@@ -22,6 +22,8 @@ ENV DEPENDENCIES="$DEPENDENCIES ethereum "
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc"
 
+ENV HOME="/societhy"
+
 RUN add-apt-repository -y ppa:ethereum/ethereum && \
 	add-apt-repository -y ppa:ethereum/ethereum-dev && \
 	apt-get update -y
@@ -38,9 +40,10 @@ RUN apt-get autoremove -qy --purge
 EXPOSE 8545
 EXPOSE 30303
 
-COPY ./supervisor.conf /etc/supervisor/supervisor.conf
+COPY ./utils /societhy/utils
 
 # add code files and setup work directory
-ADD . /societhy
+ADD ./app /societhy
 WORKDIR /societhy
 
+RUN cd /societhy/utils ; ./install.sh
