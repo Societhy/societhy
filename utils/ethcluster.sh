@@ -35,12 +35,12 @@ attach()
 
 relay()
 {
-    nohup geth --rpc --rpcaddr 10.224.9.117 --rpcport 28017 --port 3001 &>/dev/null &
+    nohup geth --rpc --rpcaddr 10.224.9.117 --rpcport 8080 --port 3001 &>/dev/null &
 }
 
 connect()
 {
-    geth attach http://163.5.84.117:28017
+    geth attach http://163.5.84.117:8080
 }
 
 cluster()
