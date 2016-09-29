@@ -20,7 +20,7 @@ ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
 ENV DEPENDENCIES="$DEPENDENCIES ethereum "
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask mongokat ipfsapi mongokat openpyxl ethjsonrpc"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc"
 
 ENV HOME="/societhy"
 
@@ -39,6 +39,8 @@ RUN apt-get autoremove -qy --purge
 RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
 
 ENV IP="172.17.0.2"
+
+ENV MONGOIP="163.5.84.117"
 
 COPY ./utils /societhy/utils
 
