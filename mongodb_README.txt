@@ -10,6 +10,13 @@ SERVER
 
 CLIENT
     On utilise la database "main" pour le projet.
+    Les collections sont:
+        contracts
+        files
+        fundraises
+        organizations
+        projects
+        users
     Démarrer le client mongo sur le serveur: mongo 10.224.9.117/main
     Démarrer le client mongo depuis l'extérieur: mongo 163.5.84.117/main
 
