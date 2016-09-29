@@ -6,6 +6,7 @@ SERVER
     Redémarrer le serveur mongod: sudo service mongod restart
     Stop le serveur mongod: sudo service mongod stop
     /!\ Si impossible de restart le serveur mongod: sudo rm /var/lib/mongodb/mongod.lock /!\
+    Afficher les logs du server: tailf /var/log/mongodb/mongod.log
 
 CLIENT
     On utilise la database "main" pour le projet.
