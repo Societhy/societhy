@@ -20,7 +20,7 @@ ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
 ENV DEPENDENCIES="$DEPENDENCIES ethereum "
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask mongokat ipfsapi mongokat openpyxl ethjsonrpc"
 
 ENV HOME="/societhy"
 
@@ -36,14 +36,13 @@ RUN pip3 install ethereum --upgrade
 
 RUN apt-get autoremove -qy --purge
 
-# open ports
-EXPOSE 8545
-EXPOSE 30303
+RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
+
+ENV IP="172.17.0.2"
 
 COPY ./utils /societhy/utils
 
 # add code files and setup work directory
-ADD ./app /societhy
 WORKDIR /societhy
 
 RUN cd /societhy/utils ; ./install.sh

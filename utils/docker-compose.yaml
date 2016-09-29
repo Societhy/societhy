@@ -8,8 +8,12 @@ testenv:
   ports:
     - "8800"  # unused
     - "27017:27017" # geth json-rpc api
+    - "4242:4242" # web port
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
 
   volumes:
-    - ./code:/societhy/code:ro
+    - ../app:/societhy/app:rw
+  extra_hosts:
+    - "custom:172.17.0.2"
+    
