@@ -1,0 +1,17 @@
+{% raw %}
+<html ng-app="societhy">
+ <script src="/static/scripts/angular/angular.js"></script>
+ <script src="/static/scripts/angular-cookies/angular-cookies.js"></script>
+ <script src="/static/scripts/index.js"></script>
+ <script src="/static/scripts/profile.component.js"></script>
+ <title>Bienvenue chez Societhy</title>
+ <head>Societhy</head>
+ <body ng-controller="IndexController">
+	 <input ng-model="user.username">
+	 <input ng-model="user.password">
+	 <button ng-click="login()">Sign in !</button>
+	 <button ng-click="logout()">Sign out...</button>
+	 <profile></profile>
+ </body>
+</html>
+{% endraw %}

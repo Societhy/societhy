@@ -19,9 +19,6 @@ ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
 # ethereum
 ENV DEPENDENCIES="$DEPENDENCIES ethereum "
 
-# python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc"
-
 ENV HOME="/societhy"
 
 RUN add-apt-repository -y ppa:ethereum/ethereum && \
@@ -29,6 +26,9 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 	apt-get update -y
 
 RUN apt-get install $DEPENDENCIES -qy
+
+# python packages
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc pyJWT"
 
 RUN pip3 install $PIP_PACKAGES
 
