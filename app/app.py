@@ -1,14 +1,13 @@
-from os import environ, urandom
+from os import environ
 
 from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
 
-secret_key = urandom(512)
+from core import secret_key
 
 app = Flask(__name__, template_folder='static/templates')
 app.secret_key = secret_key

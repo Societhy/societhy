@@ -1,17 +1,10 @@
 
-angular.module('user', []);
+angular.module('user', ['registration']);
 
 angular.module('user').
 controller('ProfileController', function ($scope, $http) {
 	var ctrl = this
-	this.auth = "?????"
-	this.name = "simon";
-
-
-
-	this.register = function() {
-		this.name = "patrick"
-	};
+	this.name = "?????";
 
 	this.check_auth = function() {
 		$http.get('/user/simon').then(function(data) {
@@ -27,5 +20,8 @@ controller('ProfileController', function ($scope, $http) {
 angular.module('user').
 component('profile', {
 	templateUrl: 'static/templates/profile.html',
-	controller: 'ProfileController'
+	controller: 'ProfileController',
+	bindings: {
+		auth: "="
+	}
 });

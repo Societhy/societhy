@@ -1,9 +1,8 @@
 <div ng-controller="ProfileController">
-	 <input ng-model="$ctrl.name" placeholer="name ?" value="$ctrl.name">
-	 <input ng-model="$ctrl.age" placeholder="age ?">
-	 <input ng-model="$ctrl.address" placeholder="ethereum address ?">
-	 <div>Bonjour le fameux {{$ctrl.name}}</div>
-	 <button ng-click="$ctrl.register()">Register</button>
-	 <button ng-click="$ctrl.check_auth()">Check if auth !!</button>
-	 <p> User is identified : {{$ctrl.auth}}</p>
+	<br>
+	<br>
+	<div>Bonjour le fameux {{$ctrl.name}}</div>
+	<button ng-click="$ctrl.check_auth()">Check if auth !!</button>
+	<p> User is identified : {{$ctrl.auth}}</p>
+	<registration auth='$ctrl.auth'></registration>
 </div>

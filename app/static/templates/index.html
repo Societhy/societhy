@@ -4,6 +4,7 @@
  <script src="/static/scripts/angular-cookies/angular-cookies.js"></script>
  <script src="/static/scripts/index.js"></script>
  <script src="/static/scripts/profile.component.js"></script>
+ <script src="/static/scripts/registration.component.js"></script>
  <title>Bienvenue chez Societhy</title>
  <head>Societhy</head>
  <body ng-controller="IndexController">
@@ -11,7 +12,7 @@
 	 <input ng-model="user.password">
 	 <button ng-click="login()">Sign in !</button>
 	 <button ng-click="logout()">Sign out...</button>
-	 <profile></profile>
+	 <profile auth='auth'></profile>
  </body>
 </html>
 {% endraw %}
