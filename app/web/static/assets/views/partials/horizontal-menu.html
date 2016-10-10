@@ -1,0 +1,153 @@
+<!-- start: HORIZONTAL MENU -->
+<div class="horizontal-menu-wrapper">
+	<div class="horizontal-nav-container" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
+		<ul class="nav navbar-nav no-border">
+			<li ui-sref-active="active">
+				<a ui-sref="app.dashboard"> <letter-icon data="{{ 'sidebar.nav.dashboard.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.dashboard.MAIN"> Dashboard </span> </a>
+			</li>
+			<li ng-class="{'active':$state.includes('app.ui')}" uib-dropdown auto-close="outsideClick">
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="{{ 'sidebar.nav.element.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.element.MAIN"> Menu déroulant</span> <span class="caret"></span></a>
+				<ul uib-dropdown-menu>
+					<li ui-sref-active="active">
+						<a ui-sref="app.ui.elements"> <span translate="sidebar.nav.element.ELEMENTS"> Element </span> </a>
+					</li>
+					<li class="dropdown-submenu" ng-class="{active:$state.includes('app.ui.icons') || $state.includes('app.ui.lineicons')}">
+						<a href="#"> Dropdown-submenu </a>
+						<ul class="dropdown-menu">
+							<li ui-sref-active="active">
+								<a ui-sref="app.ui.icons"> <span translate="sidebar.nav.element.FONTAWESOME"> Sous element </span> </a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li class="mega-menu" uib-dropdown uib-dropdown auto-close="outsideClick" ng-class="{'active':$state.includes('app.table') || $state.includes('app.form') || $state.includes('login') || $state.includes('app.pages')}">
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Components" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.components.MAIN">Components</span> <span class="caret"></span></a>
+				<ul uib-dropdown-menu>
+					<li>
+						<!-- start: MEGA MENU CONTENT -->
+						<div class="mega-menu-content">
+							<div class="col-md-6">
+								<ul class="mega-sub-menu padding-top-0">
+									<li>
+										<span class="mega-menu-sub-title text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.tables.MAIN">Titre</span>
+										<ul>
+											<li ui-sref-active="active">
+												<a ui-sref="app.table.basic"> <span translate="sidebar.nav.tables.BASIC">Basic Tables</span> </a>
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div class="col-md-6">
+								<ul class="mega-sub-menu padding-top-0">
+									<li>
+										<span class="mega-menu-sub-title text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.forms.MAIN">Other titre</span>
+										<ul>
+											<li ui-sref-active="active">
+												<a ui-sref="app.form.elements"> <span translate="sidebar.nav.forms.ELEMENTS">Form Elements</span> </a>
+											</li>
+
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- end: MEGA MENU CONTENT -->
+					</li>
+				</ul>
+			</li>
+			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Page Kits" color="auto" char-count="2" size="sm"></letter-icon> <span> Page Kits</span> <span class="caret"></span></a>
+				<ul uib-dropdown-menu>
+					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.utilities.MAIN">
+						Utilities
+					</li>
+					<li ui-sref-active="active">
+						<a ui-sref="app.utilities.search"> <span translate="sidebar.nav.utilities.SEARCHRESULT">Search Results</span> </a>
+					</li>
+					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.4level.MAIN">
+						Menu Levels
+					</li>
+					<li class="dropdown-submenu">
+						<a href="#" translate="sidebar.nav.4level.Item1.MAIN">Item 1</a>
+						<ul class="dropdown-menu">
+							<li class="dropdown-submenu" ui-sref-active="active">
+								<a href="javascript:;"> <span translate="sidebar.nav.4level.Item1.link1.MAIN">Sample Link 1</span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link1.LINK1"> Sample Link 1 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link1.LINK2"> Sample Link 2 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link1.LINK3"> Sample Link 3 </a>
+									</li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu" ui-sref-active="active">
+								<a href="javascript:;"> <span translate="sidebar.nav.4level.Item1.link2.MAIN">Sample Link 2</span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link2.LINK1"> Sample Link 1 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link2.LINK2"> Sample Link 2 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link2.LINK3"> Sample Link 3 </a>
+									</li>
+								</ul>
+							</li>
+							<li class="dropdown-submenu" ui-sref-active="active">
+								<a href="javascript:;"> <span translate="sidebar.nav.4level.Item1.link3.MAIN">Sample Link 3</span></a>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link3.LINK1"> Sample Link 1 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link3.LINK2"> Sample Link 2 </a>
+									</li>
+									<li>
+										<a href="#" translate="sidebar.nav.4level.Item1.link3.LINK3"> Sample Link 3 </a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li class="dropdown" uib-dropdown>
+				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle> <img alt="" src="static/assets/images/avatar-1.jpg"> <span>Simon Vadée</span> <span class="caret"></span> </a>
+
+				<ul class="dropdown-menu pull-right animated fadeInRight">
+					<li>
+						<a ui-sref="app.pages.user" translate="topbar.user.PROFILE"> My Profile </a>
+					</li>
+					<li>
+						<a ui-sref="app.pages.calendar" translate="topbar.user.CALENDAR"> My Calendar </a>
+					</li>
+					<li>
+						<a ui-sref="app.pages.messages" translate="topbar.user.MESSAGES"> My Messages (3) </a>
+					</li>
+					<li>
+						<a ui-sref="login.lockscreen" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a ui-sref="login.signin" translate="topbar.user.LOGOUT"> Log Out </a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+	<div class="close-handle visible-xs-block visible-sm-block menu-toggler" ng-click="menuInit(true)" ng-swipe-up="menuInit(true)">
+		<div class="arrow-left"></div>
+		<div class="arrow-right"></div>
+	</div>
+	<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+</div>
+<!-- end: HORIZONTAL MENU -->
