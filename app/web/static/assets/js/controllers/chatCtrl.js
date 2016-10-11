@@ -4,6 +4,7 @@
  */
 app.controller('ChatCtrl', ["$scope", function ($scope) {
 
+    $scope.noAvatarImg = "static/assets/images/default-user.png";
     $scope.selfIdUser = 50223456;
     $scope.otherIdUser = 50223457;
     $scope.setOtherId = function (value) {
@@ -11,7 +12,6 @@ app.controller('ChatCtrl', ["$scope", function ($scope) {
         $scope.otherIdUser = value;
     };
     var exampleDate = new Date().setTime(new Date().getTime() - 240000 * 60);
-
     $scope.chat = [{
         "user": "Simon Vadée",
         "avatar": "static/assets/images/avatar-1.jpg",
