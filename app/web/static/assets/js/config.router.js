@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('chartjs', 'chart.js', 'chatCtrl'),
+        resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -69,6 +69,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
 	    templateUrl: "static/assets/views/login_forgot.html"
 	}).state('login.registration', {
 	    url: '/registration',
+        resolve: loadSequence('loginCtrl'),
 	    templateUrl: "static/assets/views/login_registration.html"
 	})
 

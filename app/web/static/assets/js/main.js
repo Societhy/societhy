@@ -9,11 +9,13 @@ function ($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
 
+    $rootScope.user = null;
+
     // GLOBAL APP SCOPE
     // set below basic information
     $rootScope.app = {
         name: 'Societhy', // name of your project
-        author: 'Soci', // author's name or company name
+        author: 'SocieDEVS', // author's name or company name
         description: 'Societhy web-app', // brief description
         version: '1.0', // current version
         year: ((new Date()).getFullYear()), // automatic current year (for copyright information)
@@ -38,6 +40,24 @@ function ($rootScope, $state, $stateParams) {
     };
     $rootScope.app.layout = angular.copy($rootScope.app.defaultLayout);
 }]);
+
+// set token in request header for authentification
+app.factory('httpRequestInterceptor', function($sessionStorage) {
+  return {
+  	'request': function(config) {
+  		if ($sessionStorage.SociethyToken) {
+  			config.headers.Authentification = $sessionStorage.SociethyToken;
+  		}
+  		return config;
+  	}
+  }
+});
+
+// token authentification config 
+app.config(['$httpProvider',
+	function($httpProvider) {
+		$httpProvider.interceptors.push('httpRequestInterceptor');
+	}]);
 
 // translate config
 app.config(['$translateProvider',

@@ -8,16 +8,17 @@ from flask import session, request, Response
 from . import secret_key
 
 # users_table = {user.get('name'): user.get('id') for user in users.find()}
-users_table = dict()
+# users_table = dict()
 
-# users = {"simon": {
-# 			"id": "1",
-# 			"name": "simon",
-# 			"password": "bite"
-# 			}
-# 		}
+users_table = {"simon": None}
+users = {"simon": {
+			"id": "1",
+			"name": "simon",
+			"password": "bite"
+			}
+		}
 
-users = dict()
+# users = dict()
 
 # generates token for session
 def login(creditentials):
@@ -39,7 +40,7 @@ def login(creditentials):
 
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
 		return {
-			"error": "already logged in",
+			"data": "already logged in",
 			"status": 403
 		}
 
@@ -47,11 +48,14 @@ def login(creditentials):
 	if user is not None:
 		token = str(jwt.encode({"name": user['name'], "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
 		session[token] = user
-		return {"data": {"token": token},
+		return {"data": {
+					"token": token,
+					"user": user
+				},
 				"status": 200}
 
 	else:
-		return {"error": True,
+		return {"data": "User does not exists of false password",
 				"status": 401}
 
 # remove token from session
@@ -70,7 +74,7 @@ def sign_up(newUser):
 
 	print(newUser.get('name'), "--------------", users_table.keys())
 	if newUser.get('name') in users_table:
-		return {"error": "user already exists",
+		return {"data": "user already exists",
 				"status": 403}
 
 	# ret = users.insert_one(newUser)
@@ -78,6 +82,10 @@ def sign_up(newUser):
 	users_table[newUser.get('name')] = '1'
 	users[newUser.get('name')] = newUser
 	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(newUser.get('password'), 'utf-8'))})
+
+def check_token_validity(token):
+	return {"data": {"user": session.get(token)},
+			"status": 200}
 
 def delete_user(user):
 	_id = user.get("id")

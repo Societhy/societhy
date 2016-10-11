@@ -127,6 +127,7 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
         listIsOpen: false,
         // list of available languages
         available: {
+            'fr': 'Français',
             'en': 'English',
             'it_IT': 'Italiano',
             'de_DE': 'Deutsch'

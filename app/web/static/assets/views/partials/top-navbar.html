@@ -42,7 +42,7 @@
         <ul class="nav navbar-right" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
             <!-- start: MESSAGES DROPDOWN -->
             <!-- /// controller:  'InboxCtrl' -  localtion: static/assets/js/controllers/InboxCtrl.js /// -->
-            <li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-controller="InboxCtrl">
+            <li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-controller="InboxCtrl" ng-show="{{ rootScope.user }}">
                 <a href class="dropdown-toggle" uib-dropdown-toggle>
                     <notification-icon count='scopeVariable'>
                         <i class="fa fa-envelope"></i>
@@ -80,7 +80,7 @@
             </li>
             <!-- end: MESSAGES DROPDOWN -->
             <!-- start: ACTIVITIES DROPDOWN -->
-            <li class="dropdown" uib-dropdown on-toggle="toggled(open)">
+            <li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-show="{{ rootScope.user }}">
                 <a href class="dropdown-toggle" uib-dropdown-toggle><i class="fa fa-bell"></i></a>
                 <ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
                     <li>
@@ -118,10 +118,10 @@
         </div>
         <!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
     </div>
-    <button class="sidebar-mobile-toggler dropdown-off-sidebar btn hidden-md hidden-lg" ng-click="toggle('off-sidebar')" v-pressable>
+    <button class="sidebar-mobile-toggler dropdown-off-sidebar btn hidden-md hidden-lg" ng-click="toggle('off-sidebar')" v-pressable  ng-show="{{ rootScope.user }}">
         &nbsp;
     </button>
-    <button class="dropdown-off-sidebar btn hidden-sm hidden-xs" ng-click="toggle('off-sidebar')" v-pressable>
+    <button class="dropdown-off-sidebar btn hidden-sm hidden-xs" ng-click="toggle('off-sidebar')" v-pressable  ng-show="{{ rootScope.user }}">
         &nbsp;
     </button>
     <!-- end: NAVBAR COLLAPSE -->

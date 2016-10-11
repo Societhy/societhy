@@ -1,4 +1,4 @@
-<!-- start: HORIZONTAL MENU -->
+<!--start: HORIZONTAL MENU -->
 <div class="horizontal-menu-wrapper">
 	<div class="horizontal-nav-container" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
 		<ul class="nav navbar-nav no-border">
@@ -118,9 +118,54 @@
 				</ul>
 			</li>
 		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown" uib-dropdown>
-				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle> <img alt="" src="static/assets/images/avatar-1.jpg"> <span>Simon Vadée</span> <span class="caret"></span> </a>
+
+		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
+			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
+	            <a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
+					<span>Sign in</span> <span class="caret"></span>
+				</a>
+               <div class="dropdown-menu pull-right animated fadeInRight">
+		            <div class="panel-body" style="width:400px">
+		                <form role="form" class="form-horizontal ng-pristine ng-valid">
+		                    <div class="form-group">
+		                        <div class="col-sm-10">
+		                            <input ng-model="ctrl.username" type="text" placeholder="Email" class="form-control">
+		                        </div>
+		                    </div>
+		                    <div class="form-group">
+		                        <div class="col-sm-10">
+		                            <input ng-model="ctrl.password" type="password" placeholder="Password" class="form-control">
+		                        </div>
+		                    </div>
+		                    <div class="form-group">
+		                        <div class="col-sm-2">
+		                            <div class="checkbox clip-check check-primary">
+		                                <input type="checkbox" id="checkbox2" value="1">
+		                                <label for="checkbox2">
+		                                    Remember me
+		                                </label>
+		                            </div>
+		                        </div>
+		                        <div class="col-sm-offset-3 col-sm-7">
+		                            <button class="btn btn-o btn-primary btn-lg" type="submit" ng-click="ctrl.login()">
+		                                Sign in
+		                            </button>
+		                        </div>
+		                    </div>
+		                </form>
+		            </div>
+		        </div>
+			</li>
+			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
+	            <a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
+					<span>Register</span>
+				</a>
+			</li>
+	        <li class="dropdown" uib-dropdown ng-show="user">
+				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
+				<img alt="" src="static/assets/images/avatar-1.jpg">
+					<span>Simon Vadée</span> <span class="caret"></span>
+				</a>
 
 				<ul class="dropdown-menu pull-right animated fadeInRight">
 					<li>
@@ -137,7 +182,7 @@
 					</li>
 					<li class="divider"></li>
 					<li>
-						<a ui-sref="login.signin" translate="topbar.user.LOGOUT"> Log Out </a>
+						<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
 					</li>
 				</ul>
 			</li>
@@ -150,4 +195,4 @@
 	</div>
 	<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
 </div>
-<!-- end: HORIZONTAL MENU -->
+<!-- end: HORIZONTAL MENU

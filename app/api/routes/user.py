@@ -21,6 +21,11 @@ def sign_up():
 	ret = auth.sign_up(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/checkTokenValidity/<token>')
+def check_token_validity(token):
+	ret = auth.check_token_validity(token)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/deleteUser/<user>')
 @requires_auth
 def delete_user(user):
