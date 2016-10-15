@@ -2,10 +2,13 @@
 <div class="horizontal-menu-wrapper">
 	<div class="horizontal-nav-container" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
 		<ul class="nav navbar-nav no-border">
+
+			<!-- 		BOUTTON DASHBOARD  -->			
 			<li ui-sref-active="active">
 				<a ui-sref="app.dashboard"> <letter-icon data="{{ 'sidebar.nav.dashboard.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.dashboard.MAIN"> Dashboard </span> </a>
 			</li>
-			<li ng-class="{'active':$state.includes('app.ui')}" uib-dropdown auto-close="outsideClick">
+
+<!-- 			<li ng-class="{'active':$state.includes('app.ui')}" uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="{{ 'sidebar.nav.element.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.element.MAIN"> Menu déroulant</span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li ui-sref-active="active">
@@ -21,11 +24,12 @@
 					</li>
 				</ul>
 			</li>
-			<li class="mega-menu" uib-dropdown uib-dropdown auto-close="outsideClick" ng-class="{'active':$state.includes('app.table') || $state.includes('app.form') || $state.includes('login') || $state.includes('app.pages')}">
+ -->
+
+ <!-- 			<li class="mega-menu" uib-dropdown uib-dropdown auto-close="outsideClick" ng-class="{'active':$state.includes('app.table') || $state.includes('app.form') || $state.includes('login') || $state.includes('app.pages')}">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Components" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.components.MAIN">Components</span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li>
-						<!-- start: MEGA MENU CONTENT -->
 						<div class="mega-menu-content">
 							<div class="col-md-6">
 								<ul class="mega-sub-menu padding-top-0">
@@ -52,18 +56,19 @@
 								</ul>
 							</div>
 						</div>
-						<!-- end: MEGA MENU CONTENT -->
 					</li>
 				</ul>
-			</li>
+			</li>-->	
+
+
 			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
-				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Page Kits" color="auto" char-count="2" size="sm"></letter-icon> <span> Page Kits</span> <span class="caret"></span></a>
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Organisations" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
-					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.utilities.MAIN">
-						Utilities
+					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">ahah
+					
 					</li>
 					<li ui-sref-active="active">
-						<a ui-sref="app.utilities.search"> <span translate="sidebar.nav.utilities.SEARCHRESULT">Search Results</span> </a>
+						<a ui-sref="app.utilities.search"> <span translate="sidebar.nav.organisations.SAMPLE"/> abab </a>
 					</li>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.4level.MAIN">
 						Menu Levels
@@ -121,49 +126,49 @@
 
 		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
 			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-	            <a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
+				<a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
 					<span>Sign in</span> <span class="caret"></span>
 				</a>
-               <div class="dropdown-menu pull-right animated fadeInRight">
-		            <div class="panel-body" style="width:400px">
-		                <form role="form" class="form-horizontal ng-pristine ng-valid">
-		                    <div class="form-group">
-		                        <div class="col-sm-10">
-		                            <input ng-model="ctrl.username" type="text" placeholder="Email" class="form-control">
-		                        </div>
-		                    </div>
-		                    <div class="form-group">
-		                        <div class="col-sm-10">
-		                            <input ng-model="ctrl.password" type="password" placeholder="Password" class="form-control">
-		                        </div>
-		                    </div>
-		                    <div class="form-group">
-		                        <div class="col-sm-2">
-		                            <div class="checkbox clip-check check-primary">
-		                                <input type="checkbox" id="checkbox2" value="1">
-		                                <label for="checkbox2">
-		                                    Remember me
-		                                </label>
-		                            </div>
-		                        </div>
-		                        <div class="col-sm-offset-3 col-sm-7">
-		                            <button class="btn btn-o btn-primary btn-lg" type="submit" ng-click="ctrl.login()">
-		                                Sign in
-		                            </button>
-		                        </div>
-		                    </div>
-		                </form>
-		            </div>
-		        </div>
+				<div class="dropdown-menu pull-right animated fadeInRight">
+					<div class="panel-body" style="width:400px">
+						<form role="form" class="form-horizontal ng-pristine ng-valid">
+							<div class="form-group">
+								<div class="col-sm-10">
+									<input ng-model="ctrl.username" type="text" placeholder="Email" class="form-control">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10">
+									<input ng-model="ctrl.password" type="password" placeholder="Password" class="form-control">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-2">
+									<div class="checkbox clip-check check-primary">
+										<input type="checkbox" id="checkbox2" value="1">
+										<label for="checkbox2">
+											Remember me
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-offset-3 col-sm-7">
+									<button class="btn btn-o btn-primary btn-lg" type="submit" ng-click="ctrl.login()">
+										Sign in
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 			</li>
 			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-	            <a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
+				<a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
 					<span>Register</span>
 				</a>
 			</li>
-	        <li class="dropdown" uib-dropdown ng-show="user">
+			<li class="dropdown" uib-dropdown ng-show="user">
 				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
-				<img alt="" src="static/assets/images/avatar-1.jpg">
+					<img alt="" src="static/assets/images/avatar-1.jpg">
 					<span>Simon Vadée</span> <span class="caret"></span>
 				</a>
 
