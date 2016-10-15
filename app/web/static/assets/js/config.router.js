@@ -41,6 +41,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Dashboard'
         }
+    }).state('app.user', {
+        url: '/user',
+        templateUrl: "static/assets/views/user_profile.html",
+        title: 'User Profile',
+        ncyBreadcrumb: {
+            label: 'User Profile'
+        }
     })
 
     .state('error', {
