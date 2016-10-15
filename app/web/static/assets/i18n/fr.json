@@ -125,9 +125,10 @@
                 "MESSAGES": "Messages",
                 "BLANKPAGE": "Starter Page"
             },
-            "utilities": {
-                "MAIN": "Utilities",
-                "SEARCHRESULT": "Search Results",
+            "organisations": {
+                "MAIN": "Organisations",
+                "MYORGANISATIONS": "Search Results",
+                "SAMPLE": "La croix-rouge",
                 "ERROR404": "Error 404",
                 "ERROR500": "Error 500",
                 "PRICING": "Pricing Table"
