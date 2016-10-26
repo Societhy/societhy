@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------- 
+/* ----------------------------------------------------------------------
 >>> TABLE OF CONTENT
 -------------------------------------------------------------------------
 1 - Basic Elements & Classes
@@ -444,9 +444,12 @@ span[role="slider"] {
     text-align: center;
   }
 }
+
 .navbar .navbar-header .navbar-brand img {
-  display: inline-block;
+    display: inline-block;
+    width: 100px;
 }
+
 .navbar .navbar-header .menu-toggler {
   margin-right: 60px;
   padding: 0 15px;
