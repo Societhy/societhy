@@ -5,84 +5,112 @@
 
 			<!-- 		BOUTTON DASHBOARD  -->			
 			<li ui-sref-active="active">
-				<a ui-sref="app.dashboard"> <letter-icon data="{{ 'sidebar.nav.dashboard.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.dashboard.MAIN"> Dashboard </span> </a>
+				<a ui-sref="app.dashboard"> <letter-icon data="{{ 'sidebar.nav.dashboard.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.dashboard.MAIN"></span> </a>
 			</li>
-		</ul>
 
-		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
-			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-				<a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
-					<span>Sign in</span> <span class="caret"></span>
-				</a>
-               <div class="dropdown-menu pull-right animated fadeInRight">
-		            <div class="panel-body padding-bottom-0">
-		                <form role="form" class="form-horizontal ng-pristine ng-valid">
-		                    <div class="form-group">
-		                        <div class="col-sm-12">
-		                            <input ng-model="ctrl.username" type="text" placeholder="Email" class="form-control">
-		                        </div>
-		                    </div>
-		                    <div class="form-group">
-		                        <div class="col-sm-12">
-		                            <input ng-model="ctrl.password" type="password" placeholder="Password" class="form-control">
-		                        </div>
-		                    </div>
-		                    <div class="form-group">
-		                        <div class="col-sm-2">
-		                            <div class="checkbox clip-check check-primary">
-		                                <input type="checkbox" id="checkbox2" value="1">
-		                                <label for="checkbox2">
-		                                    Remember me
-		                                </label>
-		                            </div>
-		                        </div>
-		                        <div class="col-sm-offset-5 col-sm-5">
-		                            <button class="btn btn-o btn-primary" type="submit" ng-click="ctrl.login()">
-		                                Sign in
-		                            </button>
-		                        </div>
-		                    </div>
-		                </form>
-		            </div>
-		        </div>
-			</li>
-			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-				<a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
-					<span>Register</span>
-				</a>
-			</li>
-			<li class="dropdown" uib-dropdown ng-show="user">
-				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
-				<img alt="" src="static/assets/images/avatar-1.jpg">
-					<span>{{user.name}}</span> <span class="caret"></span>
-				</a>
-
-				<ul class="dropdown-menu pull-right animated fadeInRight">
-					<li>
-						<a ui-sref="app.user" translate="topbar.user.PROFILE"> My Profile </a>
+			<!-- 			MY ORGANISATIONS -->
+			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Organisations" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
+				<ul uib-dropdown-menu>
+					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
-					<li>
-						<a ui-sref="app.pages.calendar" translate="topbar.user.CALENDAR"> My Calendar </a>
-					</li>
-					<li>
-						<a ui-sref="app.pages.messages" translate="topbar.user.MESSAGES"> My Messages (3) </a>
-					</li>
-					<li>
-						<a ui-sref="login.lockscreen" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
+					<li ui-sref-active="active">
+						<a ui-sref="app.utilities.search"> <span translate="sidebar.nav.organisations.SAMPLE"/> </a>
 					</li>
 				</ul>
 			</li>
+
+<!-- 			MY PROJECTS -->
+
+			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Projects" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.projects.MAIN" ></span> <span class="caret"></span></a>
+				<ul uib-dropdown-menu>
+					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.projects.MYPROJECTS">
+					</li>
+					<li ui-sref-active="active">
+						<a ui-sref="app.utilities.search"> <span translate="sidebar.nav.projects.SAMPLE"/> </a>
+					</li>
+				</ul>
+			</li>
+
 		</ul>
-	</div>
-	<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
-	<div class="close-handle visible-xs-block visible-sm-block menu-toggler" ng-click="menuInit(true)" ng-swipe-up="menuInit(true)">
-		<div class="arrow-left"></div>
-		<div class="arrow-right"></div>
-	</div>
-	<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+	</li>
+</ul>
+
+<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
+	<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
+		<a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
+			<span>Sign in</span> <span class="caret"></span>
+		</a>
+		<div class="dropdown-menu pull-right animated fadeInRight">
+			<div class="panel-body" style="width:400px">
+				<form role="form" class="form-horizontal ng-pristine ng-valid">
+					<div class="form-group">
+						<div class="col-sm-10">
+							<input ng-model="ctrl.username" type="text" placeholder="Email" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-10">
+							<input ng-model="ctrl.password" type="password" placeholder="Password" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-2">
+							<div class="checkbox clip-check check-primary">
+								<input type="checkbox" id="checkbox2" value="1">
+								<label for="checkbox2">
+									Remember me
+								</label>
+							</div>
+						</div>
+						<div class="col-sm-offset-3 col-sm-7">
+							<button class="btn btn-o btn-primary btn-lg" type="submit" ng-click="ctrl.login()">
+								Sign in
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</li>
+	<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
+		<a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
+			<span>Register</span>
+		</a>
+	</li>
+	<li class="dropdown" uib-dropdown ng-show="user">
+		<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
+			<img alt="" src="static/assets/images/avatar-1.jpg">
+			<span>Simon Vadée</span> <span class="caret"></span>
+		</a>
+
+		<ul class="dropdown-menu pull-right animated fadeInRight">
+			<li>
+				<a ui-sref="app.pages.user" translate="topbar.user.PROFILE"> My Profile </a>
+			</li>
+			<li>
+				<a ui-sref="app.pages.calendar" translate="topbar.user.CALENDAR"> My Calendar </a>
+			</li>
+			<li>
+				<a ui-sref="app.pages.messages" translate="topbar.user.MESSAGES"> My Messages (3) </a>
+			</li>
+			<li>
+				<a ui-sref="login.lockscreen" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
+			</li>
+		</ul>
+	</li>
+</ul>
+</div>
+<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+<div class="close-handle visible-xs-block visible-sm-block menu-toggler" ng-click="menuInit(true)" ng-swipe-up="menuInit(true)">
+	<div class="arrow-left"></div>
+	<div class="arrow-right"></div>
+</div>
+<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
 </div>
 <!-- end: HORIZONTAL MENU

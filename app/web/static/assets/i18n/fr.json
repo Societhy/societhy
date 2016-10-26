@@ -127,11 +127,13 @@
             },
             "organisations": {
                 "MAIN": "Organisations",
-                "MYORGANISATIONS": "Search Results",
-                "SAMPLE": "La croix-rouge",
-                "ERROR404": "Error 404",
-                "ERROR500": "Error 500",
-                "PRICING": "Pricing Table"
+                "MYORGANISATIONS": "Mes Organisations",
+                "SAMPLE": "La croix-rouge"
+            },
+            "projects": {
+                "MAIN" : "Projets",
+                "MYPROJECTS" : "Mes Projets",
+                "SAMPLE" : "Aider les clodos"
             },
             "3level": {
                 "MAIN": "3 Level Menu",
