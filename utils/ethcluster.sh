@@ -37,12 +37,12 @@ attach()
 
 relay()
 {
-    nohup parity --rpc --rpcaddr 10.224.9.117 --rpcport 8545 --jsonrpc-hosts all &>/dev/null &
+    nohup parity --rpc --rpcaddr 10.224.9.117 --rpcport 8080 --jsonrpc-hosts all &>/dev/null &
 }
 
 connect()
 {
-    geth attach http://163.5.84.117:8545
+    geth attach http://163.5.84.117:8080
 }
 
 cluster()
