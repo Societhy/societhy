@@ -7,7 +7,9 @@ help()
     echo
     echo COMMANDS:
     echo "	create	<N>		créé N noeuds connectés sur un réseau privé"
-    echo "	attach	<N>		connection à l'API json-rpc du noeud N"
+    echo "  attach  <N>     connection à l'API json-rpc du noeud N"
+    echo "  relay           ouvre un noeud avec une api JSON/RPC publique"
+    echo "  connect         connection à l'API json-rpc du noeud du serveur"
     echo "	kill			détruit le cluster"
     echo "	clear			erase blockchain data (starts a new one)"
     echo
@@ -35,12 +37,12 @@ attach()
 
 relay()
 {
-    nohup geth --rpc --rpcaddr 10.224.9.117 --rpcport 8080 --port 3001 &>/dev/null &
+    nohup parity --rpc --rpcaddr 10.224.9.117 --rpcport 8545 --jsonrpc-hosts all &>/dev/null &
 }
 
 connect()
 {
-    geth attach http://163.5.84.117:8080
+    geth attach http://163.5.84.117:8545
 }
 
 cluster()
