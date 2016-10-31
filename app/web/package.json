@@ -38,6 +38,7 @@
     "grunt-contrib-uglify": "^0.11.0",
     "gruntfile-gtx": "^0.3.0",
     "http-server": "^0.6.1",
-    "require-directory": "^2.0.0"
+    "require-directory": "^2.0.0",
+    "keythereum": "latest"
   }
 }
