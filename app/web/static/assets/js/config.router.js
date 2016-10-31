@@ -36,7 +36,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.dashboard', {
         url: "/dashboard",
         templateUrl: "static/assets/views/dashboard.html",
-        resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl'),
+        resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl', 'keythereum'),
         title: 'Dashboard',
         ncyBreadcrumb: {
             label: 'Dashboard'

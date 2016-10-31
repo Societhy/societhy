@@ -1,5 +1,6 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 	
+//	var keythereum = require("keythereum");
 	var ctrl = this;
 	ctrl.coucou = "coucou";
 	if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
@@ -32,7 +33,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 	}
 
 	ctrl.register = function() {
-		console.log("bite")
 		if (ctrl.username && ctrl.password) {
 			$http.post('/newUser', {
 				name: ctrl.username,
@@ -41,8 +41,10 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 				password: ctrl.password
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
-				$cookies.put('token', response.data.token);
-			}, function(error) {
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = response.data.user;
+				},
+				function(error) {
 					console.log(error);
 			});
 		}

@@ -24,6 +24,9 @@ app.constant('JS_REQUIRES', {
         'spectrum-plugin': ['../../bower_components/spectrum/spectrum.js', '../../bower_components/spectrum/spectrum.css'],
 		'jcrop-plugin': ['../../bower_components/Jcrop/js/jquery.Jcrop.min.js', '../../bower_components/Jcrop/css/jquery.Jcrop.min.css'],
 		
+        //*** External libraries
+
+        'keythereum': '../../node_modules/keythereum/dist/keythereum.min.js',
 		
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
