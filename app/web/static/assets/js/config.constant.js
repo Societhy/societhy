@@ -33,6 +33,8 @@ app.constant('JS_REQUIRES', {
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',
         'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
+        'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
+
     },
     //*** angularJS Modules
     modules: [{

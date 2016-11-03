@@ -323,175 +323,185 @@
                     <!-- end: TAB OVERVIEW -->
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">
-                        <form action="#" role="form" id="form">
-                            <fieldset>
-                                <legend>
-                                    Account Info
-                                </legend>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                First Name
-                                            </label>
-                                            <input type="text" placeholder="Enter your first name" class="form-control" name="firstname" ng-model="userInfo.firstName">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Last Name
-                                            </label>
-                                            <input type="text" placeholder="Enter your last name" class="form-control" name="lastname" ng-model="userInfo.lastName">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Email Address
-                                            </label>
-                                            <input type="email" placeholder="email address" class="form-control" name="email" ng-model="userInfo.email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Phone
-                                            </label>
-                                            <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="userInfo.phone">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Url
-                                            </label>
-                                            <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="userInfo.url">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="block">
-                                                Gender
-                                            </label>
-                                            <div class="clip-radio radio-primary">
-                                                <input type="radio" id="us-female" name="gender" value="female" ng-model="userInfo.gender">
-                                                <label for="us-female">
-                                                    Female
+                        <div ng-controller="KeyController as ctrl">
+                        <a ladda="ldloading.contract" class="btn btn-wide btn-primary ladda-button" data-style="contract" ng-click="ctrl.loadCreateKey('contract')">
+                            <span class="ladda-label"> Generate key </span>
+                            <span class="ladda-spinner"></span>
+                        </a>
+                        <a ladda="ldloading.contract" class="btn btn-wide btn-primary ladda-button" data-style="contract" ng-click="ctrl.importKey('contract')">
+                            <span class="ladda-label"> Import key </span>
+                            <span class="ladda-spinner"></span>
+                        </a>
+                            <form action="#" role="form" id="form">
+                                <fieldset>
+                                    <legend>
+                                        Account Info
+                                    </legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    First Name
                                                 </label>
-                                                <input type="radio" id="us-male" name="gender" value="male" ng-model="userInfo.gender">
-                                                <label for="us-male">
-                                                    Male
+                                                <input type="text" placeholder="Enter your first name" class="form-control" name="firstname" ng-model="userInfo.firstName">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Last Name
                                                 </label>
+                                                <input type="text" placeholder="Enter your last name" class="form-control" name="lastname" ng-model="userInfo.lastName">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Email Address
+                                                </label>
+                                                <input type="email" placeholder="email address" class="form-control" name="email" ng-model="userInfo.email">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Phone
+                                                </label>
+                                                <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="userInfo.phone">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Url
+                                                </label>
+                                                <input type="text" placeholder="Enter Url" class="form-control" name="url" ng-model="userInfo.url">
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label class="control-label">
-                                                        Zip Code
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="block">
+                                                    Gender
+                                                </label>
+                                                <div class="clip-radio radio-primary">
+                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="userInfo.gender">
+                                                    <label for="us-female">
+                                                        Female
                                                     </label>
-                                                    <input class="form-control" placeholder="enter a zip code" type="text" name="zipcode" ng-model="userInfo.zipCode">
+                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="userInfo.gender">
+                                                    <label for="us-male">
+                                                        Male
+                                                    </label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8">
-                                                <div class="form-group">
-                                                    <label class="control-label">
-                                                        City
-                                                    </label>
-                                                    <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="userInfo.city">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                Image Upload
-                                            </label>
-                                            <div flow-init flow-object="obj.flow">
-                                                <div class="user-image">
-                                                    <div class="thumbnail margin-bottom-5">
-                                                        <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
-                                                        <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
-                                                        <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            Zip Code
+                                                        </label>
+                                                        <input class="form-control" placeholder="enter a zip code" type="text" name="zipcode" ng-model="userInfo.zipCode">
                                                     </div>
                                                 </div>
-                                                <div class="user-image-buttons-edit" ng-if="obj.flow.files.length">
-                                                    <span class="btn btn-primary btn-file">
-					                                    <i class="fa fa-pencil"></i>
-					                                    <input type="file" flow-btn />
-					                                </span>
-                                                    <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i></span>
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label class="control-label">
+                                                            City
+                                                        </label>
+                                                        <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="userInfo.city">
+                                                    </div>
                                                 </div>
-                                                <div class="user-image-buttons-edit" ng-if="!obj.flow.files.length">
-                                                    <span class="btn btn-primary btn-file">
-					                                    <i class="fa fa-pencil"></i>
-					                                    <input type="file" flow-btn />
-					                                </span>
-                                                    <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i> </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>
+                                                    Image Upload
+                                                </label>
+                                                <div flow-init flow-object="obj.flow">
+                                                    <div class="user-image">
+                                                        <div class="thumbnail margin-bottom-5">
+                                                            <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
+                                                            <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
+                                                            <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
+                                                        </div>
+                                                    </div>
+                                                    <div class="user-image-buttons-edit" ng-if="obj.flow.files.length">
+                                                        <span class="btn btn-primary btn-file">
+    					                                    <i class="fa fa-pencil"></i>
+    					                                    <input type="file" flow-btn />
+    					                                </span>
+                                                        <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i></span>
+                                                    </div>
+                                                    <div class="user-image-buttons-edit" ng-if="!obj.flow.files.length">
+                                                        <span class="btn btn-primary btn-file">
+    					                                    <i class="fa fa-pencil"></i>
+    					                                    <input type="file" flow-btn />
+    					                                </span>
+                                                        <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i> </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <legend>
-                                    Additional Info
-                                </legend>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Twitter
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="userInfo.twitter">
-                                                <i class="fa fa-twitter"></i>
-                                            </span>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>
+                                        Additional Info
+                                    </legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Twitter
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Twitter" name="twitter" ng-model="userInfo.twitter">
+                                                    <i class="fa fa-twitter"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Facebook
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="userInfo.facebook">
+                                                    <i class="fa fa-facebook"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Google Plus
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="userInfo.google">
+                                                    <i class="fa fa-google-plus"></i>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Facebook
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Facebook" name="facebook" ng-model="userInfo.facebook">
-                                                <i class="fa fa-facebook"></i>
-                                            </span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Google Plus
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Google Plus" name="google" ng-model="userInfo.google">
-                                                <i class="fa fa-google-plus"></i>
-                                            </span>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Github
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Github" name="github" ng-model="userInfo.github">
+                                                    <i class="fa fa-github"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Linkedin
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="userInfo.linkedin">
+                                                    <i class="fa fa-linkedin"></i>
+                                                </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Skype
+                                                </label>
+                                                <span class="input-icon">
+                                                    <input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="userInfo.skype">
+                                                    <i class="fa fa-skype"></i>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Github
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Github" name="github" ng-model="userInfo.github">
-                                                <i class="fa fa-github"></i>
-                                            </span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Linkedin
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Linkedin" name="linkedin" ng-model="userInfo.linkedin">
-                                                <i class="fa fa-linkedin"></i>
-                                            </span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Skype
-                                            </label>
-                                            <span class="input-icon">
-                                                <input class="form-control" type="text" placeholder="Skype" name="skype" ng-model="userInfo.skype">
-                                                <i class="fa fa-skype"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
+                                </fieldset>
+                            </form>
+                        </div>
                     </uib-tab>
                     <!-- end: TAB EDIT ACCOUNT -->
                     <!-- start: TAB PROJECTS -->

@@ -36,17 +36,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.dashboard', {
         url: "/dashboard",
         templateUrl: "static/assets/views/dashboard.html",
-        resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl', 'keythereum'),
+        resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl'),
         title: 'Dashboard',
         ncyBreadcrumb: {
             label: 'Dashboard'
         }
-    }).state('app.user', {
-        url: '/user',
+    }).state('app.me', {
+        url: '/me',
         templateUrl: "static/assets/views/user_profile.html",
-        title: 'User Profile',
+        resolve: loadSequence('keyCtrl', 'keythereum'),
+        title: 'My Profile',
         ncyBreadcrumb: {
-            label: 'User Profile'
+            label: 'My Profile'
         }
     })
 
