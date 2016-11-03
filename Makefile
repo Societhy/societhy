@@ -4,8 +4,13 @@ all:
 	@make build
 	@make shell
 
+build_dependencies:
+	npm --prefix ./app/web install ./app/web
+	bower install ./app/web
+
 build:
 	docker build -t $(DOCKER_IMAGE) .
+
 
 shell:
 	docker-compose -f utils/docker-compose.yaml up -d testenv
