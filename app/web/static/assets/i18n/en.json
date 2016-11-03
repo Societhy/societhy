@@ -125,6 +125,16 @@
                 "MESSAGES": "Messages",
                 "BLANKPAGE": "Starter Page"
             },
+            "organisations": {
+                "MAIN": "Organizations",
+                "MYORGANISATIONS": "My organizations",
+                "SAMPLE": "Red Cross"
+            },
+            "projects": {
+                "MAIN" : "Projects",
+                "MYPROJECTS" : "My Projects",
+                "SAMPLE" : "Help hobos"
+            },
             "utilities": {
                 "MAIN": "Utilities",
                 "SEARCHRESULT": "Search Results",

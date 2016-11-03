@@ -10,7 +10,7 @@
 
 			<!-- 			MY ORGANISATIONS -->
 			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
-				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Organisations" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
+				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data=" {{ 'sidebar.nav.organisations.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
