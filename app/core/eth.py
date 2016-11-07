@@ -26,14 +26,14 @@ def import_new_key(user, key):
 		"status": 200
 	}
 
- def export_and_delete_key(user, key):
-	print(key)
+def export_and_delete_key(user, address):
+	print(address)
 	return {
 		"data": "OK",
 		"status": 200
 	}
 
- def export_key(user, key):
+def export_key(user, address):
 	print(key)
 	return {
 		"data": "OK",

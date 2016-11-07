@@ -61,16 +61,16 @@ def import_new_key(user):
 	ret = eth.import_new_key(user, request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/exportDeleteKey', methods=['POST'])
+@router.route('/exportDeleteKey/<address>')
 @requires_auth
-def export_and_delete_key(user)
-	ret = eth.export_and_delete_key(user, request.json)
+def export_and_delete_key(user, address):
+	ret = eth.export_and_delete_key(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/exportKey', methods=['POST'])
+@router.route('/exportKey/<address>')
 @requires_auth
-def export_key(user)
-	ret = eth.export_key(user, request.json)
+def export_key(user, address):
+	ret = eth.export_key(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 

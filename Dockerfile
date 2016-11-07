@@ -30,6 +30,8 @@ RUN apt-get install $DEPENDENCIES -qy
 # parity dependencie
 RUN curl https://raw.githubusercontent.com/ethcore/scripts/master/install-deps.sh -L | bash
 
+RUN cp parity/target/release/parity /usr/local/bin
+
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc pyJWT"
 
