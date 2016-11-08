@@ -11,7 +11,7 @@ RUN apt-get update &&  \
 # PIP_PACKAGES are to be installed with pip3 (python packages)
 
 # languages
-ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev"
+ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl"
 
 # libraries and services
 ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
@@ -26,6 +26,11 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 	apt-get update -y
 
 RUN apt-get install $DEPENDENCIES -qy
+
+# parity dependencie
+RUN curl https://raw.githubusercontent.com/ethcore/scripts/master/install-deps.sh -L | bash
+
+RUN cp parity/target/release/parity /usr/local/bin
 
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc pyJWT"
