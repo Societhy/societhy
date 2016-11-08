@@ -1,4 +1,4 @@
-app.controller('KeyController', function($scope, $http, $timeout) {
+ app.controller('KeyController', function($scope, $http, $timeout) {
 	
 	var ctrl = this;
 

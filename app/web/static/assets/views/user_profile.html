@@ -9,11 +9,11 @@
 <div class="container-fluid container-fullw bg-white">
     <div class="row">
         <div class="col-md-12">
-            <!-- /// controller:  'UserCtrl' -  localtion: assets/js/controllers/userCtrl.js /// -->
             <div>
                 <!-- start: USER TABSET -->
                 <uib-tabset class="tabbable">
                     <!-- start: TAB OVERVIEW -->
+                    <div ng-controller="userOverviewCtrl as ctrl">
                     <uib-tab heading="Overview">
                         <div class="row">
                             <div class="col-md-4">
@@ -52,7 +52,7 @@
                                                     </a>
                                                 </li>
                                                 <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                                                    <a href="#" target="_blank">
+                                                    <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
                                                         Facebook
                                                     </a>
                                                 </li>
@@ -320,6 +320,7 @@
                             </div>
                         </div>
                     </uib-tab>
+                    </div>
                     <!-- end: TAB OVERVIEW -->
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">
