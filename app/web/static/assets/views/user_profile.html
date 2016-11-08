@@ -13,8 +13,8 @@
                 <!-- start: USER TABSET -->
                 <uib-tabset class="tabbable">
                     <!-- start: TAB OVERVIEW -->
-                    <div ng-controller="userOverviewCtrl as ctrl">
                     <uib-tab heading="Overview">
+                    <div ng-controller="userOverviewCtrl as ctrl">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="user-left">
@@ -44,6 +44,7 @@
                                             </div>
                                         </div>
                                         <hr>
+                                        <div id="newPhoto"></div>
                                         <div class="social-icons block">
                                             <ul>
                                                 <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
@@ -319,8 +320,8 @@
                                 </div>
                             </div>
                         </div>
-                    </uib-tab>
                     </div>
+                    </uib-tab>
                     <!-- end: TAB OVERVIEW -->
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">

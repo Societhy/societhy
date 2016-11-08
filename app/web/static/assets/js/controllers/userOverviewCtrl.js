@@ -29,9 +29,20 @@ ctrl.fb_connect = function (argument) {
             user_id = response.authResponse.userID; //get FB UID
 
             FB.api('/me', function(response) {
-                user_email = response.email; //get user email
-          // you can store this data into your database             
+            	user_email = response.user_email; 
+            	console.log(user_email)
+                //get user email
+          // you can store this data into your database       
+
       });
+
+            FB.api('/me/picture', function(response) 
+            {
+			console.log(response.data.url);
+			var newPhoto = angular.element(document.querySelector('#newPhoto'));
+			newPhoto.html('<img src="'+ response.data.url + '">')         	
+            });
+
 
         } else {
             //user hit cancel button
@@ -39,7 +50,7 @@ ctrl.fb_connect = function (argument) {
 
         }
     }, {
-    	scope: 'publish_stream,email'
+    	scope: 'public_profile,email'
     });
 
 }
