@@ -326,13 +326,11 @@
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">
                         <div ng-controller="KeyController as ctrl">
-                        <a ladda="ldloading.contract" class="btn btn-wide btn-primary ladda-button" data-style="contract" ng-click="ctrl.loadCreateKey('contract')">
-                            <span class="ladda-label"> Generate key </span>
-                            <span class="ladda-spinner"></span>
+                        <a ng-click="ctrl.loadGenerateKey()">
+                            <span> Generate key </span>
                         </a>
-                        <a ladda="ldloading.contract" class="btn btn-wide btn-primary ladda-button" data-style="contract" ng-click="ctrl.importKey('contract')">
-                            <span class="ladda-label"> Import key </span>
-                            <span class="ladda-spinner"></span>
+                        <a ng-click="ctrl.loadImportKey()">
+                            <span> Import key </span>
                         </a>
                             <form action="#" role="form" id="form">
                                 <fieldset>
