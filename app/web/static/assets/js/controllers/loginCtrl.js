@@ -20,7 +20,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 					$sessionStorage.SociethyToken = response.data.token;
 					$sessionStorage.username = response.data.user.name.replace(/\"/g, "");
 					$rootScope.user = response.data.user;
-					displayUsername();
 				}, function(error) {
 					console.log(error);
 				});
