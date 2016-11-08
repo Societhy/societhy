@@ -34,7 +34,7 @@ def export_and_delete_key(user, address):
 	}
 
 def export_key(user, address):
-	print(key)
+	print(address)
 	return {
 		"data": "OK",
 		"status": 200
