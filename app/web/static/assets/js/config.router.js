@@ -34,7 +34,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl'),
         abstract: true
     }).state('app.dashboard', {
-        url: "/dashboard",
+        url: "/dashboard",   
         templateUrl: "static/assets/views/dashboard.html",
         resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl'),
         title: 'Dashboard',
@@ -44,7 +44,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.me', {
         url: '/me',
         templateUrl: "static/assets/views/user_profile.html",
-        resolve: loadSequence('keyCtrl', 'keythereum', 'angularFileUpload'),
+        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload'),
         title: 'My Profile',
         ncyBreadcrumb: {
             label: 'My Profile'
