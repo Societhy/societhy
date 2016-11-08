@@ -3,7 +3,7 @@
 	<div class="horizontal-nav-container" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
 		<ul class="nav navbar-nav no-border">
 
-			<!-- 		BOUTTON DASHBOARD  -->			
+			<!-- 		BOUTTON DASHBOARD  -->
 			<li ui-sref-active="active">
 				<a ui-sref="app.dashboard"> <letter-icon data="{{ 'sidebar.nav.dashboard.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.dashboard.MAIN"></span> </a>
 			</li>
@@ -81,8 +81,8 @@
 	</li>
 	<li class="dropdown" uib-dropdown ng-show="user">
 		<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
-			<img alt="" src="static/assets/images/avatar-1.jpg">
-			<span>Simon Vadée</span> <span class="caret"></span>
+			<img alt="" src="static/assets/images/default-user.png">
+			<span id="username" ng-bind-html="ctrl.test"></span> <span class="caret"></span>
 		</a>
 
 		<ul class="dropdown-menu pull-right animated fadeInRight">

@@ -1,5 +1,5 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
-	
+
 //	var keythereum = require("keythereum");
 	var ctrl = this;
 	ctrl.coucou = "coucou";
@@ -18,7 +18,9 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name.replace(/\"/g, "");
 					$rootScope.user = response.data.user;
+					displayUsername();
 				}, function(error) {
 					console.log(error);
 				});
@@ -32,12 +34,18 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 		});
 	}
 
-	ctrl.register = function() {
+    ctrl.test = $sessionStorage.username;
+
+    ctrl.register = function() {
 		if (ctrl.username && ctrl.password) {
-			$http.post('/newUser', {
-				name: ctrl.username,
-				age: ctrl.age || "",
-				email: ctrl.email || "",
+		    $http.post('/newUser', {
+				name: ctrl.username, email: ctrl.email,
+				firstname: ctrl.firstname || "",
+				lastname: ctrl.lastname || "",
+				birthday: ctrl.birthday || "",
+				gender: ctrl.gender || "",
+				address: ctrl.address || "",
+				city: ctrl.city || "",
 				password: ctrl.password
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
@@ -48,6 +56,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 					console.log(error);
 			});
 		}
-	};
+    };
 	return ctrl
 });
