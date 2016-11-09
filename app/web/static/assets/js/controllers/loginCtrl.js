@@ -13,9 +13,8 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
 	ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
-				ctrl.password = CryptoJS.MD5(ctrl.password).toString();
 				$http.post('/login', {
-					"id": btoa(ctrl.username + ':' + ctrl.password)
+					"id": btoa(ctrl.username + ':' + CryptoJS.MD5(ctrl.password).toString())
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					$sessionStorage.SociethyToken = response.data.token;
@@ -38,7 +37,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
     ctrl.register = function() {
 		if (ctrl.username && ctrl.password) {
-			ctrl.password = CryptoJS.MD5(ctrl.password).toString();
 		    $http.post('/newUser', {
 				name: ctrl.username, email: ctrl.email,
 				firstname: ctrl.firstname || "",
@@ -47,7 +45,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
 				city: ctrl.city || "",
-				password: ctrl.password
+				password: CryptoJS.MD5(ctrl.password).toString()
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
