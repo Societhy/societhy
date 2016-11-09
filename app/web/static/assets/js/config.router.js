@@ -63,24 +63,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "static/assets/views/utility_500.html",
     })
 
-	// Login routes
-
-	.state('login', {
-	    url: '/login',
-	    template: '<div ui-view class="fade-in-right-big smooth"></div>',
-	    abstract: true
-	}).state('login.signin', {
-	    url: '/signin',
-	    templateUrl: "static/assets/views/login_login.html"
-	}).state('login.forgot', {
-	    url: '/forgot',
-	    templateUrl: "static/assets/views/login_forgot.html"
-	}).state('login.registration', {
-	    url: '/registration',
-        resolve: loadSequence('loginCtrl'),
-	    templateUrl: "static/assets/views/login_registration.html"
-	})
-
 	// Landing Page route
 	.state('landing', {
 	    url: '/landing-page',

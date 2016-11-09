@@ -20,7 +20,7 @@ def key_was_generated(user, address):
 	}
 
 def import_new_key(user, key):
-	print(key)
+	print('import --- ', user, key)
 	return {
 		"data": "OK",
 		"status": 200
