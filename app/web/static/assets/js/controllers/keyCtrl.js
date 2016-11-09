@@ -2,7 +2,7 @@
 *** GENERATE KEY MODAL CONTROLLER ***
 *****************/
 
-app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, ctrl) {
+app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, $rootScope, ctrl) {
 	$scope.ldlocal = {};
 	$scope.ldrequest = {};
 	errorAlertOptions= {
@@ -23,8 +23,12 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 		ctrl[operation]().then(
 			function(key) {
 				$scope.ldlocal[style.replace('-', '_')] = false;
-				console.log(key)
+				$rootScope.user.addresses = $rootScope.user.addresses ? $rootScope.user.addresses.concat(key.address) : [key.address];
 				SweetAlert.swal(succesAlertOptions, function() {
+					var file = new Blob([ JSON.stringify(key) ], {
+						type : 'text/plain'
+					});
+					saveAs(file, 'keyFile.txt')
 					$uibModalInstance.dismiss()
 				});
 			},
@@ -184,9 +188,9 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				}
 			}
 		});
-    };
+	};
 
-    ctrl.importLocalKey = function() {
+	ctrl.importLocalKey = function() {
 		//after file loaded ask for password and decrypt key
 		var key = JSON.parse('{"address":"379f3981e8ca02ac0ef983f9c344f984c2e74607","crypto":{"cipher":"aes-128-ctr","ciphertext":"2eadb2019e85ccf21193c4e89299704074491ee29c88218fd830c82b37a5e7d3","cipherparams":{"iv":"0c74c62e5ea7aa86ed26ae6ddc3b9b40"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"ac99012bf435c38ae29bed2e4dacca9bedf34f1ea7947b5ed842158ec035fb84"},"mac":"53fccd340cfe0d7775f79096a3290538a9afb3fe2b76239bda534f51e5ae5b71"},"id":"d847b5ec-c1ce-4794-a731-3f4111beba9d","version":3}')
 		var dk = keythereum.recover("test", key)
@@ -208,25 +212,26 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		var modalInstance = $uibModal.open({
 			templateUrl: "static/assets/views/modals/exportKeyModal.html",
 			controller: 'ModalExportController',
+			size: 'lg',
 			resolve: {
 				ctrl : function() {
 					return ctrl;
 				}
 			}
 		});
-    };
+	};
 
-    ctrl.exportDeleteKey = function(address) {
-    	$http.get('/exportDeleteKey/'.concat(address)).then(function(response) {
+	ctrl.exportDeleteKey = function(address) {
+		$http.get('/exportDeleteKey/'.concat(address)).then(function(response) {
 			// open modal to download keyfile + red message "key has been deleted from server"
 			console.log("exportDeleteKey", response);
 		});
-    };
+	};
 
-    ctrl.exportKey = function(address) {
-    	$http.get('/exportKey/'.concat(address)).then(function(response) {
+	ctrl.exportKey = function(address) {
+		$http.get('/exportKey/'.concat(address)).then(function(response) {
 			// open modal to download keyfile
 			console.log("exportKey", response);
 		});
-    };
+	};
 });
