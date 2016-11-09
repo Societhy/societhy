@@ -27,7 +27,6 @@ app.constant('JS_REQUIRES', {
         //*** External libraries
 
         'keythereum': '../../node_modules/keythereum/dist/keythereum.min.js',
-        'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',

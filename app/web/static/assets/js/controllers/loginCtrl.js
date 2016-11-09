@@ -14,7 +14,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 	ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 				$http.post('/login', {
-					"id": btoa(ctrl.username + ':' + CryptoJS.MD5(ctrl.password).toString())
+					"id": btoa(ctrl.username + ':' + ctrl.password)
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					$sessionStorage.SociethyToken = response.data.token;
@@ -45,7 +45,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
 				city: ctrl.city || "",
-				password: CryptoJS.MD5(ctrl.password).toString()
+				password: ctrl.password
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
