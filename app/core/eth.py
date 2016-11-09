@@ -1,4 +1,5 @@
 import time
+import json
 import ethjsonrpc
 from base64 import b64decode, b64encode
 
@@ -21,8 +22,11 @@ def key_was_generated(user, address):
 
 def import_new_key(user, key):
 	print('import --- ', user, key)
+	key = key.read().decode('utf-8')
+	test = json.loads(key)
+
 	return {
-		"data": "OK",
+		"data": { "address": test.get('address')},
 		"status": 200
 	}
 

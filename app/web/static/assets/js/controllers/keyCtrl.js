@@ -23,7 +23,6 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 		ctrl[operation]().then(
 			function(key) {
 				$scope.ldlocal[style.replace('-', '_')] = false;
-				$rootScope.user.addresses = $rootScope.user.addresses ? $rootScope.user.addresses.concat(key.address) : [key.address];
 				SweetAlert.swal(succesAlertOptions, function() {
 					var file = new Blob([ JSON.stringify(key) ], {
 						type : 'text/plain'
@@ -82,7 +81,6 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 
 	uploader.onCompleteItem = function (fileItem, response, status, headers) {
 		$scope.keyUploaded = true;
-		console.info('onCompleteItem', fileItem, response, status, headers);
 		alertOptions = {
 			title: status == 200 ? "Yay!" : "Oups :(",
 			text: status == 200 ? "Key was imported successfully" : "Key file not recognized...",
@@ -93,8 +91,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		SweetAlert.swal(alertOptions, function() {
 			if (status == 200) {
 				$uibModalInstance.dismiss()
-				// ctrl.importLinkedKey(response.get('address'))
-				ctrl.importLinkedKey("keyxxx0908087")
+				ctrl.importLinkedKey(response.address)
 			}
 		});
 	};
@@ -111,7 +108,6 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 
 app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, FileUploader, ctrl) {
 	$scope.addresses = $rootScope.user.addresses
-	console.log($scope.addresses);
 });
 
 /****************
@@ -201,7 +197,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	ctrl.importLinkedKey = function(address) {
 		// updates UI after
 		$rootScope.user.addresses = $rootScope.user.addresses ? $rootScope.user.addresses.concat(address) : [address];
-		console.log($rootScope.user)
+
 	};
 
 	/***
