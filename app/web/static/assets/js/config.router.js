@@ -34,7 +34,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl', 'CryptoJS'),
         abstract: true
     }).state('app.dashboard', {
-        url: "/dashboard",   
+        url: "/dashboard",
         templateUrl: "static/assets/views/dashboard.html",
         resolve: loadSequence('d3', 'ui.knob', 'countTo', 'dashboardCtrl'),
         title: 'Dashboard',
@@ -63,7 +63,17 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "static/assets/views/utility_500.html",
     })
 
-	// Landing Page route
+    .state('login', {
+        url: '/login',
+        template: '<div ui-view class="fade-in-right-big smooth"></div>',
+        abstract: true
+    }).state('login.registration', {
+        url: '/registration',
+        resolve: loadSequence('loginCtrl', 'CryptoJS'),
+        templateUrl: "static/assets/views/login_registration.html"
+    })
+
+    // Landing Page route
 	.state('landing', {
 	    url: '/landing-page',
 	    template: '<div ui-view class="fade-in-right-big smooth"></div>',
