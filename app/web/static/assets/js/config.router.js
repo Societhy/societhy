@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl', 'CryptoJS'),
+        resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
