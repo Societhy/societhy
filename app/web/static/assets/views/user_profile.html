@@ -23,7 +23,6 @@
                                         <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
                                             <div class="user-image">
                                                 <div class="thumbnail">
-                                                    <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
                                                     <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
                                                     <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
                                                 </div>
@@ -414,7 +413,6 @@
                                                 <div flow-init flow-object="obj.flow">
                                                     <div class="user-image">
                                                         <div class="thumbnail margin-bottom-5">
-                                                            <img src="assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && noImage">
                                                             <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
                                                             <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
                                                         </div>
