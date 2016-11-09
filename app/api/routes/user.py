@@ -13,6 +13,7 @@ router = Blueprint('user', __name__)
 @router.route('/login', methods=['POST'])
 def login():
 	ret = auth.login(request.json)
+	print('------------------', ret.get('data'))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/logout')
@@ -29,6 +30,7 @@ def sign_up():
 @router.route('/checkTokenValidity/<token>')
 def check_token_validity(token):
 	ret = auth.check_token_validity(token)
+	print('------------------', ret.get('data'))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/deleteUser/<user>')
@@ -56,7 +58,7 @@ def key_was_generated(user, address):
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/importNewKey', methods=['POST'])
-@requires_auth
+# @requires_auth
 def import_new_key(user):
 	ret = eth.import_new_key(user, request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))

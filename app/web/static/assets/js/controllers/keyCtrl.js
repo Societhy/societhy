@@ -29,20 +29,28 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, ct
 });
 
 app.controller('ModalImportController', function($scope, $uibModalInstance, ctrl, FileUploader) {
-	var uploader = $scope.uploader = new FileUploader({
-        url: 'utils/upload.php'
+	var modalHtml = 
+			"<div class=\"modal-header ng-scope\">\
+                <h3 class=\"modal-title\">Chose a way to generate key!</h3>\
+            </div>\
+			<div class=\"modal-body\">\
+				<button ladda=\"ldlocal.contract\" class=\"btn btn-o btn-primary ladda-button\" data-style=\"contract\" style=\"width:45%\" ng-click=\"local('genLocalKey', 'contract')\">\
+					<span class=\"ladda-label\"> Generate key locally</span>\
+    		        <span class=\"ladda-spinner\"></span>\
+				</button>\
+				<button ladda=\"ldrequest.contract\" class=\"btn btn-o btn-primary ladda-button\" data-style=\"contract\" style=\"float: right; width:45%\" ng-click=\"request('genLinkedKey', 'contract')\">\
+					<span class=\"ladda-label\"> Generate key on server</span>\
+        		    <span class=\"ladda-spinner\"></span>\
+        	    </button>\
+			</div>";
+   	$scope.ldlocal = {};
+	$scope.ldrequest = {};
+	$scope.keyUploaded = false;
+	$scope.uploader = new FileUploader({
+        url: '/importNewKey',
+        autoUpload: true
     });
-
-    // FILTERS
-
-    uploader.filters.push({
-        name: 'customFilter',
-        fn: function (item/*{File|FileLikeObject}*/, options) {
-            return this.queue.length < 10;
-        }
-    });
-
-    // CALLBACKS
+	var uploader = $scope.uploader;
 
     uploader.onWhenAddingFileFailed = function (item/*{File|FileLikeObject}*/, filter, options) {
         console.info('onWhenAddingFileFailed', item, filter, options);
@@ -72,14 +80,19 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, ctrl
         console.info('onCancelItem', fileItem, response, status, headers);
     };
     uploader.onCompleteItem = function (fileItem, response, status, headers) {
-        console.info('onCompleteItem', fileItem, response, status, headers);
+    	$scope.keyUploaded = true;
+    	console.log('modalinstance', $uibModalInstance);
+    	console.info('onCompleteItem', fileItem, response, status, headers);
     };
     uploader.onCompleteAll = function () {
         console.info('onCompleteAll');
     };
 
-    console.info('uploader', uploader);$scope.ldlocal = {};
-	$scope.ldrequest = {};
+    $scope.removeKeyFile = function(item) {
+    	$scope.keyUploaded = false;
+    	item.remove()
+    }
+
 	$scope.local = function(operation, style) {
         $scope.ldlocal[style.replace('-', '_')] = true;
        	ctrl[operation]().then(
