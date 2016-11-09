@@ -107,7 +107,8 @@
     "themify-icons": "~0.1.0",
     "bootstrap": "~3.3.2",
     "flag-icon-css": "~0.8.5",
-    "bootstrap-rtl": "~3.3.1"
+    "bootstrap-rtl": "~3.3.1",
+    "crypto-js": "~3.1.8"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",

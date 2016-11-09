@@ -1,4 +1,4 @@
-SOCIETHY
+## SOCIETHY
 ========
 
 Usage :
@@ -9,14 +9,26 @@ Usage :
 
 * do both : `make`
 
-* go to webapp : `localhost:4242` in your browser 
+* go to webapp : `localhost:4242` in your browser
 
 * launch server (in docker) = `run`
 
 * ssh to eip server : `ssh exploit@163.5.84.117 -p 22`
 
+## Install npm et bower dependencies
+====================================
+* Install node.js
+
+* Install grunt : `npm install -g grunt-cli`
+
+* Install dependencies : `make build_dependencies`
+
+**(DEPLOYMENT ONLY)**
+
+* Build Distribution Folder : `grunt build:layout1`
 
 ## Database help
+================
 
 Le serveur est lancé sur le port 27017 et 28017 pour la conf par navigateur. (je crois)
 La base est stockée dans /var/lib/mongodb/
