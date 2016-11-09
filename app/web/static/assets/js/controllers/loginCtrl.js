@@ -1,7 +1,6 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
 //	var keythereum = require("keythereum");
-	console.log(CryptoJS)
 	var ctrl = this;
 	ctrl.coucou = "coucou";
 	if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
@@ -14,7 +13,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
 	ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
-				console.log("PWD login", CryptoJS.md5(ctrl.password))
+				ctrl.password = CryptoJS.MD5(ctrl.password).toString();
 				$http.post('/login', {
 					"id": btoa(ctrl.username + ':' + ctrl.password)
 				}).then(function(response) {
@@ -39,7 +38,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
     ctrl.register = function() {
 		if (ctrl.username && ctrl.password) {
-			console.log("PWD register", CryptoJS.md5(ctrl.password))
+			ctrl.password = CryptoJS.MD5(ctrl.password).toString();
 		    $http.post('/newUser', {
 				name: ctrl.username, email: ctrl.email,
 				firstname: ctrl.firstname || "",
