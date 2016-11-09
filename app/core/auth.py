@@ -1,5 +1,6 @@
 import time
 import jwt
+import hashlib
 from base64 import b64decode, b64encode
 
 from flask import session, request, Response
@@ -15,11 +16,11 @@ def login(creditentials):
 	user = None
 
 	def auth_user(creditentials):
-		
+
 		if creditentials:
 			creditentials = str(b64decode(creditentials), 'utf-8').split(':')
 			if len(creditentials) == 2:
-				name, passw = creditentials[0], creditentials[1]
+				name, passw = creditentials[0], hashlib.md5(creditentials[1].encode()).hexdigest()
 				if (name is not None) and (passw is not None) and (name in users_table):
 					user = users_table.get(name)
 					if user and passw == user.get('password'):
@@ -52,7 +53,7 @@ def logout(user):
 	token = request.headers.get('authentification')
 	del session[token]
 	return {"success": True}
-	
+
 def sign_up(newUser):
 	required_fields = ["name", "password"]
 	for field in required_fields:
@@ -65,10 +66,12 @@ def sign_up(newUser):
 		return {"data": "user already exists",
 				"status": 403}
 
+	tmp = newUser.get('password')
+	newUser["password"] = hashlib.md5(newUser.get('password').encode()).hexdigest()
 	users.insert_one(newUser)
 	del newUser["_id"]
 	users_table[newUser.get('name')] = newUser
-	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(newUser.get('password'), 'utf-8'))})
+	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(tmp, 'utf-8'))})
 
 def check_token_validity(token):
 	return {"data": {"user": session.get(token)},
