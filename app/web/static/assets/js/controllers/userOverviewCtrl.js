@@ -22,27 +22,22 @@ window.fbAsyncInit = function() {
 ctrl.fb_connect = function (argument) {
 	FB.login(function(response) {
 
-		if (response.authResponse) {
-			console.log('Welcome!  Fetching your information.... ');
-            console.log(response); // dump complete info
+		if (response.authResponse) 
+		{
             access_token = response.authResponse.accessToken; //get access token
             user_id = response.authResponse.userID; //get FB UID
-
-            FB.api('/me', function(response) {
-            	user_email = response.user_email; 
-            	console.log(user_email)
-                //get user email
-          // you can store this data into your database       
-
-      });
-
-            FB.api('/me/picture', function(response) 
+            console.log("token : " + access_token);
+            console.log("user_id : " + user_id);
+            FB.api('/me', {fields: 'email, name, picture'} ,function(response) 
             {
-			console.log(response.data.url);
-			var newPhoto = angular.element(document.querySelector('#newPhoto'));
-			newPhoto.html('<img src="'+ response.data.url + '">')         	
-            });
+                console.log("name : " + response.name);
+                console.log("email : " + response.email);
+                console.log("photo url " + response.picture.data.url);
 
+                newPhoto = angular.element(document.querySelector('#newPhoto'));
+                newPhoto.html('<img src="'+ response.picture.data.url + '">')           
+
+            });
 
         } else {
             //user hit cancel button
