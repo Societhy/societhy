@@ -5,7 +5,7 @@ all:
 	@make shell
 
 build_dependencies:
-	npm --prefix ./app/web install ./app/web
+	npm --python="C:\Python27" --prefix ./app/web install ./app/web
 	bower install ./app/web
 
 build:

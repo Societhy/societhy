@@ -23,11 +23,12 @@ app.constant('JS_REQUIRES', {
         'jquery-appear-plugin': ['../../bower_components/jquery-appear/build/jquery.appear.min.js'],
         'spectrum-plugin': ['../../bower_components/spectrum/spectrum.js', '../../bower_components/spectrum/spectrum.css'],
 		'jcrop-plugin': ['../../bower_components/Jcrop/js/jquery.Jcrop.min.js', '../../bower_components/Jcrop/css/jquery.Jcrop.min.css'],
-		
+
         //*** External libraries
 
         'keythereum': '../../node_modules/keythereum/dist/keythereum.min.js',
-		
+        'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
+
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',

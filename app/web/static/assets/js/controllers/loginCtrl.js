@@ -1,4 +1,4 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
+app.controller('LoginController', function($rootScope, $http, $sessionStorage, CryptoJS) {
 
 //	var keythereum = require("keythereum");
 	var ctrl = this;
@@ -13,6 +13,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
 	ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
+				console.log("PWD login", CryptoJS.md5(ctrl.password))
 				$http.post('/login', {
 					"id": btoa(ctrl.username + ':' + ctrl.password)
 				}).then(function(response) {
@@ -37,6 +38,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
     ctrl.register = function() {
 		if (ctrl.username && ctrl.password) {
+			console.log("PWD register", CryptoJS.md5(ctrl.password))
 		    $http.post('/newUser', {
 				name: ctrl.username, email: ctrl.email,
 				firstname: ctrl.firstname || "",
