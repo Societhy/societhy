@@ -1,6 +1,7 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage, CryptoJS) {
+app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 
 //	var keythereum = require("keythereum");
+	console.log(CryptoJS)
 	var ctrl = this;
 	ctrl.coucou = "coucou";
 	if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
