@@ -121,7 +121,6 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	/***
 	KEY GENERATION
 	***/
-
 	ctrl.loadGenerateKey = function() {
 
 

@@ -1,12 +1,13 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
+app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state) {
 
 //	var keythereum = require("keythereum");
 	var ctrl = this;
-	ctrl.coucou = "coucou";
+
 	if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
 		$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
 			if (response.data.user != null) {
-				$rootScope.user = response.data.user;
+				$rootScope.user = ctrl.user = response.data.user;
+				console.log(ctrl.user)
 			}
 		});
 	}
@@ -19,7 +20,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 					console.log("RECEIVED = ", response);
 					$sessionStorage.SociethyToken = response.data.token;
 					$sessionStorage.username = response.data.user.name.replace(/\"/g, "");
-					$rootScope.user = response.data.user;
+					$rootScope.user = ctrl.user = response.data.user;
 				}, function(error) {
 					console.log(error);
 				});
@@ -33,23 +34,25 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage) {
 		});
 	}
 
-    ctrl.test = $sessionStorage.username;
-
     ctrl.register = function() {
+    	console.log(ctrl.wantsKey)
 		if (ctrl.username && ctrl.password) {
 		    $http.post('/newUser', {
-				name: ctrl.username, email: ctrl.email,
+				name: ctrl.username,
+				email: ctrl.email,
+				password: ctrl.password,
+				eth: ctrl.wantsKey || false,
 				firstname: ctrl.firstname || "",
 				lastname: ctrl.lastname || "",
 				birthday: ctrl.birthday || "",
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
-				city: ctrl.city || "",
-				password: ctrl.password
+				city: ctrl.city || ""
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
-				$rootScope.user = response.data.user;
+				$rootScope.user = ctrl.user = response.data.user;
+				$state.go("app.me")
 				},
 				function(error) {
 					console.log(error);

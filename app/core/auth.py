@@ -5,10 +5,9 @@ from base64 import b64decode, b64encode
 
 from flask import session, request, Response
 from models import users
+from core import eth
 
 from . import secret_key
-
-users_table = {user.get('name'): user for user in users.find({}, {"name": True, "password": True})}
 
 # generates token for session
 def login(creditentials):
@@ -21,10 +20,12 @@ def login(creditentials):
 			creditentials = str(b64decode(creditentials), 'utf-8').split(':')
 			if len(creditentials) == 2:
 				name, passw = creditentials[0], hashlib.md5(creditentials[1].encode()).hexdigest()
-				if (name is not None) and (passw is not None) and (name in users_table):
-					user = users_table.get(name)
-					if user and passw == user.get('password'):
-						return user
+				if (name is not None) and (passw is not None):
+					user = users.find({"name": name, "password": passw})
+					user = user[0] if user.count() == 1 else None
+					if user:
+						user.update({"_id": str(user.get('_id'))})
+					return user
 		return None
 
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
@@ -55,23 +56,30 @@ def logout(user):
 	return {"success": True}
 
 def sign_up(newUser):
-	required_fields = ["name", "password"]
+	required_fields = ["name", "password", "email"]
 	for field in required_fields:
 		if newUser.get(field) is None:
 			return {"status": 403,
 					"error": "missing required field"}
 
 
-	if newUser.get('name') in users_table:
-		return {"data": "user already exists",
-				"status": 403}
+	# if newUser.get('name') in users_table:
+	# 	return {"data": "user already exists",
+	# 			"status": 403}
 
-	tmp = newUser.get('password')
+	unencryptedPassword = newUser.get('password')
 	newUser["password"] = hashlib.md5(newUser.get('password').encode()).hexdigest()
+	
+	newKey = eth.gen_key() if newUser.get('eth') else None
+	newUser["eth"] = {
+		"mainKey": newKey,
+		"keys": [newKey] if newKey else [],
+	}
+
 	users.insert_one(newUser)
-	del newUser["_id"]
-	users_table[newUser.get('name')] = newUser
-	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(tmp, 'utf-8'))})
+	newUser["_id"] = str(newUser["_id"])
+	
+	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
 
 def check_token_validity(token):
 	return {"data": {"user": session.get(token)},
