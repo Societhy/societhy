@@ -22,7 +22,7 @@ def login(creditentials):
 				name, passw = creditentials[0], hashlib.md5(creditentials[1].encode()).hexdigest()
 				if (name is not None) and (passw is not None):
 					user = users.find({"name": name, "password": passw})
-					user = user[0] if user.count() == 1 else None
+					user = user[0] if user.count() >= 1 else None
 					if user:
 						user.update({"_id": str(user.get('_id'))})
 					return user
@@ -56,16 +56,24 @@ def logout(user):
 	return {"success": True}
 
 def sign_up(newUser):
-	required_fields = ["name", "password", "email"]
-	for field in required_fields:
-		if newUser.get(field) is None:
-			return {"status": 403,
-					"error": "missing required field"}
 
+	def wrong_signup_request(newUser):
+		required_fields = ["name", "password", "email"]
+		for field in required_fields:
+			if newUser.get(field) is None:
+				return {"status": 403,
+						"error": "missing required field"}
+		return None
 
-	# if newUser.get('name') in users_table:
-	# 	return {"data": "user already exists",
-	# 			"status": 403}
+	def user_exists(newUser):
+		if users.find({"email": newUser.get('email')}).count() > 0:
+			return {"data": "user already exists",
+					"status": 403}
+		return False
+
+	failure = wrong_signup_request(newUser) or user_exists(newUser)
+	if failure:
+		return failure
 
 	unencryptedPassword = newUser.get('password')
 	newUser["password"] = hashlib.md5(newUser.get('password').encode()).hexdigest()

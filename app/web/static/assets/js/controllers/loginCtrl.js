@@ -11,6 +11,9 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 			}
 		});
 	}
+	else if ($rootScope.user != null) {
+		ctrl.user = $rootScope.user
+	}
 
 	ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
@@ -30,12 +33,12 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	ctrl.logout = function() {
 		$http.get('/logout').then(function(reponse) {
 			delete $sessionStorage.SociethyToken;
-			$rootScope.user = null;
+			$rootScope.user = ctrl.user = null
 		});
 	}
 
     ctrl.register = function() {
-    	console.log(ctrl.wantsKey)
+
 		if (ctrl.username && ctrl.password) {
 		    $http.post('/newUser', {
 				name: ctrl.username,
@@ -52,7 +55,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-				$state.go("app.me")
+				$state.go("app.me", ctrl)
 				},
 				function(error) {
 					console.log(error);
