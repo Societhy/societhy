@@ -11,7 +11,7 @@ RUN apt-get update &&  \
 # PIP_PACKAGES are to be installed with pip3 (python packages)
 
 # languages
-ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl"
+ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git"
 
 # libraries and services
 ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
