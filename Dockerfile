@@ -45,11 +45,19 @@ RUN file /parity/target/release/parity
 RUN cp /parity/target/release/parity /usr/bin
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc pyJWT"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl pyJWT"
 
 RUN pip3 install $PIP_PACKAGES
 
 RUN pip3 install ethereum --upgrade
+
+# INSTALL our own ethjsonrpc module
+RUN git clone https://github.com/simonvadee/ethjsonrpc.git && \
+        cd ethjsonrpc && \
+        git pull && \
+        pip3 install -r requirements.txt && \
+        python3 setup.py install && \
+        cp -r ethjsonrpc /usr/local/lib/python3.5/dist-packages/ethjsonrpc
 
 RUN apt-get autoremove -qy --purge
 
