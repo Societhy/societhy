@@ -1,10 +1,11 @@
 import time
 import json
-import ethjsonrpc
 from base64 import b64decode, b64encode
 
 from flask import session, request, Response
+
 from models import users
+from models.db import eth_cli
 
 class KeyFormatError(Exception):
 	pass
@@ -48,11 +49,11 @@ def import_new_key(user, sourceKey):
 
 	status = 200
 	sourceKey = sourceKey.read().decode('utf-8')
+
 	try:
 		key = json.loads(sourceKey)
 		isEthereumKey(key)
 		data = { "address" : key.get('address') }
-
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format nor recognized"
 		status = 400
