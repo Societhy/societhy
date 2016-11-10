@@ -28,9 +28,21 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # parity dependencie
-RUN curl https://raw.githubusercontent.com/ethcore/scripts/master/install-deps.sh -L | bash
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 
-RUN cp parity/target/release/parity /usr/local/bin
+ENV PATH /societhy/.cargo/bin:$PATH
+
+RUN git clone https://github.com/ethcore/parity && \
+        cd parity && \
+        git checkout beta && \
+        git pull && \
+        cargo build --release --verbose && \
+        ls /parity/target/release/parity && \
+        strip /parity/target/release/parity
+
+RUN file /parity/target/release/parity
+
+RUN cp /parity/target/release/parity /usr/bin
 
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl ethjsonrpc pyJWT"
@@ -51,5 +63,7 @@ COPY ./utils /societhy/utils
 
 # add code files and setup work directory
 WORKDIR /societhy
+
+EXPOSE 8080
 
 RUN cd /societhy/utils ; ./install.sh
