@@ -1,6 +1,6 @@
 import time
 import jwt
-import hashlib
+import scrypt
 from base64 import b64decode, b64encode
 
 from flask import session, request, Response
@@ -19,9 +19,9 @@ def login(creditentials):
 		if creditentials:
 			creditentials = str(b64decode(creditentials), 'utf-8').split(':')
 			if len(creditentials) == 2:
-				name, passw = creditentials[0], hashlib.md5(creditentials[1].encode()).hexdigest()
+				name, passw = creditentials[0], scrypt.hash(creditentials[1], "du gros sel s'il vous plait")
 				if (name is not None) and (passw is not None):
-					user = users.find({"name": name, "password": passw})
+					user = users.find({"name": name, "password": passw}, {"password": False})
 					user = user[0] if user.count() >= 1 else None
 					if user:
 						user.update({"_id": str(user.get('_id'))})
@@ -76,7 +76,7 @@ def sign_up(newUser):
 		return failure
 
 	unencryptedPassword = newUser.get('password')
-	newUser["password"] = hashlib.md5(newUser.get('password').encode()).hexdigest()
+	newUser["password"] = scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")
 	
 	newKey = eth.gen_key() if newUser.get('eth') else None
 	newUser["eth"] = {
