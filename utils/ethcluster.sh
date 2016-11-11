@@ -37,7 +37,7 @@ attach()
 
 relay()
 {
-    nohup parity --rpc --rpcaddr 10.224.9.117 --rpcport 8080 --jsonrpc-hosts all &>/dev/null &
+    parity --rpc --rpcaddr 10.224.9.117 --rpcport 8080 --jsonrpc-hosts all --jsonrpc-apis web3,eth,net,parity,traces,rpc,personal
 }
 
 connect()
