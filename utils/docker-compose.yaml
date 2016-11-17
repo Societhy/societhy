@@ -14,6 +14,7 @@ testenv:
 
   volumes:
     - ../app:/societhy/app:rw
+    - ${HOME}/.ssh:/root/.ssh/:ro
   extra_hosts:
     - "custom:172.17.0.2"
     
