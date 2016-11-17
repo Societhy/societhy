@@ -45,19 +45,25 @@ RUN file /parity/target/release/parity
 RUN cp /parity/target/release/parity /usr/bin
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi mongokat openpyxl pyJWT"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT"
 
 RUN pip3 install $PIP_PACKAGES
 
 RUN pip3 install ethereum --upgrade
 
 # INSTALL our own ethjsonrpc module
+
 RUN git clone https://github.com/simonvadee/ethjsonrpc.git && \
         cd ethjsonrpc && \
         git pull && \
-        pip3 install -r requirements.txt && \
         python3 setup.py install && \
         cp -r ethjsonrpc /usr/local/lib/python3.5/dist-packages/ethjsonrpc
+
+RUN git clone https://github.com/pricingassistant/mongokat.git && \
+    cd mongokat && \
+    git pull && \
+    python3 setup.py install && \
+    cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
 RUN apt-get autoremove -qy --purge
 
@@ -67,11 +73,15 @@ ENV IP="172.17.0.2"
 
 ENV MONGOIP="163.5.84.117"
 
-COPY ./utils /societhy/utils
+ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
 # add code files and setup work directory
 WORKDIR /societhy
 
+COPY ./utils /societhy/utils
+
 EXPOSE 8080
+
+EXPOSE 22
 
 RUN cd /societhy/utils ; ./install.sh
