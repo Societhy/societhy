@@ -14,7 +14,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in addresses">
+						<tr ng-repeat="item in keys">
 							<td><strong>{{ item }}</strong></td>
 							<td ng-show="uploader.isHTML5" nowrap>{{ item }}</td>
 							<td ng-show="uploader.isHTML5">
@@ -34,13 +34,13 @@
 								</span>
 							</td>
 							<td nowrap>
-								<button type="button" class="btn btn-success btn-xs" ng-click="" ng-disabled="">
+								<button type="button" class="btn btn-success btn-xs" ng-click="exportKey(item.address)" ng-disabled="">
 									<span class="glyphicon glyphicon-upload"></span> Download
 								</button>
 								<button type="button" class="btn btn-warning btn-xs" ng-click="" ng-disabled="">
 									<span class="glyphicon glyphicon-ban-circle"></span> Cancel
 								</button>
-								<button type="button" class="btn btn-danger btn-xs" ng-click="">
+								<button type="button" class="btn btn-danger btn-xs" ng-click="exportDeleteKey(item.address)">
 									<span class="glyphicon glyphicon-trash"></span> Remove from server
 								</button>
 							</td>

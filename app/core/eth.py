@@ -1,7 +1,7 @@
 import time
 import json
 import scrypt
-from os import environ, listdir, path
+from os import environ, listdir, path, remove
 from base64 import b64decode, b64encode
 from time import strftime, clock
 
@@ -29,7 +29,7 @@ def gen_linked_key(user, password):
 			key = key[2:]
 		return key
 	
-	newKey = gen_key(password)
+	newKey = gen_key_remote(password)
 	user.add_key(newKey, local=False)
 	return {
 		"data": newKey,
@@ -43,13 +43,13 @@ def key_was_generated(user, address):
 		"status": 200
 	}
 
+
 def import_new_key(user, sourceKey):
 
 	def is_ethereum_key(keyFile):
 		required_entries = set(["address", "crypto", "id", "version"])
 		if not required_entries.issubset(set(keyFile.keys())):
 			raise KeyFormatError
-
 
 	def key_already_exists(address):
 		keyDirectory = environ.get('KEYS_DIRECTORY')
@@ -85,16 +85,21 @@ def import_new_key(user, sourceKey):
 		"status": status
 	}
 
-def export_and_delete_key(user, address):
-	print(address)
-	return {
-		"data": "OK",
-		"status": 200
-	}
+def export_key(user, address, delete=False):
 
-def export_key(user, address):
-	print(address)
+	keyDirectory = environ.get('KEYS_DIRECTORY')
+	for keyFile in listdir(keyDirectory):
+		if address in keyFile:
+			with open(path.join(keyDirectory, keyFile), 'r') as f:
+				data = json.load(f)
+				if delete is True:
+					remove(f.name)
+				return {
+					"data": data,
+					"status": 200
+				}
+
 	return {
-		"data": "OK",
-		"status": 200
+		"data": "Key does not exists",
+		"status": 400
 	}

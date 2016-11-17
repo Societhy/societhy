@@ -44,6 +44,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 			function(key) {
 				console.log(key);
 				$scope.ldrequest[style.replace('-', '_')] = false;
+				errorAlertOptions.showCancelButton = true,
 				SweetAlert.swal(succesAlertOptions, function() {
 					$uibModalInstance.dismiss()
 				});
@@ -83,7 +84,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		$scope.keyUploaded = true;
 		alertOptions = {
 			title: status == 200 ? "Yay!" : "Oups :(",
-			text: response,
+			text: status == 200 ? "Key imported successfully" : response,
 			type: status == 200 ? "success" : "error",
 			confirmButtonColor: "#007AFF"
 		}
@@ -107,7 +108,17 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 *****************/
 
 app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, FileUploader, ctrl) {
-	$scope.addresses = $rootScope.user.addresses
+
+	$scope.keys = $rootScope.user.eth.keys
+
+	$scope.exportDeleteKey = function(address) {
+		ctrl.exportDeleteKey(address);
+	}
+
+	$scope.exportKey = function(address) {
+		ctrl.exportKey(address);
+	}
+
 });
 
 /****************
@@ -161,7 +172,8 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				$http.post('/genLinkedKey', {
 					"password": "coucou"
 				}).then(
-					function(data) {
+					function(reponse) {
+						$rootScope.user.eth.keys.concat(response.data);
 						success(data);
 					}, function(error) {
 						failure(error);
@@ -197,8 +209,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 
 	ctrl.importLinkedKey = function(address) {
 		// updates UI after
-		$rootScope.user.addresses = $rootScope.user.addresses ? $rootScope.user.addresses.concat(address) : [address];
-
+		$rootScope.user.eth.keys.concat(address);
 	};
 
 	/***
@@ -221,11 +232,14 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	ctrl.exportDeleteKey = function(address) {
 		$http.get('/exportDeleteKey/'.concat(address)).then(function(response) {
 			// open modal to download keyfile + red message "key has been deleted from server"
+			removeIndex = $rootScope.user.eth.keys.indexOf(address)
+			$rootScope.user.eth.keys.splice(removeIndex, 1);
 			console.log("exportDeleteKey", response);
 		});
 	};
 
 	ctrl.exportKey = function(address) {
+		console.log(address)
 		$http.get('/exportKey/'.concat(address)).then(function(response) {
 			// open modal to download keyfile
 			console.log("exportKey", response);
