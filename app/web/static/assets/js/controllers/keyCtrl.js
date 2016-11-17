@@ -83,7 +83,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		$scope.keyUploaded = true;
 		alertOptions = {
 			title: status == 200 ? "Yay!" : "Oups :(",
-			text: status == 200 ? "Key was imported successfully" : "Key file not recognized...",
+			text: response,
 			type: status == 200 ? "success" : "error",
 			confirmButtonColor: "#007AFF"
 		}
@@ -139,7 +139,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		return $q(function(success, failure) {
 			$timeout(function() {
 				keythereum.create(keythereum.constants, function(dk) {
-					//ask for pasword
+					//ask for password
 					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
@@ -158,7 +158,9 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	ctrl.genLinkedKey = function() {
 		return $q(function(success, failure) {
 			$timeout(function() {
-				$http.get('/genLinkedKey').then(
+				$http.post('/genLinkedKey', {
+					"password": "coucou"
+				}).then(
 					function(data) {
 						success(data);
 					}, function(error) {

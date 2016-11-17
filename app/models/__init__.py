@@ -1,4 +1,4 @@
-from .user import users
+from .user import users, UserDocument
 from .contract import contracts
 from .fundraise import fundraises
 from .file import files

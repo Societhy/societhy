@@ -4,27 +4,26 @@ import scrypt
 from base64 import b64decode, b64encode
 
 from flask import session, request, Response
-from models import users
+from models import users, UserDocument
+
 from core import eth
+from core.utils import deserialize_user
 
 from . import secret_key
 
+from rlp.utils import encode_hex
 # generates token for session
 def login(creditentials):
 
 	user = None
 
 	def auth_user(creditentials):
-
 		if creditentials:
 			creditentials = str(b64decode(creditentials), 'utf-8').split(':')
 			if len(creditentials) == 2:
-				name, passw = creditentials[0], scrypt.hash(creditentials[1], "du gros sel s'il vous plait")
+				name, passw = creditentials[0], encode_hex(scrypt.hash(creditentials[1], "du gros sel s'il vous plait")).decode('utf-8')
 				if (name is not None) and (passw is not None):
-					user = users.find({"name": name, "password": passw}, {"password": False})
-					user = user[0] if user.count() >= 1 else None
-					if user:
-						user.update({"_id": str(user.get('_id'))})
+					user = users.find_one({"name": name, "password": passw}, users.user_info)
 					return user
 		return None
 
@@ -41,7 +40,7 @@ def login(creditentials):
 		session[token] = user
 		return {"data": {
 					"token": token,
-					"user": user
+					"user": deserialize_user(user)
 				},
 				"status": 200}
 
@@ -76,7 +75,7 @@ def sign_up(newUser):
 		return failure
 
 	unencryptedPassword = newUser.get('password')
-	newUser["password"] = scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")
+	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
 	
 	newKey = eth.gen_key() if newUser.get('eth') else None
 	newUser["eth"] = {

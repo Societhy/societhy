@@ -44,10 +44,10 @@ def delete_user(user):
 ####################
 
 
-@router.route('/genLinkedKey')
+@router.route('/genLinkedKey', methods=['POST'])
 @requires_auth
 def gen_linked_key(user):
-	ret = eth.gen_linked_key(user)
+	ret = eth.gen_linked_key(user, request.json.get('password'))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/keyWasGenerated/<address>')
