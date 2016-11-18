@@ -94,6 +94,7 @@ def export_key(user, address, delete=False):
 				data = json.load(f)
 				if delete is True:
 					remove(f.name)
+					user.remove_key(address, local=False)
 				return {
 					"data": data,
 					"status": 200

@@ -73,6 +73,10 @@ ENV IP="172.17.0.2"
 
 ENV MONGOIP="163.5.84.117"
 
+ENV ETHIP="127.0.0.1"
+
+ENV ETHPORT=8545
+
 ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
 RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys

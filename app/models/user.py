@@ -28,6 +28,13 @@ class UserDocument(Document):
 			 }]
 		self.save_partial()
 
+	def remove_key(self, key, local):
+		for publicKey in self["eth"]["keys"]:
+			if publicKey.get('address') == key:
+				self["eth"]["keys"].remove(publicKey)
+				self.save_partial()
+				print('REMOVED ', publicKey)
+
 class UserCollection(Collection):
 	user_info = [
 		"_id",

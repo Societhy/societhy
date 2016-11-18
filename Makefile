@@ -20,6 +20,9 @@ shell:
 	docker-compose -f utils/docker-compose.yaml up -d testenv
 	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/bash'
 
+stop:
+	sh -c 'docker stop `docker ps -a -q`'	
+
 rmall:
 	sh -c 'docker stop `docker ps -a -q`'
 	sh -c 'docker rm `docker ps -a -q`'

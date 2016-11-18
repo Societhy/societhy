@@ -154,7 +154,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
-								console.log("keyWasGenerated")
+								$rootScope.user.eth.keys.push({ "address": keyObject.address, "local": true });
 								success(keyObject);
 							},
 							function(error) {
@@ -172,9 +172,9 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				$http.post('/genLinkedKey', {
 					"password": "coucou"
 				}).then(
-					function(reponse) {
-						$rootScope.user.eth.keys.concat(response.data);
-						success(data);
+					function(response) {
+						$rootScope.user.eth.keys.push({"address": response.data, "local": false});
+						success(response.data);
 					}, function(error) {
 						failure(error);
 					});
@@ -203,13 +203,12 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		//after file loaded ask for password and decrypt key
 		var key = JSON.parse('{"address":"379f3981e8ca02ac0ef983f9c344f984c2e74607","crypto":{"cipher":"aes-128-ctr","ciphertext":"2eadb2019e85ccf21193c4e89299704074491ee29c88218fd830c82b37a5e7d3","cipherparams":{"iv":"0c74c62e5ea7aa86ed26ae6ddc3b9b40"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"ac99012bf435c38ae29bed2e4dacca9bedf34f1ea7947b5ed842158ec035fb84"},"mac":"53fccd340cfe0d7775f79096a3290538a9afb3fe2b76239bda534f51e5ae5b71"},"id":"d847b5ec-c1ce-4794-a731-3f4111beba9d","version":3}')
 		var dk = keythereum.recover("test", key)
-		console.log("importLocalKey", dk)
+		$rootScope.user.eth.keys.push({"address": key.data, "local": false});
 		return dk
 	};
 
 	ctrl.importLinkedKey = function(address) {
-		// updates UI after
-		$rootScope.user.eth.keys.concat(address);
+		$rootScope.user.eth.keys.push({"address": address, "local": false});
 	};
 
 	/***

@@ -1,0 +1,45 @@
+<div class="container-fluid container-fullw ng-scope">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-white">
+                <div class="panel-body">
+                    <h5 class="over-title margin-bottom-15">Organize your <span class="text-bold">keys</span></h5>
+                    <p></p>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th width="50%">Key</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in user.eth.keys">
+                                <th scope="row"> {{ user.eth.keys.indexOf(item) }}</th>
+                                <td> {{ item.address }}</td>
+                                <td nowrap>
+                                    <button type="button" class="btn btn-success btn-xs" ng-click="ctrl.exportKey(item.address)">
+                                        <span class="glyphicon glyphicon-upload"></span> Download
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="ctrl.exportDeleteKey(item.address)" ng-show="!item.local">
+                                        <span class="glyphicon glyphicon-trash"></span> Remove from server
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="100%">
+                                    <button width="50%" type="button" class="btn btn-success btn-xs" ng-click="ctrl.loadGenerateKey()">
+                                        <span class="glyphicon glyphicon-upload"></span> Add key
+                                    </button>
+                                    <button width="50%" type="button" class="btn btn-success btn-xs" ng-click="ctrl.loadImportKey()">
+                                        <span class="glyphicon glyphicon-upload"></span> Import new key
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
