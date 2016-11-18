@@ -9,7 +9,6 @@
 					<thead>
 						<tr>
 							<th width="50%">Name</th>
-							<th>Status</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -21,17 +20,6 @@
 								<div class="progress progress-xs margin-bottom-0">
 									<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
 								</div>
-							</td>
-							<td class="text-center">
-								<span ng-show="item.isSuccess">
-									<i class="glyphicon glyphicon-ok"></i>
-								</span>
-								<span ng-show="item.isCancel">
-									<i class="glyphicon glyphicon-ban-circle"></i>
-								</span>
-								<span ng-show="item.isError">
-									<i class="glyphicon glyphicon-remove"></i>
-								</span>
 							</td>
 							<td nowrap>
 								<button type="button" class="btn btn-success btn-xs" ng-click="exportKey(item.address)" ng-disabled="">

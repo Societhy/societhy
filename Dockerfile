@@ -75,6 +75,8 @@ ENV MONGOIP="163.5.84.117"
 
 ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
+RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
+
 # add code files and setup work directory
 WORKDIR /societhy
 
