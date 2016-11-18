@@ -20,6 +20,13 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
         //start loading bar on stateChangeStart
         cfpLoadingBar.start();
         $scope.horizontalNavbarCollapsed = true;
+
+        // if user not logged in, back to previous screen
+        if (toState.needs_auth == true && $rootScope.user == null) {
+            console.log("NOT LOGGED IN", fromState, toState, event);
+            $state.go('app.dashboard')
+        }
+
         if (toState.name == "app.pagelayouts.boxedpage") {
             $body.addClass("app-boxed-page");
         } else {

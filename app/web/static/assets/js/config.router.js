@@ -43,6 +43,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.me', {
         url: '/me',
+        needs_auth: true,
         templateUrl: "static/assets/views/user_profile.html",
         resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver'),
         title: 'My Profile',

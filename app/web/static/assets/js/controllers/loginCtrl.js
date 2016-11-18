@@ -34,6 +34,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 		$http.get('/logout').then(function(reponse) {
 			delete $sessionStorage.SociethyToken;
 			$rootScope.user = ctrl.user = null
+			$state.go('app.dashboard');
 		});
 	}
 
