@@ -5,8 +5,5 @@ language: python
 services:
   - docker
 
-before_install:
-- make
-
 script:
-- pytest
+- make test
