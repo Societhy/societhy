@@ -33,7 +33,6 @@ class UserDocument(Document):
 			if publicKey.get('address') == key:
 				self["eth"]["keys"].remove(publicKey)
 				self.save_partial()
-				print('REMOVED ', publicKey)
 
 class UserCollection(Collection):
 	user_info = [
