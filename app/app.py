@@ -8,9 +8,11 @@ from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
 
 from core import secret_key
+from core.utils import UserJSONEncoder
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
+app.json_encoder = UserJSONEncoder
 
 jinja_options = app.jinja_options.copy()
 
