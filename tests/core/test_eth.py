@@ -1,7 +1,16 @@
 import pytest
 
-def tata():
-	return 1
+def test_gen_linked_key():
+	pass
 
-def test_something():
-	assert 0 == tata()
+def test_key_was_generated():
+	pass
+
+def test_import_new_key():
+	pass
+
+def test_export_and_delete_key():
+	pass
+
+def test_export_key():
+	pass
