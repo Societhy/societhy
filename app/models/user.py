@@ -32,8 +32,19 @@ class UserDocument(Document):
 		for publicKey in self["eth"]["keys"]:
 			if publicKey.get('address') == key:
 				self["eth"]["keys"].remove(publicKey)
+				if self["eth"]["mainKey"] == key:
+					self["eth"]["mainKey"] = None
 				self.save_partial()
 
+	def get_key(self, publicKey=None):
+		if publicKey is None:
+			return self.get('eth').get('mainKey')
+		else:
+			for key in self.get('eth').get('keys'):
+				if key.get('address') == publicKey:
+					return key
+			return None
+					
 class UserCollection(Collection):
 	user_info = [
 		"_id",

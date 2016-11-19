@@ -51,7 +51,9 @@ def import_new_key(user, sourceKey):
 		if not required_entries.issubset(set(keyFile.keys())):
 			raise KeyFormatError
 
-	def key_already_exists(address):
+	def key_already_exists(address, userExistingAddresses):
+		if address in [userKey.get('address') for userKey in userExistingAddresses]:
+			raise KeyExistsError
 		keyDirectory = environ.get('KEYS_DIRECTORY')
 		for keyFile in listdir(keyDirectory):
 			if address in keyFile:
@@ -69,9 +71,10 @@ def import_new_key(user, sourceKey):
 	try:
 		key = json.loads(sourceKey)
 		is_ethereum_key(key)
-		key_already_exists(key.get('address'))
+		key_already_exists(key.get('address'), user.get('eth').get('keys'))
 		import_key_remote(key.get('address'), sourceKey)
 		data = { "address" : key.get('address') }
+		user.add_key(key.get('address'), local=False)
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format nor recognized"
 		status = 400
@@ -79,26 +82,34 @@ def import_new_key(user, sourceKey):
 		data = "trying to import an existing key"
 		status = 400
 	
-	user.add_key(key.get('address'), local=False)
 	return {
 		"data": data,
 		"status": status
 	}
 
 def export_key(user, address, delete=False):
+	exportedKey = user.get_key(address)
+	
+	if delete and exportedKey.get('local') is True:
+		user.remove_key(address, local=True)
+		return {
+			"data": None,
+			"status": 200
+		}
 
-	keyDirectory = environ.get('KEYS_DIRECTORY')
-	for keyFile in listdir(keyDirectory):
-		if address in keyFile:
-			with open(path.join(keyDirectory, keyFile), 'r') as f:
-				data = json.load(f)
-				if delete is True:
-					remove(f.name)
-					user.remove_key(address, local=False)
-				return {
-					"data": data,
-					"status": 200
-				}
+	elif exportedKey is not None:
+		keyDirectory = environ.get('KEYS_DIRECTORY')
+		for keyFile in listdir(keyDirectory):
+			if address in keyFile:
+				with open(path.join(keyDirectory, keyFile), 'r') as f:
+					data = json.load(f)
+					if delete is True:
+						user.remove_key(address, local=False)
+						remove(f.name)
+					return {
+						"data": data,
+						"status": 200
+					}
 
 	return {
 		"data": "Key does not exists",
