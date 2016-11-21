@@ -41,9 +41,11 @@ button#btn-next
     margin:		8px 0;
 }
 
-div#beforeSubmit
+div#beforeSubmit, div.formChecker
 {
     color:		red;
+    margin:		auto;
+    max-width:		75%;
 }
 
 /*
@@ -62,7 +64,7 @@ div#app  div#registrationContent div#mandatoryInfo div.reminder
     color:		red;
     display:		inline-block;
     vertical-align:	top;
-    width:		2%;
+    width:		1%;
 }
 
 /*
