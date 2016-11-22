@@ -2,7 +2,7 @@ from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
 
-from .db import client
+from .db import client, eth_cli
 
 class UserDocument(Document):
 	
@@ -45,6 +45,16 @@ class UserDocument(Document):
 					return key
 			return None
 					
+	def refresh_balance(self):
+		address = self.get('eth').get('mainKey')
+		if address:
+			balance = eth_cli.eth_getBalance(address)
+			self["balance"] = balance
+			self.save_partial()
+			return wei_to_ether(balance)
+		return None
+
+
 class UserCollection(Collection):
 	user_info = [
 		"_id",
