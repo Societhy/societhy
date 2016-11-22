@@ -307,7 +307,8 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		ctrl.exportDeleteKey(key).then(
 			function(deletedKey) {
 				l.stop()
-				SweetAlert.swal(succesAlertOptions);			},
+				SweetAlert.swal(succesAlertOptions);			
+			},
 			function(failure) {
 				l.stop()
 				errorAlertOptions.text = failure
@@ -320,10 +321,8 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.get('/exportDeleteKey/'.concat(key.address)).then(function(response) {
-					// open modal to download keyfile + red message "key has been deleted from server"
 					removeIndex = $rootScope.user.eth.keys.indexOf(key)
 					$rootScope.user.eth.keys.splice(removeIndex, 1);
-
 					success(response.data)
 				}, function(error) {
 					failure(error.data)
