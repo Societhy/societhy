@@ -77,10 +77,11 @@ def sign_up(newUser):
 	unencryptedPassword = newUser.get('password')
 	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
 	
-	newKey = keys.gen_key() if newUser.get('eth') else None
+	newKey = keys.gen_base_key() if newUser.get('eth') else None
+
 	newUser["eth"] = {
 		"mainKey": newKey,
-		"keys": [newKey] if newKey else [],
+		"keys": {newKey: {"local": False, "balance": 0, "address": newKey}} if newKey else [],
 	}
 
 	users.insert_one(newUser)

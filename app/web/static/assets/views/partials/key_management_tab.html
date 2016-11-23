@@ -9,6 +9,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Key</th>
+                                <th>Balance</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -16,6 +17,7 @@
                             <tr ng-repeat="item in user.eth.keys">
                                 <td scope="row"> {{ user.eth.keys.indexOf(item) }}</th>
                                 <td> {{ item.address }}</td>
+                                <td> {{ item.balance }}</td>
                                 <td nowrap>
                                     <button type="button" id="{{ item.address.concat('dl') }}" class="btn btn-success btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDownloadKey(item)" ng-show="!item.local">
                                         <span class="glyphicon glyphicon-upload ladda-label"> Download</span>

@@ -163,6 +163,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	/***
 	KEY GENERATION
 	***/
+
 	ctrl.loadGenerateKey = function() {
 
 
@@ -185,7 +186,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
-								$rootScope.user.eth.keys.push({ "address": keyObject.address, "local": true });
+								$rootScope.user.eth.keys['0x'.concat(keyObject.address)] = { "address": '0x'.concat(keyObject.address), "local": true, "balance": 0 };
 								success(keyObject);
 							},
 							function(error) {
@@ -204,7 +205,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					"password": "coucou"
 				}).then(
 					function(response) {
-						$rootScope.user.eth.keys.push({"address": response.data, "local": false});
+						$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
 						success(response.data);
 					}, function(error) {
 						failure(error);
@@ -239,7 +240,10 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	};
 
 	ctrl.importLinkedKey = function(address) {
-		$rootScope.user.eth.keys.push({"address": address, "local": false});
+		$rootScope.user.eth.keys[address] = {"address": address, "local": false};
+		$http.get('/getBalance/'.concat(address)).then(function(response) {
+			$rootScope.user.eth.keys[address]["balance"] = response.data
+		});
 	};
 
 	/***
@@ -321,8 +325,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.get('/exportDeleteKey/'.concat(key.address)).then(function(response) {
-					removeIndex = $rootScope.user.eth.keys.indexOf(key)
-					$rootScope.user.eth.keys.splice(removeIndex, 1);
+					delete $rootScope.user.eth.keys[key.address]
 					success(response.data)
 				}, function(error) {
 					failure(error.data)
@@ -342,4 +345,26 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 			}, 2000);
 		});
 	};
+
+	/***
+	REFRESH BALANCE
+	***/
+
+	$rootScope.refreshBalance = function(address) {
+		$http.get('/getBalance/'.concat(address)).then(function(response) {
+			$.each($rootScope.user.eth.keys, function(index, keyObject) {
+				keyObject.balance = response.data[keyObject.address];
+			});
+		});
+	};
+
+	$rootScope.refreshAllBalances = function() {
+		$http.get('/getAllBalances').then(function(response) {
+			$.each($rootScope.user.eth.keys, function(index, keyObject) {
+				keyObject.balance = response.data[keyObject.address];
+			});
+		});
+	};
+
+	return ctrl;
 });

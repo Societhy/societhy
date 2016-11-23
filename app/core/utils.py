@@ -17,3 +17,9 @@ def deserialize_user(user):
 	deserialized = copy(user)
 	deserialized.update({"_id": str(user.get('_id'))})
 	return deserialized
+
+def normalize_address(address, hexa=False):
+	if hexa is True:
+		return address if address.startswith("0x") else '0x' + address
+	else:
+		return address[2:] if address.startswith("0x") else address

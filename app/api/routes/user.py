@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, render_template, request, jsonify, make_response
-from core import auth, keys
+from core import auth, keys, wallet
 
 from api import requires_auth
 
@@ -81,6 +81,22 @@ def export_key(user, address):
 	ret = keys.export_key(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+
+####################
+##     WALLET     ##
+####################
+
+@router.route('/getAllBalances')
+@requires_auth
+def get_all_balance(user):
+	ret = wallet.refresh_all_balances(user)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getBalance/<address>')
+@requires_auth
+def get_balance(user, address):
+	ret = wallet.refresh_balance(user, address)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 ####################
 ##                ##

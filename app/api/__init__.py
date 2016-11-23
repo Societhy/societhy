@@ -1,9 +1,9 @@
 from functools import wraps
 import jwt
 from flask import session, request, Response
-from ..core import secret_key
+from core import secret_key
 
-from ..models import users, UserDocument
+from models import users, UserDocument
 
 # decorator that checks if a user is identified
 def requires_auth(f):
