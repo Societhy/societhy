@@ -42,14 +42,13 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 		$scope.ldrequest[style.replace('-', '_')] = true;
 		ctrl[operation]().then(
 			function(key) {
-				console.log(key);
 				$scope.ldrequest[style.replace('-', '_')] = false;
+				errorAlertOptions.showCancelButton = true,
 				SweetAlert.swal(succesAlertOptions, function() {
 					$uibModalInstance.dismiss()
 				});
 			},
 			function(failure) {
-				console.log(failure);
 				$scope.ldrequest[style.replace('-', '_')] = false;
 				SweetAlert.swal(errorAlertOptions);
 
@@ -83,7 +82,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		$scope.keyUploaded = true;
 		alertOptions = {
 			title: status == 200 ? "Yay!" : "Oups :(",
-			text: response,
+			text: status == 200 ? "Key imported successfully" : response,
 			type: status == 200 ? "success" : "error",
 			confirmButtonColor: "#007AFF"
 		}
@@ -107,17 +106,60 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 *****************/
 
 app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, FileUploader, ctrl) {
-	$scope.addresses = $rootScope.user.addresses
+
+	$scope.keys = $rootScope.user.eth.keys
+	errorAlertOptions= {
+		title: "Uggh..",
+		type: "error",
+	}
+	succesAlertOptions = {
+		title: "Booyah!",
+		type: "success",
+		confirmButtonColor: "#007AFF"
+	};
+
+	$scope.exportDeleteKey = function(address) {
+		ctrl.exportDeleteKey(address).then(
+			function(key) {
+				succesAlertOptions.text = "Key was deleted successfully"
+				SweetAlert.swal(succesAlertOptions)
+			},
+			function(failure) {
+				errorAlertOptions.text = failure
+				SweetAlert.swal(errorAlertOptions);
+			}
+		);
+	}
+
+	$scope.exportKey = function(address) {
+		ctrl.exportKey(address).then(
+			function(key) {
+				succesAlertOptions.confirmButtonText = "Download key file"
+				succesAlertOptions.text =  "Key was exported successfully"
+				SweetAlert.swal(succesAlertOptions, function() {
+					var file = new Blob([ JSON.stringify(key) ], {
+						type : 'text/plain'
+					});
+					saveAs(file, 'keyFile.txt')
+					$uibModalInstance.dismiss()
+				});
+			},
+			function(failure) {
+				errorAlertOptions.text = failure
+				SweetAlert.swal(errorAlertOptions);
+			}
+		);
+	};
+
 });
 
 /****************
 *** KEYCONTROLLER FUNCTIONS ***
 *****************/
 
-app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope) {
+app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope, SweetAlert, FileUploader, ladda) {
 	
 	var ctrl = this;
-
 	/***
 	KEY GENERATION
 	***/
@@ -143,7 +185,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
-								console.log("keyWasGenerated")
+								$rootScope.user.eth.keys.push({ "address": keyObject.address, "local": true });
 								success(keyObject);
 							},
 							function(error) {
@@ -161,8 +203,9 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				$http.post('/genLinkedKey', {
 					"password": "coucou"
 				}).then(
-					function(data) {
-						success(data);
+					function(response) {
+						$rootScope.user.eth.keys.push({"address": response.data, "local": false});
+						success(response.data);
 					}, function(error) {
 						failure(error);
 					});
@@ -191,14 +234,12 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		//after file loaded ask for password and decrypt key
 		var key = JSON.parse('{"address":"379f3981e8ca02ac0ef983f9c344f984c2e74607","crypto":{"cipher":"aes-128-ctr","ciphertext":"2eadb2019e85ccf21193c4e89299704074491ee29c88218fd830c82b37a5e7d3","cipherparams":{"iv":"0c74c62e5ea7aa86ed26ae6ddc3b9b40"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"ac99012bf435c38ae29bed2e4dacca9bedf34f1ea7947b5ed842158ec035fb84"},"mac":"53fccd340cfe0d7775f79096a3290538a9afb3fe2b76239bda534f51e5ae5b71"},"id":"d847b5ec-c1ce-4794-a731-3f4111beba9d","version":3}')
 		var dk = keythereum.recover("test", key)
-		console.log("importLocalKey", dk)
+		$rootScope.user.eth.keys.push({"address": key.data, "local": false});
 		return dk
 	};
 
 	ctrl.importLinkedKey = function(address) {
-		// updates UI after
-		$rootScope.user.addresses = $rootScope.user.addresses ? $rootScope.user.addresses.concat(address) : [address];
-
+		$rootScope.user.eth.keys.push({"address": address, "local": false});
 	};
 
 	/***
@@ -218,17 +259,87 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		});
 	};
 
-	ctrl.exportDeleteKey = function(address) {
-		$http.get('/exportDeleteKey/'.concat(address)).then(function(response) {
-			// open modal to download keyfile + red message "key has been deleted from server"
-			console.log("exportDeleteKey", response);
+	ctrl.loadDownloadKey = function(key) {
+		errorAlertOptions= {
+			title: "Uggh..",
+			type: "error",
+		}
+		succesAlertOptions = {
+			title: "Booyah!",
+			text: "Key was exported successfully",
+			type: "success",
+			confirmButtonText: "Download key file",
+			confirmButtonColor: "#007AFF"
+		};
+		var l = Ladda.create(document.getElementById(key.address.concat('dl')));
+		l.start()
+		ctrl.exportKey(key.address).then(
+			function(key) {
+				l.stop()
+				SweetAlert.swal(succesAlertOptions, function() {
+					var file = new Blob([ JSON.stringify(key) ], {
+						type : 'text/plain'
+					});
+					saveAs(file, 'keyFile.txt')
+				});
+			},
+			function(failure) {
+				l.stop()
+				errorAlertOptions.text = failure
+				SweetAlert.swal(errorAlertOptions);
+			}
+		);
+	};
+
+	ctrl.loadDeleteKey = function(key) {
+		errorAlertOptions= {
+			title: "Uggh..",
+			type: "error",
+		}
+		succesAlertOptions = {
+			title: "Booyah!",
+			text: "Key was deleted successfully",
+			type: "success",
+			confirmButtonColor: "#007AFF"
+		};
+		var l = Ladda.create(document.getElementById(key.address.concat('rm')));
+		l.start()
+		ctrl.exportDeleteKey(key).then(
+			function(deletedKey) {
+				l.stop()
+				SweetAlert.swal(succesAlertOptions);			
+			},
+			function(failure) {
+				l.stop()
+				errorAlertOptions.text = failure
+				SweetAlert.swal(errorAlertOptions);
+			}
+		);
+	};
+
+	ctrl.exportDeleteKey = function(key) {
+		return $q(function(success, failure) {
+			$timeout(function() {
+				$http.get('/exportDeleteKey/'.concat(key.address)).then(function(response) {
+					removeIndex = $rootScope.user.eth.keys.indexOf(key)
+					$rootScope.user.eth.keys.splice(removeIndex, 1);
+					success(response.data)
+				}, function(error) {
+					failure(error.data)
+				});
+			});
 		});
 	};
 
 	ctrl.exportKey = function(address) {
-		$http.get('/exportKey/'.concat(address)).then(function(response) {
-			// open modal to download keyfile
-			console.log("exportKey", response);
+		return $q(function(success, failure) {
+			$timeout(function() {
+				$http.get('/exportKey/'.concat(address)).then(function(response) {
+					success(response.data);
+				}, function(error) {
+					failure(error.data);
+				});
+			}, 2000);
 		});
 	};
 });

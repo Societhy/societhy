@@ -9,38 +9,26 @@
 					<thead>
 						<tr>
 							<th width="50%">Name</th>
-							<th>Status</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="item in addresses">
-							<td><strong>{{ item }}</strong></td>
+						<tr ng-repeat="item in keys">
+							<td><strong>{{ item.address }}</strong></td>
 							<td ng-show="uploader.isHTML5" nowrap>{{ item }}</td>
 							<td ng-show="uploader.isHTML5">
 								<div class="progress progress-xs margin-bottom-0">
 									<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
 								</div>
 							</td>
-							<td class="text-center">
-								<span ng-show="item.isSuccess">
-									<i class="glyphicon glyphicon-ok"></i>
-								</span>
-								<span ng-show="item.isCancel">
-									<i class="glyphicon glyphicon-ban-circle"></i>
-								</span>
-								<span ng-show="item.isError">
-									<i class="glyphicon glyphicon-remove"></i>
-								</span>
-							</td>
 							<td nowrap>
-								<button type="button" class="btn btn-success btn-xs" ng-click="" ng-disabled="">
+								<button type="button" class="btn btn-success btn-xs" ng-click="exportKey(item.address)" ng-disabled="">
 									<span class="glyphicon glyphicon-upload"></span> Download
 								</button>
 								<button type="button" class="btn btn-warning btn-xs" ng-click="" ng-disabled="">
 									<span class="glyphicon glyphicon-ban-circle"></span> Cancel
 								</button>
-								<button type="button" class="btn btn-danger btn-xs" ng-click="">
+								<button type="button" class="btn btn-danger btn-xs" ng-click="exportDeleteKey(item.address)">
 									<span class="glyphicon glyphicon-trash"></span> Remove from server
 								</button>
 							</td>

@@ -6,7 +6,7 @@ from base64 import b64decode, b64encode
 from flask import session, request, Response
 from models import users, UserDocument
 
-from core import eth
+from core import keys
 from core.utils import deserialize_user
 
 from . import secret_key
@@ -77,7 +77,7 @@ def sign_up(newUser):
 	unencryptedPassword = newUser.get('password')
 	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
 	
-	newKey = eth.gen_key() if newUser.get('eth') else None
+	newKey = keys.gen_key() if newUser.get('eth') else None
 	newUser["eth"] = {
 		"mainKey": newKey,
 		"keys": [newKey] if newKey else [],

@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, render_template, request, jsonify, make_response
-from core import auth, eth
+from core import auth, keys
 
 from api import requires_auth
 
@@ -47,13 +47,13 @@ def delete_user(user):
 @router.route('/genLinkedKey', methods=['POST'])
 @requires_auth
 def gen_linked_key(user):
-	ret = eth.gen_linked_key(user, request.json.get('password'))
+	ret = keys.gen_linked_key(user, request.json.get('password'))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/keyWasGenerated/<address>')
 @requires_auth
 def key_was_generated(user, address):
-	ret = eth.key_was_generated(user, address)
+	ret = keys.key_was_generated(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/importNewKey', methods=['POST'])
@@ -61,7 +61,7 @@ def key_was_generated(user, address):
 def import_new_key(user):
 	keyFile = request.files.get("key")
 	if keyFile and keyFile.content_type == 'text/plain':
-		ret = eth.import_new_key(user, request.files.get("key"))
+		ret = keys.import_new_key(user, request.files.get("key"))
 	else:
 		ret = {
 			"data": "Bad file type",
@@ -72,13 +72,13 @@ def import_new_key(user):
 @router.route('/exportDeleteKey/<address>')
 @requires_auth
 def export_and_delete_key(user, address):
-	ret = eth.export_and_delete_key(user, address)
+	ret = keys.export_key(user, address, delete=True)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/exportKey/<address>')
 @requires_auth
 def export_key(user, address):
-	ret = eth.export_key(user, address)
+	ret = keys.export_key(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 

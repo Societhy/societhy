@@ -9,6 +9,7 @@ test_local_env:
     - "8800"  # unused
     - "27017:27017" # geth json-rpc api
     - "4242:4242" # web port
+    - "8080" # geth json-rpc api
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
 
