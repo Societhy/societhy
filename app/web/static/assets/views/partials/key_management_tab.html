@@ -20,10 +20,19 @@
                                 <td> {{ item.balance }}</td>
                                 <td nowrap>
                                     <button type="button" id="{{ item.address.concat('dl') }}" class="btn btn-success btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDownloadKey(item)" ng-show="!item.local">
-                                        <span class="glyphicon glyphicon-upload ladda-label"> Download</span>
+                                        <span class="glyphicon glyphicon-download ladda-label"> Download</span>
                                     </button>
                                     <button width="50%" type="button" id="{{ item.address.concat('rm') }}" class="btn btn-danger btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDeleteKey(item)">
                                         <span class="glyphicon glyphicon-trash ladda-label"> Remove </span>
+                                    </button>
+                                    <button width="50%" type="button" id="{{ item.address.concat('sp') }}" class="btn btn-info btn-sm ladda-button" data-style="contract" ng-click="">
+                                        <span class="glyphicon glyphicon-euro ladda-label"> Supply </span>
+                                    </button>
+                                    <button width="50%" type="button" id="{{ item.address.concat('hs') }}" class="btn btn-primary btn-sm ladda-button" data-style="contract" ng-click="">
+                                        <span class="glyphicon glyphicon-time ladda-label"> History </span>
+                                    </button>
+                                    <button width="50%" type="button" id="{{ item.address.concat('qr') }}" class="btn btn-green btn-sm ladda-button" data-style="contract" ng-click="">
+                                        <span class="glyphicon glyphicon-qrcode ladda-label"> QR </span>
                                     </button>
                                 </td>
                             </tr>
@@ -31,7 +40,7 @@
                      </table>
                      <div>
                         <button width="50%" type="button" class="btn btn-success btn-xl" ng-click="ctrl.loadGenerateKey()">
-                            <span class="glyphicon glyphicon-upload"></span> Add key
+                            <span class="glyphicon glyphicon-sunglasses"></span> Add key
                         </button>
                         <button width="50%" type="button" class="btn btn-success btn-xl" ng-click="ctrl.loadImportKey()">
                             <span class="glyphicon glyphicon-upload"></span> Import new key
