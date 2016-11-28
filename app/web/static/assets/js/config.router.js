@@ -45,7 +45,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/me',
         needs_auth: true,
         templateUrl: "static/assets/views/user_profile.html",
-        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver'),
+        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth'),
         title: 'My Profile',
         ncyBreadcrumb: {
             label: 'My Profile'
@@ -70,7 +70,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         abstract: true
     }).state('login.registration', {
         url: '/registration',
-        resolve: loadSequence('loginCtrl', 'CryptoJS'),
+        resolve: loadSequence('loginCtrl', 'CryptoJS', 'OAuth'),
         templateUrl: "static/assets/views/login_registration.html"
     })
 

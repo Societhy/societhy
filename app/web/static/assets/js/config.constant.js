@@ -29,6 +29,7 @@ app.constant('JS_REQUIRES', {
         'keythereum': '../../node_modules/keythereum/dist/keythereum.min.js',
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
+        'OAuth' : '../../bower_components/oauth.io/dist/oauth.js',
         
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
