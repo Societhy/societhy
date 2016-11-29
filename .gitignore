@@ -1,3 +1,4 @@
+*.cache*
 *pycache*
 *.pyc
 *DS_Store*
