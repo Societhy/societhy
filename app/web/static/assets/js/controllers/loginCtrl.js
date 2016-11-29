@@ -1,4 +1,4 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state) {
+app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller) {
 
 	var ctrl = this;
 

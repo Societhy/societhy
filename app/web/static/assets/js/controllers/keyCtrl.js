@@ -105,7 +105,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 *** EXPORT KEY MODAL CONTROLLER ***
 *****************/
 
-app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, FileUploader, ctrl) {
+app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, ctrl) {
 
 	$scope.keys = $rootScope.user.eth.keys
 	errorAlertOptions= {
@@ -157,7 +157,7 @@ app.controller('ModalExportController', function($scope, $uibModalInstance, $ses
 *** KEYCONTROLLER FUNCTIONS ***
 *****************/
 
-app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope, SweetAlert, FileUploader, ladda) {
+app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope, SweetAlert, ladda) {
 	
 	var ctrl = this;
 	/***
