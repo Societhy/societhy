@@ -45,7 +45,7 @@ RUN file /parity/target/release/parity
 RUN cp /parity/target/release/parity /usr/bin
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode"
 
 RUN pip3 install $PIP_PACKAGES
 

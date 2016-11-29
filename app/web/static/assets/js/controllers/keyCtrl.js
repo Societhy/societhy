@@ -354,6 +354,25 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	};
 
 	/***
+	QRCODE
+	***/
+
+	ctrl.loadQRKey = function(key) {
+		var modalInstance = $uibModal.open({
+			templateUrl: "static/assets/views/modals/QRKeyModal.html" ,
+			controller: function($scope, $uibModalInstance, key) {
+				$scope.key = key;
+			},
+			size: 'sm',
+			resolve: {
+				key: function() {
+					return key;
+				}
+			}
+		});
+	};
+
+	/***
 	REFRESH BALANCE
 	***/
 
