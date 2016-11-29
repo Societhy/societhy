@@ -7,7 +7,6 @@
                     <table class="table table-hover table-striped">
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Key</th>
                                 <th>Balance</th>
                                 <th>Actions</th>
@@ -15,7 +14,6 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="item in user.eth.keys">
-                                <td scope="row"> {{ user.eth.keys.indexOf(item) }}</th>
                                 <td> {{ item.address }}</td>
                                 <td> {{ item.balance }}</td>
                                 <td nowrap>

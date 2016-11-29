@@ -2,13 +2,15 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 
 	var ctrl = this;
 
+	ctrl.wallet = $controller("WalletController");
+
 	ctrl.checkAuth = function() {
 		if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
 			$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
 				if (response.data.user != null) {
 					$rootScope.user = ctrl.user = response.data.user;
-					console.log(ctrl.user);
-					$rootScope.refreshAllBalances();
+					console.log("SETTING USER", ctrl.user);
+					ctrl.wallet.refreshAllBalances();
 				}
 			});
 		}
@@ -26,7 +28,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 					$sessionStorage.SociethyToken = response.data.token;
 					$sessionStorage.username = response.data.user.name.replace(/\"/g, "");
 					$rootScope.user = ctrl.user = response.data.user;
-					$rootScope.refreshAllBalances();
+					ctrl.wallet.refreshAllBalances();
 				}, function(error) {
 					console.log(error);
 				});

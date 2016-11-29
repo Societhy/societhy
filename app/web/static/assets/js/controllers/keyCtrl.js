@@ -3,6 +3,11 @@
 *****************/
 
 app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, $rootScope, ctrl) {
+
+	$scope.needLocalPassw = false;
+	$scope.needRequestPassw = false;
+	$scope.tmpPass = null;
+
 	$scope.ldlocal = {};
 	$scope.ldrequest = {};
 	errorAlertOptions= {
@@ -20,7 +25,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 
 	$scope.local = function(operation, style) {
 		$scope.ldlocal[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.tmpPass).then(
 			function(key) {
 				$scope.ldlocal[style.replace('-', '_')] = false;
 				SweetAlert.swal(succesAlertOptions, function() {
@@ -40,7 +45,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 
 	$scope.request = function(operation, style) {
 		$scope.ldrequest[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.tmpPass).then(
 			function(key) {
 				$scope.ldrequest[style.replace('-', '_')] = false;
 				errorAlertOptions.showCancelButton = true,
@@ -53,7 +58,9 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 				SweetAlert.swal(errorAlertOptions);
 
 			});
+		$scope.tmpPass = null;
 	};
+
 });
 
 /****************
@@ -198,11 +205,11 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		});
 	};
 
-	ctrl.genLinkedKey = function() {
+	ctrl.genLinkedKey = function(password) {
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.post('/genLinkedKey', {
-					"password": "coucou"
+					"password": password
 				}).then(
 					function(response) {
 						$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
@@ -352,14 +359,6 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 
 	$rootScope.refreshBalance = function(address) {
 		$http.get('/getBalance/'.concat(address)).then(function(response) {
-			$.each($rootScope.user.eth.keys, function(index, keyObject) {
-				keyObject.balance = response.data[keyObject.address];
-			});
-		});
-	};
-
-	$rootScope.refreshAllBalances = function() {
-		$http.get('/getAllBalances').then(function(response) {
 			$.each($rootScope.user.eth.keys, function(index, keyObject) {
 				keyObject.balance = response.data[keyObject.address];
 			});
