@@ -12,14 +12,15 @@ class UserDocument(Document):
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
 
-	def add_key(self, key, local, balance=0):
+	def add_key(self, key, local, balance=0, file=None):
 		if self.get('eth').get('mainKey') is None:
 			self["eth"]["mainKey"] = key
 
 		self["eth"]["keys"][key] = {
 			"balance": balance,
 			"local": local,
-			"address": key
+			"address": key,
+			"file": file
 		 }
 		self.save_partial()
 

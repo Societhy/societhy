@@ -122,5 +122,4 @@ def get_balance(user, address):
 @router.route('/user/<user>')
 @requires_auth
 def user_profile(user):
-	print(user)
 	return Response({"data":"ok"}, 200)

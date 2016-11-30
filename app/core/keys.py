@@ -14,6 +14,8 @@ from core.utils import normalize_address
 
 from rlp.utils import encode_hex
 
+keyDirectory = environ.get('KEYS_DIRECTORY')
+
 class KeyFormatError(Exception):
 	pass
 
@@ -21,24 +23,28 @@ class KeyExistsError(Exception):
 	pass
 
 def gen_base_key():
+
 	hashPassword = scrypt.hash("societhy", "rajoute du sel dans les carottes rapées")
 	hashPassword = encode_hex(hashPassword).decode('utf-8')
+	dirContent = listdir(keyDirectory)
 	key = eth_cli.personal_newAccount(hashPassword)
-	return key
+	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
+	return {"address": key, "file": keyFile}
 
 def gen_linked_key(user, password):
 
 	def gen_key_remote(password):
 		hashPassword = scrypt.hash(password, "je trouve que les carottes ne sont pas assez salées")
 		hashPassword = encode_hex(hashPassword).decode('utf-8')
+		dirContent = listdir(keyDirectory)
 		key = eth_cli.personal_newAccount(hashPassword)
-
-		return key
+		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
+		return {"address": key, "file": keyFile}
 	
 	newKey = gen_key_remote(password)
-	user.add_key(newKey, local=False, balance=0)
+	user.add_key(newKey.get('address'), local=False, balance=0, file=newKey.get('file'))
 	return {
-		"data": newKey,
+		"data": newKey.get('address'),
 		"status": 200
 	}
 
@@ -59,18 +65,14 @@ def import_new_key(user, sourceKey):
 			raise KeyFormatError
 
 	def key_already_exists(address, userExistingAddresses):
-		if address in userExistingAddresses.keys():
+		if normalize_address(address, hexa=True) in userExistingAddresses.keys():
 			raise KeyExistsError
-		keyDirectory = environ.get('KEYS_DIRECTORY')
-		for keyFile in listdir(keyDirectory):
-			if normalize_address(address) in keyFile:
-				raise KeyExistsError
 
-	def import_key_remote(address, sourceKey):
-		keyDirectory = environ.get('KEYS_DIRECTORY')
-		keyFilename = "UTC--" + strftime("%Y-%m-%dT%H-%M-%S") + "." + str(clock())[2:] + "Z--" + normalize_address(address)
+	def import_key_remote(keyId, sourceKey):
+		keyFilename = "UTC--" + strftime("%Y-%m-%dT%H-%M-%S") + "." + str(clock())[2:] + "Z--" + keyId
 		with open(path.join(keyDirectory, keyFilename), 'w') as f:
 			f.write(sourceKey)
+		return keyFilename
 
 	status = 200
 	sourceKey = sourceKey.read().decode('utf-8')
@@ -79,10 +81,10 @@ def import_new_key(user, sourceKey):
 		key = json.loads(sourceKey)
 		is_ethereum_key(key)
 		key_already_exists(key.get('address'), user.get('eth').get('keys'))
-		import_key_remote(key.get('address'), sourceKey)
+		keyFilename = import_key_remote(key.get('id'), sourceKey)
 		key["address"] = normalize_address(key.get('address'), hexa=True)
 		data = { "address" : key.get('address') }
-		user.add_key(key.get('address'), local=False, balance=eth_cli.eth_getBalance(key.get('address')))
+		user.add_key(key.get('address'), local=False, balance=eth_cli.eth_getBalance(key.get('address')), file=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format nor recognized"
 		status = 400
@@ -106,9 +108,8 @@ def export_key(user, address, delete=False):
 		}
 
 	elif exportedKey is not None:
-		keyDirectory = environ.get('KEYS_DIRECTORY')
 		for keyFile in listdir(keyDirectory):
-			if normalize_address(address, hexa=False) in keyFile:
+			if exportedKey.get('file') == keyFile:
 				with open(path.join(keyDirectory, keyFile), 'r') as f:
 					data = json.load(f)
 					if delete is True:

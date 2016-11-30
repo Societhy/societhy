@@ -83,8 +83,8 @@ def sign_up(newUser):
 	newKey = keys.gen_base_key() if newUser.get('eth') else None
 
 	newUser["eth"] = {
-		"mainKey": newKey,
-		"keys": {newKey: {"local": False, "balance": 0, "address": newKey}} if newKey else [],
+		"mainKey": newKey.get('address'),
+		"keys": {newKey: {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
 	}
 
 	users.insert_one(newUser)
