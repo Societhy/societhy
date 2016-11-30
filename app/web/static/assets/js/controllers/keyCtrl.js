@@ -41,6 +41,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 				$scope.ldlocal[style.replace('-', '_')] = false;
 				SweetAlert.swal(errorAlertOptions);
 			});
+		$scope.tmpPass = null;
 	};
 
 	$scope.request = function(operation, style) {
@@ -48,9 +49,9 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 		ctrl[operation]($scope.tmpPass).then(
 			function(key) {
 				$scope.ldrequest[style.replace('-', '_')] = false;
-				errorAlertOptions.showCancelButton = true,
+				succesAlertOptions.confirmButtonText = "OK";
 				SweetAlert.swal(succesAlertOptions, function() {
-					$uibModalInstance.dismiss()
+					$uibModalInstance.dismiss();
 				});
 			},
 			function(failure) {

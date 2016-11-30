@@ -16,8 +16,10 @@ from rlp.utils import encode_hex
 def refresh_all_balances(user):
 	accounts = user.get('eth').get('keys')
 	ret = dict()
+	print(accounts)
 	for account in accounts.keys():
 		ret[account] = eth_cli.eth_getBalance(account)
+		print("!!!! --> ", ret[account])
 	return {
 		"data": ret,
 		"status": 200

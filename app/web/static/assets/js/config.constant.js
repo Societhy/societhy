@@ -103,6 +103,6 @@ app.constant('JS_REQUIRES', {
         files: ['../../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js']
     }, {
         name:'qrcode',
-        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/qrcode-generator/js/qrcode_UTF8.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
+        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
     }]
 });
