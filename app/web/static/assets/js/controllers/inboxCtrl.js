@@ -2,8 +2,10 @@
 /**
  * controller for Messages
  */
-app.controller('InboxCtrl', ["$scope", "$state", "$interval",
-function ($scope, $state, $interval) {
+app.controller('InboxCtrl', ["$scope", "$state", "$interval", "$rootScope",
+function ($scope, $state, $interval, $rootScope) {
+    $scope.user = $rootScope.user;
+
     $scope.noAvatarImg = "static/assets/images/default-user.png";
     var date = new Date();
     var d = date.getDate();

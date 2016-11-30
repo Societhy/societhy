@@ -1,6 +1,6 @@
 var app = angular.module('app', ['packet']);
-app.run(['$rootScope', '$state', '$stateParams',
-function ($rootScope, $state, $stateParams) {
+app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http',
+function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
@@ -39,6 +39,18 @@ function ($rootScope, $state, $stateParams) {
         layout: ''
     };
     $rootScope.app.layout = angular.copy($rootScope.app.defaultLayout);
+    if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
+        $http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
+            if (response.data.user != null) {
+                $rootScope.user = response.data.user;
+                console.log($rootScope.user)
+            }
+        });
+    }
+    else if ($rootScope.user != null) {
+        ctrl.user = $rootScope.user
+    }
+
 }]);
 
 // set token in request header for authentification

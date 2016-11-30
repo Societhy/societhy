@@ -2,18 +2,18 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 
 //	var keythereum = require("keythereum");
     var ctrl = this;
-
-    if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
-		$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
-			if (response.data.user != null) {
-				$rootScope.user = ctrl.user = response.data.user;
-				console.log(ctrl.user)
-			}
-		});
-	}
-	else if ($rootScope.user != null) {
-		ctrl.user = $rootScope.user
-	}
+    ctrl.user = $rootScope.user
+ //    if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
+	// 	$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
+	// 		if (response.data.user != null) {
+	// 			$rootScope.user = ctrl.user = response.data.user;
+	// 			console.log(ctrl.user)
+	// 		}
+	// 	});
+	// }
+	// else if ($rootScope.user != null) {
+	// 	ctrl.user = $rootScope.user
+	// }
 
     ctrl.login = function() {
 
