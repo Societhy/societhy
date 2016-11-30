@@ -19,7 +19,6 @@ def refresh_all_balances(user):
 	print(accounts)
 	for account in accounts.keys():
 		ret[account] = eth_cli.eth_getBalance(account)
-		print("!!!! --> ", ret[account])
 	return {
 		"data": ret,
 		"status": 200

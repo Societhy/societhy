@@ -27,23 +27,6 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 
 RUN apt-get install $DEPENDENCIES -qy
 
-# parity dependencie
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-ENV PATH /societhy/.cargo/bin:$PATH
-
-RUN git clone https://github.com/ethcore/parity && \
-        cd parity && \
-        git checkout beta && \
-        git pull && \
-        cargo build --release --verbose && \
-        ls /parity/target/release/parity && \
-        strip /parity/target/release/parity
-
-RUN file /parity/target/release/parity
-
-RUN cp /parity/target/release/parity /usr/bin
-
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode"
 
@@ -66,6 +49,10 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
 RUN apt-get install ethminer -qy
+
+# INSTALL PARITY
+
+RUN curl https://get.parity.io -Lk | bash
 
 RUN apt-get autoremove -qy --purge
 
@@ -93,8 +80,6 @@ COPY ./utils /societhy/utils
 # add test key to key directory
 
 COPY ./utils/test_key.key $KEYS_DIRECTORY
-
-COPY .ethash/ /societhy/.ethash
 
 EXPOSE 8080
 

@@ -226,7 +226,7 @@ h5.over-title {
   }
 }
 #app .app-content {
-  height: 100%;
+ /* height: 100%;*/
 }
 #app .app-content:before, #app .app-content:after {
   content: " ";

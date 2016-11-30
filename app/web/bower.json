@@ -110,7 +110,8 @@
     "bootstrap-rtl": "~3.3.1",
     "crypto-js": "~3.1.8",
     "file-saver": "latest",
-    "monospaced/angular-qrcode": "latest"
+    "monospaced/angular-qrcode": "latest",
+    "oauth.io": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",

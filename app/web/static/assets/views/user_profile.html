@@ -19,7 +19,7 @@
                             <div class="col-md-4">
                                 <div class="user-left">
                                     <div class="center">
-                                        <h4>{{userInfo.firstName}} {{userInfo.lastName}}</h4>
+                                        <h4>{{user.firstname}} {{user.lastname}}</h4>
                                         <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
                                             <div class="user-image">
                                                 <div class="thumbnail">
@@ -75,11 +75,60 @@
                                         </div>
                                         <hr>
                                     </div>
-                                    <table class="table table-condensed">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="3">Contact Information</th>
-                                            </tr>
+				    <div class="row">
+                                        <div class="col-md-12" id="userInfo">
+					    <div class="form-group">
+                                                <label class="control-label">
+                                                    First Name
+                                                </label>
+                                                <input type="text" placeholder="Enter your first name" disabled="disabled" class="accountInfo" name="firstname" value="{{user.firstname}}">
+						<span class="btn-primary editAccountInfo">
+    					            <i class="fa fa-pencil"></i>
+    					        </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Last Name
+                                                </label>
+                                                <input type="text" placeholder="Enter your last name" disabled="disabled" class="accountInfo" name="lastname" value="{{user.lastname}}">
+						<span class="btn-primary editAccountInfo">
+    					            <i class="fa fa-pencil"></i>
+    					        </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Email Address
+                                                </label>
+                                                <input type="email" placeholder="Email address" disabled="disabled" class="accountInfo" name="email" value="{{user.email}}">
+						<span class="btn-primary editAccountInfo">
+    					            <i class="fa fa-pencil"></i>
+    					        </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Phone
+                                                </label>
+                                                <input type="text" placeholder="phone number" disabled="disabled" class="accountInfo" name="phone" value="{{user.phone}}">
+						<span class="btn-primary editAccountInfo">
+    					            <i class="fa fa-pencil"></i>
+    					        </span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Url
+                                                </label>
+                                                <input type="text" placeholder="Enter Url" disabled="disabled" class="accountInfo" name="url" value="{{userInfo.url}}">
+						<span class="btn-primary editAccountInfo">
+    					            <i class="fa fa-pencil"></i>
+    					        </span>
+                                            </div>
+                                        </div>
+                                    </div>
+					<table class="table table-condensed">
+                                            <thead>
+						<tr>
+                                                    <th colspan="3">Contact Information</th>
+						</tr>
                                         </thead>
                                         <tbody>
                                             <tr>
@@ -324,7 +373,7 @@
                     <!-- end: TAB OVERVIEW -->
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">
-                        <div ng-controller="KeyController as ctrl">
+			<div ng-controller="KeyController as ctrl">
                             <a ng-click="ctrl.loadGenerateKey()">
                                 <span> Generate key </span>
                             </a>

@@ -1,32 +1,22 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller) {
 
 	var ctrl = this;
-
+    ctrl.user = $rootScope.user
 	ctrl.wallet = $controller("WalletController");
 
-	ctrl.checkAuth = function() {
-		if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
-			$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
-				if (response.data.user != null) {
-					$rootScope.user = ctrl.user = response.data.user;
-					console.log("SETTING USER", ctrl.user);
-					ctrl.wallet.refreshAllBalances();
-				}
-			});
-		}
-		else if ($rootScope.user != null) {
-			ctrl.user = $rootScope.user
-		}
-	};
+	if (ctrl.user) {
+		ctrl.wallet.refreshAllBalances();
+	}
 
-	ctrl.login = function() {
+    ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 				$http.post('/login', {
 					"id": btoa(ctrl.username + ':' + ctrl.password)
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
 					$sessionStorage.SociethyToken = response.data.token;
-					$sessionStorage.username = response.data.user.name.replace(/\"/g, "");
+					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
 				}, function(error) {
@@ -69,6 +59,29 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 		}
     };
 
+
+    /*
+**
+*/
+    ctrl.updateUser = function(name, newData) {
+	if ($rootScope.user != null)
+	{
+	    $http.post('/updateUser', {
+		"_id": ctrl.user["_id"],
+		"old": $rootScope.user[name],
+		"new": newData,
+		"name": name
+	    }).then(function(response) {
+		console.log("Debug" + response);
+		$rootScope.user = ctrl.user = response.data.user;
+	    },
+		function(error) {
+			console.log(error);
+		});
+	}
+	else
+	    console.log("User not logged in");
+    }
     /*
     ** REGISTRATION
     */
@@ -119,7 +132,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	    return;
 	}
 	$("form #mandatoryInfo input").each(function (index) {
-	    console.log($(this).val().length);
 	    if ($(this).val().length == 0) {
 		$("button#submit").prop("disabled", true);
 		$("#beforeSubmit").show();
@@ -178,8 +190,37 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
     });
 
     /*
-    ** CHeck if the term of agreeement box has been checked
+    ** Handle the modification of the personal informations
     */
-    ctrl.checkAuth();
+
+    // var over = false;
+    // $(".form-group").mouseenter(function() {
+    // 	$(this).children(".accountInfo").stop().animate({ width: "93%" }, 600);//.next().stop().animate({ opacity: "1"}, 600, function() {
+    // 	//     $(this).css({display: "inline-block"});
+    // 	// });
+    // 	over = true;
+    // });
+
+    // $(".form-group").mouseleave(function() {
+    // 	$(this).children(".accountInfo").stop().animate({ width: "99%" }, 600);//.children(".editAccountInfo").stop().fadeOut(500).prev()
+    //     over = false;
+    // });
+
+    $(".editAccountInfo").on("click", function () {
+	$(this).addClass("btnInvisible");
+	$(this).prev().addClass("enabledInput");
+	$(this).prev().removeAttr("disabled").focus();
+
+    })
+
+    $(".accountInfo").blur(function() {
+	if ($(this).hasClass("enabledInput")) {
+	    ctrl.updateUser($(this).attr("name"), $(this).val());
+	$(this).attr("disabled", "disabled");
+	$(this).removeClass("enabledInput");
+	$(this).next().removeClass("btnInvisible");
+	}
+    });
+
     return ctrl;
 });

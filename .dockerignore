@@ -1,2 +1,7 @@
 Makefile
+<<<<<<< HEAD
 docker-compose.yml
+=======
+docker-compose.yml
+.ethash
+>>>>>>> master

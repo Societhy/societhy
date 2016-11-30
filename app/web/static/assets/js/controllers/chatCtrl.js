@@ -2,7 +2,9 @@
 /**
  * controller for Messages
  */
-app.controller('ChatCtrl', ["$scope", function ($scope) {
+app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope) {
+
+    $scope.user = $rootScope.user;
 
     $scope.noAvatarImg = "static/assets/images/default-user.png";
     $scope.selfIdUser = 50223456;

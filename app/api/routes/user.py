@@ -1,5 +1,6 @@
 from flask import Blueprint, Response, render_template, request, jsonify, make_response
-from core import auth, keys, wallet
+
+from core import auth, keys, user_management, wallet
 
 from api import requires_auth
 
@@ -15,6 +16,7 @@ def login():
 	ret = auth.login(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+
 @router.route('/logout')
 @requires_auth
 def logout(user):
@@ -27,6 +29,11 @@ def sign_up():
 	ret = auth.sign_up(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateUser', methods=['POST'])
+def updateUser():
+	ret = auth.updateUserField(request.json)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/checkTokenValidity/<token>')
 def check_token_validity(token):
 	ret = auth.check_token_validity(token)
@@ -36,6 +43,15 @@ def check_token_validity(token):
 @requires_auth
 def delete_user(user):
 	ret = auth.delete_user(user)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+#####################
+## USER MANAGEMENT ##
+#####################
+
+@router.route('/updateUser', methods=['POST'])
+def update():
+	ret = user_management.update(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 
