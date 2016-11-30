@@ -65,9 +65,9 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     python3 setup.py install && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
-RUN apt-get autoremove -qy --purge
+RUN apt-get install ethminer -qy
 
-RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
+RUN apt-get autoremove -qy --purge
 
 ENV IP="172.17.0.2"
 
@@ -79,12 +79,22 @@ ENV ETHPORT=8545
 
 ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
+RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
+
+RUN echo 'alias console="geth attach rpc:http://localhost:8545"' >> ~/.bashrc
+
 RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
 
 # add code files and setup work directory
 WORKDIR /societhy
 
 COPY ./utils /societhy/utils
+
+# add test key to key directory
+
+COPY ./utils/test_key.key $KEYS_DIRECTORY
+
+COPY .ethash/ /societhy/.ethash
 
 EXPOSE 8080
 
