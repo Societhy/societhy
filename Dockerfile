@@ -48,6 +48,10 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     python3 setup.py install && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
+# INSTALL PARITY
+
+RUN curl https://get.parity.io -Lk | bash
+
 RUN apt-get autoremove -qy --purge
 
 RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
