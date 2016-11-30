@@ -15,6 +15,7 @@ def login():
 	ret = auth.login(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+
 @router.route('/logout')
 @requires_auth
 def logout(user):
@@ -25,6 +26,11 @@ def logout(user):
 @router.route('/newUser', methods=['POST'])
 def sign_up():
 	ret = auth.sign_up(request.json)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/updateUser', methods=['POST'])
+def updateUser():
+	ret = auth.updateUserField(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/checkTokenValidity/<token>')

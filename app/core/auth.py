@@ -6,6 +6,8 @@ from base64 import b64decode, b64encode
 from flask import session, request, Response
 from models import users, UserDocument
 
+from bson.objectid import ObjectId
+
 from core import keys
 from core.utils import deserialize_user
 
@@ -13,6 +15,7 @@ from . import secret_key
 
 from rlp.utils import encode_hex
 # generates token for session
+
 def login(creditentials):
 
 	user = None
@@ -76,7 +79,7 @@ def sign_up(newUser):
 
 	unencryptedPassword = newUser.get('password')
 	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
-	
+
 	newKey = keys.gen_key() if newUser.get('eth') else None
 	newUser["eth"] = {
 		"mainKey": newKey,
@@ -85,8 +88,29 @@ def sign_up(newUser):
 
 	users.insert_one(newUser)
 	newUser["_id"] = str(newUser["_id"])
-	
+
 	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
+
+def updateUserField(userData):
+
+	def user_exist(userData):
+		if users.find({"_id": ObjectId(userData["_id"]),
+					userData["name"]: userData["old"]}).count() <= 0:
+			return {"data": "user not found",
+					"status": 401}
+		return False
+
+	failure = user_exist(userData)
+	if failure:
+	        return failure
+	users.update_one({"_id": ObjectId(userData["_id"]), userData["name"]: userData["old"]},
+			{'$set': {userData["name"]: userData["new"]}})
+	user = users.find_one({"_id": ObjectId(userData["_id"])}, users.user_info)
+	return {"data": {
+				"token": 4242,
+				"user": deserialize_user(user)
+			},
+			"status": 200}
 
 def check_token_validity(token):
 	return {"data": {"user": session.get(token)},
