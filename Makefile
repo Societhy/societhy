@@ -16,7 +16,6 @@ test:
 
 build:
 	docker build -t $(DOCKER_IMAGE) .
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/bash'
 
 prod:
 	docker-compose -f utils/docker-compose.yaml up -d test_local_env

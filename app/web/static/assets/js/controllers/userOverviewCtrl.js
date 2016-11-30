@@ -8,29 +8,20 @@ OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
 ctrl.fb_connect = function (argument) 
 {
-    res = OAuth.popup('facebook').done(function(facebook)
-    {
+    res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;
-        meObject = facebook.get("/me");
+        facebook.get("/me").done(function(userData) {
 
-        console.log(loginObject);
-        console.log(meObject);
+            console.log(userData);
 
-        console.log(meObject.data.responseJSON);
-
-
-        $http.post('/updateUser', {
-        "":""
-        }).then(function(response) {
-            console.log("RECEIVED = ", response);
-        }, function(error) {
-            console.log(error);
+            $http.post('/updateUser', userData).then(function(response) {
+                console.log("RECEIVED = ", response);
+            }, function(error) {
+                console.log(error);
+            });
         });
-
-
-    }).fail(function(err) 
-    {
-        console.log(err);
+    }).fail(function(err) {
+        console.log(error);
     });
 }
 
