@@ -1,11 +1,7 @@
 import time
 import json
-import scrypt
-from os import environ, listdir, path, remove
-from base64 import b64decode, b64encode
-from time import strftime, clock
+import requests
 
-from flask import session, request, Response
 from ethjsonrpc import wei_to_ether
 
 from models import users
@@ -39,6 +35,7 @@ def refresh_balance(user, account=None):
 
 
 def transfer(from_, to_, local=False):
+	
 	pass
 
 
@@ -46,5 +43,14 @@ def supply(user, amount):
 	pass
 
 
-def get_tx_history(user, account=None):
-	pass
+def get_tx_history(user, account):
+	# r = requests.get('https://etherchain.org/api/account/%s/tx/0' % account)
+	print("REQUESTING : ", "https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0")
+	r = requests.get('https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0')
+	data = r.json().get('data')
+	return {
+			"data": data,
+			"status": 200
+		}
+
+

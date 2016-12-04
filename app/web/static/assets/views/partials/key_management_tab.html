@@ -26,7 +26,7 @@
                                     <button width="50%" type="button" id="{{ item.address.concat('sp') }}" class="btn btn-info btn-sm ladda-button" data-style="contract" ng-click="">
                                         <span class="glyphicon glyphicon-euro ladda-label"> Supply </span>
                                     </button>
-                                    <button width="50%" type="button" id="{{ item.address.concat('hs') }}" class="btn btn-primary btn-sm ladda-button" data-style="contract" ng-click="">
+                                    <button width="50%" type="button" id="{{ item.address.concat('hs') }}" class="btn btn-primary btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadHistory(item)">
                                         <span class="glyphicon glyphicon-time ladda-label"> History </span>
                                     </button>
                                     <button width="50%" type="button" id="{{ item.address.concat('qr') }}" class="btn btn-green btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadQRKey(item)">

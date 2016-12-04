@@ -20,11 +20,16 @@ build:
 prod:
 	docker-compose -f utils/docker-compose.yaml up -d test_local_env
 	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` scp -r exploit@163.5.84.117:/home/exploit/.parity/keys /societhy/.parity/keys'
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/bash'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
 
 shell:
 	docker-compose -f utils/docker-compose.yaml up -d test_local_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/bash'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
+	@make stop
+
+mine:
+	docker-compose -f utils/docker-compose.yaml up -d test_local_mining_env
+	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
 	@make stop
 
 stop:

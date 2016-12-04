@@ -114,6 +114,12 @@ def get_balance(user, address):
 	ret = wallet.refresh_balance(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/getTxHistory/<address>')
+@requires_auth
+def get_tx_history(user, address):
+	ret = wallet.get_tx_history(user, address)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 ####################
 ##                ##
 ####################
