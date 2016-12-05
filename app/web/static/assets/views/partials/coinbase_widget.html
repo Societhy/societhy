@@ -1,0 +1,30 @@
+ <a class="coinbase-widget"
+     id="coinbase_widget"
+     data-address="0x76dae5fc88a1ff674d03335208956961828176ef"
+     data-amount="10"
+     data-code="988a7c37-17b6-5b4d-b352-67deee6d245c"
+     data-crypto_currency="ETH"
+     data-redirect_uri="http://localhost:4242/#/app/me"
+     href="https://buy.coinbase.com/?code=988a7c37-17b6-5b4d-b352-67deee6d245c&amount=5&address=1JcssT2Cr2xhnfcYscLL1bZPbojg4rUC2X&crypto_currency=BTC"
+     target="_blank">Buy bitcoin using Coinbase</a>
+  <script type='text/javascript' id='coinbase_widget_loader' class='coinbase-widget-async-loader'>
+    (function() {
+      function asyncLoad() {
+        console.log("lol");
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        var theUrl = "https://buy.coinbase.com/static/widget.js";
+        s.src = theUrl+ (theUrl.indexOf("?") >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(window.location.href);
+        var embedder = document.getElementById('coinbase_widget_loader');
+        embedder.parentNode.insertBefore(s, embedder);
+      }
+      if (window.attachEvent) {
+        console.log("here");
+        window.attachEvent('onload', asyncLoad);
+      } else {
+        console.log("there");
+        window.addEventListener('load', asyncLoad, false);
+      }
+    })();
+  </script>

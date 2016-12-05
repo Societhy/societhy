@@ -374,17 +374,9 @@
                     <!-- start: TAB EDIT ACCOUNT -->
                     <uib-tab heading="Edit Account" active="editActive">
 			<div ng-controller="KeyController as ctrl">
-                            <a ng-click="ctrl.loadGenerateKey()">
-                                <span> Generate key </span>
-                            </a>
-                            <a ng-click="ctrl.loadImportKey()">
-                                <span> Import key </span>
-                            </a>
-                            <a ng-click="ctrl.loadExportKey()">
-                                <span> Export key </span>
-                            </a>
-                            <div data-ng-include=" 'static/assets/views/partials/key_management_tab.html' "></div>
-                        </div>
+                <div data-ng-include=" 'static/assets/views/partials/coinbase_widget.html' "></div>
+                <div data-ng-include=" 'static/assets/views/partials/key_management_tab.html' "></div>
+            </div>
                     </uib-tab>
                     <!-- end: TAB EDIT ACCOUNT -->
                     <!-- start: TAB PROJECTS -->

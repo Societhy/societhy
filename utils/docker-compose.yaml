@@ -3,7 +3,6 @@ test_local_env:
   image: societhy/localenv
   dns:
     - 8.8.8.8
-    - 192.168.1.1
   command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
   working_dir: /societhy
   ports:
@@ -20,7 +19,7 @@ test_local_env:
     - ../app:/societhy/app:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
   extra_hosts:
-    - "custom:172.17.0.2"
+    - "10.11.137.79:172.17.0.2"
 
 test_local_mining_env:
   image: societhy/localenv

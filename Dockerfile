@@ -84,4 +84,6 @@ EXPOSE 8080
 
 EXPOSE 22
 
+EXPOSE 80
+
 RUN cd /societhy/utils ; ./install.sh
