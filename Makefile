@@ -5,17 +5,26 @@ all:
 	@make build
 	@make shell
 
+test:
+	@make build_test
+	@make local_test
+
 build_dependencies:
 	npm --prefix ./app/web install ./app/web
 	bower install ./app/web
 
-test:
-	docker build --file Dockerfile_tests -t $(TEST_IMAGE) .
-	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` pytest tests/'
-
 build:
 	docker build -t $(DOCKER_IMAGE) .
+
+build_test:
+	docker build --file Dockerfile_tests -t $(TEST_IMAGE) .
+	
+local_test:
+	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
+	sleep 2
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` pytest -s tests/'
+	@make stop
 
 prod:
 	docker-compose -f utils/docker-compose.yaml up -d test_local_env

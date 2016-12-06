@@ -10,7 +10,7 @@ from flask import session, request, Response
 from models import users
 from models.db import eth_cli
 
-from core.utils import normalize_address
+from core.utils import normalize_address, fromWei
 
 from rlp.utils import encode_hex
 
@@ -50,7 +50,7 @@ def gen_linked_key(user, password):
 
 def key_was_generated(user, address):
 	address = normalize_address(address, hexa=True)
-	user.add_key(address, local=True, balance=eth_cli.eth_getBalance(address))
+	user.add_key(address, local=True, balance=fromWei(eth_cli.eth_getBalance(address)))
 	return {
 		"data": "OK",
 		"status": 200
@@ -84,7 +84,7 @@ def import_new_key(user, sourceKey):
 		keyFilename = import_key_remote(key.get('id'), sourceKey)
 		key["address"] = normalize_address(key.get('address'), hexa=True)
 		data = { "address" : key.get('address') }
-		user.add_key(key.get('address'), local=False, balance=eth_cli.eth_getBalance(key.get('address')), file=keyFilename)
+		user.add_key(key.get('address'), local=False, balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), file=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format nor recognized"
 		status = 400

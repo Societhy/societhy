@@ -81,12 +81,13 @@ def sign_up(newUser):
 	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
 	
 	newKey = keys.gen_base_key() if newUser.get('eth') else None
-
-	newUser["eth"] = {
-		"mainKey": newKey.get('address'),
-		"keys": {newKey: {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
-	}
-
+	if newKey:
+		newUser["eth"] = {
+			"mainKey": newKey.get('address'),
+			"keys": {newKey.get('address'): {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
+		}
+	else:
+		newUser["eth"] = {"mainKey": None, "keys": {}}
 	users.insert_one(newUser)
 	newUser["_id"] = str(newUser["_id"])
 

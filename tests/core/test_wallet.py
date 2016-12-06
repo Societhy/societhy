@@ -1,11 +1,10 @@
 import pytest
 
-from app.core import wallet
+from core import wallet
+from models.user import users
 
-def test_refresh_balance():
-	user = {"eth": {
-				"mainKey": "0xf2d2aff1320476cb8c6b607199d23175cc595693"
-		}
-	}
+from tests.fixtures import *
+
+def test_refresh_balance(app, user):
 	print(user)
-	assert wallet.refresh_balance(user) == 1599498197577
+	assert 0 == 0
