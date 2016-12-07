@@ -35,7 +35,6 @@ def test_import_new_key(user):
 		f.close()
 		f =  open(path.join(keyDirectory, 'test_key.key'), 'rb')
 		ret = keys.import_new_key(user, f)
-		print (ret)
 		user.update()
 		assert ret.get('status') == 200
 		assert ret.get('data').get('address')in user.get('eth').get('keys')

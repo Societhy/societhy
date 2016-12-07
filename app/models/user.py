@@ -46,8 +46,9 @@ class UserDocument(Document):
 		address = address or self.get('eth').get('mainKey')
 		if address:
 			balance = wei_to_ether(eth_cli.eth_getBalance(address))
-			self['eth']['keys'][address]["balance"] = balance
-			self.save_partial()
+			if address in self['eth']['keys']:
+				self['eth']['keys'][address]["balance"] = balance
+				self.save_partial()
 			return balance
 		return None
 

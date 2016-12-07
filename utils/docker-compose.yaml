@@ -37,6 +37,7 @@ test_local_mining_env:
 
   volumes:
     - ../app:/societhy/app:rw
+    - ../tasks:/societhy/tasks:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
     - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:

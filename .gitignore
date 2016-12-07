@@ -1,3 +1,4 @@
+tasks/
 *.cache*
 *pycache*
 *.pyc

@@ -7,7 +7,6 @@ from ethjsonrpc import wei_to_ether
 from models import users
 from models.db import eth_cli
 
-from rlp.utils import encode_hex
 
 def refresh_all_balances(user):
 	accounts = user.get('eth').get('keys')
@@ -25,22 +24,26 @@ def refresh_balance(user, account=None):
 			"data": user.refresh_balance(account),
 			"status": 200
 		}
-	else:
-		balance = eth_cli.eth_getBalance()
+	elif not account:
+		balance = eth_cli.eth_getBalance(user.get('eth').get('mainKey'))
 		return {
 			"data": wei_to_ether(balance),
 			"status": 200
 		}
+	else:
+		return {
+			"data": "user %s does not own %s" % (user.get('id'), account),
+			"status": 400
+		}
 
-
-
-def transfer(from_, to_, local=False):
-	
-	pass
-
-
-def supply(user, amount):
-	pass
+def transfer(from_, to_, amount, local=False, password=None):
+	if not local:
+		ret = eth_cli.personal_unlockAccount(from_, password)
+		ret = eth_cli.transfer(from_, to_, amount)	
+		return {
+			"data": ret,
+			"status": 200
+		}
 
 
 def get_tx_history(user, account):

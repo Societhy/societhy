@@ -13,13 +13,15 @@ for keyFile in listdir(keyDirectory):
 		remove(path.join(keyDirectory, keyFile))
 		print("removed", keyFile)
 
+users.delete_many({})
+
 test_user = {
 	"name": "simon",
 	"eth": {
 		"mainKey": None,
 		"keys": {}
-		}
 	}
+}
 users.insert_one(test_user)
 
 @pytest.fixture(scope='module')

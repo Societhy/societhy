@@ -11,6 +11,9 @@ class UserJSONEncoder(json.JSONEncoder):
 def fromWei(value):
 	return value / (10 ** 18)
 
+def toWei(value):
+	return value * (10 ** 18)
+
 def serialize_user(user):
 	serialized = copy(user)
 	serialized.update({"_id": ObjectId(user.get('_id'))})
