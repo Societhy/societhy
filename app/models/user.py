@@ -45,10 +45,10 @@ class UserDocument(Document):
 	def refresh_balance(self, address=None):
 		address = address or self.get('eth').get('mainKey')
 		if address:
-			balance = eth_cli.eth_getBalance(address)
+			balance = wei_to_ether(eth_cli.eth_getBalance(address))
 			self['eth']['keys'][address]["balance"] = balance
 			self.save_partial()
-			return wei_to_ether(balance)
+			return balance
 		return None
 
 

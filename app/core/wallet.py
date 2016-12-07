@@ -22,11 +22,11 @@ def refresh_all_balances(user):
 def refresh_balance(user, account=None):
 	if account in user.get('eth').get('keys').keys():
 		return {
-			"data": user.refresh_balance(),
+			"data": user.refresh_balance(account),
 			"status": 200
 		}
 	else:
-		balance = eth_cli.eth_getBalance(account)
+		balance = eth_cli.eth_getBalance()
 		return {
 			"data": wei_to_ether(balance),
 			"status": 200

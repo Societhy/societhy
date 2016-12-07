@@ -86,7 +86,7 @@ def import_new_key(user, sourceKey):
 		data = { "address" : key.get('address') }
 		user.add_key(key.get('address'), local=False, balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), file=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
-		data = "key format nor recognized"
+		data = "key format not recognized"
 		status = 400
 	except (KeyExistsError):
 		data = "trying to import an existing key"
@@ -100,7 +100,7 @@ def import_new_key(user, sourceKey):
 def export_key(user, address, delete=False):
 	exportedKey = user.get_key(address)
 	
-	if delete and exportedKey.get('local') is True:
+	if exportedKey and delete and exportedKey.get('local') is True:
 		user.remove_key(address, local=True)
 		return {
 			"data": None,

@@ -1,11 +1,17 @@
 import pytest
 import time
-from os import environ
+from os import environ, listdir, path, remove
 
 from models.user import users
 
 from pymongo import MongoClient
 from ethjsonrpc import ParityEthJsonRpc
+
+keyDirectory = environ.get('KEYS_DIRECTORY')
+for keyFile in listdir(keyDirectory):
+	if keyFile.startswith("UTC"):
+		remove(path.join(keyDirectory, keyFile))
+		print("removed", keyFile)
 
 test_user = {
 	"name": "simon",

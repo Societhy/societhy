@@ -14,7 +14,6 @@ router = Blueprint('user', __name__)
 @router.route('/login', methods=['POST'])
 def login():
 	ret = auth.login(request.json)
-	print("here", ret)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 

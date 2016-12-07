@@ -86,6 +86,12 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		console.info('onErrorItem', fileItem, response, status, headers);
 	};
 
+	uploader.onBeforeUploadItem = function(item) {
+		item.file.type = "text/plain";
+		item._file.type = "text/plain";
+		console.log(item);
+	}
+
 	uploader.onCompleteItem = function (fileItem, response, status, headers) {
 		$scope.keyUploaded = true;
 		alertOptions = {
@@ -94,7 +100,6 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 			type: status == 200 ? "success" : "error",
 			confirmButtonColor: "#007AFF"
 		}
-
 		SweetAlert.swal(alertOptions, function() {
 			if (status == 200) {
 				$uibModalInstance.dismiss()
