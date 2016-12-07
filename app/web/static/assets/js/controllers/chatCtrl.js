@@ -8,33 +8,39 @@ app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope
 
     $scope.noAvatarImg = "static/assets/images/default-user.png";
     $scope.selfIdUser = 50223456;
-    $scope.otherIdUser = 50223457;
-    $scope.setOtherId = function (value) {
+    $scope.otherIdUser = "";
 
-        $scope.otherIdUser = value;
+    $scope.chat = [];
+
+    $scope.setOtherId = function (id) {
+        $scope.otherIdUser = id;
+        console.log($scope.otherIdUser);
+    }
+
+    $scope.receiveMessage = function () {
+        var newMessage = {
+            "avatar": $scope.noAvatarImg,
+            "date": new Date(),
+            "content": $scope.chatMessage,
+            "idUser": $scope.otherIdUser,
+            "idOther": $scope.selfIdUser
+        };
+        $scope.chat.push(newMessage);
+        $scope.chatMessage = '';
     };
-    var exampleDate = new Date().setTime(new Date().getTime() - 240000 * 60);
-    $scope.chat = [{
-        "user": "Simon Vadée",
-        "avatar": "static/assets/images/avatar-1.jpg",
-        "to": "Nicole Bell",
-        "date": exampleDate,
-        "content": "Hi, Nicole",
-        "idUser": 50223456,
-        "idOther": 50223457
-    }];
 
     $scope.sendMessage = function () {
         var newMessage = {
-            "user": "Simon Vadée",
             "avatar": "static/assets/images/avatar-1.jpg",
             "date": new Date(),
             "content": $scope.chatMessage,
             "idUser": $scope.selfIdUser,
             "idOther": $scope.otherIdUser
         };
-        $scope.chat.push(newMessage);
+        if (newMessage.content != '') {
+            $scope.chat.push(newMessage);
+            $scope.receiveMessage();
+        }
         $scope.chatMessage = '';
-
     };
 }]);
