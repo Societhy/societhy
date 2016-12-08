@@ -57,8 +57,6 @@ def updateUserField(user, newData):
 	if error:
 		return error
 
-	ret = users.update_one({"_id": ObjectId(user.get("_id"))},
-			{'$set': {newData["name"]: newData["new"]}})
 	user[newData["name"]] = newData["new"];
 	user.update()
 	return {"data": user,
