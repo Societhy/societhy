@@ -6,8 +6,6 @@ from base64 import b64decode, b64encode
 from flask import session, request, Response
 from models import users, UserDocument
 
-from bson.objectid import ObjectId
-
 from core import keys
 from core.utils import deserialize_user
 
@@ -96,7 +94,7 @@ def sign_up(newUser):
 def updateUserField(userData):
 
 	def user_exist(userData):
-		if users.find({"_id": ObjectId(userData["_id"]),
+		if users.find({"_id": ObjectId(userData["_id"])	,
 					userData["name"]: userData["old"]}).count() <= 0:
 			return {"data": "user not found",
 					"status": 401}

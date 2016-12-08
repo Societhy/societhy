@@ -4,6 +4,7 @@ FROM ubuntu:latest
 RUN apt-get update &&  \
 	apt-get upgrade -qy && \
 	apt-get dist-upgrade -qy && \
+	apt-get update --fix-missing && \
 	apt-get install software-properties-common -qy
 
 # set container dependencies as environment variable:

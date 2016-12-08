@@ -1,6 +1,6 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller) {
 
-	var ctrl = this;
+    var ctrl = this;
     ctrl.user = $rootScope.user
 	ctrl.wallet = $controller("WalletController");
 
@@ -59,29 +59,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 		}
     };
 
-
-    /*
-**
-*/
-    ctrl.updateUser = function(name, newData) {
-	if ($rootScope.user != null)
-	{
-	    $http.post('/updateUser', {
-		"_id": ctrl.user["_id"],
-		"old": $rootScope.user[name],
-		"new": newData,
-		"name": name
-	    }).then(function(response) {
-		console.log("Debug" + response);
-		$rootScope.user = ctrl.user = response.data.user;
-	    },
-		function(error) {
-			console.log(error);
-		});
-	}
-	else
-	    console.log("User not logged in");
-    }
     /*
     ** REGISTRATION
     */
@@ -206,21 +183,26 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
     //     over = false;
     // });
 
+    var old = false;
     $(".editAccountInfo").on("click", function () {
 	$(this).addClass("btnInvisible");
 	$(this).prev().addClass("enabledInput");
 	$(this).prev().removeAttr("disabled").focus();
-
+	$rootScope.oldVal = $(this).prev().val();
+	$rootScope.name = $(this).prev().attr("name");
     })
 
     $(".accountInfo").blur(function() {
 	if ($(this).hasClass("enabledInput")) {
-	    ctrl.updateUser($(this).attr("name"), $(this).val());
+//	    ctrl.updateUser($(this).attr("name"));
 	$(this).attr("disabled", "disabled");
 	$(this).removeClass("enabledInput");
 	$(this).next().removeClass("btnInvisible");
 	}
     });
 
+    $("#userInfo form").on("submit", function(){
+	$(".accountInfo").blur();
+    })
     return ctrl;
 });
