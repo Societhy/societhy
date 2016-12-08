@@ -62,6 +62,7 @@ test_remote_env:
   volumes:
     - ../app:/societhy/app:rw
     - ../tests:/societhy/tests:rw
+    - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:
     - "custom:172.17.0.2"

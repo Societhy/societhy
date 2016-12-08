@@ -15,10 +15,11 @@ def newBlock_then(function):
 		sleep(1/10)
 	function()
 
-def waitBlock():
+def waitBlock(blockNumber=1):
 	eth_cli.eth_getFilterChanges(blockFilter)
-	while True:
+	while blockNumber > 0:
 		if len(eth_cli.eth_getFilterChanges(blockFilter)) > 0:
-			break
+			print('|', end="", flush=True)
+			blockNumber -= 1
 		print('.', end="", flush=True)
 		time.sleep(1/10)

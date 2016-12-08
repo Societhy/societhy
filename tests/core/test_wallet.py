@@ -16,9 +16,10 @@ def test_transfer(user):
 	to_ = keys.gen_base_key().get('address')
 	with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 		from_ = keys.import_new_key(user, f).get('data').get('address')
-		ret = wallet.transfer(from_, to_, toWei(10), password="simon")
 		filter.waitBlock()
-		assert fromWei(eth_cli.eth_getBalance(to_)) == 10
+		ret = wallet.transfer(from_, to_, toWei(4), password="simon")
+		filter.waitBlock(blockNumber=2)
+		assert fromWei(eth_cli.eth_getBalance(to_)) == 4
 
 def test_refresh_balance(user):
 	balance_1 = wallet.refresh_balance(user).get('data')
