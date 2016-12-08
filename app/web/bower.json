@@ -118,6 +118,7 @@
     "angular": "~1.5.7",
     "moment": "~2.10.0",
     "slick-carousel": "~1.6.0",
-    "bootstrap": "~3.3.2"
+    "bootstrap": "~3.3.2",
+    "angular-xeditable": "~0.1.9"
   }
 }

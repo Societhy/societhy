@@ -17,6 +17,7 @@ def requires_auth(f):
 				return Response({"error": "signature expired"}, 401)
 
 			user = UserDocument(session.get(token), mongokat_collection=users)
+			user.update()
 		else:
 			return Response({"error": "unauthorized"}, 401)
 

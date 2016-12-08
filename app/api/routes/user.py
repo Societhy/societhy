@@ -53,6 +53,11 @@ def update():
 	ret = user_management.update(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateSingleUserField', methods=['POST'])
+@requires_auth
+def update_single_user_fieldd(user):
+	ret = user_management.updateUserField(user,request.json)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 ####################
 ## KEY MANAGEMENT ##
