@@ -6,7 +6,17 @@
 console.log("Initializing OAuth ..")
 OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
-ctrl.fb_connect = function (argument) 
+ctrl.coinbase_connect = function ()
+{
+    OAuth.popup('coinbase').done(function(result) {
+        console.log(result)
+        result.me().done(function (data) {
+            console.log(data);
+        })
+    })
+}
+
+ctrl.fb_connect = function () 
 {
     res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;

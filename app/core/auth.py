@@ -96,7 +96,7 @@ def sign_up(newUser):
 def updateUserField(userData):
 
 	def user_exist(userData):
-		if users.find({"_id": ObjectId(userData["_id"]),
+		if users.find({"_id": ObjectId(userData["_id"])	,
 					userData["name"]: userData["old"]}).count() <= 0:
 			return {"data": "user not found",
 					"status": 401}
