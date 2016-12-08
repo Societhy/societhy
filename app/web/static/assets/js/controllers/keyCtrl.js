@@ -3,6 +3,11 @@
 *****************/
 
 app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, $rootScope, ctrl) {
+
+	$scope.needLocalPassw = false;
+	$scope.needRequestPassw = false;
+	$scope.tmpPass = null;
+
 	$scope.ldlocal = {};
 	$scope.ldrequest = {};
 	errorAlertOptions= {
@@ -20,7 +25,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 
 	$scope.local = function(operation, style) {
 		$scope.ldlocal[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.tmpPass).then(
 			function(key) {
 				$scope.ldlocal[style.replace('-', '_')] = false;
 				SweetAlert.swal(succesAlertOptions, function() {
@@ -36,16 +41,17 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 				$scope.ldlocal[style.replace('-', '_')] = false;
 				SweetAlert.swal(errorAlertOptions);
 			});
+		$scope.tmpPass = null;
 	};
 
 	$scope.request = function(operation, style) {
 		$scope.ldrequest[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.tmpPass).then(
 			function(key) {
 				$scope.ldrequest[style.replace('-', '_')] = false;
-				errorAlertOptions.showCancelButton = true,
+				succesAlertOptions.confirmButtonText = "OK";
 				SweetAlert.swal(succesAlertOptions, function() {
-					$uibModalInstance.dismiss()
+					$uibModalInstance.dismiss();
 				});
 			},
 			function(failure) {
@@ -53,7 +59,9 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 				SweetAlert.swal(errorAlertOptions);
 
 			});
+		$scope.tmpPass = null;
 	};
+
 });
 
 /****************
@@ -78,6 +86,12 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 		console.info('onErrorItem', fileItem, response, status, headers);
 	};
 
+	uploader.onBeforeUploadItem = function(item) {
+		item.file.type = "text/plain";
+		item._file.type = "text/plain";
+		console.log(item);
+	}
+
 	uploader.onCompleteItem = function (fileItem, response, status, headers) {
 		$scope.keyUploaded = true;
 		alertOptions = {
@@ -86,7 +100,6 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 			type: status == 200 ? "success" : "error",
 			confirmButtonColor: "#007AFF"
 		}
-
 		SweetAlert.swal(alertOptions, function() {
 			if (status == 200) {
 				$uibModalInstance.dismiss()
@@ -105,7 +118,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 *** EXPORT KEY MODAL CONTROLLER ***
 *****************/
 
-app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, FileUploader, ctrl) {
+app.controller('ModalExportController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, SweetAlert, ctrl) {
 
 	$scope.keys = $rootScope.user.eth.keys
 	errorAlertOptions= {
@@ -154,15 +167,49 @@ app.controller('ModalExportController', function($scope, $uibModalInstance, $ses
 });
 
 /****************
+*** HISTORY KEY MODAL CONTROLLER ***
+*****************/
+
+app.controller('ModalHistoryController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, $filter, $http, ngTableParams, key) {
+	$scope.address = key;
+	$http.get('/getTxHistory/'.concat(key.address)).then(function(response) {
+		var data = response.data;
+		$scope.pow = Math.pow;
+		$scope.round = Math.round;
+	    $scope.tableParams = new ngTableParams({
+	        page: 1,
+	        count: 5,
+	        sorting: {
+	            date: 'desc'
+	        },
+	     	filter: {
+            	recipient: '' // initial filter
+        	}
+        }, {
+	        total: data.length,
+	        getData: function ($defer, params) {
+	            // use build-in angular filter
+
+	            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+	            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
+	            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+	        }
+	    });
+	});
+});
+
+
+/****************
 *** KEYCONTROLLER FUNCTIONS ***
 *****************/
 
-app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope, SweetAlert, FileUploader, ladda) {
+app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q, $rootScope, SweetAlert, ladda) {
 	
 	var ctrl = this;
 	/***
 	KEY GENERATION
 	***/
+
 	ctrl.loadGenerateKey = function() {
 
 
@@ -185,7 +232,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
-								$rootScope.user.eth.keys.push({ "address": keyObject.address, "local": true });
+								$rootScope.user.eth.keys['0x'.concat(keyObject.address)] = { "address": '0x'.concat(keyObject.address), "local": true, "balance": 0 };
 								success(keyObject);
 							},
 							function(error) {
@@ -197,14 +244,14 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		});
 	};
 
-	ctrl.genLinkedKey = function() {
+	ctrl.genLinkedKey = function(password) {
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.post('/genLinkedKey', {
-					"password": "coucou"
+					"password": password
 				}).then(
 					function(response) {
-						$rootScope.user.eth.keys.push({"address": response.data, "local": false});
+						$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
 						success(response.data);
 					}, function(error) {
 						failure(error);
@@ -239,7 +286,10 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	};
 
 	ctrl.importLinkedKey = function(address) {
-		$rootScope.user.eth.keys.push({"address": address, "local": false});
+		$rootScope.user.eth.keys[address] = {"address": address, "local": false};
+		$http.get('/getBalance/'.concat(address)).then(function(response) {
+			$rootScope.user.eth.keys[address]["balance"] = response.data
+		});
 	};
 
 	/***
@@ -321,8 +371,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.get('/exportDeleteKey/'.concat(key.address)).then(function(response) {
-					removeIndex = $rootScope.user.eth.keys.indexOf(key)
-					$rootScope.user.eth.keys.splice(removeIndex, 1);
+					delete $rootScope.user.eth.keys[key.address]
 					success(response.data)
 				}, function(error) {
 					failure(error.data)
@@ -342,4 +391,54 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 			}, 2000);
 		});
 	};
+
+	/***
+	QRCODE
+	***/
+
+	ctrl.loadQRKey = function(key) {
+		var modalInstance = $uibModal.open({
+			templateUrl: "static/assets/views/modals/QRKeyModal.html" ,
+			controller: function($scope, $uibModalInstance, key) {
+				$scope.key = key;
+			},
+			size: 'sm',
+			resolve: {
+				key: function() {
+					return key;
+				}
+			}
+		});
+	};
+
+	/***
+	HISTORY
+	***/
+
+	ctrl.loadHistory = function(key) {
+		var modalInstance = $uibModal.open({
+			templateUrl: "static/assets/views/modals/transactionHistoryModal.html",
+			controller: 'ModalHistoryController',
+			size: 'lg',
+			resolve: {
+				key : function() {
+					return key;
+				}
+			}
+		});
+	};
+
+	/***
+	REFRESH BALANCE
+	***/
+
+	$rootScope.refreshBalance = function(address) {
+		$http.get('/getBalance/'.concat(address)).then(function(response) {
+			$.each($rootScope.user.eth.keys, function(index, keyObject) {
+				keyObject.balance = response.data[keyObject.address];
+			});
+		});
+	};
+
+	return ctrl;
 });

@@ -1,0 +1,27 @@
+<div class="container-fluid container-fullw">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-white">
+                <div class="panel-body">
+                    <h5 class="over-title margin-bottom-15">
+                        <span class="text-bold">Transactions from {{address.address}}</span>
+                    </h5>
+                    <div class="row margin-bottom-10">
+                        <div class="col-md-12">
+                            <button ng-click="tableParams.sorting({})" class="btn btn-default pull-right">
+                                Clear sorting
+                            </button>
+                        </div>
+                    </div>
+                    <table ng-table="tableParams" show-filter="true" class="table table-striped">
+                        <tr ng-repeat="tx in $data">
+                            <td data-title="'To'" filter="{ 'recipient': 'text' }">{{tx.recipient}}</td>
+                            <td data-title="'Amount'" sortable="'amount'">{{ (tx.amount / pow(10, 18)).toFixed(3) }}</td>
+                            <td data-title="'Date'" sortable="'time'">{{tx.time}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -38,6 +38,7 @@ app.constant('JS_REQUIRES', {
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
+        'walletCtrl' : 'static/assets/js/controllers/walletCtrl.js'
 
     },
     //*** angularJS Modules
@@ -101,5 +102,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'angularSpectrumColorpicker',
         files: ['../../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js']
+    }, {
+        name:'qrcode',
+        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
     }]
 });

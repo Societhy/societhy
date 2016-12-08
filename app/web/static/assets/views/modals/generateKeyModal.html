@@ -2,12 +2,24 @@
 	<h3 class="modal-title">Chose a way to generate key!</h3>
 </div>
 <div class="modal-body">
-	<button ladda="ldlocal.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="width:45%" ng-click="local('genLocalKey', 'contract')">
+
+	<button class="btn btn-o btn-primary ladda-button" style="width:45%" ng-click="needLocalPassw=true" ng-show='!needLocalPassw'>
 		<span class="ladda-label"> Generate key locally</span>
-		<span class="ladda-spinner"></span>
 	</button>
-	<button ladda="ldrequest.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float: right; width:45%" ng-click="request('genLinkedKey', 'contract')">
+
+	<form ladda="ldlocal.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="width:45%;padding:0px" ng-show='needLocalPassw' ng-submit="local('genLocalKey', 'contract')">
+		<input class="form-control" type="password" placeholder="Password" ng-model="tmpPass">
+		<span class="ladda-spinner"></span>
+	</form>
+
+
+
+	<button  class="btn btn-o btn-primary ladda-button" style="float: right; width:45%" ng-click="needRequestPassw=true" ng-show="!needRequestPassw">
 		<span class="ladda-label"> Generate key on server</span>
-		<span class="ladda-spinner"></span>
 	</button>
+
+	<form ladda="ldrequest.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float:right;width:45%;padding:0px" ng-show='needRequestPassw' ng-submit="request('genLinkedKey', 'contract')">
+		<input class="form-control" type="password" placeholder="Password" ng-model="tmpPass">
+		<span class="ladda-spinner"></span>
+	</form>
 </div>

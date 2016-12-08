@@ -39,7 +39,8 @@
     "gruntfile-gtx": "^0.3.0",
     "http-server": "^0.6.1",
     "require-directory": "^2.0.0",
-      "keythereum": "latest",
-      "file-saver": "latest"
+    "keythereum": "latest",
+    "angular-qrcode": "latest",
+    "file-saver": "latest"
   }
 }

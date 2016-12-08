@@ -1,22 +1,14 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state) {
+app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller) {
 
-//	var keythereum = require("keythereum");
     var ctrl = this;
-    ctrl.user = $rootScope.user;
- //    if ($sessionStorage.SociethyToken != null && $rootScope.user == null) {
-	// 	$http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
-	// 		if (response.data.user != null) {
-	// 			$rootScope.user = ctrl.user = response.data.user;
-	// 			console.log(ctrl.user)
-	// 		}
-	// 	});
-	// }
-	// else if ($rootScope.user != null) {
-	// 	ctrl.user = $rootScope.user
-	// }
+    ctrl.user = $rootScope.user
+	ctrl.wallet = $controller("WalletController");
+
+	if (ctrl.user) {
+		ctrl.wallet.refreshAllBalances();
+	}
 
     ctrl.login = function() {
-
 		if (ctrl.username && ctrl.password) {
 				$http.post('/login', {
 					"id": btoa(ctrl.username + ':' + ctrl.password)
@@ -26,6 +18,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 					$sessionStorage.SociethyToken = response.data.token;
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
 				}, function(error) {
 					console.log(error);
 				});

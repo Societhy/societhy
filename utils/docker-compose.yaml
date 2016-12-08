@@ -7,6 +7,7 @@ test_local_env:
   working_dir: /societhy
   ports:
     - "8800"  # unused
+    - "8180"  # unused
     - "27017:27017" # geth json-rpc api
     - "4242:4242" # web port
     - "8080" # geth json-rpc api
@@ -19,22 +20,50 @@ test_local_env:
   extra_hosts:
     - "custom:172.17.0.2"
 
-    
-test_remote_env:
-  image: societhy/tests
+test_local_mining_env:
+  image: societhy/localenv
   dns:
     - 8.8.8.8
-  command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
+  command: /usr/bin/supervisord -n -c /societhy/utils/supervisor_miner.conf -l /supervisord.log
   working_dir: /societhy
   ports:
     - "8800"  # unused
+    - "8180"  # unused
     - "27017:27017" # geth json-rpc api
     - "4242:4242" # web port
+    - "8080" # geth json-rpc api
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
 
   volumes:
     - ../app:/societhy/app:rw
+    - ../tasks:/societhy/tasks:rw
+    - ${HOME}/.ssh:/root/.ssh/:ro
+    - ${HOME}/.ethash:/societhy/.ethash/:rw
+  extra_hosts:
+    - "custom:172.17.0.2"
+
+    
+test_remote_env:
+  image: societhy/tests
+  dns:
+    - 8.8.8.8
+  command: /usr/bin/supervisord -n -c /societhy/utils/supervisor_test.conf -l /supervisord.log
+  working_dir: /societhy
+  ports:
+    - "8800"  # unused
+    - "8180"  # unused
+    - "27017:27017" # geth json-rpc api
+    - "4242:4242" # web port
+    - "8080" # geth json-rpc api
+    - "8545" # geth json-rpc api
+    - "30303:30303"  # geth p2p protocol
+
+  volumes:
+    - ../app:/societhy/app:rw
+    - ../tests:/societhy/tests:rw
+    - ./ssh:/root/.ssh/:rw
+    - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:
     - "custom:172.17.0.2"
     

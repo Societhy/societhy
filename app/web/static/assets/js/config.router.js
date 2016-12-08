@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl'),
+        resolve: loadSequence('chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -45,7 +45,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/me',
         needs_auth: true,
         templateUrl: "static/assets/views/user_profile.html",
-        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth'),
+        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
         title: 'My Profile',
         ncyBreadcrumb: {
             label: 'My Profile'

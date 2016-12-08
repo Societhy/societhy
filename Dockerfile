@@ -12,7 +12,7 @@ RUN apt-get update &&  \
 # PIP_PACKAGES are to be installed with pip3 (python packages)
 
 # languages
-ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git"
+ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping"
 
 # libraries and services
 ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
@@ -28,8 +28,16 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 
 RUN apt-get install $DEPENDENCIES -qy
 
+# INSTALL PARITY
+
+WORKDIR /societhy
+
+COPY ./utils /societhy/utils
+
+RUN bash /societhy/utils/install_parity.sh
+
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests"
 
 RUN pip3 install $PIP_PACKAGES
 
@@ -49,13 +57,7 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     python3 setup.py install && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
-# INSTALL PARITY
-
-RUN curl https://get.parity.io -Lk | bash
-
 RUN apt-get autoremove -qy --purge
-
-RUN echo 'alias run="python3 app/app.py"' >> ~/.bashrc
 
 ENV IP="172.17.0.2"
 
@@ -67,12 +69,17 @@ ENV ETHPORT=8545
 
 ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
+ENV TERM=xterm-256color
+
+RUN echo 'alias run="python3 app/app.py"' >> ~/.zshrc
+
+RUN echo 'alias console="geth attach rpc:http://localhost:8545"' >> ~/.zshrc
+
 RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
 
-# add code files and setup work directory
-WORKDIR /societhy
+# add test key to key directory
 
-COPY ./utils /societhy/utils
+COPY ./utils/test_key.key $KEYS_DIRECTORY
 
 EXPOSE 8080
 
