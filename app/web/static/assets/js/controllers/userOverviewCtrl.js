@@ -6,7 +6,6 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope)
 console.log("Initializing OAuth ..")
 OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
-<<<<<<< HEAD
 ctrl.coinbase_connect = function ()
 {
     OAuth.popup('coinbase').done(function(result) {
@@ -18,9 +17,6 @@ ctrl.coinbase_connect = function ()
 }
 
 ctrl.fb_connect = function () 
-=======
-ctrl.fb_connect = function (argument)
->>>>>>> a5ee299e23839a4cd579b2af6dc9196c19a4ea43
 {
     res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;
