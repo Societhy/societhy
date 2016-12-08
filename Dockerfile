@@ -27,14 +27,6 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 
 RUN apt-get install $DEPENDENCIES -qy
 
-# INSTALL PARITY
-
-WORKDIR /societhy
-
-COPY ./utils /societhy/utils
-
-RUN bash /societhy/utils/install_parity.sh
-
 # python packages
 ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests"
 
@@ -56,7 +48,13 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     python3 setup.py install && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
-RUN apt-get autoremove -qy --purge
+# INSTALL PARITY
+
+WORKDIR /societhy
+
+COPY ./utils /societhy/utils
+
+RUN bash /societhy/utils/install_parity.sh
 
 ENV IP="172.17.0.2"
 
@@ -83,5 +81,3 @@ COPY ./utils/test_key.key $KEYS_DIRECTORY
 EXPOSE 8080
 
 EXPOSE 22
-
-RUN cd /societhy/utils ; ./install.sh
