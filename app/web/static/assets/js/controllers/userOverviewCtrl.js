@@ -1,4 +1,4 @@
- app.controller('userOverviewCtrl', function($scope, $http, $timeout) {
+app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope) {
  	var ctrl = this;
 
 //OAuth
@@ -6,6 +6,7 @@
 console.log("Initializing OAuth ..")
 OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
+<<<<<<< HEAD
 ctrl.coinbase_connect = function ()
 {
     OAuth.popup('coinbase').done(function(result) {
@@ -17,6 +18,9 @@ ctrl.coinbase_connect = function ()
 }
 
 ctrl.fb_connect = function () 
+=======
+ctrl.fb_connect = function (argument)
+>>>>>>> a5ee299e23839a4cd579b2af6dc9196c19a4ea43
 {
     res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;
@@ -35,6 +39,37 @@ ctrl.fb_connect = function ()
     });
 }
 
+    $rootScope.updateUser = function(name) {
+	if ($rootScope.user != null)
+	{
+	    $http.post('/updateSingleUserField', {
+		"_id": $rootScope.user["_id"],
+		"new": $rootScope.user[$rootScope.name],
+		"old": $rootScope.oldVal,
+		"name": $rootScope.name,
+	    }).then(function(response) {
+		$rootScope.user = ctrl.user = response.data;
+	    },
+		    function(error) {
+			console.log(error);
+		    });
+	}
+	else
+	    console.log("User not logged in");
+    }
+
+    $rootScope.$watchGroup(['user.firstname'], function(newVal, oldVal) {
+	console.log(42);
+    });
+    function animation() {
+	$("input.userDataEditable").hover(function(){
+	    $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
+	}, function(){
+     	    $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
+	});
+    };
+
+    animation();
 
 // //Load facebook SDK
 // window.fbAsyncInit = function() {
@@ -57,20 +92,20 @@ ctrl.fb_connect = function ()
 // ctrl.fb_connect = function (argument) {
 // 	FB.login(function(response) {
 
-// 		if (response.authResponse) 
+// 		if (response.authResponse)
 // 		{
 //             access_token = response.authResponse.accessToken; //get access token
 //             user_id = response.authResponse.userID; //get FB UID
 //             console.log("token : " + access_token);
 //             console.log("user_id : " + user_id);
-//             FB.api('/me', {fields: 'email, name, picture'} ,function(response) 
+//             FB.api('/me', {fields: 'email, name, picture'} ,function(response)
 //             {
 //                 console.log("name : " + response.name);
 //                 console.log("email : " + response.email);
 //                 console.log("photo url " + response.picture.data.url);
 
 //                 newPhoto = angular.element(document.querySelector('#newPhoto'));
-//                 newPhoto.html('<img src="'+ response.picture.data.url + '">')           
+//                 newPhoto.html('<img src="'+ response.picture.data.url + '">')
 
 //             });
 
@@ -82,6 +117,6 @@ ctrl.fb_connect = function ()
 //     }, {
 //     	scope: 'public_profile,email'
 //     });
-//}
+    //}
 
 });

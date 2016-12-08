@@ -81,55 +81,72 @@
                                         </div>
                                         <hr>
                                     </div>
+				    <!--start: User Info -->
 				    <div class="row">
                                         <div class="col-md-12" id="userInfo">
-					    <div class="form-group">
-                                                <label class="control-label">
-                                                    First Name
-                                                </label>
-                                                <input type="text" placeholder="Enter your first name" disabled="disabled" class="accountInfo" name="firstname" value="{{user.firstname}}">
-						<span class="btn-primary editAccountInfo">
-    					            <i class="fa fa-pencil"></i>
-    					        </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Last Name
-                                                </label>
-                                                <input type="text" placeholder="Enter your last name" disabled="disabled" class="accountInfo" name="lastname" value="{{user.lastname}}">
-						<span class="btn-primary editAccountInfo">
-    					            <i class="fa fa-pencil"></i>
-    					        </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Email Address
-                                                </label>
-                                                <input type="email" placeholder="Email address" disabled="disabled" class="accountInfo" name="email" value="{{user.email}}">
-						<span class="btn-primary editAccountInfo">
-    					            <i class="fa fa-pencil"></i>
-    					        </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Phone
-                                                </label>
-                                                <input type="text" placeholder="phone number" disabled="disabled" class="accountInfo" name="phone" value="{{user.phone}}">
-						<span class="btn-primary editAccountInfo">
-    					            <i class="fa fa-pencil"></i>
-    					        </span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">
-                                                    Url
-                                                </label>
-                                                <input type="text" placeholder="Enter Url" disabled="disabled" class="accountInfo" name="url" value="{{userInfo.url}}">
-						<span class="btn-primary editAccountInfo">
-    					            <i class="fa fa-pencil"></i>
-    					        </span>
-                                            </div>
+					    <!--start: Data Template
+						<div class="ng-scop">
+						    <input href="#" editable-text="user.firstname" class="userDataEditable" value="{{user.firstname}}"/>
+						</div>
+						End: Data Tempalte-->
+					    <form ng-submit="updateUser()">
+						<div class="form-group">
+                                                    <label class="control-label">
+							First Name
+                                                    </label>
+                                                    <input type="text" ng-model="user.firstname" placeholder="Enter your first name" disabled="disabled" class="accountInfo" name="firstname">
+						    <span class="btn-primary editAccountInfo">
+    							<i class="fa fa-pencil"></i>
+    					            </span>
+						</div>
+					    </form>
+					    <form>
+						<div class="form-group">
+                                                    <label class="control-label">
+							Last Name
+                                                    </label>
+                                                    <input type="text" placeholder="Enter your last name" disabled="disabled" class="accountInfo" name="lastname" value="{{user.lastname}}">
+						    <span class="btn-primary editAccountInfo">
+    							<i class="fa fa-pencil"></i>
+    					            </span>
+						</div>
+					    </form>
+					    <form>
+						<div class="form-group">
+                                                    <label class="control-label">
+							Email Address
+                                                    </label>
+                                                    <input type="email" placeholder="Email address" disabled="disabled" class="accountInfo" name="email" value="{{user.email}}">
+						    <span class="btn-primary editAccountInfo">
+    							<i class="fa fa-pencil"></i>
+    					            </span>
+						</div>
+					    </form>
+					    <form>
+						<div class="form-group">
+                                                    <label class="control-label">
+							Phone
+                                                    </label>
+                                                    <input type="text" placeholder="phone number" disabled="disabled" class="accountInfo" name="phone" value="{{user.phone}}">
+						    <span class="btn-primary editAccountInfo">
+    							<i class="fa fa-pencil"></i>
+    					            </span>
+						</div>
+					    </form>
+					    <form>
+						<div class="form-group">
+                                                    <label class="control-label">
+							Url
+                                                    </label>
+                                                    <input type="text" placeholder="Enter Url" disabled="disabled" class="accountInfo" name="url" value="{{userInfo.url}}">
+						    <span class="btn-primary editAccountInfo">
+    							<i class="fa fa-pencil"></i>
+    					            </span>
+						</div>
+					    </form>
                                         </div>
                                     </div>
+				    <!--end: User Info-->
 					<table class="table table-condensed">
                                             <thead>
 						<tr>

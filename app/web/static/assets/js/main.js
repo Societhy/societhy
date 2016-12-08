@@ -1,7 +1,7 @@
-var app = angular.module('app', ['packet']);
-app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http',
-function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
-
+var app = angular.module('app', ['packet', 'xeditable']);
+app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http', 'editableOptions',
+	 function ($rootScope, $state, $stateParams, $sessionStorage, $http, editableOptions) {
+	     editableOptions.theme = 'bs3';
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
 
@@ -65,7 +65,7 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   }
 });
 
-// token authentification config 
+// token authentification config
 app.config(['$httpProvider',
 	function($httpProvider) {
 		$httpProvider.interceptors.push('httpRequestInterceptor');
@@ -190,5 +190,5 @@ app.run(["$templateCache", function ($templateCache) {
 	    "    </tr>\n" +
 	    "  </tbody>\n" +
 	    "</table>\n" +
-	    "");    
+	    "");
 }]);
