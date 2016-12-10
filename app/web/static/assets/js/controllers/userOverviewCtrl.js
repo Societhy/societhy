@@ -11,7 +11,17 @@ ctrl.coinbase_connect = function ()
     OAuth.popup('coinbase').done(function(result) {
         console.log(result)
         result.me().done(function (data) {
-            console.log(data);
+            $http.post('/updateUser', { "coinbase" : {
+                "firstname" : data.firstname,
+                "lastname" : data.lastname,
+                "email" : data.email,
+                "id" : data.id,
+                "company" : data.company, 
+            }}).then(function(response) {
+                console.log("RECEIVED = ", response);
+            }, function(error) {
+                console.log(error);
+            });
         })
     })
 }
