@@ -34,10 +34,10 @@ ctrl.fb_connect = function ()
                 {"facebook" : 
                 {
                     "firstname" : userData.first_name,
-                    "lastname" : userData.lastname,
+                    "lastname" : userData.last_name,
                     "id" : userData.id,
                     "email" : userData.email,
-                    "pictureURL" : userData.picture.url
+                    "pictureURL" : userData.picture.data.url
                 }}
                 ).then(function(response) {
                     console.log(response);
