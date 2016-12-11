@@ -67,7 +67,7 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
 
 app.factory('socketIO', function (socketFactory) {
     var socket = socketFactory({
-        ioSocket: io.connect('/')
+        ioSocket: io.connect('/chat')
     });
     socket.forward('error');
     return socketFactory();

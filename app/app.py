@@ -1,7 +1,7 @@
 from os import environ
 
 from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, send, emit
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -50,21 +50,42 @@ def hello_world():
 	return render_template("index.html")
 
 socketio = SocketIO(app)
+print(socketio)
+
+@socketio.on('connect', namespace='/chat')
+def connect():
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!A user connected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    emit('send_message', "Salut toi", namespace='/chat')
+
+@socketio.on('disconnect', namespace='/chat')
+def disconnect():
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!A user disconnected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
+@socketio.on('send_message', namespace='/chat')
+def handle_message(data):
+    message = {'avatar': data[avatar],
+        'date': data[date],
+        'content': data[content],
+        'idUser': data[idUser],
+        'idOther': data[idOther]
+    }
+    print('Received: ' + message)
+    emit('send_message', message, namespace='/chat')
+
+@socketio.on('join', namespace='/chat')
+def joined_chat(data):
+    print('User joined')
+    emit('send_message', {
+        'idOther': data['id'],
+        'idUser': data['otherId'],
+        'content': 'Welcome back ' + data['name'] + '!',
+        'date': datetime.utcnow().isoformat() + 'Z',
+        'avatar': "static/assets/images/default-user.png"
+    }, namespace='/chat')
+    return 'Received join'
 
 if __name__ == '__main__':
 		if environ.get('IP'):
 			socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=True)
 		else:
 			socketio.run(app, host='127.0.0.1', port=80, debug=True, use_reloader=True)
-
-@socketio.on('connect')
-def connect():
-    print('A user connected')
-
-@socketio.on('disconnect')
-def disconnect():
-    print('A user disconnected')
-
-@socketio.on('message')
-def jtestdestrucs(message):
-    print('received message: ' + message)

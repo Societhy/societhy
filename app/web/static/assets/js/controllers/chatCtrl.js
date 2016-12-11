@@ -17,12 +17,22 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
 
     $scope.setOtherId = function (id) {
         $scope.otherIdUser = id;
-        console.log($scope.otherIdUser);
+
+        socketIO.emit('join', {'name': $scope.user.name,
+        'id': $scope.selfIdUser,
+        'otherId': $scope.otherIdUser}, function(result) {
+            console.log(result);
+        });
     }
 
     $scope.addUser = function (user) {
         $scope.usersList.push(user);
     }
+
+    socketIO.on('send_message', function (data) {
+        console.log(data);
+        $scope.chat.push(data);
+    })
 
     $scope.receiveMessage = function () {
         var newMessage = {
@@ -46,8 +56,9 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         };
         if (newMessage.content != '') {
             $scope.chat.push(newMessage);
+            console.log(socketIO);
+            socketIO.emit('send_message', newMessage);
         }
-        console.log(socketIO);
         $scope.chatMessage = '';
     };
 });
