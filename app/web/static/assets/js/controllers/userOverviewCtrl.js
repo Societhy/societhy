@@ -11,7 +11,15 @@ ctrl.coinbase_connect = function ()
     OAuth.popup('coinbase').done(function(result) {
         console.log(result)
         result.me().done(function (data) {
-            console.log(data);
+            $http.post('/updateUser', { "coinbase" : {
+                "firstname" : data.firstname,
+                "lastname" : data.lastname,
+                "email" : data.email,
+                "id" : data.id,
+                "company" : data.company, 
+            }}).then(function(response) {}, function(error) {
+                console.log(error);
+            });
         })
     })
 }
@@ -20,12 +28,19 @@ ctrl.fb_connect = function ()
 {
     res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;
-        facebook.get("/me").done(function(userData) {
-
+        facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
             console.log(userData);
-
-            $http.post('/updateUser', userData).then(function(response) {
-                console.log("RECEIVED = ", response);
+            $http.post('/updateUser', 
+                {"facebook" : 
+                {
+                    "firstname" : userData.first_name,
+                    "lastname" : userData.last_name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.picture.data.url
+                }}
+                ).then(function(response) {
+                    console.log(response);
             }, function(error) {
                 console.log(error);
             });

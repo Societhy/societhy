@@ -28,11 +28,6 @@ def sign_up():
 	ret = auth.sign_up(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/updateUser', methods=['POST'])
-def updateUser():
-	ret = auth.updateUserField(request.json)
-	return make_response(jsonify(ret.get('data')), ret.get('status'))
-
 @router.route('/checkTokenValidity/<token>')
 def check_token_validity(token):
 	ret = auth.check_token_validity(token)
@@ -49,8 +44,9 @@ def delete_user(user):
 #####################
 
 @router.route('/updateUser', methods=['POST'])
-def update():
-	ret = user_management.update(request.json)
+@requires_auth
+def update(user):
+	ret = user_management.update(user, request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/updateSingleUserField', methods=['POST'])
