@@ -28,7 +28,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT flask-socketio eventlet"
 
 RUN pip3 install $PIP_PACKAGES
 

@@ -1,4 +1,4 @@
-/** 
+/**
   * declare 'packet' module with dependencies
 */
 'use strict';

@@ -2,19 +2,26 @@
 /**
  * controller for Messages
  */
-app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope) {
+app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope, socket) {
 
     $scope.user = $rootScope.user;
 
     $scope.noAvatarImg = "static/assets/images/default-user.png";
-    $scope.selfIdUser = 50223456;
+    if ($scope.user) {
+        $scope.selfIdUser = $scope.user._id;
+    }
     $scope.otherIdUser = "";
 
+    $scope.usersList = [{name:"Bob", job:"Barber", id:"idfromserver", avatar:$scope.noAvatarImg}];
     $scope.chat = [];
 
     $scope.setOtherId = function (id) {
         $scope.otherIdUser = id;
         console.log($scope.otherIdUser);
+    }
+
+    $scope.addUser = function (user) {
+        $scope.usersList.push(user);
     }
 
     $scope.receiveMessage = function () {
@@ -39,8 +46,8 @@ app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope
         };
         if (newMessage.content != '') {
             $scope.chat.push(newMessage);
-            $scope.receiveMessage();
         }
+        console.log(socket);
         $scope.chatMessage = '';
     };
 }]);

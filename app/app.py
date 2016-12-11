@@ -1,6 +1,7 @@
 from os import environ
 
 from flask import Flask, render_template, url_for
+from flask_socketio import SocketIO
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -48,8 +49,22 @@ def hello_world():
 	print(app.url_map)
 	return render_template("index.html")
 
+socketio = SocketIO(app)
+
 if __name__ == '__main__':
 		if environ.get('IP'):
-			app.run(host=environ.get('IP'), port=4242, debug=True, use_reloader=True)
+			socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=True)
 		else:
-			app.run(host='127.0.0.1', port=80, debug=True, use_reloader=True)
+			socketio.run(app, host='127.0.0.1', port=80, debug=True, use_reloader=True)
+
+@socketio.on('connect')
+def connect():
+    print('A user connected')
+
+@socketio.on('disconnect')
+def disconnect():
+    print('A user disconnected')
+
+@socketio.on('message')
+def jtestdestrucs(message):
+    print('received message: ' + message)

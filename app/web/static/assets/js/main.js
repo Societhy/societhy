@@ -1,4 +1,4 @@
-var app = angular.module('app', ['packet']);
+var app = angular.module('app', ['packet', 'socketio']);
 app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http',
 function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
@@ -53,6 +53,14 @@ function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
 }]);
 
+app.factory('socket', function (socketio) {
+    var socket = socketio({
+        ioSocket: io.connect('/')
+    });
+    socket.forward('error');
+    return socket;
+});
+
 // set token in request header for authentification
 app.factory('httpRequestInterceptor', function($sessionStorage) {
   return {
@@ -65,7 +73,7 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   }
 });
 
-// token authentification config 
+// token authentification config
 app.config(['$httpProvider',
 	function($httpProvider) {
 		$httpProvider.interceptors.push('httpRequestInterceptor');
@@ -190,5 +198,5 @@ app.run(["$templateCache", function ($templateCache) {
 	    "    </tr>\n" +
 	    "  </tbody>\n" +
 	    "</table>\n" +
-	    "");    
+	    "");
 }]);
