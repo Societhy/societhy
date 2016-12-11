@@ -1,4 +1,4 @@
-var app = angular.module('app', ['packet', 'socketio']);
+var app = angular.module('app', ['packet']);
 app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http',
 function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
@@ -53,8 +53,8 @@ function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
 }]);
 
-app.factory('socket', function (socketio) {
-    var socket = socketio({
+app.factory('socket', function (socketFactory) {
+    var socket = socketFactory({
         ioSocket: io.connect('/')
     });
     socket.forward('error');

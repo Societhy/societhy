@@ -30,6 +30,7 @@ app.constant('JS_REQUIRES', {
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
         'OAuth' : '../../bower_components/oauth-js/dist/oauth.js',
+        'socketio' : "../../bower_components/angular-socket-io/socket.js",
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
@@ -38,8 +39,6 @@ app.constant('JS_REQUIRES', {
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
-
-        'socketio' : "../../bower_components/angular-socket-io/socket.js"
     },
     //*** angularJS Modules
     modules: [{
