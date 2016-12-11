@@ -20,7 +20,6 @@ def login():
 @router.route('/logout')
 @requires_auth
 def logout(user):
-	print("logout", user)
 	ret = auth.logout(user)
 	return jsonify(ret)
 
