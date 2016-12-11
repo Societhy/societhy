@@ -53,14 +53,6 @@ function ($rootScope, $state, $stateParams, $sessionStorage, $http) {
 
 }]);
 
-app.factory('socket', function (socketFactory) {
-    var socket = socketFactory({
-        ioSocket: io.connect('/')
-    });
-    socket.forward('error');
-    return socket;
-});
-
 // set token in request header for authentification
 app.factory('httpRequestInterceptor', function($sessionStorage) {
   return {
@@ -71,6 +63,14 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   		return config;
   	}
   }
+});
+
+app.factory('socketIO', function (socketFactory) {
+    var socket = socketFactory({
+        ioSocket: io.connect('/')
+    });
+    socket.forward('error');
+    return socketFactory();
 });
 
 // token authentification config

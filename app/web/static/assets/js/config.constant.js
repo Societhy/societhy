@@ -30,7 +30,6 @@ app.constant('JS_REQUIRES', {
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
         'OAuth' : '../../bower_components/oauth-js/dist/oauth.js',
-        'socketio' : "../../bower_components/angular-socket-io/socket.js",
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
@@ -101,5 +100,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'angularSpectrumColorpicker',
         files: ['../../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js']
+    }, {
+        name: 'btford.socket-io',
+        files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }]
 });

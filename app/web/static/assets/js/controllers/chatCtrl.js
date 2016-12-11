@@ -2,8 +2,8 @@
 /**
  * controller for Messages
  */
-app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope, socket) {
 
+app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
     $scope.user = $rootScope.user;
 
     $scope.noAvatarImg = "static/assets/images/default-user.png";
@@ -47,7 +47,7 @@ app.controller('ChatCtrl', ["$scope", "$rootScope", function ($scope, $rootScope
         if (newMessage.content != '') {
             $scope.chat.push(newMessage);
         }
-        console.log(socket);
+        console.log(socketIO);
         $scope.chatMessage = '';
     };
-}]);
+});
