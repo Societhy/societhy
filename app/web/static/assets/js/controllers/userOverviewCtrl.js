@@ -24,7 +24,7 @@ ctrl.coinbase_connect = function ()
     })
 }
 
-ctrl.fb_connect = function () 
+ctrl.fb_connect = function ()
 {
     res = OAuth.popup('facebook').done(function(facebook) {
         loginObject = facebook;
@@ -50,18 +50,22 @@ ctrl.fb_connect = function ()
     });
 }
 
-    $rootScope.updateUser = function(name) {
+    /*
+    ** Update one field from the user
+    */
+    $rootScope.updateUser = function(name, vals) {
 	if ($rootScope.user != null)
 	{
 	    $http.post('/updateSingleUserField', {
 		"_id": $rootScope.user["_id"],
-		"new": $rootScope.user[$rootScope.name],
-		"old": $rootScope.oldVal,
-		"name": $rootScope.name,
+		"new": vals[0],
+		"old": vals[1],
+		"name": name
 	    }).then(function(response) {
 		$rootScope.user = ctrl.user = response.data;
 	    },
 		    function(error) {
+			$rootScope.user[name] = ctrl.user[name] = oldVal;
 			console.log(error);
 		    });
 	}
@@ -69,14 +73,34 @@ ctrl.fb_connect = function ()
 	    console.log("User not logged in");
     }
 
-    $rootScope.$watchGroup(['user.firstname'], function(newVal, oldVal) {
-	console.log(42);
+    /*
+    ** Watch user data for any modifications
+    */
+    Array.prototype.diff = function(a) {
+	return this.filter(function(i) {return a.indexOf(i) < 0;});
+    };
+    $rootScope.$watchGroup(['user.firstname', 'user.lastname', 'user.email','user.phone', 'user.address', 'user.city', 'user.birthday'], function(newVal, oldVal, obj) {
+	vals = [
+	    ((newVal.diff(oldVal).length != 0) ? newVal.diff(oldVal)[0] : ""),
+	    ((oldVal.diff(newVal).length != 0) ? oldVal.diff(newVal)[0] : "")]
+	if ($rootScope.user != null && newVal !== oldVal) {
+	    for (var key in $rootScope.user) {
+		if ($rootScope.user[key] == vals[0]) {
+		    $rootScope.updateUser(key, vals)
+		}
+	    }
+	}
     });
+
+
+    /*
+    ** Animate user info's inputs
+    */
     function animation() {
-	$("input.userDataEditable").hover(function(){
+	$("a.userDataEditable").hover(function() {
 	    $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
-	}, function(){
-     	    $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
+	}, function() {
+	    $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
 	});
     };
 
@@ -130,4 +154,5 @@ ctrl.fb_connect = function ()
 //     });
     //}
 
+    return ctrl;
 });

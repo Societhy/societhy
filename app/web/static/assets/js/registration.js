@@ -25,15 +25,9 @@ $( document ).ready(function() {
 	else
 	    $("div#stepAdvancement button#btn-prev").prop("disabled", false);
 	if (cnt == $(".registrationDatas").length)
-	{
 	    $("div#stepAdvancement button#btn-next").prop("disabled", true);
-	    //$("div#stepAdvancement button#submit").show();
-	}
 	else
-	{
 	    $("div#stepAdvancement button#btn-next").prop("disabled", false);
-	    //$("div#stepAdvancement button#submit").hide();
-	}
 	$(".registrationDatas").hide();
 	$(".data" + cnt).show();
 

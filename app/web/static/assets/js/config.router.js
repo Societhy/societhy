@@ -50,6 +50,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'My Profile'
         }
+    }).state('app.user', {
+        url: '/user/:name',
+        templateUrl: "static/assets/views/user_other_profile.html",
+        resolve: loadSequence('userOtherOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
+        title: 'user Profile',
+        ncyBreadcrumb: {
+            label: 'User Profile'
+        }
     })
 
     .state('error', {
