@@ -26,8 +26,7 @@ def update(user, newData):
 
 def updateUserField(user, newData):
 	def field_exist(data):
-		if users.find({"_id": ObjectId(data["_id"]),
-				data["name"]: data["old"]}).count() <= 0:
+		if users.find({"_id": ObjectId(data["_id"])}).count() <= 0:
 			return {"data": "Cannot find the user and with the corresponding data. Please logout, login and try again",
 				"status": 401}
 		return False
@@ -38,5 +37,11 @@ def updateUserField(user, newData):
 
 	user[newData["name"]] = newData["new"];
 	user.save_partial()
+	return {"data": user,
+		"status": 200}
+
+
+def findUser(data):
+	user = users.find_one({"name": data["name"]})
 	return {"data": user,
 		"status": 200}

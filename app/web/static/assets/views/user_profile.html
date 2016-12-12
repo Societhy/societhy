@@ -16,7 +16,7 @@
                     <uib-tab heading="Overview">
                     <div ng-controller="userOverviewCtrl as ctrl">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-12">
                                 <div class="user-left">
                                     <div class="center">
                                         <h4>{{user.firstname}} {{user.lastname}}</h4>
@@ -84,11 +84,38 @@
 				    <!--start: User Info -->
 				    <div class="row">
                                         <div class="col-md-12" id="userInfo">
-					    <!--start: Data Template
+					    <!--start: Input Fields-->
 						<div class="ng-scop">
-						    <input href="#" editable-text="user.firstname" class="userDataEditable" value="{{user.firstname}}"/>
+						    <label class="control-label">Firstname :</label>
+						    <a href="#" editable-text="user.firstname" class="userDataEditable">{{user.firstname}}</a>
 						</div>
-						End: Data Tempalte-->
+						<div class="ng-scop">
+						    <label class="control-label">Lastname :</label>
+						    <a href="#" editable-text="user.lastname" class="userDataEditable">{{user.lastname}}</a>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Email :</label>
+						    <a href="#" editable-text="user.email" class="userDataEditable" value="{{user.email}}">{{user.email}}</a>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Address :</label>
+						    <a href="#" editable-text="user.address" class="userDataEditable" value="{{user.address}}">{{user.address}}</a>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">City :</label>
+						    <a href="#" editable-text="user.city" class="userDataEditable" value="{{user.city}}">{{user.city}}</a>
+						</div>
+<!-- PENDING						<div class="ng-scop">
+						    <label class="control-label">Birthday :</label>
+						    <input href="#" editable-bsdate="user.birthday" e-datepicker-popup="dd-MMMM-yyyy" class="userDataEditable" value="{{ (user.dob | date:'dd/MM/yyyy') || 'empty' }}"/>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Gender :</label>
+						    <input href="#" editable-select="user.gender" class="userDataEditable" value="{{user.gender}}"/>
+						</div>
+-->
+						<!--End: Input Fields-->
+					    <!-- User INFO OLD
 					    <form ng-submit="updateUser()">
 						<div class="form-group">
                                                     <label class="control-label">
@@ -143,10 +170,10 @@
     							<i class="fa fa-pencil"></i>
     					            </span>
 						</div>
-					    </form>
+					    </form>-->
                                         </div>
                                     </div>
-				    <!--end: User Info-->
+				    <!--end: User Info OLD
 					<table class="table table-condensed">
                                             <thead>
 						<tr>
@@ -183,7 +210,8 @@
                                                 </td>
                                             </tr>
                                         </tbody>
-                                    </table>
+					</table>-->
+				    <!-- General information OLD
                                     <table class="table table-condensed">
                                         <thead>
                                             <tr>
@@ -234,9 +262,10 @@
                                         <a class="btn btn-primary btn-o btn-wide" href="#" ng-click="editActive = true">
                                             Edit Account
                                         </a>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
+			    <!-- DATA EN DURE
                             <div class="col-md-8">
                                 <div class="row space20">
                                     <div class="col-sm-3">
@@ -389,7 +418,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     </uib-tab>
