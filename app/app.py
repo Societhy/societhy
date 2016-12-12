@@ -1,7 +1,6 @@
 from os import environ
 
 from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO, send, emit
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -10,6 +9,7 @@ from api.routes.fundraise import router as fundraise_routes
 
 from core import secret_key
 from core.utils import UserJSONEncoder
+import core.chat as chat
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
@@ -49,40 +49,8 @@ def hello_world():
 	print(app.url_map)
 	return render_template("index.html")
 
-socketio = SocketIO(app)
-print(socketio)
-
-@socketio.on('connect', namespace='/chat')
-def connect():
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!A user connected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-    emit('send_message', "Salut toi", namespace='/chat')
-
-@socketio.on('disconnect', namespace='/chat')
-def disconnect():
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!A user disconnected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-
-@socketio.on('send_message', namespace='/chat')
-def handle_message(data):
-    message = {'avatar': data[avatar],
-        'date': data[date],
-        'content': data[content],
-        'idUser': data[idUser],
-        'idOther': data[idOther]
-    }
-    print('Received: ' + message)
-    emit('send_message', message, namespace='/chat')
-
-@socketio.on('join', namespace='/chat')
-def joined_chat(data):
-    print('User joined')
-    emit('send_message', {
-        'idOther': data['id'],
-        'idUser': data['otherId'],
-        'content': 'Welcome back ' + data['name'] + '!',
-        'date': datetime.utcnow().isoformat() + 'Z',
-        'avatar': "static/assets/images/default-user.png"
-    }, namespace='/chat')
-    return 'Received join'
+socketio = chat.socketio
+socketio.init_app(app)
 
 if __name__ == '__main__':
 		if environ.get('IP'):
