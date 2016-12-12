@@ -52,9 +52,14 @@ def update(user):
 
 @router.route('/updateSingleUserField', methods=['POST'])
 @requires_auth
-def update_single_user_fieldd(user):
+def update_single_user_field(user):
 	ret = user_management.updateUserField(user,request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/findUser', methods=['POST'])
+def find_user():
+	ret = user_management.findUser(request.json)
+	return jsonify(ret.get('data')), ret.get('status')
 
 ####################
 ## KEY MANAGEMENT ##

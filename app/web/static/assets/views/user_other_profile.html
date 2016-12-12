@@ -1,0 +1,87 @@
+<!-- start: BREADCRUMB -->
+<div class="breadcrumb-wrapper">
+    <h4 class="mainTitle no-margin" translate="sidebar.nav.pages.USERPROFILE">USER PROFILE</h4>
+
+    <div ncy-breadcrumb class="pull-right"></div>
+</div>
+<!-- end: BREADCRUMB -->
+<!-- start: USER PROFILE -->
+<div class="container-fluid container-fullw bg-white">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <!-- start: USER TABSET -->
+                <uib-tabset class="tabbable">
+                    <!-- start: TAB OVERVIEW -->
+                    <uib-tab heading="Overview">
+			<div ng-controller="userOtherOverviewCtrl as ctrl">
+                            <div class="row">
+				<div class="col-md-12">
+                                    <div class="user-left">
+					<div class="center">
+                                            <h4>{{profile.firstname}} {{profile.lastname}}</h4>
+                                            <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+						<div class="user-image">
+                                                    <div class="thumbnail">
+							<img ng-src="{{profileInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
+							<img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
+                                                    </div>
+                                                    <div class="user-image-buttons" ng-if="obj.flow.files.length">
+							<span class="btn btn-primary btn-file">
+					                    <i class="fa fa-pencil"></i>
+					                    <input type="file" flow-btn />
+					                </span>
+							<span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i> </span>
+                                                    </div>
+                                                    <div class="user-image-buttons" ng-if="!obj.flow.files.length">
+							<span class="btn btn-primary btn-file">
+					                    <i class="fa fa-pencil"></i>
+					                    <input type="file" flow-btn />
+					                </span>
+							<span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i></span>
+                                                    </div>
+						</div>
+                                            </div>
+                                            <hr>
+                                            <div id="newPhoto"></div>
+					</div>
+					<!--start: User Info -->
+					<div class="row">
+                                            <div class="col-md-12" id="userInfo">
+						<!--start: Input Fields-->
+						<div class="ng-scop">
+						    <label class="control-label">Firstname :</label>
+						    <span disabled="disabled" href="#" class="userDataEditable">{{profile.firstname}}</span>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Lastname :</label>
+						    <span disabled="disabled" href="#" class="userDataEditable">{{profile.lastname}}</span>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Email :</label>
+						    <span disabled="disabled" href="#" class="userDataEditable">{{profile.email}}</span>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">Address :</label>
+						    <span disabled="disabled" href="#" class="userDataEditable">{{profile.address}}</span>
+						</div>
+						<div class="ng-scop">
+						    <label class="control-label">City :</label>
+						    <span disabled="disabled" href="#" class="userDataEditable">{{profile.city}}</span>
+						</div>
+                                            </div>
+					</div>
+                                    </div>
+				</div>
+                            </div>
+			</div>
+                    </uib-tab>
+                    <!-- end: TAB OVERVIEW -->
+                </uib-tabset>
+                <!-- end: USER TABSET -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end: USER PROFILE -->

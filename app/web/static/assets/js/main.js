@@ -1,4 +1,4 @@
-var app = angular.module('app', ['packet', 'xeditable']);
+var app = angular.module('app', ['packet', 'xeditable', 'ui.bootstrap']);
 app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http', 'editableOptions',
 	 function ($rootScope, $state, $stateParams, $sessionStorage, $http, editableOptions) {
 	     editableOptions.theme = 'bs3';
@@ -43,7 +43,6 @@ app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http', 'ed
         $http.get('/checkTokenValidity/'.concat($sessionStorage.SociethyToken)).then(function(response) {
             if (response.data.user != null) {
                 $rootScope.user = response.data.user;
-                console.log($rootScope.user)
             }
         });
     }
