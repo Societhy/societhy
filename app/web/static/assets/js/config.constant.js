@@ -29,7 +29,7 @@ app.constant('JS_REQUIRES', {
         'keythereum': '../../node_modules/keythereum/dist/keythereum.min.js',
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
-        'OAuth' : '../../bower_components/oauth-js/dist/oauth.js',
+        'OAuth' : '../../bower_components/oauth.io/dist/oauth.js',
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
@@ -38,6 +38,8 @@ app.constant('JS_REQUIRES', {
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
+        'userOtherOverviewCtrl' : 'static/assets/js/controllers/userOtherOverviewCtrl.js',
+        'walletCtrl' : 'static/assets/js/controllers/walletCtrl.js'
     },
     //*** angularJS Modules
     modules: [{
@@ -103,5 +105,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'btford.socket-io',
         files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
+    }, {
+        name:'qrcode',
+        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
     }]
 });

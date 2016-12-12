@@ -2,7 +2,8 @@ from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
 
-from .db import client
+from .db import client, eth_cli
+from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
 	
@@ -11,40 +12,47 @@ class UserDocument(Document):
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
 
-	def add_key(self, key, local):
+	def add_key(self, key, local, balance=0, file=None):
 		if self.get('eth').get('mainKey') is None:
 			self["eth"]["mainKey"] = key
 
-		if self.get('eth').get('keys') is not None:
-			self["eth"]["keys"].append({
-				"address": key,
-				"local": local
-			 })
-
-		else:
-			self["eth"]["keys"] = [{
-				"address": key,
-				"local": local
-			 }]
+		self["eth"]["keys"][key] = {
+			"balance": balance,
+			"local": local,
+			"address": key,
+			"file": file
+		 }
 		self.save_partial()
 
 	def remove_key(self, key, local):
-		for publicKey in self["eth"]["keys"]:
-			if publicKey.get('address') == key:
-				self["eth"]["keys"].remove(publicKey)
+		for publicKey in self["eth"]["keys"].keys():
+			if publicKey == key:
+				del self["eth"]["keys"][publicKey]
 				if self["eth"]["mainKey"] == key:
 					self["eth"]["mainKey"] = None
 				self.save_partial()
+				return
 
 	def get_key(self, publicKey=None):
 		if publicKey is None:
 			return self.get('eth').get('mainKey')
 		else:
-			for key in self.get('eth').get('keys'):
-				if key.get('address') == publicKey:
-					return key
+			for key in self.get('eth').get('keys').keys():
+				if key == publicKey:
+					return self.get('eth').get('keys').get(key) 
 			return None
 					
+	def refresh_balance(self, address=None):
+		address = address or self.get('eth').get('mainKey')
+		if address:
+			balance = wei_to_ether(eth_cli.eth_getBalance(address))
+			if address in self['eth']['keys']:
+				self['eth']['keys'][address]["balance"] = balance
+				self.save_partial()
+			return balance
+		return None
+
+
 class UserCollection(Collection):
 	user_info = [
 		"_id",
@@ -59,5 +67,7 @@ class UserCollection(Collection):
 		"lastname",
 		"city"
 	]
+
+	document_class = UserDocument
 
 users = UserCollection(collection=client.main.users)

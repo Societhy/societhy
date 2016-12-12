@@ -1,6 +1,8 @@
 ## SOCIETHY
 ========
 
+[![Build Status](https://travis-ci.org/Societhy/societhy.svg?branch=master)](https://travis-ci.org/Societhy/societhy)
+
 Usage :
 
 * build docker image : `make build`

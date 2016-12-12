@@ -1,18 +1,16 @@
 <div class="modal-header ng-scope">
     <h3 class="modal-title">Select your key</h3>
 </div>
-<div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter" class="ng-scope modal-body">
+<div nv-file-drop="" uploader="uploader" filters="queueLimit" class="ng-scope modal-body">
     <div class="row">
         <div class="col-md-3">
             <div class="panel panel-white">
                 <div class="panel-body">
                     <div ng-show="uploader.isHTML5" class="">
-                        <!-- 3. nv-file-over uploader="link" over-class="className" --> 
                         <div class="well my-drop-zone" nv-file-over="" uploader="uploader" ng-disabled="keyUploaded">
                             Drag & drop here !!
                         </div>
                     </div>
-                    <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
                     <span class="btn btn-primary btn-o btn-file">
                         Select single file
                         <input type="file" nv-file-select="" uploader="uploader" ng-disabled="keyUploaded">

@@ -1,5 +1,6 @@
 from flask import Blueprint, Response, render_template, request, jsonify, make_response
-from core import auth, keys, user_management
+
+from core import auth, keys, user_management, wallet
 
 from api import requires_auth
 
@@ -28,11 +29,6 @@ def sign_up():
 	ret = auth.sign_up(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/updateUser', methods=['POST'])
-def updateUser():
-	ret = auth.updateUserField(request.json)
-	return make_response(jsonify(ret.get('data')), ret.get('status'))
-
 @router.route('/checkTokenValidity/<token>')
 def check_token_validity(token):
 	ret = auth.check_token_validity(token)
@@ -49,10 +45,21 @@ def delete_user(user):
 #####################
 
 @router.route('/updateUser', methods=['POST'])
-def update():
-	ret = user_management.update(request.json)
+@requires_auth
+def update(user):
+	ret = user_management.update(user, request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateSingleUserField', methods=['POST'])
+@requires_auth
+def update_single_user_field(user):
+	ret = user_management.updateUserField(user,request.json)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/findUser', methods=['POST'])
+def find_user():
+	ret = user_management.findUser(request.json)
+	return jsonify(ret.get('data')), ret.get('status')
 
 ####################
 ## KEY MANAGEMENT ##
@@ -98,6 +105,28 @@ def export_key(user, address):
 
 
 ####################
+##     WALLET     ##
+####################
+
+@router.route('/getAllBalances')
+@requires_auth
+def get_all_balance(user):
+	ret = wallet.refresh_all_balances(user)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getBalance/<address>')
+@requires_auth
+def get_balance(user, address):
+	ret = wallet.refresh_balance(user, address)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getTxHistory/<address>')
+@requires_auth
+def get_tx_history(user, address):
+	ret = wallet.get_tx_history(user, address)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+####################
 ##                ##
 ####################
 
@@ -105,5 +134,4 @@ def export_key(user, address):
 @router.route('/user/<user>')
 @requires_auth
 def user_profile(user):
-	print(user)
 	return Response({"data":"ok"}, 200)

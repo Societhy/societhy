@@ -8,7 +8,6 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
     // Loading bar transition
     // -----------------------------------
     var $win = $($window), $body = $('body');
-
     $scope.horizontalNavbarCollapsed = true;
     $scope.menuInit = function (value) {
         $scope.horizontalNavbarCollapsed = value;
@@ -170,6 +169,9 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
 
     };
 
+    $scope.searchForUser = function(name) {
+	$window.location.href = "/#/app/user/" + name;
+    }
     // Function that find the exact height and width of the viewport in a cross-browser way
     var viewport = function () {
         var e = window, a = 'inner';

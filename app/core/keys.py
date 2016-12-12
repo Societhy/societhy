@@ -10,7 +10,11 @@ from flask import session, request, Response
 from models import users
 from models.db import eth_cli
 
+from core.utils import normalize_address, fromWei
+
 from rlp.utils import encode_hex
+
+keyDirectory = environ.get('KEYS_DIRECTORY')
 
 class KeyFormatError(Exception):
 	pass
@@ -18,26 +22,35 @@ class KeyFormatError(Exception):
 class KeyExistsError(Exception):
 	pass
 
+def gen_base_key():
+
+	hashPassword = scrypt.hash("societhy", "rajoute du sel dans les carottes rapées")
+	hashPassword = encode_hex(hashPassword).decode('utf-8')
+	dirContent = listdir(keyDirectory)
+	key = eth_cli.personal_newAccount(hashPassword)
+	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
+	return {"address": key, "file": keyFile}
+
 def gen_linked_key(user, password):
 
 	def gen_key_remote(password):
 		hashPassword = scrypt.hash(password, "je trouve que les carottes ne sont pas assez salées")
 		hashPassword = encode_hex(hashPassword).decode('utf-8')
+		dirContent = listdir(keyDirectory)
 		key = eth_cli.personal_newAccount(hashPassword)
-
-		if key.startswith('0x'):
-			key = key[2:]
-		return key
+		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
+		return {"address": key, "file": keyFile}
 	
 	newKey = gen_key_remote(password)
-	user.add_key(newKey, local=False)
+	user.add_key(newKey.get('address'), local=False, balance=0, file=newKey.get('file'))
 	return {
-		"data": newKey,
+		"data": newKey.get('address'),
 		"status": 200
 	}
 
 def key_was_generated(user, address):
-	user.add_key(address, local=True)
+	address = normalize_address(address, hexa=True)
+	user.add_key(address, local=True, balance=fromWei(eth_cli.eth_getBalance(address)))
 	return {
 		"data": "OK",
 		"status": 200
@@ -52,18 +65,14 @@ def import_new_key(user, sourceKey):
 			raise KeyFormatError
 
 	def key_already_exists(address, userExistingAddresses):
-		if address in [userKey.get('address') for userKey in userExistingAddresses]:
+		if normalize_address(address, hexa=True) in userExistingAddresses.keys():
 			raise KeyExistsError
-		keyDirectory = environ.get('KEYS_DIRECTORY')
-		for keyFile in listdir(keyDirectory):
-			if address in keyFile:
-				raise KeyExistsError
 
-	def import_key_remote(address, sourceKey):
-		keyDirectory = environ.get('KEYS_DIRECTORY')
-		keyFilename = "UTC--" + strftime("%Y-%m-%dT%H-%M-%S") + "." + str(clock())[2:] + "Z--" + address
+	def import_key_remote(keyId, sourceKey):
+		keyFilename = "UTC--" + strftime("%Y-%m-%dT%H-%M-%S") + "." + str(clock())[2:] + "Z--" + keyId
 		with open(path.join(keyDirectory, keyFilename), 'w') as f:
 			f.write(sourceKey)
+		return keyFilename
 
 	status = 200
 	sourceKey = sourceKey.read().decode('utf-8')
@@ -72,11 +81,12 @@ def import_new_key(user, sourceKey):
 		key = json.loads(sourceKey)
 		is_ethereum_key(key)
 		key_already_exists(key.get('address'), user.get('eth').get('keys'))
-		import_key_remote(key.get('address'), sourceKey)
+		keyFilename = import_key_remote(key.get('id'), sourceKey)
+		key["address"] = normalize_address(key.get('address'), hexa=True)
 		data = { "address" : key.get('address') }
-		user.add_key(key.get('address'), local=False)
+		user.add_key(key.get('address'), local=False, balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), file=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
-		data = "key format nor recognized"
+		data = "key format not recognized"
 		status = 400
 	except (KeyExistsError):
 		data = "trying to import an existing key"
@@ -90,7 +100,7 @@ def import_new_key(user, sourceKey):
 def export_key(user, address, delete=False):
 	exportedKey = user.get_key(address)
 	
-	if delete and exportedKey.get('local') is True:
+	if exportedKey and delete and exportedKey.get('local') is True:
 		user.remove_key(address, local=True)
 		return {
 			"data": None,
@@ -98,9 +108,8 @@ def export_key(user, address, delete=False):
 		}
 
 	elif exportedKey is not None:
-		keyDirectory = environ.get('KEYS_DIRECTORY')
 		for keyFile in listdir(keyDirectory):
-			if address in keyFile:
+			if exportedKey.get('file') == keyFile:
 				with open(path.join(keyDirectory, keyFile), 'r') as f:
 					data = json.load(f)
 					if delete is True:

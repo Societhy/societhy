@@ -335,8 +335,8 @@ h5.over-title {
 }
 
 .container-fullw {
-  margin-left: -15px;
-  margin-right: -15px;
+  margin-left: 15px;
+  margin-right: 15px;
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 30px;
@@ -522,6 +522,7 @@ span[role="slider"] {
   padding-left: 15px !important;
   padding-right: 15px !important;
   position: relative;
+  padding-top: 10px;
 }
 @media (min-width: 768px) {
   .navbar .navbar-collapse {
