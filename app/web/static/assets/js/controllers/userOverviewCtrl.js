@@ -1,5 +1,5 @@
 app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope) {
- 	var ctrl = this;
+  var ctrl = this;
 
 //OAuth
 
@@ -41,55 +41,176 @@ ctrl.fb_connect = function ()
                 }}
                 ).then(function(response) {
                     console.log(response);
-            }, function(error) {
-                console.log(error);
+                }, function(error) {
+                    console.log(error);
+                });
             });
-        });
     }).fail(function(err) {
         console.log(error);
     });
 }
 
+ctrl.twitter_connect = function ()
+{
+    OAuth.popup('twitter').done(function(result) {
+        result.me().done(function(userData) {
+            $http.post('/updateUser', 
+                {"twitter" : 
+                {
+                    "firstname" : userData.name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                }}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+})
+})
+}
+
+ctrl.linkedin_connect = function()
+{
+OAuth.popup('linkedin').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+            $http.post('/updateUser', 
+                {"linkedin" : 
+                {
+                    "firstname" : userData.firstname,
+                    "lastname" : userData.lastname,
+                    "id" : userData.id,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                }}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+    })
+})
+}
+
+ctrl.github_connect = function ()
+{
+OAuth.popup('github').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+            $http.post('/updateUser', 
+                {"github" : 
+                {
+                    "firstname" : userData.name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "company" : userData.company,
+                    "alias" : userData.alias
+                }}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+})
+})
+}
+
+ctrl.google_connect = function ()
+{
+    console.log("hello");
+    res = OAuth.popup('google').done(function(result)
+    {
+        result.me().done(function(userData) {
+            console.log(userData);
+            $http.post('/updateUser', 
+                {"google" : 
+                {
+                    "firstname" : userData.firstname,
+                    "lastname" : userData.lastname,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                    "company" : userData.company
+
+                }}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+            })    
+    }).then(function() {}, function(error) {
+        console.log(error);
+    });
+}
+
+
+
+
+
+$rootScope.updateUser = function(name) {
+	if ($rootScope.user != null)
+	{
+       $http.post('/updateSingleUserField', {
+          "_id": $rootScope.user["_id"],
+          "new": $rootScope.user[$rootScope.name],
+          "old": $rootScope.oldVal,
+          "name": $rootScope.name,
+      }).then(function(response) {
+          $rootScope.user = ctrl.user = response.data;
+      },
+      function(error) {
+         console.log(error);
+     });
+  }
+  else
+   console.log("User not logged in");
+}
     /*
     ** Update one field from the user
     */
     $rootScope.updateUser = function(name, vals) {
-	if ($rootScope.user != null)
-	{
-	    $http.post('/updateSingleUserField', {
-		"_id": $rootScope.user["_id"],
-		"new": vals[0],
-		"old": vals[1],
-		"name": name
-	    }).then(function(response) {
-		$rootScope.user = ctrl.user = response.data;
-	    },
-		    function(error) {
-			$rootScope.user[name] = ctrl.user[name] = oldVal;
-			console.log(error);
-		    });
-	}
-	else
-	    console.log("User not logged in");
+    if ($rootScope.user != null)
+    {
+        $http.post('/updateSingleUserField', {
+        "_id": $rootScope.user["_id"],
+        "new": vals[0],
+        "old": vals[1],
+        "name": name
+        }).then(function(response) {
+        $rootScope.user = ctrl.user = response.data;
+        },
+            function(error) {
+            $rootScope.user[name] = ctrl.user[name] = oldVal;
+            console.log(error);
+            });
+    }
+    else
+        console.log("User not logged in");
     }
 
     /*
     ** Watch user data for any modifications
     */
     Array.prototype.diff = function(a) {
-	return this.filter(function(i) {return a.indexOf(i) < 0;});
+    return this.filter(function(i) {return a.indexOf(i) < 0;});
     };
     $rootScope.$watchGroup(['user.firstname', 'user.lastname', 'user.email','user.phone', 'user.address', 'user.city', 'user.birthday'], function(newVal, oldVal, obj) {
-	vals = [
-	    ((newVal.diff(oldVal).length != 0) ? newVal.diff(oldVal)[0] : ""),
-	    ((oldVal.diff(newVal).length != 0) ? oldVal.diff(newVal)[0] : "")]
-	if ($rootScope.user != null && newVal !== oldVal) {
-	    for (var key in $rootScope.user) {
-		if ($rootScope.user[key] == vals[0]) {
-		    $rootScope.updateUser(key, vals)
-		}
-	    }
-	}
+    vals = [
+        ((newVal.diff(oldVal).length != 0) ? newVal.diff(oldVal)[0] : ""),
+        ((oldVal.diff(newVal).length != 0) ? oldVal.diff(newVal)[0] : "")]
+    if ($rootScope.user != null && newVal !== oldVal) {
+        for (var key in $rootScope.user) {
+        if ($rootScope.user[key] == vals[0]) {
+            $rootScope.updateUser(key, vals)
+        }
+        }
+    }
     });
 
 
@@ -97,62 +218,13 @@ ctrl.fb_connect = function ()
     ** Animate user info's inputs
     */
     function animation() {
-	$("a.userDataEditable").hover(function() {
-	    $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
-	}, function() {
-	    $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
-	});
+    $("a.userDataEditable").hover(function() {
+        $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
+    }, function() {
+        $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
+    });
     };
 
     animation();
-
-// //Load facebook SDK
-// window.fbAsyncInit = function() {
-// 	FB.init({
-// 		appId      : '1774766892791379',
-// 		xfbml      : true,
-// 		version    : 'v2.8'
-// 	});
-// 	FB.AppEvents.logPageView();
-// };
-
-// (function(d, s, id){
-// 	var js, fjs = d.getElementsByTagName(s)[0];
-// 	if (d.getElementById(id)) {return;}
-// 	js = d.createElement(s); js.id = id;
-// 	js.src = "//connect.facebook.net/en_US/sdk.js";
-// 	fjs.parentNode.insertBefore(js, fjs);
-// }(document, 'script', 'facebook-jssdk'));
-
-// ctrl.fb_connect = function (argument) {
-// 	FB.login(function(response) {
-
-// 		if (response.authResponse)
-// 		{
-//             access_token = response.authResponse.accessToken; //get access token
-//             user_id = response.authResponse.userID; //get FB UID
-//             console.log("token : " + access_token);
-//             console.log("user_id : " + user_id);
-//             FB.api('/me', {fields: 'email, name, picture'} ,function(response)
-//             {
-//                 console.log("name : " + response.name);
-//                 console.log("email : " + response.email);
-//                 console.log("photo url " + response.picture.data.url);
-
-//                 newPhoto = angular.element(document.querySelector('#newPhoto'));
-//                 newPhoto.html('<img src="'+ response.picture.data.url + '">')
-
-//             });
-
-//         } else {
-//             //user hit cancel button
-//             console.log('User cancelled login or did not fully authorize.');
-
-//         }
-//     }, {
-//     	scope: 'public_profile,email'
-//     });
-    //}
-
     return ctrl;
 });

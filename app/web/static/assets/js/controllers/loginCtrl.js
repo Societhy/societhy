@@ -92,13 +92,13 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	    $("#beforeSubmit").hide();
 	    if ($(".formChecker[style!='display: none;']").length > 0)
 	    {
-		$("button#submit").prop("disabled", true);
+//		$("button#submit").prop("disabled", true);
 		$("#beforeSubmit").show();
 		return;
 	    }
 	    $("form #mandatoryInfo input").each(function (index) {
 		if ($(this).val().length == 0) {
-		    $("button#submit").prop("disabled", true);
+//		    $("button#submit").prop("disabled", true);
 		    $("#beforeSubmit").show();
 		    return;
 		}
@@ -170,9 +170,12 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	});
     }
 
-    if ($location.path() == "/login/registration") {
-	registration_checker();
-    }
+    // DEV
+    // if ($location.path() == "/login/registration") {
+    // 	registration_checker();
+    // }
+
+
     /*
     ** Handle the modification of the personal informations
     */
