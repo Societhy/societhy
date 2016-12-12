@@ -20,31 +20,28 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
 
         socketIO.emit('join', {'name': $scope.user.name,
         'id': $scope.selfIdUser,
-        'otherId': $scope.otherIdUser}, function(result) {
-            console.log(result);
-        });
+        'otherId': $scope.otherIdUser});
     }
 
     $scope.addUser = function (user) {
         $scope.usersList.push(user);
     }
 
-    socketIO.on('send_message', function (data) {
-        console.log(data);
-        $scope.chat.push(data);
-    })
-
-    $scope.receiveMessage = function () {
+    var receiveMessage = function (data) {
         var newMessage = {
-            "avatar": $scope.noAvatarImg,
-            "date": new Date(),
-            "content": $scope.chatMessage,
-            "idUser": $scope.otherIdUser,
-            "idOther": $scope.selfIdUser
+            "avatar": data.avatar,
+            "date": data.date,
+            "content": data.content,
+            "idUser": data.idUser,
+            "idOther": data.idOther
         };
         $scope.chat.push(newMessage);
         $scope.chatMessage = '';
     };
+
+    socketIO.on('send_message', function (data) {
+        receiveMessage(data);
+    })
 
     $scope.sendMessage = function () {
         var newMessage = {
@@ -56,7 +53,6 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         };
         if (newMessage.content != '') {
             $scope.chat.push(newMessage);
-            console.log(socketIO);
             socketIO.emit('send_message', newMessage);
         }
         $scope.chatMessage = '';

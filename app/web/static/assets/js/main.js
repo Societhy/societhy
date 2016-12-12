@@ -69,7 +69,7 @@ app.factory('socketIO', function (socketFactory) {
         ioSocket: io.connect('/chat')
     });
     socket.forward('error');
-    return socketFactory();
+    return socket;
 });
 
 // token authentification config
