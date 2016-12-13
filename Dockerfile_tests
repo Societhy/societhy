@@ -69,5 +69,3 @@ RUN bash /societhy/utils/install_parity.sh
 EXPOSE 8080
 
 EXPOSE 22
-
-RUN cd /societhy/utils ; ./install.sh

@@ -11,13 +11,16 @@ ctrl.coinbase_connect = function ()
     OAuth.popup('coinbase').done(function(result) {
         console.log(result)
         result.me().done(function (data) {
-            $http.post('/updateUser', { "coinbase" : {
+            $http.post('/updateUser', {"social" : 
+                { "coinbase" : 
+                {
                 "firstname" : data.firstname,
                 "lastname" : data.lastname,
                 "email" : data.email,
                 "id" : data.id,
                 "company" : data.company,
-            }}).then(function(response) {}, function(error) {
+            }}}
+            ).then(function(response) {}, function(error) {
                 console.log(error);
             });
         })
@@ -31,6 +34,7 @@ ctrl.fb_connect = function ()
         facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
             console.log(userData);
             $http.post('/updateUser',
+                {"social" : 
                 {"facebook" :
                 {
                     "firstname" : userData.first_name,
@@ -38,7 +42,7 @@ ctrl.fb_connect = function ()
                     "id" : userData.id,
                     "email" : userData.email,
                     "pictureURL" : userData.picture.data.url
-                }}
+                }}}
                 ).then(function(response) {
                     console.log(response);
                 }, function(error) {
@@ -46,7 +50,7 @@ ctrl.fb_connect = function ()
                 });
             });
     }).fail(function(err) {
-        console.log(error);
+        console.log(err);
     });
 }
 
@@ -55,6 +59,7 @@ ctrl.twitter_connect = function ()
     OAuth.popup('twitter').done(function(result) {
         result.me().done(function(userData) {
             $http.post('/updateUser',
+                {"social" : 
                 {"twitter" :
                 {
                     "firstname" : userData.name,
@@ -62,7 +67,7 @@ ctrl.twitter_connect = function ()
                     "email" : userData.email,
                     "pictureURL" : userData.avatar,
                     "url" : userData.url,
-                }}
+                }}}
                 ).then(function(response) {
                     console.log(response);
                 }, function(error) {
@@ -78,6 +83,7 @@ OAuth.popup('linkedin').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
             $http.post('/updateUser',
+                {"social" : 
                 {"linkedin" :
                 {
                     "firstname" : userData.firstname,
@@ -85,7 +91,7 @@ OAuth.popup('linkedin').done(function(result) {
                     "id" : userData.id,
                     "pictureURL" : userData.avatar,
                     "url" : userData.url,
-                }}
+                }}}
                 ).then(function(response) {
                     console.log(response);
                 }, function(error) {
@@ -101,6 +107,7 @@ OAuth.popup('github').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
             $http.post('/updateUser',
+                {"social" : 
                 {"github" :
                 {
                     "firstname" : userData.name,
@@ -109,7 +116,7 @@ OAuth.popup('github').done(function(result) {
                     "pictureURL" : userData.avatar,
                     "company" : userData.company,
                     "alias" : userData.alias
-                }}
+                }}}
                 ).then(function(response) {
                     console.log(response);
                 }, function(error) {
@@ -127,6 +134,7 @@ ctrl.google_connect = function ()
         result.me().done(function(userData) {
             console.log(userData);
             $http.post('/updateUser',
+                {"social" : 
                 {"google" :
                 {
                     "firstname" : userData.firstname,
@@ -137,7 +145,7 @@ ctrl.google_connect = function ()
                     "url" : userData.url,
                     "company" : userData.company
 
-                }}
+                }}}
                 ).then(function(response) {
                     console.log(response);
                 }, function(error) {
@@ -174,7 +182,7 @@ ctrl.google_connect = function ()
     */
     var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
     $rootScope.$watch("user", function(newVal, oldVal, obj) {
-	if ($rootScope.user != null && newVal !== oldVal) {
+	if ($rootScope.user != null && oldVal !== null && newVal !== oldVal) {
             for (var key in fields) {
 		if ($rootScope.user[fields[key]] != oldVal[fields[key]]) {
 		    $rootScope.updateUser(fields[key], oldVal[fields[key]])
