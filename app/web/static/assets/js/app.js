@@ -50,7 +50,7 @@ angular.module("packet", [
 	$scope.searchType   = '';     // set the default search/filter term
 
 	$scope.orgas = [
-	    { name: 'Entreprise familiale', orga: "Mon groupe de musique"},
+	    { name: 'Entreprise familiale', projects: "Mon groupe de musique"},
 	];
 
     });
