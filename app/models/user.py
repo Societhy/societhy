@@ -6,11 +6,22 @@ from .db import client, eth_cli
 from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
-	
+
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
 		if self['_id'] is not None:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
+
+	def generatePersonalDataFromSocial(self):
+		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
+		if 'social' in self: 
+			for socialProvider, socialData in self['social'].items():
+				for key, value in socialData.items():
+					print(key)
+					print(value)
+					if key in fields and key not in self:
+						self[key] = value
+		self.save_partial()
 
 	def add_key(self, key, local, balance=0, file=None):
 		if self.get('eth').get('mainKey') is None:

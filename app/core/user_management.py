@@ -1,6 +1,9 @@
 import time
 import jwt
 import scrypt
+
+import collections
+
 from base64 import b64decode, b64encode
 
 from flask import session, request, Response
@@ -17,9 +20,18 @@ from rlp.utils import encode_hex
 # generates token for session
 
 def update(user, newData):
-	user.update(newData)
-	print(newData)
+	def recurse_update(user, newData):
+		for key, value in newData.items():
+			if isinstance(value, collections.Mapping):
+				r = recurse_update(user.get(key, {}), value)
+				user[key] = r
+			else:
+				user[key] = newData[key]
+		return user
+
+	user = recurse_update(user, newData)
 	user.save_partial()
+	user.generatePersonalDataFromSocial()
 	return {"data": user,
 		"status": 200}
 
