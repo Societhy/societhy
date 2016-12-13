@@ -14,19 +14,36 @@ from . import secret_key
 from rlp.utils import encode_hex
 # generates token for session
 
-def login(creditentials):
+def login(credentials):
 
 	user = None
 
-	def auth_user(creditentials):
-		if creditentials:
-			creditentials = str(b64decode(creditentials), 'utf-8').split(':')
-			if len(creditentials) == 2:
-				name, passw = creditentials[0], encode_hex(scrypt.hash(creditentials[1], "du gros sel s'il vous plait")).decode('utf-8')
+	def auth_user(credentials):
+		if credentials:
+			credentials = str(b64decode(credentials), 'utf-8').split(':')
+			if len(credentials) == 2:
+				name, passw = credentials[0], encode_hex(scrypt.hash(credentials[1], "du gros sel s'il vous plait")).decode('utf-8')
 				if (name is not None) and (passw is not None):
 					user = users.find_one({"name": name, "password": passw}, users.user_info)
 					return user
 		return None
+
+	def auth_user_social(credentials):
+		print(credentials)
+		if credentials["provider"] == "facebook":
+			return users.find_one({"social.facebook.id" : credentials["socialId"]})
+		if credentials["provider"] == "github":
+			return users.find_one({"social.github.id" : credentials["socialId"]})
+		if credentials["provider"] == "coinbase" :
+			return users.find_one({"social.coinbase.id" : credentials["socialId"]})
+		if credentials["provider"] == "linkedin":
+			return users.find_one({"social.linkedin.id" : credentials["socialId"]})
+		if credentials["provider"] == "twitter":
+			return users.find_one({"social.twitter.id" : credentials["socialId"]})
+		if credentials["provider"] == "google":
+			return users.find_one({"social.google.id" : credentials["socialId"]})
+
+
 
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
 		return {
@@ -34,10 +51,14 @@ def login(creditentials):
 			"status": 403
 		}
 
-	user = auth_user(creditentials.get('id'))
+	if "socialId" not in credentials:
+		print(credentials)
+		user = auth_user(credentials.get('id'))
+	else:
+		user = auth_user_social(credentials)
 
 	if user is not None:
-		token = str(jwt.encode({"name": user['name'], "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
+		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
 		session[token] = user
 		return {"data": {
 					"token": token,
@@ -71,25 +92,52 @@ def sign_up(newUser):
 					"status": 403}
 		return False
 
-	failure = wrong_signup_request(newUser) or user_exists(newUser)
-	if failure:
-		return failure
+	def social_user_exists(newUser):
+		if 'facebook' in newUser["social"]:
+			if users.find({"social.facebook.id" : newUser["social"]["facebook"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
+		if 'github' in newUser["social"]:
+			if users.find({"social.github.id" : newUser["social"]["github"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
+		if 'coinbase' in newUser["social"]:
+			if users.find({"social.coinbase.id" : newUser["social"]["coinbase"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
+		if 'linkedin' in newUser["social"]:
+			if users.find({"social.linkedin.id" : newUser["social"]["linkedin"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
+		if 'twitter' in newUser["social"]:
+			if users.find({"social.twitter.id" : newUser["social"]["twitter"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
+		if 'google' in newUser["social"]:
+			if users.find({"social.facebook.id" : newUser["social"]["google"]["id"]}).count() > 0:
+				return {"data": "user already exists", "status": 403}
 
-	unencryptedPassword = newUser.get('password')
-	newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
-	
-	newKey = keys.gen_base_key() if newUser.get('eth') else None
-	if newKey:
-		newUser["eth"] = {
-			"mainKey": newKey.get('address'),
-			"keys": {newKey.get('address'): {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
-		}
+
+	if 'social' not in newUser:
+		failure = wrong_signup_request(newUser) or user_exists(newUser)
+		if failure:
+			return failure
+
+		unencryptedPassword = newUser.get('password')
+		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
+				
+		user = UserDocument(newUser, mongokat_collection=users)
+		user.save()
+		user.populate_key()
+		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
+
 	else:
-		newUser["eth"] = {"mainKey": None, "keys": {}}
-	users.insert_one(newUser)
-	newUser["_id"] = str(newUser["_id"])
+		failure = social_user_exists(newUser)
+		if failure:
+			return failure
+		newUser = gen_key(newUser)
+		user = UserDocument(newUser, mongokat_collection=users)
+		user.save()
+		user.populate_key()
+		user.generatePersonalDataFromSocial()
+		return {"data": newUser, "status": 200}
 
-	return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
+
 
 
 def check_token_validity(token):

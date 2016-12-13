@@ -1,11 +1,21 @@
 from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
-
 from .db import client, eth_cli
 from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
+
+	def populate_key():
+		from core.keys import gen_base_key
+		newKey = gen_base_key() if self.get('eth') else None
+		if newKey:
+			self["eth"] = {
+				"mainKey": newKey.get('address'),
+				"keys": {newKey.get('address'): {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
+			}
+		else:
+			self["eth"] = {"mainKey": None, "keys": {}}
 
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
 		if self['_id'] is not None:

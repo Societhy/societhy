@@ -11,138 +11,175 @@
 		<p class="text-center text-dark text-bold text-extra-large margin-top-15">
 			Sign Up
 		</p>
-		<!-- start: REGISTER BOX -->
-		<div id="regitrationContainer" class="box-register">
-			<form class="form-register">
-				<div id="mandatoryInfo" class="registrationDatas data1">
-					<h5 class="text-center">
-						Enter your account details below:
-					</h5>
-					<div class="form-group">
-					    <div class="reminder">*</div>
-					    <input type="email" class="form-control" ng-model="ctrl.email" name="email" placeholder="Email">
-					    <div id="emailCheck" style="display: none;" class="formChecker text-center">
-						Please enter a valid address email.
-					    </div>
-					</div>
-					<div class="form-group">
-					    <div class="reminder">*</div>
-					    <input type="text" class="form-control" ng-model="ctrl.username" name="username" placeholder="Username">
-					    <div id="usernameCheck" style="display: none;" class="formChecker text-center">
-						Your username has to contain between 8 and 20 alphanumeric characters, underscore and dash.
-					    </div>
-					</div>
-					<div class="form-group">
-						<div class="reminder">*</div>
-						<input type="password" class="form-control" ng-model="ctrl.password" id="password" name="password" placeholder="Password">
-						<div id="passwordCheck" style="display: none;" class="formChecker text-center">
-						    Your password has to contain between 6 and 20 characters, spaces are not allowed.
-						</div>
+        <!-- SOCIAL LOGIN-->
+        <div class="social-icons block">
+            <ul>
+                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                <a href="#" ng-click="ctrl.twitter_register()" target="_blank">
+                        Twitter
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                    <a href="#" ng-click="ctrl.fb_register()" target="_blank">
+                        Facebook
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                    <a href="#" ng-click="ctrl.google_register()" target="_blank">
+                        Google+
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                    <a href="#" ng-click="ctrl.linkedin_register()" target="_blank">
+                        LinkedIn
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                    <a href="#" ng-click="ctrl.github_register()" target="_blank">
+                        Github
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
+                    <a href="#" ng-click="ctrl.coinbase_register()" target="_blank">
+                        Coinbase
+                    </a>
+                </li>
 
-					</div>
-					<div class="form-group">
-						<div class="reminder">*</div>
-						<input type="password" class="form-control" name="password_again" placeholder="Password Confirmation">
-						<div id="passwordConfirmationCheck" style="display: none;" class="formChecker text-center">
-						    The passwords do not match.
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="checkbox clip-check check-primary">
-							<input type="checkbox" id="agree" value="agree">
-							<label for="agree">
-								I agree with the terms of agreement
-							</label>
-						</div>
-					</div>
-					<div class="form-group">
-						<div class="checkbox clip-check check-primary">
-							<input type="checkbox" id="wantsKey" value="wantsKey" ng-model="ctrl.wantsKey">
-							<label for="wantsKey">
-								I want to create an ethereum key
-							</label>
-						</div>
-					</div>
-				</div>
-				<div id="personalInfo" class="registrationDatas data2">
-					<h5 class="text-center">
-						Enter your personal details below:
-					</h5>
-					<div class="form-group">
-						<input type="text" class="form-control" ng-model="ctrl.firstname" name="firstname" placeholder="Firstname">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" ng-model="ctrl.lastname" name="lastname" placeholder="Lastname">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" ng-model="ctrl.birthday" name="birthday" id="datepicker" placeholder="Birthday">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" ng-model="ctrl.address" name="address" placeholder="Address">
-					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" ng-model="ctrl.city" name="city" placeholder="City">
-					</div>
-					<div class="form-group">
-						<label class="inline-block text-center text-small">
-							Gender:
-						</label>
-						<select id="gender" ng-model="ctrl.gender" name="gender" class="center-block text-center">
-							<option value="0" disabled selected>-- Select --</option>
-							<option value="Female">Female</option>
-							<option value="Male">Male</option>
-						</select>
-					</div>
-				</div>
-				<div id="stepAdvancement" class="form-actions text-center">
-					<button id="btn-prev" type="button" disabled="disabled" class="btn btn-green">
-						<- previous
-					</button>
-					<button id="btn-next" type="button" class="btn btn-green ">
-						Next ->
-					</button>
-				</div>
-				<div id="beforeSubmit" class="text-center">
-					Please fill out all the mandatory fields preceded by an '*'.
-				</div>
-				<button type="submit" id="submit" disabled="disabled" class="btn btn-red btn-block" ng-click="ctrl.register()" disabled>
-					Submit
-				</button>
-				<hr />
-				<p class="text-center">
-					Already have an account?
-					<a ui-sref="login.signin">
-						Log-in
-					</a>
-				</p>
+            </ul>
+        </div>
 
-				<p class="text-center">
-					Or
-				</p>
-				<p class="text-center">
-					sign up with a social network
-				</p>
-				<div class="social-icons text-center">
-					<ul>
-						<li class="social-twitter" uib-tooltip="Twitter" tooltip-placement="top">
-							<a target="_blank" href="#"> Twitter </a>
-						</li>
-						<li class="social-google" uib-tooltip="Google" tooltip-placement="top">
-							<a target="_blank" href="#"> Google </a>
-						</li>
-						<li class="social-facebook" uib-tooltip="Facebook" tooltip-placement="top">
-							<a target="_blank" href="#"> Facebook </a>
-						</li>
-					</ul>
-				</div>
-			</form>
-			<!-- start: COPYRIGHT -->
-			<div class="copyright">
-				{{app.year}} &copy; {{ app.name }} by {{ app.author }}.
-			</div>
-			<!-- end: COPYRIGHT -->
-		</div>
-		<!-- end: REGISTER BOX -->
-	</div>
+        <!-- start: REGISTER BOX -->
+        <div id="regitrationContainer" class="box-register">
+         <form class="form-register">
+            <div id="mandatoryInfo" class="registrationDatas data1">
+               <h5 class="text-center">
+                  Enter your account details below:
+              </h5>
+              <div class="form-group">
+               <div class="reminder">*</div>
+               <input type="email" class="form-control" ng-model="ctrl.email" name="email" placeholder="Email">
+               <div id="emailCheck" style="display: none;" class="formChecker text-center">
+                  Please enter a valid address email.
+              </div>
+          </div>
+          <div class="form-group">
+           <div class="reminder">*</div>
+           <input type="text" class="form-control" ng-model="ctrl.username" name="username" placeholder="Username">
+           <div id="usernameCheck" style="display: none;" class="formChecker text-center">
+              Your username has to contain between 8 and 20 alphanumeric characters, underscore and dash.
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="reminder">*</div>
+          <input type="password" class="form-control" ng-model="ctrl.password" id="password" name="password" placeholder="Password">
+          <div id="passwordCheck" style="display: none;" class="formChecker text-center">
+              Your password has to contain between 6 and 20 characters, spaces are not allowed.
+          </div>
+
+      </div>
+      <div class="form-group">
+          <div class="reminder">*</div>
+          <input type="password" class="form-control" name="password_again" placeholder="Password Confirmation">
+          <div id="passwordConfirmationCheck" style="display: none;" class="formChecker text-center">
+              The passwords do not match.
+          </div>
+      </div>
+      <div class="form-group">
+          <div class="checkbox clip-check check-primary">
+             <input type="checkbox" id="agree" value="agree">
+             <label for="agree">
+                I agree with the terms of agreement
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+      <div class="checkbox clip-check check-primary">
+         <input type="checkbox" id="wantsKey" value="wantsKey" ng-model="ctrl.wantsKey">
+         <label for="wantsKey">
+            I want to create an ethereum key
+        </label>
+    </div>
+</div>
+</div>
+<div id="personalInfo" class="registrationDatas data2">
+   <h5 class="text-center">
+      Enter your personal details below:
+  </h5>
+  <div class="form-group">
+      <input type="text" class="form-control" ng-model="ctrl.firstname" name="firstname" placeholder="Firstname">
+  </div>
+  <div class="form-group">
+      <input type="text" class="form-control" ng-model="ctrl.lastname" name="lastname" placeholder="Lastname">
+  </div>
+  <div class="form-group">
+      <input type="text" class="form-control" ng-model="ctrl.birthday" name="birthday" id="datepicker" placeholder="Birthday">
+  </div>
+  <div class="form-group">
+      <input type="text" class="form-control" ng-model="ctrl.address" name="address" placeholder="Address">
+  </div>
+  <div class="form-group">
+      <input type="text" class="form-control" ng-model="ctrl.city" name="city" placeholder="City">
+  </div>
+  <div class="form-group">
+      <label class="inline-block text-center text-small">
+         Gender:
+     </label>
+     <select id="gender" ng-model="ctrl.gender" name="gender" class="center-block text-center">
+         <option value="0" disabled selected>-- Select --</option>
+         <option value="Female">Female</option>
+         <option value="Male">Male</option>
+     </select>
+ </div>
+</div>
+<div id="stepAdvancement" class="form-actions text-center">
+   <button id="btn-prev" type="button" disabled="disabled" class="btn btn-green">
+      <- previous
+  </button>
+  <button id="btn-next" type="button" class="btn btn-green ">
+      Next ->
+  </button>
+</div>
+<div id="beforeSubmit" class="text-center">
+   Please fill out all the mandatory fields preceded by an '*'.
+</div>
+<button type="submit" id="submit" disabled="disabled" class="btn btn-red btn-block" ng-click="ctrl.register()" disabled>
+   Submit
+</button>
+<hr />
+<p class="text-center">
+   Already have an account?
+   <a ui-sref="login.signin">
+      Log-in
+  </a>
+</p>
+
+<p class="text-center">
+   Or
+</p>
+<p class="text-center">
+   sign up with a social network
+</p>
+<div class="social-icons text-center">
+   <ul>
+      <li class="social-twitter" uib-tooltip="Twitter" tooltip-placement="top">
+         <a target="_blank" href="#"> Twitter </a>
+     </li>
+     <li class="social-google" uib-tooltip="Google" tooltip-placement="top">
+         <a target="_blank" href="#"> Google </a>
+     </li>
+     <li class="social-facebook" uib-tooltip="Facebook" tooltip-placement="top">
+         <a target="_blank" href="#"> Facebook </a>
+     </li>
+ </ul>
+</div>
+</form>
+<!-- start: COPYRIGHT -->
+<div class="copyright">
+    {{app.year}} &copy; {{ app.name }} by {{ app.author }}.
+</div>
+<!-- end: COPYRIGHT -->
+</div>
+<!-- end: REGISTER BOX -->
+</div>
 </div>
 <!-- end: REGISTRATION -->

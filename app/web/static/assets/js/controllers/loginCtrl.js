@@ -1,5 +1,7 @@
 app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller, $location) {
 
+	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
+
     var ctrl = this;
     ctrl.user = $rootScope.user
 	ctrl.wallet = $controller("WalletController");
@@ -33,7 +35,301 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 		});
 	}
 
-    ctrl.register = function() {
+
+ctrl.coinbase_register = function ()
+{
+    OAuth.popup('coinbase').done(function(result) {
+        console.log(result)
+        result.me().done(function (data) {
+            $http.post('/newUser', {"social" : 
+                { "coinbase" : 
+                {
+                "firstname" : data.firstname,
+                "lastname" : data.lastname,
+                "email" : data.email,
+                "id" : data.id,
+                "company" : data.company,
+            }}}
+            ).then(function(response) {}, function(error) {
+                console.log(error);
+            });
+        })
+    })
+}
+
+ctrl.fb_register = function ()
+{
+    res = OAuth.popup('facebook').done(function(facebook) {
+        loginObject = facebook;
+        facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
+            console.log(userData);
+            $http.post('/newUser',
+                {"social" : 
+                {"facebook" :
+                {
+                    "firstname" : userData.first_name,
+                    "lastname" : userData.last_name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.picture.data.url
+                }}}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+            });
+    }).fail(function(err) {
+        console.log(err);
+    });
+}
+
+ctrl.twitter_register = function ()
+{
+    OAuth.popup('twitter').done(function(result) {
+        result.me().done(function(userData) {
+            $http.post('/newUser',
+                {"social" : 
+                {"twitter" :
+                {
+                    "firstname" : userData.name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                }}}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+})
+})
+}
+
+ctrl.linkedin_register = function()
+{
+OAuth.popup('linkedin').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+            $http.post('/newUser',
+                {"social" : 
+                {"linkedin" :
+                {
+                    "firstname" : userData.firstname,
+                    "lastname" : userData.lastname,
+                    "id" : userData.id,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                }}}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+    })
+})
+}
+
+ctrl.github_register = function ()
+{
+OAuth.popup('github').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+            $http.post('/newUser',
+                {"social" : 
+                {"github" :
+                {
+                    "firstname" : userData.name,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "company" : userData.company,
+                    "alias" : userData.alias
+                }}}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+})
+})
+}
+
+ctrl.google_register = function ()
+{
+    console.log("hello");
+    res = OAuth.popup('google').done(function(result)
+    {
+        result.me().done(function(userData) {
+            console.log(userData);
+            $http.post('/newUser',
+                {"social" : 
+                {"google" :
+                {
+                    "firstname" : userData.firstname,
+                    "lastname" : userData.lastname,
+                    "id" : userData.id,
+                    "email" : userData.email,
+                    "pictureURL" : userData.avatar,
+                    "url" : userData.url,
+                    "company" : userData.company
+
+                }}}
+                ).then(function(response) {
+                    console.log(response);
+                }, function(error) {
+                    console.log(error);
+                });
+            })
+    }).then(function() {}, function(error) {
+        console.log(error);
+    });
+}
+
+
+ctrl.coinbase_connect = function ()
+{
+    OAuth.popup('coinbase').done(function(result) {
+        console.log(result)
+        result.me().done(function (data) {
+				$http.post('/login', {
+					"provider": "coinbase",
+					"socialId": data.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+        })
+    })
+}
+
+ctrl.fb_connect = function ()
+{
+    res = OAuth.popup('facebook').done(function(facebook) {
+        loginObject = facebook;
+        facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
+				$http.post('/login', {
+					"provider": "facebook",
+					"socialId": userData.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+            });
+    }).fail(function(err) {
+        console.log(err);
+    });
+}
+
+ctrl.twitter_connect = function ()
+{
+    OAuth.popup('twitter').done(function(result) {
+        result.me().done(function(userData) {
+				$http.post('/login', {
+					"provider": "twitter",
+					"socialId": userData.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+})
+})
+}
+
+ctrl.linkedin_connect= function()
+{
+OAuth.popup('linkedin').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+				$http.post('/login', {
+					"provider": "linkedin",
+					"socialId": userData.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+    })
+})
+}
+
+ctrl.github_connect = function ()
+{
+OAuth.popup('github').done(function(result) {
+    console.log(result)
+    result.me().done(function(userData) {
+				$http.post('/login', {
+					"provider": "github",
+					"socialId": userData.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+})
+})
+}
+
+ctrl.google_connect = function ()
+{
+    console.log("hello");
+    res = OAuth.popup('google').done(function(result)
+    {
+        result.me().done(function(userData) {
+            console.log(userData);
+				$http.post('/login', {
+					"provider": "google",
+					"socialId": userData.id
+				}).then(function(response) {
+					console.log("RECEIVED = ", response);
+					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.SociethyToken = response.data.token;
+					$sessionStorage.username = response.data.user.name;
+					$rootScope.user = ctrl.user = response.data.user;
+					ctrl.wallet.refreshAllBalances();
+				}, function(error) {
+					console.log(error);
+				});
+            })
+    }).then(function() {}, function(error) {
+        console.log(error);
+    });
+}
+
+    /*
+    ** REGISTRATION
+    */
+
+   ctrl.register = function() {
 
 		if (ctrl.username && ctrl.password) {
 		    $http.post('/newUser', {
@@ -58,12 +354,6 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 			});
 		}
     };
-
-
-
-    /*
-    ** REGISTRATION
-    */
 
     function registration_checker() {
 	console.log("registration check enabled");

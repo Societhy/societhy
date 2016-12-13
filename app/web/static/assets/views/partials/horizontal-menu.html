@@ -44,6 +44,41 @@
 		</a>
 		<div class="dropdown-menu pull-right animated fadeInRight">
 			<div class="panel-body" style="width:400px">
+			  <div class="social-icons block">
+            <ul>
+                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                    <a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
+                        Twitter
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                    <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
+                        Facebook
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                    <a href="#" ng-click="ctrl.google_connect()" target="_blank">
+                        Google+
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                    <a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
+                        LinkedIn
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                    <a href="#" ng-click="ctrl.github_connect()" target="_blank">
+                        Github
+                    </a>
+                </li>
+                <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
+                    <a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
+                        Coinbase
+                    </a>
+                </li>
+
+            </ul>
+        </div>
 				<form role="form" class="form-horizontal ng-pristine ng-valid">
 					<div class="form-group">
 						<div class="col-sm-10">
@@ -82,7 +117,7 @@
 	<li class="dropdown" uib-dropdown ng-show="user">
 		<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
 			<img alt="" src="static/assets/images/default-user.png">
-			<span id="username" ng-bind="ctrl.user.name"></span>
+			<span id="username" > {{ ctrl.user.name || ctrl.user.firstname.concat(" ").concat(ctrl.user.lastname)}}</span>
 			<span> {{ctrl.user.totalBalance.toFixed(1)}} ETH</span>
 			<span class="caret"></span>
 		</a>
