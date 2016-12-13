@@ -6,7 +6,7 @@ from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
 
-	def populate_key():
+	def populate_key(self):
 		from core.keys import gen_base_key
 		newKey = gen_base_key() if self.get('eth') else None
 		if newKey:
@@ -16,6 +16,7 @@ class UserDocument(Document):
 			}
 		else:
 			self["eth"] = {"mainKey": None, "keys": {}}
+		self.save_partial()
 
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
 		if self['_id'] is not None:

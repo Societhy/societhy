@@ -130,7 +130,6 @@ def sign_up(newUser):
 		failure = social_user_exists(newUser)
 		if failure:
 			return failure
-		newUser = gen_key(newUser)
 		user = UserDocument(newUser, mongokat_collection=users)
 		user.save()
 		user.populate_key()
