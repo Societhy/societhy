@@ -182,7 +182,7 @@ ctrl.google_connect = function ()
     */
     var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
     $rootScope.$watch("user", function(newVal, oldVal, obj) {
-	if ($rootScope.user != null && newVal !== oldVal) {
+	if ($rootScope.user != null && oldVal !== null && newVal !== oldVal) {
             for (var key in fields) {
 		if ($rootScope.user[fields[key]] != oldVal[fields[key]]) {
 		    $rootScope.updateUser(fields[key], oldVal[fields[key]])
