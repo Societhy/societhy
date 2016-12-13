@@ -88,21 +88,15 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	** Enable submit button when all mandatory field are filled
 	*/
 	function updateSubmitButtonState () {
-	    $("button#submit").prop("disabled", false);
-	    $("#beforeSubmit").hide();
-	    if ($(".formChecker[style!='display: none;']").length > 0)
-	    {
-//		$("button#submit").prop("disabled", true);
+	    if ($(".formChecker.disabled").length != 4) {
+		console.log(2);
+	    	$("button#submit").prop("disabled", true);
 		$("#beforeSubmit").show();
-		return;
 	    }
-	    $("form #mandatoryInfo input").each(function (index) {
-		if ($(this).val().length == 0) {
-//		    $("button#submit").prop("disabled", true);
-		    $("#beforeSubmit").show();
-		    return;
-		}
-	    });
+	    else {
+		$("button#submit").prop("disabled", false);
+		$("#beforeSubmit").hide();
+	    }
 	};
 
 	/*
@@ -126,10 +120,14 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	*/
 	$("form input[type='email']").on("change", function() {
 	    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-	    if (!re.test($(this).val()))
-		$("#emailCheck").show();
-	    else
-		$("#emailCheck").hide();
+	    if (!re.test($(this).val())) {
+		$("#emailCheck").removeClass("disabled");
+		$("#emailCheck").addClass("enabled");
+	    }
+	    else {
+		$("#emailCheck").addClass("disabled");
+		$("#emailCheck").removeClass("enabled");
+	    }
 	    updateSubmitButtonState();
 	});
 
@@ -138,10 +136,14 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	*/
 	$("form input[name='username']").on("change", function() {
 	    var re = /^[a-zA-Z0-9_-]{6,20}$/;
-	    if (!re.test($(this).val()))
-		$("#usernameCheck").show();
-	    else
-		$("#usernameCheck").hide();
+	    if (!re.test($(this).val())) {
+		$("#usernameCheck").addClass("enabled");
+		$("#usernameCheck").removeClass("disabled");
+	    }
+	    else {
+		    $("#usernameCheck").addClass("disabled");
+		    $("#usernameCheck").removeClass("enabled");
+		}
 	    updateSubmitButtonState();
 	});
 
@@ -150,30 +152,37 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 	*/
 	$("form input[name='password']").on("change", function() {
 	    if ($(this).val().length < 8 || $(this).val().length > 20 ||
-		$(this).val().indexOf(" ") != -1)
-		$("#passwordCheck").show();
-	    else
-		$("#passwordCheck").hide();
+		$(this).val().indexOf(" ") != -1) {
+		$("#passwordCheck").addClass("enabled");
+		$("#passwordCheck").removeClass("disabled");
+	    }
+	    else {
+		$("#passwordCheck").removeClass("enabled");
+		$("#passwordCheck").addClass("disabled");
+	    }
 	    updateSubmitButtonState();
 	});
 
 	/*
 	** Check if passwords match
 	*/
-	$("form input[name='password_again']").on("change", function() {
-	    if ($("form input[name='password']").val() != "" && $("form input[name='password_again']").val() != "" &&
-		$("form input[name='password_again']").val() !== $("form input[name='password']").val())
-		$("#passwordConfirmationCheck").show();
-	    else
-		$("#passwordConfirmationCheck").hide();
+	$("form input[name='password'], form input[name='password_again']").on("change", function() {
+	    if (($("form input[name='password']").length == 0 || $("form input[name='password_again']").length == 0 ) || $("form input[name='password']").val().length != "" && $("form input[name='password_again']").val() != "" &&
+		$("form input[name='password_again']").val() !== $("form input[name='password']").val()) {
+		$("#passwordConfirmationCheck").addClass("enabled");
+		$("#passwordConfirmationCheck").removeClass("disabled");
+	    }
+	    else {
+		    $("#passwordConfirmationCheck").addClass("disabled");
+		    $("#passwordConfirmationCheck").removeClass("enabled");
+		}
 	    updateSubmitButtonState();
 	});
     }
 
-    // DEV
-    // if ($location.path() == "/login/registration") {
-    // 	registration_checker();
-    // }
+    if ($location.path() == "/login/registration") {
+    	registration_checker();
+    }
 
 
     /*
