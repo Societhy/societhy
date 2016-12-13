@@ -16,7 +16,7 @@ ctrl.coinbase_connect = function ()
                 "lastname" : data.lastname,
                 "email" : data.email,
                 "id" : data.id,
-                "company" : data.company, 
+                "company" : data.company,
             }}).then(function(response) {}, function(error) {
                 console.log(error);
             });
@@ -30,8 +30,8 @@ ctrl.fb_connect = function ()
         loginObject = facebook;
         facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
             console.log(userData);
-            $http.post('/updateUser', 
-                {"facebook" : 
+            $http.post('/updateUser',
+                {"facebook" :
                 {
                     "firstname" : userData.first_name,
                     "lastname" : userData.last_name,
@@ -54,8 +54,8 @@ ctrl.twitter_connect = function ()
 {
     OAuth.popup('twitter').done(function(result) {
         result.me().done(function(userData) {
-            $http.post('/updateUser', 
-                {"twitter" : 
+            $http.post('/updateUser',
+                {"twitter" :
                 {
                     "firstname" : userData.name,
                     "id" : userData.id,
@@ -77,8 +77,8 @@ ctrl.linkedin_connect = function()
 OAuth.popup('linkedin').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
-            $http.post('/updateUser', 
-                {"linkedin" : 
+            $http.post('/updateUser',
+                {"linkedin" :
                 {
                     "firstname" : userData.firstname,
                     "lastname" : userData.lastname,
@@ -100,8 +100,8 @@ ctrl.github_connect = function ()
 OAuth.popup('github').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
-            $http.post('/updateUser', 
-                {"github" : 
+            $http.post('/updateUser',
+                {"github" :
                 {
                     "firstname" : userData.name,
                     "id" : userData.id,
@@ -126,8 +126,8 @@ ctrl.google_connect = function ()
     {
         result.me().done(function(userData) {
             console.log(userData);
-            $http.post('/updateUser', 
-                {"google" : 
+            $http.post('/updateUser',
+                {"google" :
                 {
                     "firstname" : userData.firstname,
                     "lastname" : userData.lastname,
@@ -143,76 +143,46 @@ ctrl.google_connect = function ()
                 }, function(error) {
                     console.log(error);
                 });
-            })    
+            })
     }).then(function() {}, function(error) {
         console.log(error);
     });
 }
 
-
-
-
-
-$rootScope.updateUser = function(name) {
+    $rootScope.updateUser = function(name, oldVal) {
 	if ($rootScope.user != null)
 	{
-       $http.post('/updateSingleUserField', {
-          "_id": $rootScope.user["_id"],
-          "new": $rootScope.user[$rootScope.name],
-          "old": $rootScope.oldVal,
-          "name": $rootScope.name,
-      }).then(function(response) {
-          $rootScope.user = ctrl.user = response.data;
-      },
-      function(error) {
-         console.log(error);
-     });
-  }
-  else
-   console.log("User not logged in");
-}
-    /*
-    ** Update one field from the user
-    */
-    $rootScope.updateUser = function(name, vals) {
-    if ($rootScope.user != null)
-    {
-        $http.post('/updateSingleUserField', {
-        "_id": $rootScope.user["_id"],
-        "new": vals[0],
-        "old": vals[1],
-        "name": name
-        }).then(function(response) {
-        $rootScope.user = ctrl.user = response.data;
-        },
-            function(error) {
-            $rootScope.user[name] = ctrl.user[name] = oldVal;
-            console.log(error);
-            });
-    }
-    else
-        console.log("User not logged in");
+            $http.post('/updateSingleUserField', {
+		"_id": $rootScope.user["_id"],
+		"new": $rootScope.user[name],
+		"old": oldVal,
+		"name": name
+            }).then(function(response) {
+		$rootScope.user = ctrl.user = response.data;
+            },
+		    function(error) {
+			$rootScope.user[name] = ctrl.user[name] = oldVal;
+			console.log(error);
+		    });
+	}
+	else
+            console.log("User not logged in");
     }
 
     /*
     ** Watch user data for any modifications
     */
-    Array.prototype.diff = function(a) {
-    return this.filter(function(i) {return a.indexOf(i) < 0;});
-    };
-    $rootScope.$watchGroup(['user.firstname', 'user.lastname', 'user.email','user.phone', 'user.address', 'user.city', 'user.birthday'], function(newVal, oldVal, obj) {
-    vals = [
-        ((newVal.diff(oldVal).length != 0) ? newVal.diff(oldVal)[0] : ""),
-        ((oldVal.diff(newVal).length != 0) ? oldVal.diff(newVal)[0] : "")]
-    if ($rootScope.user != null && newVal !== oldVal) {
-        for (var key in $rootScope.user) {
-        if ($rootScope.user[key] == vals[0]) {
-            $rootScope.updateUser(key, vals)
-        }
-        }
-    }
-    });
-
+    var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
+    $rootScope.$watch("user", function(newVal, oldVal, obj) {
+	if ($rootScope.user != null && newVal !== oldVal) {
+            for (var key in fields) {
+		if ($rootScope.user[fields[key]] != oldVal[fields[key]]) {
+		    $rootScope.updateUser(fields[key], oldVal[fields[key]])
+		    return;
+		}
+            }
+	}
+    }, true);
 
     /*
     ** Animate user info's inputs
