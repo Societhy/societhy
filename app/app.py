@@ -13,6 +13,7 @@ from core.utils import UserJSONEncoder
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
+app.config["SESSION_COOKIE_HTTPONLY"] = False
 
 jinja_options = app.jinja_options.copy()
 
