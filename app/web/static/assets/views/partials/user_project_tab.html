@@ -1,0 +1,46 @@
+<form>
+    <div class="form-group">
+	<div class="input-group">
+	    <input type="text" class="tableFilter form-control" placeholder="Filter: Type1, Type2.." ng-model="searchType">
+	</div>
+    </div>
+</form>
+<table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+    <!-- ngInclude: templates.header -->
+    <thead  class="ng-scope">
+	<tr>
+	    <td>
+		<a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+		    Nom du projet
+		    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+		    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+		</a>
+	    </td>
+	    <td>
+		<a href="#" ng-click="sortType = 'type'; sortReverse = !sortReverse">
+		    <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+		    <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+		    Type
+		</a>
+	    </td>
+	    <td>
+		<a href="#">Action</a>
+	    </td>
+	</tr>
+	<hr />
+    </thead>
+    <tbody><!-- ngRepeat: user in $data -->
+	<tr ng-repeat="project in projects  | orderBy:sortType:sortReverse | filter:searchType" class="ng-scope">
+	    <td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding"> {{project.name}} </td>
+	    <td data-title="'Alias'" data-title-text="Alias" class="ng-binding">{{project.type}}</td>
+	    <td data-title="'Gender'" data-title-text="Gender" class="ng-binding">
+		<button width="50%" type="button" class="btn btn-primary btn-sm ladda-button">
+		    <span class="glyphicon glyphicon-arrow-right ladda-label"> Access </span>
+		</button>
+		<button width="50%" type="button" class="btn btn-danger btn-sm ladda-button">
+		    <span class="glyphicon glyphicon-trash ladda-label"> Remove </span>
+		</button>
+	    </td>
+	</tr><!-- end ngRepeat: user in $data -->
+    </tbody>
+</table>
