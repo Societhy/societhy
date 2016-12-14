@@ -12,7 +12,7 @@ def refresh_all_balances(user):
 	accounts = user.get('eth').get('keys')
 	ret = dict()
 	for account in accounts.keys():
-		ret[account] = eth_cli.eth_getBalance(account)
+		ret[account] = wei_to_ether(eth_cli.eth_getBalance(account))
 	return {
 		"data": ret,
 		"status": 200
