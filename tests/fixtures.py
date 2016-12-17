@@ -2,6 +2,8 @@ import pytest
 import time
 from os import environ, listdir, path, remove
 
+from core.blockchain_watcher import blockchain_watcher as bw
+
 from models.user import users
 
 from pymongo import MongoClient
