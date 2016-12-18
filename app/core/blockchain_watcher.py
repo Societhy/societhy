@@ -4,7 +4,7 @@ from signal import signal, SIGINT
 from time import sleep
 from sys import exit
 
-from models.db import eth_cli
+from models.clients import eth_cli
 from models.events import Event, EventQueue
 
 class BlockchainWatcher:

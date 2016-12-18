@@ -7,6 +7,8 @@ from core import keys
 
 
 from models.user import users
+from models.organization import organizations, OrgaDocument as Organization
+from models.contract import contracts
 
 from pymongo import MongoClient
 from ethjsonrpc import ParityEthJsonRpc
@@ -19,6 +21,8 @@ for keyFile in listdir(keyDirectory):
 		print("removed", keyFile)
 
 users.delete_many({})
+organizations.delete_many({})
+contracts.delete_many({})
 
 test_user = {
 	"name": "basic",
@@ -34,6 +38,8 @@ test_miner = {
 		"keys": {}
 	}
 }
+
+test_orga = {"name": "basic_orga"}
 
 users.insert_one(test_user)
 users.insert_one(test_miner)
@@ -55,3 +61,7 @@ def user():
 @pytest.fixture(scope='module')
 def miner():
 	return users.find_one({"name": "miner"})
+
+@pytest.fixture(scope='module')
+def testOrga(miner):
+	return Organization('greeter', doc=test_orga, owner=miner)

@@ -1,5 +1,5 @@
 from collections import deque
-from .db import eth_cli
+from .clients import eth_cli
 
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 class Event:
@@ -22,6 +22,9 @@ class ContractCreationEvent(Event):
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		self.callback(self.tx_receipt)
 
+
+class LogEvent(Event):
+	pass
 
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):

@@ -5,7 +5,7 @@ import requests
 from ethjsonrpc import wei_to_ether
 
 from models import users
-from models.db import eth_cli
+from models.clients import eth_cli
 
 
 def refresh_all_balances(user):

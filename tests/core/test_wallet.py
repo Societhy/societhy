@@ -6,7 +6,7 @@ from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import *
 
 from models.user import users
-from models.db import eth_cli
+from models.clients import eth_cli
 
 from tests.fixtures import *
 

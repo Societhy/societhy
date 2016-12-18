@@ -1,7 +1,7 @@
 from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
-from .db import client, eth_cli
+from .clients import client, eth_cli
 from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):

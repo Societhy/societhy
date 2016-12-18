@@ -66,6 +66,10 @@ COPY ./utils /societhy/utils
 
 RUN bash /societhy/utils/install_parity.sh
 
+RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
+
+COPY ./utils/test_key.key $KEYS_DIRECTORY
+
 EXPOSE 8080
 
 EXPOSE 22
