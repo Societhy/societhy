@@ -16,7 +16,7 @@ def requires_auth(f):
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
 
-			user = UserDocument(session.get(token), mongokat_collection=users)
+			user = UserDocument(session.get(token))
 			user.update()
 		else:
 			return Response({"error": "unauthorized"}, 401)

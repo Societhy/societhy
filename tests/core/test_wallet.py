@@ -12,16 +12,16 @@ from tests.fixtures import *
 
 from ethjsonrpc import wei_to_ether
 
-bw.run()
 
 def test_transfer(user):
+	bw.resume()
 	keyDirectory = '/societhy/tests/fixtures'
 	to_ = keys.gen_base_key().get('address')
 	with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 		from_ = keys.import_new_key(user, f).get('data').get('address')
 		bw.waitBlock()
 		ret = wallet.transfer(from_, to_, toWei(4), password="simon")
-		bw.waitBlock(blockNumber=2)
+		bw.waitTx(ret.get('data'))
 		assert fromWei(eth_cli.eth_getBalance(to_)) == 4
 
 def test_refresh_balance(user):

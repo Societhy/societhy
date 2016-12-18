@@ -6,6 +6,9 @@ from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
 
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
+		super().__init__(doc, users, fetched_fields, gen_skel)
+
 	def populate_key(self):
 		from core.keys import gen_base_key
 		newKey = gen_base_key() if self.get('eth') else None
@@ -28,8 +31,8 @@ class UserDocument(Document):
 		if 'social' in self: 
 			for socialProvider, socialData in self['social'].items():
 				for key, value in socialData.items():
-					print(key)
-					print(value)
+					# print(key)
+					# print(value)
 					if key in fields and key not in self:
 						self[key] = value
 		self.save_partial()

@@ -13,7 +13,6 @@ test_local_env:
     - "8080" # geth json-rpc api
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
-
   volumes:
     - ../app:/societhy/app:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
@@ -34,10 +33,12 @@ test_local_mining_env:
     - "8080" # geth json-rpc api
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
-
+  environment:
+    - MINING=1
   volumes:
     - ../app:/societhy/app:rw
-    - ../tasks:/societhy/tasks:rw
+    - ../tests:/societhy/tests:rw
+    - ../contracts:/societhy/contracts:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
     - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:
@@ -58,10 +59,12 @@ test_remote_env:
     - "8080" # geth json-rpc api
     - "8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
-
+  environment:
+    - MINING=1
   volumes:
     - ../app:/societhy/app:rw
     - ../tests:/societhy/tests:rw
+    - ../contracts:/societhy/contracts:rw
     - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:
