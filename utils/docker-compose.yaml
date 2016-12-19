@@ -41,6 +41,7 @@ test_local_mining_env:
     - ../contracts:/societhy/contracts:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
     - ${HOME}/.ethash:/societhy/.ethash/:rw
+    - ${HOME}/rendu/ethjsonrpc/:/societhy/ethjsonrpc:rw
   extra_hosts:
     - "custom:172.17.0.2"
 

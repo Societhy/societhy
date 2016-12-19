@@ -20,15 +20,18 @@ def test_create_orga(miner, testOrga):
 	bw.run()
 	if miner.refresh_balance() < 1:
 		bw.waitBlock()
-	tx_hash = testOrga.deploy_contract(password='simon')
+	tx_hash = testOrga.deploy_contract(password='simon', args=["bite"])
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
 	assert testOrga["contract_id"] != None
-	assert organizations.find_one({"contract_id": testOrga["contract_id"]}, ) != None
+	testOrga = organizations.find_one({"contract_id": testOrga["contract_id"]})
+	assert testOrga != None
+	assert testOrga.contract != None
+
 	bw.pause()
 
 def test_join(testOrga):
-	
+	assert testOrga.call('greet') == "bite"
 	pass
 
 def test_donate(miner):
