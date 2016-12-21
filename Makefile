@@ -18,6 +18,12 @@ build:
 
 build_test:
 	docker build --file Dockerfile_tests -t $(TEST_IMAGE) .
+
+force_build:
+	docker build --no-cache -t $(DOCKER_IMAGE) .
+
+force_build_test:
+	docker build --no-cache --file Dockerfile_tests -t $(TEST_IMAGE) .
 	
 local_test:
 	docker-compose -f utils/docker-compose.yaml up -d test_remote_env

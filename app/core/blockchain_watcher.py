@@ -31,7 +31,7 @@ class BlockchainWatcher:
           
                 block = eth_cli.eth_getBlockByHash(blockHash, True)
                 self.last_tx = [tx.get('hash') for tx in block.get('transactions')]
-                print("new block with hash =", blockHash, "and tx =", self.last_tx)
+                print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.last_tx)
           
                 for event in self.event_queue.yieldEvents(block.get('transactions')):
                     event.process()
