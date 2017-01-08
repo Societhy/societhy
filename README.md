@@ -51,8 +51,8 @@ CLIENT
         organizations
         projects
         users
-    Démarrer le client mongo sur le serveur: mongo 10.224.9.117/main
-    Démarrer le client mongo depuis l'extérieur: mongo 163.5.84.117/main
+    Démarrer le client mongo sur le serveur: mongo 10.224.9.117/main -u dev -p SecurityIsABitBetter
+    Démarrer le client mongo depuis l'extérieur: mongo 163.5.84.117/main -u dev -p SecurityIsABitBetter
 
     COMMANDE DE BASE
         - Afficher les databases: show dbs
