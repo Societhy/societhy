@@ -14,10 +14,26 @@ contract mortal {
 contract greeter is mortal {
     /* define variable greeting of the type string */
     string greeting;
+    address[] members;
 
     /* this runs when the contract is executed */
     function greeter(string _greeting) public {
         greeting = _greeting;
+
+    }
+
+    function join() public returns (string) {
+        for (uint32 i = 0; i < members.length; i++) {
+            if (msg.sender ==  members[i]) {
+                throw ;
+            }
+        }
+        members.push(msg.sender);
+        return "OK";
+    }
+
+    function getMemberList() returns (address[]) {
+        return members;
     }
 
     /* main function */

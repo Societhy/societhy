@@ -9,17 +9,25 @@ from models.events import Event, EventQueue
 
 class BlockchainWatcher:
 
+    event_queue = None
+    lock = None
+    block_filter = None
+    new_block_event = None
+    thread = None
+    is_running = None
+
+
     def __init__(self):
         self.blockFilter = eth_cli.eth_newBlockFilter()
         self.newBlockEvent = threading.Event()
         self.running = False
         self.lock = threading.Lock()
         self.event_queue = EventQueue()
+        self.thread = threading.Thread(target=self.watch)
 
     def run(self):
         signal(SIGINT, self.stop_with_signal)
         self.running = True
-        self.thread = threading.Thread(target=self.watch)
         self.thread.start()
 
     def watch(self):

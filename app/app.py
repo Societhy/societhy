@@ -46,7 +46,6 @@ def add_header(response):
 
 @app.route('/')
 def hello_world():
-	blockchain_watcher.push_event(None)
 	return render_template("index.html")
 
 

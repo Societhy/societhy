@@ -4,10 +4,19 @@ from .clients import eth_cli
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 class Event:
 
+	filter_params = None
+	filter_id = None
+	tx_hash = None
+	users = None
+	callback = None
+
 	def __init__(self, tx_hash=None, users=[], callback=None):
 		self.tx_hash = tx_hash
 		self.users = users
 		self.callback = callback
+
+	def happened(self):
+		return False
 
 	def process(self):
 		print("PROCESSING EVENT", self.tx_hash)
@@ -28,6 +37,8 @@ class LogEvent(Event):
 
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):
+
+	lock = None
 
 	def yieldEvents(self, transactions):
 		ret = list()

@@ -12,6 +12,13 @@ from ethereum.abi import encode_abi
 class ContractDocument(Document):
 
 	contract_directory = "/societhy/app/contracts"
+	evm_code = None
+	abi = None
+	name = None
+	address = None
+	owner = None
+	balance = None
+	tx_history = list()
 
 	def __init__(self,
 				contract=None,
@@ -61,7 +68,7 @@ class ContractDocument(Document):
 	def get_balance(self):
 		return eth_cli.eth_getBalance(self["contract_address"])
 
-	def call(self, function, *args):
+	def call(self, function, local=True, *args, **kwargs):
 
 		def compute_return_types(function_name, abi):
 			return_types = list()
@@ -75,7 +82,13 @@ class ContractDocument(Document):
 			return signature, return_types
 
 		signature, return_types = compute_return_types(function, self["abi"])
-		result = eth_cli.call(self["address"], signature, list(args), return_types)
+		if local is True:
+			result = eth_cli.call(self["address"], signature, list(args), return_types)
+		else:
+			from_ = kwargs.get('from_')
+			password = kwargs.get('password')
+			unlocked = eth_cli.personal_unlockAccount(from_, password)
+			result = eth_cli.call_with_transaction(self["address"], from_, signature, list(args))
 		return result[0] if len(result) == 1 else result
 
 	def send_tx(self, function, *args):

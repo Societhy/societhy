@@ -18,10 +18,8 @@ from ethjsonrpc import wei_to_ether
 
 def test_create_orga(miner, testOrga):
 	bw.run()
-	print("USING miner = ", miner)
 	while miner.refresh_balance() < 1:
 		bw.waitBlock()
-		print("coinbase =", eth_cli.eth_coinbase(), "balance =", eth_cli.eth_getBalance(eth_cli.eth_coinbase()))
 	tx_hash = testOrga.deploy_contract(password='simon', args=["bite"])
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
@@ -33,7 +31,8 @@ def test_create_orga(miner, testOrga):
 	bw.pause()
 
 def test_join(testOrga):
-	assert testOrga.call('greet') == "bite"
+	assert testOrga.join() == "OK"
+	print(testOrga.call("test"))
 	pass
 
 def test_donate(miner):

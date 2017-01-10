@@ -17,6 +17,16 @@ class OrganisationInitializationError(Exception):
 
 class OrgaDocument(Document):
 
+	contract = None
+	rules = None
+	members = dict()
+	files = dict()
+	projects = dict()
+	proposals = dict()
+	social_links = None
+	shares = None
+	alerts = None
+
 	def __init__(self,
 				doc=None,
 				mongokat_collection=None,
@@ -29,6 +39,8 @@ class OrgaDocument(Document):
 			self.contract = Contract(contract, owner)
 			self.contract.compile()
 			self["owner"] = owner.get('eth').get('mainKey') if type(owner) is User else owner			
+
+	# CONTRACT SPECIFIC METHODS
 
 	def _load_contract(self):
 		if self.get('contract_id'):
@@ -47,8 +59,38 @@ class OrgaDocument(Document):
 		self["contract_id"] = self.contract.save()
 		self.save()
 
-	def call(self, function):
-		return self.contract.call(function)
+	# GENERIC METHODS
+
+	def getMemberList(self):
+		return self.contract.call("getMemberList")
+
+	def join(self, user):
+		return self.contract.call('join', local=False, from_=self["owner"], password="simon")
+
+	def leave(self, member):
+		return None
+
+	def donate(self, user):
+		return None
+
+	def kill(self, from_):
+		return None
+
+	def createProject(self, project):
+		return None
+
+	def killProject(self, project):
+		return None
+
+	def createProposal(self, proposal):
+		return None:
+
+	def killProposal(self, proposal):
+		return None
+
+	def transferOwnership(self, from_, to_):
+		return None
+
 
 class OrgaCollection(Collection):
 	document_class = OrgaDocument

@@ -68,6 +68,7 @@ test_remote_env:
     - ../contracts:/societhy/contracts:rw
     - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
+    - ${HOME}/rendu/ethjsonrpc/:/societhy/ethjsonrpc:rw
   extra_hosts:
     - "custom:172.17.0.2"
     
