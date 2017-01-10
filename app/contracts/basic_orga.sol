@@ -11,14 +11,16 @@ contract mortal {
     function kill() { if (msg.sender == owner) selfdestruct(owner); }
 }
 
-contract greeter is mortal {
+contract basic_orga is mortal {
     /* define variable greeting of the type string */
-    string greeting;
+    string name;
     address[] members;
+    
+    event newMember(address orga, address member);
 
     /* this runs when the contract is executed */
-    function greeter(string _greeting) public {
-        greeting = _greeting;
+    function basic_orga(string _name) public {
+        name = _name;
 
     }
 
@@ -29,7 +31,12 @@ contract greeter is mortal {
             }
         }
         members.push(msg.sender);
+        newMember(this, msg.sender);
         return "OK";
+    }
+
+    function donate() public returns (string) {
+
     }
 
     function getMemberList() returns (address[]) {
@@ -37,7 +44,7 @@ contract greeter is mortal {
     }
 
     /* main function */
-    function greet() constant returns (string) {
-        return greeting;
+    function getName() constant returns (string) {
+        return name;
     }
 }

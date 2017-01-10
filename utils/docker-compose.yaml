@@ -38,7 +38,7 @@ test_local_mining_env:
   volumes:
     - ../app:/societhy/app:rw
     - ../tests:/societhy/tests:rw
-    - ../contracts:/societhy/contracts:rw
+    - ../app/contracts:/societhy/contracts:rw
     - ${HOME}/.ssh:/root/.ssh/:ro
     - ${HOME}/.ethash:/societhy/.ethash/:rw
     - ${HOME}/rendu/ethjsonrpc/:/societhy/ethjsonrpc:rw
@@ -65,7 +65,7 @@ test_remote_env:
   volumes:
     - ../app:/societhy/app:rw
     - ../tests:/societhy/tests:rw
-    - ../contracts:/societhy/contracts:rw
+    - ../app/contracts:/societhy/contracts:rw
     - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
     - ${HOME}/rendu/ethjsonrpc/:/societhy/ethjsonrpc:rw

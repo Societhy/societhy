@@ -3,7 +3,7 @@ from bson import ObjectId
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
-from models.events import Event, ContractCreationEvent
+from models.events import Event, ContractCreationEvent, LogEvent
 from models.user import UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 
@@ -50,7 +50,7 @@ class OrgaDocument(Document):
 		if from_ is None:
 			from_ = self["owner"]
 		tx_hash = self.contract.deploy(from_, password, args=args)
-		bw.push_event(ContractCreationEvent(tx_hash=tx_hash, callback=self.register))
+		bw.push_event(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register))
 		return tx_hash
 
 	def register(self, tx_receipt):
@@ -59,13 +59,20 @@ class OrgaDocument(Document):
 		self["contract_id"] = self.contract.save()
 		self.save()
 
+	# CALLBACKS FOR UPDATE
+
+	def memberJoined(self, logs):
+		print("USER JOINED", logs)
+
 	# GENERIC METHODS
 
-	def getMemberList(self):
+	def get_member_list(self):
 		return self.contract.call("getMemberList")
 
-	def join(self, user):
-		return self.contract.call('join', local=False, from_=self["owner"], password="simon")
+	def join(self, user, password=None):
+		from_ = user.get('eth').get('mainKey')
+		bw.push_event(LogEvent("newMember", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
+		return self.contract.call('join', local=False, from_=from_, password=password, args=[user.get('name')])
 
 	def leave(self, member):
 		return None
@@ -83,7 +90,7 @@ class OrgaDocument(Document):
 		return None
 
 	def createProposal(self, proposal):
-		return None:
+		return None
 
 	def killProposal(self, proposal):
 		return None

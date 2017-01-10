@@ -25,19 +25,11 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pytest pillow qrcode requests"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pytest pillow qrcode requests web3"
 
 RUN pip3 install $PIP_PACKAGES
 
 RUN pip3 install ethereum --upgrade
-
-# INSTALL our own ethjsonrpc module
-
-RUN git clone https://github.com/simonvadee/ethjsonrpc.git && \
-        cd ethjsonrpc && \
-        git pull && \
-        python3 setup.py install && \
-        cp -r ethjsonrpc /usr/local/lib/python3.5/dist-packages/ethjsonrpc
 
 # INSTALL latest (py3) mongokat module
 
@@ -70,6 +62,10 @@ RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
 
 COPY ./utils/test_key.key $KEYS_DIRECTORY
 
-EXPOSE 8080
+# INSTALL our own ethjsonrpc module
 
-EXPOSE 22
+RUN git clone https://github.com/simonvadee/ethjsonrpc.git && \
+        cd ethjsonrpc && \
+        git pull && \
+        python3 setup.py install && \
+        cp -r ethjsonrpc /usr/local/lib/python3.5/dist-packages/ethjsonrpc

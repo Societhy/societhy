@@ -30,10 +30,14 @@ def test_create_orga(miner, testOrga):
 
 	bw.pause()
 
-def test_join(testOrga):
-	assert testOrga.join() == "OK"
-	print(testOrga.call("test"))
-	pass
+def test_join(miner, testOrga):
+	bw.resume()
+	tx_hash = testOrga.join(miner, password="simon")
+	assert tx_hash.startswith('0x')
+	bw.waitEvent("newMember")
+	bw.pause()
 
-def test_donate(miner):
-	pass
+def test_memberlist(miner, testOrga):
+	result = testOrga.get_member_list()
+	assert result != None
+	print('result = ', result)

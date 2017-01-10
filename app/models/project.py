@@ -3,7 +3,7 @@ from .clients import client
 
 class ProjectDocument(Document):
 
-	contract  None
+	contract = None
 	owner = None
 	members = None
 	description = None

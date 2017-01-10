@@ -1,4 +1,4 @@
-from os import path
+from os import path, listdir
 
 from mongokat import Collection, Document
 
@@ -11,7 +11,7 @@ from ethereum.abi import encode_abi
 
 class ContractDocument(Document):
 
-	contract_directory = "/societhy/app/contracts"
+	contract_directory = "/societhy/contracts"
 	evm_code = None
 	abi = None
 	name = None
@@ -68,7 +68,7 @@ class ContractDocument(Document):
 	def get_balance(self):
 		return eth_cli.eth_getBalance(self["contract_address"])
 
-	def call(self, function, local=True, *args, **kwargs):
+	def call(self, function, local=True, **kwargs):
 
 		def compute_return_types(function_name, abi):
 			return_types = list()
@@ -83,12 +83,12 @@ class ContractDocument(Document):
 
 		signature, return_types = compute_return_types(function, self["abi"])
 		if local is True:
-			result = eth_cli.call(self["address"], signature, list(args), return_types)
+			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')
 			password = kwargs.get('password')
 			unlocked = eth_cli.personal_unlockAccount(from_, password)
-			result = eth_cli.call_with_transaction(self["address"], from_, signature, list(args))
+			result = eth_cli.call_with_transaction(from_, self["address"], signature, kwargs.get('args'))
 		return result[0] if len(result) == 1 else result
 
 	def send_tx(self, function, *args):

@@ -64,4 +64,4 @@ def miner():
 
 @pytest.fixture(scope='module')
 def testOrga(miner):
-	return Organization(contract='greeter', doc=test_orga, owner=miner)
+	return Organization(contract='basic_orga', doc=test_orga, owner=miner)
