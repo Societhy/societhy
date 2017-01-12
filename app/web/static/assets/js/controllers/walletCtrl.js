@@ -12,6 +12,9 @@ app.controller('WalletController', function($rootScope, $http, $sessionStorage, 
 		}
 	
 		$http.get('/getAllBalances').then(function(response) {
+			$.each($rootScope.user.eth.keys, function(index, keyObject) {
+				keyObject.balance = response.data[keyObject.address];
+			});
 			$rootScope.user.totalBalance = ctrl.totalBalance();
 		});
 	}

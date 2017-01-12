@@ -4,12 +4,14 @@ from flask import session, request, Response
 from core import secret_key
 
 from models import users, UserDocument
+from models.clients import client as mongo_client
 from uuid import uuid4
 from datetime import datetime, timedelta
 
 from flask.sessions import SessionInterface, SessionMixin
 from werkzeug.datastructures import CallbackDict
 from pymongo import MongoClient
+
 
 # decorator that checks if a user is identified
 def requires_auth(f):
@@ -21,11 +23,15 @@ def requires_auth(f):
 		print("----------")
 		if token is not None and token in session:
 			try:
+				token = token.replace('|', '.')
+				print('mod de | par . --------------------------')
+				print(token)
+				print('----------------------')
 				jwt.decode(token, secret_key)
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
 
-			user = UserDocument(session.get(token), mongokat_collection=users)
+			user = UserDocument(session.get(token))
 			user.update()
 		else:
 			return Response({"error": "unauthorized"}, 401)
@@ -44,10 +50,9 @@ class MongoSession(CallbackDict, SessionMixin):
 
 
 class MongoSessionInterface(SessionInterface):
-    def __init__(self, host='localhost', port=27017,
-                 db='', collection='sessions'):
-        client = MongoClient(host, port)
-        self.store = client[db][collection]
+    def __init__(self, collection='sessions'):
+        client = mongo_client;
+        self.store = client['main'][collection]
 
     def open_session(self, app, request):
         sid = request.cookies.get(app.session_cookie_name)
@@ -75,4 +80,5 @@ class MongoSessionInterface(SessionInterface):
                            'expiration': expiration}, True)
         response.set_cookie(app.session_cookie_name, session.sid,
                             expires=self.get_expiration_time(app, session),
-                            httponly=True, domain=domain)
+                            httponly=False, domain=domain)
+        print(response.headers)

@@ -5,14 +5,14 @@ import requests
 from ethjsonrpc import wei_to_ether
 
 from models import users
-from models.db import eth_cli
+from models.clients import eth_cli
 
 
 def refresh_all_balances(user):
 	accounts = user.get('eth').get('keys')
 	ret = dict()
 	for account in accounts.keys():
-		ret[account] = eth_cli.eth_getBalance(account)
+		ret[account] = wei_to_ether(eth_cli.eth_getBalance(account))
 	return {
 		"data": ret,
 		"status": 200

@@ -21,9 +21,8 @@ build_test:
 	
 local_test:
 	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
-	sleep 2
+	sleep 3
 	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
-	# sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` bash'
 	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` pytest -svv tests/'
 	sh -c "docker stop `docker ps | grep societhy/tests | cut -f 1 -d " "`"
 

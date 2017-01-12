@@ -2,11 +2,18 @@ import pytest
 import time
 from os import environ, listdir, path, remove
 
+from core.blockchain_watcher import blockchain_watcher as bw
+from core import keys
+
+
 from models.user import users
+from models.organization import organizations, OrgaDocument as Organization
+from models.contract import contracts
 
 from pymongo import MongoClient
 from ethjsonrpc import ParityEthJsonRpc
 
+print("INITIALIZING TESTS")
 keyDirectory = environ.get('KEYS_DIRECTORY')
 for keyFile in listdir(keyDirectory):
 	if keyFile.startswith("UTC"):
@@ -14,15 +21,32 @@ for keyFile in listdir(keyDirectory):
 		print("removed", keyFile)
 
 users.delete_many({})
+organizations.delete_many({})
+contracts.delete_many({})
 
 test_user = {
-	"name": "simon",
+	"name": "basic",
 	"eth": {
 		"mainKey": None,
 		"keys": {}
 	}
 }
+test_miner = {
+	"name": "miner",
+	"eth": {
+		"mainKey": None,
+		"keys": {}
+	}
+}
+
+test_orga = {"name": "basic_orga"}
+
 users.insert_one(test_user)
+users.insert_one(test_miner)
+
+test_miner = users.find_one({"name": "miner"})
+with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
+	keys.import_new_key(test_miner, f)
 
 @pytest.fixture(scope='module')
 def app():
@@ -32,4 +56,12 @@ def app():
 
 @pytest.fixture(scope='module')
 def user():
-	return users.find_one()
+	return users.find_one({"name": "basic"})
+
+@pytest.fixture(scope='module')
+def miner():
+	return users.find_one({"name": "miner"})
+
+@pytest.fixture(scope='module')
+def testOrga(miner):
+	return Organization(contract='greeter', doc=test_orga, owner=miner)

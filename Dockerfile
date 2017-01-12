@@ -12,7 +12,7 @@ RUN apt-get update &&  \
 # PIP_PACKAGES are to be installed with pip3 (python packages)
 
 # languages
-ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping"
+ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc"
 
 # libraries and services
 ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
@@ -29,7 +29,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest"
 
 RUN pip3 install $PIP_PACKAGES
 
@@ -68,6 +68,8 @@ ENV ETHPORT=8545
 ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 
 ENV TERM=xterm-256color
+
+ENV PYTHONPATH="/societhy/app"
 
 RUN echo 'alias run="python3 app/app.py"' >> ~/.zshrc
 

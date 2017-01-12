@@ -14,18 +14,17 @@ from core.utils import UserJSONEncoder
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
-app.config["SESSION_COOKIE_HTTPONLY"] = False
-app.session_interface = MongoSessionInterface(db='Mongo')
+app.session_interface = MongoSessionInterface()
 
 jinja_options = app.jinja_options.copy()
 
 jinja_options.update(dict(
-    block_start_string='<%',
-    block_end_string='%>',
-    variable_start_string='%%',
-    variable_end_string='%%',
-    comment_start_string='<#',
-    comment_end_string='#>'
+	block_start_string='<%',
+	block_end_string='%>',
+	variable_start_string='%%',
+	variable_end_string='%%',
+	comment_start_string='<#',
+	comment_end_string='#>'
 ))
 app.jinja_options = jinja_options
 
@@ -49,13 +48,18 @@ def add_header(response):
     response.headers['Pragma'] = 'no-cache'
     return response
 
+
 @app.route('/')
 def hello_world():
-	print(app.url_map)
 	return render_template("index.html")
 
+
 if __name__ == '__main__':
-		if environ.get('IP'):
-			app.run(host=environ.get('IP'), port=4242, debug=True, use_reloader=True)
-		else:
-			app.run(host='127.0.0.1', port=80, debug=True, use_reloader=True)
+
+	if environ.get('MINING'):
+		from core.blockchain_watcher import blockchain_watcher
+		blockchain_watcher.run()
+	if environ.get('IP'):
+		app.run(host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))
+	else:
+		app.run(host='127.0.0.1', port=80, debug=True, use_reloader=True)

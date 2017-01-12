@@ -59,6 +59,10 @@ def login(credentials):
 
 	if user is not None:
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
+		token = token.replace('.', '|')
+		print('je mapelle token--------------------------')
+		print(token)
+		print('----------------------')
 		session[token] = user
 		print(session.items())
 		return {"data": {
@@ -122,7 +126,7 @@ def sign_up(newUser):
 		unencryptedPassword = newUser.get('password')
 		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
 				
-		user = UserDocument(newUser, mongokat_collection=users)
+		user = UserDocument(newUser)
 		user.save()
 		user.populate_key()
 		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
@@ -131,7 +135,7 @@ def sign_up(newUser):
 		failure = social_user_exists(newUser)
 		if failure:
 			return failure
-		user = UserDocument(newUser, mongokat_collection=users)
+		user = UserDocument(newUser)
 		user.save()
 		user.populate_key()
 		user.generatePersonalDataFromSocial()

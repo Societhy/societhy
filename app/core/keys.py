@@ -8,7 +8,7 @@ from time import strftime, clock
 from flask import session, request, Response
 
 from models import users
-from models.db import eth_cli
+from models.clients import eth_cli
 
 from core.utils import normalize_address, fromWei
 
