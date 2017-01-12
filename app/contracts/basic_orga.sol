@@ -17,6 +17,7 @@ contract basic_orga is mortal {
     address[] members;
     
     event newMember(address orga, address member);
+    event memberLeft(address orga, address member);
 
     /* this runs when the contract is executed */
     function basic_orga(string _name) public {
@@ -24,7 +25,7 @@ contract basic_orga is mortal {
 
     }
 
-    function join() public returns (string) {
+    function join() public {
         for (uint32 i = 0; i < members.length; i++) {
             if (msg.sender ==  members[i]) {
                 throw ;
@@ -33,6 +34,10 @@ contract basic_orga is mortal {
         members.push(msg.sender);
         newMember(this, msg.sender);
         return "OK";
+    }
+
+    function leave() /* modifier */{
+        
     }
 
     function donate() public returns (string) {

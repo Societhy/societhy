@@ -4,7 +4,7 @@ from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
 from models.events import Event, ContractCreationEvent, LogEvent
-from models.user import UserDocument as User
+from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 
 from core.blockchain_watcher import blockchain_watcher as bw
@@ -62,20 +62,40 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 
 	def memberJoined(self, logs):
+		# decode logs, find user and add its id (?) to member list
 		print("USER JOINED", logs)
+
+	def memberLeft(self, logs):
+		# decode logs, find user and delete it from memebr list
+		print("USEF LEFT", logs)
 
 	# GENERIC METHODS
 
+	def getTotalFunds(self):
+		return self["contract"].get_balance()
+
 	def get_member_list(self):
-		return self.contract.call("getMemberList")
+		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
+		memberList = users.find({"eth.mainKey": {"$in": memberAddressList}})
+		return list(memberList)
 
 	def join(self, user, password=None):
 		from_ = user.get('eth').get('mainKey')
-		bw.push_event(LogEvent("newMember", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
-		return self.contract.call('join', local=False, from_=from_, password=password, args=[user.get('name')])
+		tx_hash = self.contract.call('join', local=False, from_=from_, password=password, args=[user.get('name')])
+		if tx_hash.startswith('0x'):
+			bw.push_event(LogEvent("newMember", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
+			return tx_hash
+		else:
+			return False
 
-	def leave(self, member):
-		return None
+	def leave(self, user, password=None):
+		from_ = user.get('eth').get('mainKey')
+		tx_hash = self.contract.call('leave', local=False, from_=from_, password=password, args=[user.get('name')])
+		if tx_hash.startswith('0x'):
+			bw.push_event(LogEvent("memberLeft", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
+			return tx_hash
+		else:
+			return False
 
 	def donate(self, user):
 		return None

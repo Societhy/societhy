@@ -33,11 +33,22 @@ def test_create_orga(miner, testOrga):
 def test_join(miner, testOrga):
 	bw.resume()
 	tx_hash = testOrga.join(miner, password="simon")
-	assert tx_hash.startswith('0x')
+	assert tx_hash is not None
 	bw.waitEvent("newMember")
 	bw.pause()
 
-def test_memberlist(miner, testOrga):
+def test_memberlist(testOrga):
 	result = testOrga.get_member_list()
-	assert result != None
-	print('result = ', result)
+	assert len(result) == 1
+	assert result[0].get('name') == 'miner'
+
+def test_getbalance(testOrga):
+	result = testOrga.getTotalFunds()
+	print("result =", result)
+
+def test_leave(miner, testOrga):
+	bw.resume()
+	tx_hash = testOrga.leave(miner, password='simon')
+	assert tx_hash.startswith('0x')
+	bw.waitEvent("memberLeft")
+	bw.pause()
