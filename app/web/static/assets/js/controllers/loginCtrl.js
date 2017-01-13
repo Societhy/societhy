@@ -425,7 +425,7 @@ ctrl.google_connect = function ()
 	** Check Username format
 	*/
 	$("form input[name='username']").on("change", function() {
-	    var re = /^[a-zA-Z0-9_-]{6,20}$/;
+	    var re = /^[a-zA-Z0-9_-]{3,20}$/;
 	    if (!re.test($(this).val())) {
 		$("#usernameCheck").addClass("enabled");
 		$("#usernameCheck").removeClass("disabled");
@@ -441,7 +441,7 @@ ctrl.google_connect = function ()
 	** Check the requierment for password
 	*/
 	$("form input[name='password']").on("change", function() {
-	    if ($(this).val().length < 8 || $(this).val().length > 20 ||
+	    if ($(this).val().length < 1 || $(this).val().length > 20 ||
 		$(this).val().indexOf(" ") != -1) {
 		$("#passwordCheck").addClass("enabled");
 		$("#passwordCheck").removeClass("disabled");

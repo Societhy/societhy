@@ -58,7 +58,21 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'User Profile'
         }
+    }).state('app.registration', {
+        url: '/registration',
+        resolve: loadSequence('CryptoJS'),
+        templateUrl: "static/assets/views/login_registration.html"
+    }).state('app.neworga', {
+        url: '/orga/new',
+        needs_auth: true,
+        templateUrl :"static/assets/views/wizard_orga.html",
+//        resolve: loadSequence(''),
+        title: "Create a new organisation",
+        ncyBreadcrumb: {
+            label: 'Organisation Creation'
+        }
     })
+
 
     .state('error', {
         url: '/error',
@@ -70,16 +84,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('error.500', {
         url: '/500',
         templateUrl: "static/assets/views/utility_500.html",
-    })
-
-    .state('login', {
-        url: '/login',
-        template: '<div ui-view class="fade-in-right-big smooth"></div>',
-        abstract: true
-    }).state('login.registration', {
-        url: '/registration',
-        resolve: loadSequence('OAuth', 'loginCtrl', 'walletCtrl', 'CryptoJS'),
-        templateUrl: "static/assets/views/login_registration.html"
     })
 
     // Landing Page route

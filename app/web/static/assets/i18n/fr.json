@@ -128,6 +128,7 @@
             "organisations": {
                 "MAIN": "Organisations",
                 "MYORGANISATIONS": "Mes Organisations",
+                "CREATE": "Créer une organisation",
                 "SAMPLE": "La croix-rouge"
             },
             "projects": {
