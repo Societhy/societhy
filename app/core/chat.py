@@ -9,11 +9,11 @@ def connect():
 
 @socketio.on('disconnect', namespace='/chat')
 def disconnect():
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!A user disconnected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    print('A user disconnected')
 
 @socketio.on('send_message', namespace='/chat')
 def handle_message(data):
-    message = {'avatar': data['avatar'],
+    message = {'avatar': "static/assets/images/default-user.png", #change with data[avatar]
         'date': data['date'],
         'content': data['content'],
         'idUser': data['idOther'], #Invert data['idOther']
