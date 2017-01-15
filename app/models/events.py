@@ -39,11 +39,11 @@ class ContractCreationEvent(Event):
 
 class LogEvent(Event):
 
-	def __init__(self, name, contract_address, users=[], callbacks=None):
+	def __init__(self, name, contract_address, topics=None, users=[], callbacks=None):
 		super().__init__(users=users, callbacks=callbacks)
 		self.logs = None
 		self.name = name
-		self.filter_id = eth_cli.eth_newFilter(address=contract_address)
+		self.filter_id = eth_cli.eth_newFilter(address=contract_address, topics=topics)
 
 	def process(self):
 		print("PROCESSING EVENT", self.name)

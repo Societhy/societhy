@@ -29,3 +29,8 @@ def normalize_address(address, hexa=False):
 		return address if address.startswith("0x") else '0x' + address
 	else:
 		return address[2:] if address.startswith("0x") else address
+
+def to32bytes(data): 
+    data = data.replace('0x', '')
+    padding_lenght = 64 - len(data)
+    return '0x' + '0' * padding_lenght + data

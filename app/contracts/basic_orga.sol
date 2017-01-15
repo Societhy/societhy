@@ -16,8 +16,8 @@ contract basic_orga is mortal {
     string name;
     address[] members;
     
-    event newMember(address orga, address member);
-    event memberLeft(address orga, address member);
+    event newMember(address indexed orga, address indexed member);
+    event memberLeft(address indexed orga, address indexed member);
 
     /* this runs when the contract is executed */
     function basic_orga(string _name) public {
@@ -33,7 +33,6 @@ contract basic_orga is mortal {
         }
         members.push(msg.sender);
         newMember(this, msg.sender);
-        return "OK";
     }
 
     function leave() /* modifier */{

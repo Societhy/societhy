@@ -66,7 +66,7 @@ class ContractDocument(Document):
 				return abi_item
 
 	def get_balance(self):
-		return eth_cli.eth_getBalance(self["contract_address"])
+		return eth_cli.eth_getBalance(self["address"])
 
 	def call(self, function, local=True, **kwargs):
 

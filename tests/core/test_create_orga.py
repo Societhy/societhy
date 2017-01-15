@@ -42,6 +42,9 @@ def test_memberlist(testOrga):
 	assert len(result) == 1
 	assert result[0].get('name') == 'miner'
 
+def test_donate(miner, testOrga):
+	pass
+	
 def test_getbalance(testOrga):
 	result = testOrga.getTotalFunds()
 	print("result =", result)
@@ -52,3 +55,9 @@ def test_leave(miner, testOrga):
 	assert tx_hash.startswith('0x')
 	bw.waitEvent("memberLeft")
 	bw.pause()
+
+def test_createproject(miner, testOrga):
+	pass
+
+def test_destroyOrga(miner, testOrga):
+	pass

@@ -8,7 +8,7 @@ from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import toWei
+from core.utils import toWei, to32bytes
 
 from .clients import client, eth_cli
 
@@ -72,7 +72,7 @@ class OrgaDocument(Document):
 	# GENERIC METHODS
 
 	def getTotalFunds(self):
-		return self["contract"].get_balance()
+		return self.contract.get_balance()
 
 	def get_member_list(self):
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
@@ -83,7 +83,7 @@ class OrgaDocument(Document):
 		from_ = user.get('eth').get('mainKey')
 		tx_hash = self.contract.call('join', local=False, from_=from_, password=password, args=[user.get('name')])
 		if tx_hash.startswith('0x'):
-			bw.push_event(LogEvent("newMember", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
+			bw.push_event(LogEvent("newMember", self.contract["address"], topics=[None, None, to32bytes(from_)], callbacks=[user.joinedOrga, self.memberJoined]))
 			return tx_hash
 		else:
 			return False
@@ -92,7 +92,7 @@ class OrgaDocument(Document):
 		from_ = user.get('eth').get('mainKey')
 		tx_hash = self.contract.call('leave', local=False, from_=from_, password=password, args=[user.get('name')])
 		if tx_hash.startswith('0x'):
-			bw.push_event(LogEvent("memberLeft", self.contract["address"], callbacks=[user.joinedOrga, self.memberJoined]))
+			bw.push_event(LogEvent("memberLeft", self.contract["address"], topics=[None, None, to32bytes(from_)], callbacks=[user.leftOrga, self.memberLeft]))
 			return tx_hash
 		else:
 			return False

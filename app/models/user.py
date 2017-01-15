@@ -19,6 +19,9 @@ class UserDocument(Document):
 	def joinedOrga(self, logs):
 		print("USER JOINED ORGA", logs)
 
+	def leftOrga(self, logs):
+		print("USER LEFT ORGA", logs)
+
 	# KEY MANAGEMENT
 
 	def populate_key(self):
