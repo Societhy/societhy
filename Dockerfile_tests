@@ -54,9 +54,9 @@ ENV KEYS_DIRECTORY="/societhy/.parity/keys"
 # add code files and setup work directory
 WORKDIR /societhy
 
-RUN bash /societhy/utils/install_parity.sh
-
 COPY ./utils /societhy/utils
+
+RUN bash /societhy/utils/install_parity.sh
 
 RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
 

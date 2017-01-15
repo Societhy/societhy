@@ -45,9 +45,9 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
 
 WORKDIR /societhy
 
-RUN bash /societhy/utils/install_parity.sh
-
 COPY ./utils /societhy/utils
+
+sRUN bash /societhy/utils/install_parity.sh
 
 # INSTALL our own ethjsonrpc module
 
