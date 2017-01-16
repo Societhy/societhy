@@ -19,6 +19,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});

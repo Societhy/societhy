@@ -3716,7 +3716,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 
 #off-sidebar .message-bar {
   position: absolute;
-  bottom: 0;
+  bottom: 10;
 }
 
 /* ---------------------------------------------------------------------- */

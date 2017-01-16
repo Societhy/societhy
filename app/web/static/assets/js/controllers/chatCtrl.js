@@ -10,12 +10,13 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         $scope.user = $rootScope.user;
         $scope.usersList = [];
         $scope.noAvatarImg = "static/assets/images/default-user.png";
+        $scope.otherIdUser = "";
+        $scope.chat = [];
         if ($scope.user) {
             $scope.usersList = $scope.user.contact_list;
             $scope.selfIdUser = $scope.user._id;
+            socketIO.emit('init', {"id": $scope.selfIdUser});
         }
-        $scope.otherIdUser = "";
-        $scope.chat = [];
     }
 
     $scope.setOtherId = function (id) {
