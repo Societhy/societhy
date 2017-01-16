@@ -1,16 +1,41 @@
 from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
-
-from .db import client, eth_cli
+from .clients import client, eth_cli
 from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
+
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
+		super().__init__(doc, users, fetched_fields, gen_skel)
+
+	def populate_key(self):
+		from core.keys import gen_base_key
+		newKey = gen_base_key() if self.get('eth') else None
+		if newKey:
+			self["eth"] = {
+				"mainKey": newKey.get('address'),
+				"keys": {newKey.get('address'): {"local": False, "balance": 0, "address": newKey.get('address'), "file": newKey.get('file')}} if newKey else [],
+			}
+		else:
+			self["eth"] = {"mainKey": None, "keys": {}}
+		self.save_partial()
 
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
 		if self['_id'] is not None:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
+
+	def generatePersonalDataFromSocial(self):
+		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
+		if 'social' in self:
+			for socialProvider, socialData in self['social'].items():
+				for key, value in socialData.items():
+					# print(key)
+					# print(value)
+					if key in fields and key not in self:
+						self[key] = value
+		self.save_partial()
 
 	def add_key(self, key, local, balance=0, file=None):
 		if self.get('eth').get('mainKey') is None:

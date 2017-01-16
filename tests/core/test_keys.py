@@ -5,7 +5,7 @@ from os import path
 from core import keys
 
 from models.user import users
-from models.db import eth_cli
+from models.clients import eth_cli
 
 from tests.fixtures import *
 

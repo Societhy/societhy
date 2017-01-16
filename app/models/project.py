@@ -1,5 +1,5 @@
 from mongokat import Collection, Document
-from .db import client
+from .clients import client
 
 class ProjectDocument(Document):
 	pass

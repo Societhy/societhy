@@ -30,4 +30,27 @@ angular.module("packet", [
 	'duScroll',
 	'pascalprecht.translate',
 	'FBAngular'
-]);
+])
+    .controller('projectTableCtrl', function($scope) {
+	$scope.sortType     = 'name'; // set the default sort type
+	$scope.sortReverse  = false;  // set the default sort order
+	$scope.searchType   = '';     // set the default search/filter term
+
+	$scope.projects = [
+	    { name: 'Aider les sans-abris', type: 'Levée de fonds'},
+	    { name: 'Bénévolat medecin du monde', type: 'Action humanitaire'},
+	    { name: 'ONG: Tous Ensemble', type: 'Action caritative, Levée de fonds'},
+	    { name: 'Mon groupe de musique', type: 'Personel, musique'},
+	];
+    })
+
+    .controller('orgaTableCtrl', function($scope) {
+	$scope.sortType     = 'name'; // set the default sort type
+	$scope.sortReverse  = false;  // set the default sort order
+	$scope.searchType   = '';     // set the default search/filter term
+
+	$scope.orgas = [
+	    { name: 'Entreprise familiale', projects: "Mon groupe de musique"},
+	];
+
+    });

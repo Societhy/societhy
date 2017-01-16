@@ -1,7 +1,6 @@
 from os import environ
 
 from pymongo import MongoClient
-
 from ethjsonrpc import ParityEthJsonRpc
 
 mongo_ip = environ.get('MONGOIP')

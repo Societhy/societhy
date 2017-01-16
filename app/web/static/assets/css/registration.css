@@ -82,3 +82,8 @@ div#app  div#registrationContent div#personalInfo
 {
     display:none;
 }
+
+.enabled
+{
+    display: block !important;
+}

@@ -142,3 +142,9 @@ a.editable-empty:focus {
     text-transform:		none;
     width:			100%
 }
+
+/* Table */
+table#project thead.ng-scope tr td
+{
+    width: 33%;
+}
