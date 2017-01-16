@@ -166,40 +166,6 @@
                                                     <a href uib-popover="Your personal information is not required for unlawful purposes, but only in order to proceed in this tutorial" popover-placement="top" popover-title="Don't worry!"> Why do you need my personal information? </a>
                                                 </p>
                                             </fieldset>
-                                            <fieldset>
-                                                <legend>
-                                                    Security question
-                                                </legend>
-                                                <p>
-                                                    Enter security questions in case you lose access to your account. <span class="text-small block">Be sure to pick questions that you will remember the answers to.</span>
-                                                </p>
-                                                <uib-accordion close-others="oneAtATime" class="accordion">
-                                                    <uib-accordion-group is-open="question1.open">
-                                                        <uib-accordion-heading>
-                                                            What was the name of your first stuffed animal? <i class="pull-right" ng-class="{'ti-angle-down': question1.open, 'ti-angle-right': !question1.open}"></i>
-                                                        </uib-accordion-heading>
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" name="stuffedAnimal" ng-model="myModel.stuffedAnimal" placeholder="Enter the the name of your first stuffed animal">
-                                                        </div>
-                                                    </uib-accordion-group>
-                                                    <uib-accordion-group is-open="question2.open">
-                                                        <uib-accordion-heading>
-                                                            What is your grandfather's first name? <i class="pull-right" ng-class="{'ti-angle-down': question2.open, 'ti-angle-right': !question2.open}"></i>
-                                                        </uib-accordion-heading>
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" name="grandfatherName" ng-model="myModel.grandfatherName" placeholder="Enter your grandfather's first name">
-                                                        </div>
-                                                    </uib-accordion-group>
-                                                    <uib-accordion-group is-open="question3.open">
-                                                        <uib-accordion-heading>
-                                                            In what city your grandmother live? <i class="pull-right" ng-class="{'ti-angle-down': question3.open, 'ti-angle-right': !question3.open}"></i>
-                                                        </uib-accordion-heading>
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" name="grandmotherCity" ng-model="myModel.grandmotherCity" placeholder="Enter your grandfather's first name">
-                                                        </div>
-                                                    </uib-accordion-group>
-                                                </uib-accordion>
-                                            </fieldset>
                                             <div class="form-group">
                                                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
                                                     Next <i class="fa fa-arrow-circle-right"></i>

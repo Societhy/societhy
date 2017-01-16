@@ -19,6 +19,7 @@ function ($scope, ngNotify) {
                 form.$setPristine();
                 nextStep();
             } else {
+                console.log(form);
                 var field = null, firstError = null;
                 for (field in form) {
                     if (field[0] != '$') {
@@ -31,7 +32,7 @@ function ($scope, ngNotify) {
                         }
                     }
                 }
-
+                console.log(firstError)
                 angular.element('.ng-invalid[name=' + firstError + ']').focus();
                 errorMessage();
             }
