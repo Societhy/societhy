@@ -12,6 +12,9 @@
 			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data=" {{ 'sidebar.nav.organisations.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
+					<li ui-sref-active="active">
+						<a ui-sref="app.neworga"> <span translate="sidebar.nav.organisations.CREATE"/> </a>
+					</li>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
 					<li ui-sref-active="active">
@@ -20,7 +23,7 @@
 				</ul>
 			</li>
 
-<!-- 			MY PROJECTS -->
+			<!-- 			MY PROJECTS -->
 
 			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Projects" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.projects.MAIN" ></span> <span class="caret"></span></a>
@@ -44,41 +47,41 @@
 		</a>
 		<div class="dropdown-menu pull-right animated fadeInRight">
 			<div class="panel-body" style="width:400px">
-			  <div class="social-icons block">
-            <ul>
-                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                    <a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
-                        Twitter
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                    <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
-                        Facebook
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                    <a href="#" ng-click="ctrl.google_connect()" target="_blank">
-                        Google+
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                    <a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
-                        LinkedIn
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                    <a href="#" ng-click="ctrl.github_connect()" target="_blank">
-                        Github
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
-                    <a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
-                        Coinbase
-                    </a>
-                </li>
+				<div class="social-icons block">
+					<ul>
+						<li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+							<a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
+								Twitter
+							</a>
+						</li>
+						<li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+							<a href="#" ng-click="ctrl.fb_connect()" target="_blank">
+								Facebook
+							</a>
+						</li>
+						<li data-placement="top" data-original-title="Google" class="social-google tooltips">
+							<a href="#" ng-click="ctrl.google_connect()" target="_blank">
+								Google+
+							</a>
+						</li>
+						<li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+							<a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
+								LinkedIn
+							</a>
+						</li>
+						<li data-placement="top" data-original-title="Github" class="social-github tooltips">
+							<a href="#" ng-click="ctrl.github_connect()" target="_blank">
+								Github
+							</a>
+						</li>
+						<li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
+							<a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
+								Coinbase
+							</a>
+						</li>
 
-            </ul>
-        </div>
+					</ul>
+				</div>
 				<form role="form" class="form-horizontal ng-pristine ng-valid">
 					<div class="form-group">
 						<div class="col-sm-10">
@@ -110,7 +113,7 @@
 		</div>
 	</li>
 	<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-		<a href="#" class="nav-user-wrapper padding-15" ui-sref="login.registration">
+		<a href="#" class="nav-user-wrapper padding-15" ui-sref="app.registration">
 			<span>Register</span>
 		</a>
 	</li>
@@ -135,12 +138,12 @@
 			<li>
 				<a ui-sref="" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
 			</li>
- -->			<li class="divider"></li>
-			<li>
-				<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
-			</li>
-		</ul>
-	</li>
+		-->			<li class="divider"></li>
+		<li>
+			<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
+		</li>
+	</ul>
+</li>
 </ul>
 </div>
 <!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
