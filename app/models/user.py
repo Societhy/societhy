@@ -6,7 +6,7 @@ from .db import client, eth_cli
 from ethjsonrpc import wei_to_ether
 
 class UserDocument(Document):
-	
+
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
 		if self['_id'] is not None:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
@@ -39,9 +39,9 @@ class UserDocument(Document):
 		else:
 			for key in self.get('eth').get('keys').keys():
 				if key == publicKey:
-					return self.get('eth').get('keys').get(key) 
+					return self.get('eth').get('keys').get(key)
 			return None
-					
+
 	def refresh_balance(self, address=None):
 		address = address or self.get('eth').get('mainKey')
 		if address:
@@ -65,7 +65,8 @@ class UserCollection(Collection):
 		"gender",
 		"firstname",
 		"lastname",
-		"city"
+		"city",
+        "contact_list"
 	]
 
 	document_class = UserDocument

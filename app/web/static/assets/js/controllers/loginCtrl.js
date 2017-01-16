@@ -46,7 +46,8 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 				birthday: ctrl.birthday || "",
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
-				city: ctrl.city || ""
+				city: ctrl.city || "",
+                contact_list: []
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;

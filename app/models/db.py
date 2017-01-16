@@ -6,6 +6,7 @@ from ethjsonrpc import ParityEthJsonRpc
 
 mongo_ip = environ.get('MONGOIP')
 client = MongoClient(host=mongo_ip or '127.0.0.1')
+client.main.authenticate('dev', 'SecurityIsABitBetter')
 
 eth_ip = environ.get('ETHIP')
 eth_port = environ.get('ETHPORT')

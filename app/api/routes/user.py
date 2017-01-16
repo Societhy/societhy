@@ -20,7 +20,7 @@ def login():
 @router.route('/logout')
 @requires_auth
 def logout(user):
-	print("logout", user)
+	# print("logout", user)
 	ret = auth.logout(user)
 	return jsonify(ret)
 
@@ -55,6 +55,18 @@ def update(user):
 def update_single_user_field(user):
 	ret = user_management.updateUserField(user,request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/addToContact', methods=['POST'])
+@requires_auth
+def add_contact_to_contactlist(user):
+    ret = user_management.addToContact(user, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/delFromContact', methods=['POST'])
+@requires_auth
+def del_contact_from_contactlist(user):
+    ret = user_management.delFromContact(user, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/findUser', methods=['POST'])
 def find_user():
