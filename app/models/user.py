@@ -22,6 +22,8 @@ class UserDocument(Document):
 	def leftOrga(self, logs):
 		print("USER LEFT ORGA", logs)
 
+	def madeDonation(self, logs):
+		print("USER MADE DONATION", logs)
 	# KEY MANAGEMENT
 
 	def populate_key(self):

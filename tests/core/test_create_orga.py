@@ -43,7 +43,11 @@ def test_memberlist(testOrga):
 	assert result[0].get('name') == 'miner'
 
 def test_donate(miner, testOrga):
-	pass
+	bw.resume()
+	tx_hash = testOrga.donate(miner, password="simon")
+	assert tx_hash is not None
+	bw.waitEvent("newDonation")
+	bw.pause()
 	
 def test_getbalance(testOrga):
 	result = testOrga.getTotalFunds()

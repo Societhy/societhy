@@ -1,7 +1,21 @@
+from sha3 import keccak_256
+
 from collections import deque
 from .clients import eth_cli
 
+from core.utils import to32bytes
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
+
+def make_topics(signature, *args):
+	
+	ret = list()
+	if signature:
+		signature = to32bytes(keccak_256(signature.encode('utf-8')).hexdigest())
+	ret.append(signature)
+	for arg in args:
+		ret.append(to32bytes(arg))
+	return ret
+
 class Event:
 
 	filter_params = None
@@ -43,6 +57,7 @@ class LogEvent(Event):
 		super().__init__(users=users, callbacks=callbacks)
 		self.logs = None
 		self.name = name
+		self.contract_address = contract_address
 		self.filter_id = eth_cli.eth_newFilter(address=contract_address, topics=topics)
 
 	def process(self):
