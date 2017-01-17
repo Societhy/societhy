@@ -12,9 +12,9 @@
                     <h5 class="sidebar-title">Contacts</h5>
                     <ul class="media-list">
                         <li class="media" ng-repeat="user in usersList">
-                            <a ct-toggle="on" target="users" href ng-click="setOtherId(user.id)">
+                            <a ct-toggle="on" target="users" href ng-click="setChat(user.id, user.firstname, user.lastname)">
                                 <i class="fa fa-circle status-online"></i>
-                                <img alt="..." ng-src="{{user.avatar}}" class="media-object">
+                                <img alt="..." ng-src="{{noAvatarImg}}" class="media-object">
                                 <div class="media-body">
                                     <h4 class="media-heading">{{user.firstname}} {{user.lastname}}</h4>
                                     <span>{{user.id}}</span>
