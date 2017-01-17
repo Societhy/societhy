@@ -16,17 +16,21 @@ from tests.fixtures import *
 from ethjsonrpc import wei_to_ether
 
 
-def test_create_orga(miner, testOrga):
+def test_create_orga(miner):
 	bw.run()
 	while miner.refresh_balance() < 1:
 		bw.waitBlock()
-	tx_hash = testOrga.deploy_contract(password='simon', args=["bite"])
+
+	test_orga = {"name": "basic_orga"}
+	new_orga = Organization(contract='basic_orga', doc=test_orga, owner=miner)
+	tx_hash = new_orga.deploy_contract(password='simon', args=["bite"])
+	
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
-	assert testOrga["contract_id"] != None
-	testOrga = organizations.find_one({"contract_id": testOrga["contract_id"]})
-	assert testOrga != None
-	assert testOrga.contract != None
+	assert new_orga["contract_id"] != None
+	inserted_orga = organizations.find_one({"contract_id": new_orga["contract_id"]})
+	assert inserted_orga != None
+	assert inserted_orga.contract != None
 
 	bw.pause()
 
@@ -35,6 +39,7 @@ def test_join(miner, testOrga):
 	tx_hash = testOrga.join(miner, password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newMember")
+	assert miner in testOrga.get_member_list()
 	bw.pause()
 
 def test_memberlist(testOrga):
@@ -44,24 +49,31 @@ def test_memberlist(testOrga):
 
 def test_donate(miner, testOrga):
 	bw.resume()
-	tx_hash = testOrga.donate(miner, password="simon")
+	tx_hash = testOrga.donate(miner, 0, password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newDonation")
+	assert testOrga.getTotalFunds() == 0
+	
+	tx_hash = testOrga.donate(miner, 1000, password="simon")
+	assert tx_hash is not None
+	bw.waitEvent("newDonation")
+	assert testOrga.getTotalFunds() == 1000
 	bw.pause()
 	
-def test_getbalance(testOrga):
-	result = testOrga.getTotalFunds()
-	print("result =", result)
-
 def test_leave(miner, testOrga):
 	bw.resume()
 	tx_hash = testOrga.leave(miner, password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitEvent("memberLeft")
+	assert miner not in testOrga.get_member_list()
 	bw.pause()
 
 def test_createproject(miner, testOrga):
-	pass
+	bw.resume()
+	tx_hash = testOrga.createProject(miner, 'newproject', password='simon')
+	assert tx_hash.startswith('0x')
+	bw.waitTx(tx_hash)
+	bw.pause()
 
 def test_destroyOrga(miner, testOrga):
 	pass

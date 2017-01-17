@@ -39,8 +39,6 @@ test_miner = {
 	}
 }
 
-test_orga = {"name": "basic_orga"}
-
 users.insert_one(test_user)
 users.insert_one(test_miner)
 
@@ -64,4 +62,5 @@ def miner():
 
 @pytest.fixture(scope='module')
 def testOrga(miner):
-	return Organization(contract='basic_orga', doc=test_orga, owner=miner)
+	return organizations.find_one({"name": "basic_orga"}
+)

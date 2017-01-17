@@ -34,3 +34,8 @@ def to32bytes(data):
     data = data.replace('0x', '')
     padding_lenght = 64 - len(data)
     return '0x' + '0' * padding_lenght + data
+
+def to20bytes(data):
+	if len(data) > 40:
+		data = data[-40:]
+	return '0x' + data

@@ -30,5 +30,4 @@ I0928 13:03:15.436540 eth/handler.go:248] Ethereum protocol handler stopped
 I0928 13:03:15.436558 core/tx_pool.go:163] Transaction pool stopped
 I0928 13:03:15.436579 eth/backend.go:502] Automatic pregeneration of ethash DAG OFF (ethash dir: /var/root/.ethash)
 I0928 13:03:15.436803 ethdb/database.go:169] closed db:.ethereum/societhest/chaindata
-I0928 13:03:15.436919 ethdb/database.go:169] closed db:.ethereum/societhest/dappss
-s
+I0928 13:03:15.436919 ethdb/database.go:169] closed db:.ethereum/societhest/dapps
