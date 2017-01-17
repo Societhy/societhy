@@ -38,6 +38,22 @@ class UserDocument(Document):
 			self["eth"] = {"mainKey": None, "keys": {}}
 		self.save_partial()
 
+	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
+		if self['_id'] is not None:
+			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
+		super().save_partial(data, allow_protected_fields, **kwargs)
+
+	def generatePersonalDataFromSocial(self):
+		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
+		if 'social' in self:
+			for socialProvider, socialData in self['social'].items():
+				for key, value in socialData.items():
+					# print(key)
+					# print(value)
+					if key in fields and key not in self:
+						self[key] = value
+		self.save_partial()
+
 	def add_key(self, key, local, balance=0, file=None):
 		if self.get('eth').get('mainKey') is None:
 			self["eth"]["mainKey"] = key
@@ -65,21 +81,8 @@ class UserDocument(Document):
 		else:
 			for key in self.get('eth').get('keys').keys():
 				if key == publicKey:
-					return self.get('eth').get('keys').get(key) 
+					return self.get('eth').get('keys').get(key)
 			return None
-					
-	# GENERIC METHODS
-
-	def generatePersonalDataFromSocial(self):
-		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
-		if 'social' in self: 
-			for socialProvider, socialData in self['social'].items():
-				for key, value in socialData.items():
-					# print(key)
-					# print(value)
-					if key in fields and key not in self:
-						self[key] = value
-		self.save_partial()
 
 	def refresh_balance(self, address=None):
 		address = address or self.get('eth').get('mainKey')
@@ -104,7 +107,8 @@ class UserCollection(Collection):
 		"gender",
 		"firstname",
 		"lastname",
-		"city"
+		"city",
+        "contact_list"
 	]
 
 	document_class = UserDocument

@@ -52,6 +52,17 @@ def updateUserField(user, newData):
 	return {"data": user,
 		"status": 200}
 
+def addToContact(user, data):
+    users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
+    user = users.find_one({"_id": ObjectId(data["_id"])})
+    return {"data": user,
+        "status": 200}
+
+def delFromContact(user, data):
+    users.update({"_id": ObjectId(data["_id"])}, {"$pull": {"contact_list": {"id": data["contact"]["id"]}}})
+    user = users.find_one({"_id": ObjectId(data["_id"])})
+    return {"data": user,
+        "status": 200}
 
 def findUser(data):
 	user = users.find_one({"name": data["name"]})

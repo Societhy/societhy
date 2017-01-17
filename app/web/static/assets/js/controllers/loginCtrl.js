@@ -21,6 +21,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -342,7 +343,8 @@ ctrl.google_connect = function ()
 				birthday: ctrl.birthday || "",
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
-				city: ctrl.city || ""
+				city: ctrl.city || "",
+                contact_list: []
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;

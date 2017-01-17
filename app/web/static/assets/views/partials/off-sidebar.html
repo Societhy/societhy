@@ -6,18 +6,18 @@
             <i class="ti-comments"></i>
         </uib-tab-heading>
         <!-- /// controller:  'ChatCtrl' -  localtion: static/assets/js/controllers/chatCtrl.js /// -->
-        <div id="users" toggleable active-class="chat-open" ng-controller="ChatCtrl">
+          <div id="users" toggleable active-class="chat-open" ng-controller="ChatCtrl">
             <div class="users-list">
                 <div class="sidebar-content" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                    <h5 class="sidebar-title" translate="offsidebar.chat.ONLINE">On-line</h5>
+                    <h5 class="sidebar-title">Contacts</h5>
                     <ul class="media-list">
                         <li class="media" ng-repeat="user in usersList">
-                            <a ct-toggle="on" target="users" href ng-click="setOtherId(user.id)">
+                            <a ct-toggle="on" target="users" href ng-click="setChat(user.id, user.firstname, user.lastname)">
                                 <i class="fa fa-circle status-online"></i>
-                                <img alt="..." ng-src="{{user.avatar}}" class="media-object">
+                                <img alt="..." ng-src="{{noAvatarImg}}" class="media-object">
                                 <div class="media-body">
-                                    <h4 class="media-heading">{{user.name}}</h4>
-                                    <span>{{user.job}}</span>
+                                    <h4 class="media-heading">{{user.firstname}} {{user.lastname}}</h4>
+                                    <span>{{user.id}}</span>
                                 </div>
                             </a>
                         </li>
@@ -37,44 +37,6 @@
             </div>
         </div>
     </uib-tab>
-    <!-- end: TAB USER -->
-    <!-- start: TAB FAVORITES -->
-    <!-- <uib-tab>
-        <uib-tab-heading>
-            <i class="ti-heart"></i>
-        </uib-tab-heading>
-        <div class="tab-pane" id="favorites">
-            <div class="users-list">
-                <div class="sidebar-content" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                    <h5 class="sidebar-title" translate="offsidebar.favorites.MAIN">Favorites</h5>
-                    <ul class="media-list">
-                        <li class="media">
-                            <a href="#">
-                                <img alt="..." ng-src="{{ noAvatarImg }}" class="media-object">
-                                <div class="media-body">
-                                    <h4 class="media-heading">Nicole Bell</h4>
-                                    <span> Content Designer </span>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a href="#">
-                                <div class="user-label">
-                                    <span class="label label-success">3</span>
-                                </div>
-                                <img alt="..." ng-src="{{ noAvatarImg }}" class="media-object">
-                                <div class="media-body">
-                                    <h4 class="media-heading">Steven Thompson</h4>
-                                    <span> Visual Designer </span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </uib-tab> -->
-    <!-- end: TAB FAVORITES -->
     <!-- start: TAB GENERAL SETTING -->
     <uib-tab>
         <uib-tab-heading>

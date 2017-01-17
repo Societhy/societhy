@@ -6,17 +6,23 @@
 app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
     $scope.user = $rootScope.user;
 
-    $scope.noAvatarImg = "static/assets/images/default-user.png";
-    if ($scope.user) {
-        $scope.selfIdUser = $scope.user._id;
+    var load = function () {
+        $scope.user = $rootScope.user;
+        $scope.noAvatarImg = "static/assets/images/default-user.png";
+        $scope.usersList = [];
+        $scope.otherIdUser = "";
+        $scope.otherName = "";
+        $scope.chat = [];
+        if ($scope.user) {
+            $scope.usersList = $scope.user.contact_list;
+            $scope.selfIdUser = $scope.user._id;
+            socketIO.emit('init', {"id": $scope.selfIdUser});
+        }
     }
-    $scope.otherIdUser = "";
 
-    $scope.usersList = [{name:"Bob", job:"Barber", id:"idfromserver", avatar:$scope.noAvatarImg}];
-    $scope.chat = [];
-
-    $scope.setOtherId = function (id) {
+    $scope.setChat = function (id, firstname, lastname) {
         $scope.otherIdUser = id;
+        $scope.otherName = firstname + " " + lastname;
 
         socketIO.emit('join', {'name': $scope.user.name,
         'id': $scope.selfIdUser,
@@ -29,11 +35,11 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
 
     var receiveMessage = function (data) {
         var newMessage = {
-            "avatar": data.avatar,
             "date": data.date,
-            "content": data.content,
-            "idUser": data.idUser,
-            "idOther": data.idOther
+            "content": data.data,
+            "idUser": data.send_address,
+            "idOther": data.recip_address,
+            "avatar": data.avatar
         };
         $scope.chat.push(newMessage);
         $scope.chatMessage = '';
@@ -43,13 +49,21 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         receiveMessage(data);
     })
 
+    socketIO.on('last_messages', function (data) {
+        data = JSON.parse(data);
+        for (var message in data) {
+            receiveMessage(data[message]);
+        }
+    })
+
     $scope.sendMessage = function () {
         var newMessage = {
-            "avatar": "static/assets/images/avatar-1.jpg",
             "date": new Date(),
             "content": $scope.chatMessage,
             "idUser": $scope.selfIdUser,
-            "idOther": $scope.otherIdUser
+            "idOther": $scope.otherIdUser,
+            "avatar": $scope.noAvatarImg,
+            "files": null
         };
         if (newMessage.content != '') {
             $scope.chat.push(newMessage);
@@ -57,4 +71,10 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         }
         $scope.chatMessage = '';
     };
+
+    $rootScope.$on('loadChat', function(event, data) {
+        load();
+    });
+
+    load();
 });

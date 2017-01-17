@@ -53,10 +53,10 @@ socketio = chat.socketio
 socketio.init_app(app)
 
 if __name__ == '__main__':
-		if environ.get('MINING'):
-			from core.blockchain_watcher import blockchain_watcher
-			blockchain_watcher.run()
-		if environ.get('IP'):
-			socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))
-		else:
-			socketio.run(app, host='127.0.0.1', port=80, debug=True, use_reloader=True)
+	if environ.get('MINING'):
+		from core.blockchain_watcher import blockchain_watcher
+		blockchain_watcher.run()
+	if environ.get('IP'):
+		socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))
+	else:
+		socketio.run(app, host='127.0.0.1', port=80, debug=True, use_reloader=True)
