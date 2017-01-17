@@ -40,7 +40,6 @@ app.constant('JS_REQUIRES', {
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
         'userOtherOverviewCtrl' : 'static/assets/js/controllers/userOtherOverviewCtrl.js',
         'walletCtrl' : 'static/assets/js/controllers/walletCtrl.js'
-
     },
     //*** angularJS Modules
     modules: [{
@@ -103,6 +102,9 @@ app.constant('JS_REQUIRES', {
     }, {
         name: 'angularSpectrumColorpicker',
         files: ['../../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js']
+    }, {
+        name: 'btford.socket-io',
+        files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }, {
         name:'qrcode',
         files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']

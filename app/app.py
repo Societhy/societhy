@@ -9,6 +9,7 @@ from api.routes.fundraise import router as fundraise_routes
 
 from core import secret_key
 from core.utils import UserJSONEncoder
+import core.chat as chat
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
@@ -48,13 +49,14 @@ def add_header(response):
 def hello_world():
 	return render_template("index.html")
 
+socketio = chat.socketio
+socketio.init_app(app)
 
 if __name__ == '__main__':
-
-	if environ.get('MINING'):
-		from core.blockchain_watcher import blockchain_watcher
-		blockchain_watcher.run()
-	if environ.get('IP'):
-		app.run(host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))
-	else:
-		app.run(host='127.0.0.1', port=80, debug=True, use_reloader=True)
+		if environ.get('MINING'):
+			from core.blockchain_watcher import blockchain_watcher
+			blockchain_watcher.run()
+		if environ.get('IP'):
+			socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))
+		else:
+			socketio.run(app, host='127.0.0.1', port=80, debug=True, use_reloader=True)

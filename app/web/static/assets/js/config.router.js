@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",

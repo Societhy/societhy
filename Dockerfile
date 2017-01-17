@@ -29,7 +29,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3 flask-socketio eventlet"
 
 RUN pip3 install $PIP_PACKAGES
 
@@ -41,13 +41,11 @@ RUN git clone https://github.com/pricingassistant/mongokat.git && \
     python3 setup.py install && \
     cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
 
-# INSTALL PARITY
-
 WORKDIR /societhy
 
 COPY ./utils /societhy/utils
 
-sRUN bash /societhy/utils/install_parity.sh
+RUN bash /societhy/utils/install_parity.sh
 
 # INSTALL our own ethjsonrpc module
 

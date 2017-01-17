@@ -64,6 +64,14 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   }
 });
 
+app.factory('socketIO', function (socketFactory) {
+    var socket = socketFactory({
+        ioSocket: io.connect('/chat')
+    });
+    socket.forward('error');
+    return socket;
+});
+
 // token authentification config
 app.config(['$httpProvider',
 	function($httpProvider) {

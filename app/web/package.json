@@ -40,7 +40,9 @@
     "http-server": "^0.6.1",
     "require-directory": "^2.0.0",
     "keythereum": "latest",
+    "file-saver": "latest",
     "angular-qrcode": "latest",
-    "file-saver": "latest"
+    "file-saver": "latest",
+    "socket.io":"latest"
   }
 }
