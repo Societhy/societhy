@@ -35,7 +35,7 @@ class BlockchainWatcher:
 
     def watch(self):
         if self.running:
-          
+            print('.', end='', flush=True)
             newBlocks = eth_cli.eth_getFilterChanges(self.newBlockFilter)
           
             for blockHash in newBlocks:
