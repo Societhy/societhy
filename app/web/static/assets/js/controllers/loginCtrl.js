@@ -403,7 +403,6 @@ ctrl.google_connect = function ()
 	*/
 	function updateSubmitButtonState () {
 	    if ($(".formChecker.disabled").length != 4) {
-		console.log(2);
 	    	$("button#submit").prop("disabled", true);
 		$("#beforeSubmit").show();
 	    }
@@ -465,7 +464,7 @@ ctrl.google_connect = function ()
 	** Check the requierment for password
 	*/
 	$("form input[name='password']").on("change", function() {
-	    if ($(this).val().length < 1 || $(this).val().length > 20 ||
+	    if ($(this).val().length < 4 || $(this).val().length > 20 ||
 		$(this).val().indexOf(" ") != -1) {
 		$("#passwordCheck").addClass("enabled");
 		$("#passwordCheck").removeClass("disabled");
@@ -494,9 +493,7 @@ ctrl.google_connect = function ()
 	});
     }
 
-    if ($location.path() == "/login/registration") {
     	registration_checker();
-    }
 
 
     /*
