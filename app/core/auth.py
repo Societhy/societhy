@@ -124,7 +124,8 @@ def sign_up(newUser):
 		user = UserDocument(newUser)
 		user.save()
 		user.populate_key()
-		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
+		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
+					"socketid": newUser.get('socketid')})
 
 	else:
 		failure = social_user_exists(newUser)

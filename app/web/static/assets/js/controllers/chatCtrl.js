@@ -57,7 +57,6 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
     })
 
     socketIO.on('sessionId', function (data) {
-        console.log(data);
         $rootScope.sessionId = data;
     })
 

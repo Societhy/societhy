@@ -14,7 +14,7 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 		if (ctrl.username && ctrl.password) {
 				$http.post('/login', {
 					"id": btoa(ctrl.username + ':' + ctrl.password),
-					"socketid": $rootScope.socketid
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					$sessionStorage.user = JSON.stringify(response.data.user);
@@ -67,15 +67,17 @@ ctrl.fb_register = function ()
             console.log(userData);
             $http.post('/newUser',
                 {"social" : 
-                {"facebook" :
-                {
-                    "firstname" : userData.first_name,
-                    "lastname" : userData.last_name,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.picture.data.url
-                }}}
-                ).then(function(response) {
+	                {"facebook" :
+    		            {
+            		        "firstname" : userData.first_name,
+                    		"lastname" : userData.last_name,
+	        	            "id" : userData.id,
+    	       		        "email" : userData.email,
+        	   	         	"pictureURL" : userData.picture.data.url
+	        	        }
+    	        	},
+    	        "socketid": $rootScope.sessionId
+			}).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -92,15 +94,17 @@ ctrl.twitter_register = function ()
         result.me().done(function(userData) {
             $http.post('/newUser',
                 {"social" : 
-                {"twitter" :
-                {
-                    "firstname" : userData.name,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.avatar,
-                    "url" : userData.url,
-                }}}
-                ).then(function(response) {
+                	{"twitter" :
+	                {
+	                    "firstname" : userData.name,
+	                    "id" : userData.id,
+	                    "email" : userData.email,
+	                    "pictureURL" : userData.avatar,
+	                    "url" : userData.url,
+	                }
+	            },
+	            "socketid": $rootScope.sessionId
+	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -123,8 +127,9 @@ OAuth.popup('linkedin').done(function(result) {
                     "id" : userData.id,
                     "pictureURL" : userData.avatar,
                     "url" : userData.url,
-                }}}
-                ).then(function(response) {
+                }},
+	            "socketid": $rootScope.sessionId
+	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -148,8 +153,9 @@ OAuth.popup('github').done(function(result) {
                     "pictureURL" : userData.avatar,
                     "company" : userData.company,
                     "alias" : userData.alias
-                }}}
-                ).then(function(response) {
+                }},
+            "socketid": $rootScope.sessionId
+        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -177,8 +183,9 @@ ctrl.google_register = function ()
                     "url" : userData.url,
                     "company" : userData.company
 
-                }}}
-                ).then(function(response) {
+                }},
+            "socketid": $rootScope.sessionId
+        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -198,7 +205,7 @@ ctrl.coinbase_connect = function ()
 				$http.post('/login', {
 					"provider": "coinbase",
 					"socialId": data.id,
-					"socketid": $rootScope.socketid
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -222,7 +229,7 @@ ctrl.fb_connect = function ()
 				$http.post('/login', {
 					"provider": "facebook",
 					"socialId": userData.id,
-					"socketid": $rootScope.socketid
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -247,7 +254,7 @@ ctrl.twitter_connect = function ()
 				$http.post('/login', {
 					"provider": "twitter",
 					"socialId": userData.id,
-					"socketid": $rootScope.socketid					
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -271,7 +278,7 @@ OAuth.popup('linkedin').done(function(result) {
 				$http.post('/login', {
 					"provider": "linkedin",
 					"socialId": userData.id,
-					"socketid": $rootScope.socketid					
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -295,7 +302,7 @@ OAuth.popup('github').done(function(result) {
 				$http.post('/login', {
 					"provider": "github",
 					"socialId": userData.id,
-					"socketid": $rootScope.socketid
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -321,7 +328,7 @@ ctrl.google_connect = function ()
 				$http.post('/login', {
 					"provider": "google",
 					"socialId": userData.id,
-					"socketid": $rootScope.socketid					
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -357,7 +364,8 @@ ctrl.google_connect = function ()
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
 				city: ctrl.city || "",
-                contact_list: []
+                contact_list: [],
+                socketid: $rootScope.sessionId
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
