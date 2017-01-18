@@ -44,7 +44,6 @@ def login(credentials):
 			return users.find_one({"social.google.id" : credentials["socialId"]})
 
 
-
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
 		return {
 			"data": "already logged in",
@@ -59,6 +58,7 @@ def login(credentials):
 
 	if user is not None:
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
+		user["socketid"] = credentials.get('socketid')
 		session[token] = user
 		return {"data": {
 					"token": token,

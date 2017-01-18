@@ -157,7 +157,7 @@ ctrl.google_connect = function ()
     });
 }
 
-    $rootScope.updateUser = function(name, oldVal) {
+$rootScope.updateUser = function(name, oldVal) {
 	if ($rootScope.user != null)
 	{
             $http.post('/updateSingleUserField', {
