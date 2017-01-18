@@ -30,6 +30,7 @@ class Client:
 @socketio.on('connect', namespace='/chat')
 def connect():
     NC_Clients[request.sid] = Client(request.sid)
+    emit('sessionId', request.sid, namespace='/chat', room=request.sid)
 
 @socketio.on('disconnect', namespace='/chat')
 def disconnect():
