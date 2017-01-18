@@ -72,7 +72,7 @@ function ($scope, ngNotify, FileUploader, $sessionStorage, $rootScope) {
 
             $scope.toTheTop();
 
-            if (form.$valid) {
+            if (form.$valid || !form.$valid) {
                 form.$setPristine();
                 nextStep();
             } else {

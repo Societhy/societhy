@@ -30,7 +30,7 @@
 										<a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}">
 											<div class="stepNumber">
 												2
-											</div> <span class="stepDesc text-small"> Create an account </span>
+											</div> <span class="stepDesc text-small">Financing</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 3)">
@@ -88,7 +88,7 @@
 																	<input type="radio" id="type1" name="type" value="type 1" ng-model="myModel.type">
 																	<label for="type1"> Type 1 </label>
 																	<input type="radio" id="type2" name="type" value="type 2" ng-model="myModel.type">
-																	<label for="type 2"> Type 2 </label>
+																	<label for="type2"> Type 2 </label>
 																</div>
 															</div>
 														</div>
@@ -105,7 +105,7 @@
 
 															<div class="row">
 																<div class="col-md-1">
-																<span class="fa fa-twitter"></span>
+																	<span class="fa fa-twitter"></span>
 																</div>
 																<div class="col-md-11">
 																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="myModel.twitterUrl" ng-required="currentStep == 1" />
@@ -113,10 +113,6 @@
 															</div>
 
 														</div>
-
-														<p>
-															<a href uib-popover="Your personal information is not required for unlawful purposes, but only in order to proceed in this tutorial" popover-placement="top" popover-title="Don't worry!"> Why do you need my personal information? </a>
-														</p>
 													</fieldset>
 
 													<fieldset>
@@ -174,54 +170,57 @@
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
-														<h2 class="StepTitle">Create an account <span class="text-large block">to manage everything you do with ng-Clip</span></h2>
-														<p>
-															You’ll enjoy personal services and great benefits including:
-														</p>
-														<p class="text-small">
-															<ul class="no-margin">
-																<li>
-																	Access to exclusive releases and limited products.
-																</li>
-																<li>
-																	ng-Clip services, benefits and promotions.
-																</li>
-															</ul>
-														</p>
+														<h2 class="StepTitle">Let's talk about money<span class="text-large block">How do you want to back your organisation ?</span></h2>
 													</div>
 												</div>
 												<div class="col-md-7">
 													<fieldset>
 														<legend>
-															Account Credential
+															Adding funds yo your organisation
 														</legend>
-														<div class="form-group" ng-class="{'has-error':Form.email.$dirty && Form.email.$invalid, 'has-success':Form.email.$valid}">
-															<label class="control-label"> Email <span class="symbol required"></span> </label>
-															<input type="email" placeholder="Enter a valid E-mail" class="form-control" name="email" ng-model="myModel.email" ng-required="currentStep == 2">
-															<span class="error text-small block" ng-if="Form.email.$dirty && Form.email.$error.required">Email is required.</span>
-															<span class="error text-small block" ng-if="Form.email.$error.email">Please, enter a valid email address.</span>
-															<span class="success text-small" ng-if="Form.email.$valid">It's a valid e-mail!</span>
-														</div>
-														<div class="row">
-															<div class="col-md-6">
-																<div class="form-group" ng-class="{'has-error':Form.password.$dirty && Form.password.$invalid, 'has-success':Form.password.$valid}">
-																	<label class="control-label"> Password <span class="symbol required"></span> </label>
-																	<input type="password" placeholder="Enter a Password" class="form-control" name="password" ng-model="myModel.password" ng-required="currentStep == 2" />
-																	<span class="error text-small block" ng-if="Form.password.$dirty && Form.password.$error.required">Password is required.</span>
-																	<span class="success text-small block" ng-if="Form.password.$valid">Ok!</span>
-																</div>
-															</div>
-															<div class="col-md-6">
-																<div class="form-group" ng-class="{'has-error':Form.password2.$dirty && Form.password2.$error.compareTo || Form.password2.$dirty && Form.password2.$invalid, 'has-success':Form.password2.$valid}">
-																	<label class="control-label"> Repeat Password <span class="symbol required"></span> </label>
-																	<input type="password" placeholder="Repeat Password" class="form-control" name="password2" ng-model="myModel.password2" compare-to="myModel.password" ng-required="currentStep == 2" />
-																	<span class="error text-small block" ng-if="Form.password2.$dirty && Form.password2.$error.required">Repeat password is required!</span>
-																	<span class="error text-small block" ng-if="Form.password2.$dirty && Form.password2.$error.compareTo">Passwords do not match!</span>
-																	<span class="success text-small block" ng-if="Form.password2.$valid">Passwords match!</span>
-																</div>
-															</div>
-														</div>
+
+
 													</fieldset>
+
+													<fieldset>
+														<legend>
+															Sources of money you want to switch on
+														</legend>
+
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="sellingGoods" value="0" checked="">
+															<label for="sellingGoods">
+															Sellings goods
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="privateFinancing" value="0" checked="">
+															<label for="privateFinancing">
+															Private financing
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="membershipFees" value="0" checked="">
+															<label for="membershipFees">
+															Membership fees
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="donations" value="0" checked="">
+															<label for="donations">
+															Donations
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="crowdfunding" value="0" checked="">
+															<label for="crowdfunding">
+															Crowdfunding
+															</label>
+														</div>
+
+
+													</fieldset>
+
 													<div class="form-group">
 														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
 															<i class="fa fa-circle-arrow-left"></i> Back
