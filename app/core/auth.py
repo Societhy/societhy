@@ -29,7 +29,6 @@ def login(credentials):
 		return None
 
 	def auth_user_social(credentials):
-		print(credentials)
 		if credentials["provider"] == "facebook":
 			return users.find_one({"social.facebook.id" : credentials["socialId"]})
 		if credentials["provider"] == "github":
@@ -51,7 +50,6 @@ def login(credentials):
 		}
 
 	if "socialId" not in credentials:
-		print(credentials)
 		user = auth_user(credentials.get('id'))
 	else:
 		user = auth_user_social(credentials)
