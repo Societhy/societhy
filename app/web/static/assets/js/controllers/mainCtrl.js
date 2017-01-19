@@ -169,8 +169,9 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
 
     };
 
-    $scope.searchForUser = function(name) {
-	$window.location.href = "/#/app/user/" + name;
+    $scope.searchForAnything = function(search) {
+        $rootScope.search = search;
+    	$state.go("app.user", {"name": search});
     }
     // Function that find the exact height and width of the viewport in a cross-browser way
     var viewport = function () {

@@ -38,6 +38,7 @@ class OrgaDocument(Document):
 		if contract:
 			self.contract = Contract(contract, owner)
 			self.contract.compile()
+		if owner:
 			self["owner"] = owner.get('eth').get('mainKey') if type(owner) is User else owner			
 
 	# CONTRACT SPECIFIC METHODS
@@ -48,18 +49,26 @@ class OrgaDocument(Document):
 
 	def deploy_contract(self, from_=None, password=None, args=[]):
 		if from_ is None:
+			users_socket = []
 			from_ = self["owner"]
+		elif isinstance(from_, UserDocument):
+			users_socket = [from_.get('socketid')]
+			from_ = from_.get('eth').get('mainKey')
+		else:
+			users_socket = []
+
 		tx_hash = self.contract.deploy(from_, password, args=args)
 		bw.push_event(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register))
 		return tx_hash
+
+
+	# CALLBACKS FOR UPDATE
 
 	def register(self, tx_receipt):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
-
-	# CALLBACKS FOR UPDATE
 
 	def memberJoined(self, logs):
 		# decode logs, find user and add its id (?) to member list
@@ -82,7 +91,7 @@ class OrgaDocument(Document):
 
 	def get_member_list(self):
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
-		memberList = users.find({"eth.mainKey": {"$in": memberAddressList}})
+		memberList = users.find({"eth.mainKey": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
 	def join(self, user, password=None):

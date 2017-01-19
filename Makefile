@@ -44,8 +44,10 @@ shell:
 	@make stop
 
 mine:
-	docker-compose -f utils/docker-compose.yaml up -d test_local_mining_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
+	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
+	sleep 3
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` /bin/bash'
 	@make stop
 
 stop:

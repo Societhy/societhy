@@ -39,7 +39,7 @@ def test_join(miner, testOrga):
 	tx_hash = testOrga.join(miner, password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newMember")
-	assert miner in testOrga.get_member_list()
+	assert miner.get('name') in [member.get('name') for member in testOrga.get_member_list()]
 	bw.pause()
 
 def test_memberlist(testOrga):
@@ -65,7 +65,7 @@ def test_leave(miner, testOrga):
 	tx_hash = testOrga.leave(miner, password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitEvent("memberLeft")
-	assert miner not in testOrga.get_member_list()
+	assert miner.get('name') not in [member.get('name') for member in testOrga.get_member_list()]
 	bw.pause()
 
 def test_createproject(miner, testOrga):

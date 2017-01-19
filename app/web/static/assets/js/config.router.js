@@ -53,10 +53,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.user', {
         url: '/user/:name',
         templateUrl: "static/assets/views/user_other_profile.html",
-        resolve: loadSequence('userOtherOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
+        resolve: loadSequence('userOtherOverviewCtrl', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
         title: 'user Profile',
         ncyBreadcrumb: {
             label: 'User Profile'
+        }
+    }).state('app.organization', {
+        url: '/orga/:organization',
+        templateUrl: "static/assets/views/orga_dashboard.html",
+        resolve: loadSequence('orgaMainCtrl'),
+        title: 'Organisation dashboard',
+        ncyBreadcrumb: {
+            label: 'Organisation'
         }
     }).state('app.registration', {
         url: '/registration',

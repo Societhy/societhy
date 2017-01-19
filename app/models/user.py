@@ -111,6 +111,14 @@ class UserCollection(Collection):
         "contact_list"
 	]
 
+	public_info = [
+		"_id",
+		"name",
+		"eth.mainKey",
+		"firstname",
+		"lastname",
+	]
+
 	document_class = UserDocument
 
 users = UserCollection(collection=client.main.users)
