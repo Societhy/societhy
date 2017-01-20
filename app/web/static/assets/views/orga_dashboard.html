@@ -8,77 +8,51 @@
         <uib-tabset class="tabbable">
           <!-- start: TAB OVERVIEW -->
           <uib-tab heading="Overview" href="">
-            <div class="row" ng-controller="OrgaMainController as ctrl">
-              <div class="col-md-12">
-                <div class="user-left">
-                  <img src="" alt="..." class="img-rounded">
-                  <button type="button" class="btn btn-wide btn-o btn-success">
-                    Join
-                  </button>
-                  <div class="center">
-                    <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
-                      <div class="user-image">
-                        <div class="thumbnail">
-                          <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
-                          <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
-                        </div>
-                        <div class="user-image-buttons" ng-if="obj.flow.files.length">
-                          <span class="btn btn-primary btn-file">
-                           <i class="fa fa-pencil"></i>
-                           <input type="file" flow-btn />
-                         </span>
-                         <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i> </span>
-                       </div>
-                       <div class="user-image-buttons" ng-if="!obj.flow.files.length">
-                        <span class="btn btn-primary btn-file">
-                         <i class="fa fa-pencil"></i>
-                         <input type="file" flow-btn />
-                       </span>
-                       <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i></span>
-                     </div>
-                   </div>
-                 </div>
-                 <hr>
-                 <div id="newPhoto"></div>
-                 <div class="social-icons block">
-                  <ul>
-                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                      <a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
-                        Twitter
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                      <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
-                        Facebook
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                      <a href="#" ng-click="ctrl.google_connect()" target="_blank">
-                        Google+
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                      <a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
-                        LinkedIn
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                      <a href="#" ng-click="ctrl.github_connect()" target="_blank">
-                        Github
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
-                      <a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
-                        Coinbase
-                      </a>
-                    </li>
+            <div ng-controller="OrgaMainController as ctrl">
+              <h1>{{ currentOrga.name }}</h1>
+              <div class="row" style="display:flex;align-items:center; border-style: solid;">
 
-                  </ul>
+                <div class="col-md-6 inline-block border-solid">
+                  <div class="user-left user-image">
+                    <img ng-src="{{currentOrga.picture}}" alt="..." class="img-rounded">
+                  </div>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success">Join</button>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger">Leave</button>
                 </div>
-                <hr>
+
+                <div class="col-md-6 inline-block border-solid">              
+                  <div class="social-icons float-right">
+                    <ul>
+                      <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Twitter
+                        </a>
+                      </li>
+                      <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Facebook
+                        </a>
+                      </li>
+                      <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Google+
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-            </div>
-            </div>
+
+              <div class="row margin-top-20" >
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px" >              
+                  <h2>Projects</h1>
+                  
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                  <h1>Members</h1>
+                  
+                </div>
+              </div>
             </div>
           </uib-tab>
 

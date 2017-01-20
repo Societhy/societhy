@@ -4036,6 +4036,10 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   border-right: none !important;
 }
 
+.border-solid {
+  border-style: solid;
+}
+
 .border-right {
   border-right-style: solid !important;
   border-right-width: 1px !important;
@@ -5454,6 +5458,14 @@ a.text-light:hover {
 }
 .tooltip-notification .tooltip-notification-inner > div {
   width: 100px;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
 }
 
 .float-none {

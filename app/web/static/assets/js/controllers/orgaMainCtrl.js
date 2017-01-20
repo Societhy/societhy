@@ -8,9 +8,11 @@ app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage
 			"id": $state.params.orga_id
 		}).then(
 		function(data) {
+			$rootScope.currentOrga = data;
 			console.log(data);
 		},
 		function(error) {
+			$rootScope.currentOrga = {"name": "one", "id": 1, "picture": "static/assets/images/orga_default.jpg"};
 			console.log(error);
 		});
 
