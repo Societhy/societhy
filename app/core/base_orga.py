@@ -1,6 +1,22 @@
 from flask import session, request, Response
+from bson import objectid, errors
 
 from models.organization import organizations, OrgaDocument
+
+def get_orga_document(user, _id=None, name=None):
+	orga = None
+	if _id:
+		try:
+			_id = objectid.ObjectId(_id)
+		except errors.InvalidId:
+			return {"data": "Not a valid ObjectId, it must be a 12-byte input or a 24-character hex string", "status": 400}
+		orga = organizations.find_one({"_id": _id})
+	elif name:
+		orga = list(organizations.find({"name": name}))
+	return {
+		"data": orga,
+		"status": 200
+	}	
 
 def create_orga(user, password, newOrga):
 	# first we have to build the smart contract and write it in '/societhy/contracts'

@@ -3,7 +3,10 @@ app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage
 	var ctrl = this;
 
 	ctrl.init = function() {
-		$http.get('/getOrganisation/'.concat($state.params.organization)).then(
+		console.log($state.params);
+		$http.post('/getOrganization', {
+			"id": $state.params.orga_id
+		}).then(
 		function(data) {
 			console.log(data);
 		},

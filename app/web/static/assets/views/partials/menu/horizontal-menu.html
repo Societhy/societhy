@@ -17,8 +17,8 @@
 					</li>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
-					<li ui-sref-active="active">
-						<a ui-sref="app.organization({organization: 'coucou'})"> <span translate="sidebar.nav.organisations.SAMPLE"/> </a>
+					<li ui-sref-active="active" ng-repeat="orga in user.organizations">
+						<a ui-sref="app.organization({orga_name: orga.name, orga_id: orga.id})"> {{ orga.name }} </a>
 					</li>
 				</ul>
 			</li>
@@ -30,8 +30,8 @@
 				<ul uib-dropdown-menu>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.projects.MYPROJECTS">
 					</li>
-					<li ui-sref-active="active">
-						<a ui-sref="app.project({organisation: coucou})"> <span translate="sidebar.nav.projects.SAMPLE"/> </a>
+					<li ui-sref-active="active" ng-repeat="project in user.projects">
+						<a ui-sref="app.project({project_name: project.name, project_id: project.id})"> {{ project.name }} </a>
 					</li>
 				</ul>
 			</li>

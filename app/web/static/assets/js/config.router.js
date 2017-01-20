@@ -59,12 +59,20 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'User Profile'
         }
     }).state('app.organization', {
-        url: '/orga/:organization',
+        url: '/orga/:orga_name/:orga_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
         resolve: loadSequence('orgaMainCtrl'),
         title: 'Organisation dashboard',
         ncyBreadcrumb: {
             label: 'Organisation'
+        }
+    }).state('app.project', {
+        url: '/orga/:project_name/:project_id',
+        templateUrl: "static/assets/views/project_dashboard.html",
+        resolve: loadSequence('projectMainCtrl'),
+        title: 'Project dashboard',
+        ncyBreadcrumb: {
+            label: 'Project'
         }
     }).state('app.registration', {
         url: '/registration',

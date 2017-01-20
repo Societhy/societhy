@@ -31,9 +31,9 @@
             <li>
                 <form role="search" class="navbar-form main-search">
                     <div class="form-group">
-                        <input type="text" name="username" ng-model="username" placeholder="{{ 'search.PLACEHOLDER' | translate }}" class="form-control">
+                        <input type="text" name="username" ng-model="search" placeholder="{{ 'search.PLACEHOLDER' | translate }}" class="form-control">
                         <button class="btn search-button" type="submit">
-                            <i class="fa fa-search" ng-click="searchForUser(username)"></i>
+                            <i class="fa fa-search" ng-click="searchForAnything(search)"></i>
                         </button>
                     </div>
                 </form>

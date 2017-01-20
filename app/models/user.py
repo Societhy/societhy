@@ -108,7 +108,8 @@ class UserCollection(Collection):
 		"firstname",
 		"lastname",
 		"city",
-        "contact_list"
+        "contact_list",
+        "organizations"
 	]
 
 	public_info = [

@@ -2,9 +2,22 @@ from flask import Blueprint, Response, render_template, request, jsonify, make_r
 
 from core import base_orga
 
-from api import requires_auth, ensure_fields
+from models.organization import organizations
+from api import requires_auth, ensure_fields, populate_user
 
 router = Blueprint('orga', __name__)
+
+@router.route('/getOrganization', methods=['POST'])
+@populate_user
+def get_orga_document(user):
+	if 'id' in request.json:
+		ret = base_orga.get_orga_document(user, _id=request.json.get('id'))
+		return make_response(jsonify(ret.get('data')), ret.get('status'))
+	elif 'name' in request.json:
+		ret = base_orga.get_orga_document(user, name=request.json.get('name'))
+		return make_response(jsonify(ret.get('data')), ret.get('status'))
+	else:
+		return make_response("Wrong request format", 400)
 
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
@@ -25,7 +38,8 @@ def join_orga(user):
 		return make_response("Wrong request format", 400)
 
 @router.route('/getOrgaMemberList/<token>/<orga_id>', methods=['GET'])
-def get_orga_member_list(token, orga_id):
+@populate_user
+def get_orga_member_list(user, token, orga_id):
 	if orga_id:
 		ret = base_orga.get_orga_member_list(token, orga_id)
 		return make_response(jsonify(ret.get('data')), ret.get('status'))

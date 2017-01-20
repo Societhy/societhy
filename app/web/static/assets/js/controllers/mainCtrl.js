@@ -173,6 +173,7 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
         $rootScope.search = search;
     	$state.go("app.user", {"name": search});
     }
+    
     // Function that find the exact height and width of the viewport in a cross-browser way
     var viewport = function () {
         var e = window, a = 'inner';
