@@ -10,7 +10,7 @@
           <uib-tab heading="Overview" href="">
             <div ng-controller="OrgaMainController as ctrl">
               <h1>{{ currentOrga.name }}</h1>
-              <div class="row" style="display:flex;align-items:center; border-style: solid;">
+              <div class="row border-solid vertical-center">
 
                 <div class="col-md-6 inline-block border-solid">
                   <div class="user-left user-image">
@@ -44,15 +44,27 @@
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px" >              
-                  <h2>Projects</h1>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                  <h2>Projects</h2>
                   
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
-                  <h1>Members</h1>
+                  <h2>News</h2>
                   
                 </div>
               </div>
+
+              <div class="row margin-top-20" >
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                  <h2>Proposals</h2>
+                  
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                  <h2>Members</h2>
+                  
+                </div>
+              </div>
+
             </div>
           </uib-tab>
 
