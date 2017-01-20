@@ -32,7 +32,7 @@ class ContractDocument(Document):
 			self["is_deployed"] = False
 			self["name"] = contract
 			self["contract_file"] = path.join(self.contract_directory, contract + ".sol")
-			self["owner"] = owner.get('eth').get('mainKey') if type(owner) is User else owner
+			self["owner"] = owner.get('account') if type(owner) is User else owner
 
 	def compile(self):
 		compiled = compile_file(self["contract_file"]).get(self["name"])

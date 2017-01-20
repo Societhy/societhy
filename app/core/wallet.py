@@ -25,7 +25,7 @@ def refresh_balance(user, account=None):
 			"status": 200
 		}
 	elif not account:
-		balance = eth_cli.eth_getBalance(user.get('eth').get('mainKey'))
+		balance = eth_cli.eth_getBalance(user.get('account'))
 		return {
 			"data": wei_to_ether(balance),
 			"status": 200

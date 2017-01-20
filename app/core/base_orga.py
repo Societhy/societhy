@@ -13,6 +13,8 @@ def get_orga_document(user, _id=None, name=None):
 		orga = organizations.find_one({"_id": _id})
 	elif name:
 		orga = list(organizations.find({"name": name}))
+		if len(orga) == 1:
+			orga = orga[0]
 	return {
 		"data": orga,
 		"status": 200
@@ -34,7 +36,7 @@ def create_orga(user, password, newOrga):
 
 def join_orga(user, password, orga_id):
 	# first we find the orga
-	orga = organizations.find_one({"_id": orga_id})
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
 	# then we call the model's method and wait for the model to be updated
@@ -45,7 +47,7 @@ def join_orga(user, password, orga_id):
 	}
 
 def get_orga_member_list(token, orga_id):
-	orga = organizations.find_one({"_id": orga_id})
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
 	member_list = orga.get_member_list()
@@ -55,7 +57,7 @@ def get_orga_member_list(token, orga_id):
 	}
 
 def donate_to_orga(user, password, orga_id, donation):
-	orga = organizations.find_one({"_id": orga_id})
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
 	donation_amount = donation.get('amount')
@@ -67,14 +69,14 @@ def donate_to_orga(user, password, orga_id, donation):
 	}
 
 def create_project_from_orga(user, password, orga_id, newProject):
-	orga = organizations.find_one({"_id": orga_id})
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	return {
 		"data": "",
 		"status": 200
 	}
 
 def leave_orga(user, password, orga_id):
-	orga = organizations.find_one({"_id": orga_id})
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	return {
 		"data": "",
 		"status": 200

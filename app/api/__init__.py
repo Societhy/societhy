@@ -11,8 +11,10 @@ def ensure_fields(fields, request_data):
 			ensure_fields(field.keys(), field.values())
 		else:
 			if field not in request_data:
+				print('----------', field, "not in", request_data.keys())
 				return False
-
+	return True
+	
 # decorator that checks if a user is identified
 def requires_auth(f):
 	@wraps(f)

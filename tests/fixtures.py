@@ -26,15 +26,15 @@ contracts.delete_many({})
 
 test_user = {
 	"name": "basic",
+	"account": None,
 	"eth": {
-		"mainKey": None,
 		"keys": {}
 	}
 }
 test_miner = {
 	"name": "miner",
+	"account": None,
 	"eth": {
-		"mainKey": None,
 		"keys": {}
 	}
 }

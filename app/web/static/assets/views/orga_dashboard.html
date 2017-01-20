@@ -14,9 +14,9 @@
 
                 <div class="col-md-6 inline-block border-solid">
                   <div class="user-left user-image">
-                    <img ng-src="{{currentOrga.picture}}" alt="..." class="img-rounded">
+                    <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                   </div>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success">Join</button>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success" ng-click="ctrl.joinOrga()">Join</button>
                   <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger">Leave</button>
                 </div>
 

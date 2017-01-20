@@ -121,7 +121,10 @@ def sign_up(newUser):
 				
 		user = UserDocument(newUser)
 		user.save()
-		user.populate_key()
+		if user.get('eth'):
+			del user["eth"]
+			user.populate_key()
+
 		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
 					"socketid": newUser.get('socketid')})
 
@@ -131,7 +134,9 @@ def sign_up(newUser):
 			return failure
 		user = UserDocument(newUser)
 		user.save()
-		user.populate_key()
+		if user.get('eth'):
+			del user["eth"]
+			user.populate_key()
 		user.generatePersonalDataFromSocial()
 		return {"data": newUser, "status": 200}
 

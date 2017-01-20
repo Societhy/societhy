@@ -39,9 +39,11 @@ class OrgaDocument(Document):
 			self.contract = Contract(contract, owner)
 			self.contract.compile()
 		if owner:
-			self["owner"] = owner.get('eth').get('mainKey') if type(owner) is User else owner			
+			self["owner"] = owner.get('account') if type(owner) is User else owner			
 
+	####
 	# CONTRACT SPECIFIC METHODS
+	####
 
 	def _load_contract(self):
 		if self.get('contract_id'):
@@ -53,7 +55,7 @@ class OrgaDocument(Document):
 			from_ = self["owner"]
 		elif isinstance(from_, UserDocument):
 			users_socket = [from_.get('socketid')]
-			from_ = from_.get('eth').get('mainKey')
+			from_ = from_.get('account')
 		else:
 			users_socket = []
 
@@ -62,7 +64,9 @@ class OrgaDocument(Document):
 		return tx_hash
 
 
+	####
 	# CALLBACKS FOR UPDATE
+	####
 
 	def register(self, tx_receipt):
 		self.contract["address"] = tx_receipt.get('contractAddress')
@@ -71,7 +75,8 @@ class OrgaDocument(Document):
 		self.save()
 
 	def memberJoined(self, logs):
-		# decode logs, find user and add its id (?) to member list
+		# decode logs, find user and add its id, key, name (?) to member list
+
 		print("USER JOINED", logs)
 
 	def memberLeft(self, logs):
@@ -84,18 +89,49 @@ class OrgaDocument(Document):
 	def projectCreated(self, logs):
 		print("NEW PROJECT == ", logs)
 
+
+	####
+	# RIGHTS MANAGEMENT
+	####
+
+	def setRights(self, user, actions, rights):
+		pass
+
+	def can(self, user, action):
+		# get action signature
+		# get member key
+		member = self.getMember(user)
+		# if user is None of has no key or is not a member, check if method is public
+		if member:
+			self.contract.checkRight(member.get('address'))
+		# call contract function with (key, sig) and return bool
+		pass
+
+	####
 	# GENERIC METHODS
+	####
+
+	def getMember(self, user):
+		if isinstance(user, UserDocument):
+			account = user.get('account')
+			if account in self.members:
+				return self.members[account]
+			else:
+				for member in self.members.values():
+					if user.get('_id')  == member.get('_id'):
+						return member
+		return None
 
 	def getTotalFunds(self):
 		return self.contract.get_balance()
 
 	def get_member_list(self):
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
-		memberList = users.find({"eth.mainKey": {"$in": memberAddressList}}, users.public_info)
+		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
 	def join(self, user, password=None):
-		from_ = user.get('eth').get('mainKey')
+		from_ = user.get('account')
 		tx_hash = self.contract.call('join', local=False, from_=from_, password=password, args=[user.get('name')])
 		if tx_hash.startswith('0x'):
 			topics = make_topics(self.contract.get_abi("newMember").get('signature'), from_)
@@ -106,7 +142,7 @@ class OrgaDocument(Document):
 			return False
 
 	def leave(self, user, password=None):
-		from_ = user.get('eth').get('mainKey')
+		from_ = user.get('account')
 		tx_hash = self.contract.call('leave', local=False, from_=from_, password=password)
 		if tx_hash.startswith('0x'):
 			topics = make_topics(self.contract.get_abi("memberLeft").get('signature'), from_)
@@ -119,7 +155,7 @@ class OrgaDocument(Document):
 		if toWei(user.refresh_balance()) < amount:
 			return False
 
-		from_ = user.get('eth').get('mainKey')
+		from_ = user.get('account')
 		tx_hash = self.contract.call('donate', local=False, from_=from_, password=password, value=amount)
 		if tx_hash.startswith('0x'):
 			topics = make_topics(self.contract.get_abi("newDonation").get('signature'), from_)
@@ -132,7 +168,7 @@ class OrgaDocument(Document):
 		return None
 
 	def createProject(self, user, project, password=None):
-		from_ = user.get('eth').get('mainKey')
+		from_ = user.get('account')
 		tx_hash = self.contract.call('createProject', local=False, from_=from_, password=password, args=[project])
 		if tx_hash.startswith('0x'):
 			bw.push_event(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated]))
