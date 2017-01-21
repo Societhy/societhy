@@ -18,12 +18,12 @@ from ethjsonrpc import wei_to_ether
 
 def test_create_orga(miner):
 	bw.run()
-	while miner.refresh_balance() < 1:
+	while miner.refreshBalance() < 1:
 		bw.waitBlock()
 
 	test_orga = {"name": "basic_orga"}
 	new_orga = Organization(contract='basic_orga', doc=test_orga, owner=miner)
-	tx_hash = new_orga.deploy_contract(password='simon', args=["bite"])
+	tx_hash = new_orga.deployContract(from_=miner, password='simon', args=["bite"])
 	
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
@@ -39,11 +39,11 @@ def test_join(miner, testOrga):
 	tx_hash = testOrga.join(miner, password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newMember")
-	assert miner.get('name') in [member.get('name') for member in testOrga.get_member_list()]
+	assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
 	bw.pause()
 
 def test_memberlist(testOrga):
-	result = testOrga.get_member_list()
+	result = testOrga.getMemberList()
 	assert len(result) == 1
 	assert result[0].get('name') == 'miner'
 
@@ -65,7 +65,7 @@ def test_leave(miner, testOrga):
 	tx_hash = testOrga.leave(miner, password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitEvent("memberLeft")
-	assert miner.get('name') not in [member.get('name') for member in testOrga.get_member_list()]
+	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 	bw.pause()
 
 def test_createproject(miner, testOrga):

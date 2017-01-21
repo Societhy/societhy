@@ -8,7 +8,7 @@ from models import users
 from models.clients import eth_cli
 
 
-def refresh_all_balances(user):
+def refreshAllBalances(user):
 	accounts = user.get('eth').get('keys')
 	ret = dict()
 	for account in accounts.keys():
@@ -18,10 +18,10 @@ def refresh_all_balances(user):
 		"status": 200
 	}
 
-def refresh_balance(user, account=None):
+def refreshBalance(user, account=None):
 	if account in user.get('eth').get('keys').keys():
 		return {
-			"data": user.refresh_balance(account),
+			"data": user.refreshBalance(account),
 			"status": 200
 		}
 	elif not account:
@@ -38,15 +38,15 @@ def refresh_balance(user, account=None):
 
 def transfer(from_, to_, amount, local=False, password=None):
 	if not local:
-		ret = eth_cli.personal_unlockAccount(from_, password)
-		ret = eth_cli.transfer(from_, to_, amount)	
+		ret = eth_cli.personal_unlockAccount(from_.get('account'), password)
+		ret = eth_cli.transfer(from_.get('account'), to_, amount)	
 		return {
 			"data": ret,
 			"status": 200
 		}
 
 
-def get_tx_history(user, account):
+def getTxHistory(user, account):
 	# r = requests.get('https://etherchain.org/api/account/%s/tx/0' % account)
 	print("REQUESTING : ", "https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0")
 	r = requests.get('https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0')

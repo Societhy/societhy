@@ -1,8 +1,12 @@
+import scrypt
+
 from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
 from .clients import client, eth_cli
 from ethjsonrpc import wei_to_ether
+
+from rlp.utils import encode_hex
 
 class UserDocument(Document):
 
@@ -26,11 +30,25 @@ class UserDocument(Document):
 		print("USER MADE DONATION", logs)
 	# KEY MANAGEMENT
 
-	def populate_key(self):
-		from core.keys import gen_base_key
-		newKey = gen_base_key()
+	def unlockAccount(self, password=None):
+		if self["password_type"] == "remote_hashed":
+			password = self.hashPassword(self['password'])
+		elif self["password_type"] == "local_hashed" and password is not None:
+			password = self.hashPassword(password)
+
+		if password is not None:
+			return eth_cli.personal_unlockAccount(self["account"], password)
+		else:
+			return False
+
+	def hashPassword(self, password):
+		return encode_hex(scrypt.hash(password, "rajoute du sel dans les carottes rapées")).decode('utf-8')
+
+	def populateKey(self):
+		from core.keys import genBaseKey
+		newKey = genBaseKey(self["password"])
 		if newKey:
-			self.add_key(newKey.get('address'), local=False, keyfile=newKey.get('file'))
+			self.addKey(newKey.get('address'), local_account=False, password_type="remote_hashed", keyfile=newKey.get('file'))
 		else:
 			self["account"] = None
 			self["eth"] = {"keys": {}}
@@ -41,29 +59,37 @@ class UserDocument(Document):
 		if 'social' in self:
 			for socialProvider, socialData in self['social'].items():
 				for key, value in socialData.items():
-					# print(key)
-					# print(value)
 					if key in fields and key not in self:
 						self[key] = value
 		self.save_partial()
 
-	def add_key(self, account, local, balance=0, keyfile=None):
+	def setDefaultKey(self, account):
+		if account in self.get('eth').get('keys'):
+			defaultKey = self["eth"]["keys"][account]
+			self["account"] = defaultKey.get('address')
+			self["local_account"] = defaultKey.get('local_account')
+			self["password_type"] = defaultKey.get('password_type')
+			self.save_partial()
+
+	def addKey(self, account, local_account, password_type, balance=0, keyfile=None):
 		if self.get('account') is None:
 			self["account"] = account
-			self["local_account"] = local
+			self["local_account"] = local_account
+			self["password_type"] = password_type
 
 		if not self.get('eth'):
 			self["eth"] = {"keys":{}}
 
 		self["eth"]["keys"][account] = {
 			"balance": balance,
-			"local": local,
+			"local_account": local_account,
+			"password_type": password_type,
 			"address": account,
 			"file": keyfile
 		 }
 		self.save_partial()
 
-	def remove_key(self, key, local):
+	def removeKey(self, key, local_account):
 		for publicKey in self["eth"]["keys"].keys():
 			if publicKey == key:
 				del self["eth"]["keys"][publicKey]
@@ -73,7 +99,7 @@ class UserDocument(Document):
 				self.save_partial()
 				return
 
-	def get_key(self, publicKey=None):
+	def getKey(self, publicKey=None):
 		if publicKey is None:
 			return self.get('account')
 		else:
@@ -82,7 +108,7 @@ class UserDocument(Document):
 					return self.get('eth').get('keys').get(key)
 			return None
 
-	def refresh_balance(self, address=None):
+	def refreshBalance(self, address=None):
 		address = address or self.get('account')
 		if address:
 			balance = wei_to_ether(eth_cli.eth_getBalance(address))

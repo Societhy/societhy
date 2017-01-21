@@ -6,7 +6,7 @@ from .clients import eth_cli
 from core.utils import to32bytes
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 
-def make_topics(signature, *args):
+def makeTopics(signature, *args):
 	
 	ret = list()
 	if signature:

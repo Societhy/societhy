@@ -38,7 +38,7 @@ def disconnect():
     Clients.pop(disconnect_cli.id, None)
 
 @socketio.on('send_message', namespace='/chat')
-def handle_message(data):
+def handleMessage(data):
     message = {
         'date': data['date'],
         'data': data['content'],
@@ -53,11 +53,11 @@ def handle_message(data):
     db_message.save()
 
 @socketio.on('init', namespace='/chat')
-def init_socket(data):
+def initSocket(data):
     NC_Clients[request.sid].init(data['id'])
 
 @socketio.on('join', namespace='/chat')
-def joined_chat(data):
+def joinedChat(data):
     last_messages = dumps(messages.find({"$or": [{'send_address': data['id'], 'recip_address': data['otherId']}, {"send_address": data['otherId'], "recip_address": data['id']}]}, {'_id': 0}).sort('_id', pymongo.ASCENDING).limit(50))
     if (data['id'] in Clients):
         emit("last_messages", last_messages, namespace='/chat', room=Clients[data['id']].sessionId)

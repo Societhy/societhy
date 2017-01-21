@@ -3,7 +3,7 @@ from bson import objectid, errors
 
 from models.organization import organizations, OrgaDocument
 
-def get_orga_document(user, _id=None, name=None):
+def getOrgaDocument(user, _id=None, name=None):
 	orga = None
 	if _id:
 		try:
@@ -20,7 +20,7 @@ def get_orga_document(user, _id=None, name=None):
 		"status": 200
 	}	
 
-def create_orga(user, password, newOrga):
+def createOrga(user, password, newOrga):
 	# first we have to build the smart contract and write it in '/societhy/contracts'
 	# then we need to check the dict newOrga if the data is correct
 	# then we build the Organization object providing : name of the contract (without '.sol'), the dict with all data, the owner (UserDocument)
@@ -34,7 +34,7 @@ def create_orga(user, password, newOrga):
 		"status": 200
 	}
 
-def join_orga(user, password, orga_id):
+def joinOrga(user, password, orga_id):
 	# first we find the orga
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
@@ -46,36 +46,36 @@ def join_orga(user, password, orga_id):
 		"status": 200
 	}
 
-def get_orga_member_list(token, orga_id):
+def getOrgaMemberList(token, orga_id):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	member_list = orga.get_member_list()
+	member_list = orga.getMemberList()
 	return {
 		"data": member_list,
 		"status": 200
 	}
 
-def donate_to_orga(user, password, orga_id, donation):
+def donateToOrga(user, password, orga_id, donation):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
 	donation_amount = donation.get('amount')
-	if user.refresh_balance() > donation_amount:
+	if user.refreshBalance() > donation_amount:
 		tx_hash = orga.donate(user, toWei(donation_amount), password=password)
 	return {
 		"data": tx_hash,
 		"status": 200
 	}
 
-def create_project_from_orga(user, password, orga_id, newProject):
+def createProjectFromOrga(user, password, orga_id, newProject):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	return {
 		"data": "",
 		"status": 200
 	}
 
-def leave_orga(user, password, orga_id):
+def leaveOrga(user, password, orga_id):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	return {
 		"data": "",

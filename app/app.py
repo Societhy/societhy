@@ -35,7 +35,7 @@ app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
 
 @app.after_request
-def add_header(response):
+def addHeader(response):
 	"""
 	Add headers to both force latest IE rendering engine or Chrome Frame,
 	and also to cache the rendered page for 10 minutes.
@@ -46,7 +46,7 @@ def add_header(response):
 	return response
 
 @app.route('/')
-def hello_world():
+def helloWorld():
 	return render_template("index.html")
 
 socketio = chat.socketio

@@ -17,7 +17,7 @@
                                 <td> {{ item.address }}</td>
                                 <td> {{ item.balance.toFixed(3)}}</td>
                                 <td nowrap>
-                                    <button type="button" id="{{ item.address.concat('dl') }}" class="btn btn-success btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDownloadKey(item)" ng-show="!item.local">
+                                    <button type="button" id="{{ item.address.concat('dl') }}" class="btn btn-success btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDownloadKey(item)" ng-show="!item.local_account">
                                         <span class="glyphicon glyphicon-download ladda-label"> Download</span>
                                     </button>
                                     <button width="50%" type="button" id="{{ item.address.concat('rm') }}" class="btn btn-danger btn-sm ladda-button" data-style="contract" ng-click="ctrl.loadDeleteKey(item)">

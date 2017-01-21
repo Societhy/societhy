@@ -12,12 +12,10 @@ from models import users, UserDocument
 from bson.objectid import ObjectId
 
 from core import keys
-from core.utils import deserialize_user
 
 from . import secret_key
 
 from rlp.utils import encode_hex
-# generates token for session
 
 def update(user, newData):
 	def recurse_update(user, newData):
@@ -36,14 +34,14 @@ def update(user, newData):
 		"status": 200}
 
 
-def updateUserField(user, newData):
-	def field_exist(data):
+def updateSingleUserField(user, newData):
+	def fieldExist(data):
 		if users.find({"_id": ObjectId(data["_id"])}).count() <= 0:
 			return {"data": "Cannot find the user and with the corresponding data. Please logout, login and try again",
 				"status": 401}
 		return False
 
-	error = field_exist(newData)
+	error = fieldExist(newData)
 	if error:
 		return error
 
