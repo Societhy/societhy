@@ -1,4 +1,4 @@
-from os import path
+from os import path, listdir
 
 from mongokat import Collection, Document
 
@@ -11,7 +11,14 @@ from ethereum.abi import encode_abi
 
 class ContractDocument(Document):
 
-	contract_directory = "/societhy/app/contracts"
+	contract_directory = "/societhy/contracts"
+	evm_code = None
+	abi = None
+	name = None
+	address = None
+	owner = None
+	balance = None
+	tx_history = list()
 
 	def __init__(self,
 				contract=None,
@@ -25,7 +32,7 @@ class ContractDocument(Document):
 			self["is_deployed"] = False
 			self["name"] = contract
 			self["contract_file"] = path.join(self.contract_directory, contract + ".sol")
-			self["owner"] = owner.get('eth').get('mainKey') if type(owner) is User else owner
+			self["owner"] = owner.get('account') if type(owner) is User else owner
 
 	def compile(self):
 		compiled = compile_file(self["contract_file"]).get(self["name"])
@@ -40,11 +47,10 @@ class ContractDocument(Document):
 			signature += ')'
 			abi_item["signature"] = signature
 
-	def deploy(self, from_, password, args=[]):
-		unlocked = eth_cli.personal_unlockAccount(from_, password)
+	def deploy(self, from_, args=[]):
 		evm_code = self["evm_code"]
 		if len(args):
-			constructor_abi = self.get_abi("constructor")
+			constructor_abi = self.getAbi("constructor")
 			types = [_input.get('type') for _input in constructor_abi.get('inputs')]
 			encoded_params = encode_abi(types, args)
 			encoded_params_hex = encode_hex(encoded_params).decode("utf-8")
@@ -53,17 +59,17 @@ class ContractDocument(Document):
 		self["creation_tx_hash"] = eth_cli.eth_sendTransaction(from_address=from_, gas=estimated_gas_cost, data=evm_code)
 		return self["creation_tx_hash"]
 
-	def get_abi(self, elem):
+	def getAbi(self, elem):
 		for abi_item in self.get('abi'):
 			if (elem == "constructor" and abi_item.get('type') == "constructor") or abi_item.get('name') == elem:
 				return abi_item
 
-	def get_balance(self):
-		return eth_cli.eth_getBalance(self["contract_address"])
+	def getBalance(self):
+		return eth_cli.eth_getBalance(self["address"])
 
-	def call(self, function, *args):
+	def call(self, function, local=True, **kwargs):
 
-		def compute_return_types(function_name, abi):
+		def computeReturnTypes(function_name, abi):
 			return_types = list()
 			signature = None
 			for function in abi:
@@ -74,8 +80,14 @@ class ContractDocument(Document):
 					break
 			return signature, return_types
 
-		signature, return_types = compute_return_types(function, self["abi"])
-		result = eth_cli.call(self["address"], signature, list(args), return_types)
+		signature, return_types = computeReturnTypes(function, self["abi"])
+		if local is True:
+			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
+		else:
+			from_ = kwargs.get('from_')
+			# password = kwargs.get('password')
+			# unlocked = eth_cli.personal_unlockAccount(from_, password)
+			result = eth_cli.call_with_transaction(from_, self["address"], signature, kwargs.get('args'), value=kwargs.get('value'), gas=kwargs.get('gas'))
 		return result[0] if len(result) == 1 else result
 
 	def send_tx(self, function, *args):

@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -53,12 +53,42 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.user', {
         url: '/user/:name',
         templateUrl: "static/assets/views/user_other_profile.html",
-        resolve: loadSequence('userOtherOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
+        resolve: loadSequence('userOtherOverviewCtrl', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
         title: 'user Profile',
         ncyBreadcrumb: {
             label: 'User Profile'
         }
+    }).state('app.organization', {
+        url: '/orga/:orga_name/:orga_id',
+        templateUrl: "static/assets/views/orga_dashboard.html",
+        resolve: loadSequence('orgaMainCtrl'),
+        title: 'Organisation dashboard',
+        ncyBreadcrumb: {
+            label: 'Organisation'
+        }
+    }).state('app.project', {
+        url: '/orga/:project_name/:project_id',
+        templateUrl: "static/assets/views/project_dashboard.html",
+        resolve: loadSequence('projectMainCtrl'),
+        title: 'Project dashboard',
+        ncyBreadcrumb: {
+            label: 'Project'
+        }
+    }).state('app.registration', {
+        url: '/registration',
+        resolve: loadSequence('CryptoJS'),
+        templateUrl: "static/assets/views/login_registration.html"
+    }).state('app.neworga', {
+        url: '/orga/new',
+        needs_auth: true,
+        templateUrl :"static/assets/views/wizard_orga.html",
+//        resolve: loadSequence(''),
+        title: "Create a new organisation",
+        ncyBreadcrumb: {
+            label: 'Organisation Creation'
+        }
     })
+
 
     .state('error', {
         url: '/error',
@@ -70,16 +100,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('error.500', {
         url: '/500',
         templateUrl: "static/assets/views/utility_500.html",
-    })
-
-    .state('login', {
-        url: '/login',
-        template: '<div ui-view class="fade-in-right-big smooth"></div>',
-        abstract: true
-    }).state('login.registration', {
-        url: '/registration',
-        resolve: loadSequence('OAuth', 'loginCtrl', 'walletCtrl', 'CryptoJS'),
-        templateUrl: "static/assets/views/login_registration.html"
     })
 
     // Landing Page route

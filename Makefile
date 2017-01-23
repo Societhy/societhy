@@ -18,11 +18,18 @@ build:
 
 build_test:
 	docker build --file Dockerfile_tests -t $(TEST_IMAGE) .
+
+force_build:
+	docker build --no-cache -t $(DOCKER_IMAGE) .
+
+force_build_test:
+	docker build --no-cache --file Dockerfile_tests -t $(TEST_IMAGE) .
 	
 local_test:
 	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
 	sleep 3
 	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
+	# sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` /bin/bash'
 	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` pytest -svv tests/'
 	sh -c "docker stop `docker ps | grep societhy/tests | cut -f 1 -d " "`"
 
@@ -37,8 +44,10 @@ shell:
 	@make stop
 
 mine:
-	docker-compose -f utils/docker-compose.yaml up -d test_local_mining_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
+	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
+	sleep 3
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` /bin/bash'
 	@make stop
 
 stop:

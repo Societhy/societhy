@@ -20,23 +20,24 @@ def login():
 @router.route('/logout')
 @requires_auth
 def logout(user):
+	# print("logout", user)
 	ret = auth.logout(user)
 	return jsonify(ret)
 
 @router.route('/newUser', methods=['POST'])
-def sign_up():
-	ret = auth.sign_up(request.json)
+def signUp():
+	ret = auth.signUp(request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/checkTokenValidity/<token>')
-def check_token_validity(token):
-	ret = auth.check_token_validity(token)
+def checkTokenValidity(token):
+	ret = auth.checkTokenValidity(token)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/deleteUser/<user>')
 @requires_auth
-def delete_user(user):
-	ret = auth.delete_user(user)
+def deleteUser(user):
+	ret = auth.deleteUser(user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 #####################
@@ -51,12 +52,24 @@ def update(user):
 
 @router.route('/updateSingleUserField', methods=['POST'])
 @requires_auth
-def update_single_user_field(user):
-	ret = user_management.updateUserField(user,request.json)
+def updateSingleUserField(user):
+	ret = user_management.updateSingleUserField(user,request.json)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/addToContact', methods=['POST'])
+@requires_auth
+def addToContactList(user):
+    ret = user_management.addToContactList(user, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/delFromContact', methods=['POST'])
+@requires_auth
+def delFromContactList(user):
+    ret = user_management.delFromContactList(user, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/findUser', methods=['POST'])
-def find_user():
+def findUser():
 	ret = user_management.findUser(request.json)
 	return jsonify(ret.get('data')), ret.get('status')
 
@@ -67,22 +80,22 @@ def find_user():
 
 @router.route('/genLinkedKey', methods=['POST'])
 @requires_auth
-def gen_linked_key(user):
-	ret = keys.gen_linked_key(user, request.json.get('password'))
+def genLinkedKey(user):
+	ret = keys.genLinkedKey(user, request.json.get('password'))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/keyWasGenerated/<address>')
 @requires_auth
-def key_was_generated(user, address):
-	ret = keys.key_was_generated(user, address)
+def keyWasGenerated(user, address):
+	ret = keys.keyWasGenerated(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/importNewKey', methods=['POST'])
 @requires_auth
-def import_new_key(user):
+def importNewKey(user):
 	keyFile = request.files.get("key")
 	if keyFile and keyFile.content_type == 'text/plain':
-		ret = keys.import_new_key(user, request.files.get("key"))
+		ret = keys.importNewKey(user, request.files.get("key"))
 	else:
 		ret = {
 			"data": "Bad file type",
@@ -92,14 +105,14 @@ def import_new_key(user):
 
 @router.route('/exportDeleteKey/<address>')
 @requires_auth
-def export_and_delete_key(user, address):
-	ret = keys.export_key(user, address, delete=True)
+def exportDeleteKey(user, address):
+	ret = keys.exportKey(user, address, delete=True)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/exportKey/<address>')
 @requires_auth
-def export_key(user, address):
-	ret = keys.export_key(user, address)
+def exportKey(user, address):
+	ret = keys.exportKey(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 
@@ -109,20 +122,20 @@ def export_key(user, address):
 
 @router.route('/getAllBalances')
 @requires_auth
-def get_all_balance(user):
-	ret = wallet.refresh_all_balances(user)
+def getAllBalance(user):
+	ret = wallet.refreshAllBalances(user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/getBalance/<address>')
 @requires_auth
-def get_balance(user, address):
-	ret = wallet.refresh_balance(user, address)
+def getBalance(user, address):
+	ret = wallet.refreshBalance(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/getTxHistory/<address>')
 @requires_auth
-def get_tx_history(user, address):
-	ret = wallet.get_tx_history(user, address)
+def getTxHistory(user, address):
+	ret = wallet.getTxHistory(user, address)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 ####################

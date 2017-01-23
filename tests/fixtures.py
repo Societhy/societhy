@@ -26,27 +26,25 @@ contracts.delete_many({})
 
 test_user = {
 	"name": "basic",
+	"account": None,
 	"eth": {
-		"mainKey": None,
 		"keys": {}
 	}
 }
 test_miner = {
 	"name": "miner",
+	"account": None,
 	"eth": {
-		"mainKey": None,
 		"keys": {}
 	}
 }
-
-test_orga = {"name": "basic_orga"}
 
 users.insert_one(test_user)
 users.insert_one(test_miner)
 
 test_miner = users.find_one({"name": "miner"})
 with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
-	keys.import_new_key(test_miner, f)
+	keys.importNewKey(test_miner, f)
 
 @pytest.fixture(scope='module')
 def app():
@@ -64,4 +62,5 @@ def miner():
 
 @pytest.fixture(scope='module')
 def testOrga(miner):
-	return Organization(contract='greeter', doc=test_orga, owner=miner)
+	return organizations.find_one({"name": "basic_orga"}
+)

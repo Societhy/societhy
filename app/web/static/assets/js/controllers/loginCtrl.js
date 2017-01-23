@@ -13,14 +13,16 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 				$http.post('/login', {
-					"id": btoa(ctrl.username + ':' + ctrl.password)
+					"id": btoa(ctrl.username + ':' + ctrl.password),
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
-					sessionStorage.user = JSON.stringify(response.data.user);
+					$sessionStorage.user = JSON.stringify(response.data.user);
 					$sessionStorage.SociethyToken = response.data.token;
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -65,15 +67,17 @@ ctrl.fb_register = function ()
             console.log(userData);
             $http.post('/newUser',
                 {"social" : 
-                {"facebook" :
-                {
-                    "firstname" : userData.first_name,
-                    "lastname" : userData.last_name,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.picture.data.url
-                }}}
-                ).then(function(response) {
+	                {"facebook" :
+    		            {
+            		        "firstname" : userData.first_name,
+                    		"lastname" : userData.last_name,
+	        	            "id" : userData.id,
+    	       		        "email" : userData.email,
+        	   	         	"pictureURL" : userData.picture.data.url
+	        	        }
+    	        	},
+    	        "socketid": $rootScope.sessionId
+			}).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -90,15 +94,17 @@ ctrl.twitter_register = function ()
         result.me().done(function(userData) {
             $http.post('/newUser',
                 {"social" : 
-                {"twitter" :
-                {
-                    "firstname" : userData.name,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.avatar,
-                    "url" : userData.url,
-                }}}
-                ).then(function(response) {
+                	{"twitter" :
+	                {
+	                    "firstname" : userData.name,
+	                    "id" : userData.id,
+	                    "email" : userData.email,
+	                    "pictureURL" : userData.avatar,
+	                    "url" : userData.url,
+	                }
+	            },
+	            "socketid": $rootScope.sessionId
+	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -121,8 +127,9 @@ OAuth.popup('linkedin').done(function(result) {
                     "id" : userData.id,
                     "pictureURL" : userData.avatar,
                     "url" : userData.url,
-                }}}
-                ).then(function(response) {
+                }},
+	            "socketid": $rootScope.sessionId
+	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -146,8 +153,9 @@ OAuth.popup('github').done(function(result) {
                     "pictureURL" : userData.avatar,
                     "company" : userData.company,
                     "alias" : userData.alias
-                }}}
-                ).then(function(response) {
+                }},
+            "socketid": $rootScope.sessionId
+        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -175,8 +183,9 @@ ctrl.google_register = function ()
                     "url" : userData.url,
                     "company" : userData.company
 
-                }}}
-                ).then(function(response) {
+                }},
+            "socketid": $rootScope.sessionId
+        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
                     console.log(error);
@@ -195,7 +204,8 @@ ctrl.coinbase_connect = function ()
         result.me().done(function (data) {
 				$http.post('/login', {
 					"provider": "coinbase",
-					"socialId": data.id
+					"socialId": data.id,
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -203,6 +213,7 @@ ctrl.coinbase_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');					
 				}, function(error) {
 					console.log(error);
 				});
@@ -217,7 +228,8 @@ ctrl.fb_connect = function ()
         facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
 				$http.post('/login', {
 					"provider": "facebook",
-					"socialId": userData.id
+					"socialId": userData.id,
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -225,6 +237,7 @@ ctrl.fb_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');					
 				}, function(error) {
 					console.log(error);
 				});
@@ -240,7 +253,8 @@ ctrl.twitter_connect = function ()
         result.me().done(function(userData) {
 				$http.post('/login', {
 					"provider": "twitter",
-					"socialId": userData.id
+					"socialId": userData.id,
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -248,6 +262,7 @@ ctrl.twitter_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -262,7 +277,8 @@ OAuth.popup('linkedin').done(function(result) {
     result.me().done(function(userData) {
 				$http.post('/login', {
 					"provider": "linkedin",
-					"socialId": userData.id
+					"socialId": userData.id,
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -270,6 +286,7 @@ OAuth.popup('linkedin').done(function(result) {
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -284,7 +301,8 @@ OAuth.popup('github').done(function(result) {
     result.me().done(function(userData) {
 				$http.post('/login', {
 					"provider": "github",
-					"socialId": userData.id
+					"socialId": userData.id,
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -292,6 +310,7 @@ OAuth.popup('github').done(function(result) {
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -308,7 +327,8 @@ ctrl.google_connect = function ()
             console.log(userData);
 				$http.post('/login', {
 					"provider": "google",
-					"socialId": userData.id
+					"socialId": userData.id,
+					"socketid": $rootScope.sessionId					
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -316,6 +336,7 @@ ctrl.google_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
+                    $rootScope.$emit("loadChat", '');
 				}, function(error) {
 					console.log(error);
 				});
@@ -342,11 +363,14 @@ ctrl.google_connect = function ()
 				birthday: ctrl.birthday || "",
 				gender: ctrl.gender || "",
 				address: ctrl.address || "",
-				city: ctrl.city || ""
+				city: ctrl.city || "",
+                contact_list: [],
+                socketid: $rootScope.sessionId
 			}).then(function(response) {
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
 				$state.go("app.me", ctrl)
 				},
 				function(error) {
@@ -379,7 +403,6 @@ ctrl.google_connect = function ()
 	*/
 	function updateSubmitButtonState () {
 	    if ($(".formChecker.disabled").length != 4) {
-		console.log(2);
 	    	$("button#submit").prop("disabled", true);
 		$("#beforeSubmit").show();
 	    }
@@ -425,7 +448,7 @@ ctrl.google_connect = function ()
 	** Check Username format
 	*/
 	$("form input[name='username']").on("change", function() {
-	    var re = /^[a-zA-Z0-9_-]{6,20}$/;
+	    var re = /^[a-zA-Z0-9_-]{3,20}$/;
 	    if (!re.test($(this).val())) {
 		$("#usernameCheck").addClass("enabled");
 		$("#usernameCheck").removeClass("disabled");
@@ -441,7 +464,7 @@ ctrl.google_connect = function ()
 	** Check the requierment for password
 	*/
 	$("form input[name='password']").on("change", function() {
-	    if ($(this).val().length < 8 || $(this).val().length > 20 ||
+	    if ($(this).val().length < 4 || $(this).val().length > 20 ||
 		$(this).val().indexOf(" ") != -1) {
 		$("#passwordCheck").addClass("enabled");
 		$("#passwordCheck").removeClass("disabled");
@@ -470,9 +493,7 @@ ctrl.google_connect = function ()
 	});
     }
 
-    if ($location.path() == "/login/registration") {
     	registration_checker();
-    }
 
 
     /*

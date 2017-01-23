@@ -29,11 +29,23 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3 flask-socketio eventlet"
 
 RUN pip3 install $PIP_PACKAGES
 
 RUN pip3 install ethereum --upgrade
+
+RUN git clone https://github.com/pricingassistant/mongokat.git && \
+    cd mongokat && \
+    git pull && \
+    python3 setup.py install && \
+    cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
+
+WORKDIR /societhy
+
+COPY ./utils /societhy/utils
+
+RUN bash /societhy/utils/install_parity.sh
 
 # INSTALL our own ethjsonrpc module
 
@@ -42,20 +54,6 @@ RUN git clone https://github.com/simonvadee/ethjsonrpc.git && \
         git pull && \
         python3 setup.py install && \
         cp -r ethjsonrpc /usr/local/lib/python3.5/dist-packages/ethjsonrpc
-
-RUN git clone https://github.com/pricingassistant/mongokat.git && \
-    cd mongokat && \
-    git pull && \
-    python3 setup.py install && \
-    cp -r mongokat /usr/local/lib/python3.5/dist-packages/mongokat
-
-# INSTALL PARITY
-
-WORKDIR /societhy
-
-COPY ./utils /societhy/utils
-
-RUN bash /societhy/utils/install_parity.sh
 
 ENV IP="172.17.0.2"
 

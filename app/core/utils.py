@@ -14,18 +14,28 @@ def fromWei(value):
 def toWei(value):
 	return value * (10 ** 18)
 
-def serialize_user(user):
+def serializeUser(user):
 	serialized = copy(user)
 	serialized.update({"_id": ObjectId(user.get('_id'))})
 	return serialized
 
-def deserialize_user(user):
+def deserializeUser(user):
 	deserialized = copy(user)
 	deserialized.update({"_id": str(user.get('_id'))})
 	return deserialized
 
-def normalize_address(address, hexa=False):
+def normalizeAddress(address, hexa=False):
 	if hexa is True:
 		return address if address.startswith("0x") else '0x' + address
 	else:
 		return address[2:] if address.startswith("0x") else address
+
+def to32bytes(data): 
+    data = data.replace('0x', '')
+    padding_lenght = 64 - len(data)
+    return '0x' + '0' * padding_lenght + data
+
+def to20bytes(data):
+	if len(data) > 40:
+		data = data[-40:]
+	return '0x' + data

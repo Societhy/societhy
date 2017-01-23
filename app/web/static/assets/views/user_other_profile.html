@@ -20,7 +20,9 @@
                                     <div class="user-left">
 					<div class="center">
                                             <h4>{{profile.firstname}} {{profile.lastname}}</h4>
-                                            <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+                                            <button type="button" class="btn btn-info btn-xl" ng-click="addToContact()" ng-disabled="alreadyContact">
+                                                Add contact
+                                            </button>
 						<div class="user-image">
                                                     <div class="thumbnail">
 							<img ng-src="{{profileInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">

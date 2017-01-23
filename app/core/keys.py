@@ -10,7 +10,7 @@ from flask import session, request, Response
 from models import users
 from models.clients import eth_cli
 
-from core.utils import normalize_address, fromWei
+from core.utils import normalizeAddress, fromWei
 
 from rlp.utils import encode_hex
 
@@ -22,53 +22,53 @@ class KeyFormatError(Exception):
 class KeyExistsError(Exception):
 	pass
 
-def gen_base_key():
+def genBaseKey(password):
 
-	hashPassword = scrypt.hash("societhy", "rajoute du sel dans les carottes rapées")
+	hashPassword = scrypt.hash(password, "rajoute du sel dans les carottes rapées")
 	hashPassword = encode_hex(hashPassword).decode('utf-8')
 	dirContent = listdir(keyDirectory)
 	key = eth_cli.personal_newAccount(hashPassword)
 	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
 	return {"address": key, "file": keyFile}
 
-def gen_linked_key(user, password):
+def genLinkedKey(user, password):
 
-	def gen_key_remote(password):
-		hashPassword = scrypt.hash(password, "je trouve que les carottes ne sont pas assez salées")
+	def genKeyRemote(password):
+		hashPassword = scrypt.hash(password, "rajoute du sel dans les carottes rapées")
 		hashPassword = encode_hex(hashPassword).decode('utf-8')
 		dirContent = listdir(keyDirectory)
 		key = eth_cli.personal_newAccount(hashPassword)
 		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
 		return {"address": key, "file": keyFile}
 	
-	newKey = gen_key_remote(password)
-	user.add_key(newKey.get('address'), local=False, balance=0, file=newKey.get('file'))
+	newKey = genKeyRemote(password)
+	user.addKey(newKey.get('address'), local_account=False, password_type="local_hashed", balance=0, keyfile=newKey.get('file'))
 	return {
 		"data": newKey.get('address'),
 		"status": 200
 	}
 
-def key_was_generated(user, address):
-	address = normalize_address(address, hexa=True)
-	user.add_key(address, local=True, balance=fromWei(eth_cli.eth_getBalance(address)))
+def keyWasGenerated(user, address):
+	address = normalizeAddress(address, hexa=True)
+	user.addKey(address, local_account=True, password_type="local", balance=fromWei(eth_cli.eth_getBalance(address)))
 	return {
 		"data": "OK",
 		"status": 200
 	}
 
 
-def import_new_key(user, sourceKey):
+def importNewKey(user, sourceKey):
 
-	def is_ethereum_key(keyFile):
+	def isEthereumKey(keyFile):
 		required_entries = set(["address", "crypto", "id", "version"])
 		if not required_entries.issubset(set(keyFile.keys())):
 			raise KeyFormatError
 
-	def key_already_exists(address, userExistingAddresses):
-		if normalize_address(address, hexa=True) in userExistingAddresses.keys():
+	def keyAlreadyExists(address, userExistingAddresses):
+		if normalizeAddress(address, hexa=True) in userExistingAddresses.keys():
 			raise KeyExistsError
 
-	def import_key_remote(keyId, sourceKey):
+	def importKeyRemote(keyId, sourceKey):
 		keyFilename = "UTC--" + strftime("%Y-%m-%dT%H-%M-%S") + "." + str(clock())[2:] + "Z--" + keyId
 		with open(path.join(keyDirectory, keyFilename), 'w') as f:
 			f.write(sourceKey)
@@ -79,12 +79,12 @@ def import_new_key(user, sourceKey):
 
 	try:
 		key = json.loads(sourceKey)
-		is_ethereum_key(key)
-		key_already_exists(key.get('address'), user.get('eth').get('keys'))
-		keyFilename = import_key_remote(key.get('id'), sourceKey)
-		key["address"] = normalize_address(key.get('address'), hexa=True)
+		isEthereumKey(key)
+		keyAlreadyExists(key.get('address'), user.get('eth').get('keys'))
+		keyFilename = importKeyRemote(key.get('id'), sourceKey)
+		key["address"] = normalizeAddress(key.get('address'), hexa=True)
 		data = { "address" : key.get('address') }
-		user.add_key(key.get('address'), local=False, balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), file=keyFilename)
+		user.addKey(key.get('address'), local_account=False, password_type="local", balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), keyfile=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format not recognized"
 		status = 400
@@ -97,11 +97,11 @@ def import_new_key(user, sourceKey):
 		"status": status
 	}
 
-def export_key(user, address, delete=False):
-	exportedKey = user.get_key(address)
+def exportKey(user, address, delete=False):
+	exportedKey = user.getKey(address)
 	
-	if exportedKey and delete and exportedKey.get('local') is True:
-		user.remove_key(address, local=True)
+	if exportedKey and delete and exportedKey.get('local_account') is True:
+		user.removeKey(address, local_account=True)
 		return {
 			"data": None,
 			"status": 200
@@ -113,7 +113,7 @@ def export_key(user, address, delete=False):
 				with open(path.join(keyDirectory, keyFile), 'r') as f:
 					data = json.load(f)
 					if delete is True:
-						user.remove_key(address, local=False)
+						user.removeKey(address, local_account=False)
 						remove(f.name)
 					return {
 						"data": data,

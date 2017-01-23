@@ -1,0 +1,120 @@
+
+<!-- start: ORGA DASHBOARD PROFILE -->
+<div class="container-fluid container-fullw bg-white">
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <!-- start: USER TABSET -->
+        <uib-tabset class="tabbable">
+          <!-- start: TAB OVERVIEW -->
+          <uib-tab heading="Overview" href="">
+            <div ng-controller="OrgaMainController as ctrl">
+              <h1>{{ currentOrga.name }}</h1>
+              <div class="row border-solid vertical-center">
+
+                <div class="col-md-6 inline-block border-solid">
+                  <div class="user-left user-image">
+                    <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
+                  </div>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success" ng-click="ctrl.joinOrga()">Join</button>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger">Leave</button>
+                </div>
+
+                <div class="col-md-6 inline-block border-solid">              
+                  <div class="social-icons float-right">
+                    <ul>
+                      <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Twitter
+                        </a>
+                      </li>
+                      <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Facebook
+                        </a>
+                      </li>
+                      <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                        <a href="#" ng-click="" target="_blank">
+                          Google+
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row margin-top-20" >
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                  <h2>Projects</h2>
+                  
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                  <h2>News</h2>
+                  
+                </div>
+              </div>
+
+              <div class="row margin-top-20" >
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                  <h2>Proposals</h2>
+                  
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                  <h2>Members</h2>
+                  
+                </div>
+              </div>
+
+            </div>
+          </uib-tab>
+
+          <uib-tab heading="Activity" active="editActive">
+           <div data-ng-include=" 'static/assets/views/partials/user/coinbase_widget.html' "></div>
+           <div data-ng-include=" 'static/assets/views/partials/user/key_management_tab.html' "></div>
+         </uib-tab>
+
+         <uib-tab heading="Members">
+           <div class="container-fluid container-fullw ng-scope">
+             <div class="panel panel-white">
+              <div class="panel-body">
+                <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
+                 <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' ">
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </uib-tab>
+
+       <uib-tab heading="Sales">
+         <div class="container-fluid container-fullw ng-scope">
+           <div class="panel panel-white">
+            <div class="panel-body">
+              <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
+               <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' ">
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </uib-tab>
+
+     <uib-tab heading="Settings">
+       <div class="container-fluid container-fullw ng-scope">
+         <div class="panel panel-white">
+          <div class="panel-body">
+            <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
+             <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </uib-tab>
+   <!-- end: TAB ORGANISATIONS -->
+ </uib-tabset>
+ <!-- end: USER TABSET -->
+</div>
+</div>
+</div>
+</div>
+<!-- end: USER PROFILE -->

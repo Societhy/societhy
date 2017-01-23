@@ -7,7 +7,7 @@ from flask import session, request, Response
 from models import users, UserDocument
 
 from core import keys
-from core.utils import deserialize_user
+from core.utils import deserializeUser
 
 from . import secret_key
 
@@ -18,7 +18,7 @@ def login(credentials):
 
 	user = None
 
-	def auth_user(credentials):
+	def authUser(credentials):
 		if credentials:
 			credentials = str(b64decode(credentials), 'utf-8').split(':')
 			if len(credentials) == 2:
@@ -28,8 +28,7 @@ def login(credentials):
 					return user
 		return None
 
-	def auth_user_social(credentials):
-		print(credentials)
+	def authUserSocial(credentials):
 		if credentials["provider"] == "facebook":
 			return users.find_one({"social.facebook.id" : credentials["socialId"]})
 		if credentials["provider"] == "github":
@@ -44,7 +43,6 @@ def login(credentials):
 			return users.find_one({"social.google.id" : credentials["socialId"]})
 
 
-
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
 		return {
 			"data": "already logged in",
@@ -52,22 +50,18 @@ def login(credentials):
 		}
 
 	if "socialId" not in credentials:
-		print(credentials)
-		user = auth_user(credentials.get('id'))
+		user = authUser(credentials.get('id'))
 	else:
-		user = auth_user_social(credentials)
+		user = authUserSocial(credentials)
 
 	if user is not None:
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
-		token = token.replace('.', '|')
-		print('je mapelle token--------------------------')
-		print(token)
-		print('----------------------')
+		user["socketid"] = credentials.get('socketid')
 		session[token] = user
 		print(session.items())
 		return {"data": {
 					"token": token,
-					"user": deserialize_user(user)
+					"user": deserializeUser(user)
 				},
 				"status": 200}
 
@@ -81,9 +75,9 @@ def logout(user):
 	del session[token]
 	return {"success": True}
 
-def sign_up(newUser):
+def signUp(newUser):
 
-	def wrong_signup_request(newUser):
+	def wrongSignupRequest(newUser):
 		required_fields = ["name", "password", "email"]
 		for field in required_fields:
 			if newUser.get(field) is None:
@@ -91,13 +85,13 @@ def sign_up(newUser):
 						"error": "missing required field"}
 		return None
 
-	def user_exists(newUser):
+	def userExists(newUser):
 		if users.find({"email": newUser.get('email')}).count() > 0:
 			return {"data": "user already exists",
 					"status": 403}
 		return False
 
-	def social_user_exists(newUser):
+	def socialUserExists(newUser):
 		if 'facebook' in newUser["social"]:
 			if users.find({"social.facebook.id" : newUser["social"]["facebook"]["id"]}).count() > 0:
 				return {"data": "user already exists", "status": 403}
@@ -119,36 +113,43 @@ def sign_up(newUser):
 
 
 	if 'social' not in newUser:
-		failure = wrong_signup_request(newUser) or user_exists(newUser)
+		failure = wrongSignupRequest(newUser) or userExists(newUser)
 		if failure:
 			return failure
 
 		unencryptedPassword = newUser.get('password')
 		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), "du gros sel s'il vous plait")).decode('utf-8')
-				
 		user = UserDocument(newUser)
 		user.save()
-		user.populate_key()
-		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8'))})
+		if user.get('eth'):
+			del user["eth"]
+			user.populateKey()
+
+		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
+					"socketid": newUser.get('socketid')})
 
 	else:
-		failure = social_user_exists(newUser)
+		failure = socialUserExists(newUser)
 		if failure:
 			return failure
+
+		newUser["password"] = encode_hex(scrypt.hash("password", "du gros sel s'il vous plait")).decode('utf-8')
 		user = UserDocument(newUser)
 		user.save()
-		user.populate_key()
+		if user.get('eth'):
+			del user["eth"]
+			user.populateKey()
 		user.generatePersonalDataFromSocial()
 		return {"data": newUser, "status": 200}
 
 
 
 
-def check_token_validity(token):
+def checkTokenValidity(token):
 	return {"data": {"user": session.get(token)},
 			"status": 200}
 
-def delete_user(user):
+def deleteUser(user):
 	# _id = user.get("id")
 	# users.remove({"id": _id})
 	pass

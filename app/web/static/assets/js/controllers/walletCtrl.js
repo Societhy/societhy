@@ -10,7 +10,6 @@ app.controller('WalletController', function($rootScope, $http, $sessionStorage, 
 		if (ctrl.user == undefined) {
 			init();
 		}
-	
 		$http.get('/getAllBalances').then(function(response) {
 			$.each($rootScope.user.eth.keys, function(index, keyObject) {
 				keyObject.balance = response.data[keyObject.address];
