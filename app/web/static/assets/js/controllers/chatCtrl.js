@@ -23,6 +23,7 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
     $scope.setChat = function (id, firstname, lastname) {
         $scope.otherIdUser = id;
         $scope.otherName = firstname + " " + lastname;
+        $scope.chat = [];
 
         socketIO.emit('join', {'name': $scope.user.name,
         'id': $scope.selfIdUser,
@@ -59,6 +60,13 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
     socketIO.on('sessionId', function (data) {
         $rootScope.sessionId = data;
     })
+
+    socketIO.on('new_contact_list', function (data) {
+        $rootScope.user.contact_list = data;
+        $scope.user = $rootScope.user;
+        $scope.usersList = $scope.user.contact_list;
+    })
+
 
     $scope.sendMessage = function () {
         var newMessage = {

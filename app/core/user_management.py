@@ -65,6 +65,11 @@ def delFromContact(user, data):
     return {"data": user,
         "status": 200}
 
+def isInContactList(userId, contactId):
+    if users.find_one({'_id': ObjectId(userId), 'contact_list.id': contactId}) != None:
+        return True
+    return False
+
 def findUser(data):
 	user = users.find_one({"name": data["name"]})
 	return {"data": user,
