@@ -31,20 +31,24 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
     }
 
     $scope.addToContact = function(){
-        $http.post('/addToContact', {
-            "_id": $rootScope.user._id,
-            "contact" : {
-                "id": ctrl.profile._id,
-                "firstname": ctrl.profile.firstname,
-                "lastname": ctrl.profile.lastname,
-            }
-        }).then(function(response) {
-            $rootScope.user = response.data;
-            $rootScope.$emit("loadChat", '');
-            toggleContactBtn();
-        }, function(error) {
-            console.error();
-        });
+        if (ctrl.profile != null) {
+            $http.post('/addToContact', {
+                "_id": $rootScope.user._id,
+                "contact" : {
+                    "id": ctrl.profile._id,
+                    "firstname": ctrl.profile.firstname,
+                    "lastname": ctrl.profile.lastname,
+                }
+            }).then(function(response) {
+                if (response.status != 401) {
+                    $rootScope.user = response.data;
+                    $rootScope.$emit("loadChat", '');
+                    toggleContactBtn();
+                }
+            }, function(error) {
+                console.error();
+            });
+        }
     }
 
     findUser();
