@@ -29,7 +29,7 @@ class BlockchainWatcher:
         self.thread = threading.Thread(target=self.watch)
 
     def run(self):
-        signal(SIGINT, self.stop_with_signal)
+        signal(SIGINT, self.stopWithSignal)
         self.running = True
         self.thread.start()
 
@@ -56,11 +56,11 @@ class BlockchainWatcher:
 
             threading.Timer(1, self.watch).start()
 
-    def push_event(self, event):
+    def pushEvent(self, event):
         # install a new filter in the node, push a new event in the queue with filter_id and user_id
         self.event_queue.append(event)
 
-    def newBlock_then(self, function):
+    def newBlockThen(self, function):
         self.newBlockEvent.wait()
         function()
 
@@ -93,7 +93,7 @@ class BlockchainWatcher:
         self.running = True
         self.watch()
 
-    def stop_with_signal(self, signal, frame):
+    def stopWithSignal(self, signal, frame):
         print("BW EXITED AFTER SIGNAL")
         self.running = False
         self.thread.join()

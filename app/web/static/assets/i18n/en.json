@@ -128,6 +128,7 @@
             "organisations": {
                 "MAIN": "Organizations",
                 "MYORGANISATIONS": "My organizations",
+                "CREATE": "Create a new organization",
                 "SAMPLE": "Red Cross"
             },
             "projects": {

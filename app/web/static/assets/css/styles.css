@@ -447,7 +447,7 @@ span[role="slider"] {
 
 .navbar .navbar-header .navbar-brand img {
     display: inline-block;
-    width: 100px;
+    width: 200px;
 }
 
 .navbar .navbar-header .menu-toggler {
@@ -522,7 +522,7 @@ span[role="slider"] {
   padding-left: 15px !important;
   padding-right: 15px !important;
   position: relative;
-  padding-top: 10px;
+  /*padding-top: 10px;*/
 }
 @media (min-width: 768px) {
   .navbar .navbar-collapse {
@@ -4036,6 +4036,10 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   border-right: none !important;
 }
 
+.border-solid {
+  border-style: solid;
+}
+
 .border-right {
   border-right-style: solid !important;
   border-right-width: 1px !important;
@@ -4078,6 +4082,11 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 
 .panel-white .border-dark, .partition-white .border-dark {
   border-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+.vertical-center {
+  display:flex;
+  align-items:center;
 }
 
 .block {
@@ -5454,6 +5463,14 @@ a.text-light:hover {
 }
 .tooltip-notification .tooltip-notification-inner > div {
   width: 100px;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
 }
 
 .float-none {

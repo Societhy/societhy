@@ -17,11 +17,12 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
     }
 
     function findUser() {
-	name = $location.url().substring($location.url().lastIndexOf('/') + 1);
+	name = $rootScope.search || $location.url().substring($location.url().lastIndexOf('/') + 1);
 	$http.post('/findUser', {
 		   "name": name,
 		  }).then(function(response) {
 	    $rootScope.profile = ctrl.profile = response.data;
+        $rootScope.search = null;
         toggleContactBtn();
 	},
 		function(error) {
