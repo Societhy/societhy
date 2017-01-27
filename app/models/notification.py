@@ -17,10 +17,6 @@ class NotificationDocument(Document):
     			 category=None,
     			 description=None):
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
-			self[sender] = senderType
-			self[senderId] = sender["_id"]
-			self[category] = category
-			self[description] = description
 
 
 			def getSender(self):
