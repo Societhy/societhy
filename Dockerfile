@@ -29,7 +29,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
 RUN apt-get install $DEPENDENCIES -qy
 
 # python packages
-ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3 flask-socketio eventlet"
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3 flask-socketio eventlet Flask-Mail"
 
 RUN pip3 install $PIP_PACKAGES
 

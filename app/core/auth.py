@@ -58,7 +58,6 @@ def login(credentials):
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
 		user["socketid"] = credentials.get('socketid')
 		session[token] = user
-		print(session.items())
 		return {"data": {
 					"token": token,
 					"user": deserializeUser(user)

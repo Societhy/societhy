@@ -19,7 +19,6 @@ def ensure_fields(fields, request_data):
 			ensure_fields(field.keys(), field.values())
 		else:
 			if field not in request_data:
-				print('----------', field, "not in", request_data.keys())
 				return False
 	return True
 	
@@ -28,15 +27,9 @@ def requires_auth(f):
 	@wraps(f)
 	def wrapped_function(*args, **kwargs):
 		token = request.headers.get('authentification')
-		print("--------")
-		print(token, session.items())
-		print("----------")
 		if token is not None and token in session:
 			try:
 				token = token.replace('|', '.')
-				print('mod de | par . --------------------------')
-				print(token)
-				print('----------------------')
 				jwt.decode(token, secret_key)
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)

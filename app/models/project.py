@@ -14,7 +14,7 @@ class ProjectDocument(Document):
 	files = None
 
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
-		super().__init__(doc, projects, fetched_fields, gen_skel)
+		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 
 	def getMemberList(self):
 		pass
