@@ -29,8 +29,12 @@ def createOrga(user, password, newOrga):
 		#	tx_hash = orga.deploy_contract(from_=user, password=password, args=[orga_name])
 		#	if tx_hash is error return error
 	# answer is "organization is being created"
+	print("hello")
+	print(newOrga)
+	instance = OrgaDocument(doc=newOrga, owner=user)
+	instance.save()
 	return {
-		"data": "tx_hash",
+		"data": newOrga,
 		"status": 200
 	}
 

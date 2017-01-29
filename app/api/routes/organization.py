@@ -21,9 +21,9 @@ def getOrgaDocument(user):
 
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
-def creeateOrga(user):
+def createOrga(user):
 	if ensure_fields(['password', 'newOrga'], request.json):
-		ret = base_orga.creeateOrga(user, request.json.get('password'), request.json.get('newOrga'))
+		ret = base_orga.createOrga(user, request.json.get('password'), request.json.get('newOrga'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)

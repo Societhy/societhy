@@ -5,7 +5,7 @@
 
 
 app.controller('OrgaWizardCtrl', 
-function ($scope, ngNotify, FileUploader, $sessionStorage, $rootScope) {
+function ($scope, $http, ngNotify, FileUploader, $sessionStorage, $rootScope) {
     $scope.currentStep = 1;
     console.log("loaded");
 
@@ -113,7 +113,20 @@ function ($scope, ngNotify, FileUploader, $sessionStorage, $rootScope) {
             }
         },
         submit: function (form) {
-            console.log(form)
+            console.log(form.name);
+            console.log(form.description);
+            console.log(form.type);
+            console.log(form.fbUrl);
+            $http.post('/createOrga', {"password": "", "newOrga" : {
+                "name": form.name.rawModelValue,
+                "description" : form.description.$$rawModelValue,
+                "type" : form.type.$$rawModelValue,
+                "fbUrl": form.fbUrl.$$rawModelValue,
+                "twitterUrl" : form.twitterUrl.$$rawModelValue
+            }})
+            .then(function(response) { console.log(response)}, function(error) {
+                console.log(error);
+            });
 
         },
         reset: function () {
