@@ -112,7 +112,8 @@ function ($scope, ngNotify, FileUploader, $sessionStorage, $rootScope) {
                     errorMessage();
             }
         },
-        submit: function () {
+        submit: function (form) {
+            console.log(form)
 
         },
         reset: function () {
