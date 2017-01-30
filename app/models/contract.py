@@ -85,8 +85,6 @@ class ContractDocument(Document):
 			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')
-			# password = kwargs.get('password')
-			# unlocked = eth_cli.personal_unlockAccount(from_, password)
 			result = eth_cli.call_with_transaction(from_, self["address"], signature, kwargs.get('args'), value=kwargs.get('value'), gas=kwargs.get('gas'))
 		return result[0] if len(result) == 1 else result
 

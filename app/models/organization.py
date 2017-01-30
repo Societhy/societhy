@@ -38,6 +38,8 @@ class OrgaDocument(Document):
 		if contract:
 			self.contract = Contract(contract, owner.get('account'))
 			self.contract.compile()
+		elif self.get("contract_id"):
+			self._loadContract()
 		if owner:
 			self["owner"] = owner
 
@@ -195,8 +197,7 @@ class OrgaCollection(Collection):
 	@find_method
 	def find_one(self, *args, **kwargs):
 		doc = super().find_one(*args, **kwargs)
-		if doc:
-			doc._loadContract()
+		doc.__init__()
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)

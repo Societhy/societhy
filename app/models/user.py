@@ -1,12 +1,12 @@
 import scrypt
 
 from bson.objectid import ObjectId
-
 from mongokat import Collection, Document
-from .clients import client, eth_cli
 from ethjsonrpc import wei_to_ether
-
 from rlp.utils import encode_hex
+
+from .clients import client, eth_cli
+from core import SALT_WALLET_PASSWORD
 
 class UserDocument(Document):
 
@@ -35,6 +35,8 @@ class UserDocument(Document):
 			password = self.hashPassword(self['password'])
 		elif self["password_type"] == "local_hashed" and password is not None:
 			password = self.hashPassword(password)
+		elif self["password_type"] == "local" and password is not None:
+			password = password
 
 		if password is not None:
 			return eth_cli.personal_unlockAccount(self["account"], password)
@@ -42,7 +44,7 @@ class UserDocument(Document):
 			return False
 
 	def hashPassword(self, password):
-		return encode_hex(scrypt.hash(password, "rajoute du sel dans les carottes rapées")).decode('utf-8')
+		return encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 
 	def populateKey(self):
 		from core.keys import genBaseKey

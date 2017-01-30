@@ -28,6 +28,7 @@ def test_create_orga(miner):
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
 	assert new_orga["contract_id"] != None
+	sleep(1)
 	inserted_orga = organizations.find_one({"contract_id": new_orga["contract_id"]})
 	assert inserted_orga != None
 	assert inserted_orga.contract != None
