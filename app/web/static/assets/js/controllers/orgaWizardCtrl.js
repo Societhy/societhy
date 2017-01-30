@@ -4,18 +4,75 @@
 */
 
 
-app.controller('OrgaWizardCtrl', ['$scope', 'ngNotify',
-function ($scope, ngNotify) {
+app.controller('OrgaWizardCtrl', 
+function ($scope, $http, ngNotify, FileUploader, $sessionStorage, $rootScope) {
     $scope.currentStep = 1;
     console.log("loaded");
-    // Initial Value
+
+
+    // IMAGE UPLOAD
+     var uploaderImages = $scope.uploaderImages = new FileUploader({
+        url: 'upload.php',
+        headers: {
+            Authentification: $sessionStorage.SociethyToken
+        },
+    });
+    console.log(uploaderImages);
+    uploaderImages.filters.push({
+        name: 'imageFilter',
+        fn: function (item/*{File|FileLikeObject}*/, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+    // CALLBACKS
+
+    uploaderImages.onWhenAddingFileFailed = function (item/*{File|FileLikeObject}*/, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploaderImages.onAfterAddingFile = function (fileItem) {
+        console.info('onAfterAddingFile', fileItem);
+    };
+    uploaderImages.onAfterAddingAll = function (addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploaderImages.onBeforeUploadItem = function (item) {
+        console.info('onBeforeUploadItem', item);
+    };
+    uploaderImages.onProgressItem = function (fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploaderImages.onProgressAll = function (progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploaderImages.onSuccessItem = function (fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploaderImages.onCancelItem = function (fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+    };
+    uploaderImages.onCompleteItem = function (fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploaderImages.onCompleteAll = function () {
+        console.info('onCompleteAll');
+    };
+
+    console.info('uploader', uploaderImages);
+
+
+    // PAGE MANAGEMENT
     $scope.form = {
 
         next: function (form) {
 
             $scope.toTheTop();
 
-            if (form.$valid) {
+            if (form.$valid || !form.$valid) {
                 form.$setPristine();
                 nextStep();
             } else {
@@ -55,7 +112,21 @@ function ($scope, ngNotify) {
                     errorMessage();
             }
         },
-        submit: function () {
+        submit: function (form) {
+            console.log(form.name);
+            console.log(form.description);
+            console.log(form.type);
+            console.log(form.fbUrl);
+            $http.post('/createOrga', {"password": "", "newOrga" : {
+                "name": form.name.rawModelValue,
+                "description" : form.description.$$rawModelValue,
+                "type" : form.type.$$rawModelValue,
+                "fbUrl": form.fbUrl.$$rawModelValue,
+                "twitterUrl" : form.twitterUrl.$$rawModelValue
+            }})
+            .then(function(response) { console.log(response)}, function(error) {
+                console.log(error);
+            });
 
         },
         reset: function () {
@@ -83,4 +154,4 @@ function ($scope, ngNotify) {
             sticky: 'false',
         });
     };
-}]);
+});
