@@ -82,7 +82,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/orga/new',
         needs_auth: true,
         templateUrl :"static/assets/views/wizard_orga.html",
-//        resolve: loadSequence(''),
+        resolve: loadSequence('ngNotify', 'orgaWizardCtrl'),
         title: "Create a new organisation",
         ncyBreadcrumb: {
             label: 'Organisation Creation'
