@@ -142,9 +142,15 @@ def signUp(newUser):
 		return {"data": newUser, "status": 200}
 
 
+def setSocketId(socketid, user):
+	if user:
+		user['socketid'] = socketid
+		token = request.headers.get('authentification')
+		session[token] = user
+	return {"data": user,
+			"status": 200}
 
-
-def checkTokenValidity(token):
+def checkTokenValidity(token, user):
 	return {"data": {"user": session.get(token)},
 			"status": 200}
 

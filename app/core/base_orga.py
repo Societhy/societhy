@@ -1,6 +1,7 @@
 from flask import session, request, Response
 from bson import objectid, errors
 
+from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
 
 def getOrgaDocument(user, _id=None, name=None):
@@ -29,14 +30,23 @@ def createOrga(user, password, newOrga):
 		#	tx_hash = orga.deploy_contract(from_=user, password=password, args=[orga_name])
 		#	if tx_hash is error return error
 	# answer is "organization is being created"
-	print("hello")
-	print(newOrga)
-	instance = OrgaDocument(doc=newOrga, owner=user)
-	instance.save()
-	return {
-		"data": newOrga,
-		"status": 200
-	}
+	print(newOrga, user, password)
+	instance = OrgaDocument(doc=newOrga, owner=user, contract='basic_orga')
+	tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
+	from core.chat import socketio
+	print('-----', user)
+	socketio.emit('txResult', {"status": "coucou"}, room=user.get('socketid'))
+	if tx_hash.startswith('0x'):
+		return {
+			"data": newOrga,
+			"status": 200
+		}
+	else:
+		return {
+			"data": tx_hash,
+			"status": 400
+		}
+
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga

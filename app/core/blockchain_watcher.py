@@ -28,6 +28,7 @@ class BlockchainWatcher:
         self.event_queue = EventQueue()
         self.thread = threading.Thread(target=self.watch)
 
+
     def run(self):
         signal(SIGINT, self.stopWithSignal)
         self.running = True

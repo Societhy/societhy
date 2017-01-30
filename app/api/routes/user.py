@@ -2,7 +2,7 @@ from flask import Blueprint, Response, render_template, request, jsonify, make_r
 
 from core import auth, keys, user_management, wallet
 
-from api import requires_auth
+from api import requires_auth, populate_user
 
 router = Blueprint('user', __name__)
 
@@ -30,8 +30,16 @@ def signUp():
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/checkTokenValidity/<token>')
-def checkTokenValidity(token):
-	ret = auth.checkTokenValidity(token)
+@populate_user
+def checkTokenValidity(token, user):
+	print('-----', user)
+	ret = auth.checkTokenValidity(token, user)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/socketid/<socketid>')
+@populate_user
+def setSocketId(socketid, user):
+	ret = auth.setSocketId(socketid, user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/deleteUser/<user>')

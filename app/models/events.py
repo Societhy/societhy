@@ -1,10 +1,19 @@
 from sha3 import keccak_256
 
 from collections import deque
+
 from .clients import eth_cli
 
 from core.utils import to32bytes
+from core.chat import socketio
+
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
+
+def notifyUsers(users, status="success"):
+	for user in users:
+		print("EMITING txResult for user", user)
+		socketio.emit('send_message', {"data": "bite"}, room=user)
+		socketio.emit('txResult', {"status": status}, room=user)
 
 def makeTopics(signature, *args):
 	
@@ -49,7 +58,10 @@ class ContractCreationEvent(Event):
 		print("PROCESSING EVENT", self.tx_hash)
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		for cb in self.callbacks:
-			cb(self.tx_receipt)
+			if cb(self.tx_receipt) is True:
+				notifyUsers(self.users, "success")
+			else:
+				notifyUsers(self.users, "failure")
 
 
 class LogEvent(Event):

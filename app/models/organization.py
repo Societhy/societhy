@@ -58,9 +58,11 @@ class OrgaDocument(Document):
 		elif isinstance(from_, User):
 			users_socket = [from_.get('socketid')]
 
-		from_.unlockAccount(password=password)
+		if not from_.unlockAccount(password=password):
+			return "Failed to unlock account"
+
 		tx_hash = self.contract.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register))
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=users_socket))
 		return tx_hash
 
 
@@ -68,7 +70,7 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt):
+	def register(self, tx_receipt, users=[]):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()

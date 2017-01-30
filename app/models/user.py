@@ -54,7 +54,7 @@ class UserDocument(Document):
 		else:
 			self["account"] = None
 			self["eth"] = {"keys": {}}
-			self.save_partial()
+		self.save_partial()
 
 	def generatePersonalDataFromSocial(self):
 		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
@@ -97,7 +97,8 @@ class UserDocument(Document):
 				del self["eth"]["keys"][publicKey]
 				if self["account"] == key:
 					self["account"] = None
-					self["local_account"] = False
+					self["local_account"] = None
+					self["password_type"] = None
 				self.save_partial()
 				return
 
@@ -127,7 +128,8 @@ class UserCollection(Collection):
 		"name",
 		"address",
 		"account",
-		"local_account"
+		"local_account",
+		"password_type",
 		"eth",
 		"eth.keys",
 		"email",

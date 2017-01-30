@@ -22,7 +22,7 @@ def getOrgaDocument(user):
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
 def createOrga(user):
-	if ensure_fields(['password', 'newOrga'], request.json):
+	if ensure_fields(['password', {'newOrga': ["name"]}], request.json):
 		ret = base_orga.createOrga(user, request.json.get('password'), request.json.get('newOrga'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:

@@ -10,6 +10,7 @@ from flask import session, request, Response
 from models import users
 from models.clients import eth_cli
 
+from . import SALT_WALLET_PASSWORD
 from core.utils import normalizeAddress, fromWei
 
 from rlp.utils import encode_hex
@@ -83,8 +84,9 @@ def importNewKey(user, sourceKey):
 		keyAlreadyExists(key.get('address'), user.get('eth').get('keys'))
 		keyFilename = importKeyRemote(key.get('id'), sourceKey)
 		key["address"] = normalizeAddress(key.get('address'), hexa=True)
-		data = { "address" : key.get('address') }
-		user.addKey(key.get('address'), local_account=False, password_type="local", balance=fromWei(eth_cli.eth_getBalance(key.get('address'))), keyfile=keyFilename)
+		balance = fromWei(eth_cli.eth_getBalance(key.get('address')))
+		data = { "address": key.get('address'), "balance": balance}
+		user.addKey(key.get('address'), local_account=False, password_type="local", balance=balance, keyfile=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):
 		data = "key format not recognized"
 		status = 400
