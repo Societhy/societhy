@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
 
-PARITY_DEB_URL=http://d1h4xl4cr1h0mo.cloudfront.net/v1.4.5/x86_64-unknown-linux-gnu/parity_1.4.5_amd64.deb
-               
-
-
 function run_installer()
 {
 	####### Init vars
-	
+
 	HOMEBREW_PREFIX=/usr/local
 	HOMEBREW_CACHE=/Library/Caches/Homebrew
 	HOMEBREW_REPO=https://github.com/Homebrew/homebrew
 	OSX_REQUIERED_VERSION="10.7.0"
-	
+
+
 	declare OS_TYPE
 	declare OSX_VERSION
 	declare GIT_PATH
@@ -29,7 +26,8 @@ function run_installer()
 	depCount=0
 	depFound=0
 
-	
+
+
 	####### Setup colors
 
 	red=`tput setaf 1`
@@ -84,11 +82,11 @@ function run_installer()
 	}
 
 	function check() {
-		echo "${green}${bold} ✓${reset}	 $1${reset}"
+		echo "${green}${bold} ✓${reset}  $1${reset}"
 	}
 
 	function uncheck() {
-		echo "${red}${bold} ✘${reset}	 $1${reset}"
+		echo "${red}${bold} ✘${reset}  $1${reset}"
 	}
 
 
@@ -135,7 +133,7 @@ function run_installer()
 		fi
 	}
 
-	function detectOS() {
+	function detect_os() {
 		if [[ "$OSTYPE" == "linux-gnu" ]]
 		then
 			OS_TYPE="linux"
@@ -146,7 +144,7 @@ function run_installer()
 			get_osx_dependencies
 		else
 			OS_TYPE="win"
-			abortInstall "${red}==>${reset} ${b}OS not supported:${reset} parity one-liner currently support OS X and Linux.${n}For instructions on installing parity on other platforms please visit ${u}${blue}http://ethcore.io/${reset}"
+			abort_install "${red}==>${reset} ${b}OS not supported:${reset} Parity one-liner currently support OS X and Linux.${n}For instructions on installing parity on other platforms please visit ${u}${blue}http://ethcore.io/${reset}"
 		fi
 
 		echo
@@ -161,13 +159,21 @@ function run_installer()
 			elif [[ $canContinue == false && $depFound == 0 ]]
 			then
 				red "All dependencies are missing and cannot be auto-installed ($depFound/$depCount)"
-				abortInstall "$errorMessages";
+				abort_install "$errorMessages";
 			elif [[ $canContinue == false ]]
 			then
 				red "Some dependencies which cannot be auto-installed are missing ($depFound/$depCount)"
-				abortInstall "$errorMessages";
+				abort_install "$errorMessages";
 			fi
 		fi
+	}
+
+	function get_osx_dependencies()
+	{
+		macos_version
+		find_git
+		find_ruby
+		find_brew
 	}
 
 	function macos_version()
@@ -201,87 +207,41 @@ function run_installer()
 		fi
 
 		errorMessages+="${red}==>${reset} ${b}Mac OS version too old:${reset} eth requires OS X version ${red}$OSX_REQUIERED_VERSION${reset} at least in order to run.${n}"
-		errorMessages+="		Please update the OS and reload the install process.${n}"
+		errorMessages+="    Please update the OS and reload the install process.${n}"
 	}
-	
-	function get_osx_dependencies()
-	{
-		macos_version
-		find_git
-		find_ruby
-		find_brew
-	}
-	
-	function linux_version()
-	{
-		source /etc/lsb-release
-		
-		if [[ $DISTRIB_ID == "Ubuntu" ]]; then
-			if [[ $DISTRIB_RELEASE == "14.04" || $DISTRIB_RELEASE == "15.04" || $DISTRIB_RELEASE == "15.10" ]]; then
-				check "Ubuntu"
-				isUbuntu=true
-			else
-				check "Ubuntu, but version not supported"
 
-				errorMessages+="${red}==>${reset} ${b}Ubuntu version not supported:${reset} This script requires Ubuntu version 14.04, 15.04 or 15.10.${n}"
-				errorMessages+="		Please either upgrade your Ubuntu installation or using the get-deps.ethcore.io script instead, which can help you build Parity.${n}"
-			fi
+	function find_eth()
+	{
+		ETH_PATH=`which eth 2>/dev/null`
+
+		if [[ -f $ETH_PATH ]]
+		then
+			check "Found eth: $ETH_PATH"
+			echo "$($ETH_PATH -V)"
+			isEth=true
 		else
-			check "Ubuntu not found"
-			errorMessages+="${red}==>${reset} ${b}Linux distribution not supported:${reset} This script requires Ubuntu version 14.04, 15.04 or 15.10.${n}"
-			errorMessages+="		Please either use this on an Ubuntu installation or instead use the get-deps.ethcore.io script, which can help you build Parity.${n}"
+			uncheck "Eth is missing"
+			isEth=false
 		fi
-	}
-
-	function get_linux_dependencies()
-	{
-		linux_version
-
-		find_curl
-
-		find_apt
-		find_sudo
 	}
 
 	function find_git()
 	{
 		depCount=$((depCount+1))
+
 		GIT_PATH=`which git 2>/dev/null`
 
 		if [[ -f $GIT_PATH ]]
 		then
-			depFound=$((depFound+1))
-			check "git"
+			check "$($GIT_PATH --version)"
 			isGit=true
-		else
-			uncheck "git is missing"
-			isGit=false
-			INSTALL_FILES+="${blue}${dim}==> git:${reset}${n}"
-		fi
-	}
-
-	function find_brew()
-	{
-		BREW_PATH=`which brew 2>/dev/null`
-
-		if [[ -f $BREW_PATH ]]
-		then
-			check "$($BREW_PATH -v)"
-			isBrew=true
 			depFound=$((depFound+1))
 		else
-			uncheck "Homebrew is missing"
-			isBrew=false
-
-			INSTALL_FILES+="${blue}${dim}==> Homebrew:${reset}${n}"
-			INSTALL_FILES+=" ${blue}${dim}➜${reset}	 $HOMEBREW_PREFIX/bin/brew${n}"
-			INSTALL_FILES+=" ${blue}${dim}➜${reset}	 $HOMEBREW_PREFIX/Library${n}"
-			INSTALL_FILES+=" ${blue}${dim}➜${reset}	 $HOMEBREW_PREFIX/share/man/man1/brew.1${n}"
+			uncheck "Git is missing"
+			isGit=false
 		fi
-
-		depCount=$((depCount+1))
 	}
-	
+
 	function find_ruby()
 	{
 		depCount=$((depCount+1))
@@ -299,10 +259,212 @@ function run_installer()
 			isRuby=false
 			canContinue=false
 			errorMessages+="${red}==>${reset} ${b}Couldn't find Ruby:${reset} Brew requires Ruby which could not be found.${n}"
-			errorMessages+="		Please install Ruby using these instructions ${u}${blue}https://www.ruby-lang.org/en/documentation/installation/${reset}.${n}"
+			errorMessages+="    Please install Ruby using these instructions ${u}${blue}https://www.ruby-lang.org/en/documentation/installation/${reset}.${n}"
 		fi
 	}
-	
+
+	function find_brew()
+	{
+		BREW_PATH=`which brew 2>/dev/null`
+
+		if [[ -f $BREW_PATH ]]
+		then
+			check "$($BREW_PATH -v)"
+			isBrew=true
+			depFound=$((depFound+1))
+		else
+			uncheck "Homebrew is missing"
+			isBrew=false
+
+			INSTALL_FILES+="${blue}${dim}==> Homebrew:${reset}${n}"
+			INSTALL_FILES+=" ${blue}${dim}➜${reset}  $HOMEBREW_PREFIX/bin/brew${n}"
+			INSTALL_FILES+=" ${blue}${dim}➜${reset}  $HOMEBREW_PREFIX/Library${n}"
+			INSTALL_FILES+=" ${blue}${dim}➜${reset}  $HOMEBREW_PREFIX/share/man/man1/brew.1${n}"
+		fi
+
+		depCount=$((depCount+1))
+	}
+
+	function install_brew()
+	{
+		if [[ $isBrew == false ]]
+		then
+			head "Installing Homebrew"
+
+			if [[ $isRuby == true ]]
+			then
+				ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+			else
+				cd /usr
+
+				if [[ ! -d $HOMEBREW_PREFIX ]]
+				then
+					sudo mkdir $HOMEBREW_PREFIX
+					sudo chmod g+rwx $HOMEBREW_PREFIX
+				fi
+
+				if [[ ! -d $HOMEBREW_CACHE ]]
+				then
+					sudo mkdir $HOMEBREW_CACHE
+					sudo chmod g+rwx $HOMEBREW_CACHE
+				fi
+
+				DEVELOPER_DIR=`/usr/bin/xcode-select -print-path 2>/dev/null`
+
+				if [[ ! $(ls -A $DEVELOPER_DIR) || ! -f $DEVELOPER_DIR/usr/bin/git ]]
+				then
+					info "Installing the Command Line Tools (expect a GUI popup):"
+					sudo /usr/bin/xcode-select --install
+
+					echo "Press any key when the installation has completed"
+				fi
+
+				cd $HOMEBREW_PREFIX
+
+				bash -o pipefail -c "curl -fsSL ${HOMEBREW_REPO}/tarball/master | tar xz -m --strip 1"
+			fi
+
+			find_brew
+			echo
+
+			if [[ $isBrew == false ]]
+			then
+				abort_install "Couldn't install brew"
+			fi
+		fi
+	}
+
+	function osx_installer()
+	{
+		osx_dependency_installer
+
+		info "Updating brew"
+		exe brew update
+		echo
+
+		info "Installing multirust"
+		exe brew install multirust
+		sudo multirust default beta
+		echo
+	}
+
+	function osx_dependency_installer()
+	{
+		if [[ $isGit == false ]];
+		then
+			echo "Installing Git"
+		fi
+
+		if [[ $isRuby == false ]];
+		then
+			echo "Installing Ruby"
+		fi
+
+		if [[ $isBrew == false ]];
+		then
+			install_brew
+		fi
+	}
+
+	function linux_version()
+	{
+		source /etc/lsb-release
+		
+		if [[ $DISTRIB_ID == "Ubuntu" ]]; then
+			if [[ $DISTRIB_RELEASE == "14.04" || $DISTRIB_RELEASE == "15.04" || $DISTRIB_RELEASE == "15.10" ]]; then
+				check "Ubuntu"
+				isUbuntu=true
+			else
+				check "Ubuntu, but version not supported"
+				isUbuntu=false
+			fi
+		else
+			check "Ubuntu not found"
+			isUbuntu=false
+		fi
+	}
+
+	function get_linux_dependencies()
+	{
+		linux_version
+
+		find_multirust
+
+		find_curl
+		find_git
+		find_make
+		find_gcc
+
+		find_apt
+		find_sudo
+	}
+
+	function find_multirust()
+	{
+		depCount=$((depCount+2))
+		MULTIRUST_PATH=`which multirust 2>/dev/null`
+		if [[ -f $MULTIRUST_PATH ]]; then
+			depFound=$((depFound+1))
+			check "multirust"
+			isMultirust=true
+			if [[ $(multirust show-default 2>/dev/null | grep beta | wc -l) == 3 ]]; then
+				depFound=$((depFound+1))
+				check "rust beta"
+				isMultirustBeta=true
+			else
+				uncheck "rust is not beta"
+				isMultirustBeta=false
+				INSTALL_FILES+="${blue}${dim}==> multirust -> rust beta:${reset}${n}"
+			fi
+		else
+			uncheck "multirust is missing"
+			uncheck "rust beta is missing"
+			isMultirust=false
+			isMultirustBeta=false
+			INSTALL_FILES+="${blue}${dim}==> multirust:${reset}${n}"
+		fi
+	}
+
+	function find_apt()
+	{
+		depCount=$((depCount+1))
+
+		APT_PATH=`which apt-get 2>/dev/null`
+
+		if [[ -f $APT_PATH ]]
+		then
+			depFound=$((depFound+1))
+			check "apt-get"
+			isApt=true
+		else
+			uncheck "apt-get is missing"
+			isApt=false
+
+			if [[ $isGCC == false || $isGit == false || $isMake == false || $isCurl == false ]]; then
+				canContinue=false
+				errorMessages+="${red}==>${reset} ${b}Couldn't find apt-get:${reset} We can only use apt-get in order to grab our dependencies.${n}"
+				errorMessages+="    Please switch to a distribution such as Debian or Ubuntu or manually install the missing packages.${n}"
+			fi
+		fi
+	}
+
+	function find_gcc()
+	{
+		depCount=$((depCount+1))
+		GCC_PATH=`which g++ 2>/dev/null`
+
+		if [[ -f $GCC_PATH ]]
+		then
+			depFound=$((depFound+1))
+			check "g++"
+			isGCC=true
+		else
+			uncheck "g++ is missing"
+			isGCC=false
+			INSTALL_FILES+="${blue}${dim}==> g++:${reset}${n}"
+		fi
+	}
+
 	function find_sudo()
 	{
 		depCount=$((depCount+1))
@@ -323,12 +485,45 @@ function run_installer()
 				fi
 
 				isSudo=false
-				INSTALL_FILES+="${blue}${dim}==>${reset}\tsudo${n}"
 			else
 				canContinue=false
 				errorMessages+="${red}==>${reset} ${b}Couldn't find sudo:${reset} Root access is needed for parts of this installation.${n}"
 				errorMessages+="    Please ensure you have sudo installed or alternatively run this script as root.${n}"
 			fi
+		fi
+	}
+
+	function find_git()
+	{
+		depCount=$((depCount+1))
+		GIT_PATH=`which git 2>/dev/null`
+
+		if [[ -f $GIT_PATH ]]
+		then
+			depFound=$((depFound+1))
+			check "git"
+			isGit=true
+		else
+			uncheck "git is missing"
+			isGit=false
+			INSTALL_FILES+="${blue}${dim}==> git:${reset}${n}"
+		fi
+	}
+
+	function find_make()
+	{
+		depCount=$((depCount+1))
+		MAKE_PATH=`which make 2>/dev/null`
+
+		if [[ -f $MAKE_PATH ]]
+		then
+			depFound=$((depFound+1))
+			check "make"
+			isMake=true
+		else
+			uncheck "make is missing"
+			isMake=false
+			INSTALL_FILES+="${blue}${dim}==> make:${reset}${n}"
 		fi
 	}
 
@@ -345,102 +540,46 @@ function run_installer()
 		else
 			uncheck "curl is missing"
 			isCurl=false
-			INSTALL_FILES+="${blue}${dim}==>${reset}\tcurl${n}"
+			INSTALL_FILES+="${blue}${dim}==> curl:${reset}${n}"
 		fi
 	}
 
-	function find_apt()
-	{
-		depCount=$((depCount+1))
-
-		APT_PATH=`which apt-get 2>/dev/null`
-
-		if [[ -f $APT_PATH ]]
-		then
-			depFound=$((depFound+1))
-			check "apt-get"
-			isApt=true
-		else
-			uncheck "apt-get is missing"
-			isApt=false
-
-			canContinue=false
-			errorMessages+="${red}==>${reset} ${b}Couldn't find apt-get:${reset} We can only use apt-get in order to grab our dependencies.${n}"
-			errorMessages+="		Please switch to a distribution such as Debian or Ubuntu or manually install the missing packages.${n}"
-		fi
-	}
-
-	function verify_installation()
-	{
-		ETH_PATH=`which parity 2>/dev/null`
-
-		if [[ -f $ETH_PATH ]]
-		then
-			success "Parity has been installed"
-		else
-			error "Parity is missing"
-			abortInstall
-		fi
-	}
-	
-	function verify_dep_installation()
-	{
-		info "Verifying installation"
-
-		if [[ $OS_TYPE == "linux" ]]; then
-			find_apt
-
-			if [[ $isApt == false ]]; then
-				abortInstall
-			fi
-		fi
-	}
-	
-	function linux_deps_installer()
-	{
-		if [[ $isCurl == false ]]; then
-			info "Preparing apt..."
-			sudo apt-get update -qq
-			echo
-		fi
-
-		if [[ $isCurl == false ]]; then
-			info "Installing curl..."
-			sudo apt-get install -q -y curl
-			echo
-		fi
-	}
-	
 	function linux_installer()
 	{
-		linux_deps_installer
-		verify_dep_installation
+		if [[ $isGCC == false || $isGit == false || $isMake == false || $isCurl == false ]]; then
+			info "Installing build dependencies..."
+			sudo apt-get update -qq
+			if [[ $isGit == false ]]; then
+				sudo apt-get install -q -y git
+			fi
+			if [[ $isGCC == false ]]; then
+				sudo apt-get install -q -y g++ gcc
+			fi
+			if [[ $isMake == false ]]; then
+				sudo apt-get install -q -y make
+			fi
+			if [[ $isCurl == false ]]; then
+				sudo apt-get install -q -y curl
+			fi
+			echo
+		fi
 
-		info "Installing parity"
-		file=/tmp/parity.deb
+		if [[ $isMultirust == false ]]; then
+			info "Installing multirust..."
+			if [[ $isSudo == false ]]; then
+				apt-get install -q -y sudo
+			fi
+			curl -sf https://raw.githubusercontent.com/brson/multirust/master/quick-install.sh | sudo sh -s -- --yes
+			echo
+		fi
 
-		curl -L $PARITY_DEB_URL > $file
-		sudo dpkg -i $file
-		rm $file
+		if [[ $isMultirustBeta == false ]]; then
+			info "Installing rust beta..."
+			multirust default beta
+			echo
+		fi
 	}
 
-	
-	function osx_installer()
-	{
-		info "Adding ethcore repository"
-		brew tap ethcore/ethcore https://github.com/ethcore/homebrew-ethcore.git
-		echo
-
-		info "Updating brew"
-		brew update
-		echo
-
-		info "Installing parity"
-		brew reinstall parity
-		brew linkapps parity
-		echo
-	}
-	
 	function install()
 	{
 		echo
@@ -453,11 +592,51 @@ function run_installer()
 		then
 			linux_installer
 		fi
-
-		verify_installation
 	}
 
-	
+	function verify_installation()
+	{
+		info "Verifying installation"
+
+		if [[ $OS_TYPE == "linux" ]]; then
+			find_curl
+			find_git
+			find_make
+			find_gcc
+			find_multirust
+
+			if [[ $isCurl == false || $isGit == false || $isMake == false || $isGCC == false || $isMultirustBeta == false ]]; then
+				abort_install
+			fi
+		fi
+	}
+
+	function build_parity()
+	{
+		info "Downloading Parity..."
+		git clone https://github.com/ethcore/parity
+		cd parity
+		git submodule init
+		git submodule update
+		
+		info "Building..."
+		cargo build --release
+		cd ..
+
+		echo
+		successHeading "Parity is built!"
+		info "Parity source code is in ${b}$(pwd)/parity${reset}. From there, you can:"
+		info "- Run a client & sync the chain with:"
+		info "    ${b}cargo run --bin parity --release${reset}"
+		info "- Run a JSONRPC-capable client (for use with netstats) with:"
+		info "    ${b}cargo run --bin parity --release -- -j --jsonrpc-url 127.0.0.1:8545${reset}"
+		info "- Run tests with:"
+		info "    ${b}cargo test --release --features ethcore/json-tests -p ethcore${reset}"
+		info "- Install the client with:"
+		info "    ${b}sudo cp parity/target/release/parity${reset} /usr/local/bin"
+		echo
+	}
+
 	function install_netstats()
 	{
 		echo "Installing netstats"
@@ -465,14 +644,9 @@ function run_installer()
 		secret=$(prompt_for_input "Please enter the netstats secret:")
 		instance_name=$(prompt_for_input "Please enter your instance name:")
 		contact_details=$(prompt_for_input "Please enter your contact details (optional):")
-
-		curl -sL https://deb.nodesource.com/setup_0.12 | bash -
-		sudo apt-get update
 		
 		# install ethereum & install dependencies
-		sudo apt-get install -y -qq build-essential git unzip wget nodejs ntp cloud-utils
-
-		sudo apt-get install -y -qq npm
+		sudo apt-get install -y -qq build-essential git unzip wget nodejs npm ntp cloud-utils
 
 		# add node symlink if it doesn't exist
 		[[ ! -f /usr/bin/node ]] && sudo ln -s /usr/bin/nodejs /usr/bin/node
@@ -488,10 +662,7 @@ function run_installer()
 
 		sudo chmod 755 /etc/cron.hourly/ntpdate
 
-		cd $HOME
-
 		[ ! -d "www" ] && git clone https://github.com/cubedro/eth-net-intelligence-api netstats
-		oldpwd= $(pwd)
 		cd netstats
 		sudo npm install
 		sudo npm install pm2 -g
@@ -524,15 +695,14 @@ function run_installer()
 ]
 EOL
 
-		pm2 startOrRestart app.json
-		cd $oldpwd
+		pm2 start app.json
+		cd ..
 	}
-	
 
-	function abortInstall()
+	function abort_install()
 	{
 		echo
-		error "Installation failed"
+		error "Installation aborted"
 		echo -e "$1"
 		echo
 		exit 0
@@ -541,35 +711,55 @@ EOL
 	function finish()
 	{
 		echo
-		successHeading "All done"
-		head "Next steps"
-		info "Run ${cyan}\`parity -j\`${reset} to start the Parity Ethereum client.${reset}"
+		successHeading "Installation successful!"
 		echo
 		exit 0
 	}
 
+
+	####### Run the script
+	tput clear
+	echo
+	echo
+	echo " ${blue}∷ ${b}${green} WELCOME TO PARITY ${reset} ${blue}∷${reset}"
+	echo
+	echo
+
+	# Check dependencies
 	head "Checking OS dependencies"
-	detectOS
+	detect_os
 
 	if [[ $INSTALL_FILES != "" ]]; then
 		echo
 		head "In addition to the Parity build dependencies, this script will install:"
-		printf "$INSTALL_FILES"
+		echo "$INSTALL_FILES"
 		echo
 	fi
 
-	#DEBUG
-	
-	head "${b}OK,${reset} let's install Parity now!"
-	if [[ $(ask_user "${b}Last chance!${reset} Sure you want to install this software?") == true ]]; then
-		install	
-		echo
-		echo
-	else
-		finish
+	# Prompt user to continue or abort
+	wait_for_user "${b}Last chance!${reset} Sure you want to install this software?"
+
+	# Install dependencies and eth
+	install
+
+	# Check installation
+	verify_installation
+
+	if [[ ! -e parity ]]; then
+		# Maybe install parity
+		if [[ $(ask_user "${b}Parity${reset} Would you like to download and build parity?") == true ]]; then
+			# Do get parity.
+			build_parity
+		fi
 	fi
 
-	# Display goodbye message
+	if [[ $OS_TYPE == "linux" && $DISTRIB_ID == "Ubuntu" ]]; then
+		if [[ $(ask_user "${b}Netstats${reset} Would you like to download, install and configure a Netstats client?${n}${b}${red}WARNING: ${reset}${red}This will need a secret and reconfigure any existing node/NPM installation you have.${reset} ") == true ]]; then
+			install_netstats
+		fi
+	fi
+
+	# Display goodby message
 	finish
 }
 

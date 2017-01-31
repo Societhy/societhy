@@ -5,6 +5,7 @@
 
  app.controller('ChatCtrl', function ($scope, $rootScope, $http, socketIO) {
     $scope.user = $rootScope.user;
+    // socketIO.forward('sessionId', $scope);
 
     var load = function () {
         $scope.user = $rootScope.user;
@@ -46,6 +47,11 @@
         $scope.chatMessage = '';
     };
 
+    $scope.$on('$destroy', function() {
+      socketIO.removeListener();
+      console.log("here")
+    });
+
     socketIO.on('send_message', function (data) {
         receiveMessage(data);
     })
@@ -57,9 +63,11 @@
         }
     })
 
+    // $scope.$on('socket:sessionId', function(ev, data) {
     socketIO.on('sessionId', function (data) {
-        $rootScope.sessionId = data;
-        if ($rootScope.user && $rootScope.sessionId != $rootScope.user.socketid) {
+            // console.log(ev, data, socketIO);
+        if ($rootScope.user && data != $rootScope.user.socketid ) {
+            $rootScope.sessionId = data;
             $http.get('/socketid/'.concat($rootScope.sessionId)).then(function(resp) {
                 $rootScope.user = resp.data
                 console.log($rootScope.user)

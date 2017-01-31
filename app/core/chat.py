@@ -23,14 +23,18 @@ class Client:
             self.id = id
             self.initialized = True
             Clients[self.id] = self
+            print("NEW CLIENT :::::::::::::", Clients)
+
 
     def __repr__(self):
         return 'Id: ' + str(self.id) + ' sessionId: '+ str(self.sessionId)
 
 @socketio.on('connect', namespace='/')
 def connect():
-    NC_Clients[request.sid] = Client(request.sid)
-    emit('sessionId', request.sid, namespace='/', room=request.sid)
+    if not NC_Clients.get(request.sid) or NC_Clients.get(request.sid).sessionId != request.sid:
+        NC_Clients[request.sid] = Client(request.sid)
+        emit('sessionId', request.sid, namespace='/', room=request.sid)
+        print("------------------------------__>", request.sid)
 
 @socketio.on('disconnect', namespace='/')
 def disconnect():

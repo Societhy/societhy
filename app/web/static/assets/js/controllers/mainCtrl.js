@@ -228,10 +228,6 @@
     });
     };
 
-    // socketIO.on('txResult', function (data) {
-    //     console.log('OUI', data);
-    // })
-
     $scope.searchForAnything = function(search) {
         $rootScope.search = search;
         $state.go("app.user", {"name": search});

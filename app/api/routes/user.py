@@ -32,7 +32,6 @@ def signUp():
 @router.route('/checkTokenValidity/<token>')
 @populate_user
 def checkTokenValidity(token, user):
-	print('-----', user)
 	ret = auth.checkTokenValidity(token, user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
