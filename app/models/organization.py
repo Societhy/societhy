@@ -132,13 +132,11 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('join', local=False, from_=user.get('account'), args=[user.get('name')])
-		if tx_hash.startswith('0x'):
+	def join(self, user, password=None, local=False):
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined]))
-			print ("tx hash ok with ", tx_hash)
 			return tx_hash
 		else:
 			return False
@@ -147,7 +145,7 @@ class OrgaDocument(Document):
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'))
 
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[user.leftOrga, self.memberLeft]))
 			return tx_hash
@@ -160,7 +158,7 @@ class OrgaDocument(Document):
 
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount)
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation]))
 			return tx_hash
@@ -174,7 +172,7 @@ class OrgaDocument(Document):
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project])
 
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated]))
 			return tx_hash
 		else:

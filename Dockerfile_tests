@@ -11,7 +11,7 @@ RUN apt-get update -y &&  \
 # PIP_PACKAGES are to be installed with pip3 (python packages)
 
 # languages
-ENV DEPENDENCIES="python3 python3-pip python-virtualenv libssl-dev curl file binutils make git ethminer solc"
+ENV DEPENDENCIES="python3 python3-pip python-virtualenv libssl-dev curl file binutils make git ethminer solc pkg-config"
 
 # libraries and services
 ENV DEPENDENCIES="$DEPENDENCIES mongodb supervisor"
@@ -49,14 +49,12 @@ ENV ETHPORT=8545
 
 ENV PYTHONPATH="/societhy/app"
 
-ENV KEYS_DIRECTORY="/societhy/.parity/keys"
+ENV KEYS_DIRECTORY="/societhy/.parity/keys/DemoPoA/"
 
 # add code files and setup work directory
 WORKDIR /societhy
 
 COPY ./utils /societhy/utils
-
-RUN bash /societhy/utils/install_parity.sh
 
 RUN mkdir /societhy/.parity && mkdir /societhy/.parity/keys
 

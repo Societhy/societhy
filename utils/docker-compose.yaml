@@ -35,6 +35,7 @@ test_remote_env:
     - "30303:30303"  # geth p2p protocol
   environment:
     - MINING=1
+    - TESTING=1
     - IP=172.17.0.2
   volumes:
     - ../app:/societhy/app:rw

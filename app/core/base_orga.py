@@ -35,7 +35,7 @@ def createOrga(user, password, newOrga):
 	tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	from core.chat import socketio
 	print('-----', user)
-	socketio.emit('txResult', {"status": "coucou"}, room=user.get('socketid'))
+	# socketio.emit('txResult', {"status": "coucou"}, room=user.get('socketid'))
 	if tx_hash.startswith('0x'):
 		return {
 			"data": newOrga,

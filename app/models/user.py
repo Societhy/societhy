@@ -2,11 +2,11 @@ import scrypt
 
 from bson.objectid import ObjectId
 from mongokat import Collection, Document
-from ethjsonrpc import wei_to_ether
 from rlp.utils import encode_hex
 
 from .clients import client, eth_cli
 from core import SALT_WALLET_PASSWORD
+from core.utils import fromWei
 
 class UserDocument(Document):
 
@@ -114,7 +114,7 @@ class UserDocument(Document):
 	def refreshBalance(self, address=None):
 		address = address or self.get('account')
 		if address:
-			balance = wei_to_ether(eth_cli.eth_getBalance(address))
+			balance = fromWei(eth_cli.eth_getBalance(address))
 			if address in self['eth']['keys']:
 				self['eth']['keys'][address]["balance"] = balance
 				self.save_partial()

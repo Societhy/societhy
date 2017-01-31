@@ -42,6 +42,9 @@ class BlockchainWatcher:
             for blockHash in newBlocks:
           
                 block = eth_cli.eth_getBlockByHash(blockHash, True)
+                self.lastTx = [tx.get('hash') for tx in block.get('transactions')]
+                self.newBlockEvent.set()
+                self.newBlockEvent.clear()
                 print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.lastTx)
           
                 for event in self.event_queue.yieldEvents(block.get('transactions')):
@@ -51,9 +54,6 @@ class BlockchainWatcher:
                         self.newLogEvent.clear()
                     event.process()
 
-                self.lastTx = [tx.get('hash') for tx in block.get('transactions')]
-                self.newBlockEvent.set()
-                self.newBlockEvent.clear()
 
             threading.Timer(1, self.watch).start()
 

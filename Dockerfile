@@ -45,7 +45,7 @@ WORKDIR /societhy
 
 COPY ./utils /societhy/utils
 
-RUN bash /societhy/utils/install_parity.sh
+#RUN bash /societhy/utils/install_parity.sh
 
 # INSTALL our own ethjsonrpc module
 

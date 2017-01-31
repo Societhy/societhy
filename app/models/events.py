@@ -1,3 +1,4 @@
+from os import environ as env
 from sha3 import keccak_256
 
 from collections import deque
@@ -10,10 +11,11 @@ from core.chat import socketio
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 
 def notifyUsers(users, status="success"):
-	for user in users:
-		print("EMITING txResult for user", user)
-		socketio.emit('send_message', {"data": "bite"}, room=user)
-		socketio.emit('txResult', {"status": status}, room=user)
+	if not env.get('TESTING'):
+		for user in users:
+			print("EMITING txResult for user", user)
+			socketio.emit('send_message', {"data": "bite"}, room=user)
+			socketio.emit('txResult', {"status": status}, room=user)
 
 def makeTopics(signature, *args):
 	

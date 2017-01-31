@@ -33,7 +33,7 @@ def refreshBalance(user, account=None):
 
 def transfer(from_, to_, amount, local=False, password=None):
 	if not local:
-		ret = eth_cli.personal_unlockAccount(from_.get('account'), password)
+		ret = from_.unlockAccount(password=password)
 		ret = eth_cli.transfer(from_.get('account'), to_, amount)	
 		return {
 			"data": ret,

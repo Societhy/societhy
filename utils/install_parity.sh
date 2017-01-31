@@ -721,7 +721,7 @@ EOL
 	tput clear
 	echo
 	echo
-	echo " ${blue}∷ ${b}${green} WELCOME TO PARITY ${reset} ${blue}∷${reset}"
+	echo " ${blue}∷ ${b}${green} WELCOME TO PARITY ${reset} ${blue}∷${reset}a"
 	echo
 	echo
 
