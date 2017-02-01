@@ -17,6 +17,7 @@ from ethjsonrpc import wei_to_ether
 
 def test_create_orga(miner):
 	bw.run()
+	mockTx(nb=1)
 	while miner.refreshBalance() < 1:
 		bw.waitBlock()
 
@@ -27,19 +28,17 @@ def test_create_orga(miner):
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
 	sleep(1)
-	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
 	assert new_orga["contract_id"] != None
 	inserted_orga = organizations.find_one({"contract_id": new_orga["contract_id"]})
 	assert inserted_orga != None
 	assert inserted_orga.contract != None
 
+
 def test_join(miner, testOrga):
 	tx_hash = testOrga.join(miner, password="simon")
-	assert tx_hash is not None
+	assert tx_hash != None
 	print('tx hash = ', tx_hash)
 	bw.waitEvent('newMember')
-	sleep(1)
-	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
 	assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
 
 def test_memberlist(testOrga):
@@ -51,25 +50,19 @@ def test_donate(miner, testOrga):
 	tx_hash = testOrga.donate(miner, 1000, password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newDonation")
-	sleep(1)
-	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
 	assert testOrga.getTotalFunds() == 1000
 	
 def test_leave(miner, testOrga):
 	tx_hash = testOrga.leave(miner, password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitEvent("memberLeft")
-	sleep(1)
-	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
+
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 
 def test_createproject(miner, testOrga):
 	tx_hash = testOrga.createProject(miner, 'newproject', password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitTx(tx_hash)
-	sleep(1)
-	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
-
 
 def test_destroyOrga(miner, testOrga):
 	pass

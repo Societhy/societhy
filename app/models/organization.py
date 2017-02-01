@@ -135,7 +135,7 @@ class OrgaDocument(Document):
 		return list(memberList)
 
 	def join(self, user, password=None, local=False):
-		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], gas=139806, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined]))

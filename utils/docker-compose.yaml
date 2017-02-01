@@ -67,3 +67,37 @@ test_prod_env:
     - "custom:172.17.0.2"
 
 
+test_pow_env:
+  image: societhy/env
+  dns:
+    - 8.8.8.8
+  command: /usr/bin/supervisord -n -c /societhy/utils/PoW/supervisor.conf -l /supervisord.log
+  working_dir: /societhy
+  ports:
+    - "8800"  # unused
+    - "8180"  # unused
+    - "27017:27017" # geth json-rpc api
+    - "4242:4242" # web port
+    - "8080" # geth json-rpc api
+    - "8545" # geth json-rpc api
+    - "30303:30303"  # geth p2p protocol
+  environment:
+    - MINING=1
+    - TESTING=1
+    - IP=172.17.0.2
+    - MONGOIP=127.0.0.1
+    - ETHIP=127.0.0.1
+    - ETHPORT=8545
+    - KEYS_DIRECTORY=/societhy/.parity/keys/Morden/
+    - TERM=xterm-256color
+    - PYTHONPATH=/societhy/app
+  volumes:
+    - ../app:/societhy/app:rw
+    - ../app/contracts:/societhy/contracts:rw
+    - ../tests:/societhy/tests:rw
+    - ../ethjsonrpc/:/societhy/ethjsonrpc:rw
+    - ./ssh:/root/.ssh/:rw
+    - ${HOME}/.ethash:/societhy/.ethash/:rw
+  extra_hosts:
+    - "custom:172.17.0.2"
+
