@@ -37,7 +37,8 @@ def test_join(miner, testOrga):
 	assert tx_hash is not None
 	print('tx hash = ', tx_hash)
 	bw.waitEvent('newMember')
-	# assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
+	assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
+	print('----------', eth_cli.eth_getTransactionReceipt(tx_hash) )
 
 def test_memberlist(testOrga):
 	result = testOrga.getMemberList()
