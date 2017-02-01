@@ -1,29 +1,9 @@
 
 test_local_env:
-  image: societhy/localenv
+  image: societhy/env
   dns:
     - 8.8.8.8
   command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
-  working_dir: /societhy
-  ports:
-    - "8800"  # unused
-    - "8180"  # unused
-    - "27017:27017" # geth json-rpc api
-    - "4242:4242" # web port
-    - "8080" # geth json-rpc api
-    - "8545" # geth json-rpc api
-    - "30303:30303"  # geth p2p protocol
-  volumes:
-    - ../app:/societhy/app:rw
-    - ${HOME}/.ssh:/root/.ssh/:ro
-  extra_hosts:
-    - "custom:172.17.0.2"
-
-test_remote_env:
-  image: societhy/tests
-  dns:
-    - 8.8.8.8
-  command: /usr/bin/supervisord -n -c /societhy/utils/supervisor_test.conf -l /supervisord.log
   working_dir: /societhy
   ports:
     - "8800"  # unused
@@ -37,13 +17,52 @@ test_remote_env:
     - MINING=1
     - TESTING=1
     - IP=172.17.0.2
+    - MONGOIP=127.0.0.1
+    - ETHIP=127.0.0.1
+    - ETHPORT=8545
+    - KEYS_DIRECTORY=/societhy/.parity/keys/SociethyPoA/
+    - TERM=xterm-256color
+    - PYTHONPATH=/societhy/app
   volumes:
     - ../app:/societhy/app:rw
-    - ../tests:/societhy/tests:rw
     - ../app/contracts:/societhy/contracts:rw
+    - ../tests:/societhy/tests:rw
+    - ../ethjsonrpc/:/societhy/ethjsonrpc:rw
     - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
-    - ${HOME}/rendu/ethjsonrpc/:/societhy/ethjsonrpc:rw
+  extra_hosts:
+    - "custom:172.17.0.2"
+
+test_prod_env:
+  image: societhy/env
+  dns:
+    - 8.8.8.8
+  command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
+  working_dir: /societhy
+  ports:
+    - "8800"  # unused
+    - "8180"  # unused
+    - "27017:27017" # geth json-rpc api
+    - "4242:4242" # web port
+    - "8080" # geth json-rpc api
+    - "8545" # geth json-rpc api
+    - "30303:30303"  # geth p2p protocol
+  environment:
+    - MINING=1
+    - IP=172.17.0.2
+    - MONGOIP=163.5.84.117
+    - ETHIP=127.0.0.1
+    - ETHPORT=8545
+    - KEYS_DIRECTORY=/societhy/.parity/keys/SociethyPoA/
+    - TERM=xterm-256color
+    - PYTHONPATH=/societhy/app
+  volumes:
+    - ../app:/societhy/app:rw
+    - ../app/contracts:/societhy/contracts:rw
+    - ../tests:/societhy/tests:rw
+    - ../ethjsonrpc/:/societhy/ethjsonrpc:rw
+    - ./ssh:/root/.ssh/:rw
+    - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:
     - "custom:172.17.0.2"
 

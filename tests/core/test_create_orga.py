@@ -15,8 +15,6 @@ from tests.fixtures import *
 
 from ethjsonrpc import wei_to_ether
 
-
-
 def test_create_orga(miner):
 	bw.run()
 	while miner.refreshBalance() < 1:

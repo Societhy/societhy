@@ -65,7 +65,6 @@
 
     // $scope.$on('socket:sessionId', function(ev, data) {
     socketIO.on('sessionId', function (data) {
-            // console.log(ev, data, socketIO);
         if ($rootScope.user && data != $rootScope.user.socketid ) {
             $rootScope.sessionId = data;
             $http.get('/socketid/'.concat($rootScope.sessionId)).then(function(resp) {

@@ -14,8 +14,7 @@ def notifyUsers(users, status="success"):
 	if not env.get('TESTING'):
 		for user in users:
 			print("EMITING txResult for user", user)
-			socketio.emit('send_message', {"data": "bite"}, room=user)
-			socketio.emit('txResult', {"status": status}, room=user)
+			socketio.emit('txResult', {"status": status})
 
 def makeTopics(signature, *args):
 	

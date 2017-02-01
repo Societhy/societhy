@@ -1,0 +1,2 @@
+class NotEnoughFunds(Exception):
+	pass

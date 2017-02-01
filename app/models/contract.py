@@ -32,10 +32,12 @@ class ContractDocument(Document):
 			self["is_deployed"] = False
 			self["name"] = contract
 			self["contract_file"] = path.join(self.contract_directory, contract + ".sol")
+			self["contract_name"] = contract
 			self["owner"] = owner.get('account') if type(owner) is User else owner
 
 	def compile(self):
-		compiled = compile_file(self["contract_file"]).get(self["name"])
+		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
+		compiled = compile_file(self["contract_file"]).get(solc_key)
 		self["evm_code"] = '0x' + compiled.get('bin_hex')
 		self["abi"] = compiled.get('abi')
 		for abi_item in self["abi"]:
