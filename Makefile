@@ -5,7 +5,7 @@ all:
 	@make shell
 
 test:
-	@make build_test
+	@make build
 	@make local_test
 
 build_dependencies:
@@ -27,6 +27,8 @@ local_test:
 
 prod:
 	docker-compose -f utils/docker-compose.yaml up -d test_prod_env
+	sleep 3
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` ps -eaf'
 	#sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` scp -r exploit@163.5.84.117:/home/exploit/.parity/keys /societhy/.parity/keys'
 	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` /bin/zsh'
 	@make stop

@@ -64,11 +64,12 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   }
 });
 
-app.factory('socketIO', function (socketFactory) {
+app.factory('socketIO', function ($rootScope, socketFactory) {
     var socket = socketFactory({
         ioSocket: io.connect('/')
     });
     socket.forward('error');
+    socket.forward('txResult', $rootScope);
     return socket;
 });
 

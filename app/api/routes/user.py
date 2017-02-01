@@ -66,7 +66,7 @@ def updateSingleUserField(user):
 @router.route('/addToContact', methods=['POST'])
 @requires_auth
 def addToContactList(user):
-    ret = user_management.addToContactList(user, request.json)
+    ret = user_management.addToContact(user, request.json)
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/delFromContact', methods=['POST'])

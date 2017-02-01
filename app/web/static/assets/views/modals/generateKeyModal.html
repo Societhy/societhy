@@ -8,7 +8,7 @@
 	</button>
 
 	<form ladda="ldlocal.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="width:45%;padding:0px" ng-show='needLocalPassw' ng-submit="local('genLocalKey', 'contract')">
-		<input class="form-control" type="password" placeholder="Password" ng-model="tmpPass">
+		<input class="form-control" type="password" placeholder="Password" ng-model="localPassword">
 		<span class="ladda-spinner"></span>
 	</form>
 
@@ -19,7 +19,7 @@
 	</button>
 
 	<form ladda="ldrequest.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float:right;width:45%;padding:0px" ng-show='needRequestPassw' ng-submit="request('genLinkedKey', 'contract')">
-		<input class="form-control" type="password" placeholder="Password" ng-model="tmpPass">
+		<input class="form-control" type="password" placeholder="Password" ng-model="requestPassword">
 		<span class="ladda-spinner"></span>
 	</form>
 </div>

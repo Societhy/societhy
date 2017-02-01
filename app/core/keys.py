@@ -25,8 +25,7 @@ class KeyExistsError(Exception):
 
 def genBaseKey(password):
 
-	hashPassword = scrypt.hash(password, SALT_WALLET_PASSWORD)
-	hashPassword = encode_hex(hashPassword).decode('utf-8')
+	hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 	dirContent = listdir(keyDirectory)
 	key = eth_cli.personal_newAccount(hashPassword)
 	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
@@ -35,8 +34,7 @@ def genBaseKey(password):
 def genLinkedKey(user, password):
 
 	def genKeyRemote(password):
-		hashPassword = scrypt.hash(password, SALT_WALLET_PASSWORD)
-		hashPassword = encode_hex(hashPassword).decode('utf-8')
+		hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 		dirContent = listdir(keyDirectory)
 		key = eth_cli.personal_newAccount(hashPassword)
 		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]

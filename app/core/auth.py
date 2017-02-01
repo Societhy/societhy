@@ -123,6 +123,8 @@ def signUp(newUser):
 		if user.get('eth'):
 			del user["eth"]
 			user.populateKey()
+		else:
+			user["eth"] = {}
 
 		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
 					"socketid": newUser.get('socketid')})
@@ -138,6 +140,9 @@ def signUp(newUser):
 		if user.get('eth'):
 			del user["eth"]
 			user.populateKey()
+		else:
+			user["eth"] = {}
+
 		user.generatePersonalDataFromSocial()
 		return {"data": newUser, "status": 200}
 

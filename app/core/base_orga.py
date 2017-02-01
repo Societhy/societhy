@@ -1,6 +1,7 @@
 from flask import session, request, Response
 from bson import objectid, errors
 
+from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
 from models.errors import NotEnoughFunds
@@ -24,15 +25,14 @@ def getOrgaDocument(user, _id=None, name=None):
 
 def createOrga(user, password, newOrga):
 	print(newOrga, user, password)
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	instance = OrgaDocument(doc=newOrga, owner=user, contract='basic_orga')
 	try:
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
-	except NotEnoughFunds:
-		return {
-			"data": "Not enough funds in wallet!",
-			"status": 400
-		}
-	# socketio.emit('txResult', {"status": "coucou"}, room=user.get('socketid'))
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+
 	return {
 			"data": newOrga,
 			"status": 200

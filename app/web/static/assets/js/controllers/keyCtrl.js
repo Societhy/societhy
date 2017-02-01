@@ -40,7 +40,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 
 	$scope.request = function(operation, style) {
 		$scope.ldrequest[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.requestPassword).then(
 			function(key) {
 				$scope.ldrequest[style.replace('-', '_')] = false;
 				errorAlertOptions.showCancelButton = true,
@@ -178,12 +178,12 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		});
 	};
 
-	ctrl.genLocalKey = function() {
+	ctrl.genLocalKey = function(password) {
 		return $q(function(success, failure) {
 			$timeout(function() {
 				keythereum.create(keythereum.constants, function(dk) {
 					//ask for password
-					keythereum.dump("bite", dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
+					keythereum.dump(password, dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
 								$rootScope.user.eth.keys['0x'.concat(keyObject.address)] = { "address": '0x'.concat(keyObject.address), "local": true, "balance": 0 };
@@ -198,11 +198,11 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 		});
 	};
 
-	ctrl.genLinkedKey = function() {
+	ctrl.genLinkedKey = function(password) {
 		return $q(function(success, failure) {
 			$timeout(function() {
 				$http.post('/genLinkedKey', {
-					"password": "coucou"
+					"password": password
 				}).then(
 					function(response) {
 						$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};

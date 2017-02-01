@@ -4,7 +4,6 @@
  */
 
  app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
-
     // Loading bar transition
     // -----------------------------------
     var $win = $($window), $body = $('body');
@@ -227,6 +226,13 @@
         callback.apply(null, args);
     });
     };
+
+    $rootScope.$on('socket:txResult', function (event, data) {
+        if (data.data)
+            $scope.toogleSuccessTx(data.event);
+        else
+            $scope.toogleErrorTx(data.event);
+    });
 
     $scope.searchForAnything = function(search) {
         $rootScope.search = search;

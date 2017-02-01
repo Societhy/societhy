@@ -53,10 +53,11 @@ class OrgaDocument(Document):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		if from_ is None:
-			users_socket = []
 			from_ = self["owner"]
-		elif isinstance(from_, User):
-			users_socket = [from_.get('socketid')]
+
+		if isinstance(from_, User):
+			socketid = from_.get('socketid')
+			users_socket = list(socketid) if socketid is not None else None 
 
 		if not from_.unlockAccount(password=password):
 			return "Failed to unlock account"
@@ -75,6 +76,7 @@ class OrgaDocument(Document):
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
+		return {k: v for (k, v) in self.items() if type(v) != ObjectId}
 
 	def memberJoined(self, logs):
 		# decode logs, find user and add its id, key, name (?) to member list
@@ -193,6 +195,10 @@ class OrgaDocument(Document):
 
 class OrgaCollection(Collection):
 	document_class = OrgaDocument
+
+	orga_info = [
+		""
+	]
 
 	@find_method
 	def find_one(self, *args, **kwargs):

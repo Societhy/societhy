@@ -10,12 +10,6 @@ from core.chat import socketio
 
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 
-def notifyUsers(users, status="success"):
-	if not env.get('TESTING'):
-		for user in users:
-			print("EMITING txResult for user", user)
-			socketio.emit('txResult', {"status": status})
-
 def makeTopics(signature, *args):
 	
 	ret = list()
@@ -33,6 +27,7 @@ class Event:
 	tx_hash = None
 	users = None
 	callback = None
+	name = "defaultEvent"
 
 	def __init__(self, tx_hash=None, users=[], callbacks=None):
 		self.tx_hash = tx_hash
@@ -42,6 +37,12 @@ class Event:
 		elif callable(callbacks):
 			self.callbacks = [callbacks]
 
+	def notifyUsers(self, data=None):
+		if self.users:
+			for user in self.users:
+				payload = {"event": self.name, "data": data}
+				socketio.emit('txResult', payload, room=user)
+
 	def happened(self):
 		return False
 
@@ -49,21 +50,19 @@ class Event:
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		print("PROCESSING EVENT", self.tx_hash, "--------------", self.tx_receipt)
 		for cb in self.callbacks:
-			cb()
+			notifyUsers(self.users, cb())
 
 
 # EVENT CLASS FOR CONTRACT CREATION
 class ContractCreationEvent(Event):
 
+	name = "contractCreation"
+
 	def process(self):
 		print("PROCESSING EVENT", self.tx_hash)
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		for cb in self.callbacks:
-			if cb(self.tx_receipt) is True:
-				notifyUsers(self.users, "success")
-			else:
-				notifyUsers(self.users, "failure")
-
+			self.notifyUsers(cb(self.tx_receipt))
 
 class LogEvent(Event):
 
@@ -79,7 +78,7 @@ class LogEvent(Event):
 		tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		self.logs = tx_receipt.get('logs')
 		for cb in self.callbacks:
-			cb(self.logs)
+			self.notifyUsers(cb(self.logs))
 
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):
