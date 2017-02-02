@@ -30,19 +30,7 @@ def login(credentials):
 		return None
 
 	def authUserSocial(credentials):
-		if credentials["provider"] == "facebook":
-			return users.find_one({"social.facebook.id" : credentials["socialId"]})
-		if credentials["provider"] == "github":
-			return users.find_one({"social.github.id" : credentials["socialId"]})
-		if credentials["provider"] == "coinbase" :
-			return users.find_one({"social.coinbase.id" : credentials["socialId"]})
-		if credentials["provider"] == "linkedin":
-			return users.find_one({"social.linkedin.id" : credentials["socialId"]})
-		if credentials["provider"] == "twitter":
-			return users.find_one({"social.twitter.id" : credentials["socialId"]})
-		if credentials["provider"] == "google":
-			return users.find_one({"social.google.id" : credentials["socialId"]})
-
+		return users.find_one({("social.%s.id" % credentials["provider"]) : credentials["socialId"]})
 
 	if request.headers.get('authentification') is not None and request.headers.get('authentification') in session:
 		return {
@@ -92,29 +80,18 @@ def signUp(newUser):
 		return False
 
 	def socialUserExists(newUser):
-		if 'facebook' in newUser["social"]:
-			if users.find({"social.facebook.id" : newUser["social"]["facebook"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-		if 'github' in newUser["social"]:
-			if users.find({"social.github.id" : newUser["social"]["github"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-		if 'coinbase' in newUser["social"]:
-			if users.find({"social.coinbase.id" : newUser["social"]["coinbase"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-		if 'linkedin' in newUser["social"]:
-			if users.find({"social.linkedin.id" : newUser["social"]["linkedin"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-		if 'twitter' in newUser["social"]:
-			if users.find({"social.twitter.id" : newUser["social"]["twitter"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-		if 'google' in newUser["social"]:
-			if users.find({"social.facebook.id" : newUser["social"]["google"]["id"]}).count() > 0:
-				return {"data": "user already exists", "status": 403}
-
+		social_provider = list(newUser.get('social').keys())[0]
+		social_id = newUser.get('social').get(social_provider).get('id')
+		social_email = newUser.get('social').get(social_provider).get('email')
+		if users.find({'$or': [{("social.%s.id" % social_provider) : newUser["social"][social_provider]["id"]},
+								{"email": social_email}]}).count() > 0:
+			return None
+		else:
+			return {"social_id": social_id, "social_provider": social_provider}
 
 	if 'social' not in newUser:
 		failure = wrongSignupRequest(newUser) or userExists(newUser)
-		if failure:
+		if failure is True:
 			return failure
 
 		unencryptedPassword = newUser.get('password')
@@ -132,9 +109,9 @@ def signUp(newUser):
 					"socketid": newUser.get('socketid')})
 
 	else:
-		failure = socialUserExists(newUser)
-		if failure:
-			return failure
+		social_infos = socialUserExists(newUser)
+		if social_infos is None:
+			return {"data": "user already exists", "status": 403}
 
 		newUser["password"] = encode_hex(scrypt.hash("password", SALT_LOGIN_PASSWORD)).decode('utf-8')
 		user = UserDocument(newUser)
@@ -147,7 +124,9 @@ def signUp(newUser):
 			user.save_partial()
 
 		user.generatePersonalDataFromSocial()
-		return {"data": newUser, "status": 200}
+		return login({"socialId": social_infos.get('social_id'),
+						"provider": social_infos.get('social_provider'),
+						"socketid": newUser.get('socketid')})
 
 
 def setSocketId(socketid, user):

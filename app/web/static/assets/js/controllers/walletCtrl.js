@@ -24,7 +24,7 @@ app.controller('WalletController', function($rootScope, $http, $sessionStorage, 
 
 	ctrl.totalBalance = function() {
 		var totalBalance = 0;
-		$.each(ctrl.user.eth.keys, function(index, keyObject) {
+		$.each($rootScope.user.eth.keys, function(index, keyObject) {
 			totalBalance += keyObject.balance;
 		});
 		return totalBalance;

@@ -79,7 +79,7 @@ def importNewKey(user, sourceKey):
 	try:
 		key = json.loads(sourceKey)
 		isEthereumKey(key)
-		keyAlreadyExists(key.get('address'), user.get('eth').get('keys'))
+		keyAlreadyExists(key.get('address'), user.get('eth').get('keys', {}))
 		keyFilename = importKeyRemote(key.get('id'), sourceKey)
 		key["address"] = normalizeAddress(key.get('address'), hexa=True)
 		balance = fromWei(eth_cli.eth_getBalance(key.get('address')))

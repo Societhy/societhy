@@ -41,7 +41,7 @@
 
             $scope.toTheTop();
 
-            if (form.$valid || !form.$valid) {
+            if (form.$valid) {
                 form.$setPristine();
                 nextStep();
             } else {
@@ -60,7 +60,7 @@
                 }
                 console.log(firstError)
                 angular.element('.ng-invalid[name=' + firstError + ']').focus();
-                errorMessage();
+                errorMessage('please complete the form in this step before proceeding');
             }
         },
 
@@ -80,28 +80,32 @@
                     goToStep(i);
 
                 } else
-                errorMessage();
+                errorMessage('please complete the form in this step before proceeding');
             }
         },
 
         submit: function (form) {
-            $scope.completeBlockchainAction(function(password, newOrga) {
-                $rootScope.toogleWait("Processing organization creation...");
-                $http.post('/createOrga', {
-                    "password": password,
-                    "newOrga" : {
-                        "name": form.name.$$rawModelValue,
-                        "description" : form.description.$$rawModelValue,
-                        "type" : form.type.$$rawModelValue,
-                        "fbUrl": form.fbUrl.$$rawModelValue,
-                        "twitterUrl" : form.twitterUrl.$$rawModelValue
-                    }}).then(function(response) {
-                        console.log("resp =", response, $rootScope.user);
-                    }, function(error) {
-                        $rootScope.toogleError(error.data);
-                     });
+            if (!$rootScope.user.account) {
+                errorMessage("Please set up an ethereum account first")
+            }
+            else {
+                $scope.completeBlockchainAction(function(password, newOrga) {
+                    $rootScope.toogleWait("Processing organization creation...");
+                    $http.post('/createOrga', {
+                        "password": password,
+                        "newOrga" : {
+                            "name": form.name.$$rawModelValue,
+                            "description" : form.description.$$rawModelValue,
+                            "type" : form.type.$$rawModelValue,
+                            "fbUrl": form.fbUrl.$$rawModelValue,
+                            "twitterUrl" : form.twitterUrl.$$rawModelValue
+                        }}).then(function(response) {
+                            console.log("resp =", response, $rootScope.user);
+                        }, function(error) {
+                            $rootScope.toogleError(error.data);
+                         });
                 }, form);
-
+            }
         },
 
         reset: function () {
@@ -119,14 +123,16 @@
     var goToStep = function (i) {
         $scope.currentStep = i;
     };
-    var errorMessage = function (i) {
 
-        ngNotify.set('please complete the form in this step before proceeding', {
+    var errorMessage = function (text) {
+
+        ngNotify.set(text, {
             theme: 'pure',
             position: 'top',
             type: 'error',
             button: 'true',
-            sticky: 'false',
+            sticky: false,
+            duration: 3000
         });
     };
 });

@@ -23,7 +23,6 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 				$rootScope.user = ctrl.user = response.data.user;
 				ctrl.wallet.refreshAllBalances();
                 $rootScope.$emit("loadChat", '');
-                $state.reload();
 			}, function(error) {
 				$rootScope.toogleError(error.data);
 			});
@@ -46,14 +45,20 @@ ctrl.coinbase_register = function ()
         result.me().done(function (data) {
             $http.post('/newUser', {"social" : 
                 { "coinbase" : 
-                {
-                "firstname" : data.firstname,
-                "lastname" : data.lastname,
-                "email" : data.email,
-                "id" : data.id,
-                "company" : data.company,
-            }}}
-            ).then(function(response) {}, function(error) {
+	                {
+		                "firstname" : data.firstname,
+		                "lastname" : data.lastname,
+		                "email" : data.email,
+		                "id" : data.id,
+		                "company" : data.company,
+	            	}
+        		}
+ 		   }).then(function(response) {
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+            }, function(error) {
 				$rootScope.toogleError(error.data);
                 console.log(error);
             });
@@ -80,7 +85,10 @@ ctrl.fb_register = function ()
     	        	},
     	        "socketid": $rootScope.sessionId
 			}).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
                 }, function(error) {
 					$rootScope.toogleError(error.data);
                     console.log(error);
@@ -108,7 +116,11 @@ ctrl.twitter_register = function ()
 	            },
 	            "socketid": $rootScope.sessionId
 	        }).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+				console.log(response);
                 }, function(error) {
 					$rootScope.toogleError(error.data);
                     console.log(error);
@@ -134,7 +146,11 @@ OAuth.popup('linkedin').done(function(result) {
                 }},
 	            "socketid": $rootScope.sessionId
 	        }).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+                console.log(response);
                 }, function(error) {
 					$rootScope.toogleError(error.data);
                     console.log(error);
@@ -161,7 +177,12 @@ OAuth.popup('github').done(function(result) {
                 }},
             "socketid": $rootScope.sessionId
         }).then(function(response) {
-                    console.log(response);
+                console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+
                 }, function(error) {
 					$rootScope.toogleError(error.data);
                     console.log(error);
@@ -178,20 +199,24 @@ ctrl.google_register = function ()
         result.me().done(function(userData) {
             console.log(userData);
             $http.post('/newUser',
-                {"social" : 
-                {"google" :
-                {
-                    "firstname" : userData.firstname,
-                    "lastname" : userData.lastname,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.avatar,
-                    "url" : userData.url,
-                    "company" : userData.company
-
-                }},
+                {"social" :
+	                {"google" :
+		                {
+		                    "firstname" : userData.firstname,
+		                    "lastname" : userData.lastname,
+		                    "id" : userData.id,
+		                    "email" : userData.email,
+		                    "pictureURL" : userData.avatar,
+		                    "url" : userData.url,
+		                    "company" : userData.company
+		                }
+	            },
             "socketid": $rootScope.sessionId
         }).then(function(response) {
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
                     console.log(response);
                 }, function(error) {
 					$rootScope.toogleError(error.data);
