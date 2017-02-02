@@ -14,10 +14,14 @@ def getOrgaDocument(user, _id=None, name=None):
 		except errors.InvalidId:
 			return {"data": "Not a valid ObjectId, it must be a 12-byte input or a 24-character hex string", "status": 400}
 		orga = organizations.find_one({"_id": _id})
+		if orga is None:
+			return {"data": "Organization does not exist", "status": 400}
 	elif name:
 		orga = list(organizations.find({"name": name}))
 		if len(orga) == 1:
 			orga = orga[0]
+		elif len(orga) < 1:
+			return {"data": "Organization does not exist", "status": 400}
 	return {
 		"data": orga,
 		"status": 200

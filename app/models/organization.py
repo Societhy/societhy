@@ -55,15 +55,11 @@ class OrgaDocument(Document):
 		if from_ is None:
 			from_ = self["owner"]
 
-		if isinstance(from_, User):
-			socketid = from_.get('socketid')
-			users_socket = list(socketid) if socketid is not None else None 
-
 		if not from_.unlockAccount(password=password):
 			return "Failed to unlock account"
 
 		tx_hash = self.contract.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=users_socket))
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
 		return tx_hash
 
 
@@ -76,22 +72,27 @@ class OrgaDocument(Document):
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
-		return {k: v for (k, v) in self.items() if type(v) != ObjectId}
+		resp = {"name": self["name"], "_id": str(self["_id"])}
+		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
+		return resp
 
 	def memberJoined(self, logs):
 		# decode logs, find user and add its id, key, name (?) to member list
-
 		print("USER JOINED", logs)
+		return logs
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
 		print("USEF LEFT", logs)
+		return {"data": logs}
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
+		return {"data": logs}
 
 	def projectCreated(self, logs):
 		print("NEW PROJECT == ", logs)
+		return {"data": logs}
 
 
 	####
@@ -138,7 +139,7 @@ class OrgaDocument(Document):
 		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], gas=139806, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined]))
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined], users=user))
 			return tx_hash
 		else:
 			return False

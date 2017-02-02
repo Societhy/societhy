@@ -4,6 +4,7 @@ from sha3 import keccak_256
 from collections import deque
 
 from .clients import eth_cli
+from .user import UserDocument as User
 
 from core.utils import to32bytes
 from core.chat import socketio
@@ -28,10 +29,16 @@ class Event:
 	users = None
 	callback = None
 	name = "defaultEvent"
+	notified = list()
 
 	def __init__(self, tx_hash=None, users=[], callbacks=None):
 		self.tx_hash = tx_hash
-		self.users = users
+
+		if isinstance(users, User):
+			self.users = [users.get('socketid')] if users.get('socketid') is not None else None
+		elif isinstance(users, list):
+			self.users = [user.get('socketid') if isinstance(user, User) else user for user in users]
+
 		if isinstance(callbacks, list):
 			self.callbacks = callbacks
 		elif callable(callbacks):
@@ -39,9 +46,11 @@ class Event:
 
 	def notifyUsers(self, data=None):
 		if self.users:
-			for user in self.users:
+			for user in list(self.users):
 				payload = {"event": self.name, "data": data}
+				print("EMITTING", payload, "to", user)
 				socketio.emit('txResult', payload, room=user)
+				self.users.remove(user)
 
 	def happened(self):
 		return False

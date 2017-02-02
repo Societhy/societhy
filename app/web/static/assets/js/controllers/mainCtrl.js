@@ -26,8 +26,9 @@
             console.log("NOT LOGGED IN");
             $state.go('app.dashboard').then(function(arg) {
                 $state.reload();
+                $rootScope.toogleError("Please sign-in first")
             }, function(error) {
-                consol.log(error);
+                console.log(error);
             });
         }
 
@@ -214,24 +215,33 @@
           closeOnConfirm: true,
           inputPlaceholder: "Password"
       },
-      function(inputValue){
+      function(inputValue) {
           if (inputValue === false) return false;
-
-          if (inputValue === "") {
+          else if (inputValue === "") {
             SweetAlert.swal.showInputError("You need to write something!");
             return false
-        }
+          }
         var password = inputValue;
         args[0] = password;
         callback.apply(null, args);
     });
     };
 
+    var mapping_events_route = {
+        "contractCreation": "app.organization"
+    }
+
     $rootScope.$on('socket:txResult', function (event, data) {
-        if (data.data)
+        console.log(data);
+        if (data.data) {
             $rootScope.toogleSuccess(data.event);
-        else
+            if (data.event in mapping_events_route) {
+                $state.go(mapping_events_route[data.event], data.data);
+            }
+        }
+        else {
             $rootScope.toogleError(data.event);
+        }
     });
 
     $scope.searchForAnything = function(search) {

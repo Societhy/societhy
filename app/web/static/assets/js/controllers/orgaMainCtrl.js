@@ -1,43 +1,46 @@
-app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage, $state) {
+app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $state) {
 
 	var ctrl = this;
 
-	ctrl.init = function() {
-		console.log($state.params);
-		$http.post('/getOrganization', {
-			// "name": $state.params.orga_id
-			"name": $state.params.orga_name
-		}).then(
-		function(data) {
-			$rootScope.currentOrga = data.data;
-			console.log(data);
-		},
-		function(error) {
-			$rootScope.currentOrga = {"name": "one", "id": 1, "picture": "static/assets/images/orga_default.jpg"};
-			console.log(error);
-		});
-	}
-
 	ctrl.joinOrga = function() {
-		password = "test";
-		if ($rootScope.user.local_account == true) {
+		if (!$rootScope.user) {
+			$rootScope.toogleError("Please sign-in first")
+		}
+
+		else if ($rootScope.user.local_account == true) {
 			console.log("ask for password")
 		}
 		else {
-			$http.post('/joinOrga', {
-				"orga_id": $rootScope.currentOrga._id,
-				"password": password
-			}).then(
-			function(data) {
-				console.log(data);
-			},
-			function(error) {
-				console.log(error);
-			});
+            $scope.completeBlockchainAction(function(password) {
+	            $rootScope.toogleWait("Joining...");
+				$http.post('/joinOrga', {
+					"orga_id": $rootScope.currentOrga._id,
+					"password": password
+				}).then(
+				function(data) {
+					console.log(data);
+				},
+				function(error) {
+					console.log(error);
+				});
+        	});
+
+
 		}
 	}
 
-	ctrl.init()
+	$rootScope.currentOrga = $state.params.data
+	console.log("state params", $state.params)
+	if (!$rootScope.currentOrga) {
+		$http.post('/getOrganization', {
+			"id": $state.params._id
+		}).then(function(response) {
+			$rootScope.currentOrga = response.data;
+		}, function(error) {
+			$state.go('app.dashboard');
+			$rootScope.toogleError("Organization does not exist");			
+		})
+	}
 	return ctrl;
 });
 

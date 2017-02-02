@@ -22,7 +22,7 @@ class UserDocument(Document):
 
 	def joinedOrga(self, logs):
 		print("USER JOINED ORGA", logs)
-
+		return logs
 	def leftOrga(self, logs):
 		print("USER LEFT ORGA", logs)
 
