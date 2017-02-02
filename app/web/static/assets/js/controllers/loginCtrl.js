@@ -1,4 +1,4 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller, $location) {
+app.controller('LoginController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
 
 	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
@@ -12,20 +12,21 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
-				$http.post('/login', {
-					"id": btoa(ctrl.username + ':' + ctrl.password),
-					"socketid": $rootScope.sessionId
-				}).then(function(response) {
-					console.log("RECEIVED = ", response);
-					$sessionStorage.user = JSON.stringify(response.data.user);
-					$sessionStorage.SociethyToken = response.data.token;
-					$sessionStorage.username = response.data.user.name;
-					$rootScope.user = ctrl.user = response.data.user;
-					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
-				}, function(error) {
-					console.log(error);
-				});
+			$http.post('/login', {
+				"id": btoa(ctrl.username + ':' + ctrl.password),
+				"socketid": $rootScope.sessionId
+			}).then(function(response) {
+				console.log("RECEIVED = ", response);
+				$sessionStorage.user = JSON.stringify(response.data.user);
+				$sessionStorage.SociethyToken = response.data.token;
+				$sessionStorage.username = response.data.user.name;
+				$rootScope.user = ctrl.user = response.data.user;
+				ctrl.wallet.refreshAllBalances();
+                $rootScope.$emit("loadChat", '');
+                $state.reload();
+			}, function(error) {
+				$rootScope.toogleError(error.data);
+			});
 		}
 	}
 
@@ -53,6 +54,7 @@ ctrl.coinbase_register = function ()
                 "company" : data.company,
             }}}
             ).then(function(response) {}, function(error) {
+				$rootScope.toogleError(error.data);
                 console.log(error);
             });
         })
@@ -80,6 +82,7 @@ ctrl.fb_register = function ()
 			}).then(function(response) {
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
             });
@@ -107,6 +110,7 @@ ctrl.twitter_register = function ()
 	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
 })
@@ -132,6 +136,7 @@ OAuth.popup('linkedin').done(function(result) {
 	        }).then(function(response) {
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
     })
@@ -158,6 +163,7 @@ OAuth.popup('github').done(function(result) {
         }).then(function(response) {
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
 })
@@ -188,10 +194,12 @@ ctrl.google_register = function ()
         }).then(function(response) {
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
             })
     }).then(function() {}, function(error) {
+		$rootScope.toogleError(error.data);
         console.log(error);
     });
 }
@@ -215,6 +223,7 @@ ctrl.coinbase_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');					
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
         })
@@ -239,6 +248,7 @@ ctrl.fb_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');					
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
             });
@@ -264,6 +274,7 @@ ctrl.twitter_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
 })
@@ -288,6 +299,7 @@ OAuth.popup('linkedin').done(function(result) {
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
     })
@@ -312,6 +324,7 @@ OAuth.popup('github').done(function(result) {
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
 })
@@ -338,10 +351,12 @@ ctrl.google_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
             })
     }).then(function() {}, function(error) {
+		$rootScope.toogleError(error.data);
         console.log(error);
     });
 }
@@ -371,9 +386,10 @@ ctrl.google_connect = function ()
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
                 $rootScope.$emit("loadChat", '');
-				$state.go("app.me", ctrl)
+				$state.go("app.me", ctrl, {reload: true})
 				},
 				function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 			});
 		}
@@ -493,7 +509,7 @@ ctrl.google_connect = function ()
 	});
     }
 
-    	registration_checker();
+    registration_checker();
 
 
     /*

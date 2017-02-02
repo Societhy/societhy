@@ -86,7 +86,7 @@
 
         submit: function (form) {
             $scope.completeBlockchainAction(function(password, newOrga) {
-                $scope.toogleWaitTx("Processing organization creation...");
+                $rootScope.toogleWait("Processing organization creation...");
                 $http.post('/createOrga', {
                     "password": password,
                     "newOrga" : {
@@ -98,7 +98,7 @@
                     }}).then(function(response) {
                         console.log("resp =", response, $rootScope.user);
                     }, function(error) {
-                        $scope.toogleErrorTx(error.data);
+                        $rootScope.toogleError(error.data);
                      });
                 }, form);
 

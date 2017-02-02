@@ -45,7 +45,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/me',
         needs_auth: true,
         templateUrl: "static/assets/views/user_profile.html",
-        resolve: loadSequence('userOverviewCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'qrcode', 'ngTable'),
+        resolve: loadSequence('userOverviewCtrl', 'loginCtrl', 'keyCtrl', 'keythereum', 'angularFileUpload', 'FileSaver', 'qrcode', 'ngTable'),
         title: 'My Profile',
         ncyBreadcrumb: {
             label: 'My Profile'

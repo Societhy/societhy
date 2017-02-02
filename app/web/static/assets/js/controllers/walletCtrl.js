@@ -11,10 +11,14 @@ app.controller('WalletController', function($rootScope, $http, $sessionStorage, 
 			init();
 		}
 		$http.get('/getAllBalances').then(function(response) {
+			if ($rootScope.user.eth.keys == undefined)
+				$rootScope.user.eth.keys = {}
 			$.each($rootScope.user.eth.keys, function(index, keyObject) {
 				keyObject.balance = response.data[keyObject.address];
 			});
 			$rootScope.user.totalBalance = ctrl.totalBalance();
+		}, function(error) {
+			$rootScope.toogleError(error.data);	
 		});
 	}
 
@@ -32,6 +36,8 @@ app.controller('WalletController', function($rootScope, $http, $sessionStorage, 
 			$.each($rootScope.user.eth.keys, function(index, keyObject) {
 				keyObject.balance = response.data[keyObject.address];
 			});
+		}, function(error) {
+			$rootScope.toogleError(error.data);	
 		});
 	};
 

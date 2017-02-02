@@ -31,7 +31,9 @@ class UserDocument(Document):
 	# KEY MANAGEMENT
 
 	def unlockAccount(self, password=None):
-		if self["password_type"] == "remote_hashed":
+		if not self.get('account'):
+			return False
+		elif self["password_type"] == "remote_hashed":
 			password = self.hashPassword(self['password'])
 		elif self["password_type"] == "local_hashed" and password is not None:
 			password = self.hashPassword(password)
@@ -120,6 +122,9 @@ class UserDocument(Document):
 				self.save_partial()
 			return balance
 		return None
+
+	def delete(self):
+		return self.mongokat_collection.remove({"_id": ObjectId(self.get('_id'))})
 
 
 class UserCollection(Collection):

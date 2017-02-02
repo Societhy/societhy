@@ -175,7 +175,7 @@
     };
 
     var waitToast = null
-    $scope.toogleWaitTx = function(text) {
+    $rootScope.toogleWait = function(text) {
         if (!waitToast) {
             waitToast = toaster.pop({type: "wait", title: "Loading", body: text || "Processing transaction", timeout: 0});
         } else {
@@ -186,21 +186,21 @@
         }
     };
 
-    $scope.toogleSuccessTx = function(text) {
+    $rootScope.toogleSuccess = function(text) {
         if (waitToast) {
-            $scope.toogleWaitTx();
+            $rootScope.toogleWait();
         }
         $timeout(function () {
-            toaster.pop({type: "success", title: "Done !", body: text, timeout:3000});
+            toaster.pop({type: "success", title: "Done !", body: text});
         }, 0);
     };
 
-    $scope.toogleErrorTx = function(text) {
+    $rootScope.toogleError = function(text) {
         if (waitToast) {
-            $scope.toogleWaitTx();
+            $rootScope.toogleWait();
         }
         $timeout(function () {
-            toaster.pop({type: "error", title: "Failed...", body: text, timeout:3000});
+            toaster.pop({type: "error", title: "Failed...", body: text});
         }, 0);
     };
 
@@ -229,9 +229,9 @@
 
     $rootScope.$on('socket:txResult', function (event, data) {
         if (data.data)
-            $scope.toogleSuccessTx(data.event);
+            $rootScope.toogleSuccess(data.event);
         else
-            $scope.toogleErrorTx(data.event);
+            $rootScope.toogleError(data.event);
     });
 
     $scope.searchForAnything = function(search) {

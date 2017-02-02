@@ -41,7 +41,7 @@ def setSocketId(socketid, user):
 	ret = auth.setSocketId(socketid, user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/deleteUser/<user>')
+@router.route('/deleteUser')
 @requires_auth
 def deleteUser(user):
 	ret = auth.deleteUser(user)

@@ -2,6 +2,7 @@ import time
 import jwt
 import scrypt
 from base64 import b64decode, b64encode
+from bson.objectid import ObjectId
 
 from flask import session, request, Response
 from models import users, UserDocument
@@ -125,6 +126,7 @@ def signUp(newUser):
 			user.populateKey()
 		else:
 			user["eth"] = {}
+			user.save_partial()
 
 		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
 					"socketid": newUser.get('socketid')})
@@ -142,6 +144,7 @@ def signUp(newUser):
 			user.populateKey()
 		else:
 			user["eth"] = {}
+			user.save_partial()
 
 		user.generatePersonalDataFromSocial()
 		return {"data": newUser, "status": 200}
@@ -160,6 +163,7 @@ def checkTokenValidity(token, user):
 			"status": 200}
 
 def deleteUser(user):
-	# _id = user.get("id")
-	# users.remove({"id": _id})
-	pass
+	logout(user)
+	user.delete()
+	return {"data": "User deleted successfully",
+			"status": 200}
