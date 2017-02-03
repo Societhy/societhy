@@ -25,6 +25,9 @@ def deserializeUser(user):
 	return deserialized
 
 def normalizeAddress(address, hexa=False):
+	if len(address) > 40:
+		address = address[len(address) - 40:]
+
 	if hexa is True:
 		return address if address.startswith("0x") else '0x' + address
 	else:

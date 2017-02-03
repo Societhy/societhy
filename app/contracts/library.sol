@@ -39,9 +39,9 @@ contract open_structure {
     function join(string _name) public {
         uint id;
         if (memberId[msg.sender] == 0) {
-            // memberId[msg.sender] = members.length;
-            // id = members.length++;
-            // members[id] = Member({member: msg.sender, donation: 0, name: _name, memberSince: now});
+            memberId[msg.sender] = members.length;
+            id = members.length++;
+            members[id] = Member({member: msg.sender, donation: 0, name: _name, memberSince: now});
             newMember(msg.sender);
         }
         else throw;
@@ -52,6 +52,7 @@ contract open_structure {
             members[i] = members[i+1];
         }
         delete members[members.length-1];
+        memberId[msg.sender] = 0;
         members.length--;
         memberLeft(msg.sender);
     }

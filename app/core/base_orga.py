@@ -28,9 +28,9 @@ def getOrgaDocument(user, _id=None, name=None):
 	}	
 
 def createOrga(user, password, newOrga):
-	print(newOrga, user, password)
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
+	newOrga["members"] = {}
 	instance = OrgaDocument(doc=newOrga, owner=user, contract='basic_orga')
 	try:
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
@@ -48,7 +48,11 @@ def joinOrga(user, password, orga_id):
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
 	# then we call the model's method and wait for the model to be updated
-	tx_hash = orga.join(user, password=password)
+	try:
+		tx_hash = orga.join(user, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -84,8 +88,16 @@ def createProjectFromOrga(user, password, orga_id, newProject):
 	}
 
 def leaveOrga(user, password, orga_id):
-	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	try:
+		orga_instance.leave(user, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	
 	return {
-		"data": "",
+		"data": user.get("orga_list"),
 		"status": 200
 	}

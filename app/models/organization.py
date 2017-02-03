@@ -8,7 +8,7 @@ from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import toWei, to20bytes
+from core.utils import toWei, to20bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
@@ -78,21 +78,33 @@ class OrgaDocument(Document):
 
 	def memberJoined(self, logs):
 		# decode logs, find user and add its id, key, name (?) to member list
-		print("USER JOINED", logs)
-		return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = users.find_one({"account": address}, ["account", "name", "_id"])
+			if member:
+				self["members"][member.get('account')] = member
+				self.save_partial();
+		print(" ----> MEMBER JOINED : ", self["members"])
+		return self["members"]
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
-		print("USEF LEFT", logs)
-		return {"data": logs}
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			print('-----------------------------> ', address)
+			if address in self["members"]:
+				del self["members"][address]
+				self.save_partial();
+		print(" ----> MEMBER LEFT : ", self["members"])
+		return self["members"]
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
-		return {"data": logs}
+		return logs
 
 	def projectCreated(self, logs):
 		print("NEW PROJECT == ", logs)
-		return {"data": logs}
+		return logs
 
 
 	####
@@ -119,12 +131,14 @@ class OrgaDocument(Document):
 	def getMember(self, user):
 		if isinstance(user, User):
 			account = user.get('account')
-			if account in self.members:
-				return self.members[account]
+			if account in self["members"]:
+				return self["members"][account]
 			else:
-				for member in self.members.values():
+				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
 						return member
+		elif user in self["members"]:
+				return self["members"][user]
 		return None
 
 	def getTotalFunds(self):
@@ -136,7 +150,7 @@ class OrgaDocument(Document):
 		return list(memberList)
 
 	def join(self, user, password=None, local=False):
-		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], gas=139806, password=password)
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined], users=user))
@@ -145,12 +159,10 @@ class OrgaDocument(Document):
 			return False
 
 	def leave(self, user, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'))
-
+		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[user.leftOrga, self.memberLeft]))
+			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[user.leftOrga, self.memberLeft], users=user))
 			return tx_hash
 		else:
 			return False
@@ -160,10 +172,10 @@ class OrgaDocument(Document):
 			return False
 
 		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount)
+		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation]))
+			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
 			return tx_hash
 		else:
 			return False
@@ -173,10 +185,10 @@ class OrgaDocument(Document):
 
 	def createProject(self, user, project, password=None):
 		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project])
+		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated]))
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user))
 			return tx_hash
 		else:
 			return False

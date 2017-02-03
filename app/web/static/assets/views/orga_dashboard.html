@@ -9,7 +9,7 @@
           <!-- start: TAB OVERVIEW -->
           <uib-tab heading="Overview" href="">
             <div ng-controller="OrgaMainController as ctrl">
-              <h1>{{ currentOrga.name }}</h1>
+              <h1>{{ currentOrga.address }}</h1>
               <div class="row border-solid vertical-center">
 
                 <div class="col-md-6 inline-block border-solid">
@@ -17,7 +17,7 @@
                     <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                   </div>
                   <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success" ng-click="ctrl.joinOrga()">Join</button>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger">Leave</button>
+                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 </div>
 
                 <div class="col-md-6 inline-block border-solid">              
@@ -61,7 +61,35 @@
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                   <h2>Members</h2>
-                  
+                  <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+                    <!-- ngInclude: templates.header -->
+                    <thead  class="ng-scope">
+                      <tr>
+                        <td>
+                          <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                            Member
+                            <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                          </a>
+                        </td>
+                        <td>
+                          <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                            <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                            Rank
+                          </a>
+                        </td>
+                      </tr>
+                      <hr />
+                    </thead>
+                    <tbody><!-- ngRepeat: user in $data -->
+                      <tr ng-repeat="(address, member) in currentOrga.members" class="ng-scope">
+                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.name}}</td>
+                      </tr><!-- end ngRepeat: user in $data -->
+                    </tbody>
+                  </table>
+
                 </div>
               </div>
 
@@ -111,9 +139,9 @@
      </div>
    </uib-tab>
  -->
-    <!-- end: TAB ORGANISATIONS -->
- </uib-tabset>
- <!-- end: USER TABSET -->
+ <!-- end: TAB ORGANISATIONS -->
+</uib-tabset>
+<!-- end: USER TABSET -->
 </div>
 </div>
 </div>

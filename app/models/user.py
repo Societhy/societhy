@@ -22,12 +22,16 @@ class UserDocument(Document):
 
 	def joinedOrga(self, logs):
 		print("USER JOINED ORGA", logs)
-		return logs
+		return None
+
 	def leftOrga(self, logs):
 		print("USER LEFT ORGA", logs)
+		return None
 
 	def madeDonation(self, logs):
 		print("USER MADE DONATION", logs)
+		return None
+
 	# KEY MANAGEMENT
 
 	def unlockAccount(self, password=None):

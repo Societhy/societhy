@@ -5,7 +5,7 @@
 
 
   app.controller('OrgaWizardCtrl', 
-    function ($scope, $http, ngNotify, FileUploader, $sessionStorage, $rootScope) {
+    function ($scope, $http, ngNotify, FileUploader, $sessionStorage, $rootScope, $state) {
         $scope.currentStep = 1;
 
 
@@ -89,22 +89,21 @@
                 errorMessage("Please set up an ethereum account first")
             }
             else {
-                $scope.completeBlockchainAction(function(password, newOrga) {
-                    $rootScope.toogleWait("Processing organization creation...");
-                    $http.post('/createOrga', {
-                        "password": password,
-                        "newOrga" : {
-                            "name": form.name.$$rawModelValue,
-                            "description" : form.description.$$rawModelValue,
-                            "type" : form.type.$$rawModelValue,
-                            "fbUrl": form.fbUrl.$$rawModelValue,
-                            "twitterUrl" : form.twitterUrl.$$rawModelValue
-                        }}).then(function(response) {
-                            console.log("resp =", response, $rootScope.user);
-                        }, function(error) {
-                            $rootScope.toogleError(error.data);
-                         });
-                }, form);
+                $scope.completeBlockchainAction(
+                    function(password) {
+                        $rootScope.toogleWait("Processing organization creation...");
+                        $http.post('/createOrga', {
+                            "password": password,
+                            "newOrga" : {
+                                "name": form.name.$$rawModelValue,
+                                "description" : form.description.$$rawModelValue,
+                                "type" : form.type.$$rawModelValue,
+                                "fbUrl": form.fbUrl.$$rawModelValue,
+                                "twitterUrl" : form.twitterUrl.$$rawModelValue
+                            }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
+                },  function(data) {
+                        $state.go("app.organization", data.data);
+                });
             }
         },
 

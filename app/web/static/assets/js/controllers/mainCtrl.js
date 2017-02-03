@@ -38,12 +38,12 @@
             $body.removeClass("app-boxed-page");
         }
         if(typeof CKEDITOR !== 'undefined'){
-         for(name in CKEDITOR.instances)
-         {
-           CKEDITOR.instances[name].destroy();
-       }
-   }
-});
+           for(name in CKEDITOR.instances)
+           {
+             CKEDITOR.instances[name].destroy();
+         }
+     }
+ });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
       $scope.horizontalNavbarCollapsed = true;
         //stop loading bar on stateChangeSuccess
@@ -205,7 +205,8 @@
         }, 0);
     };
 
-    $scope.completeBlockchainAction = function(callback) {
+    var tmpCallback = null;
+    $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({
           title: "Unlock your wallet",
@@ -216,27 +217,24 @@
           inputPlaceholder: "Password"
       },
       function(inputValue) {
-          if (inputValue === false) return false;
-          else if (inputValue === "") {
+        if (inputValue === false) return false;
+        else if (inputValue === "") {
             SweetAlert.swal.showInputError("You need to write something!");
             return false
-          }
+        }
         var password = inputValue;
         args[0] = password;
-        callback.apply(null, args);
-    });
+        requestCallback.apply(null, args);
+        tmpCallback = updateCallback;
+        });
     };
 
-    var mapping_events_route = {
-        "contractCreation": "app.organization"
-    }
-
     $rootScope.$on('socket:txResult', function (event, data) {
-        console.log(data);
         if (data.data) {
             $rootScope.toogleSuccess(data.event);
-            if (data.event in mapping_events_route) {
-                $state.go(mapping_events_route[data.event], data.data);
+            if (tmpCallback) {
+                tmpCallback(data);
+                tmpCallback = null;
             }
         }
         else {
