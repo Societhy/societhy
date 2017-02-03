@@ -18,7 +18,7 @@
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
 					<li ui-sref-active="active" ng-repeat="orga in user.organizations">
-						<a ui-sref="app.organization({orga_name: orga.name, orga_id: orga.id})"> {{ orga.name }} </a>
+						<a ui-sref="app.organization({name: orga.name, _id: orga._id})"> {{ orga.name }} </a>
 					</li>
 				</ul>
 			</li>

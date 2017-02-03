@@ -20,12 +20,20 @@ class UserDocument(Document):
 
 	# CALLBACKS FOR UPDATE
 
-	def joinedOrga(self, logs):
-		print("USER JOINED ORGA", logs)
+	def joinedOrga(self, orga):
+		print("===================", orga, self["organizations"])
+		if orga not in self["organizations"]:
+			self["organizations"].append(orga)
+			self.save_partial()
+			print ("AFTER --------------- ", self)
 		return None
 
-	def leftOrga(self, logs):
-		print("USER LEFT ORGA", logs)
+	def leftOrga(self, orga):
+		print("===================", orga, self["organizations"])
+		if orga in self["organizations"]:
+			self["organizations"].remove(orga)
+			self.save_partial()
+			print ("AFTER --------------- ", self)
 		return None
 
 	def madeDonation(self, logs):
@@ -127,6 +135,11 @@ class UserDocument(Document):
 			return balance
 		return None
 
+	def public(self):
+		return {
+			key: self.get(key)for key in self if key in users.public_info
+		}
+
 	def delete(self):
 		return self.mongokat_collection.remove({"_id": ObjectId(self.get('_id'))})
 
@@ -156,7 +169,24 @@ class UserCollection(Collection):
 		"account",
 		"firstname",
 		"lastname",
+		"organizations"
 	]
+
+	structure = {
+		"name": str,
+		"address": str,
+		"account": str,
+		"local_account": str,
+		"password_type": str,
+		"eth": dict,
+		"email": str,
+		"gender": str,
+		"firstname": str,
+		"lastname": str,
+		"city": str,
+        "contact_list": list,
+        "organizations": list
+	}
 
 	document_class = UserDocument
 

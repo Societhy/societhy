@@ -31,7 +31,7 @@ def createOrga(user, password, newOrga):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	newOrga["members"] = {}
-	instance = OrgaDocument(doc=newOrga, owner=user, contract='basic_orga')
+	instance = OrgaDocument(doc=newOrga, owner=user.public(), contract='basic_orga', gen_skel=True)
 	try:
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:

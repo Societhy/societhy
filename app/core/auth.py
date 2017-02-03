@@ -96,7 +96,7 @@ def signUp(newUser):
 
 		unencryptedPassword = newUser.get('password')
 		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), SALT_LOGIN_PASSWORD)).decode('utf-8')
-		user = UserDocument(newUser)
+		user = UserDocument(newUser, gen_skel=True)
 		user.save()
 		if user.get('eth'):
 			del user["eth"]
@@ -114,7 +114,7 @@ def signUp(newUser):
 			return {"data": "user already exists", "status": 403}
 
 		newUser["password"] = encode_hex(scrypt.hash("password", SALT_LOGIN_PASSWORD)).decode('utf-8')
-		user = UserDocument(newUser)
+		user = UserDocument(newUser, gen_skel=True)
 		user.save()
 		if user.get('eth'):
 			del user["eth"]
