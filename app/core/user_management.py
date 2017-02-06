@@ -51,6 +51,9 @@ def updateSingleUserField(user, newData):
 		"status": 200}
 
 def addToContact(user, data):
+    if users.find_one({'_id': ObjectId(data['contact']['id'])}) is None:
+        return {'data': 'User doesn\' exists.',
+            'status': 401}
     users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
     user = users.find_one({"_id": ObjectId(data["_id"])})
     return {"data": user,
@@ -61,6 +64,11 @@ def delFromContact(user, data):
     user = users.find_one({"_id": ObjectId(data["_id"])})
     return {"data": user,
         "status": 200}
+
+def isInContactList(userId, contactId):
+    if users.find_one({'_id': ObjectId(userId), 'contact_list.id': contactId}) != None:
+        return True
+    return False
 
 def findUser(data):
 	user = users.find_one({"name": data["name"]})
