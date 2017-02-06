@@ -7,6 +7,8 @@ from flask_socketio import SocketIO, send, emit
 from core.utils import UserJSONEncoder
 
 from models.message import messages, MessageDocument
+from models import users
+from .user_management import isInContactList
 
 socketio = SocketIO(async_mode='eventlet', json=flask_json)
 
@@ -42,6 +44,11 @@ def disconnect():
 
 @socketio.on('send_message', namespace='/')
 def handleMessage(data):
+    def addToContact(userId, otherId):
+        contact = users.find_one({'_id': ObjectId(otherId)})
+        users.update({"_id": ObjectId(userId)}, {"$addToSet": {"contact_list": {'id': str(contact['_id']), 'firstname': contact['firstname'], 'lastname': contact['lastname']}}})
+        return users.find_one({'_id': ObjectId(userId)}, {'contact_list': 1, '_id': 0})
+
     message = {
         'date': data['date'],
         'data': data['content'],
@@ -50,6 +57,10 @@ def handleMessage(data):
         'avatar': data['avatar'],
         'files': data['files']
     }
+    if isInContactList(data['idOther'], data['idUser']) == False:
+        contact_list = addToContact(data['idOther'], data['idUser'])
+        print(dumps(contact_list))
+        emit('new_contact_list', contact_list['contact_list'], namespace='/chat', room=Clients[data['idOther']].sessionId)
     if (data['idOther'] in Clients):
         emit('send_message', message, namespace='/', room=Clients[data['idOther']].sessionId)
     db_message = MessageDocument(message)

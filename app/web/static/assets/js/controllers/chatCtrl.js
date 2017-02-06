@@ -24,6 +24,7 @@
     $scope.setChat = function (id, firstname, lastname) {
         $scope.otherIdUser = id;
         $scope.otherName = firstname + " " + lastname;
+        $scope.chat = [];
 
         socketIO.emit('join', {'name': $scope.user.name,
             'id': $scope.selfIdUser,
@@ -70,6 +71,13 @@
     // socketIO.on('txResult', function (data) {
     //     console.log("yesy", data);
     // })
+
+    socketIO.on('new_contact_list', function (data) {
+        $rootScope.user.contact_list = data;
+        $scope.user = $rootScope.user;
+        $scope.usersList = $scope.user.contact_list;
+    })
+
 
     $scope.sendMessage = function () {
         var newMessage = {
