@@ -205,4 +205,5 @@ class UserCollection(Collection):
 	document_class = UserDocument
 
 users = UserCollection(collection=client.main.users)
-from .organization import organizations
+from models.organization import organizations
+

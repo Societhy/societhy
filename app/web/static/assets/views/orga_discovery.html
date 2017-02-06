@@ -1,0 +1,30 @@
+<div ng-controller="OrgaDiscoveryController as ctrl">
+<table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped table-hover" id="project">
+  <!-- ngInclude: templates.header -->
+  <thead  class="ng-scope">
+    <tr>
+      <td>
+        <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+          Organization
+          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+        </a>
+      </td>
+      <td>
+        <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+          <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+          <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+          Address
+        </a>
+      </td>
+    </tr>
+    <hr />
+  </thead>
+  <tbody><!-- ngRepeat: user in $data -->
+    <tr ng-repeat="orga in organizations" class="ng-scope" ui-sref="app.organization({name: orga.name, _id: orga._id})" href="#">
+      <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{orga.name}} </td>
+      <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{orga.address}}</td>
+    </tr><!-- end ngRepeat: user in $data -->
+  </tbody>
+</table>
+</div>

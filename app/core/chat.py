@@ -6,11 +6,10 @@ from flask_socketio import SocketIO, send, emit
 
 from core.utils import UserJSONEncoder
 
-from models.message import messages, MessageDocument
 from models import users
+from models.clients import socketio
+from models.message import messages, MessageDocument
 from .user_management import isInContactList
-
-socketio = SocketIO(async_mode='eventlet', json=flask_json)
 
 NC_Clients = {} #Not connected clients
 Clients = {} #Clients connected ready to chat

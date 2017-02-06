@@ -3,11 +3,10 @@ from sha3 import keccak_256
 
 from collections import deque
 
-from .clients import eth_cli
-from .user import UserDocument as User
+from .clients import eth_cli, socketio
 
+# from core.chat import socketio
 from core.utils import to32bytes
-from core.chat import socketio
 
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 
@@ -34,10 +33,12 @@ class Event:
 	def __init__(self, tx_hash=None, users=[], callbacks=None):
 		self.tx_hash = tx_hash
 
-		if isinstance(users, User):
+		if isinstance(users, list):
+			self.users = [user if isinstance(user, str) else user.get('socketid') for user in users]
+		elif isinstance(users, str):
+			self.users = [users]
+		else:
 			self.users = [users.get('socketid')] if users.get('socketid') is not None else None
-		elif isinstance(users, list):
-			self.users = [user.get('socketid') if isinstance(user, User) else user for user in users]
 
 		if isinstance(callbacks, list):
 			self.callbacks = callbacks

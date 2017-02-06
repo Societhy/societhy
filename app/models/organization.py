@@ -68,6 +68,7 @@ class OrgaDocument(Document):
 	####
 
 	def register(self, tx_receipt, users=[]):
+		print("HEEEERE")
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
