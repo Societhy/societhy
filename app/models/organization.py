@@ -38,6 +38,8 @@ class OrgaDocument(Document):
 		if contract:
 			self.contract = Contract(contract, owner.get('account'))
 			self.contract.compile()
+		elif self.get("contract_id"):
+			self._loadContract()
 		if owner:
 			self["owner"] = owner
 
@@ -51,14 +53,17 @@ class OrgaDocument(Document):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		if from_ is None:
-			users_socket = []
 			from_ = self["owner"]
-		elif isinstance(from_, User):
-			users_socket = [from_.get('socketid')]
 
-		from_.unlockAccount(password=password)
+		if isinstance(from_, User):
+			socketid = from_.get('socketid')
+			users_socket = list(socketid) if socketid is not None else None 
+
+		if not from_.unlockAccount(password=password):
+			return "Failed to unlock account"
+
 		tx_hash = self.contract.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register))
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=users_socket))
 		return tx_hash
 
 
@@ -66,11 +71,12 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt):
+	def register(self, tx_receipt, users=[]):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
+		return {k: v for (k, v) in self.items() if type(v) != ObjectId}
 
 	def memberJoined(self, logs):
 		# decode logs, find user and add its id, key, name (?) to member list
@@ -128,13 +134,11 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('join', local=False, from_=user.get('account'), args=[user.get('name')])
-		if tx_hash.startswith('0x'):
+	def join(self, user, password=None, local=False):
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], gas=139806, password=password)
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined]))
-			print ("tx hash ok with ", tx_hash)
 			return tx_hash
 		else:
 			return False
@@ -143,7 +147,7 @@ class OrgaDocument(Document):
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'))
 
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[user.leftOrga, self.memberLeft]))
 			return tx_hash
@@ -156,7 +160,7 @@ class OrgaDocument(Document):
 
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount)
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation]))
 			return tx_hash
@@ -170,7 +174,7 @@ class OrgaDocument(Document):
 		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project])
 
-		if tx_hash.startswith('0x'):
+		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated]))
 			return tx_hash
 		else:
@@ -192,11 +196,14 @@ class OrgaDocument(Document):
 class OrgaCollection(Collection):
 	document_class = OrgaDocument
 
+	orga_info = [
+		""
+	]
+
 	@find_method
 	def find_one(self, *args, **kwargs):
 		doc = super().find_one(*args, **kwargs)
-		if doc:
-			doc._loadContract()
+		doc.__init__()
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)

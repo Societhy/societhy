@@ -3,7 +3,7 @@
  * controller for Messages
  */
 
-app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
+ app.controller('ChatCtrl', function ($scope, $rootScope, $http, socketIO) {
     $scope.user = $rootScope.user;
 
     var load = function () {
@@ -17,6 +17,7 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
             $scope.usersList = $scope.user.contact_list;
             $scope.selfIdUser = $scope.user._id;
             socketIO.emit('init', {"id": $scope.selfIdUser});
+            console.log('chat ctrl loaded')
         }
     }
 
@@ -26,8 +27,8 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
         $scope.chat = [];
 
         socketIO.emit('join', {'name': $scope.user.name,
-        'id': $scope.selfIdUser,
-        'otherId': $scope.otherIdUser});
+            'id': $scope.selfIdUser,
+            'otherId': $scope.otherIdUser});
     }
 
     $scope.addUser = function (user) {
@@ -59,7 +60,17 @@ app.controller('ChatCtrl', function ($scope, $rootScope, socketIO) {
 
     socketIO.on('sessionId', function (data) {
         $rootScope.sessionId = data;
-    })
+        if ($rootScope.user && data != $rootScope.user.socketid ) {
+            $http.get('/socketid/'.concat($rootScope.sessionId)).then(function(resp) {
+                $rootScope.user = resp.data
+                console.log($rootScope.user)
+            });
+        }
+    });
+
+    // socketIO.on('txResult', function (data) {
+    //     console.log("yesy", data);
+    // })
 
     socketIO.on('new_contact_list', function (data) {
         $rootScope.user.contact_list = data;

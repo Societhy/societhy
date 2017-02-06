@@ -1,12 +1,12 @@
 import scrypt
 
 from bson.objectid import ObjectId
-
 from mongokat import Collection, Document
-from .clients import client, eth_cli
-from ethjsonrpc import wei_to_ether
-
 from rlp.utils import encode_hex
+
+from .clients import client, eth_cli
+from core import SALT_WALLET_PASSWORD
+from core.utils import fromWei
 
 class UserDocument(Document):
 
@@ -35,6 +35,8 @@ class UserDocument(Document):
 			password = self.hashPassword(self['password'])
 		elif self["password_type"] == "local_hashed" and password is not None:
 			password = self.hashPassword(password)
+		elif self["password_type"] == "local" and password is not None:
+			password = password
 
 		if password is not None:
 			return eth_cli.personal_unlockAccount(self["account"], password)
@@ -42,7 +44,7 @@ class UserDocument(Document):
 			return False
 
 	def hashPassword(self, password):
-		return encode_hex(scrypt.hash(password, "rajoute du sel dans les carottes rapées")).decode('utf-8')
+		return encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 
 	def populateKey(self):
 		from core.keys import genBaseKey
@@ -52,7 +54,7 @@ class UserDocument(Document):
 		else:
 			self["account"] = None
 			self["eth"] = {"keys": {}}
-			self.save_partial()
+		self.save_partial()
 
 	def generatePersonalDataFromSocial(self):
 		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
@@ -95,7 +97,8 @@ class UserDocument(Document):
 				del self["eth"]["keys"][publicKey]
 				if self["account"] == key:
 					self["account"] = None
-					self["local_account"] = False
+					self["local_account"] = None
+					self["password_type"] = None
 				self.save_partial()
 				return
 
@@ -111,7 +114,7 @@ class UserDocument(Document):
 	def refreshBalance(self, address=None):
 		address = address or self.get('account')
 		if address:
-			balance = wei_to_ether(eth_cli.eth_getBalance(address))
+			balance = fromWei(eth_cli.eth_getBalance(address))
 			if address in self['eth']['keys']:
 				self['eth']['keys'][address]["balance"] = balance
 				self.save_partial()
@@ -125,7 +128,8 @@ class UserCollection(Collection):
 		"name",
 		"address",
 		"account",
-		"local_account"
+		"local_account",
+		"password_type",
 		"eth",
 		"eth.keys",
 		"email",

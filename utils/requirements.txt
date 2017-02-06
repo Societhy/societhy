@@ -1,0 +1,13 @@
+flask
+ipfsapi
+openpyxl
+pyJWT
+pillow
+qrcode
+requests
+pytest
+web3
+pysha3
+flask-socketio
+eventlet
+ethereum

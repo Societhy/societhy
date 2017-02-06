@@ -1,7 +1,10 @@
 from flask import session, request, Response
 from bson import objectid, errors
 
+from ethjsonrpc.exceptions import BadResponseError
+from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
+from models.errors import NotEnoughFunds
 
 def getOrgaDocument(user, _id=None, name=None):
 	orga = None
@@ -21,18 +24,19 @@ def getOrgaDocument(user, _id=None, name=None):
 	}	
 
 def createOrga(user, password, newOrga):
-	# first we have to build the smart contract and write it in '/societhy/contracts'
-	# then we need to check the dict newOrga if the data is correct
-	# then we build the Organization object providing : name of the contract (without '.sol'), the dict with all data, the owner (UserDocument)
-		#	orga = Organization(contract='basic_orga', doc=test_orga, owner=miner)
-	# then we deploy the contract to the blockchain (providing the user to alert, password for the owner and name of the orga) and check that the transaction hash exists
-		#	tx_hash = orga.deploy_contract(from_=user, password=password, args=[orga_name])
-		#	if tx_hash is error return error
-	# answer is "organization is being created"
+	print(newOrga, user, password)
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	instance = OrgaDocument(doc=newOrga, owner=user, contract='basic_orga')
+	try:
+		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+
 	return {
-		"data": "tx_hash",
-		"status": 200
-	}
+			"data": newOrga,
+			"status": 200
+		}
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga

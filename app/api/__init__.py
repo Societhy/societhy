@@ -8,7 +8,8 @@ from models import users, UserDocument
 def ensure_fields(fields, request_data):
 	for field in fields:
 		if isinstance(field, dict):
-			ensure_fields(field.keys(), field.values())
+			k = list(field.keys())[0]
+			return ensure_fields(field.get(k), request_data.get(k))
 		else:
 			if field not in request_data:
 				print('----------', field, "not in", request_data.keys())

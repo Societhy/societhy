@@ -1,9 +1,13 @@
+from os import environ as env
 from sha3 import keccak_256
 
 from collections import deque
+
 from .clients import eth_cli
 
 from core.utils import to32bytes
+from core.chat import socketio
+
 # BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
 
 def makeTopics(signature, *args):
@@ -23,6 +27,7 @@ class Event:
 	tx_hash = None
 	users = None
 	callback = None
+	name = "defaultEvent"
 
 	def __init__(self, tx_hash=None, users=[], callbacks=None):
 		self.tx_hash = tx_hash
@@ -32,6 +37,12 @@ class Event:
 		elif callable(callbacks):
 			self.callbacks = [callbacks]
 
+	def notifyUsers(self, data=None):
+		if self.users:
+			for user in self.users:
+				payload = {"event": self.name, "data": data}
+				socketio.emit('txResult', payload, room=user)
+
 	def happened(self):
 		return False
 
@@ -39,18 +50,19 @@ class Event:
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		print("PROCESSING EVENT", self.tx_hash, "--------------", self.tx_receipt)
 		for cb in self.callbacks:
-			cb()
+			notifyUsers(self.users, cb())
 
 
 # EVENT CLASS FOR CONTRACT CREATION
 class ContractCreationEvent(Event):
 
+	name = "contractCreation"
+
 	def process(self):
 		print("PROCESSING EVENT", self.tx_hash)
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		for cb in self.callbacks:
-			cb(self.tx_receipt)
-
+			self.notifyUsers(cb(self.tx_receipt))
 
 class LogEvent(Event):
 
@@ -66,7 +78,7 @@ class LogEvent(Event):
 		tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		self.logs = tx_receipt.get('logs')
 		for cb in self.callbacks:
-			cb(self.logs)
+			self.notifyUsers(cb(self.logs))
 
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):

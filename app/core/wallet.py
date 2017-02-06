@@ -19,13 +19,8 @@ def refreshAllBalances(user):
 	}
 
 def refreshBalance(user, account=None):
-	if account in user.get('eth').get('keys').keys():
-		return {
-			"data": user.refreshBalance(account),
-			"status": 200
-		}
-	elif not account:
-		balance = eth_cli.eth_getBalance(user.get('account'))
+	if account is None or account in user.get('eth').get('keys').keys():
+		balance = user.refreshBalance(address=account)
 		return {
 			"data": wei_to_ether(balance),
 			"status": 200
@@ -38,7 +33,7 @@ def refreshBalance(user, account=None):
 
 def transfer(from_, to_, amount, local=False, password=None):
 	if not local:
-		ret = eth_cli.personal_unlockAccount(from_.get('account'), password)
+		ret = from_.unlockAccount(password=password)
 		ret = eth_cli.transfer(from_.get('account'), to_, amount)	
 		return {
 			"data": ret,

@@ -1,7 +1,7 @@
 var app = angular.module('app', ['packet', 'xeditable', 'ui.bootstrap']);
 app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http', 'editableOptions',
-	 function ($rootScope, $state, $stateParams, $sessionStorage, $http, editableOptions) {
-	     editableOptions.theme = 'bs3';
+  function ($rootScope, $state, $stateParams, $sessionStorage, $http, editableOptions) {
+      editableOptions.theme = 'bs3';
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
 
@@ -64,11 +64,12 @@ app.factory('httpRequestInterceptor', function($sessionStorage) {
   }
 });
 
-app.factory('socketIO', function (socketFactory) {
+app.factory('socketIO', function ($rootScope, socketFactory) {
     var socket = socketFactory({
-        ioSocket: io.connect('/chat')
+        ioSocket: io.connect('/')
     });
     socket.forward('error');
+    socket.forward('txResult', $rootScope);
     return socket;
 });
 
@@ -80,7 +81,7 @@ app.config(['$httpProvider',
 
 // translate config
 app.config(['$translateProvider',
-function ($translateProvider) {
+    function ($translateProvider) {
 
     // prefix and suffix information  is required to specify a pattern
     // You can simply use the static-files loader with this pattern:
@@ -103,11 +104,11 @@ function ($translateProvider) {
 // Angular-Loading-Bar
 // configuration
 app.config(['cfpLoadingBarProvider',
-function (cfpLoadingBarProvider) {
-    cfpLoadingBarProvider.includeBar = true;
-    cfpLoadingBarProvider.includeSpinner = false;
+    function (cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeBar = true;
+        cfpLoadingBarProvider.includeSpinner = false;
 
-}]);
+    }]);
 // Angular-breadcrumb
 // configuration
 app.config(function ($breadcrumbProvider) {
@@ -123,8 +124,8 @@ app.config(['$localStorageProvider',
     }]);
 //filter to convert html to plain text
 app.filter('htmlToPlaintext', function () {
-      return function (text) {
-          return String(text).replace(/<[^>]+>/gm, '');
-      };
-  }
+  return function (text) {
+      return String(text).replace(/<[^>]+>/gm, '');
+  };
+}
 );

@@ -32,10 +32,12 @@ class ContractDocument(Document):
 			self["is_deployed"] = False
 			self["name"] = contract
 			self["contract_file"] = path.join(self.contract_directory, contract + ".sol")
+			self["contract_name"] = contract
 			self["owner"] = owner.get('account') if type(owner) is User else owner
 
 	def compile(self):
-		compiled = compile_file(self["contract_file"]).get(self["name"])
+		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
+		compiled = compile_file(self["contract_file"]).get(solc_key)
 		self["evm_code"] = '0x' + compiled.get('bin_hex')
 		self["abi"] = compiled.get('abi')
 		for abi_item in self["abi"]:
@@ -85,8 +87,6 @@ class ContractDocument(Document):
 			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')
-			# password = kwargs.get('password')
-			# unlocked = eth_cli.personal_unlockAccount(from_, password)
 			result = eth_cli.call_with_transaction(from_, self["address"], signature, kwargs.get('args'), value=kwargs.get('value'), gas=kwargs.get('gas'))
 		return result[0] if len(result) == 1 else result
 

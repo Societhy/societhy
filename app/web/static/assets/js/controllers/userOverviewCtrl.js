@@ -14,16 +14,16 @@ ctrl.coinbase_connect = function ()
             $http.post('/updateUser', {"social" : 
                 { "coinbase" : 
                 {
-                "firstname" : data.firstname,
-                "lastname" : data.lastname,
-                "email" : data.email,
-                "id" : data.id,
-                "company" : data.company,
-            }}}
-            ).then(function(response) {}, function(error) {
-                console.log(error);
-            });
-        })
+                    "firstname" : data.firstname,
+                    "lastname" : data.lastname,
+                    "email" : data.email,
+                    "id" : data.id,
+                    "company" : data.company,
+                }}}
+                ).then(function(response) {}, function(error) {
+                    console.log(error);
+                });
+            })
     })
 }
 
@@ -73,15 +73,15 @@ ctrl.twitter_connect = function ()
                 }, function(error) {
                     console.log(error);
                 });
-})
-})
+            })
+    })
 }
 
 ctrl.linkedin_connect = function()
 {
-OAuth.popup('linkedin').done(function(result) {
-    console.log(result)
-    result.me().done(function(userData) {
+    OAuth.popup('linkedin').done(function(result) {
+        console.log(result)
+        result.me().done(function(userData) {
             $http.post('/updateUser',
                 {"social" : 
                 {"linkedin" :
@@ -97,15 +97,15 @@ OAuth.popup('linkedin').done(function(result) {
                 }, function(error) {
                     console.log(error);
                 });
+            })
     })
-})
 }
 
 ctrl.github_connect = function ()
 {
-OAuth.popup('github').done(function(result) {
-    console.log(result)
-    result.me().done(function(userData) {
+    OAuth.popup('github').done(function(result) {
+        console.log(result)
+        result.me().done(function(userData) {
             $http.post('/updateUser',
                 {"social" : 
                 {"github" :
@@ -122,8 +122,8 @@ OAuth.popup('github').done(function(result) {
                 }, function(error) {
                     console.log(error);
                 });
-})
-})
+            })
+    })
 }
 
 ctrl.google_connect = function ()
@@ -160,49 +160,73 @@ ctrl.google_connect = function ()
 $rootScope.updateUser = function(name, oldVal) {
 	if ($rootScope.user != null)
 	{
-            $http.post('/updateSingleUserField', {
-		"_id": $rootScope.user["_id"],
-		"new": $rootScope.user[name],
-		"old": oldVal,
-		"name": name
-            }).then(function(response) {
-		$rootScope.user = ctrl.user = response.data;
-            },
-		    function(error) {
-			$rootScope.user[name] = ctrl.user[name] = oldVal;
-			console.log(error);
-		    });
-	}
-	else
-            console.log("User not logged in");
-    }
+        $http.post('/updateSingleUserField', {
+          "_id": $rootScope.user["_id"],
+          "new": $rootScope.user[name],
+          "old": oldVal,
+          "name": name
+      }).then(function(response) {
+          $rootScope.user = ctrl.user = response.data;
+      },
+      function(error) {
+       $rootScope.user[name] = ctrl.user[name] = oldVal;
+       console.log(error);
+   });
+  }
+  else
+    console.log("User not logged in");
+}
 
     /*
     ** Watch user data for any modifications
     */
     var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
     $rootScope.$watch("user", function(newVal, oldVal, obj) {
-	if ($rootScope.user != null && oldVal !== null && newVal !== oldVal) {
-            for (var key in fields) {
-		if ($rootScope.user[fields[key]] != oldVal[fields[key]]) {
-		    $rootScope.updateUser(fields[key], oldVal[fields[key]])
-		    return;
-		}
-            }
-	}
-    }, true);
+     if ($rootScope.user != null && oldVal !== null && newVal !== oldVal) {
+        for (var key in fields) {
+          if ($rootScope.user[fields[key]] != oldVal[fields[key]]) {
+              $rootScope.updateUser(fields[key], oldVal[fields[key]])
+              return;
+          }
+      }
+  }
+}, true);
 
     /*
     ** Animate user info's inputs
     */
     function animation() {
-    $("a.userDataEditable").hover(function() {
-        $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
-    }, function() {
-        $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
-    });
+        $("a.userDataEditable").hover(function() {
+            $(this).css("border", "solid 2px rgba(66, 139, 202, 1)");
+        }, function() {
+            $(this).css("border", "solid 1px rgba(204, 204, 204, 1)");
+        });
     };
 
     animation();
     return ctrl;
+});
+
+app.controller('userProjectTableCtrl', function($scope) {
+    $scope.sortType     = 'name'; // set the default sort type
+    $scope.sortReverse  = false;  // set the default sort order
+    $scope.searchType   = '';     // set the default search/filter term
+
+    $scope.projects = [
+    { name: 'Aider les sans-abris', type: 'Levée de fonds'},
+    { name: 'Bénévolat medecin du monde', type: 'Action humanitaire'},
+    { name: 'ONG: Tous Ensemble', type: 'Action caritative, Levée de fonds'},
+    { name: 'Mon groupe de musique', type: 'Personel, musique'},
+    ];
+})
+
+app.controller('userOrgaTableCtrl', function($scope) {
+    $scope.sortType     = 'name'; // set the default sort type
+    $scope.sortReverse  = false;  // set the default sort order
+    $scope.searchType   = '';     // set the default search/filter term
+
+    $scope.orgas = [
+    { name: 'Entreprise familiale', projects: "Mon groupe de musique"},
+    ];
+
 });

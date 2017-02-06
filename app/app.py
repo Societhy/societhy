@@ -9,7 +9,7 @@ from api.routes.fundraise import router as fundraise_routes
 
 from core import secret_key
 from core.utils import UserJSONEncoder
-import core.chat as chat
+from core.chat import socketio
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
@@ -49,7 +49,7 @@ def addHeader(response):
 def helloWorld():
 	return render_template("index.html")
 
-socketio = chat.socketio
+
 socketio.init_app(app)
 
 if __name__ == '__main__':

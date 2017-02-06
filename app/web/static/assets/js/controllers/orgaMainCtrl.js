@@ -40,3 +40,4 @@ app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage
 	ctrl.init()
 	return ctrl;
 });
+
