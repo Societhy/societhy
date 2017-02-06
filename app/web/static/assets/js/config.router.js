@@ -59,10 +59,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'User Profile'
         }
     }).state('app.organization', {
-        url: '/orga/:orga_name/:orga_id',
+        url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
         resolve: loadSequence('orgaMainCtrl'),
         title: 'Organisation dashboard',
+        params: {
+            data: null
+        },
         ncyBreadcrumb: {
             label: 'Organisation'
         }

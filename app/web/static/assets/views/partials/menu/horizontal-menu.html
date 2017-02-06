@@ -18,14 +18,14 @@
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.organisations.MYORGANISATIONS">
 					</li>
 					<li ui-sref-active="active" ng-repeat="orga in user.organizations">
-						<a ui-sref="app.organization({orga_name: orga.name, orga_id: orga.id})"> {{ orga.name }} </a>
+						<a ui-sref="app.organization({name: orga.name, _id: orga._id})"> {{ orga.name }} </a>
 					</li>
 				</ul>
 			</li>
 
 			<!-- 			MY PROJECTS -->
 
-			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown uib-dropdown auto-close="outsideClick">
+			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Projects" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.projects.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li class="dropdown-header text-uppercase text-light text-bold text-extra-small padding-top-25 padding-bottom-10" translate="sidebar.nav.projects.MYPROJECTS">
@@ -39,11 +39,11 @@
 		</ul>
 
 		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
-			<li class="dropdown" uib-dropdown auto-close="disabled" ng-show="!user">
-				<a href="#" class="dropdown-toggle nav-user-wrapper padding-15" data-toggle="dropdown" uib-dropdown-toggle>
+			<li  uib-dropdown ng-show="!user" auto-close="outsideClick">
+				<a href="#" class="nav-user-wrapper padding-15" uib-dropdown-toggle>
 					<span>Sign in</span> <span class="caret"></span>
 				</a>
-				<div class="dropdown-menu pull-right animated fadeInRight">
+				<div class="pull-right animated fadeInRight"  uib-dropdown-menu>
 					<div class="panel-body" style="width:400px">
 						<div class="social-icons block">
 							<ul>

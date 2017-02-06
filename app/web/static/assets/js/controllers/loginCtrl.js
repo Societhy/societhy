@@ -1,4 +1,4 @@
-app.controller('LoginController', function($rootScope, $http, $sessionStorage, $state, $controller, $location) {
+app.controller('LoginController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
 
 	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
@@ -12,20 +12,20 @@ app.controller('LoginController', function($rootScope, $http, $sessionStorage, $
 
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
-				$http.post('/login', {
-					"id": btoa(ctrl.username + ':' + ctrl.password),
-					"socketid": $rootScope.sessionId
-				}).then(function(response) {
-					console.log("RECEIVED = ", response);
-					$sessionStorage.user = JSON.stringify(response.data.user);
-					$sessionStorage.SociethyToken = response.data.token;
-					$sessionStorage.username = response.data.user.name;
-					$rootScope.user = ctrl.user = response.data.user;
-					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
-				}, function(error) {
-					console.log(error);
-				});
+			$http.post('/login', {
+				"id": btoa(ctrl.username + ':' + ctrl.password),
+				"socketid": $rootScope.sessionId
+			}).then(function(response) {
+				console.log("RECEIVED = ", response);
+				$sessionStorage.user = JSON.stringify(response.data.user);
+				$sessionStorage.SociethyToken = response.data.token;
+				$sessionStorage.username = response.data.user.name;
+				$rootScope.user = ctrl.user = response.data.user;
+				ctrl.wallet.refreshAllBalances();
+                $rootScope.$emit("loadChat", '');
+			}, function(error) {
+				$rootScope.toogleError(error.data);
+			});
 		}
 	}
 
@@ -45,14 +45,21 @@ ctrl.coinbase_register = function ()
         result.me().done(function (data) {
             $http.post('/newUser', {"social" : 
                 { "coinbase" : 
-                {
-                "firstname" : data.firstname,
-                "lastname" : data.lastname,
-                "email" : data.email,
-                "id" : data.id,
-                "company" : data.company,
-            }}}
-            ).then(function(response) {}, function(error) {
+	                {
+		                "firstname" : data.firstname,
+		                "lastname" : data.lastname,
+		                "email" : data.email,
+		                "id" : data.id,
+		                "company" : data.company,
+	            	}
+        		}
+ 		   }).then(function(response) {
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+            }, function(error) {
+				$rootScope.toogleError(error.data);
                 console.log(error);
             });
         })
@@ -78,8 +85,12 @@ ctrl.fb_register = function ()
     	        	},
     	        "socketid": $rootScope.sessionId
 			}).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
             });
@@ -105,8 +116,13 @@ ctrl.twitter_register = function ()
 	            },
 	            "socketid": $rootScope.sessionId
 	        }).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+				console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
 })
@@ -130,8 +146,13 @@ OAuth.popup('linkedin').done(function(result) {
                 }},
 	            "socketid": $rootScope.sessionId
 	        }).then(function(response) {
-                    console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+                console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
     })
@@ -156,8 +177,14 @@ OAuth.popup('github').done(function(result) {
                 }},
             "socketid": $rootScope.sessionId
         }).then(function(response) {
-                    console.log(response);
+                console.log(response);
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
+
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
 })
@@ -172,26 +199,32 @@ ctrl.google_register = function ()
         result.me().done(function(userData) {
             console.log(userData);
             $http.post('/newUser',
-                {"social" : 
-                {"google" :
-                {
-                    "firstname" : userData.firstname,
-                    "lastname" : userData.lastname,
-                    "id" : userData.id,
-                    "email" : userData.email,
-                    "pictureURL" : userData.avatar,
-                    "url" : userData.url,
-                    "company" : userData.company
-
-                }},
+                {"social" :
+	                {"google" :
+		                {
+		                    "firstname" : userData.firstname,
+		                    "lastname" : userData.lastname,
+		                    "id" : userData.id,
+		                    "email" : userData.email,
+		                    "pictureURL" : userData.avatar,
+		                    "url" : userData.url,
+		                    "company" : userData.company
+		                }
+	            },
             "socketid": $rootScope.sessionId
         }).then(function(response) {
+				$sessionStorage.SociethyToken = response.data.token;
+				$rootScope.user = ctrl.user = response.data.user;
+                $rootScope.$emit("loadChat", '');
+				$state.go("app.me", ctrl, {reload: true})
                     console.log(response);
                 }, function(error) {
+					$rootScope.toogleError(error.data);
                     console.log(error);
                 });
             })
     }).then(function() {}, function(error) {
+		$rootScope.toogleError(error.data);
         console.log(error);
     });
 }
@@ -215,6 +248,7 @@ ctrl.coinbase_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');					
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
         })
@@ -239,6 +273,7 @@ ctrl.fb_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');					
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
             });
@@ -264,6 +299,7 @@ ctrl.twitter_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
 })
@@ -288,6 +324,7 @@ OAuth.popup('linkedin').done(function(result) {
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
     })
@@ -312,6 +349,7 @@ OAuth.popup('github').done(function(result) {
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
 })
@@ -338,10 +376,12 @@ ctrl.google_connect = function ()
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loadChat", '');
 				}, function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 				});
             })
     }).then(function() {}, function(error) {
+		$rootScope.toogleError(error.data);
         console.log(error);
     });
 }
@@ -371,9 +411,10 @@ ctrl.google_connect = function ()
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
                 $rootScope.$emit("loadChat", '');
-				$state.go("app.me", ctrl)
+				$state.go("app.me", ctrl, {reload: true})
 				},
 				function(error) {
+					$rootScope.toogleError(error.data);
 					console.log(error);
 			});
 		}
@@ -493,7 +534,7 @@ ctrl.google_connect = function ()
 	});
     }
 
-    	registration_checker();
+    registration_checker();
 
 
     /*

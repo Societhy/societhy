@@ -26,8 +26,9 @@
             console.log("NOT LOGGED IN");
             $state.go('app.dashboard').then(function(arg) {
                 $state.reload();
+                $rootScope.toogleError("Please sign-in first")
             }, function(error) {
-                consol.log(error);
+                console.log(error);
             });
         }
 
@@ -37,12 +38,12 @@
             $body.removeClass("app-boxed-page");
         }
         if(typeof CKEDITOR !== 'undefined'){
-         for(name in CKEDITOR.instances)
-         {
-           CKEDITOR.instances[name].destroy();
-       }
-   }
-});
+           for(name in CKEDITOR.instances)
+           {
+             CKEDITOR.instances[name].destroy();
+         }
+     }
+ });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
       $scope.horizontalNavbarCollapsed = true;
         //stop loading bar on stateChangeSuccess
@@ -175,7 +176,7 @@
     };
 
     var waitToast = null
-    $scope.toogleWaitTx = function(text) {
+    $rootScope.toogleWait = function(text) {
         if (!waitToast) {
             waitToast = toaster.pop({type: "wait", title: "Loading", body: text || "Processing transaction", timeout: 0});
         } else {
@@ -186,25 +187,26 @@
         }
     };
 
-    $scope.toogleSuccessTx = function(text) {
+    $rootScope.toogleSuccess = function(text) {
         if (waitToast) {
-            $scope.toogleWaitTx();
+            $rootScope.toogleWait();
         }
         $timeout(function () {
-            toaster.pop({type: "success", title: "Done !", body: text, timeout:3000});
+            toaster.pop({type: "success", title: "Done !", body: text});
         }, 0);
     };
 
-    $scope.toogleErrorTx = function(text) {
+    $rootScope.toogleError = function(text) {
         if (waitToast) {
-            $scope.toogleWaitTx();
+            $rootScope.toogleWait();
         }
         $timeout(function () {
-            toaster.pop({type: "error", title: "Failed...", body: text, timeout:3000});
+            toaster.pop({type: "error", title: "Failed...", body: text});
         }, 0);
     };
 
-    $scope.completeBlockchainAction = function(callback) {
+    var tmpCallback = null;
+    $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({
           title: "Unlock your wallet",
@@ -214,24 +216,30 @@
           closeOnConfirm: true,
           inputPlaceholder: "Password"
       },
-      function(inputValue){
-          if (inputValue === false) return false;
-
-          if (inputValue === "") {
+      function(inputValue) {
+        if (inputValue === false) return false;
+        else if (inputValue === "") {
             SweetAlert.swal.showInputError("You need to write something!");
             return false
         }
         var password = inputValue;
         args[0] = password;
-        callback.apply(null, args);
-    });
+        requestCallback.apply(null, args);
+        tmpCallback = updateCallback;
+        });
     };
 
     $rootScope.$on('socket:txResult', function (event, data) {
-        if (data.data)
-            $scope.toogleSuccessTx(data.event);
-        else
-            $scope.toogleErrorTx(data.event);
+        if (data.data) {
+            $rootScope.toogleSuccess(data.event);
+            if (tmpCallback) {
+                tmpCallback(data);
+                tmpCallback = null;
+            }
+        }
+        else {
+            $rootScope.toogleError(data.event);
+        }
     });
 
     $scope.searchForAnything = function(search) {

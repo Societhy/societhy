@@ -1,16 +1,16 @@
+from pymongo import ASCENDING
 from datetime import datetime
-from flask import Flask, request
+from bson.json_util import dumps
+from flask import Flask, request, json as flask_json
 from flask_socketio import SocketIO, send, emit
 
-import pymongo
-from bson.json_util import dumps
-from bson.objectid import ObjectId
+from core.utils import UserJSONEncoder
 
 from models.message import messages, MessageDocument
 from models import users
 from .user_management import isInContactList
 
-socketio = SocketIO(async_mode='threading')
+socketio = SocketIO(async_mode='threading', json=flask_json)
 
 NC_Clients = {} #Not connected clients
 Clients = {} #Clients connected ready to chat
@@ -72,6 +72,6 @@ def initSocket(data):
 
 @socketio.on('join', namespace='/')
 def joinedChat(data):
-    last_messages = dumps(messages.find({"$or": [{'send_address': data['id'], 'recip_address': data['otherId']}, {"send_address": data['otherId'], "recip_address": data['id']}]}, {'_id': 0}).sort('_id', pymongo.ASCENDING).limit(50))
+    last_messages = dumps(messages.find({"$or": [{'send_address': data['id'], 'recip_address': data['otherId']}, {"send_address": data['otherId'], "recip_address": data['id']}]}, {'_id': 0}).sort('_id', ASCENDING).limit(50))
     if (data['id'] in Clients):
         emit("last_messages", last_messages, namespace='/', room=Clients[data['id']].sessionId)

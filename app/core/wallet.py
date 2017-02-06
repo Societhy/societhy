@@ -9,7 +9,7 @@ from models.clients import eth_cli
 
 
 def refreshAllBalances(user):
-	accounts = user.get('eth').get('keys')
+	accounts = user.get('eth').get('keys', {})
 	ret = dict()
 	for account in accounts.keys():
 		ret[account] = wei_to_ether(eth_cli.eth_getBalance(account))

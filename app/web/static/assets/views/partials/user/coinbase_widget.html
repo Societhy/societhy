@@ -10,7 +10,6 @@
   <script type='text/javascript' id='coinbase_widget_loader' class='coinbase-widget-async-loader'>
     (function() {
       function asyncLoad() {
-        console.log("lol");
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.async = true;
@@ -20,10 +19,8 @@
         embedder.parentNode.insertBefore(s, embedder);
       }
       if (window.attachEvent) {
-        console.log("here");
         window.attachEvent('onload', asyncLoad);
       } else {
-        console.log("there");
         window.addEventListener('load', asyncLoad, false);
       }
     })();

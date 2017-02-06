@@ -99,7 +99,7 @@
 																	<span class="fa fa-facebook"></span>
 																</div>
 																<div class="col-md-11">
-																	<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="myModel.fbUrl" ng-required="currentStep == 1" />
+																	<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="myModel.fbUrl" />
 																</div>
 															</div>
 
@@ -108,7 +108,7 @@
 																	<span class="fa fa-twitter"></span>
 																</div>
 																<div class="col-md-11">
-																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="myModel.twitterUrl" ng-required="currentStep == 1" />
+																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="myModel.twitterUrl"/>
 																</div>
 															</div>
 
@@ -259,9 +259,11 @@
 																<label class="btn btn-primary btn-sm" ng-model="myModel.paymentMethod" uib-btn-radio="'paypal'"> <i class="fa fa-cc-paypal"></i> PayPal </label>
 															</div>
 														</div>
-														<div class="form-group">
-															<label> Card Number </label>
-															<input type="text" class="form-control" name="cardNumber" ng-model="myModel.cardNumber" placeholder="Enter Your Card Number">
+														<div class="form-group" ng-class="{'has-error':Form.cardNumber.$dirty && Form.cardNumber.$invalid, 'has-success':Form.cardNumber.$valid}">
+															<label > Card Number <span class="symbol required"></span> </label>
+															<input type="text" class="form-control" name="cardNumber" ng-model="myModel.cardNumber" placeholder="Enter Your Card Number" ng-required="currentStep == 3" >
+															<span class="error text-small block" ng-if="Form.cardNumber.$dirty && Form.cardNumber.$invalid">Card number is mandatory</span>
+															<span class="success text-small block" ng-if="Form.cardNumber.$valid">Cool !</span>
 														</div>
 														<label> Expires </label>
 														<div class="row">
