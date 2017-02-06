@@ -230,6 +230,7 @@
     };
 
     $rootScope.$on('socket:txResult', function (event, data) {
+        console.log("TX RESULT", data);
         if (data.data) {
             $rootScope.toogleSuccess(data.event);
             if (tmpCallback) {

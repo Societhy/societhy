@@ -68,7 +68,6 @@ class OrgaDocument(Document):
 	####
 
 	def register(self, tx_receipt, users=[]):
-		print("HEEEERE")
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
@@ -79,15 +78,14 @@ class OrgaDocument(Document):
 		return resp
 
 	def memberJoined(self, logs):
-		# decode logs, find user and add its id, key, name (?) to member list
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
-			if member:
-				# member.joinedOrga(self.public())
+			if member and member.get('account') not in self["members"]:
 				self["members"][member.get('account')] = member.public()
 				self.save_partial();
-		return self
+				return self
+		return False
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
@@ -95,18 +93,21 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
 			if address in self["members"]:
-				# member.leftOrga(self.public())
 				del self["members"][address]
 				self.save_partial();
-		return self
+				return self
+		return False
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
 		return logs
 
 	def projectCreated(self, logs):
-		print("NEW PROJECT == ", logs)
-		return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			print("NEW PROJECT == ", logs)
+			return logs
+		return False
+
 
 
 	####
@@ -195,8 +196,7 @@ class OrgaDocument(Document):
 		return None
 
 	def createProject(self, user, project, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project], password=password)
+		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user))

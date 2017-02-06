@@ -46,12 +46,14 @@ class Event:
 			self.callbacks = [callbacks]
 
 	def notifyUsers(self, data=None):
-		if self.users and data is not None:
-			for user in list(self.users):
-				payload = {"event": self.name, "data": data}
-				print("EMITTING", payload, "to", user)
-				socketio.emit('txResult', payload, room=user)
-				self.users.remove(user)
+		if self.users:
+			if data is not None:
+				for user in list(self.users):
+					payload = {"event": self.name, "data": data}
+					print("EMITTING", payload, "to", user)
+					socketio.emit('txResult', payload, room=user)
+					self.users.remove(user)
+
 
 	def happened(self):
 		return False

@@ -43,6 +43,23 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}
 	}
 
+	ctrl.createProject = function() {
+		 if ($scope.doVerifications()) {
+		 	$scope.completeBlockchainAction(
+		 		function(password) {
+		 			$rootScope.toogleWait("Creating project")
+		 			$http.post('/createProjectFromOrga', {
+		 				"orga_id": $rootScope.currentOrga._id,
+		 				"newProject": {},
+		 				"password": password
+		 			}).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+		 		}, function(data) {
+		 			// $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+		 			console.log("completed project createProjecttion, ", data)
+		 		})
+		 }
+	}
+
 	$scope.currentOrga = $rootScope.currentOrga = $state.params.data
 	if (!$rootScope.currentOrga) {
 		$http.post('/getOrganization', {
