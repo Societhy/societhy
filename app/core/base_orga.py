@@ -56,7 +56,7 @@ def joinOrga(user, password, orga_id):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	# then we call the model's method and wait for the model to be updated
+
 	try:
 		tx_hash = orga.join(user, password=password)
 	except BadResponseError as e:
