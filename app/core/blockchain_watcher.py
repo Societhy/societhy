@@ -1,4 +1,4 @@
-import threading
+from eventlet import event as g_event, greenpool, sleep as g_sleep
 
 from signal import signal, SIGINT
 from time import sleep
@@ -19,20 +19,19 @@ class BlockchainWatcher:
 
     def __init__(self):
         self.newBlockFilter = eth_cli.eth_newBlockFilter()
-        self.newBlockEvent = threading.Event()
-        self.newLogEvent = threading.Event()
+        self.newBlockEvent = g_event.Event()
+        self.newLogEvent = g_event.Event()
         self.lastEvent = None
         self.lastTx = None
         self.running = False
-        self.lock = threading.Lock()
         self.event_queue = EventQueue()
-        self.thread = threading.Thread(target=self.watch)
+        self.pool = greenpool.GreenPool(size=10)
 
 
     def run(self):
         signal(SIGINT, self.stopWithSignal)
         self.running = True
-        self.thread.start()
+        self.pool.spawn(self.watch)
 
     def watch(self):
         if self.running:
@@ -43,19 +42,24 @@ class BlockchainWatcher:
           
                 block = eth_cli.eth_getBlockByHash(blockHash, True)
                 self.lastTx = [tx.get('hash') for tx in block.get('transactions')]
-                self.newBlockEvent.set()
-                self.newBlockEvent.clear()
+                if self.newBlockEvent.ready():
+                    self.newBlockEvent = g_event.Event()
+                else:
+                    self.newBlockEvent.send()
                 print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.lastTx)
           
                 for event in self.event_queue.yieldEvents(block.get('transactions')):
                     if isinstance(event, LogEvent):
                         self.lastEvent = event
-                        self.newLogEvent.set()
-                        self.newLogEvent.clear()
+                        if self.newLogEvent.ready():
+                            self.newLogEvent = g_event.Event()
+                        else:
+                            self.newLogEvent.send()
                     event.process()
 
 
-            threading.Timer(1, self.watch).start()
+            g_sleep(1)
+            self.pool.spawn(self.watch)
 
     def pushEvent(self, event):
         # install a new filter in the node, push a new event in the queue with filter_id and user_id
@@ -63,17 +67,20 @@ class BlockchainWatcher:
 
     def newBlockThen(self, function):
         self.newBlockEvent.wait()
+        self.newBlockEvent = g_event.Event()
         function()
 
     def waitBlock(self, blockNumber=1):
         while blockNumber > 0:
             self.newBlockEvent.wait()
+            self.newBlockEvent = g_event.Event()
             blockNumber -= 1
 
     def waitTx(self, tx_hash):
         print("waiting for tx %s..." % tx_hash)
         while True:
             self.newBlockEvent.wait()
+            self.newBlockEvent = g_event.Event()
             if tx_hash in self.lastTx:
                 return
 
@@ -81,6 +88,7 @@ class BlockchainWatcher:
         print("waiting for event %s..." % event)
         while True:
             self.newLogEvent.wait()
+            self.newLogEvent = g_event.Event()
             if self.lastEvent.name == event:
                 self.lastEvent = None
                 return
@@ -97,13 +105,13 @@ class BlockchainWatcher:
     def stopWithSignal(self, signal, frame):
         print("BW EXITED AFTER SIGNAL")
         self.running = False
-        self.thread.join()
+        self.pool.waitall()
         exit()
 
     def stop(self):
         print("BW EXITED")
         self.running = False
-        self.thread.join()
+        self.pool.waitall()
 
 
 blockchain_watcher = BlockchainWatcher()

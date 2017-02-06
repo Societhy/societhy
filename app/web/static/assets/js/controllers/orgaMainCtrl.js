@@ -1,65 +1,57 @@
 app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $state) {
 
 	var ctrl = this;
+	$scope.isMember = false;
 
 	ctrl.joinOrga = function() {
-		if (!$rootScope.user) {
-			$rootScope.toogleError("Please sign-in first")
-		}
 
-		else if ($rootScope.user.local_account == true) {
-			console.log("ask for password")
-		}
-
-		else {
-            $scope.completeBlockchainAction(
-            	function(password) {
-		            $rootScope.toogleWait("Joining...");
+		if ($scope.doVerifications()) {
+			$scope.completeBlockchainAction(
+				function(password) {
+					$rootScope.toogleWait("Joining...");
 					$http.post('/joinOrga', {
 						"orga_id": $rootScope.currentOrga._id,
 						"password": password
 					}).then(function(data) {}, function(error) { $rootScope.toogleError(error); });
-        	},  function(data) {
-    				$scope.currentOrga.members = $rootScope.currentOrga.members = data.data;
-        	});
+				},  function(data) {
+					$scope.currentOrga.members = $rootScope.currentOrga.members = data.data.members;
+					$rootScope.user.organizations.push($rootScope.currentOrga);
+					$scope.isMember = true;
+				});
 
 
 		}
 	}
 
 	ctrl.leaveOrga = function() {
-		if (!$rootScope.user) {
-			$rootScope.toogleError("Please sign-in first")
-		}
-
-		else if ($rootScope.user.local_account == true) {
-			console.log("ask for password")
-		}
-
-		else {
-            $scope.completeBlockchainAction(
-            	function(password) {
-		            $rootScope.toogleWait("Leaving...");
+		
+		if ($scope.doVerifications()) {
+			$scope.completeBlockchainAction(
+				function(password) {
+					$rootScope.toogleWait("Leaving...");
 					$http.post('/leaveOrga', {
 						"orga_id": $rootScope.currentOrga._id,
 						"password": password
 					}).then(function(data) {}, function(error) { $rootScope.toogleError(error); });
-        	},  function(data) {
-					$scope.currentOrga.members = $rootScope.currentOrga.members = data.data;
-        	});
+				},  function(data) {
+					$scope.currentOrga.members = $rootScope.currentOrga.members = data.data.members;
+					$scope.isMember = false;
+					$rootScope.user.organizations.splice(data.data, 1);
+				});
 
 
 		}
 	}
 
 	$scope.currentOrga = $rootScope.currentOrga = $state.params.data
-	console.log("current orga", $scope.currentOrga)
 	if (!$rootScope.currentOrga) {
 		$http.post('/getOrganization', {
 			"id": $state.params._id
 		}).then(function(response) {
 			$scope.currentOrga = $rootScope.currentOrga = response.data;
 			console.log("current orga", $scope.currentOrga)
+			if ($rootScope.user)
+				$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
 		}, function(error) {
 			$state.go('app.dashboard');
 			$rootScope.toogleError("Organization does not exist");			

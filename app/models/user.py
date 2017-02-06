@@ -1,39 +1,53 @@
 import scrypt
 
+from flask import session
 from bson.objectid import ObjectId
 from mongokat import Collection, Document
 from rlp.utils import encode_hex
 
 from .clients import client, eth_cli
+
 from core import SALT_WALLET_PASSWORD
 from core.utils import fromWei
 
 class UserDocument(Document):
 
-	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc, users, fetched_fields, gen_skel)
+		self.session_token = session
+
+	def needsReloading(self):
+		if self.session_token:
+			session[self.session_token]["needs_reloading"] = True
+
+	def reload(self):
+		if self['_id'] and type(self['_id']) is str:
+			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
+		super().reload()
 
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
-		if self['_id'] is not None:
+		if self['_id'] and type(self['_id']) is str:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
 
 	# CALLBACKS FOR UPDATE
 
-	def joinedOrga(self, orga):
-		print("===================", orga, self["organizations"])
-		if orga not in self["organizations"]:
-			self["organizations"].append(orga)
-			self.save_partial()
-			print ("AFTER --------------- ", self)
+	def joinedOrga(self, logs):
+		if len(logs) == 1 and logs[0].get('address') is not None:
+			address = logs[0].get('address')
+			orga = organizations.find_one({"address": address})
+			if orga:
+				self["organizations"].append(orga.public())
+				self.save_partial();
 		return None
 
-	def leftOrga(self, orga):
-		print("===================", orga, self["organizations"])
-		if orga in self["organizations"]:
-			self["organizations"].remove(orga)
-			self.save_partial()
-			print ("AFTER --------------- ", self)
+	def leftOrga(self, logs):
+		if len(logs) == 1 and logs[0].get('address') is not None:
+			address = logs[0].get('address')
+			orga = organizations.find_one({"address": address})
+			if orga:
+				self["organizations"].remove(orga.public())
+				self.save_partial()
 		return None
 
 	def madeDonation(self, logs):
@@ -191,3 +205,4 @@ class UserCollection(Collection):
 	document_class = UserDocument
 
 users = UserCollection(collection=client.main.users)
+from .organization import organizations

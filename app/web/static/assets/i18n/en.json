@@ -129,6 +129,7 @@
                 "MAIN": "Organizations",
                 "MYORGANISATIONS": "My organizations",
                 "CREATE": "Create a new organization",
+                "DISCOVER": "Discover",
                 "SAMPLE": "Red Cross"
             },
             "projects": {

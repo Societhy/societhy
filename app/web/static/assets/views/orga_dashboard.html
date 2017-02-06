@@ -16,11 +16,16 @@
                   <div class="user-left user-image">
                     <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                   </div>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success" ng-click="ctrl.joinOrga()">Join</button>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
+                  <button ng-if="!isMember" type="button" class="btn btn-wide btn-success" ng-click="ctrl.joinOrga()">Join</button>
+                  <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
+                  <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 </div>
 
-                <div class="col-md-6 inline-block border-solid">              
+                <div class="col-md-6 inline-block border-solid vertical-center">              
+                <div class="float-left" style="line-height: 40px">
+                Balance: 
+                <span ng-bind="currentOrga.balance"></span>
+                </div>
                   <div class="social-icons float-right">
                     <ul>
                       <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
@@ -44,20 +49,20 @@
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                <div class="col-md-6 border-solid border-dark vertical-center padding-20">
                   <h2>Projects</h2>
-                  
+                  <button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20" ng-click="ctrl.createProject()">+</button>
                 </div>
-                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                <div class="col-md-6 inline-block border-solid border-dark padding-20">
                   <h2>News</h2>
                   
                 </div>
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
+                <div class="col-md-6 border-solid border-dark vertical-center padding-20">              
                   <h2>Proposals</h2>
-                  
+                  <button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20" ng-click="ctrl.createProposal()">+</button>                  
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                   <h2>Members</h2>

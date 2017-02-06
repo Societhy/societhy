@@ -252,7 +252,6 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 			$rootScope.user.password_type = "local";
 			$rootScope.user.local_account = false;
 		}
-		console.log($rootScope.user.eth)
 		$rootScope.user.totalBalance = ctrl.wallet.totalBalance();
 		$state.reload();
 	};

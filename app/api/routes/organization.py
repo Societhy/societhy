@@ -19,6 +19,11 @@ def getOrgaDocument(user):
 	else:
 		return make_response("Wrong request format", 400)
 
+@router.route('/getAllOrganizations', methods=['GET'])
+def getAllOrganizations():
+	ret = base_orga.getAllOrganizations()
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
 def createOrga(user):

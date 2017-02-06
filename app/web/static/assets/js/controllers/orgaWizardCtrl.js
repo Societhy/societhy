@@ -85,10 +85,7 @@
         },
 
         submit: function (form) {
-            if (!$rootScope.user.account) {
-                errorMessage("Please set up an ethereum account first")
-            }
-            else {
+            if ($scope.doVerifications()) {
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");

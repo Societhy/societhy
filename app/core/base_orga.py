@@ -27,6 +27,13 @@ def getOrgaDocument(user, _id=None, name=None):
 		"status": 200
 	}	
 
+def getAllOrganizations():
+	orgas = list(organizations.find({}, organizations.public_info))
+	return {
+		"data": orgas,
+		"status": 200
+	}	
+
 def createOrga(user, password, newOrga):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}

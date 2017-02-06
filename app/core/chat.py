@@ -8,7 +8,7 @@ from core.utils import UserJSONEncoder
 
 from models.message import messages, MessageDocument
 
-socketio = SocketIO(async_mode='threading', json=flask_json)
+socketio = SocketIO(async_mode='eventlet', json=flask_json)
 
 NC_Clients = {} #Not connected clients
 Clients = {} #Clients connected ready to chat

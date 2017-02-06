@@ -41,7 +41,8 @@ app.constant('JS_REQUIRES', {
         'userOtherOverviewCtrl' : 'static/assets/js/controllers/userOtherOverviewCtrl.js',
         'walletCtrl' : 'static/assets/js/controllers/walletCtrl.js',
         'orgaMainCtrl' : 'static/assets/js/controllers/orgaMainCtrl.js',
-        'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js'
+        'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
+        'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
     },
     //*** angularJS Modules
     modules: [{

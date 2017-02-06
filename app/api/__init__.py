@@ -12,7 +12,6 @@ def ensure_fields(fields, request_data):
 			return ensure_fields(field.get(k), request_data.get(k))
 		else:
 			if field not in request_data:
-				print('----------', field, "not in", request_data.keys())
 				return False
 	return True
 	
@@ -27,8 +26,10 @@ def requires_auth(f):
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
 
-			user = UserDocument(session.get(token))
-			user.update()
+			user = UserDocument(session.get(token), session=token)
+			if session.get(token).get('needs_reloading') is True:
+				user.reload()
+				session[token]["needs_reloading"] = False
 		else:
 			return Response({"error": "unauthorized"}, 401)
 

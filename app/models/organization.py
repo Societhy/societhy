@@ -69,6 +69,7 @@ class OrgaDocument(Document):
 
 	def register(self, tx_receipt, users=[]):
 		self.contract["address"] = tx_receipt.get('contractAddress')
+		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
@@ -82,10 +83,10 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
 			if member:
-				member.joinedOrga(self.public())
+				# member.joinedOrga(self.public())
 				self["members"][member.get('account')] = member.public()
 				self.save_partial();
-		return self["members"]
+		return self
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
@@ -93,10 +94,10 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
 			if address in self["members"]:
-				member.leftOrga(self.public())
+				# member.leftOrga(self.public())
 				del self["members"][address]
 				self.save_partial();
-		return self["members"]
+		return self
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
@@ -159,7 +160,8 @@ class OrgaDocument(Document):
 		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined], users=user))
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -168,7 +170,8 @@ class OrgaDocument(Document):
 		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberLeft], users=user))
+			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -182,6 +185,7 @@ class OrgaDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -195,6 +199,7 @@ class OrgaDocument(Document):
 
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -221,6 +226,7 @@ class OrgaCollection(Collection):
 
 	public_info = [
 		"_id",
+		"address",
 		"name",
 		"contract_id",
 		"description",

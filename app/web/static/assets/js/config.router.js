@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -69,6 +69,23 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Organisation'
         }
+    }).state('app.neworga', {
+        url: '/orga/new',
+        needs_auth: true,
+        templateUrl :"static/assets/views/wizard_orga.html",
+        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload'),
+        title: "Create a new organisation",
+        ncyBreadcrumb: {
+            label: 'Organisation Creation'
+        }
+    }).state('app.discoverorga', {
+        url: '/orga/discover',
+        templateUrl: "static/assets/views/orga_discovery.html",
+        resolve: loadSequence('orgaDiscoveryCtrl'),
+        title: 'Organisations list',
+        ncyBreadcrumb: {
+            label: 'Organisation'
+        }
     }).state('app.project', {
         url: '/orga/:project_name/:project_id',
         templateUrl: "static/assets/views/project_dashboard.html",
@@ -81,15 +98,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/registration',
         resolve: loadSequence('CryptoJS'),
         templateUrl: "static/assets/views/login_registration.html"
-    }).state('app.neworga', {
-        url: '/orga/new',
-        needs_auth: true,
-        templateUrl :"static/assets/views/wizard_orga.html",
-        resolve: loadSequence('ngNotify', 'orgaWizardCtrl', 'FileSaver', 'angularFileUpload'),
-        title: "Create a new organisation",
-        ncyBreadcrumb: {
-            label: 'Organisation Creation'
-        }
     })
 
 

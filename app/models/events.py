@@ -51,8 +51,6 @@ class Event:
 				print("EMITTING", payload, "to", user)
 				socketio.emit('txResult', payload, room=user)
 				self.users.remove(user)
-		else:
-			print(" ++++++++++++++++++++++ NO USERS OR DATA", self.users, data)
 
 	def happened(self):
 		return False
@@ -62,6 +60,7 @@ class Event:
 		print("PROCESSING EVENT", self.tx_hash, "--------------", self.tx_receipt)
 		for cb in self.callbacks:
 			notifyUsers(self.users, cb())
+		return self
 
 
 # EVENT CLASS FOR CONTRACT CREATION
@@ -74,6 +73,7 @@ class ContractCreationEvent(Event):
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.tx_receipt))
+		return self
 
 class LogEvent(Event):
 
@@ -90,6 +90,7 @@ class LogEvent(Event):
 		self.logs = tx_receipt.get('logs')
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.logs))
+		return self
 
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):

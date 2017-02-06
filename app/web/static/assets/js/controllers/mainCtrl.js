@@ -247,6 +247,22 @@
         $state.go("app.user", {"name": search});
     }
     
+    $scope.doVerifications = function() {
+        if (!$rootScope.user) {
+            $rootScope.toogleError("Please sign-in first")
+            return false;
+        }
+        else if ($rootScope.user.local_account == true) {
+            console.log("ask for password")
+            return false;
+        }
+        else if (!$rootScope.user.account) {
+            $rootScope.toogleError("Please set up an ethereum account first")
+            return false;
+        }
+        return true;
+    }
+
     // Function that find the exact height and width of the viewport in a cross-browser way
     var viewport = function () {
         var e = window, a = 'inner';
