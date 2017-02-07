@@ -54,8 +54,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		 				"password": password
 		 			}).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
 		 		}, function(data) {
-		 			// $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
-		 			console.log("completed project createProjecttion, ", data)
+		 			$scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
 		 		})
 		 }
 	}

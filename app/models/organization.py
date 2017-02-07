@@ -6,6 +6,7 @@ from ethjsonrpc import wei_to_ether
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
+from models.project import ProjectDocument, ProjectCollection
 
 from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import toWei, to20bytes, normalizeAddress
@@ -41,7 +42,7 @@ class OrgaDocument(Document):
 		elif self.get("contract_id"):
 			self._loadContract()
 		if owner:
-			self["owner"] = owner
+			self["owner"] = owner.public() if isinstance(owner, User) else owner
 
 	####
 	# CONTRACT SPECIFIC METHODS
@@ -103,9 +104,16 @@ class OrgaDocument(Document):
 		return logs
 
 	def projectCreated(self, logs):
-		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
-			print("NEW PROJECT == ", logs)
-			return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+			if len(logs[0]["decoded_data"]) == 1 and len(logs[0]["decoded_data"]) == 1:
+				new_project["name"] = logs[0]["decoded_data"][0]
+			project_id = new_project.save()
+			if contract_address not in self["projects"]:
+				self["projects"][contract_address] = new_project
+				self.save_partial()
+				return self
 		return False
 
 
@@ -199,7 +207,7 @@ class OrgaDocument(Document):
 		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user))
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user, event_abi=self.contract["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:

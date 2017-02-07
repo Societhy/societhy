@@ -59,7 +59,6 @@
     })
 
     socketIO.on('sessionId', function (data) {
-        console.log("YAY")
         $rootScope.sessionId = data;
         if ($rootScope.user && data != $rootScope.user.socketid ) {
             $http.get('/socketid/'.concat($rootScope.sessionId)).then(function(resp) {
