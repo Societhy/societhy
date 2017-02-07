@@ -7,6 +7,7 @@ from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
+from models.member import Member
 
 from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import toWei, to20bytes, normalizeAddress
@@ -15,6 +16,8 @@ from .clients import client, eth_cli
 
 class OrganisationInitializationError(Exception):
 	pass
+
+governances = ["democracy", "entreprise", "association", "private"]
 
 class OrgaDocument(Document):
 
@@ -27,6 +30,44 @@ class OrgaDocument(Document):
 	social_links = None
 	shares = None
 	alerts = None
+
+	rules = {
+		"governance": "democracy",
+		"default_proposal_duration": 48,
+		"quorum": 20,
+		"majority": 50,
+		"can_be_removed": True,
+		"shareable": True,
+		"public": True,
+		"anonymous": False
+	}
+
+	rights = {
+		"owner": {
+			"join": True,
+			"donate": True,
+			"create_project": True,
+			"create_roposal": True,
+			"vote_proposal": True,
+			"recruit": True,
+			"remove_members": True,
+			"sell_share": True,
+			"buy_share": True,
+		},
+		"admin": {},
+		"partner": {},
+		"member": {
+			"join": True,
+			"donate": True,
+			"create_project": False,
+			"create_roposal": False,
+			"vote_proposal": True,
+			"recruit": False,
+			"remove_members": False,
+			"sell_share": True,
+			"buy_share": True,
+		}
+	}
 
 	def __init__(self,
 				doc=None,
@@ -73,7 +114,10 @@ class OrgaDocument(Document):
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
+
+		self["rules"] = self.rules
 		self.save()
+
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
 		return resp
@@ -83,7 +127,8 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
 			if member and member.get('account') not in self["members"]:
-				self["members"][member.get('account')] = member.public()
+				self["members"][member.get('account')] = Member(member.public(), self.rights.get('member'))
+				print("+++++++++++++++++++", self["members"][member.get('account')])
 				self.save_partial();
 				return self
 		return False
@@ -247,6 +292,7 @@ class OrgaCollection(Collection):
 		"name": str,
 		"members": dict,
 		"rights": dict,
+		"rules": dict,
 		"proposals": dict,
 		"projects": dict,
 		"description": str,

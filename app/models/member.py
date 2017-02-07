@@ -7,12 +7,13 @@ class Tag:
 class Member(User):
 
 	organization = None
-	rights = dict()
+	rights = None
 
-	def __init__(self, user):
-		super().__init__()
+	def __init__(self, user, rights):
+		user.update({"rights": rights})
+		print('---------------', user)
+		super().__init__(doc=user, gen_skel=False)
 
-	
 	def canDo(self, action):
 		pass
 

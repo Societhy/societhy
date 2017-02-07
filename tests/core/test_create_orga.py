@@ -52,12 +52,12 @@ def test_donate(miner, testOrga):
 	bw.waitEvent("newDonation")
 	assert testOrga.getTotalFunds() == 1000
 	
-def test_leave(miner, testOrga):
-	tx_hash = testOrga.leave(miner, password='simon')
-	assert tx_hash.startswith('0x')
-	bw.waitEvent("memberLeft")
+# def test_leave(miner, testOrga):
+# 	tx_hash = testOrga.leave(miner, password='simon')
+# 	assert tx_hash.startswith('0x')
+# 	bw.waitEvent("memberLeft")
 
-	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
+# 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 
 def test_createproject(miner, testOrga):
 	tx_hash = testOrga.createProject(miner, {}, password='simon')

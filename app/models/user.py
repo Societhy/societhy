@@ -155,7 +155,7 @@ class UserDocument(Document):
 
 	def public(self):
 		return {
-			key: self.get(key)for key in self if key in users.public_info
+			key: self.get(key) for key in self if key in users.public_info
 		}
 
 	def delete(self):
