@@ -6,6 +6,7 @@ from ethjsonrpc import wei_to_ether
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
+from models.project import ProjectDocument, ProjectCollection
 
 from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import toWei, to20bytes, normalizeAddress
@@ -41,7 +42,7 @@ class OrgaDocument(Document):
 		elif self.get("contract_id"):
 			self._loadContract()
 		if owner:
-			self["owner"] = owner
+			self["owner"] = owner.public() if isinstance(owner, User) else owner
 
 	####
 	# CONTRACT SPECIFIC METHODS
@@ -78,15 +79,14 @@ class OrgaDocument(Document):
 		return resp
 
 	def memberJoined(self, logs):
-		# decode logs, find user and add its id, key, name (?) to member list
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
-			if member:
-				# member.joinedOrga(self.public())
+			if member and member.get('account') not in self["members"]:
 				self["members"][member.get('account')] = member.public()
 				self.save_partial();
-		return self
+				return self
+		return False
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
@@ -94,18 +94,28 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = users.find_one({"account": address})
 			if address in self["members"]:
-				# member.leftOrga(self.public())
 				del self["members"][address]
 				self.save_partial();
-		return self
+				return self
+		return False
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
 		return logs
 
 	def projectCreated(self, logs):
-		print("NEW PROJECT == ", logs)
-		return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+			if len(logs[0]["decoded_data"]) == 1 and len(logs[0]["decoded_data"]) == 1:
+				new_project["name"] = logs[0]["decoded_data"][0]
+			project_id = new_project.save()
+			if contract_address not in self["projects"]:
+				self["projects"][contract_address] = new_project
+				self.save_partial()
+				return self
+		return False
+
 
 
 	####
@@ -194,11 +204,10 @@ class OrgaDocument(Document):
 		return None
 
 	def createProject(self, user, project, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project], password=password)
+		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user))
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user, event_abi=self.contract["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:

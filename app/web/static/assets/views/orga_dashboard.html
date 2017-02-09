@@ -22,10 +22,10 @@
                 </div>
 
                 <div class="col-md-6 inline-block border-solid vertical-center">              
-                <div class="float-left" style="line-height: 40px">
-                Balance: 
-                <span ng-bind="currentOrga.balance"></span>
-                </div>
+                  <div class="float-left" style="line-height: 40px">
+                    Balance: 
+                    <span ng-bind="currentOrga.balance"></span>
+                  </div>
                   <div class="social-icons float-right">
                     <ul>
                       <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
@@ -49,9 +49,38 @@
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 border-solid border-dark vertical-center padding-20">
-                  <h2>Projects</h2>
-                  <button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20" ng-click="ctrl.createProject()">+</button>
+                <div class="col-md-6 border-solid border-dark padding-20">
+                    <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+                    
+                  <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+                    <!-- ngInclude: templates.header -->
+                    <thead  class="ng-scope">
+                      <tr>
+                        <td>
+                          <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                            Project address
+                            <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                          </a>
+                        </td>
+                        <td>
+                          <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                            <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                            Name
+                          </a>
+                        </td>
+                      </tr>
+                      <hr />
+                    </thead>
+                    <tbody><!-- ngRepeat: user in $data -->
+                      <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
+                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                        <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
+                      </tr><!-- end ngRepeat: user in $data -->
+                    </tbody>
+                  </table>
+
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark padding-20">
                   <h2>News</h2>
@@ -60,9 +89,8 @@
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 border-solid border-dark vertical-center padding-20">              
-                  <h2>Proposals</h2>
-                  <button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20" ng-click="ctrl.createProposal()">+</button>                  
+                <div class="col-md-6 border-solid border-dark padding-20">              
+                  <h2>Proposals<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                   <h2>Members</h2>

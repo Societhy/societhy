@@ -1,21 +1,17 @@
 import time
 import jwt
 import scrypt
-
 import collections
-
 from base64 import b64decode, b64encode
-
+from bson.objectid import ObjectId
 from flask import session, request, Response
+from rlp.utils import encode_hex
+
 from models import users, UserDocument
 
-from bson.objectid import ObjectId
-
 from core import keys
-
 from . import secret_key
 
-from rlp.utils import encode_hex
 
 def update(user, newData):
 	def recurse_update(user, newData):

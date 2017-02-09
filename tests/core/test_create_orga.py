@@ -60,7 +60,7 @@ def test_leave(miner, testOrga):
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 
 def test_createproject(miner, testOrga):
-	tx_hash = testOrga.createProject(miner, 'newproject', password='simon')
+	tx_hash = testOrga.createProject(miner, {}, password='simon')
 	assert tx_hash.startswith('0x')
 	bw.waitTx(tx_hash)
 

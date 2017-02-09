@@ -45,7 +45,7 @@ def login(credentials):
 
 	if user is not None:
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
-		user["socketid"] = credentials.get('socketid')
+		setSocketId(credentials.get('socketid'), user)
 		session[token] = user
 		return {"data": {
 					"token": token,
@@ -132,8 +132,8 @@ def signUp(newUser):
 def setSocketId(socketid, user):
 	if user:
 		user['socketid'] = socketid
-		token = request.headers.get('authentification')
-		session[token] = user
+		user.save_partial()
+		user.needsReloading()
 	return {"data": user,
 			"status": 200}
 

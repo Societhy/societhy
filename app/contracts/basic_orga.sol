@@ -11,7 +11,7 @@ contract basic_orga is mortal, open_structure {
     ProjectData[] public projects;
 
     event newDonation(address indexed member, uint indexed value, bool success);
-    event newProject(address indexed newProjectAddress, string indexed name);
+    event newProject(address indexed newProjectAddress, string name);
 
     struct ProjectData {
         Project projectAddress;

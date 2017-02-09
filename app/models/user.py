@@ -36,18 +36,22 @@ class UserDocument(Document):
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
-			if orga:
+			if orga and orga.public() not in self["organizations"]:
 				self["organizations"].append(orga.public())
 				self.save_partial();
+			else:
+				return False
 		return None
 
 	def leftOrga(self, logs):
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
-			if orga:
+			if orga and orga.public() in self["organizations"]:
 				self["organizations"].remove(orga.public())
 				self.save_partial()
+			else:
+				return False
 		return None
 
 	def madeDonation(self, logs):
@@ -205,4 +209,5 @@ class UserCollection(Collection):
 	document_class = UserDocument
 
 users = UserCollection(collection=client.main.users)
-from .organization import organizations
+from models.organization import organizations
+

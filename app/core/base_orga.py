@@ -51,10 +51,12 @@ def createOrga(user, password, newOrga):
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	# then we call the model's method and wait for the model to be updated
+
 	try:
 		tx_hash = orga.join(user, password=password)
 	except BadResponseError as e:
@@ -76,6 +78,8 @@ def getOrgaMemberList(token, orga_id):
 	}
 
 def donateToOrga(user, password, orga_id, donation):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
@@ -88,9 +92,18 @@ def donateToOrga(user, password, orga_id, donation):
 	}
 
 def createProjectFromOrga(user, password, orga_id, newProject):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga.createProject(user, newProject, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
 	return {
-		"data": "",
+		"data": tx_hash,
 		"status": 200
 	}
 

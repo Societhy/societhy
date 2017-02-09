@@ -9,6 +9,7 @@ from core import keys
 from models.user import users
 from models.organization import organizations, OrgaDocument as Organization
 from models.contract import contracts
+from models.project import projects
 from models.clients import eth_cli
 
 from pymongo import MongoClient
@@ -23,6 +24,7 @@ for keyFile in listdir(keyDirectory):
 
 users.delete_many({})
 organizations.delete_many({})
+projects.delete_many({})
 contracts.delete_many({})
 
 
