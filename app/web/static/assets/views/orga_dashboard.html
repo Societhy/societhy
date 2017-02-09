@@ -9,7 +9,12 @@
           <!-- start: TAB OVERVIEW -->
           <uib-tab heading="Overview" href="">
             <div ng-controller="OrgaMainController as ctrl">
-              <h1>{{ currentOrga.address }}</h1>
+              <div class="vertical-center">
+              <h1 class="padding-right-20">{{ currentOrga.address }}</h1>
+                <div class="input-group-sm bootstrap-touchspin align-left">
+                  <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-prefix="E" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+                </div>
+              </div>
               <div class="row border-solid vertical-center">
 
                 <div class="col-md-6 inline-block border-solid">
@@ -50,8 +55,8 @@
 
               <div class="row margin-top-20" >
                 <div class="col-md-6 border-solid border-dark padding-20">
-                    <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
-                    
+                  <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+
                   <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                     <!-- ngInclude: templates.header -->
                     <thead  class="ng-scope">
@@ -84,7 +89,7 @@
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark padding-20">
                   <h2>News</h2>
-                  
+
                 </div>
               </div>
 

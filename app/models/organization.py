@@ -10,7 +10,7 @@ from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import toWei, to20bytes, normalizeAddress
+from core.utils import fromWei, toWei, to20bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
@@ -92,6 +92,10 @@ class OrgaDocument(Document):
 	def _loadContract(self):
 		if self.get('contract_id'):
 			self.contract = contracts.find_one({"_id": self['contract_id']})
+			balance = self.getTotalFunds()
+			if balance != self["balance"]:
+				self["balance"] = balance
+				self.save_partial()
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		if from_ is None:
@@ -125,28 +129,35 @@ class OrgaDocument(Document):
 	def memberJoined(self, logs):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = users.find_one({"account": address})
-			if member and member.get('account') not in self["members"]:
-				self["members"][member.get('account')] = Member(member.public(), self.rights.get('member'))
-				print("+++++++++++++++++++", self["members"][member.get('account')])
+			new_member = users.find_one({"account": address})
+			if new_member and new_member.get('account') not in self["members"]:
+				self["members"][new_member.get('account')] = Member(new_member.public(), rights=self.rights.get('member'))
 				self.save_partial();
 				return self
 		return False
 
 	def memberLeft(self, logs):
-		# decode logs, find user and delete it from memebr list
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = users.find_one({"account": address})
-			if address in self["members"]:
+			member = self.getMember(address)
+			if member:
 				del self["members"][address]
 				self.save_partial();
 				return self
 		return False
 
 	def newDonation(self, logs):
-		print("NEW DONATION", logs)
-		return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
+			self["balance"] = self.getTotalFunds()
+
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = self.getMember(address)
+			if member:
+				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
+			self.save_partial()
+			return self["balance"]
+		return False
 
 	def projectCreated(self, logs):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
@@ -198,13 +209,13 @@ class OrgaDocument(Document):
 			else:
 				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
-						return member
-		elif user in self["members"]:
+						return Member(member)
+		elif type(user) is str and user in self["members"]:
 				return self["members"][user]
 		return None
 
 	def getTotalFunds(self):
-		return self.contract.getBalance()
+		return fromWei(self.contract.getBalance())
 
 	def getMemberList(self):
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
@@ -234,8 +245,6 @@ class OrgaDocument(Document):
 	def donate(self, user, amount, password=None):
 		if toWei(user.refreshBalance()) < amount:
 			return False
-
-		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))

@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl'),
+        resolve: loadSequence('orgaMainCtrl', 'touchspin-plugin'),
         title: 'Organisation dashboard',
         params: {
             data: null

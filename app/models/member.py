@@ -9,9 +9,9 @@ class Member(User):
 	organization = None
 	rights = None
 
-	def __init__(self, user, rights):
-		user.update({"rights": rights})
-		print('---------------', user)
+	def __init__(self, user, rights=None):
+		if rights:
+			user.update({"rights": rights})
 		super().__init__(doc=user, gen_skel=False)
 
 	def canDo(self, action):

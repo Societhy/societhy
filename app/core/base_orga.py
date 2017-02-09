@@ -3,6 +3,9 @@ from bson import objectid, errors
 
 from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
+
+from core.utils import toWei
+
 from models.organization import organizations, OrgaDocument
 from models.errors import NotEnoughFunds
 
@@ -50,7 +53,6 @@ def createOrga(user, password, newOrga):
 		}
 
 def joinOrga(user, password, orga_id):
-	# first we find the orga
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
@@ -83,9 +85,11 @@ def donateToOrga(user, password, orga_id, donation):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	donation_amount = donation.get('amount')
+	donation_amount = float(donation.get('amount'))
 	if user.refreshBalance() > donation_amount:
 		tx_hash = orga.donate(user, toWei(donation_amount), password=password)
+	else:
+		return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 	return {
 		"data": tx_hash,
 		"status": 200

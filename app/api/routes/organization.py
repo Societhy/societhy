@@ -51,9 +51,9 @@ def getOrgaMemberList(user, token, orga_id):
 	else:
 		return make_response("Wrong request format", 400)
 
-@router.route('/donateToOrga', methods=['POST'])
+@router.route('/makeDonation', methods=['POST'])
 @requires_auth
-def donateToOrga(user):
+def makeDonation(user):
 	if ensure_fields(['password', 'orga_id', 'donation'], request.json):
 		ret = base_orga.donateToOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('donation'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
