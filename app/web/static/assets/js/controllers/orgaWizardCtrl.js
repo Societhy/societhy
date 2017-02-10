@@ -34,6 +34,24 @@
         console.info('onCompleteItem', fileItem, response, status, headers);
     };
 
+    //DOCUMENT UPLOAD
+    var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+        headers: {
+            Authentification: $sessionStorage.SociethyToken
+        },
+    });
+
+    uploaderDocs.onBeforeUploadItem = function (item) {
+        console.info('onBeforeUploadItem', item);
+    };
+    uploaderDocs.onErrorItem = function (fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploaderDocs.onCompleteItem = function (fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+
+
     // PAGE MANAGEMENT
     $scope.form = {
 
@@ -98,9 +116,9 @@
                                 "fbUrl": form.fbUrl.$$rawModelValue,
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
-                },  function(data) {
+                    },  function(data) {
                         $state.go("app.organization", data.data);
-                });
+                    });
             }
         },
 

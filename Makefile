@@ -14,7 +14,7 @@ pow:
 
 build_dependencies:
 	npm --prefix ./app/web install ./app/web
-	bower install ./app/web
+	bower install --allow-root ./app/web
 
 build:
 	docker build -t $(DOCKER_IMAGE) .
