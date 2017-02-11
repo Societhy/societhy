@@ -11,9 +11,11 @@
 
     // IMAGE UPLOAD
     var uploaderImages = $scope.uploaderImages = new FileUploader({
-        headers: {
+            url: '/addOrgaProfilePicture',
+            alias: 'pic',
+            headers: {
             Authentification: $sessionStorage.SociethyToken
-        },
+        }
     });
 
     uploaderImages.filters.push({
@@ -103,7 +105,8 @@
         },
 
         submit: function (form) {
-            if ($scope.doVerifications()) {
+            console.log(uploaderImages);
+             if ($scope.doVerifications()) {
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
@@ -117,8 +120,10 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
+                        uploaderImages.formData = [{"orga":form.name.$$rawModelValue}];
+                        uploaderImages.uploadAll();
                         $state.go("app.organization", data.data);
-                    });
+                    })
             }
         },
 
