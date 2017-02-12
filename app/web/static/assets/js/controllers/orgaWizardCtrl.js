@@ -26,7 +26,8 @@
         }
     });
 
-    uploaderImages.onBeforeUploadItem = function (item) {
+    uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
+        item.formData.push({"orga":form.name.$$rawModelValue});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
@@ -120,7 +121,6 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
-                        uploaderImages.formData = [{"orga":form.name.$$rawModelValue}];
                         uploaderImages.uploadAll();
                         $state.go("app.organization", data.data);
                     })
