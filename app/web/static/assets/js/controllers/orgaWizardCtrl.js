@@ -27,7 +27,7 @@
     });
 
     uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
-        item.formData.push({"orga":form.name.$$rawModelValue});
+        item.formData.push({"orga":"lolala"});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
