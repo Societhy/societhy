@@ -50,7 +50,6 @@ def createOrga(user, password, newOrga):
 		}
 
 def addOrgaProfilePicture(user, pic):
-	print(pic)
 	return {"status" : 200}
 
 def joinOrga(user, password, orga_id):
