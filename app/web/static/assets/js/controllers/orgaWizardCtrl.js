@@ -27,7 +27,7 @@
     });
 
     uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
-        item.formData.push({"orga":"lolala"});
+//        item.formData.push({"Init":"Init"});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
@@ -121,6 +121,7 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
+                        //uploaderImages.formData.push({"orga_id":data.data._id});
                         uploaderImages.uploadAll();
                         $state.go("app.organization", data.data);
                     })
@@ -147,7 +148,7 @@
 
         ngNotify.set(text, {
             theme: 'pure',
-            position: 'top',
+            position: 'top',    
             type: 'error',
             button: 'true',
             sticky: false,

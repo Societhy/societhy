@@ -39,7 +39,8 @@ def addOrgaProfilePicture(user):
 	# for item in request.files.get("pic"):
 	# 	print(item)
 	# print(request.files.get("fromData"))
-	print(request.form.get("orga"))
+	print(request.form.get("Init"))
+	print(request.form["orga_id"])
 	pic = request.files.get("pic")
 	base_orga.addOrgaProfilePicture(user, pic)
 	return make_response("working on it", 200)
