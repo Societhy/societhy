@@ -1,4 +1,4 @@
-app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $state, $controller) {
+app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
 
 	var ctrl = this;
 	$scope.isMember = false;
@@ -10,7 +10,6 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}).then(function(response) {
 			$scope.currentOrga = $rootScope.currentOrga = response.data.orga;
 			$scope.currentRights = $rootScope.currentRights = response.data.rights
-			$(".donate-button").click(ctrl.makeDonation);
 			console.log("current orga & rights", $scope.currentOrga, $scope.currentRights)
 			if ($rootScope.user) {
 				$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
@@ -103,10 +102,11 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	$rootScope.$on("loggedIn", function(event, data) {
 		onLoad();
 	});
-
-	// $(function () {
-		onLoad();
-	// });
+	
+	$timeout(function() {
+		$(".donate-button").click(ctrl.makeDonation);
+	}, 500);
+	onLoad();
 
 	return ctrl;
 });

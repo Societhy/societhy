@@ -12,12 +12,12 @@
               <div class="vertical-center">
                 <h1 class="padding-right-20">{{ currentOrga.address }}</h1>
                 <div class="input-group-sm bootstrap-touchspin align-left">
-                  <input ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-prefix="E" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+                  <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
                 </div>
               </div>
-              <div class="row border-solid vertical-center">
+              <div class="row  vertical-center">
 
-                <div class="col-md-6 inline-block border-solid">
+                <div class="col-md-6 inline-block ">
                   <div class="user-left user-image">
                     <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                   </div>
@@ -39,7 +39,7 @@
                   <button ng-if="currentRights.leave" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 </div>
 
-                <div class="col-md-6 inline-block border-solid vertical-center">              
+                <div class="col-md-6 inline-block  vertical-center">              
                   <div class="float-left" style="line-height: 40px">
                     Balance: 
                     <span ng-bind="currentOrga.balance"></span>
@@ -65,9 +65,8 @@
                   </div>
                 </div>
               </div>
-
               <div class="row margin-top-20" >
-                <div class="col-md-6 border-solid border-dark padding-20">
+                <div class="col-md-6  border-dark padding-20">
                   <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
 
                   <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
@@ -100,17 +99,17 @@
                   </table>
 
                 </div>
-                <div class="col-md-6 inline-block border-solid border-dark padding-20">
+                <div class="col-md-6 inline-block  border-dark padding-20">
                   <h2>News</h2>
 
                 </div>
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 border-solid border-dark padding-20">              
+                <div class="col-md-6  border-dark padding-20">              
                   <h2>Proposals<button ng-if="currentRights.create_proposal" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
                 </div>
-                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                <div class="col-md-6 inline-block  border-dark" style="padding: 20px">
                   <h2>Members</h2>
                   <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                     <!-- ngInclude: templates.header -->
