@@ -48,8 +48,8 @@ def addOrgaProfilePicture(user):
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
 def joinOrga(user):
-	if ensure_fields(['password', 'orga_id'], request.json):
-		ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'))
+	if ensure_fields(['password', 'orga_id', 'tag'], request.json):
+		ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('tag'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)

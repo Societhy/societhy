@@ -44,7 +44,8 @@ class OrgaDocument(Document):
 
 	rights = {
 		"owner": {
-			"join": True,
+			"join": False,
+			"leave": True,
 			"donate": True,
 			"create_project": True,
 			"create_roposal": True,
@@ -57,7 +58,8 @@ class OrgaDocument(Document):
 		"admin": {},
 		"partner": {},
 		"member": {
-			"join": True,
+			"join": False,
+			"leave": True,
 			"donate": True,
 			"create_project": False,
 			"create_roposal": False,
@@ -66,6 +68,18 @@ class OrgaDocument(Document):
 			"remove_members": False,
 			"sell_share": True,
 			"buy_share": True,
+		},
+		"default": {
+			"join": True,
+			"leave": False,
+			"donate": True,
+			"create_project": False,
+			"create_roposal": False,
+			"vote_proposal": False,
+			"recruit": False,
+			"remove_members": False,
+			"sell_share": False,
+			"buy_share": False,
 		}
 	}
 
@@ -127,13 +141,16 @@ class OrgaDocument(Document):
 		return resp
 
 	def memberJoined(self, logs):
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
 			if new_member and new_member.get('account') not in self["members"]:
-				self["members"][new_member.get('account')] = Member(new_member.public(), rights=self.rights.get('member'))
-				self.save_partial();
-				return self
+				rights_tag = logs[0]["decoded_data"][0]
+				if rights_tag in self.rights.keys():
+					public_member =  Member(new_member.public(), rights=self.rights.get(rights_tag), tag=rights_tag)
+					self["members"][new_member.get('account')] = public_member
+					self.save_partial();
+					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
 		return False
 
 	def memberLeft(self, logs):
@@ -143,7 +160,7 @@ class OrgaDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
-				return self
+				return { "orga": self.public(public_members=True), "rights": self.rights.get('default')}
 		return False
 
 	def newDonation(self, logs):
@@ -163,7 +180,7 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
-			if len(logs[0]["decoded_data"]) == 1 and len(logs[0]["decoded_data"]) == 1:
+			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
@@ -195,9 +212,19 @@ class OrgaDocument(Document):
 	# GENERIC METHODS
 	####
 
-	def public(self):
+	def public(self, additional_infos=None, public_members=False):
+		to_be_public = organizations.public_info
+		if additional_infos:
+			to_be_public += additional_infos
+		if public_members:
+			ret = {key: self.get(key) for key in self if key in to_be_public}
+			ret.update({"members":{account: {"name": member["name"],
+											"_id": member["_id"],
+											"account": account,
+											"tag": member["tag"]} for account, member in self.get('members').items()}})
+			return ret
 		return {
-			key: self.get(key)for key in self if key in organizations.public_info
+			key: self.get(key) for key in self if key in to_be_public
 		}
 
 
@@ -222,11 +249,11 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, password=None, local=False):
-		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
+	def join(self, user, tag, password=None, local=False):
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user))
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.contract["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:

@@ -35,7 +35,7 @@ def test_create_orga(miner):
 
 
 def test_join(miner, testOrga):
-	tx_hash = testOrga.join(miner, password="simon")
+	tx_hash = testOrga.join(miner, "member", password="simon")
 	assert tx_hash != None
 	print('tx hash = ', tx_hash)
 	bw.waitEvent('newMember')

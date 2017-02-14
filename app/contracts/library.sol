@@ -21,7 +21,7 @@ contract open_structure {
     mapping (address => uint) public memberId;
     Member[] public members;
 
-    event newMember(address indexed member);
+    event newMember(address indexed member, string tag);
     event memberLeft(address indexed member);
 
     struct Member {
@@ -36,13 +36,13 @@ contract open_structure {
         _;
     }
 
-    function join(string _name) public {
+    function join(string _name, string tag) public {
         uint id;
         if (memberId[msg.sender] == 0) {
             memberId[msg.sender] = members.length;
             id = members.length++;
             members[id] = Member({member: msg.sender, donation: 0, name: _name, memberSince: now});
-            newMember(msg.sender);
+            newMember(msg.sender, tag);
         }
         else throw;
     }

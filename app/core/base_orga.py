@@ -11,6 +11,7 @@ from models.errors import NotEnoughFunds
 
 def getOrgaDocument(user, _id=None, name=None):
 	orga = None
+	rights = None
 	if _id:
 		try:
 			_id = objectid.ObjectId(_id)
@@ -25,8 +26,15 @@ def getOrgaDocument(user, _id=None, name=None):
 			orga = orga[0]
 		elif len(orga) < 1:
 			return {"data": "Organization does not exist", "status": 400}
+
+	if user:
+		if user.get('account') in orga.get('members'):
+			rights = orga.get('members').get(user.get('account')).get('rights')
+		else:
+			rights = orga.rights.get('default')
+
 	return {
-		"data": orga,
+		"data": { "orga": orga, "rights": rights},
 		"status": 200
 	}	
 
@@ -55,7 +63,7 @@ def createOrga(user, password, newOrga):
 def addOrgaProfilePicture(user, pic):
 	return {"status" : 200}
 
-def joinOrga(user, password, orga_id):
+def joinOrga(user, password, orga_id, tag):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
@@ -63,7 +71,7 @@ def joinOrga(user, password, orga_id):
 		return {"data": "Organization does not exists", "status": 400}
 
 	try:
-		tx_hash = orga.join(user, password=password)
+		tx_hash = orga.join(user, tag, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 

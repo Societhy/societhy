@@ -105,9 +105,13 @@ class LogEvent(Event):
 		tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		self.logs = tx_receipt.get('logs')
 		if self.event_abi and len(self.logs) >= 1:
-			event_types = computeEventTypes(self.name, self.event_abi)
-			decoded_data = decode_hex(self.logs[0].get('data')[2:]).decode('utf-8')
-			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data.splitlines()] if len(line)]
+			raw_data = self.logs[0].get('data')[2:]
+			i = 32
+			decoded_data = list()
+			while i <= len(raw_data):
+				decoded_data.append(decode_hex(raw_data[i-32:i]).decode("ascii"))
+				i += 32
+			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.logs))
 		return self
