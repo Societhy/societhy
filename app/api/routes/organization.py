@@ -33,6 +33,18 @@ def createOrga(user):
 	else:
 		return make_response("Wrong request format", 400)
 
+@router.route('/addOrgaProfilePicture', methods=['POST'])
+@requires_auth
+def addOrgaProfilePicture(user):
+	print("here")
+	# for item in request.files.get("pic"):
+	# 	print(item)
+	# print(request.files.get("fromData"))
+	print(request.form.get("Init"))
+	pic = request.files.get("pic")
+	base_orga.addOrgaProfilePicture(user, pic)
+	return make_response("working on it", 200)
+
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
 def joinOrga(user):

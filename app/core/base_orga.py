@@ -52,6 +52,9 @@ def createOrga(user, password, newOrga):
 			"status": 200
 		}
 
+def addOrgaProfilePicture(user, pic):
+	return {"status" : 200}
+
 def joinOrga(user, password, orga_id):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}

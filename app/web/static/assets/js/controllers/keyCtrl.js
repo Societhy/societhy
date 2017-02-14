@@ -67,6 +67,7 @@ app.controller('ModalImportController', function($scope, $uibModalInstance, $ses
 	$scope.uploader = new FileUploader({
 		url: '/importNewKey',
 		alias: 'key',
+		formData: [{"coucou":"test"}],
 		headers: {
 			Authentification: $sessionStorage.SociethyToken
 		},
@@ -128,7 +129,7 @@ app.controller('ModalExportController', function($scope, $uibModalInstance, $ses
 				errorAlertOptions.text = failure
 				SweetAlert.swal(errorAlertOptions);
 			}
-		);
+			);
 	}
 
 	$scope.exportKey = function(address) {
@@ -148,7 +149,7 @@ app.controller('ModalExportController', function($scope, $uibModalInstance, $ses
 				errorAlertOptions.text = failure
 				SweetAlert.swal(errorAlertOptions);
 			}
-		);
+			);
 	};
 
 });
@@ -206,12 +207,19 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				$http.post('/genLinkedKey', {
 					"password": password
 				}).then(
-					function(response) {
-						$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
-						success(response.data);
-					}, function(error) {
-						failure(error);
-					});
+				function(response) {
+					$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
+					if (!$rootScope.user.account) {
+						$rootScope.user.account = data.address;
+						$rootScope.user.password_type = "local";
+						$rootScope.user.local_account = false;
+					}
+					$rootScope.user.totalBalance = ctrl.wallet.totalBalance();
+					$state.reload();
+					success(response.data);
+				}, function(error) {
+					failure(error);
+				});
 			}, 2000);
 		});
 	};
@@ -302,7 +310,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				errorAlertOptions.text = failure
 				SweetAlert.swal(errorAlertOptions);
 			}
-		);
+			);
 	};
 
 	ctrl.loadDeleteKey = function(key) {
@@ -328,7 +336,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				errorAlertOptions.text = failure
 				SweetAlert.swal(errorAlertOptions);
 			}
-		);
+			);
 	};
 
 	ctrl.exportDeleteKey = function(key) {
