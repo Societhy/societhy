@@ -50,7 +50,7 @@ def populate_user(f):
 				kwargs['user'] = None
 				return f(*args, **kwargs)
 
-			user = UserDocument(session.get(token))
+			user = UserDocument(session.get(token), session=token)
 			if session.get(token).get('needs_reloading') is True:
 				user.reload()
 				session[token]["needs_reloading"] = False
