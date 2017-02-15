@@ -1,6 +1,6 @@
 from os import environ
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -33,6 +33,7 @@ app.register_blueprint(user_routes)
 app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
+
 
 @app.after_request
 def addHeader(response):

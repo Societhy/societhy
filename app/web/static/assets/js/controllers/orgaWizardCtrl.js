@@ -11,9 +11,11 @@
 
     // IMAGE UPLOAD
     var uploaderImages = $scope.uploaderImages = new FileUploader({
-        headers: {
+            url: '/addOrgaProfilePicture',
+            alias: 'pic',
+            headers: {
             Authentification: $sessionStorage.SociethyToken
-        },
+        }
     });
 
     uploaderImages.filters.push({
@@ -24,7 +26,8 @@
         }
     });
 
-    uploaderImages.onBeforeUploadItem = function (item) {
+    uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
+       item.formData.push({"Init":"Init"});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
@@ -33,6 +36,24 @@
     uploaderImages.onCompleteItem = function (fileItem, response, status, headers) {
         console.info('onCompleteItem', fileItem, response, status, headers);
     };
+
+    //DOCUMENT UPLOAD
+    var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+        headers: {
+            Authentification: $sessionStorage.SociethyToken
+        },
+    });
+
+    uploaderDocs.onBeforeUploadItem = function (item) {
+        console.info('onBeforeUploadItem', item);
+    };
+    uploaderDocs.onErrorItem = function (fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploaderDocs.onCompleteItem = function (fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+
 
     // PAGE MANAGEMENT
     $scope.form = {
@@ -85,7 +106,8 @@
         },
 
         submit: function (form) {
-            if ($scope.doVerifications()) {
+            console.log(uploaderImages);
+             if ($scope.doVerifications()) {
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
@@ -98,9 +120,11 @@
                                 "fbUrl": form.fbUrl.$$rawModelValue,
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
-                },  function(data) {
+                    },  function(data) {
+                        uploaderImages.formData.push({"orga_id":data.data._id});
+                        uploaderImages.uploadAll();
                         $state.go("app.organization", data.data);
-                });
+                    })
             }
         },
 
@@ -124,7 +148,7 @@
 
         ngNotify.set(text, {
             theme: 'pure',
-            position: 'top',
+            position: 'top',    
             type: 'error',
             button: 'true',
             sticky: false,
