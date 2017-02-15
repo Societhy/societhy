@@ -260,7 +260,8 @@ class OrgaCollection(Collection):
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,
-		"balance": int
+		"balance": int,
+		"profile_picture_id": ObjectId
 	}
 
 	@find_method

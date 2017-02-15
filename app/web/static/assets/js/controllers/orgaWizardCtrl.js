@@ -121,7 +121,7 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
-                        uploaderImages.formData.push({"orga_id":data.data._id});
+                        uploaderImages.queue[0].formData.push({"orga_id":data.data._id});
                         uploaderImages.uploadAll();
                         $state.go("app.organization", data.data);
                     })

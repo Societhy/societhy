@@ -1,10 +1,12 @@
 from flask import session, request, Response
-from bson import objectid, errors
+from bson import objectid, errors, json_util
+import json
 
 from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
 from models.errors import NotEnoughFunds
+from models.clients import db_filesystem
 
 def getOrgaDocument(user, _id=None, name=None):
 	orga = None
@@ -22,6 +24,7 @@ def getOrgaDocument(user, _id=None, name=None):
 			orga = orga[0]
 		elif len(orga) < 1:
 			return {"data": "Organization does not exist", "status": 400}
+	orga["picture"] = ("data:image/gif;base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture_id"]).read()))["$binary"])
 	return {
 		"data": orga,
 		"status": 200
@@ -49,8 +52,12 @@ def createOrga(user, password, newOrga):
 			"status": 200
 		}
 
-def addOrgaProfilePicture(user, pic):
-	return {"status" : 200}
+def addOrgaProfilePicture(user, pic, orga_id):
+	_id = db_filesystem.put(pic)
+	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$set": {"profile_picture_id" : _id} } )
+	if ret.modified_count <= 1:
+		return {"data":"Photo uploade failure, not inserted into database", "status" : 400}
+	return {"data":"OK", "status":200}
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga
