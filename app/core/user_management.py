@@ -6,8 +6,9 @@ import collections
 
 from base64 import b64decode, b64encode
 
-from flask import session, request, Response
+from flask import session, request, Response, jsonify
 from models import users, UserDocument
+from models.notification import notifications
 
 from bson.objectid import ObjectId
 
@@ -66,3 +67,7 @@ def findUser(data):
 	user = users.find_one({"name": data["name"]})
 	return {"data": user,
 		"status": 200}
+
+def getUserNotif(data):
+	ret = list(notifications.find({"userId" : ObjectId(data.get("_id"))}, {"date" : 0, "_id" : 0}))
+	return {"data": {"notifications": ret}, "status": 200}

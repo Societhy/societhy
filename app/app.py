@@ -8,13 +8,6 @@ from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
 
-
-from bson.objectid import ObjectId
-from core.notifications import *
-from models.project import projects, ProjectDocument as Project
-from models.organization import organizations, OrgaDocument as Orga
-
-
 from core import secret_key
 from core.utils import UserJSONEncoder
 import core.chat as chat
@@ -65,7 +58,6 @@ def addHeader(response):
 
 @app.route('/')
 def helloWorld():
-	notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newProposition')
 	return render_template("index.html")
 
 socketio = chat.socketio
