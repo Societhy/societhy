@@ -39,6 +39,8 @@
 
     //DOCUMENT UPLOAD
     var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+        url:"/addOrgaDocuments"
+        alias:"doc"
         headers: {
             Authentification: $sessionStorage.SociethyToken
         },
@@ -121,8 +123,9 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
-                        uploaderImages.queue[0].formData.push({"orga_id":data.data._id});
+                        uploaderImages.queue[0].formData.push({"orga_id":data.data._id, "type":uploaderImages.queue[0].file.type});
                         uploaderImages.uploadAll();
+                        uploaderDocs.uploadAll();
                         $state.go("app.organization", data.data);
                     })
             }

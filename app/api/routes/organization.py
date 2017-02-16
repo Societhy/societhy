@@ -37,9 +37,10 @@ def createOrga(user):
 @requires_auth
 def addOrgaProfilePicture(user):
 	orga_id = request.form.get("orga_id")
+	pic_type = request.form.get("type")
 	pic = request.files.get("pic")
-	base_orga.addOrgaProfilePicture(user, pic, orga_id)
-	return make_response("working on it", 200)
+	ret = base_orga.addOrgaProfilePicture(user, pic, orga_id, pic_type)
+	return make_response(ret)
 
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
