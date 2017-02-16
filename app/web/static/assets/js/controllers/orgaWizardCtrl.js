@@ -27,7 +27,6 @@
     });
 
     uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
-       item.formData.push({"Init":"Init"});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
@@ -39,14 +38,16 @@
 
     //DOCUMENT UPLOAD
     var uploaderDocs = $scope.uploaderDocs = new FileUploader({
-        url:"/addOrgaDocuments"
-        alias:"doc"
+        url:"/addOrgaDocuments",
+        alias:"doc",
         headers: {
             Authentification: $sessionStorage.SociethyToken
         },
     });
 
     uploaderDocs.onBeforeUploadItem = function (item) {
+        item.formData.push({"name": item.file.name});
+        item.formData.push({"type": item.file.type});        
         console.info('onBeforeUploadItem', item);
     };
     uploaderDocs.onErrorItem = function (fileItem, response, status, headers) {

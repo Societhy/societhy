@@ -261,6 +261,7 @@ class OrgaCollection(Collection):
 		"alerts": list,
 		"social_accounts": dict,
 		"balance": int,
+		"uploaded_documents": list
 	}
 
 	@find_method
