@@ -60,10 +60,14 @@ def addOrgaProfilePicture(user, orga_id, pic, pic_type):
 	return {"data":"OK", "status":200}
 
 def addOrgaDocuments(user, orga_id, doc, name, doc_type):
-	_id = db_filesystem.put(doc)
+	_id = db_filesystem.put(doc, doc_type=doc_type, name=name)
 	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$addToSet": { "uploaded_documents" : {"doc_id": _id, "doc_type": doc_type, "doc_name":name} } })
 	print("LALALALA " + str(ret.modified_count))
 	return {"ok"}
+
+def getOrgaUploadedDocument(user, doc_id):
+	gfile = db_filesystem.get(objectid.ObjectId(doc_id))
+	return Response(gfile, mimetype=gfile.doc_type, direct_passthrough=True)
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga

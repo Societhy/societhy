@@ -59,6 +59,12 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		 }
 	}
 
+ctrl.downloadDoc = function (doc_id, doc_name) {
+	$http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
+		console.log(response);
+	});
+}
+
 	$scope.currentOrga = $rootScope.currentOrga = $state.params.data
 	if (!$rootScope.currentOrga) {
 		$http.post('/getOrganization', {
@@ -76,3 +82,4 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	return ctrl;
 });
 
+	

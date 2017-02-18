@@ -53,6 +53,12 @@ def addOrgaDocuments(user):
 	ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
 	return make_response("ok", 200)
 
+@router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
+@requires_auth
+def getOrgaUploadedDocument(user, doc_id, doc_name):
+	ret = base_orga.getOrgaUploadedDocument(user, doc_id)
+	return ret
+
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
 def joinOrga(user):
