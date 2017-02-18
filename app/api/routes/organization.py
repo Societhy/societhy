@@ -39,7 +39,7 @@ def addOrgaProfilePicture(user):
 	orga_id = request.form.get("orga_id")
 	pic_type = request.form.get("type")
 	pic = request.files.get("pic")
-	ret = base_orga.addOrgaProfilePicture(user, pic, orga_id, pic_type)
+	ret = base_orga.addOrgaProfilePicture(user, orga_id, pic, pic_type)
 	#todo : gerer le retour
 	return make_response("ok", 200)
 
