@@ -1,6 +1,6 @@
 from os import environ
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -41,8 +41,9 @@ def add_header(response):
     and also to cache the rendered page for 10 minutes.
     """
     response.headers['Access-Control-Allow-Headers'] = 'Authentification, authentification, Origin, X-Requested-With, Content-Type, Accept'
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Origin'] = request.headers['origin']
+    response.headers['Access-Control-Allow-Methods'] = '*'
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'no-cache, no-store'
     response.headers['Pragma'] = 'no-cache'

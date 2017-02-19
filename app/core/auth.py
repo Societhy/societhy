@@ -59,10 +59,6 @@ def login(credentials):
 
 	if user is not None:
 		token = str(jwt.encode({"_id": str(user.get("_id")), "timestamp": time.strftime("%a%d%b%Y%H%M%S")}, secret_key, algorithm='HS256'), 'utf-8')
-		token = token.replace('.', '|')
-		print('je mapelle token--------------------------')
-		print(token)
-		print('----------------------')
 		session[token] = user
 		print(session.items())
 		return {"data": {

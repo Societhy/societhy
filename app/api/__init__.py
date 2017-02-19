@@ -18,15 +18,8 @@ def requires_auth(f):
 	@wraps(f)
 	def wrapped_function(*args, **kwargs):
 		token = request.headers.get('authentification')
-		print("--------")
-		print(token, session.items())
-		print("----------")
 		if token is not None and token in session:
 			try:
-				token = token.replace('|', '.')
-				print('mod de | par . --------------------------')
-				print(token)
-				print('----------------------')
 				jwt.decode(token, secret_key)
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
@@ -77,7 +70,7 @@ class MongoSessionInterface(SessionInterface):
         self.store.update({'sid': session.sid},
                           {'sid': session.sid,
                            'data': session,
-                           'expiration': expiration}, True)
+                           'expiration': expiration}, True, check_keys=False)
         response.set_cookie(app.session_cookie_name, session.sid,
                             expires=self.get_expiration_time(app, session),
                             httponly=False, domain=domain)
