@@ -1,3 +1,7 @@
+"""
+Ceci est un test de documentation
+"""
+
 from flask import session, request, Response
 from bson import objectid, errors, json_util
 import json
@@ -9,6 +13,10 @@ from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
 
 def getOrgaDocument(user, _id=None, name=None):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	orga = None
 	if _id:
 		try:
@@ -31,6 +39,10 @@ def getOrgaDocument(user, _id=None, name=None):
 	}	
 
 def getAllOrganizations():
+	"""
+	Ceci est un test de documentation
+	"""
+
 	orgas = list(organizations.find({}, organizations.public_info))
 	return {
 		"data": orgas,
@@ -38,6 +50,10 @@ def getAllOrganizations():
 	}	
 
 def createOrga(user, password, newOrga):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	newOrga["members"] = {}
@@ -53,6 +69,10 @@ def createOrga(user, password, newOrga):
 		}
 
 def addOrgaProfilePicture(user, orga_id, pic, pic_type):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	_id = db_filesystem.put(pic)
 	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$set": {"profile_picture" : {"profile_picture_id" : _id, "profile_picture_type" : pic_type} } } )
 	if ret.modified_count <= 1:
@@ -60,12 +80,20 @@ def addOrgaProfilePicture(user, orga_id, pic, pic_type):
 	return {"data":"OK", "status":200}
 
 def addOrgaDocuments(user, orga_id, doc, name, doc_type):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	_id = db_filesystem.put(doc, doc_type=doc_type, name=name)
 	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$addToSet": { "uploaded_documents" : {"doc_id": _id, "doc_type": doc_type, "doc_name":name} } })
 	print("LALALALA " + str(ret.modified_count))
 	return {"ok"}
 
 def getOrgaUploadedDocument(user, doc_id, doc_name):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	gfile = db_filesystem.get(objectid.ObjectId(doc_id))
 	rep = Response(gfile, mimetype=gfile.doc_type, direct_passthrough=True)
 	rep.headers['Content-Disposition'] = 'attachment; filename="' + doc_name + '"'
@@ -73,6 +101,10 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
 	return rep
 
 def joinOrga(user, password, orga_id):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	# first we find the orga
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
@@ -91,6 +123,10 @@ def joinOrga(user, password, orga_id):
 	}
 
 def getOrgaMemberList(token, orga_id):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
@@ -101,6 +137,10 @@ def getOrgaMemberList(token, orga_id):
 	}
 
 def donateToOrga(user, password, orga_id, donation):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
@@ -115,6 +155,10 @@ def donateToOrga(user, password, orga_id, donation):
 	}
 
 def createProjectFromOrga(user, password, orga_id, newProject):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 
@@ -131,6 +175,10 @@ def createProjectFromOrga(user, password, orga_id, newProject):
 	}
 
 def leaveOrga(user, password, orga_id):
+	"""
+	Ceci est un test de documentation
+	"""
+
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	
