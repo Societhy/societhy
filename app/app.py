@@ -65,7 +65,7 @@ def addHeader(response):
 
 @app.route('/')
 def helloWorld():
-	notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newProposition')
+#	notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : O#bjectId("5876417fcba72b00a03cf9f4")}), 'newProposition')
 	return render_template("index.html")
 
 socketio = chat.socketio
