@@ -46,7 +46,7 @@
     });
 
     uploaderDocs.onBeforeUploadItem = function (item) {
-            console.log(uploaderDocs.queue.length);
+        console.log(uploaderDocs.queue.length);
         item.formData.push({"name": item.file.name});
         item.formData.push({"type": item.file.type});        
         console.info('onBeforeUploadItem', item);
@@ -58,6 +58,32 @@
         console.info('onCompleteItem', fileItem, response, status, headers);
     };
 
+
+    // MEMBER MANAGEMENT
+
+        $scope.users = [];
+
+    $scope.addRow = function () {
+        $scope.users.push({ 'invited_username': $scope.invited_username,  'invited_role': $scope.invited_role });
+        $scope.invited_username = '';
+        $scope.invited_role = '';
+    };
+
+
+    $scope.removeRow = function (name) {
+        var index = -1;
+        var comArr = eval($scope.users);
+        for (var i = 0; i < comArr.length; i++) {
+            if (comArr[i].name === name) {
+                index = i;
+                break;
+            }
+        }
+        if (index === -1) {
+            alert("Something gone wrong");
+        }
+        $scope.users.splice(index, 1);
+    };
 
     // PAGE MANAGEMENT
     $scope.form = {
@@ -122,7 +148,8 @@
                                 "description" : form.description.$$rawModelValue,
                                 "type" : form.type.$$rawModelValue,
                                 "fbUrl": form.fbUrl.$$rawModelValue,
-                                "twitterUrl" : form.twitterUrl.$$rawModelValue
+                                "twitterUrl" : form.twitterUrl.$$rawModelValue,
+                                "invited_users" : $scope.users
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
                         console.log(uploaderDocs.queue.length);

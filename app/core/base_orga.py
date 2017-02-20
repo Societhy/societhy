@@ -65,9 +65,12 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type):
 	print("LALALALA " + str(ret.modified_count))
 	return {"ok"}
 
-def getOrgaUploadedDocument(user, doc_id):
+def getOrgaUploadedDocument(user, doc_id, doc_name):
 	gfile = db_filesystem.get(objectid.ObjectId(doc_id))
-	return Response(gfile, mimetype=gfile.doc_type, direct_passthrough=True)
+	rep = Response(gfile, mimetype=gfile.doc_type, direct_passthrough=True)
+	rep.headers['Content-Disposition'] = 'attachment; filename="' + doc_name + '"'
+	rep.headers['Content-Type'] = "application/force-download"
+	return rep
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga

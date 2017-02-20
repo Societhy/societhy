@@ -29,20 +29,28 @@
 										<a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}">
 											<div class="stepNumber">
 												2
-											</div> <span class="stepDesc text-small">Financing</span>
+											</div> <span class="stepDesc text-small">Members</span>
 										</a>
 									</li>
+
 									<li ng-click="form.goTo(Form, 3)">
 										<a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
 											<div class="stepNumber">
 												3
-											</div> <span class="stepDesc text-small"> Document Upload </span>
+											</div> <span class="stepDesc text-small">Financing</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 4)">
 										<a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}">
 											<div class="stepNumber">
 												4
+											</div> <span class="stepDesc text-small"> Document Upload </span>
+										</a>
+									</li>
+									<li ng-click="form.goTo(Form, 5)">
+										<a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}">
+											<div class="stepNumber">
+												5
 											</div> <span class="stepDesc text-small"> Complete </span>
 										</a>
 									</li>
@@ -167,6 +175,85 @@
 										<!-- start: WIZARD STEP 2 -->
 										<div id="step-2" ng-show="currentStep == 2">
 											<div class="row">
+												<div class="col-md-3">
+													<div class="padding-30">
+														<h2 class="StepTitle">Members<span class="text-large block">Do you want to add members to your organisation ?</span></h2>
+													</div>
+												</div>
+												<div class="col-md-9">
+													<fieldset>
+														<legend>
+															Adding Members
+														</legend>
+
+														<div class="col-md-6">
+															<div class="row">
+																<div class="padding-bottom-20">
+																	<h3>Invite Users</h3>
+																</div>
+																<form class="form-horizontal padding-bottom-20" role="form" ng-submit="addRow()">
+																	<div class="form-group">
+																		<label class="col-md-2 control-label">Username</label>
+																		<div class="col-md-4">
+																			<input type="text" class="form-control" name="invited_username" ng-model="invited_username" />
+																		</div>
+																	</div>
+																	<div style="vertical-align:top" class="form-group">
+																		<label class="col-md-2 control-label">Roles</label>
+																		<div class="col-md-4">
+																			<input type="text" class="form-control" name="invited_role" ng-model="invited_role" />
+																		</div>
+																	</div>
+																	<div class="form-group">
+																		<div class="col-md-2">
+																			<input type="submit" ng-click='addRow()' value="Submit" class="btn btn-primary btn-wide pull-right"/>
+																		</div>
+																	</div>
+																</form>
+															</div>
+														</div>
+														<div class="col-md-6">
+															<div class="table-responsive">
+																<table class="table">
+																	<thead>
+																		<tr>
+																			<th>Username</th>
+																			<th>Role</th>
+																			<th>Action </th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr ng-repeat="user in users">
+																			<td>{{user.invited_username}} </td>
+																			<td>{{user.invited_role}} </td>
+																			<td>
+																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user.name)">
+																					<span>Remove</span>
+																				</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+
+
+													</fieldset>
+													<div class="form-group">
+														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+															<i class="fa fa-circle-arrow-left"></i> Back
+														</button>
+														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+															Next <i class="fa fa-arrow-circle-right"></i>
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- end: WIZARD STEP 2 -->
+										<!-- start: WIZARD STEP 3 -->
+										<div id="step-3" ng-show="currentStep == 3">
+											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
 														<h2 class="StepTitle">Let's talk about money<span class="text-large block">How do you want to back your organisation ?</span></h2>
@@ -231,9 +318,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 2 -->
-										<!-- start: WIZARD STEP 3 -->
-										<div id="step-3" ng-show="currentStep == 3">
+										<!-- end: WIZARD STEP 3 -->
+										<!-- start: WIZARD STEP 4 -->
+										<div id="step-4" ng-show="currentStep == 4">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
@@ -323,9 +410,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 3 -->
-										<!-- start: WIZARD STEP 4 -->
-										<div id="step-4" ng-show="currentStep == 4">
+										<!-- end: WIZARD STEP 4 -->
+										<!-- start: WIZARD STEP 5 -->
+										<div id="step-5" ng-show="currentStep == 5">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="text-center">
@@ -342,7 +429,7 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 4 -->
+										<!-- end: WIZARD STEP 5 -->
 									</div>
 									<pre class="code margin-top-20">{{ myModel | json }}</pre>
 								</form>

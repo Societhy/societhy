@@ -44,26 +44,26 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	}
 
 	ctrl.createProject = function() {
-		 if ($scope.doVerifications()) {
-		 	$scope.completeBlockchainAction(
-		 		function(password) {
-		 			$rootScope.toogleWait("Creating project")
-		 			$http.post('/createProjectFromOrga', {
-		 				"orga_id": $rootScope.currentOrga._id,
-		 				"newProject": {},
-		 				"password": password
-		 			}).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
-		 		}, function(data) {
-		 			$scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
-		 		})
-		 }
+		if ($scope.doVerifications()) {
+			$scope.completeBlockchainAction(
+				function(password) {
+					$rootScope.toogleWait("Creating project")
+					$http.post('/createProjectFromOrga', {
+						"orga_id": $rootScope.currentOrga._id,
+						"newProject": {},
+						"password": password
+					}).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+				}, function(data) {
+					$scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+				})
+		}
 	}
 
-ctrl.downloadDoc = function (doc_id, doc_name) {
-	$http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
-		console.log(response);
-	});
-}
+	ctrl.downloadDoc = function (doc_id, doc_name) {
+		$http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
+			console.log(response);
+		});
+	}
 
 	$scope.currentOrga = $rootScope.currentOrga = $state.params.data
 	if (!$rootScope.currentOrga) {
@@ -82,4 +82,3 @@ ctrl.downloadDoc = function (doc_id, doc_name) {
 	return ctrl;
 });
 
-	
