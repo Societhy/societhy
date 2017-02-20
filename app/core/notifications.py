@@ -1,4 +1,4 @@
-from app import mail
+from app import *
 
 from flask_mail import Message
 from models.user import users, UserDocument as User
@@ -8,7 +8,7 @@ from models.notification import notifications, NotificationDocument as Notificat
 import datetime
 
 
-#db.users.update({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}, {$set: {"notifications" : [{"_id" : ObjectId("588a36371179f010917d4579")}]} })
+# Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
 class Notification():
 	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd')
@@ -31,7 +31,8 @@ class NotificationPush(Notification):
 			return "unsent"
 		print("insert")
 		if subject:
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "subjectId":subject.get("_id"), "category":category, "date": datetime.datetime.now(), "description":self.description})
+			subjectType = findType(subject)
+			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
 		else:
 			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
 
@@ -51,26 +52,24 @@ class NotificationEmail(Notification):
 
 def notifyToOne(sender, user, category, subject=None):
 	print("notifToOne")
-	print(sender.get("_id"))
-	sendType = findSenderType(sender)
-	if sendType == None:
+	senderType = findType(sender)
+	if senderType == None:
 		return
 	print(user.get("notification_accept"))
 	if user.get("notification_accept") == 0:
 		return
 	elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
 		push = NotificationPush()
-		push.sendNotif(sender, findSenderType(sender), category, subject, user)
+		push.sendNotif(sender, senderType, category, subject, user)
 	if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
 		email = NotificationEmail()
-		email.sendNotif(sender, findSenderType(sender), category, subject, user)
+		email.sendNotif(sender, senderType, category, subject, user)
 
-def findSenderType(sender):
-	if isinstance(sender, User):
+def findType(doc):
+	if isinstance(doc, User):
 		return "user"
-	elif isinstance(sender, Orga):
-		print('orga')
+	elif isinstance(doc, Orga):
 		return "organization"
-	elif isinstance(sender, Project):
+	elif isinstance(doc, Project):
 		return "project"
 	return None
