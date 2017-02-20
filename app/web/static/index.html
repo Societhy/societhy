@@ -60,8 +60,12 @@
     <link rel="stylesheet" href="static/assets/css/plugins.css">
     <!-- Packet Theme -->
     <link rel="stylesheet" data-ng-href="static/assets/css/themes/{{ app.layout.theme }}.css" />
+    <!-- Range Slider -->
+    <link rel="stylesheet" href="static/assets/css/jQDateRangeSlider-min.css">
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico" />
+    <!-- Boostrap-select -->
+    <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css">
 </head>
 <body ng-controller="AppCtrl">
     <div ui-view id="app" class="lyt-4" ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}"></div>
@@ -145,6 +149,12 @@
     <script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
     <!-- Angular Slick Carousel -->
     <script src="bower_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
+    <!-- jquery-ui.js -->
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+    <!-- RangerSlider.js -->
+    <script src="static/assets/js/rangeSlider.js"></script>
+    <!-- RangerSlider.js -->
+    <script src="static/assets/js/jQDateRangeSlider-min.js"></script>
     <!-- Packet Scripts -->
     <script src="static/assets/js/app.js"></script>
     <script src="static/assets/js/main.js"></script>
@@ -172,5 +182,7 @@
     <!-- Packet Controllers -->
     <script src="static/assets/js/controllers/mainCtrl.js"></script>
     <script src="static/assets/js/controllers/bootstrapCtrl.js"></script>
+    <!-- Boostrap-select -->
+    <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
 </body>
 </html>

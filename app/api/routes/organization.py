@@ -18,7 +18,7 @@ def getOrgaDocument(user):
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
-
+        
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
 def creeateOrga(user):
@@ -72,3 +72,8 @@ def leaveOrga(user):
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
+        
+@router.route('/getOrgaHisto', methods=['POST'])
+def getOrgaHisto():
+	ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
+	return make_response(jsonify(ret.get('data')), ret.get('status'))

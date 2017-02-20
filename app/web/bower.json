@@ -112,7 +112,9 @@
     "file-saver": "latest",
     "monospaced/angular-qrcode": "latest",
     "oauth.io": "latest",
-    "angular-socket-io": "latest"
+    "angular-socket-io": "latest",
+    "bootstrap-select": "latest",
+    "jquery-ui": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",

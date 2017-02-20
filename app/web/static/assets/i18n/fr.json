@@ -252,5 +252,32 @@
         "FIXEDSIDEBAR": "Fixed sidebar",
         "CLOSEDSIDEBAR": "Closed sidebar",
         "FIXEDFOOTER": "Fixed footer"
+    },
+    "notification": {
+	"LOADING": "CHARGEMENT...",
+        "organisation": {
+	    "title": "Historique",
+	    "messages": {
+		"memberLeave": "Un membre à <u>quitté</u> l'organisation.",
+		"newMember": "Un membre à <u>rejoint</u> l'organisation.",
+		"newProposition": "Un membre vient de soumettre une nouvelle proposition.",
+		"newDonation": "Une donation vient d'être faite."
+	    },
+	    "filter" : {
+		"title": "Filtre",
+		"categories" : {
+		    "title" : "Catégorie",
+		    "newMember" : "Nouvel utilisateur",
+		    "memberLeave" : "Ancien utilisateur",
+		    "newDonation" : "Nouveau don"
+		},
+		"years" : {
+		    "title": "Période"
+		}
+	    },
+	    "export" : {
+		"title": "Exportation de donées"
+	    }
+	}
     }
 }

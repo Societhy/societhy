@@ -1,7 +1,17 @@
 from flask import session, request, Response
-from bson import objectid, errors
+from bson import  errors
+
+from flask_mail import Message
+from models.user import users, UserDocument as User
+from models.project import projects, ProjectDocument as Project
+from models.organization import organizations, OrgaDocument as Orga
+from models.notification import notifications, NotificationDocument as Notification
+import datetime
+
+from bson.objectid import ObjectId
 
 from models.organization import organizations, OrgaDocument
+from models.notification import notifications, NotificationDocument
 
 def getOrgaDocument(user, _id=None, name=None):
 	orga = None
@@ -81,3 +91,11 @@ def leaveOrga(user, password, orga_id):
 		"data": "",
 		"status": 200
 	}
+
+def getHisto(token, orga_id, date):
+	data = NotificationDocument.getHisto(orga_id, date)
+	return {
+		"data": data,
+		"status": 200
+	}
+
