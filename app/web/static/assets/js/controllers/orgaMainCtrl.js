@@ -45,7 +45,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}
 	}
 
-    $rootScope.updateFilter = function() {
+    $rootScope.updateCategoryFilter = function() {
 	delete $rootScope.histo;
 	$rootScope.histo = $.extend(true, {}, $rootScope.histoFull);
 	if ($("#filterCategory").val() != "all")
@@ -58,37 +58,76 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
     }
 
     ctrl.getHisto = function(begin, end) {
-	password = "test";
 	$http.post('/getOrgaHisto', {
-	    "orga_id": $state.params.orga_id,
-	    "password": password,
+	    "orga_id": $state.params._id,
 	    "date": {"begin": begin, "end": end}
 	}).then(
-	    function(data) {
+	    function(data) {		
 		$(".orgaActivityLoading").addClass("displayNone");
 		$(".timeline").removeClass("displayNone");
-		$rootScope.histoFull = data.data;
-		$rootScope.histo = data.data;
+		if (data.data[0])
+		{
+		    $rootScope.sliderFilter = [];
+		    $rootScope.sliderFilter.first = data.data[0]["first"];
+		    $rootScope.sliderFilter.valBegin = begin;
+		    $rootScope.sliderFilter.valEnd = end;
+		    $rootScope.histoFull = data.data;
+		    $rootScope.histo = data.data;
+		    updateSliderFilter();
+		    $rootScope.updateCategoryFilter();
+		}
+		else
+		{
+		    delete $rootScope.histoFull;
+		    delete $rootScope.histo;
+
+		}
 	    },
 	    function(error) {
 		console.log(error);
 	    });
 
     };
-
-    $rootScope.initSlider = function() {
-	console.log();
-	max = new Date();
-	min = new Date();
-	min.setDate(min.getDate() - 7);
-	max.setMonth(max.getMonth() - 1);
-	min.setMonth(min.getMonth() - 1);
-	$("#slider").dateRangeSlider();
-	$("#slider").dateRangeSlider("bounds",min, max);
-	min.setDate(min.getDate() + 4);
-	$("#slider").dateRangeSlider("values",min, max);
+    
+    function updateSliderFilter() {
+	if (!$rootScope.sliderFilter || $("#sliderFilter.ui-dateRangeSlider").length <= 0)
+	    return;
+	console.log(new Date($rootScope.sliderFilter.first));
+	$("#sliderFilter").dateRangeSlider("bounds",new Date($rootScope.sliderFilter.first), new Date($rootScope.sliderFilter.valEnd));
+	$("#sliderFilter").dateRangeSlider("values",new Date($rootScope.sliderFilter.valBegin), new Date($rootScope.sliderFilter.valEnd));
     }
 
+    $rootScope.initSliders = function() {
+	$("#sliderFilter").dateRangeSlider();
+	var slider = $('.range-slider');
+	range = $('.range-slider__range');
+	value = $('.range-slider__value');
+	slider.each(function() {
+	    value.each(function() {
+		var value = $(this).prev().attr('value');
+		$(this).html(value);
+	    });
+	    range.on('input', function() {
+		$(this).next(value).html(this.value);
+	    });
+	});
+	$("#sliderFilter").bind("userValuesChanged", $rootScope.updateHisto);
+	updateSliderFilter();
+    }
+
+    $rootScope.slider = {
+	value: 10
+    };
+    
+    $rootScope.updateHisto = function(e, data) {
+	begin = data.values.min;
+	end = data.values.max
+	locale = "en-us";
+        ctrl.getHisto(
+	    (begin.toLocaleString(locale, { month: "short" }) + " " + begin.getDate() + ", "+  begin.getFullYear() +  " 12:00 AM"),
+	    (end.toLocaleString(locale, { month: "short" }) + " " + end.getDate() + ", "+  end.getFullYear() +  " 11:59 PM"))
+    }
+    
     ctrl.createProject = function() {
 		 if ($scope.doVerifications()) {
 		 	$scope.completeBlockchainAction(
@@ -103,24 +142,31 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		 			$scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
 		 		})
 		 }
-	}
+    }
 
-	if (!$rootScope.currentOrga) {
-		$http.post('/getOrganization', {
-			"id": $state.params._id
-		}).then(function(response) {
-			$scope.currentOrga = $rootScope.currentOrga = response.data;
-			console.log("current orga", $scope.currentOrga)
-			$rootScope.date = new Date();
-			begin = new Date();
-			begin.setDate(begin.getDate() - 7);
-			ctrl.getHisto(begin, $rootScope.date);
-			if ($rootScope.user)
-				$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
-		}, function(error) {
-		    //$state.go('app.dashboard');
-			$rootScope.toogleError("Organization does not exist");			
-		})
-	}
-	return ctrl;
+    function getLastDays () {
+	$rootScope.date = new Date();
+	begin = new Date();
+	begin.setDate(begin.getDate() - 7);
+	locale = "en-us";	    
+	ctrl.getHisto(
+	    (begin.toLocaleString(locale, { month: "short" }) + " " + begin.getDate() + ", "+  begin.getFullYear() +  " 12:00 AM"),
+	    ($rootScope.date.toLocaleString(locale, { month: "short" }) + " " + $rootScope.date.getDate() + ", "+  $rootScope.date.getFullYear() +  " 11:59 PM"));
+    };
+    
+    if (!$rootScope.currentOrga) {
+	$http.post('/getOrganization', {
+	    "id": $state.params._id
+	}).then(function(response) {
+	    $scope.currentOrga = $rootScope.currentOrga = response.data;
+	    console.log("current orga", $scope.currentOrga);
+	    getLastDays();
+	    if ($rootScope.user)
+		$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
+	}, function(error) {
+	    $state.go('app.dashboard');
+	    $rootScope.toogleError("Organization does not exist");			
+	})
+    }
+    return ctrl;
 });

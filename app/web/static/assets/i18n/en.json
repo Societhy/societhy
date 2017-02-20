@@ -133,9 +133,9 @@
                 "SAMPLE": "Red Cross"
             },
             "projects": {
-                "MAIN" : "Projects",
-                "MYPROJECTS" : "My Projects",
-                "SAMPLE" : "Help hobos"
+                "MAIN": "Projects",
+                "MYPROJECTS": "My Projects",
+                "SAMPLE": "Help hobos"
             },
             "utilities": {
                 "MAIN": "Utilities",
@@ -271,19 +271,22 @@
 		"newProposition": "A member has submit a new proposition",
 		"newDonation": "A member has made a new donation."
 	    },
-	    "filter" : {
+	    "filter": {
 		"title": "Filter",
-		"categories" : {
-		    "title" : "Category",
-		    "newMember" : "New member",
-		    "memberLeave" : "Old member",
-		    "newDonation" : "New donation"
+		"categories": {
+		    "title": "Category",
+		    "newMember": "New member",
+		    "memberLeave": "Old member",
+		    "newDonation": "New donation"
 		},
-		"years" : {
+		"years": {
 		    "title": "Period"
+		},
+		"limit": {
+		    "title": "Limit"
 		}
 	    },
-	    "export" : {
+	    "export": {
 		"title": "Data export"
 	    }
 	}

@@ -34,15 +34,32 @@
     <div id="cmdContainer" class="col-md-6">
     <!-- BEGIN: FILTER-->
       <div id="filterContainer" class="col-md-12">
+
 	<div class="filter">
 	  <label>
 	    <span translate="notification.organisation.filter.years.title"></span> :
 	  </label>
-	  <div id="slider"></div>
+
+	  <div id="sliderFilter"></div>
+
 	</div>
+
+
+	<div class="filter">
+	  <label>
+	    <span translate="notification.organisation.filter.limit.title"></span> :
+	  </label>
+	  <div class="range-slider">
+	    <input class="range-slider__range" type="range" value="50" min="0" max="{{filter.limit}}">
+	    <span class="range-slider__value">0</span>
+	    <rzslider rz-slider-model="slider.value"></rzslider>
+	  </div>
+
+	</div>
+	
 	<div class="filter">
 	  <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
-	  <select  ng-click="updateFilter()" id="filterCategory" class=" cs-selectx cs-skin-slidex" histoFilter="category">
+	  <select  ng-click="updateCategoryFilter()" id="filterCategory" class=" cs-selectx cs-skin-slidex" histoFilter="category">
 	    <option value="all"> </option>
 	    <option value="newMember" translate="notification.organisation.filter.categories.newMember"></option>
 	    <option value="memberLeave" translate="notification.organisation.filter.categories.memberLeave"></option>
