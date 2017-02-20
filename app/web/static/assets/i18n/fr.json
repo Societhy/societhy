@@ -133,9 +133,9 @@
                 "SAMPLE": "La croix-rouge"
             },
             "projects": {
-                "MAIN" : "Projets",
-                "MYPROJECTS" : "Mes Projets",
-                "SAMPLE" : "Aider les clodos"
+                "MAIN": "Projets",
+                "MYPROJECTS": "Mes Projets",
+                "SAMPLE": "Aider les clodos"
             },
             "3level": {
                 "MAIN": "3 Level Menu",
@@ -264,19 +264,22 @@
 		"newProposition": "Un membre vient de soumettre une nouvelle proposition.",
 		"newDonation": "Une donation vient d'être faite."
 	    },
-	    "filter" : {
+	    "filter": {
 		"title": "Filtre",
-		"categories" : {
-		    "title" : "Catégorie",
-		    "newMember" : "Nouvel utilisateur",
-		    "memberLeave" : "Ancien utilisateur",
-		    "newDonation" : "Nouveau don"
+		"categories": {
+		    "title": "Catégorie",
+		    "newMember": "Nouvel utilisateur",
+		    "memberLeave": "Ancien utilisateur",
+		    "newDonation": "Nouveau don"
 		},
-		"years" : {
+		"years": {
 		    "title": "Période"
+		},
+		"limit": {
+		    "title": "Limite"
 		}
 	    },
-	    "export" : {
+	    "export": {
 		"title": "Exportation de donées"
 	    }
 	}
