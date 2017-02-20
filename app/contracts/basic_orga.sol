@@ -11,7 +11,7 @@ contract basic_orga is mortal, open_structure {
     ProjectData[] public projects;
 
     event newDonation(address indexed member, uint indexed value, bool success);
-    event newProject(address indexed newProjectAddress, string indexed name);
+    event newProject(address indexed newProjectAddress, string name);
 
     struct ProjectData {
         Project projectAddress;
@@ -37,12 +37,9 @@ contract basic_orga is mortal, open_structure {
     }
 
     function donate() payable {
-        if (msg.value == 0) throw;
-        else {
-            if (memberId[msg.sender] != 0) {
-                members[memberId[msg.sender]].donation += msg.value;
-            }
-            newDonation(msg.sender, msg.value, true);
-       }
+        if (memberId[msg.sender] != 0 && msg.value > 0) {
+            members[memberId[msg.sender]].donation += msg.value;
+        }
+        newDonation(msg.sender, msg.value, true);
     }
 }

@@ -1,43 +1,47 @@
-app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage, $state) {
+app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $state) {
 
 	var ctrl = this;
-
+	$scope.isMember = false;
+/*
 	ctrl.init = function() {
-		console.log($state.params);
-		$http.post('/getOrganization', {
-			// "name": $state.params.orga_id
-			"name": $state.params.orga_name
-		}).then(
-		function(data) {
-			$rootScope.currentOrga = data.data;
-			console.log(data);
-		    $rootScope.date = new Date();
-		    begin = new Date();
-		    begin.setDate(begin.getDate() - 7);
-		    ctrl.getHisto(begin,$rootScope.date);
-		},
-		function(error) {
-			$rootScope.currentOrga = {"name": "one", "id": 1, "picture": "static/assets/images/orga_default.jpg"};
-			console.log(error);
-		});
+*/
+	ctrl.joinOrga = function() {
+
+		if ($scope.doVerifications()) {
+			$scope.completeBlockchainAction(
+				function(password) {
+					$rootScope.toogleWait("Joining...");
+					$http.post('/joinOrga', {
+						"orga_id": $rootScope.currentOrga._id,
+						"password": password
+					}).then(function(data) {}, function(error) { $rootScope.toogleError(error); });
+				},  function(data) {
+					$scope.currentOrga.members = $rootScope.currentOrga.members = data.data.members;
+					$rootScope.user.organizations.push($rootScope.currentOrga);
+					$scope.isMember = true;
+				});
+
+
+		}
 	}
 
-	ctrl.joinOrga = function() {
-		password = "test";
-		if ($rootScope.user.local_account == true) {
-			console.log("ask for password")
-		}
-		else {
-			$http.post('/joinOrga', {
-				"orga_id": $rootScope.currentOrga._id,
-				"password": password
-			}).then(
-			function(data) {
-				console.log(data);
-			},
-			function(error) {
-				console.log(error);
-			});
+	ctrl.leaveOrga = function() {
+		
+		if ($scope.doVerifications()) {
+			$scope.completeBlockchainAction(
+				function(password) {
+					$rootScope.toogleWait("Leaving...");
+					$http.post('/leaveOrga', {
+						"orga_id": $rootScope.currentOrga._id,
+						"password": password
+					}).then(function(data) {}, function(error) { $rootScope.toogleError(error); });
+				},  function(data) {
+					$scope.currentOrga.members = $rootScope.currentOrga.members = data.data.members;
+					$scope.isMember = false;
+					$rootScope.user.organizations.splice(data.data, 1);
+				});
+
+
 		}
 	}
 
@@ -85,6 +89,38 @@ app.controller('OrgaMainController', function($rootScope, $http, $sessionStorage
 	$("#slider").dateRangeSlider("values",min, max);
     }
 
-    ctrl.init();
-    return ctrl;
+    ctrl.createProject = function() {
+		 if ($scope.doVerifications()) {
+		 	$scope.completeBlockchainAction(
+		 		function(password) {
+		 			$rootScope.toogleWait("Creating project")
+		 			$http.post('/createProjectFromOrga', {
+		 				"orga_id": $rootScope.currentOrga._id,
+		 				"newProject": {},
+		 				"password": password
+		 			}).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+		 		}, function(data) {
+		 			$scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+		 		})
+		 }
+	}
+
+	if (!$rootScope.currentOrga) {
+		$http.post('/getOrganization', {
+			"id": $state.params._id
+		}).then(function(response) {
+			$scope.currentOrga = $rootScope.currentOrga = response.data;
+			console.log("current orga", $scope.currentOrga)
+			$rootScope.date = new Date();
+			begin = new Date();
+			begin.setDate(begin.getDate() - 7);
+			ctrl.getHisto(begin, $rootScope.date);
+			if ($rootScope.user)
+				$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
+		}, function(error) {
+		    //$state.go('app.dashboard');
+			$rootScope.toogleError("Organization does not exist");			
+		})
+	}
+	return ctrl;
 });

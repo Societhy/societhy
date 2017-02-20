@@ -9,18 +9,23 @@
           <!-- start: TAB OVERVIEW -->
           <uib-tab heading="Overview" href="">
             <div ng-controller="OrgaMainController as ctrl">
-              <h1>{{ currentOrga.name }}</h1>
+              <h1>{{ currentOrga.address }}</h1>
               <div class="row border-solid vertical-center">
 
                 <div class="col-md-6 inline-block border-solid">
                   <div class="user-left user-image">
                     <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                   </div>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-success" ng-click="ctrl.joinOrga()">Join</button>
-                  <button ng-if="true" type="button" class="btn btn-wide btn-o btn-danger">Leave</button>
+                  <button ng-if="!isMember" type="button" class="btn btn-wide btn-success" ng-click="ctrl.joinOrga()">Join</button>
+                  <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
+                  <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 </div>
 
-                <div class="col-md-6 inline-block border-solid">              
+                <div class="col-md-6 inline-block border-solid vertical-center">              
+                  <div class="float-left" style="line-height: 40px">
+                    Balance: 
+                    <span ng-bind="currentOrga.balance"></span>
+                  </div>
                   <div class="social-icons float-right">
                     <ul>
                       <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
@@ -44,66 +49,141 @@
               </div>
 
               <div class="row margin-top-20" >
-		<div data-ng-include=" 'static/assets/views/partials/orga/orga_newsfeed.html' "></div>
+                <div class="col-md-6 border-solid border-dark padding-20">
+                    <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+                    
+                  <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+                    <!-- ngInclude: templates.header -->
+                    <thead  class="ng-scope">
+                      <tr>
+                        <td>
+                          <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                            Project address
+                            <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                          </a>
+                        </td>
+                        <td>
+                          <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                            <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                            Name
+                          </a>
+                        </td>
+                      </tr>
+                      <hr />
+                    </thead>
+                    <tbody><!-- ngRepeat: user in $data -->
+                      <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
+                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                        <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
+                      </tr><!-- end ngRepeat: user in $data -->
+                    </tbody>
+                  </table>
+
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark padding-20">
+                  <h2>News</h2>
+                  
+                </div>
               </div>
               <div class="row margin-top-20" >
-		<div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">              
-                  <h2>Proposals</h2>
-                  
-		</div>
-		<div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+                <div class="col-md-6 border-solid border-dark padding-20">              
+                  <h2>Proposals<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
+                </div>
+                <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                   <h2>Members</h2>
-                  
-		</div>
+                  <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+                    <!-- ngInclude: templates.header -->
+                    <thead  class="ng-scope">
+                      <tr>
+                        <td>
+                          <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                            Member
+                            <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                          </a>
+                        </td>
+                        <td>
+                          <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                            <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                            Rank
+                          </a>
+                        </td>
+                      </tr>
+                      <hr />
+                    </thead>
+                    <tbody><!-- ngRepeat: user in $data -->
+                      <tr ng-repeat="(address, member) in currentOrga.members" class="ng-scope">
+                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.name}}</td>
+                      </tr><!-- end ngRepeat: user in $data -->
+                    </tbody>
+                  </table>
+                </div>
               </div>
-
 	    </div>
           </uib-tab>
-
           <uib-tab heading="Activity" active="editActive" ng-click="initSlider()">
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
 	  </uib-tab>
+          <uib-tab heading="Docs">
+           <div class="container-fluid container-fullw ng-scope">
+             <div class="panel panel-white">
+              <div class="panel-body">
+                <div ng-controller="" class="ng-scope ng-binding">
+                 <div data-ng-include="">
+                  
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </uib-tab>
 
-          <uib-tab heading="Members">
-            <div class="container-fluid container-fullw ng-scope">
-              <div class="panel panel-white">
-		<div class="panel-body">
-                  <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
-                    <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' ">
-                    </div>
-		  </div>
-		</div>
-              </div>
-            </div>
-	  </uib-tab>
+<!-- 
+         <uib-tab heading="Members">
+           <div class="container-fluid container-fullw ng-scope">
+             <div class="panel panel-white">
+              <div class="panel-body">
+                <div ng-controller="" class="ng-scope ng-binding">
+                 <div data-ng-include="">
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </uib-tab>
 
-	  <uib-tab heading="Sales">
-            <div class="container-fluid container-fullw ng-scope">
-              <div class="panel panel-white">
-		<div class="panel-body">
-		  <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
-		    <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' ">
-		    </div>
-		  </div>
-		</div>
-              </div>
-	    </div>
-	  </uib-tab>
+       <uib-tab heading="Sales">
+         <div class="container-fluid container-fullw ng-scope">
+           <div class="panel panel-white">
+            <div class="panel-body">
+              <div ng-controller="" class="ng-scope ng-binding">
+               <div data-ng-include="">
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
+     </uib-tab>
 
-	  <uib-tab heading="Settings">
-	    <div class="container-fluid container-fullw ng-scope">
-              <div class="panel panel-white">
-		<div class="panel-body">
-		  <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
-		    <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
-		  </div>
-		</div>
-	      </div>
-	    </div>
-	  </uib-tab>
-	  <!-- end: TAB ORGANISATIONS -->
+     <uib-tab heading="Settings">
+       <div class="container-fluid container-fullw ng-scope">
+         <div class="panel panel-white">
+          <div class="panel-body">
+            <div ng-controller="" class="ng-scope ng-binding">
+             <div data-ng-include=""></div>
+           </div>
+         </div>
+       </div>
+     </div>
+   </uib-tab>
+ -->
+ <!-- end: TAB ORGANISATIONS -->
 	</uib-tabset>
-	<!-- end: USER TABSET -->
+<!-- end: USER TABSET -->
       </div>
     </div>
   </div>

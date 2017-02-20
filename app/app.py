@@ -1,7 +1,6 @@
 from os import environ
 
-from flask import Flask, render_template, url_for
-from flask_mail import Mail
+from flask import Flask, render_template, url_for, request
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -10,7 +9,7 @@ from api.routes.fundraise import router as fundraise_routes
 
 from core import secret_key
 from core.utils import UserJSONEncoder
-import core.chat as chat
+from core.chat import socketio
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
@@ -24,8 +23,6 @@ app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
-mail = Mail()
-mail.init_app(app)
 
 jinja_options = app.jinja_options.copy()
 
@@ -45,6 +42,7 @@ app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
 
+
 @app.after_request
 def addHeader(response):
 	"""
@@ -60,7 +58,7 @@ def addHeader(response):
 def helloWorld():
 	return render_template("index.html")
 
-socketio = chat.socketio
+
 socketio.init_app(app)
 
 if __name__ == '__main__':

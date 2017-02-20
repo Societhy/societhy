@@ -81,6 +81,9 @@
                                     </div>
                                     <hr>
                                 </div>
+                                <div class="center">
+                                  <button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.deleteAccount()"> Delete account </button>
+                                </div>
                                 <!--start: User Info -->
                                 <div class="row">
                                     <div class="col-md-12" id="userInfo">
@@ -127,7 +130,7 @@
        <div class="container-fluid container-fullw ng-scope">
            <div class="panel panel-white">
             <div class="panel-body">
-                <div ng-controller="projectTableCtrl" class="ng-scope ng-binding">
+                <div ng-controller="userProjectTableCtrl" class="ng-scope ng-binding">
                  <div data-ng-include=" 'static/assets/views/partials/user/user_project_tab.html' "></div>
              </div>
          </div>
@@ -140,7 +143,7 @@
    <div class="container-fluid container-fullw ng-scope">
        <div class="panel panel-white">
         <div class="panel-body">
-            <div ng-controller="orgaTableCtrl" class="ng-scope ng-binding">
+            <div ng-controller="userOrgaTableCtrl" class="ng-scope ng-binding">
              <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
          </div>
      </div>

@@ -18,15 +18,40 @@ def getOrgaDocument(user):
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
-        
+
+@router.route('/getAllOrganizations', methods=['GET'])
+def getAllOrganizations():
+	ret = base_orga.getAllOrganizations()
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
-def creeateOrga(user):
-	if ensure_fields(['password', 'newOrga'], request.json):
-		ret = base_orga.creeateOrga(user, request.json.get('password'), request.json.get('newOrga'))
+def createOrga(user):
+	if ensure_fields(['password', {'newOrga': ["name"]}], request.json):
+		ret = base_orga.createOrga(user, request.json.get('password'), request.json.get('newOrga'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
+
+@router.route('/addOrgaProfilePicture', methods=['POST'])
+@requires_auth
+def addOrgaProfilePicture(user):
+	orga_id = request.form.get("orga_id")
+	pic_type = request.form.get("type")
+	pic = request.files.get("pic")
+	ret = base_orga.addOrgaProfilePicture(user, orga_id, pic, pic_type)
+	#todo : gerer le retour
+	return make_response("ok", 200)
+
+@router.route('/addOrgaDocuments', methods=['POST'])
+@requires_auth
+def addOrgaDocuments(user):
+	orga_id = request.form.get("orga_id")
+	doc = request.files.get("doc")
+	name = request.form.get("name")
+	doc_type = request.form.get("type")
+	ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
+	return make_response("ok", 200)
 
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth

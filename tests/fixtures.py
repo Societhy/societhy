@@ -9,6 +9,8 @@ from core import keys
 from models.user import users
 from models.organization import organizations, OrgaDocument as Organization
 from models.contract import contracts
+from models.project import projects
+from models.clients import eth_cli
 
 from pymongo import MongoClient
 from ethjsonrpc import ParityEthJsonRpc
@@ -22,7 +24,9 @@ for keyFile in listdir(keyDirectory):
 
 users.delete_many({})
 organizations.delete_many({})
+projects.delete_many({})
 contracts.delete_many({})
+
 
 test_user = {
 	"name": "basic",
@@ -46,6 +50,7 @@ test_miner = users.find_one({"name": "miner"})
 with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 	keys.importNewKey(test_miner, f)
 
+
 @pytest.fixture(scope='module')
 def app():
 	from app.app import app
@@ -64,3 +69,10 @@ def miner():
 def testOrga(miner):
 	return organizations.find_one({"name": "basic_orga"}
 )
+
+def mockTx(nb=5):
+	for i in range(nb):
+		test_miner.unlockAccount(password='simon')
+		ret = eth_cli.transfer(test_miner.get('account'), "0x00a329c0648769a73afac7f9381e08fb43dbea72", 0)
+		bw.waitTx(ret)
+

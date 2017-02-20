@@ -52,6 +52,7 @@ contract open_structure {
             members[i] = members[i+1];
         }
         delete members[members.length-1];
+        memberId[msg.sender] = 0;
         members.length--;
         memberLeft(msg.sender);
     }

@@ -2,28 +2,34 @@
 /**
  * Clip-Two Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$swipe', '$translate', '$localStorage', '$window', '$document', '$timeout', 'cfpLoadingBar', 'Fullscreen',
-function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar, Fullscreen) {
 
+ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
     // Loading bar transition
     // -----------------------------------
     var $win = $($window), $body = $('body');
     $scope.horizontalNavbarCollapsed = true;
+    
     $scope.menuInit = function (value) {
         $scope.horizontalNavbarCollapsed = value;
     };
     $scope.menuToggle = function (value) {
         $scope.horizontalNavbarCollapsed = !$scope.horizontalNavbarCollapsed;
     };
-    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         //start loading bar on stateChangeStart
         cfpLoadingBar.start();
         $scope.horizontalNavbarCollapsed = true;
 
         // if user not logged in, back to previous screen
         if (toState.needs_auth == true && $rootScope.user == null) {
-            console.log("NOT LOGGED IN", fromState, toState, event);
-            $state.go('app.dashboard')
+            console.log("NOT LOGGED IN");
+            $state.go('app.dashboard').then(function(arg) {
+                $state.reload();
+                $rootScope.toogleError("Please sign-in first")
+            }, function(error) {
+                console.log(error);
+            });
         }
 
         if (toState.name == "app.pagelayouts.boxedpage") {
@@ -31,15 +37,15 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
         } else {
             $body.removeClass("app-boxed-page");
         }
-		if(typeof CKEDITOR !== 'undefined'){
-	        for(name in CKEDITOR.instances)
-			{
-			    CKEDITOR.instances[name].destroy();
-			}
-		}
-    });
+        if(typeof CKEDITOR !== 'undefined'){
+           for(name in CKEDITOR.instances)
+           {
+             CKEDITOR.instances[name].destroy();
+         }
+     }
+ });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-		$scope.horizontalNavbarCollapsed = true;
+      $scope.horizontalNavbarCollapsed = true;
         //stop loading bar on stateChangeSuccess
         event.targetScope.$watch("$viewContentLoaded", function () {
 
@@ -169,11 +175,95 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
 
     };
 
+    var waitToast = null
+    $rootScope.toogleWait = function(text) {
+        if (!waitToast) {
+            waitToast = toaster.pop({type: "wait", title: "Loading", body: text || "Processing transaction", timeout: 0});
+        } else {
+            $timeout(function () {
+                toaster.clear(waitToast);
+            }, 0);
+            waitToast = null;
+        }
+    };
+
+    $rootScope.toogleSuccess = function(text) {
+        if (waitToast) {
+            $rootScope.toogleWait();
+        }
+        $timeout(function () {
+            toaster.pop({type: "success", title: "Done !", body: text});
+        }, 0);
+    };
+
+    $rootScope.toogleError = function(text) {
+        if (waitToast) {
+            $rootScope.toogleWait();
+        }
+        $timeout(function () {
+            toaster.pop({type: "error", title: "Failed...", body: text});
+        }, 0);
+    };
+
+    var tmpCallback = null;
+    $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
+        var args = arguments;
+        SweetAlert.swal({
+          title: "Unlock your wallet",
+          type: "input",
+          inputType: "password",
+          showCancelButton: false,
+          closeOnConfirm: true,
+          inputPlaceholder: "Password"
+      },
+      function(inputValue) {
+        if (inputValue === false) return false;
+        else if (inputValue === "") {
+            SweetAlert.swal.showInputError("You need to write something!");
+            return false
+        }
+        var password = inputValue;
+        args[0] = password;
+        requestCallback.apply(null, args);
+        tmpCallback = updateCallback;
+        });
+    };
+
+    $rootScope.$on('socket:txResult', function (event, data) {
+        console.log("TX RESULT", data);
+        if (data.data) {
+            $rootScope.toogleSuccess(data.event);
+            if (tmpCallback) {
+                tmpCallback(data);
+                tmpCallback = null;
+            }
+        }
+        else {
+            $rootScope.toogleError(data.event);
+        }
+    });
+
     $scope.searchForAnything = function(search) {
         $rootScope.search = search;
-    	$state.go("app.user", {"name": search});
+        $state.go("app.user", {"name": search});
     }
     
+    $scope.doVerifications = function() {
+        if (!$rootScope.user) {
+            $rootScope.toogleError("Please sign-in first")
+            return false;
+        }
+        else if ($rootScope.user.local_account == true) {
+            console.log("ask for password")
+            return false;
+        }
+        else if (!$rootScope.user.account) {
+            $rootScope.toogleError("Please set up an ethereum account first")
+            return false;
+        }
+        return true;
+    }
+
     // Function that find the exact height and width of the viewport in a cross-browser way
     var viewport = function () {
         var e = window, a = 'inner';
@@ -227,4 +317,4 @@ function ($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window
             $('footer').show();
         }
     });
-}]);
+});

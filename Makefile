@@ -1,53 +1,54 @@
-DOCKER_IMAGE=societhy/localenv
-TEST_IMAGE=societhy/tests
+DOCKER_IMAGE=societhy/env
 
 all:
 	@make build
 	@make shell
 
 test:
-	@make build_test
+	@make build
 	@make local_test
+
+pow:
+	@make build
+	@make pow_test
 
 build_dependencies:
 	npm --prefix ./app/web install ./app/web
-	bower install ./app/web
+	bower install --allow-root ./app/web
 
 build:
 	docker build -t $(DOCKER_IMAGE) .
 
-build_test:
-	docker build --file Dockerfile_tests -t $(TEST_IMAGE) .
-
 force_build:
 	docker build --no-cache -t $(DOCKER_IMAGE) .
 
-force_build_test:
-	docker build --no-cache --file Dockerfile_tests -t $(TEST_IMAGE) .
-	
-local_test:
-	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
+pow_test:
+	docker-compose -f utils/docker-compose.yaml up -d test_pow_env
 	sleep 3
-	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
-	# sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` /bin/bash'
-	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` pytest -svv tests/'
-	sh -c "docker stop `docker ps | grep societhy/tests | cut -f 1 -d " "`"
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` pytest -svv tests/'
+	sh -c "docker stop `docker ps | grep societhy/env | cut -f 1 -d " "`"
+
+local_test:
+	docker-compose -f utils/docker-compose.yaml up -d test_local_env
+	sleep 3
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` pytest -svv tests/'
+	sh -c "docker stop `docker ps | grep societhy/env | cut -f 1 -d " "`"
 
 prod:
-	docker-compose -f utils/docker-compose.yaml up -d test_local_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` scp -r exploit@163.5.84.117:/home/exploit/.parity/keys /societhy/.parity/keys'
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
+	docker-compose -f utils/docker-compose.yaml up -d test_prod_env
+	sleep 3
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` ps -eaf'
+	#sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` scp -r exploit@163.5.84.117:/home/exploit/.parity/keys /societhy/.parity/keys'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` /bin/zsh'
+	@make stop
 
 shell:
 	docker-compose -f utils/docker-compose.yaml up -d test_local_env
-	sh -c 'docker exec -t -i `docker ps | grep societhy/localenv | cut -f 1 -d " "` /bin/zsh'
-	@make stop
-
-mine:
-	docker-compose -f utils/docker-compose.yaml up -d test_remote_env
 	sleep 3
-	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` ps -eaf'
-	sh -c 'docker exec -t -i `docker ps | grep societhy/tests | cut -f 1 -d " "` /bin/bash'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` ps -eaf'
+	sh -c 'docker exec -t -i `docker ps | grep societhy/env | cut -f 1 -d " "` /bin/zsh'
 	@make stop
 
 stop:

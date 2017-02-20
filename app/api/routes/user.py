@@ -2,7 +2,7 @@ from flask import Blueprint, Response, render_template, request, jsonify, make_r
 
 from core import auth, keys, user_management, wallet
 
-from api import requires_auth
+from api import requires_auth, populate_user
 
 router = Blueprint('user', __name__)
 
@@ -30,11 +30,18 @@ def signUp():
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/checkTokenValidity/<token>')
-def checkTokenValidity(token):
-	ret = auth.checkTokenValidity(token)
+@populate_user
+def checkTokenValidity(token, user):
+	ret = auth.checkTokenValidity(token, user)
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
-@router.route('/deleteUser/<user>')
+@router.route('/socketid/<socketid>')
+@populate_user
+def setSocketId(socketid, user):
+	ret = auth.setSocketId(socketid, user)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/deleteUser')
 @requires_auth
 def deleteUser(user):
 	ret = auth.deleteUser(user)
@@ -59,13 +66,13 @@ def updateSingleUserField(user):
 @router.route('/addToContact', methods=['POST'])
 @requires_auth
 def addToContactList(user):
-    ret = user_management.addToContactList(user, request.json)
+    ret = user_management.addToContact(user, request.json)
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/delFromContact', methods=['POST'])
 @requires_auth
-def delFromContactList(user):
-    ret = user_management.delFromContactList(user, request.json)
+def delFromContact(user):
+    ret = user_management.delFromContact(user, request.json)
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/findUser', methods=['POST'])

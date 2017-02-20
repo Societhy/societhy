@@ -6,9 +6,10 @@ from ethjsonrpc import wei_to_ether
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
+from models.project import ProjectDocument, ProjectCollection
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import toWei, to20bytes
+from core.utils import toWei, to20bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
@@ -38,8 +39,10 @@ class OrgaDocument(Document):
 		if contract:
 			self.contract = Contract(contract, owner.get('account'))
 			self.contract.compile()
+		elif self.get("contract_id"):
+			self._loadContract()
 		if owner:
-			self["owner"] = owner
+			self["owner"] = owner.public() if isinstance(owner, User) else owner
 
 	####
 	# CONTRACT SPECIFIC METHODS
@@ -51,14 +54,13 @@ class OrgaDocument(Document):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		if from_ is None:
-			users_socket = []
 			from_ = self["owner"]
-		elif isinstance(from_, User):
-			users_socket = [from_.get('socketid')]
 
-		from_.unlockAccount(password=password)
+		if not from_.unlockAccount(password=password):
+			return "Failed to unlock account"
+
 		tx_hash = self.contract.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register))
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
 		return tx_hash
 
 
@@ -66,26 +68,54 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt):
+	def register(self, tx_receipt, users=[]):
 		self.contract["address"] = tx_receipt.get('contractAddress')
+		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
 		self["contract_id"] = self.contract.save()
 		self.save()
+		resp = {"name": self["name"], "_id": str(self["_id"])}
+		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
+		return resp
 
 	def memberJoined(self, logs):
-		# decode logs, find user and add its id, key, name (?) to member list
-
-		print("USER JOINED", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = users.find_one({"account": address})
+			if member and member.get('account') not in self["members"]:
+				self["members"][member.get('account')] = member.public()
+				self.save_partial();
+				return self
+		return False
 
 	def memberLeft(self, logs):
 		# decode logs, find user and delete it from memebr list
-		print("USEF LEFT", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = users.find_one({"account": address})
+			if address in self["members"]:
+				del self["members"][address]
+				self.save_partial();
+				return self
+		return False
 
 	def newDonation(self, logs):
 		print("NEW DONATION", logs)
+		return logs
 
 	def projectCreated(self, logs):
-		print("NEW PROJECT == ", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+			if len(logs[0]["decoded_data"]) == 1 and len(logs[0]["decoded_data"]) == 1:
+				new_project["name"] = logs[0]["decoded_data"][0]
+			project_id = new_project.save()
+			if contract_address not in self["projects"]:
+				self["projects"][contract_address] = new_project
+				self.save_partial()
+				return self
+		return False
+
 
 
 	####
@@ -109,15 +139,23 @@ class OrgaDocument(Document):
 	# GENERIC METHODS
 	####
 
+	def public(self):
+		return {
+			key: self.get(key)for key in self if key in organizations.public_info
+		}
+
+
 	def getMember(self, user):
 		if isinstance(user, User):
 			account = user.get('account')
-			if account in self.members:
-				return self.members[account]
+			if account in self["members"]:
+				return self["members"][account]
 			else:
-				for member in self.members.values():
+				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
 						return member
+		elif user in self["members"]:
+				return self["members"][user]
 		return None
 
 	def getTotalFunds(self):
@@ -128,24 +166,22 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('join', local=False, from_=user.get('account'), args=[user.get('name')])
-		if tx_hash.startswith('0x'):
+	def join(self, user, password=None, local=False):
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[user.joinedOrga, self.memberJoined]))
-			print ("tx hash ok with ", tx_hash)
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
 
 	def leave(self, user, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'))
-
-		if tx_hash.startswith('0x'):
+		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'), password=password)
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[user.leftOrga, self.memberLeft]))
+			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -155,10 +191,11 @@ class OrgaDocument(Document):
 			return False
 
 		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount)
-		if tx_hash.startswith('0x'):
+		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount, password=password)
+		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation]))
+			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -167,11 +204,11 @@ class OrgaDocument(Document):
 		return None
 
 	def createProject(self, user, project, password=None):
-		user.unlockAccount(password=password)
-		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project])
+		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
-		if tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated]))
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.contract["address"], callbacks=[self.projectCreated], users=user, event_abi=self.contract["abi"]))
+			user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -192,11 +229,45 @@ class OrgaDocument(Document):
 class OrgaCollection(Collection):
 	document_class = OrgaDocument
 
+	orga_info = [
+		""
+	]
+
+	public_info = [
+		"_id",
+		"address",
+		"name",
+		"contract_id",
+		"description",
+		"balance",
+		"social_accounts"
+	]
+
+	structure = {
+		"name": str,
+		"members": dict,
+		"rights": dict,
+		"proposals": dict,
+		"projects": dict,
+		"description": str,
+		"owner": dict,
+		"contract_id": ObjectId,
+		"orga_type": str,
+		"files": dict,
+		"tx_history": list,
+		"creation_date": str,
+		"mailing_lists": dict,
+		"accounting_data": str,
+		"alerts": list,
+		"social_accounts": dict,
+		"balance": int,
+		"uploaded_documents": list
+	}
+
 	@find_method
 	def find_one(self, *args, **kwargs):
 		doc = super().find_one(*args, **kwargs)
-		if doc:
-			doc._loadContract()
+		doc.__init__()
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)

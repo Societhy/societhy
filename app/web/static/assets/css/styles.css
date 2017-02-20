@@ -754,12 +754,12 @@ span[role="slider"] {
   padding: 0;
   margin: 0;
   font-family: 'themify';
-  content: "\e6da";
+  content: "\e643";
   left: 5px;
   top: 0;
 }
 .app-offsidebar-open .navbar .dropdown-off-sidebar:after {
-  content: "\e6d9";
+  content: "\e643";
 }
 @media (min-width: 992px) {
   .app-offsidebar-open .navbar .dropdown-off-sidebar {

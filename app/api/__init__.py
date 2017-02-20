@@ -16,7 +16,8 @@ from pymongo import MongoClient
 def ensure_fields(fields, request_data):
 	for field in fields:
 		if isinstance(field, dict):
-			ensure_fields(field.keys(), field.values())
+			k = list(field.keys())[0]
+			return ensure_fields(field.get(k), request_data.get(k))
 		else:
 			if field not in request_data:
 				return False
@@ -34,8 +35,10 @@ def requires_auth(f):
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
 
-			user = UserDocument(session.get(token))
-			user.update()
+			user = UserDocument(session.get(token), session=token)
+			if session.get(token).get('needs_reloading') is True:
+				user.reload()
+				session[token]["needs_reloading"] = False
 		else:
 			return Response({"error": "unauthorized"}, 401)
 
@@ -57,9 +60,12 @@ def populate_user(f):
 				return f(*args, **kwargs)
 
 			user = UserDocument(session.get(token))
-			user.update()
+			if session.get(token).get('needs_reloading') is True:
+				user.reload()
+				session[token]["needs_reloading"] = False
 		else:
 			user = None
+
 		kwargs['user'] = user
 		return f(*args, **kwargs)
 	return wrapped_function

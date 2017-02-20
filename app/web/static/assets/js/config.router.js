@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'inboxCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -59,10 +59,30 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'User Profile'
         }
     }).state('app.organization', {
-        url: '/orga/:orga_name/:orga_id',
+        url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
         resolve: loadSequence('orgaMainCtrl'),
         title: 'Organisation dashboard',
+        params: {
+            data: null
+        },
+        ncyBreadcrumb: {
+            label: 'Organisation'
+        }
+    }).state('app.neworga', {
+        url: '/orga/new',
+        needs_auth: true,
+        templateUrl :"static/assets/views/wizard_orga.html",
+        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload'),
+        title: "Create a new organisation",
+        ncyBreadcrumb: {
+            label: 'Organisation Creation'
+        }
+    }).state('app.discoverorga', {
+        url: '/orga/discover',
+        templateUrl: "static/assets/views/orga_discovery.html",
+        resolve: loadSequence('orgaDiscoveryCtrl'),
+        title: 'Organisations list',
         ncyBreadcrumb: {
             label: 'Organisation'
         }
@@ -78,15 +98,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/registration',
         resolve: loadSequence('CryptoJS'),
         templateUrl: "static/assets/views/login_registration.html"
-    }).state('app.neworga', {
-        url: '/orga/new',
-        needs_auth: true,
-        templateUrl :"static/assets/views/wizard_orga.html",
-//        resolve: loadSequence(''),
-        title: "Create a new organisation",
-        ncyBreadcrumb: {
-            label: 'Organisation Creation'
-        }
     })
 
 

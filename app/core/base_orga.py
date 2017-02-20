@@ -1,17 +1,13 @@
 from flask import session, request, Response
-from bson import  errors
+from bson import objectid, errors, json_util
+import json
 
-from flask_mail import Message
-from models.user import users, UserDocument as User
-from models.project import projects, ProjectDocument as Project
-from models.organization import organizations, OrgaDocument as Orga
-from models.notification import notifications, NotificationDocument as Notification
-import datetime
-
-from bson.objectid import ObjectId
-
+from ethjsonrpc.exceptions import BadResponseError
+from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
-from models.notification import notifications, NotificationDocument
+from models.notification import notifications, NotificationDocument as Notification
+from models.errors import NotEnoughFunds
+from models.clients import db_filesystem
 
 def getOrgaDocument(user, _id=None, name=None):
 	orga = None
@@ -21,36 +17,68 @@ def getOrgaDocument(user, _id=None, name=None):
 		except errors.InvalidId:
 			return {"data": "Not a valid ObjectId, it must be a 12-byte input or a 24-character hex string", "status": 400}
 		orga = organizations.find_one({"_id": _id})
+		if orga is None:
+			return {"data": "Organization does not exist", "status": 400}
 	elif name:
 		orga = list(organizations.find({"name": name}))
 		if len(orga) == 1:
 			orga = orga[0]
+		elif len(orga) < 1:
+			return {"data": "Organization does not exist", "status": 400}
+	orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
 	return {
 		"data": orga,
 		"status": 200
 	}	
 
-def createOrga(user, password, newOrga):
-	# first we have to build the smart contract and write it in '/societhy/contracts'
-	# then we need to check the dict newOrga if the data is correct
-	# then we build the Organization object providing : name of the contract (without '.sol'), the dict with all data, the owner (UserDocument)
-		#	orga = Organization(contract='basic_orga', doc=test_orga, owner=miner)
-	# then we deploy the contract to the blockchain (providing the user to alert, password for the owner and name of the orga) and check that the transaction hash exists
-		#	tx_hash = orga.deploy_contract(from_=user, password=password, args=[orga_name])
-		#	if tx_hash is error return error
-	# answer is "organization is being created"
+def getAllOrganizations():
+	orgas = list(organizations.find({}, organizations.public_info))
 	return {
-		"data": "tx_hash",
+		"data": orgas,
 		"status": 200
-	}
+	}	
+
+def createOrga(user, password, newOrga):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	newOrga["members"] = {}
+	instance = OrgaDocument(doc=newOrga, owner=user.public(), contract='basic_orga', gen_skel=True)
+	try:
+		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+
+	return {
+			"data": newOrga,
+			"status": 200
+		}
+
+def addOrgaProfilePicture(user, orga_id, pic, pic_type):
+	_id = db_filesystem.put(pic)
+	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$set": {"profile_picture" : {"profile_picture_id" : _id, "profile_picture_type" : pic_type} } } )
+	if ret.modified_count <= 1:
+		return {"data":"Photo uploade failure, not inserted into database", "status" : 400}
+	return {"data":"OK", "status":200}
+
+def addOrgaDocuments(user, orga_id, doc, name, doc_type):
+	_id = db_filesystem.put(doc)
+	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$addToSet": { "uploaded_documents" : {"doc_id": _id, "doc_type": doc_type, "doc_name":name} } })
+	print("LALALALA " + str(ret.modified_count))
+	return {"ok"}
 
 def joinOrga(user, password, orga_id):
 	# first we find the orga
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	# then we call the model's method and wait for the model to be updated
-	tx_hash = orga.join(user, password=password)
+
+	try:
+		tx_hash = orga.join(user, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -67,6 +95,8 @@ def getOrgaMemberList(token, orga_id):
 	}
 
 def donateToOrga(user, password, orga_id, donation):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
@@ -79,21 +109,38 @@ def donateToOrga(user, password, orga_id, donation):
 	}
 
 def createProjectFromOrga(user, password, orga_id, newProject):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga.createProject(user, newProject, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
 	return {
-		"data": "",
+		"data": tx_hash,
 		"status": 200
 	}
 
 def leaveOrga(user, password, orga_id):
-	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	try:
+		orga_instance.leave(user, password=password)
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	
 	return {
-		"data": "",
+		"data": user.get("orga_list"),
 		"status": 200
 	}
 
 def getHisto(token, orga_id, date):
-	data = NotificationDocument.getHisto(orga_id, date)
+	data = Notification.getHisto(orga_id, date)
 	return {
 		"data": data,
 		"status": 200
