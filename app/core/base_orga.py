@@ -34,7 +34,8 @@ def getOrgaDocument(user, _id=None, name=None):
 		else:
 			rights = orga.rights.get('default')
 
-	orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
+	if orga.get('profil_picture'):
+		orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
 	return {
 		"data": { "orga": orga, "rights": rights},
 		"status": 200
