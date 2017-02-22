@@ -3,6 +3,83 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	var ctrl = this;
 	$scope.isMember = false;
 
+    $scope.listProducts = [{
+            "name": "Product1",
+            "description": "Ceci est le product1 de test 1",
+            "price": 10,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product2",
+            "description": "Ceci est le product2 de test 2",
+            "price": 20,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product3",
+            "description": "Ceci est le product3 de test 3",
+            "price": 30,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product4",
+            "description": "Ceci est le product4 de test 4",
+            "price": 40,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product5",
+            "description": "Ceci est le product5 de test 5",
+            "price": 50,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product6",
+            "description": "Ceci est le product6 de test 6",
+            "price": 60,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product7",
+            "description": "Ceci est le product7 de test 7",
+            "price": 70,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product8",
+            "description": "Ceci est le product8 de test 8",
+            "price": 80,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product9",
+            "description": "Ceci est le product9 de test 9",
+            "price": 90,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+        {
+            "name": "Product10",
+            "description": "Ceci est le product10 de test 10",
+            "price": 100,
+            "stock": 1000,
+            "picture": "static/assets/images/cheese.png"
+        },
+    ];
+    $scope.currentProd = $scope.listProducts[0];
+
+    ctrl.setProduct = function(product) {
+        $scope.currentProd = product;
+    }
+
 	ctrl.joinOrga = function() {
 
 		if ($scope.doVerifications()) {
@@ -24,7 +101,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	}
 
 	ctrl.leaveOrga = function() {
-		
+
 		if ($scope.doVerifications()) {
 			$scope.completeBlockchainAction(
 				function(password) {
@@ -70,9 +147,8 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 				$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
 		}, function(error) {
 			$state.go('app.dashboard');
-			$rootScope.toogleError("Organization does not exist");			
+			$rootScope.toogleError("Organization does not exist");
 		})
 	}
 	return ctrl;
 });
-

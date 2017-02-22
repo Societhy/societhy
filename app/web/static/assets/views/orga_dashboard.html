@@ -21,9 +21,9 @@
                   <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 </div>
 
-                <div class="col-md-6 inline-block border-solid vertical-center">              
+                <div class="col-md-6 inline-block border-solid vertical-center">
                   <div class="float-left" style="line-height: 40px">
-                    Balance: 
+                    Balance:
                     <span ng-bind="currentOrga.balance"></span>
                   </div>
                   <div class="social-icons float-right">
@@ -51,7 +51,7 @@
               <div class="row margin-top-20" >
                 <div class="col-md-6 border-solid border-dark padding-20">
                     <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
-                    
+
                   <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                     <!-- ngInclude: templates.header -->
                     <thead  class="ng-scope">
@@ -84,13 +84,13 @@
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark padding-20">
                   <h2>News</h2>
-                  
+
                 </div>
               </div>
 
               <div class="row margin-top-20" >
-                <div class="col-md-6 border-solid border-dark padding-20">              
-                  <h2>Proposals<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
+                <div class="col-md-6 border-solid border-dark padding-20">
+                  <h2>Proposals<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>
                 </div>
                 <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                   <h2>Members</h2>
@@ -133,7 +133,8 @@
            <div data-ng-include=""></div>
            <div data-ng-include=""></div>
          </uib-tab>
-<!-- 
+
+<!--
          <uib-tab heading="Members">
            <div class="container-fluid container-fullw ng-scope">
              <div class="panel panel-white">
@@ -146,20 +147,29 @@
            </div>
          </div>
        </uib-tab>
-
-       <uib-tab heading="Sales">
-         <div class="container-fluid container-fullw ng-scope">
-           <div class="panel panel-white">
-            <div class="panel-body">
-              <div ng-controller="" class="ng-scope ng-binding">
-               <div data-ng-include="">
+ -->
+       <uib-tab heading="Sales" active="editActive">
+           <div class="row" style="margin-right: 10" ng-controller="OrgaMainController as ctrl">
+               <div class="col-md-3">
+                   <button class="btn btn-green">Add a new product</button>
+                   <div class="dd ng-scope">
+                       <ol class="dd-list">
+                           <li class="dd-handle" ng-repeat="product in listProducts" ng-click="ctrl.setProduct(product)">{{product.name}}</li>
+                       </ol>
+                   </div>
                </div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </uib-tab>
 
+               <div class="col-md-9 panel panel-white padding-20" style="min-height: 60%">
+                   <h2 style="text-align: center">{{currentProd.name}}</h2>
+                   <h4 class="float-right">{{currentProd.price}}</h4>
+                   <p class="float-left panel panel-white" style="min-height: 200; min-width: 65%; max-width: 65%">
+                       {{currentProd.description}}
+                   </p>
+                   <img ng-src="{{currentProd.picture}}" alt="..." width="30%" class="float-right">
+               </div>
+           </div>
+      </uib-tab>
+<!--
      <uib-tab heading="Settings">
        <div class="container-fluid container-fullw ng-scope">
          <div class="panel panel-white">
