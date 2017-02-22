@@ -36,14 +36,22 @@ def createOrga(user):
 @router.route('/addOrgaProfilePicture', methods=['POST'])
 @requires_auth
 def addOrgaProfilePicture(user):
-	print("here")
-	# for item in request.files.get("pic"):
-	# 	print(item)
-	# print(request.files.get("fromData"))
-	print(request.form.get("Init"))
+	orga_id = request.form.get("orga_id")
+	pic_type = request.form.get("type")
 	pic = request.files.get("pic")
-	base_orga.addOrgaProfilePicture(user, pic)
-	return make_response("working on it", 200)
+	ret = base_orga.addOrgaProfilePicture(user, orga_id, pic, pic_type)
+	#todo : gerer le retour
+	return make_response("ok", 200)
+
+@router.route('/addOrgaDocuments', methods=['POST'])
+@requires_auth
+def addOrgaDocuments(user):
+	orga_id = request.form.get("orga_id")
+	doc = request.files.get("doc")
+	name = request.form.get("name")
+	doc_type = request.form.get("type")
+	ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
+	return make_response("ok", 200)
 
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth

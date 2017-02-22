@@ -11,9 +11,9 @@
 
     // IMAGE UPLOAD
     var uploaderImages = $scope.uploaderImages = new FileUploader({
-            url: '/addOrgaProfilePicture',
-            alias: 'pic',
-            headers: {
+        url: '/addOrgaProfilePicture',
+        alias: 'pic',
+        headers: {
             Authentification: $sessionStorage.SociethyToken
         }
     });
@@ -27,7 +27,6 @@
     });
 
     uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
-       item.formData.push({"Init":"Init"});
         console.info('onBeforeUploadItem', item);
     };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
@@ -39,12 +38,17 @@
 
     //DOCUMENT UPLOAD
     var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+        url:"/addOrgaDocuments",
+        alias:"doc",
         headers: {
             Authentification: $sessionStorage.SociethyToken
         },
     });
 
     uploaderDocs.onBeforeUploadItem = function (item) {
+            console.log(uploaderDocs.queue.length);
+        item.formData.push({"name": item.file.name});
+        item.formData.push({"type": item.file.type});        
         console.info('onBeforeUploadItem', item);
     };
     uploaderDocs.onErrorItem = function (fileItem, response, status, headers) {
@@ -59,7 +63,7 @@
     $scope.form = {
 
         next: function (form) {
-
+            console.log(uploaderDocs);
             $scope.toTheTop();
 
             if (form.$valid) {
@@ -106,8 +110,8 @@
         },
 
         submit: function (form) {
-            console.log(uploaderImages);
-             if ($scope.doVerifications()) {
+            console.log(uploaderDocs);
+            if ($scope.doVerifications()) {
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
@@ -121,38 +125,47 @@
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue
                             }}).then(function(response) {}, function(error) {$rootScope.toogleError(error.data);});
                     },  function(data) {
-                        uploaderImages.formData.push({"orga_id":data.data._id});
+                        console.log(uploaderDocs.queue.length);
+                        if (uploaderImages.queue.length != 0)
+                        {
+                            uploaderImages.queue[0].formData.push({"orga_id":data.data._id, "type":uploaderImages.queue[0].file.type});
+                        }
                         uploaderImages.uploadAll();
+                        for (var i = 0; i != uploaderDocs.queue.length; i++)
+                        {
+                            uploaderDocs.queue[i].formData.push({"orga_id" : data.data._id})
+                        } 
+                        uploaderDocs.uploadAll();
                         $state.go("app.organization", data.data);
                     })
-            }
-        },
+}
+},
 
-        reset: function () {
+reset: function () {
 
-        }
-    };
+}
+};
 
 
-    var nextStep = function () {
-        $scope.currentStep++;
-    };
-    var prevStep = function () {
-        $scope.currentStep--;
-    };
-    var goToStep = function (i) {
-        $scope.currentStep = i;
-    };
+var nextStep = function () {
+    $scope.currentStep++;
+};
+var prevStep = function () {
+    $scope.currentStep--;
+};
+var goToStep = function (i) {
+    $scope.currentStep = i;
+};
 
-    var errorMessage = function (text) {
+var errorMessage = function (text) {
 
-        ngNotify.set(text, {
-            theme: 'pure',
-            position: 'top',    
-            type: 'error',
-            button: 'true',
-            sticky: false,
-            duration: 3000
-        });
-    };
+    ngNotify.set(text, {
+        theme: 'pure',
+        position: 'top',    
+        type: 'error',
+        button: 'true',
+        sticky: false,
+        duration: 3000
+    });
+};
 });
