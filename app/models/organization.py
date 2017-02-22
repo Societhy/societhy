@@ -72,6 +72,7 @@ class OrgaDocument(Document):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
+		self["balance"] = self.getTotalFunds()
 		self["contract_id"] = self.contract.save()
 		self.save()
 		resp = {"name": self["name"], "_id": str(self["_id"])}
