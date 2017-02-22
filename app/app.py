@@ -6,6 +6,7 @@ from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
+from api import MongoSessionInterface as MongoSessionInterface
 
 from core import secret_key
 from core.utils import UserJSONEncoder
@@ -14,7 +15,7 @@ from core.chat import socketio
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
-app.config["SESSION_COOKIE_HTTPONLY"] = False
+app.session_interface = MongoSessionInterface()
 
 jinja_options = app.jinja_options.copy()
 
@@ -36,15 +37,20 @@ app.register_blueprint(fundraise_routes)
 
 
 @app.after_request
-def addHeader(response):
-	"""
-	Add headers to both force latest IE rendering engine or Chrome Frame,
-	and also to cache the rendered page for 10 minutes.
-	"""
-	response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-	response.headers['Cache-Control'] = 'no-cache, no-store'
-	response.headers['Pragma'] = 'no-cache'
-	return response
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['Access-Control-Allow-Headers'] = 'Authentification, authentification, Origin, X-Requested-With, Content-Type, Accept'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    if (request.headers.get('origin') is not None):
+    	response.headers['Access-Control-Allow-Origin'] = request.headers['origin']
+    response.headers['Access-Control-Allow-Methods'] = '*'
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    return response
 
 @app.route('/')
 def helloWorld():
