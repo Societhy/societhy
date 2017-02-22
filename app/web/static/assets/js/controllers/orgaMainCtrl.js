@@ -1,10 +1,26 @@
 app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $state) {
-
 	var ctrl = this;
 	$scope.isMember = false;
+
+    /*
+    ** Notification default Value
+    */
+    
 /*
-	ctrl.init = function() {
-*/
+      $rootScope.itemArray = [
+      {id: 1, name: 'first'},
+	{id: 2, name: 'second'},
+	{id: 3, name: 'third'},
+	{id: 4, name: 'fourth'},
+	{id: 5, name: 'fifth'},
+    ];
+    $rootScope.availableColors = ['Red','Green','Blue','Yellow','Magenta','Maroon','Umbra','Turquoise'];
+    
+    $rootScope.toto = 42;
+    ctrl.toto = 43;
+    $rootScope.selected = { value: $scope.itemArray[0] };
+/*      ctrl.init = function() {
+    */
 	ctrl.joinOrga = function() {
 
 		if ($scope.doVerifications()) {
@@ -45,13 +61,21 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}
 	}
 
-    $rootScope.updateCategoryFilter = function() {
+    $rootScope.updateFilter = function() {
 	delete $rootScope.histo;
 	$rootScope.histo = $.extend(true, {}, $rootScope.histoFull);
 	if ($("#filterCategory").val() != "all")
 	{
 	    $.each($rootScope.histo, function (id) {
 		if ($rootScope.histo[id]["category"] != $("#filterCategory").val())
+		    delete $rootScope.histo[id];
+	    });
+	}
+	if ($("#filterMember").val() != "all")
+	{
+	    $.each($rootScope.histo, function (id,value) {
+		if (($("#filterMember").val() != $rootScope.histo[id]["subject"]["name"]) &&
+		    ($("#filterMember").val() != $rootScope.histo[id]["sender"]["name"]))
 		    delete $rootScope.histo[id];
 	    });
 	}
@@ -68,13 +92,14 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		if (data.data[0])
 		{
 		    $rootScope.sliderFilter = [];
-		    $rootScope.sliderFilter.first = data.data[0]["first"];
+		    if (!$rootScope.sliderFilter.first)
+			$rootScope.sliderFilter.first = data.data[0]["first"];
 		    $rootScope.sliderFilter.valBegin = begin;
 		    $rootScope.sliderFilter.valEnd = end;
 		    $rootScope.histoFull = data.data;
 		    $rootScope.histo = data.data;
 		    updateSliderFilter();
-		    $rootScope.updateCategoryFilter();
+		    $rootScope.updateFilter();
 		}
 		else
 		{
@@ -93,7 +118,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	if (!$rootScope.sliderFilter || $("#sliderFilter.ui-dateRangeSlider").length <= 0)
 	    return;
 	console.log(new Date($rootScope.sliderFilter.first));
-	$("#sliderFilter").dateRangeSlider("bounds",new Date($rootScope.sliderFilter.first), new Date($rootScope.sliderFilter.valEnd));
+	$("#sliderFilter").dateRangeSlider("bounds",new Date($rootScope.sliderFilter.first), $rootScope.date);
 	$("#sliderFilter").dateRangeSlider("values",new Date($rootScope.sliderFilter.valBegin), new Date($rootScope.sliderFilter.valEnd));
     }
 
@@ -118,6 +143,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
     $rootScope.slider = {
 	value: 10
     };
+
     
     $rootScope.updateHisto = function(e, data) {
 	begin = data.values.min;
@@ -127,7 +153,6 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	    (begin.toLocaleString(locale, { month: "short" }) + " " + begin.getDate() + ", "+  begin.getFullYear() +  " 12:00 AM"),
 	    (end.toLocaleString(locale, { month: "short" }) + " " + end.getDate() + ", "+  end.getFullYear() +  " 11:59 PM"))
     }
-    
     ctrl.createProject = function() {
 		 if ($scope.doVerifications()) {
 		 	$scope.completeBlockchainAction(
@@ -144,11 +169,10 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		 }
     }
 
-    function getLastDays () {
+    function initHisto () {
 	$rootScope.date = new Date();
-	begin = new Date();
-	begin.setDate(begin.getDate() - 7);
-	locale = "en-us";	    
+	begin = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
+	locale = "en-us";
 	ctrl.getHisto(
 	    (begin.toLocaleString(locale, { month: "short" }) + " " + begin.getDate() + ", "+  begin.getFullYear() +  " 12:00 AM"),
 	    ($rootScope.date.toLocaleString(locale, { month: "short" }) + " " + $rootScope.date.getDate() + ", "+  $rootScope.date.getFullYear() +  " 11:59 PM"));
@@ -160,7 +184,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	}).then(function(response) {
 	    $scope.currentOrga = $rootScope.currentOrga = response.data;
 	    console.log("current orga", $scope.currentOrga);
-	    getLastDays();
+	    initHisto();
 	    if ($rootScope.user)
 		$scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
 	}, function(error) {

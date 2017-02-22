@@ -5,7 +5,7 @@ import json
 from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 from models.organization import organizations, OrgaDocument
-from models.notification import notifications, NotificationDocument as Notification
+from models.notification import notifications, NotificationDocument as notification
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
 
@@ -47,7 +47,6 @@ def createOrga(user, password, newOrga):
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-
 	return {
 			"data": newOrga,
 			"status": 200
@@ -78,7 +77,7 @@ def joinOrga(user, password, orga_id):
 		tx_hash = orga.join(user, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "newMember"})
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -133,14 +132,15 @@ def leaveOrga(user, password, orga_id):
 		orga_instance.leave(user, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
+
 	return {
 		"data": user.get("orga_list"),
 		"status": 200
 	}
 
 def getHisto(token, orga_id, date):
-	data = Notification.getHisto(orga_id, date)
+	data = notification.getHisto(orga_id, date)
 	return {
 		"data": data,
 		"status": 200

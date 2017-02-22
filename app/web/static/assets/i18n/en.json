@@ -267,7 +267,7 @@
 	    "title": "Historic",
 	    "messages": {
 		"memberLeave": "A member <u>has left</u> the organisation.",
-		"newMember": "A member <u>has joim</u> the organisation.",
+		"newMember": "A member <u>has join</u> the organisation.",
 		"newProposition": "A member has submit a new proposition",
 		"newDonation": "A member has made a new donation."
 	    },
@@ -275,12 +275,17 @@
 		"title": "Filter",
 		"categories": {
 		    "title": "Category",
+		    "all": "All",
 		    "newMember": "New member",
 		    "memberLeave": "Old member",
 		    "newDonation": "New donation"
 		},
 		"years": {
 		    "title": "Period"
+		},
+		"member": {
+		    "title": "Member",
+		    "placeholder": "Select or search for a specific member"
 		},
 		"limit": {
 		    "title": "Limit"

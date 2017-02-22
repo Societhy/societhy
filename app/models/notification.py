@@ -20,6 +20,15 @@ class NotificationDocument(Document):
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 
+	def pushNotif(data):
+		notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
+                                      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      "category": data["category"],
+                                      "createdAt": datetime.now(),
+                                      "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                })
+
+                
 	def getSender(self):
 		if self['sender']['senderType'] == 'organization':
 			return organizations.find_one({"_id": self['sender']['senderId']})
@@ -39,13 +48,6 @@ class NotificationDocument(Document):
 		return  name['name']
                 
 	def getHisto(_id, date):
-#		notifications.insert({"subject" : { "id" : ObjectId("58823a62fa25f07ac36d4b71"), "type": "organization"},
-#                                      "sender" : { "id" : ObjectId("587f0069082c0c0055c3c4d4"), "type": "user"},
-#                                      "category": "newDonation",
-#                                      "createdAt": datetime.datetime.now(),
-#                                      "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")
-#                                      })
-		
 		data = notifications.find({
                         "$and" : [
                                 {"$or" : [
