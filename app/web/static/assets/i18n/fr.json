@@ -268,12 +268,17 @@
 		"title": "Filtre",
 		"categories": {
 		    "title": "Catégorie",
+		    "all": "Tout",
 		    "newMember": "Nouvel utilisateur",
 		    "memberLeave": "Ancien utilisateur",
 		    "newDonation": "Nouveau don"
 		},
 		"years": {
 		    "title": "Période"
+		},
+		"member": {
+		    "title": "Membre",
+		    "placeholder": "Selectionnez ou cherchez un membre en particulier"
 		},
 		"limit": {
 		    "title": "Limite"

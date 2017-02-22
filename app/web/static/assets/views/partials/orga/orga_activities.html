@@ -43,29 +43,49 @@
 	  <div id="sliderFilter"></div>
 
 	</div>
-
-
-	<div class="filter">
-	  <label>
-	    <span translate="notification.organisation.filter.limit.title"></span> :
-	  </label>
-	  <div class="range-slider">
-	    <input class="range-slider__range" type="range" value="50" min="0" max="{{filter.limit}}">
-	    <span class="range-slider__value">0</span>
-	    <rzslider rz-slider-model="slider.value"></rzslider>
-	  </div>
-
-	</div>
 	
 	<div class="filter">
 	  <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
-	  <select  ng-click="updateCategoryFilter()" id="filterCategory" class=" cs-selectx cs-skin-slidex" histoFilter="category">
-	    <option value="all"> </option>
+	  <select  ng-click="updateFilter()" id="filterCategory" class="cs-selectw cws-skin-slide" histoFilter="category">
+	    <option value="all" translate="notification.organisation.filter.categories.all"></option>
 	    <option value="newMember" translate="notification.organisation.filter.categories.newMember"></option>
 	    <option value="memberLeave" translate="notification.organisation.filter.categories.memberLeave"></option>
 	    <option value="newDonation" translate="notification.organisation.filter.categories.newDonation"></option>
 	  </select>
 	</div>
+	<div class="filter" id="memberFilter">
+	  <label><span translate="notification.organisation.filter.member.title"></span> :</label>
+
+	  <select  ng-click="updateFilter()" id="filterMember" class="cs-selectw cws-skin-slide" histoFilter="category">
+	    <option value="all" > </option>
+	    <option  ng-repeat="(key, member) in currentOrga.members" value="{{member.name}}">
+	      <span>{{member.name}}</span>
+	    </option>
+	  </select>
+<!--
+	  <ui-select multiple ng-model="colors"  ng-disabled="ctrl.disabled" close-on-select="false" style="width: 800px;" title="Choose a person">
+	    <ui-select-match placeholder="Select person..."><span id="memberFilterSelected">{{$item.value.name}}</span></ui-select-match>
+	    <ui-select-choices repeat="(key, member) in currentOrga.members | filter:$select.search">
+	      <span>{{member.value.name}}</span>
+	    </ui-select-choices>
+	  </ui-select>
+	  
+	  <ui-select multiple ng-model="colors" theme="bootstrap"  close-on-select="false" style="width: 300px;" title="Choose a color">
+	    <ui-select-match placeholder="Select colors...">{{$item.value.name}}</ui-select-match>
+	    <ui-select-choices repeat="(key, member) in currentOrga.members">
+	      <span>{{member.value.name}}</span>
+	    </ui-select-choices>
+	  </ui-select>
+
+	  <ui-select ng-change="updateFilter()" ng-model="memberFilter" theme="bootstrap">
+	    <ui-select-match><span >{{$select.selected.name}}</span></ui-select-match>
+	    <ui-select-choices repeat="(key, member) in currentOrga.members">
+	      <span>{{member.value.name}}</span>
+	    </ui-select-choices>
+	  </ui-select>
+-->
+	</div>
+	
       </div>
       <div id="ExportContainer" class="col-md-12">
 	<div class="filterHeader">

@@ -5,7 +5,7 @@ from models.user import users, UserDocument as User
 from models.project import projects, ProjectDocument as Project
 from models.organization import organizations, OrgaDocument as Orga
 from models.notification import notifications, NotificationDocument as Notification
-import datetime
+from datetime import datetime
 
 
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
@@ -32,9 +32,11 @@ class NotificationPush(Notification):
 		print("insert")
 		if subject:
 			subjectType = findType(subject)
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
+			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now()})
 		else:
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
+			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category,  "createdAt": datetime.now(),
+                                              "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                        })
 
 class NotificationEmail(Notification):
 	def sendNotif(self, sender, senderType, category, subject, user):
