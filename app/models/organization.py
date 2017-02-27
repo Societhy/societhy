@@ -133,6 +133,7 @@ class OrgaDocument(Document):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
+		self["balance"] = self.getTotalFunds()
 		self["contract_id"] = self.contract.save()
 
 		self["rules"] = self.rules
@@ -344,7 +345,8 @@ class OrgaCollection(Collection):
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,
-		"balance": int
+		"balance": int,
+		"uploaded_documents": list
 	}
 
 	def lookup(self, query):

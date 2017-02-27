@@ -3,10 +3,14 @@ from os import environ
 from flask import json as flask_json
 from flask_socketio import SocketIO
 from pymongo import MongoClient
+import gridfs
 from ethjsonrpc import ParityEthJsonRpc
+
 
 mongo_ip = environ.get('MONGOIP')
 client = MongoClient(host=mongo_ip or '127.0.0.1')
+db_filesystem = gridfs.GridFS(client.main)
+
 if mongo_ip != '127.0.0.1':
 	client.main.authenticate('dev', 'SecurityIsABitBetter')
 
