@@ -15,9 +15,7 @@ class ProjectDocument(Document):
 	campaigns = None
 	files = None
 
-	gen_skel = False
-
-	def __init__(self, at=None, contract=None, owner=None, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
+	def __init__(self, at=None, contract=None, owner=None, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False):
 		super().__init__(doc, projects, fetched_fields, gen_skel)
 		if contract:
 			self.contract = Contract(contract, owner.get('account') or owner.get('address'))

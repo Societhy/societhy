@@ -12,9 +12,7 @@ from core.utils import fromWei
 
 class UserDocument(Document):
 
-	gen_skel = False
-
-	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None):
 		super().__init__(doc, users, fetched_fields, gen_skel)
 		self.session_token = session
 

@@ -6,7 +6,7 @@ from core.blockchain_watcher import blockchain_watcher as bw
 from core import keys
 
 
-from models.user import users
+from models.user import users, UserDocument
 from models.organization import organizations, OrgaDocument as Organization
 from models.contract import contracts
 from models.project import projects
@@ -43,8 +43,10 @@ test_miner = {
 	}
 }
 
-users.insert_one(test_user)
-users.insert_one(test_miner)
+test_user_doc = UserDocument(doc=test_user, gen_skel=True)
+test_miner_doc = UserDocument(doc=test_miner, gen_skel=True)
+test_user_doc.save()
+test_miner_doc.save()
 
 test_miner = users.find_one({"name": "miner"})
 with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
