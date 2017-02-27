@@ -28,8 +28,10 @@ class OrgaDocument(Document):
 	projects = dict()
 	proposals = dict()
 	social_links = None
-	shares = None
+	tokens = None
 	alerts = None
+
+	gen_skel = False
 
 	rules = {
 		"governance": "democracy",
@@ -37,7 +39,7 @@ class OrgaDocument(Document):
 		"quorum": 20,
 		"majority": 50,
 		"can_be_removed": True,
-		"shareable": True,
+		"tokenable": True,
 		"public": True,
 		"anonymous": False
 	}
@@ -48,12 +50,12 @@ class OrgaDocument(Document):
 			"leave": True,
 			"donate": True,
 			"create_project": True,
-			"create_roposal": True,
+			"create_proposal": True,
 			"vote_proposal": True,
 			"recruit": True,
 			"remove_members": True,
-			"sell_share": True,
-			"buy_share": True,
+			"sell_token": True,
+			"buy_token": True,
 		},
 		"admin": {},
 		"partner": {},
@@ -62,24 +64,24 @@ class OrgaDocument(Document):
 			"leave": True,
 			"donate": True,
 			"create_project": False,
-			"create_roposal": False,
+			"create_proposal": False,
 			"vote_proposal": True,
 			"recruit": False,
 			"remove_members": False,
-			"sell_share": True,
-			"buy_share": True,
+			"sell_token": True,
+			"buy_token": True,
 		},
 		"default": {
 			"join": True,
 			"leave": False,
 			"donate": True,
 			"create_project": False,
-			"create_roposal": False,
+			"create_proposal": False,
 			"vote_proposal": False,
 			"recruit": False,
 			"remove_members": False,
-			"sell_share": False,
-			"buy_share": False,
+			"sell_token": False,
+			"buy_token": False,
 		}
 	}
 
@@ -344,6 +346,12 @@ class OrgaCollection(Collection):
 		"social_accounts": dict,
 		"balance": int
 	}
+
+	def lookup(self, query):
+		results = list(super().find({"name": query}, ["_id", "name", "address"]))
+		for doc in results:
+			doc.update({"category": "organization"})
+		return results
 
 	@find_method
 	def find_one(self, *args, **kwargs):

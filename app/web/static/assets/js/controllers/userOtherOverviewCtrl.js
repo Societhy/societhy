@@ -1,4 +1,4 @@
-app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootScope, $location) {
+app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootScope, $location, $state) {
     var ctrl = this;
     $scope.alreadyContact = false;
 
@@ -7,7 +7,8 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
 
     function toggleContactBtn() {
         $scope.alreadyContact = false;
-        for (contact in $rootScope.user.contact_list) {
+        console.log("nefore =", $rootScope.profile)
+        for (contact in $rootScope.profile.contact_list) {
             if ($rootScope.user.contact_list[contact].id == ctrl.profile._id) {
                 console.log($rootScope.user.contact_list[contact].id, ' vs ', ctrl.profile._id);
                 $scope.alreadyContact = true;
@@ -17,18 +18,17 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
     }
 
     function findUser() {
-	name = $rootScope.search || $location.url().substring($location.url().lastIndexOf('/') + 1);
-	$http.post('/findUser', {
-		   "name": name,
-		  }).then(function(response) {
-	    $rootScope.profile = ctrl.profile = response.data;
-        $rootScope.search = null;
-        toggleContactBtn();
-	},
-		function(error) {
-		    console.log(error);
-		});
-
+        console.log($state.params);
+    	$http.post('/findUser', {
+    		   "_id": $state.params._id,
+    		  }).then(function(response) {
+    	    $rootScope.profile = ctrl.profile = response.data;
+            $rootScope.query = null;
+            toggleContactBtn();
+    	},
+    		function(error) {
+    		    console.log(error);
+    		});
     }
 
     $scope.addToContact = function(){
