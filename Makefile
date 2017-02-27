@@ -25,6 +25,10 @@ force_build:
 pull:
 	docker pull $(DOCKER_IMAGE)
 
+push:
+	docker login
+	docker push societhy/devserver
+
 pow_test:
 	docker-compose -f utils/docker-compose.yaml up -d test_pow_env
 	sleep 3
