@@ -31,8 +31,6 @@ class OrgaDocument(Document):
 	tokens = None
 	alerts = None
 
-	gen_skel = False
-
 	rules = {
 		"governance": "democracy",
 		"default_proposal_duration": 48,
@@ -89,7 +87,7 @@ class OrgaDocument(Document):
 				doc=None,
 				mongokat_collection=None,
 				fetched_fields=None,
-				gen_skel=None,
+				gen_skel=False,
 				contract=None,
 				owner=None):
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
@@ -147,7 +145,7 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
-			if new_member and new_member.get('account') not in self["members"]:
+			if new_member and new_member.get('account') not in self.get('members'):
 				rights_tag = logs[0]["decoded_data"][0]
 				if rights_tag in self.rights.keys():
 					public_member =  Member(new_member.public(), rights=self.rights.get(rights_tag), tag=rights_tag)
@@ -252,7 +250,7 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, tag, password=None, local=False):
+	def join(self, user, tag="member", password=None, local=False):
 		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
