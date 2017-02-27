@@ -51,7 +51,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'My Profile'
         }
     }).state('app.user', {
-        url: '/user/:name',
+        url: '/user/:name/:_id',
         templateUrl: "static/assets/views/user_other_profile.html",
         resolve: loadSequence('userOtherOverviewCtrl', 'angularFileUpload', 'FileSaver', 'OAuth', 'qrcode', 'ngTable'),
         title: 'user Profile',
@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl'),
+        resolve: loadSequence('orgaMainCtrl', 'touchspin-plugin'),
         title: 'Organisation dashboard',
         params: {
             data: null
@@ -87,7 +87,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Organisation'
         }
     }).state('app.project', {
-        url: '/orga/:project_name/:project_id',
+        url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/project_dashboard.html",
         resolve: loadSequence('projectMainCtrl'),
         title: 'Project dashboard',

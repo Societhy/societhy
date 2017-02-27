@@ -15,6 +15,8 @@ class ProjectDocument(Document):
 	campaigns = None
 	files = None
 
+	gen_skel = False
+
 	def __init__(self, at=None, contract=None, owner=None, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):
 		super().__init__(doc, projects, fetched_fields, gen_skel)
 		if contract:
@@ -64,6 +66,13 @@ class ProjectDocument(Document):
 		pass
 
 class ProjectCollection(Collection):
-	pass
+
+	document_class = ProjectDocument
+
+	def lookup(self, query):
+		results = list(super().find({"name": query}, ["_id", "name", "address"]))
+		for doc in results:
+			doc.update({"category": "organization"})
+		return results
 
 projects = ProjectCollection(collection=client.main.projects)

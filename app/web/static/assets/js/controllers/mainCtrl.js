@@ -3,7 +3,7 @@
  * Clip-Two Main Controller
  */
 
- app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
+ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, $http, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
     // Loading bar transition
     // -----------------------------------
     var $win = $($window), $body = $('body');
@@ -243,9 +243,14 @@
         }
     });
 
-    $scope.searchForAnything = function(search) {
-        $rootScope.search = search;
-        $state.go("app.user", {"name": search});
+    $scope.searchForAnything = function(query) {
+        $rootScope.query = query;
+        $http.get('/searchFor/'.concat(query)).then(function(response) {
+            console.log(response.data);
+            if (response.data.length == 1) {
+                $state.go("app.".concat(response.data[0].category), response.data[0]);                
+            }
+        });
     }
     
     $scope.doVerifications = function() {

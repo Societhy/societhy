@@ -27,15 +27,15 @@ def test_create_orga(miner):
 	
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
-	sleep(1)
+	sleep(0.5)
 	assert new_orga["contract_id"] != None
-	inserted_orga = organizations.find_one({"contract_id": new_orga["contract_id"]})
-	assert inserted_orga != None
-	assert inserted_orga.contract != None
+	inserted = organizations.find_one({"contract_id": new_orga["contract_id"]})
+	assert inserted != None
+	assert inserted.contract != None
 
 
 def test_join(miner, testOrga):
-	tx_hash = testOrga.join(miner, password="simon")
+	tx_hash = testOrga.join(miner, "member", password="simon")
 	assert tx_hash != None
 	print('tx hash = ', tx_hash)
 	bw.waitEvent('newMember')
@@ -47,11 +47,18 @@ def test_memberlist(testOrga):
 	assert result[0].get('name') == 'miner'
 
 def test_donate(miner, testOrga):
-	tx_hash = testOrga.donate(miner, 1000, password="simon")
+	tx_hash = testOrga.donate(miner, toWei(1000), password="simon")
 	assert tx_hash is not None
 	bw.waitEvent("newDonation")
 	assert testOrga.getTotalFunds() == 1000
 	
+def test_createproject(miner, testOrga):
+	tx_hash = testOrga.createProject(miner, {}, password='simon')
+	assert tx_hash.startswith('0x')
+	bw.waitTx(tx_hash)
+	sleep(0.5)
+	assert len(testOrga["projects"]) == 1
+
 def test_leave(miner, testOrga):
 	tx_hash = testOrga.leave(miner, password='simon')
 	assert tx_hash.startswith('0x')
@@ -59,10 +66,6 @@ def test_leave(miner, testOrga):
 
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 
-def test_createproject(miner, testOrga):
-	tx_hash = testOrga.createProject(miner, {}, password='simon')
-	assert tx_hash.startswith('0x')
-	bw.waitTx(tx_hash)
 
 def test_destroyOrga(miner, testOrga):
 	pass
