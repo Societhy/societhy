@@ -55,7 +55,10 @@ class UserDocument(Document):
 		return None
 
 	def madeDonation(self, logs):
-		print("USER MADE DONATION", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
+			self["donations"] = self.get('donations', 0) + donation_amount
+			self.save_partial()
 		return None
 
 	# KEY MANAGEMENT
@@ -155,7 +158,7 @@ class UserDocument(Document):
 
 	def public(self):
 		return {
-			key: self.get(key)for key in self if key in users.public_info
+			key: self.get(key) for key in self if key in users.public_info
 		}
 
 	def delete(self):
