@@ -48,7 +48,6 @@ def login(credentials):
 		token = token.replace('.', '|')
 		setSocketId(credentials.get('socketid'), user)
 		session[token] = user
-		print(session.items())
 		return {"data": {
 					"token": token,
 					"user": deserializeUser(user)

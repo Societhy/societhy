@@ -1,5 +1,7 @@
 from os import environ
+from sys import exit
 import re
+from signal import signal, SIGINT
 
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
@@ -76,6 +78,15 @@ def searchForAnything(query):
 
 
 socketio.init_app(app)
+
+def stopServer(signal, frame):
+	if blockchain_watcher.running:
+		blockchain_watcher.stopWithSignal(signal, frame)
+	app.session_interface.store.remove({})
+	socketio.stop()
+	exit()
+signal(SIGINT, stopServer)
+
 
 if __name__ == '__main__':
 	if environ.get('MINING'):
