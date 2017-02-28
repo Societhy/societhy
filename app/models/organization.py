@@ -7,14 +7,17 @@ from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
+from models.member import Member
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import toWei, to20bytes, normalizeAddress
+from core.utils import fromWei, toWei, to20bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
 class OrganisationInitializationError(Exception):
 	pass
+
+governances = ["democracy", "entreprise", "association", "private"]
 
 class OrgaDocument(Document):
 
@@ -27,6 +30,58 @@ class OrgaDocument(Document):
 	social_links = None
 	shares = None
 	alerts = None
+
+	rules = {
+		"governance": "democracy",
+		"default_proposal_duration": 48,
+		"quorum": 20,
+		"majority": 50,
+		"can_be_removed": True,
+		"shareable": True,
+		"public": True,
+		"anonymous": False
+	}
+
+	rights = {
+		"owner": {
+			"join": False,
+			"leave": True,
+			"donate": True,
+			"create_project": True,
+			"create_roposal": True,
+			"vote_proposal": True,
+			"recruit": True,
+			"remove_members": True,
+			"sell_share": True,
+			"buy_share": True,
+		},
+		"admin": {},
+		"partner": {},
+		"member": {
+			"join": False,
+			"leave": True,
+			"donate": True,
+			"create_project": False,
+			"create_roposal": False,
+			"vote_proposal": True,
+			"recruit": False,
+			"remove_members": False,
+			"sell_share": True,
+			"buy_share": True,
+		},
+		"default": {
+			"join": True,
+			"leave": False,
+			"donate": True,
+			"create_project": False,
+			"create_roposal": False,
+			"vote_proposal": False,
+			"recruit": False,
+			"remove_members": False,
+			"sell_share": False,
+			"buy_share": False,
+		}
+	}
 
 	def __init__(self,
 				doc=None,
@@ -51,6 +106,10 @@ class OrgaDocument(Document):
 	def _loadContract(self):
 		if self.get('contract_id'):
 			self.contract = contracts.find_one({"_id": self['contract_id']})
+			balance = self.getTotalFunds()
+			if balance != self["balance"]:
+				self["balance"] = balance
+				self.save_partial()
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		if from_ is None:
@@ -72,42 +131,57 @@ class OrgaDocument(Document):
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
+		self["balance"] = self.getTotalFunds()
 		self["contract_id"] = self.contract.save()
+
+		self["rules"] = self.rules
 		self.save()
+
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
 		return resp
 
 	def memberJoined(self, logs):
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = users.find_one({"account": address})
-			if member and member.get('account') not in self["members"]:
-				self["members"][member.get('account')] = member.public()
-				self.save_partial();
-				return self
+			new_member = users.find_one({"account": address})
+			if new_member and new_member.get('account') not in self["members"]:
+				rights_tag = logs[0]["decoded_data"][0]
+				if rights_tag in self.rights.keys():
+					public_member =  Member(new_member.public(), rights=self.rights.get(rights_tag), tag=rights_tag)
+					self["members"][new_member.get('account')] = public_member
+					self.save_partial();
+					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
 		return False
 
 	def memberLeft(self, logs):
-		# decode logs, find user and delete it from memebr list
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = users.find_one({"account": address})
-			if address in self["members"]:
+			member = self.getMember(address)
+			if member:
 				del self["members"][address]
 				self.save_partial();
-				return self
+				return { "orga": self.public(public_members=True), "rights": self.rights.get('default')}
 		return False
 
 	def newDonation(self, logs):
-		print("NEW DONATION", logs)
-		return logs
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
+			self["balance"] = self.getTotalFunds()
+
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = self.getMember(address)
+			if member:
+				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
+			self.save_partial()
+			return self["balance"]
+		return False
 
 	def projectCreated(self, logs):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
-			if len(logs[0]["decoded_data"]) == 1 and len(logs[0]["decoded_data"]) == 1:
+			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
@@ -139,9 +213,19 @@ class OrgaDocument(Document):
 	# GENERIC METHODS
 	####
 
-	def public(self):
+	def public(self, additional_infos=None, public_members=False):
+		to_be_public = organizations.public_info
+		if additional_infos:
+			to_be_public += additional_infos
+		if public_members:
+			ret = {key: self.get(key) for key in self if key in to_be_public}
+			ret.update({"members":{account: {"name": member["name"],
+											"_id": member["_id"],
+											"account": account,
+											"tag": member["tag"]} for account, member in self.get('members').items()}})
+			return ret
 		return {
-			key: self.get(key)for key in self if key in organizations.public_info
+			key: self.get(key) for key in self if key in to_be_public
 		}
 
 
@@ -153,24 +237,24 @@ class OrgaDocument(Document):
 			else:
 				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
-						return member
-		elif user in self["members"]:
+						return Member(member)
+		elif type(user) is str and user in self["members"]:
 				return self["members"][user]
 		return None
 
 	def getTotalFunds(self):
-		return self.contract.getBalance()
+		return fromWei(self.contract.getBalance())
 
 	def getMemberList(self):
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, password=None, local=False):
-		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name')], password=password)
+	def join(self, user, tag, password=None, local=False):
+		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user))
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.contract["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -189,8 +273,6 @@ class OrgaDocument(Document):
 	def donate(self, user, amount, password=None):
 		if toWei(user.refreshBalance()) < amount:
 			return False
-
-		user.unlockAccount(password=password)
 		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
@@ -247,6 +329,7 @@ class OrgaCollection(Collection):
 		"name": str,
 		"members": dict,
 		"rights": dict,
+		"rules": dict,
 		"proposals": dict,
 		"projects": dict,
 		"description": str,
@@ -260,7 +343,8 @@ class OrgaCollection(Collection):
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,
-		"balance": int
+		"balance": int,
+		"uploaded_documents": list
 	}
 
 	@find_method

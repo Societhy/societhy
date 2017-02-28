@@ -110,9 +110,9 @@
     "bootstrap-rtl": "~3.3.1",
     "crypto-js": "~3.1.8",
     "file-saver": "latest",
-    "monospaced/angular-qrcode": "latest",
     "oauth.io": "latest",
-    "angular-socket-io": "latest"
+    "angular-socket-io": "latest",
+    "angular-qrcode": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",
@@ -121,6 +121,7 @@
     "moment": "~2.10.0",
     "slick-carousel": "~1.6.0",
     "bootstrap": "~3.3.2",
-    "angular-xeditable": "~0.1.9"
+    "angular-xeditable": "~0.1.9",
+    "sweetalert": "^1.1.3"
   }
 }
