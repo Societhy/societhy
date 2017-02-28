@@ -8,11 +8,13 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
     function toggleContactBtn() {
         $scope.alreadyContact = false;
         console.log("nefore =", $rootScope.profile)
-        for (contact in $rootScope.profile.contact_list) {
-            if ($rootScope.user.contact_list[contact].id == ctrl.profile._id) {
-                console.log($rootScope.user.contact_list[contact].id, ' vs ', ctrl.profile._id);
-                $scope.alreadyContact = true;
-                break;
+        if ($rootScope.user) {
+            for (contact in $rootScope.user.contact_list) {
+                if ($rootScope.user.contact_list[contact].id == ctrl.profile._id) {
+                    console.log($rootScope.user.contact_list[contact].id, ' vs ', ctrl.profile._id);
+                    $scope.alreadyContact = true;
+                    break;
+                }
             }
         }
     }
