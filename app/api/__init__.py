@@ -34,6 +34,8 @@ def requires_auth(f):
 				jwt.decode(token, secret_key)
 			except jwt.ExpiredSignatureError:
 				return Response({"error": "signature expired"}, 401)
+			except jwt.exceptions.DecodeError:
+				return Response({"error": "Login required"}, 401)
 			token = token.replace('.', '|')
 			user = UserDocument(session.get(token), session=token)
 			if session.get(token).get('needs_reloading') is True:
@@ -56,7 +58,7 @@ def populate_user(f):
 			try:
 				token = token.replace('|', '.')
 				jwt.decode(token, secret_key)
-			except jwt.ExpiredSignatureError:
+			except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
 				kwargs['user'] = None
 				return f(*args, **kwargs)
 			token = token.replace('.', '|')
@@ -110,4 +112,3 @@ class MongoSessionInterface(SessionInterface):
 		response.set_cookie(app.session_cookie_name, session.sid,
 							expires=self.get_expiration_time(app, session),
 							httponly=False, domain=domain)
-		print(response.headers)
