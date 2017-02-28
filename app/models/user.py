@@ -12,7 +12,7 @@ from core.utils import fromWei
 
 class UserDocument(Document):
 
-	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None):
 		super().__init__(doc, users, fetched_fields, gen_skel)
 		self.session_token = session
 
@@ -210,6 +210,13 @@ class UserCollection(Collection):
 	}
 
 	document_class = UserDocument
+
+	def lookup(self, query):
+		results = list(super().find({"name": query}, ["_id", "name", "account"]))
+		for doc in results:
+			doc.update({"category": "user"})
+		return results
+
 
 users = UserCollection(collection=client.main.users)
 from models.organization import organizations

@@ -6,4 +6,5 @@ services:
   - docker
 
 script:
-- make test
+- docker pull societhy/devserver
+- make local_test

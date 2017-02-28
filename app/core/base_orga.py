@@ -59,7 +59,7 @@ def createOrga(user, password, newOrga):
 		return {"data": str(e), "status": 400}
 
 	return {
-			"data": newOrga,
+			"data": {"orga": instance, "tx_hash": tx_hash},
 			"status": 200
 		}
 
@@ -76,7 +76,7 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type):
 	print("LALALALA " + str(ret.modified_count))
 	return {"ok"}
 
-def joinOrga(user, password, orga_id, tag):
+def joinOrga(user, password, orga_id, tag="member"):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
@@ -141,11 +141,11 @@ def leaveOrga(user, password, orga_id):
 	
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	try:
-		orga_instance.leave(user, password=password)
+		tx_hash = orga_instance.leave(user, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 	
 	return {
-		"data": user.get("orga_list"),
+		"data": tx_hash,
 		"status": 200
 	}

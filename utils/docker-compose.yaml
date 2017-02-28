@@ -1,6 +1,6 @@
 
 test_local_env:
-  image: societhy/env
+  image: societhy/devserver
   dns:
     - 8.8.8.8
   command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
@@ -34,7 +34,7 @@ test_local_env:
     - "custom:172.17.0.2"
 
 test_prod_env:
-  image: societhy/env
+  image: societhy/devserver
   dns:
     - 8.8.8.8
   command: /usr/bin/supervisord -n -c /societhy/utils/supervisor.conf -l /supervisord.log
@@ -68,7 +68,7 @@ test_prod_env:
 
 
 test_pow_env:
-  image: societhy/env
+  image: societhy/devserver
   dns:
     - 8.8.8.8
   command: /usr/bin/supervisord -n -c /societhy/utils/PoW/supervisor.conf -l /supervisord.log
