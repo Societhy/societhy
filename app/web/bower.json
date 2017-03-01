@@ -114,9 +114,6 @@
     "angular-socket-io": "latest",
     "bootstrap-select": "latest",
     "angularjs-slider": "lastest",
-    "angular-ui-select": "lastest"
-    "select2": "lastest";
-    "angular-qrcode": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",

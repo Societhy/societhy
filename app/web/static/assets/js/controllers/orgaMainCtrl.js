@@ -215,6 +215,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
                     $rootScope.sliderFilter.valEnd = end;
                     $rootScope.histoFull = $rootScope.histo = data.data;
                     updateSliderFilter();
+                    updateFilter();
                 }
                 else {
                     delete $rootScope.histoFull;
@@ -231,10 +232,12 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
      ** SLIDER
      */
     function updateSliderFilter() {
+
         if (!$rootScope.sliderFilter || $("#sliderFilter.ui-dateRangeSlider").length <= 0)
             return;
         $("#sliderFilter").dateRangeSlider("bounds", new Date($rootScope.sliderFilter.first), $rootScope.date);
         $("#sliderFilter").dateRangeSlider("values", new Date($rootScope.sliderFilter.valBegin), new Date($rootScope.sliderFilter.valEnd));
+
     }
 
     $rootScope.initSliders = function () {
@@ -263,6 +266,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
         begin = data.values.min;
         end = data.values.max
         locale = "en-us";
+
         ctrl.getHisto(
             (begin.toLocaleString(locale, {month: "short"}) + " " + begin.getDate() + ", " + begin.getFullYear() + " 12:00 AM"),
             (end.toLocaleString(locale, {month: "short"}) + " " + end.getDate() + ", " + end.getFullYear() + " 11:59 PM"))
@@ -297,9 +301,6 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
             if (filtered === false)
                 delete $rootScope.histo[id];
         });
-    }
-    function updateMemberFilter(newVal) {
-        console.log(newVal);
 
     }
 
