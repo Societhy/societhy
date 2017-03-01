@@ -23,9 +23,9 @@ def login(credentials):
 		if credentials:
 			credentials = str(b64decode(credentials), 'utf-8').split(':')
 			if len(credentials) == 2:
-				name, passw = credentials[0], encode_hex(scrypt.hash(credentials[1], SALT_LOGIN_PASSWORD)).decode('utf-8')
-				if (name is not None) and (passw is not None):
-					user = users.find_one({"name": name, "password": passw}, users.user_info)
+				email, passw = credentials[0], encode_hex(scrypt.hash(credentials[1], SALT_LOGIN_PASSWORD)).decode('utf-8')
+				if (email is not None) and (passw is not None):
+					user = users.find_one({"email": email, "password": passw}, users.user_info)
 					return user
 		return None
 
