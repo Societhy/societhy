@@ -3,7 +3,6 @@
 */
 'use strict';
 angular.module("packet", [
-	'ui.select',
 	'rzModule',
 	'ngAnimate',
 	'ngCookies',
