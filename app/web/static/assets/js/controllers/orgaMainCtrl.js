@@ -134,7 +134,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 					$scope.currentRights = $rootScope.currentRights = data.data.rights;
 					$scope.isMember = false;
 					$rootScope.user.organizations.splice(data.data, 1);
-				});
+                });
 
 
 		}
@@ -199,7 +199,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
     $rootScope.filtered = {"categories": [], "members": []};
 
 
-    ctrl.getHisto = function (begin, end) {
+    $rootScope.getHisto = function (begin, end) {
         $http.post('/getOrgaHisto', {
             "orga_id": $state.params._id,
             "date": {"begin": begin, "end": end}
@@ -215,7 +215,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
                     $rootScope.sliderFilter.valEnd = end;
                     $rootScope.histoFull = $rootScope.histo = data.data;
                     updateSliderFilter();
-                    updateFilter();
+                    $rootScope.updateFilter();
                 }
                 else {
                     delete $rootScope.histoFull;
@@ -263,13 +263,13 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
      ** FILTERS
      */
     $rootScope.updateHisto = function (e, data) {
-        begin = data.values.min;
-        end = data.values.max
+        $rootScope.slider.begin = data.values.min;
+        $rootScope.slider.end = data.values.max
         locale = "en-us";
 
-        ctrl.getHisto(
-            (begin.toLocaleString(locale, {month: "short"}) + " " + begin.getDate() + ", " + begin.getFullYear() + " 12:00 AM"),
-            (end.toLocaleString(locale, {month: "short"}) + " " + end.getDate() + ", " + end.getFullYear() + " 11:59 PM"))
+        $rootScope.getHisto(
+            ($rootScope.slider.begin.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.begin.getDate() + ", " + $rootScope.slider.begin.getFullYear() + " 12:00 AM"),
+            ($rootScope.slider.end.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.end.getDate() + ", " + $rootScope.slider.end.getFullYear() + " 11:59 PM"))
     }
 
     $rootScope.updateFilter = function () {
@@ -316,12 +316,15 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
         $rootScope.filter.members[1].name = "unknown"
         $rootScope.$watch( 'filtered' , $rootScope.updateFilter, true);
 
-        $rootScope.date = new Date();
-        begin = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
         locale = "en-us";
-        ctrl.getHisto(
-            (begin.toLocaleString(locale, {month: "short"}) + " " + begin.getDate() + ", " + begin.getFullYear() + " 12:00 AM"),
-            ($rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 11:59 PM"));
+        $rootScope.date = new Date();
+        $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 12:00 AM"};
+        lastWeek = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
+        $rootScope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 11:59 PM";
+
+        $rootScope.getHisto(
+            ($rootScope.slider.begin),
+            ($rootScope.slider.end));
     };
     initHisto();
 
