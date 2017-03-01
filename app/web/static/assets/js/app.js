@@ -32,4 +32,5 @@ angular.module("packet", [
 	'duScroll',
 	'pascalprecht.translate',
 	'FBAngular',
+    'isteven-multi-select'
 ]);

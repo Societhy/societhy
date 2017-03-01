@@ -1,117 +1,96 @@
-<div class="orgaActivityContainer">
-  <div class="page-header" >
-    <h1>
-      <span translate="notification.organisation.title"></span>
-    </h1>
-  </div>
-  <!-- Sample 4 -->
-  <div class="row">
-    <!-- BEGIN: TIMELINE-->
-    <div id="timelineContainer" class="col-md-6">
-      <div class="orgaActivityLoading" class="col-md-6">
-	<i  class="fa fa-spinner fa-spin"></i>
-	<span translate="notification.LOADING"> </span>
-      </div>
-      <ul class="timeline displayNone" style="cursor: default;">
-	<li>
-	  <div class="tldate">{{date | date: 'yyyy-MM-dd'}}</div>
-	</li>
-	<li ng-repeat="data in histo">
-	  <div class="timeline-panel">
-	    <div class="tl-heading">
-	      <h4>{{data.sender.name}} -> {{data.subject.name}}</h4>
-	    </div>
-	    <p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{data.date}}</small></p>
-	    <div class="tl-body">
-	      <p><span translate="notification.organisation.messages.{{data.category}}" ></span></p>
-	    </div>
-	  </div>
-	</li>
-      </ul>
+<div class="orgaActivityContainer" ng-controller="OrgaHistoController">
+    <div class="page-header">
+        <h1>
+            <span translate="notification.organisation.title"></span>
+        </h1>
     </div>
-    <!-- END: TIMELINE-->
-    <!-- BEGIN: CMD-->
-    <div id="cmdContainer" class="col-md-6">
-    <!-- BEGIN: FILTER-->
-      <div id="filterContainer" class="col-md-12">
-
-	<div class="filter">
-	  <label>
-	    <span translate="notification.organisation.filter.years.title"></span> :
-	  </label>
-
-	  <div id="sliderFilter"></div>
-
-	</div>
-	
-	<div class="filter">
-	  <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
-	  <select  ng-click="updateFilter()" id="filterCategory" class="cs-selectw cws-skin-slide" histoFilter="category">
-	    <option value="all" translate="notification.organisation.filter.categories.all"></option>
-	    <option value="newMember" translate="notification.organisation.filter.categories.newMember"></option>
-	    <option value="memberLeave" translate="notification.organisation.filter.categories.memberLeave"></option>
-	    <option value="newDonation" translate="notification.organisation.filter.categories.newDonation"></option>
-	  </select>
-	</div>
-	<div class="filter" id="memberFilter">
-	  <label><span translate="notification.organisation.filter.member.title"></span> :</label>
-
-	  <select  ng-click="updateFilter()" id="filterMember" class="cs-selectw cws-skin-slide" histoFilter="category">
-	    <option value="all" > </option>
-	    <option  ng-repeat="(key, member) in currentOrga.members" value="{{member.name}}">
-	      <span>{{member.name}}</span>
-	    </option>
-	  </select>
-		<div class="select-box" ng-if="ctrl.appendToBodyDemo.present">
-			<h3>Select2 theme</h3>
-			<p>Selected: {{ctrl.person.selected}}</p>
-			<ui-select ng-model="ctrl.person.selected" theme="select2" ng-disabled="ctrl.disabled" style="min-width: 300px;" title="Choose a person" append-to-body="true">
-				<ui-select-match placeholder="Select a person in the list or search his name/age...">{{$select.selected.name}}</ui-select-match>
-				<ui-select-choices repeat="person in ctrl.people | propsFilter: {name: $select.search, age: $select.search}">
-					<div ng-bind-html="person.name | highlight: $select.search"></div>
-					<small>
-						email: {{person.email}}
-						age: <span ng-bind-html="''+person.age | highlight: $select.search"></span>
-					</small>
-				</ui-select-choices>
-			</ui-select>
-			<p class="alert alert-info positioned">The select dropdown menu should be displayed above this element.</p>
-		</div>
-	  <!--<ui-select multiple ng-model="colors"  ng-disabled="ctrl.disabled" close-on-select="false" style="width: 800px;" title="Choose a person">-->
-	    <!--<ui-select-match placeholder="Select person..."><span id="memberFilterSelected">{{$item.value.name}}</span></ui-select-match>-->
-	    <!--<ui-select-choices repeat="(key, member) in currentOrga.members | filter:$select.search">-->
-	      <!--<span>{{member.value.name}}</span>-->
-	    <!--</ui-select-choices>-->
-	  <!--</ui-select>-->
-	  <!---->
-	  <!--<ui-select multiple ng-model="colors" theme="bootstrap"  close-on-select="false" style="width: 300px;" title="Choose a color">-->
-	    <!--<ui-select-match placeholder="Select colors...">{{$item.value.name}}</ui-select-match>-->
-	    <!--<ui-select-choices repeat="(key, member) in currentOrga.members">-->
-	      <!--<span>{{member.value.name}}</span>-->
-	    <!--</ui-select-choices>-->
-	  <!--</ui-select>-->
-
-	  <!--<ui-select ng-change="updateFilter()" ng-model="memberFilter" theme="bootstrap">-->
-	    <!--<ui-select-match><span >{{$select.selected.name}}</span></ui-select-match>-->
-	    <!--<ui-select-choices repeat="(key, member) in currentOrga.members">-->
-	      <!--<span>{{member.value.name}}</span>-->
-	    <!--</ui-select-choices>-->
-	  <!--</ui-select>-->
-
-
-	</div>
-	
-      </div>
-      <div id="ExportContainer" class="col-md-12">
-	<div class="filterHeader">
-	  <h1>
-	    <span translate="notification.organisation.export.title"></span>
-	  </h1>
-	</div>
-      </div>
-      <!-- ENDL FILTER-->
+    <!-- Sample 4 -->
+    <div class="row">
+        <!-- BEGIN: TIMELINE-->
+        <div id="timelineContainer" class="col-md-6">
+            <div class="orgaActivityLoading" class="col-md-6">
+                <i class="fa fa-spinner fa-spin"></i>
+                <span translate="notification.LOADING"> </span>
+            </div>
+            <ul class="timeline displayNone" style="cursor: default;">
+                <li>
+                    <div class="tldate">{{date | date: 'yyyy-MM-dd'}}</div>
+                </li>
+                <li ng-repeat="data in histo">
+                    <div class="timeline-panel">
+                        <div class="tl-heading">
+                            <h4>{{data.sender.name}} -> {{data.subject.name}}</h4>
+                        </div>
+                        <p>
+                            <small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{data.date}}</small>
+                        </p>
+                        <div class="tl-body">
+                            <p><span translate="notification.organisation.messages.{{data.category}}"></span></p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- END: TIMELINE-->
+        <!-- BEGIN: CMD-->
+        <div id="cmdContainer" class="col-md-6">
+            <!-- BEGIN: FILTER-->
+            <div id="filterContainer" class="col-md-12">
+                <!-- BEGIN: SLIDER -->
+                <div class="filter">
+                    <label>
+                        <span translate="notification.organisation.filter.years.title"></span> :
+                    </label>
+                    <div id="sliderFilter"></div>
+                </div>
+                <!-- END: SLIDER -->
+                <!-- BEGIN: CATEGORY -->
+                <div class="filter">
+                    <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.categories"
+                         output-model="filtered.categories"
+                         button-label="name"
+                         item-label="name"
+                         tick-property="ticked"
+                    >
+                    </div>
+                </div>
+                <!-- END: CATEGORY -->
+                <!-- BEGIN: MEMBER -->
+                <div class="filter">
+                    <label><span translate="notification.organisation.filter.member.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.members"
+                         output-model="filtered.members"
+                         button-label="icon name"
+                         item-label="name"
+                         tick-property="ticked"
+                    >
+                    </div>
+                </div>
+            </div>
+            <!-- END: FILTER-->
+            <!-- EXPORT CONTAINER -->
+            <div id="ExportContainer" class="col-md-12">
+                <div class="filter">
+                    <h1>
+                        <span translate="notification.organisation.export.title"></span>
+                    </h1>
+                    <!--<div-->
+                    <!--isteven-multi-select-->
+                    <!--input-model="filter.members"-->
+                    <!--output-model="filtered.members"-->
+                    <!--button-label="icon name"-->
+                    <!--item-label="name"-->
+                    <!--tick-property="ticked"-->
+                    <!--&gt;-->
+                    <!--</div>-->
+                </div>
+                <!-- END: EXPORT CONTAINER-->
+            </div>
+            <!-- END: CMD-->
+        </div>
     </div>
-    <!-- END: CMD-->
-  </div>
-</div>
-</div>

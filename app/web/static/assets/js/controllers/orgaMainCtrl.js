@@ -112,3 +112,143 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 
 	return ctrl;
 });
+
+/*
+ ** Histo Handler
+ */
+app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
+    ctrl = this;
+
+    $rootScope.filter = {"categories": [{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}], "members": []};
+    $rootScope.filtered = {"categories": [], "members": []};
+
+
+    ctrl.getHisto = function (begin, end) {
+        $http.post('/getOrgaHisto', {
+            "orga_id": $state.params._id,
+            "date": {"begin": begin, "end": end}
+        }).then(
+            function (data) {
+                $(".orgaActivityLoading").addClass("displayNone");
+                $(".timeline").removeClass("displayNone");
+                if (data.data[0]) {
+                    $rootScope.sliderFilter = [];
+                    if (!$rootScope.sliderFilter.first)
+                        $rootScope.sliderFilter.first = data.data[0]["first"];
+                    $rootScope.sliderFilter.valBegin = begin;
+                    $rootScope.sliderFilter.valEnd = end;
+                    $rootScope.histoFull = $rootScope.histo = data.data;
+                    updateSliderFilter();
+                }
+                else {
+                    delete $rootScope.histoFull;
+                    delete $rootScope.histo;
+
+                }
+            },
+            function (error) {
+                console.log(error);
+            });
+    };
+
+    /*
+     ** SLIDER
+     */
+    function updateSliderFilter() {
+        if (!$rootScope.sliderFilter || $("#sliderFilter.ui-dateRangeSlider").length <= 0)
+            return;
+        $("#sliderFilter").dateRangeSlider("bounds", new Date($rootScope.sliderFilter.first), $rootScope.date);
+        $("#sliderFilter").dateRangeSlider("values", new Date($rootScope.sliderFilter.valBegin), new Date($rootScope.sliderFilter.valEnd));
+    }
+
+    $rootScope.initSliders = function () {
+        $("#sliderFilter").dateRangeSlider();
+        var slider = $('.range-slider');
+        range = $('.range-slider__range');
+        value = $('.range-slider__value');
+        slider.each(function () {
+            value.each(function () {
+                var value = $(this).prev().attr('value');
+                $(this).html(value);
+
+            });
+            range.on('input', function () {
+                $(this).next(value).html(this.value);
+            });
+        });
+        $("#sliderFilter").bind("userValuesChanged", $rootScope.updateHisto);
+        updateSliderFilter();
+    }
+
+    /*
+     ** FILTERS
+     */
+    $rootScope.updateHisto = function (e, data) {
+        begin = data.values.min;
+        end = data.values.max
+        locale = "en-us";
+        ctrl.getHisto(
+            (begin.toLocaleString(locale, {month: "short"}) + " " + begin.getDate() + ", " + begin.getFullYear() + " 12:00 AM"),
+            (end.toLocaleString(locale, {month: "short"}) + " " + end.getDate() + ", " + end.getFullYear() + " 11:59 PM"))
+    }
+
+    $rootScope.updateFilter = function () {
+        delete $rootScope.histo;
+
+        $rootScope.histo = $.extend(true, {}, $rootScope.histoFull);
+        $.each($rootScope.histo, function (id, value) {
+            filtered = true;
+            if ($rootScope.filtered.categories.length !== 0) {
+                filtered = false;
+                $.each($rootScope.filtered.categories, function () {
+                    if (this["name"] == $rootScope.histo[id]["category"]) {
+                        filtered = true;
+                        return;
+                    }
+                });
+            }
+            if ($rootScope.filtered.members.length !== 0 && filtered === true) {
+                filtered = false;
+                $.each($rootScope.filtered.members, function () {
+                    if ((this["name"] == $rootScope.histo[id]["subject"]["name"]) ||
+                        (this["name"] == $rootScope.histo[id]["sender"]["name"])) {
+                        filtered = true;
+                        return;
+                    }
+                });
+            }
+
+            if (filtered === false)
+                delete $rootScope.histo[id];
+        });
+    }
+    function updateMemberFilter(newVal) {
+        console.log(newVal);
+
+    }
+
+    /*
+     ** INIT
+     */
+    function initHisto() {
+
+        angular.forEach($rootScope.currentOrga.members, function(value, key) {
+            $rootScope.filter.members.push(value);
+        });
+        $rootScope.filter.members[1] = $.extend(true, {}, $rootScope.filter.members[0]);
+        $rootScope.filter.members[1].name = "unknown"
+        $rootScope.$watch( 'filtered' , $rootScope.updateFilter, true);
+
+        $rootScope.date = new Date();
+        begin = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
+        locale = "en-us";
+        ctrl.getHisto(
+            (begin.toLocaleString(locale, {month: "short"}) + " " + begin.getDate() + ", " + begin.getFullYear() + " 12:00 AM"),
+            ($rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 11:59 PM"));
+    };
+    initHisto();
+
+    return ctrl;
+
+});
+
