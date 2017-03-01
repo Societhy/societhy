@@ -312,8 +312,10 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
         angular.forEach($rootScope.currentOrga.members, function(value, key) {
             $rootScope.filter.members.push(value);
         });
-        $rootScope.filter.members[1] = $.extend(true, {}, $rootScope.filter.members[0]);
-        $rootScope.filter.members[1].name = "unknown"
+        if ($rootScope.filter.members[0]) {
+            $rootScope.filter.members[1] = $.extend(true, {}, $rootScope.filter.members[0]);
+            $rootScope.filter.members[1].name = "unknown"
+        }
         $rootScope.$watch( 'filtered' , $rootScope.updateFilter, true);
 
         locale = "en-us";
