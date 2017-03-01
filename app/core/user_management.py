@@ -9,6 +9,7 @@ from rlp.utils import encode_hex
 
 from models import users, UserDocument
 from models.notification import notifications
+from models import errors
 
 from core import keys
 from . import secret_key
@@ -68,10 +69,14 @@ def isInContactList(userId, contactId):
     return False
 
 def findUser(data):
-	user = users.find_one({"name": data["name"]})
-	return {"data": user,
-		"status": 200}
+	if data.get('_id'):
+		try:
+			_id = ObjectId(data.get('_id'))
+		except errors.InvalidId:
+			return {"data": "Not a valid ObjectId, it must be a 12-byte input or a 24-character hex string", "status": 400}
 
-def getUserNotif(data):
-	ret = list(notifications.find({"userId" : ObjectId(data.get("_id"))}, {"date" : 0, "_id" : 0}))
-	return {"data": {"notifications": ret}, "status": 200}
+		user = users.find_one({"_id": _id})
+		return {"data": user,
+			"status": 200}
+	else:
+		return {"data": "User's id is required to view its profile", "status":400}

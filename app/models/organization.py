@@ -28,7 +28,7 @@ class OrgaDocument(Document):
 	projects = dict()
 	proposals = dict()
 	social_links = None
-	shares = None
+	tokens = None
 	alerts = None
 
 	rules = {
@@ -37,7 +37,7 @@ class OrgaDocument(Document):
 		"quorum": 20,
 		"majority": 50,
 		"can_be_removed": True,
-		"shareable": True,
+		"tokenable": True,
 		"public": True,
 		"anonymous": False
 	}
@@ -48,12 +48,12 @@ class OrgaDocument(Document):
 			"leave": True,
 			"donate": True,
 			"create_project": True,
-			"create_roposal": True,
+			"create_proposal": True,
 			"vote_proposal": True,
 			"recruit": True,
 			"remove_members": True,
-			"sell_share": True,
-			"buy_share": True,
+			"sell_token": True,
+			"buy_token": True,
 		},
 		"admin": {},
 		"partner": {},
@@ -62,24 +62,24 @@ class OrgaDocument(Document):
 			"leave": True,
 			"donate": True,
 			"create_project": False,
-			"create_roposal": False,
+			"create_proposal": False,
 			"vote_proposal": True,
 			"recruit": False,
 			"remove_members": False,
-			"sell_share": True,
-			"buy_share": True,
+			"sell_token": True,
+			"buy_token": True,
 		},
 		"default": {
 			"join": True,
 			"leave": False,
 			"donate": True,
 			"create_project": False,
-			"create_roposal": False,
+			"create_proposal": False,
 			"vote_proposal": False,
 			"recruit": False,
 			"remove_members": False,
-			"sell_share": False,
-			"buy_share": False,
+			"sell_token": False,
+			"buy_token": False,
 		}
 	}
 
@@ -87,7 +87,7 @@ class OrgaDocument(Document):
 				doc=None,
 				mongokat_collection=None,
 				fetched_fields=None,
-				gen_skel=None,
+				gen_skel=False,
 				contract=None,
 				owner=None):
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
@@ -145,7 +145,7 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
-			if new_member and new_member.get('account') not in self["members"]:
+			if new_member and new_member.get('account') not in self.get('members'):
 				rights_tag = logs[0]["decoded_data"][0]
 				if rights_tag in self.rights.keys():
 					public_member =  Member(new_member.public(), rights=self.rights.get(rights_tag), tag=rights_tag)
@@ -250,7 +250,7 @@ class OrgaDocument(Document):
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
-	def join(self, user, tag, password=None, local=False):
+	def join(self, user, tag="member", password=None, local=False):
 		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
@@ -346,6 +346,12 @@ class OrgaCollection(Collection):
 		"balance": int,
 		"uploaded_documents": list
 	}
+
+	def lookup(self, query):
+		results = list(super().find({"name": query}, ["_id", "name", "address"]))
+		for doc in results:
+			doc.update({"category": "organization"})
+		return results
 
 	@find_method
 	def find_one(self, *args, **kwargs):

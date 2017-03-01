@@ -4,26 +4,101 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	$scope.isMember = false;
 	ctrl.wallet = $controller("WalletController");
 
-	onLoad = function() {
-		$http.post('/getOrganization', {
-			"id": $state.params._id
-		}).then(function(response) {
-			$scope.currentOrga = $rootScope.currentOrga = response.data.orga;
-			$scope.currentRights = $rootScope.currentRights = response.data.rights
-			console.log("current orga & rights", $scope.currentOrga, $scope.currentRights)
-			console.log($rootScope.user);
-			console.log($scope);
-			if ($rootScope.user) {
-			    $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
-			}
-		}, function(error) {
-			$state.go('app.dashboard');
-			$rootScope.toogleError("Organization does not exist");			
-		})
-	};
+    $scope.listProducts = [{
+            "name": "Product1",
+            "description": "Ceci est le product1 de test 1",
+            "price": 10,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product2",
+            "description": "Ceci est le product2 de test 2",
+            "price": 20,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product3",
+            "description": "Ceci est le product3 de test 3",
+            "price": 30,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product4",
+            "description": "Ceci est le product4 de test 4",
+            "price": 40,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product5",
+            "description": "Ceci est le product5 de test 5",
+            "price": 50,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product6",
+            "description": "Ceci est le product6 de test 6",
+            "price": 60,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product7",
+            "description": "Ceci est le product7 de test 7",
+            "price": 70,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product8",
+            "description": "Ceci est le product8 de test 8",
+            "price": 80,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product9",
+            "description": "Ceci est le product9 de test 9",
+            "price": 90,
+            "stock": 1000,
+            "picture": ""
+        },
+        {
+            "name": "Product10",
+            "description": "Ceci est le product10 de test 10",
+            "price": 100,
+            "stock": 1000,
+            "picture": ""
+        },
+    ];
+    $scope.currentProd = $scope.listProducts[0];
 
-	ctrl.joinOrga = function(tag) {
 
+    ctrl.setProduct = function(product) {
+        $scope.currentProd = product;
+    }
+
+    onLoad = function() {
+        $http.post('/getOrganization', {
+            "id": $state.params._id
+        }).then(function(response) {
+            $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+            $scope.currentRights = $rootScope.currentRights = response.data.rights
+            console.log("current orga & rights", $scope.currentOrga, $scope.currentRights)
+            if ($rootScope.user) {
+                $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
+            }
+        }, function(error) {
+            $state.go('app.dashboard');
+            $rootScope.toogleError("Organization does not exist");
+        })
+    };
+
+    ctrl.joinOrga = function(tag) {
 		if ($scope.doVerifications()) {
 			$scope.completeBlockchainAction(
 				function(password) {
@@ -45,7 +120,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	}
 
 	ctrl.leaveOrga = function() {
-		
+
 		if ($scope.doVerifications()) {
 			$scope.completeBlockchainAction(
 				function(password) {
@@ -104,7 +179,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	$rootScope.$on("loggedIn", function(event, data) {
 		onLoad();
 	});
-	
+
 	$timeout(function() {
 		$(".donate-button").click(ctrl.makeDonation);
 	}, 500);
@@ -112,6 +187,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 
 	return ctrl;
 });
+
 
 /*
  ** Histo Handler
@@ -251,4 +327,3 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
     return ctrl;
 
 });
-

@@ -1,6 +1,10 @@
 from os import environ
+from sys import exit
+import re
+from signal import signal, SIGINT
 
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, make_response, jsonify
+from eventlet.greenpool import GreenPool
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
@@ -10,6 +14,8 @@ from api.routes.fundraise import router as fundraise_routes
 from core import secret_key
 from core.utils import UserJSONEncoder
 from core.chat import socketio
+
+from models import organizations, users, projects
 
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
@@ -23,6 +29,8 @@ app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+
+workers_pool = GreenPool(size=3)
 
 jinja_options = app.jinja_options.copy()
 
@@ -44,22 +52,48 @@ app.register_blueprint(fundraise_routes)
 
 
 @app.after_request
-def addHeader(response):
-	"""
-	Add headers to both force latest IE rendering engine or Chrome Frame,
-	and also to cache the rendered page for 10 minutes.
-	"""
-	response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
-	response.headers['Cache-Control'] = 'no-cache, no-store'
-	response.headers['Pragma'] = 'no-cache'
-	return response
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['Access-Control-Allow-Headers'] = 'Authentification, authentification, Origin, X-Requested-With, Content-Type, Accept'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    if (request.headers.get('origin') is not None):
+    	response.headers['Access-Control-Allow-Origin'] = request.headers['origin']
+    response.headers['Access-Control-Allow-Methods'] = '*'
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'no-cache, no-store'
+    response.headers['Pragma'] = 'no-cache'
+    return response
 
 @app.route('/')
 def helloWorld():
 	return render_template("index.html")
 
+@app.route('/searchFor/<query>', methods=['GET'])
+def searchForAnything(query):
+	
+	def process_query(collection):
+		regex = re.compile("^%s" % query, re.IGNORECASE)
+		return list(collection.lookup(regex))
+
+	data = list()
+	for results in workers_pool.imap(process_query, (organizations, users, projects)):
+		data += results
+	return make_response(jsonify(data), 200)
+
 
 socketio.init_app(app)
+
+def stopServer(signal, frame):
+	if blockchain_watcher.running:
+		blockchain_watcher.stopWithSignal(signal, frame)
+	app.session_interface.store.remove({})
+	socketio.stop()
+	exit()
+signal(SIGINT, stopServer)
+
 
 if __name__ == '__main__':
 	if environ.get('MINING'):
