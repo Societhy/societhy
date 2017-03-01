@@ -11,7 +11,7 @@ from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
 
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd')
+categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated")
 senderList = ('organization', 'project', 'user')
 
 
@@ -74,7 +74,7 @@ class NotificationDocument(Document):
                                         {"sender.type" : "organization", "sender.id" : ObjectId(_id)},
                                         {"subject.type" : "organization", "subject.id" : ObjectId(_id)}
                                 ]},
-                                {'createdAt': 1, '_id': 0}).sort("_createdAt", 1).limit(1)[0]['createdAt'].strftime("%Y-%m-%d %H:%M:%S")
+                                {'createdAt': 1, '_id': 0}).sort("createdAt", 1).limit(1)[0]['createdAt'].strftime("%Y-%m-%d %H:%M:%S")
 			return res
 		return []
 
