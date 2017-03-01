@@ -113,7 +113,7 @@
     "oauth.io": "latest",
     "angular-socket-io": "latest",
     "bootstrap-select": "latest",
-    "angularjs-slider": "lastest",
+    "angularjs-slider": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",
