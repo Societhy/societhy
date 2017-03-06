@@ -12,7 +12,7 @@ from core.utils import fromWei
 
 class UserDocument(Document):
 
-	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
+	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None):
 		super().__init__(doc, users, fetched_fields, gen_skel)
 		self.session_token = session
 
@@ -55,7 +55,10 @@ class UserDocument(Document):
 		return None
 
 	def madeDonation(self, logs):
-		print("USER MADE DONATION", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
+			self["donations"] = self.get('donations', 0) + donation_amount
+			self.save_partial()
 		return None
 
 	# KEY MANAGEMENT
@@ -155,7 +158,7 @@ class UserDocument(Document):
 
 	def public(self):
 		return {
-			key: self.get(key)for key in self if key in users.public_info
+			key: self.get(key) for key in self if key in users.public_info
 		}
 
 	def delete(self):
@@ -207,6 +210,13 @@ class UserCollection(Collection):
 	}
 
 	document_class = UserDocument
+
+	def lookup(self, query):
+		results = list(super().find({"name": query}, ["_id", "name", "account"]))
+		for doc in results:
+			doc.update({"category": "user"})
+		return results
+
 
 users = UserCollection(collection=client.main.users)
 from models.organization import organizations

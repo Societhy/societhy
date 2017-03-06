@@ -12,7 +12,7 @@ def fromWei(value):
 	return value / (10 ** 18)
 
 def toWei(value):
-	return value * (10 ** 18)
+	return int(value * (10 ** 18))
 
 def serializeUser(user):
 	serialized = copy(user)

@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="static/assets/css/orga.css">
 <!-- start: ORGA DASHBOARD PROFILE -->
 <div class="container-fluid container-fullw bg-white">
   <div class="row">
@@ -6,15 +6,37 @@
       <div ng-controller="OrgaMainController as ctrl" class="ng-scope ng-binding">
         <!-- start: USER TABSET -->
         <uib-tabset class="tabbable">
+<<<<<<< HEAD
         <!-- start: TAB OVERVIEW -->
         <uib-tab heading="Overview" href="">
           <h1>{{ currentOrga.address }}</h1>
+                        <div class="vertical-center">
+                <h1 class="padding-right-20">{{ currentOrga.address }}</h1>
+                <div class="input-group-sm bootstrap-touchspin align-left">
+                  <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+                </div>
+              </div>
+
           <div class="row border-solid vertical-center">
 
             <div class="col-md-6 inline-block border-solid">
               <div class="user-left user-image">
                 <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
               </div>
+                                <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
+                    <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
+                      Join
+                    </button>
+                    <button type="button" class="btn btn-success btn-primary dropdown-toggle" uib-dropdown-toggle>as a
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
+                      <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
+                      <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
+                    </ul>
+                  </div>
+
               <button ng-if="!isMember" type="button" class="btn btn-wide btn-success" ng-click="ctrl.joinOrga()">Join</button>
               <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
               <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
@@ -112,6 +134,14 @@
                       </a>
                     </td>
                   </tr>
+                                          <td>
+                          <a href="#" ng-click="sortType = 'tag'; sortReverse = !sortReverse">
+                            <span ng-show="sortType == 'tag' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'tag' && sortReverse" class="fa fa-caret-up"></span>
+                            Tag
+                          </a>
+                        </td>
+
                   <hr />
                 </thead>
                 <tbody><!-- ngRepeat: user in $data -->
@@ -127,10 +157,22 @@
         </div>
       </uib-tab>
 
-      <uib-tab heading="Activity" active="editActive">
-      <div data-ng-include=""></div>
-      <div data-ng-include=""></div>
+          <uib-tab heading="Activity" active="editActive" ng-click="initSliders()">
+            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
     </uib-tab>
+          <uib-tab heading="Docs">
+           <div class="container-fluid container-fullw ng-scope">
+             <div class="panel panel-white">
+              <div class="panel-body">
+                <div  class="ng-scope ng-binding">
+                 <div data-ng-include="">
+
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+       </uib-tab>
 
     <!-- DOCUMENTS -->    
     <uib-tab heading="Docs">
@@ -190,7 +232,7 @@
     </div>
   </uib-tab>
 
-<!-- 
+<!--
          <uib-tab heading="Members">
            <div class="container-fluid container-fullw ng-scope">
              <div class="panel panel-white">
@@ -203,20 +245,29 @@
            </div>
          </div>
        </uib-tab>
-
-       <uib-tab heading="Sales">
-         <div class="container-fluid container-fullw ng-scope">
-           <div class="panel panel-white">
-            <div class="panel-body">
-              <div ng-controller="" class="ng-scope ng-binding">
-               <div data-ng-include="">
+ -->
+       <uib-tab heading="Sales" active="editActive">
+           <div class="row" style="margin-right: 10" ng-controller="OrgaMainController as ctrl">
+               <div class="col-md-3">
+                   <button class="btn btn-green">Add a new product</button>
+                   <div class="dd ng-scope">
+                       <ol class="dd-list">
+                           <li class="dd-handle" ng-repeat="product in listProducts" ng-click="ctrl.setProduct(product)">{{product.name}}</li>
+                       </ol>
+                   </div>
                </div>
-             </div>
-           </div>
-         </div>
-       </div>
-     </uib-tab>
 
+               <div class="col-md-9 panel panel-white padding-20" style="min-height: 60%">
+                   <h2 style="text-align: center">{{currentProd.name}}</h2>
+                   <!-- <h4 style="text-align: right">{{currentProd.price}}</h4> -->
+                   <p class="float-left panel panel-white" style="min-height: 200; min-width: 65%; max-width: 65%">
+                       {{currentProd.description}}
+                   </p>
+                   <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.jpg'}}" alt="..." width="30%" class="float-right">
+               </div>
+           </div>
+      </uib-tab>
+<!--
      <uib-tab heading="Settings">
        <div class="container-fluid container-fullw ng-scope">
          <div class="panel panel-white">
@@ -228,12 +279,12 @@
        </div>
      </div>
    </uib-tab>
- -->
+-->
  <!-- end: TAB ORGANISATIONS -->
-</uib-tabset>
+	</uib-tabset>
 <!-- end: USER TABSET -->
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- end: USER PROFILE -->

@@ -8,7 +8,11 @@ import json
 
 from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
+
+from core.utils import toWei
+
 from models.organization import organizations, OrgaDocument
+from models.notification import notifications, NotificationDocument as notification
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
 
@@ -18,6 +22,7 @@ def getOrgaDocument(user, _id=None, name=None):
 	"""
 
 	orga = None
+	rights = None
 	if _id:
 		try:
 			_id = objectid.ObjectId(_id)
@@ -32,9 +37,16 @@ def getOrgaDocument(user, _id=None, name=None):
 			orga = orga[0]
 		elif len(orga) < 1:
 			return {"data": "Organization does not exist", "status": 400}
-	orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
+	if user:
+		if user.get('account') in orga.get('members'):
+			rights = orga.get('members').get(user.get('account')).get('rights')
+		else:
+			rights = orga.rights.get('default')
+
+	if orga.get('profil_picture'):
+		orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
 	return {
-		"data": orga,
+		"data": { "orga": orga, "rights": rights},
 		"status": 200
 	}	
 
@@ -62,9 +74,8 @@ def createOrga(user, password, newOrga):
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-
 	return {
-			"data": newOrga,
+			"data": {"orga": instance, "tx_hash": tx_hash},
 			"status": 200
 		}
 
@@ -100,12 +111,7 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
 	rep.headers['Content-Type'] = "application/force-download"
 	return rep
 
-def joinOrga(user, password, orga_id):
-	"""
-	Ceci est un test de documentation
-	"""
-
-	# first we find the orga
+def joinOrga(user, password, orga_id, tag="member"):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
@@ -113,10 +119,10 @@ def joinOrga(user, password, orga_id):
 		return {"data": "Organization does not exists", "status": 400}
 
 	try:
-		tx_hash = orga.join(user, password=password)
+		tx_hash = orga.join(user, tag, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "newMember"})
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -146,9 +152,11 @@ def donateToOrga(user, password, orga_id, donation):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	donation_amount = donation.get('amount')
+	donation_amount = float(donation.get('amount'))
 	if user.refreshBalance() > donation_amount:
 		tx_hash = orga.donate(user, toWei(donation_amount), password=password)
+	else:
+		return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -184,11 +192,20 @@ def leaveOrga(user, password, orga_id):
 	
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	try:
-		orga_instance.leave(user, password=password)
+		tx_hash = orga_instance.leave(user, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
+
 	return {
-		"data": user.get("orga_list"),
+		"data": tx_hash,
 		"status": 200
 	}
+
+def getHisto(token, orga_id, date):
+	data = notification.getHisto(orga_id, date)
+	return {
+		"data": data,
+		"status": 200
+	}
+

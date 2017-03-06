@@ -133,9 +133,9 @@
                 "SAMPLE": "Red Cross"
             },
             "projects": {
-                "MAIN" : "Projects",
-                "MYPROJECTS" : "My Projects",
-                "SAMPLE" : "Help hobos"
+                "MAIN": "Projects",
+                "MYPROJECTS": "My Projects",
+                "SAMPLE": "Help hobos"
             },
             "utilities": {
                 "MAIN": "Utilities",
@@ -260,5 +260,40 @@
         "FIXEDSIDEBAR": "Fixed sidebar",
         "CLOSEDSIDEBAR": "Closed sidebar",
         "FIXEDFOOTER": "Fixed footer"
+    },
+    "notification": {
+	"LOADING": "LOADING...",
+        "organisation": {
+	    "title": "Historic",
+	    "messages": {
+		"memberLeave": "A member <u>has left</u> the organisation.",
+		"newMember": "A member <u>has join</u> the organisation.",
+		"newProposition": "A member has submit a new proposition",
+		"newDonation": "A member has made a new donation."
+	    },
+	    "filter": {
+		"title": "Filter",
+		"categories": {
+		    "title": "Category",
+		    "all": "All",
+		    "newMember": "New member",
+		    "memberLeave": "Old member",
+		    "newDonation": "New donation"
+		},
+		"years": {
+		    "title": "Period"
+		},
+		"member": {
+		    "title": "Member",
+		    "placeholder": "Select or search for a specific member"
+		},
+		"limit": {
+		    "title": "Limit"
+		}
+	    },
+	    "export": {
+		"title": "Data export"
+	    }
+	}
     }
 }

@@ -99,5 +99,9 @@
         load();
     });
 
+    $rootScope.$on('loggedIn', function(event, data) {
+        load();
+    });
+
     load();
 });

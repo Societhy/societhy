@@ -1,4 +1,4 @@
-from eventlet import event as g_event, greenpool, sleep as g_sleep
+from eventlet import event as g_event, greenthread, sleep as g_sleep
 
 from signal import signal, SIGINT
 from time import sleep
@@ -13,7 +13,7 @@ class BlockchainWatcher:
     lock = None
     block_filter = None
     new_block_event = None
-    thread = None
+    current_worker = None
     is_running = None
 
 
@@ -25,13 +25,11 @@ class BlockchainWatcher:
         self.lastTx = None
         self.running = False
         self.event_queue = EventQueue()
-        self.pool = greenpool.GreenPool(size=10)
-
 
     def run(self):
-        signal(SIGINT, self.stopWithSignal)
+        # signal(SIGINT, self.stopWithSignal)
         self.running = True
-        self.pool.spawn(self.watch)
+        self.current_worker = greenthread.spawn(self.watch)
 
     def watch(self):
         if self.running:
@@ -57,9 +55,7 @@ class BlockchainWatcher:
                             self.newLogEvent.send()
                     event.process()
 
-
-            g_sleep(1)
-            self.pool.spawn(self.watch)
+            self.current_worker = greenthread.spawn_after(1, self.watch)
 
     def pushEvent(self, event):
         # install a new filter in the node, push a new event in the queue with filter_id and user_id
@@ -103,15 +99,13 @@ class BlockchainWatcher:
         self.watch()
 
     def stopWithSignal(self, signal, frame):
-        print("BW EXITED AFTER SIGNAL")
+        print("BW EXITED AFTER SIGNAL (please ctrl+C an other time to terminate and flush session)")
         self.running = False
-        self.pool.waitall()
-        exit()
+        self.current_worker.cancel()
 
     def stop(self):
         print("BW EXITED")
         self.running = False
-        self.pool.waitall()
 
 
 blockchain_watcher = BlockchainWatcher()

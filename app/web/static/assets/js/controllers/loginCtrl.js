@@ -22,7 +22,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 				$sessionStorage.username = response.data.user.name;
 				$rootScope.user = ctrl.user = response.data.user;
 				ctrl.wallet.refreshAllBalances();
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 			}, function(error) {
 				$rootScope.toogleError(error.data);
 			});
@@ -56,7 +56,7 @@ ctrl.coinbase_register = function ()
  		   }).then(function(response) {
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
             }, function(error) {
 				$rootScope.toogleError(error.data);
@@ -87,7 +87,7 @@ ctrl.fb_register = function ()
 			}).then(function(response) {
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
                 }, function(error) {
 					$rootScope.toogleError(error.data);
@@ -118,7 +118,7 @@ ctrl.twitter_register = function ()
 	        }).then(function(response) {
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
 				console.log(response);
                 }, function(error) {
@@ -148,7 +148,7 @@ OAuth.popup('linkedin').done(function(result) {
 	        }).then(function(response) {
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
                 console.log(response);
                 }, function(error) {
@@ -180,7 +180,7 @@ OAuth.popup('github').done(function(result) {
                 console.log(response);
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
 
                 }, function(error) {
@@ -215,7 +215,7 @@ ctrl.google_register = function ()
         }).then(function(response) {
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
                     console.log(response);
                 }, function(error) {
@@ -246,7 +246,7 @@ ctrl.coinbase_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');					
+                    $rootScope.$emit("loggedIn", '');					
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -271,7 +271,7 @@ ctrl.fb_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');					
+                    $rootScope.$emit("loggedIn", '');					
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -297,7 +297,7 @@ ctrl.twitter_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -322,7 +322,7 @@ OAuth.popup('linkedin').done(function(result) {
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -347,7 +347,7 @@ OAuth.popup('github').done(function(result) {
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -374,7 +374,7 @@ ctrl.google_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loadChat", '');
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -410,7 +410,7 @@ ctrl.google_connect = function ()
 				console.log("RECEIVED = ", response);
 				$sessionStorage.SociethyToken = response.data.token;
 				$rootScope.user = ctrl.user = response.data.user;
-                $rootScope.$emit("loadChat", '');
+                $rootScope.$emit("loggedIn", '');
 				$state.go("app.me", ctrl, {reload: true})
 				},
 				function(error) {
