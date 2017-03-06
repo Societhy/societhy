@@ -1,4 +1,9 @@
-import time
+"""
+This module handle all the authentification process.
+The two mains functions are login and register. They contains theirs owns userful functions.
+"""
+
+ import time
 import jwt
 import scrypt
 from base64 import b64decode, b64encode
@@ -15,10 +20,6 @@ from . import secret_key, SALT_LOGIN_PASSWORD
 from rlp.utils import encode_hex
 # generates token for session
 
-"""
-This module handle all the authentification process.
-The two mains functions are login and register. They contains theirs owns userful functions.
-"""
 
 def login(credentials):
 	"""
