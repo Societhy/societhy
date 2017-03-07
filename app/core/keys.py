@@ -15,6 +15,10 @@ from core.utils import normalizeAddress, fromWei
 
 from rlp.utils import encode_hex
 
+"""
+module that controls all the keys related features
+"""
+
 keyDirectory = environ.get('KEYS_DIRECTORY')
 
 class KeyFormatError(Exception):
@@ -25,6 +29,11 @@ class KeyExistsError(Exception):
 
 def genBaseKey(password):
 
+	"""
+	password : string for user's password
+	password is hashed and a new ethereum account is created from it
+	key file is returned alongside the address of the newly created account
+	"""
 	hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 	dirContent = listdir(keyDirectory)
 	key = eth_cli.personal_newAccount(hashPassword)
@@ -32,6 +41,12 @@ def genBaseKey(password):
 	return {"address": key, "file": keyFile}
 
 def genLinkedKey(user, password):
+
+	"""
+	user : UserDoc
+	password : string (non hashed)
+	creates a new key and assigned it to a user
+	"""
 
 	def genKeyRemote(password):
 		hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
@@ -48,6 +63,11 @@ def genLinkedKey(user, password):
 	}
 
 def keyWasGenerated(user, address):
+	"""
+	user : UserDoc
+	address : string of 20bytes of the address
+	assignes an address, without the key file associated with it, to a user
+	"""
 	address = normalizeAddress(address, hexa=True)
 	user.addKey(address, local_account=True, password_type="local", balance=fromWei(eth_cli.eth_getBalance(address)))
 	return {
@@ -57,7 +77,12 @@ def keyWasGenerated(user, address):
 
 
 def importNewKey(user, sourceKey):
-
+	"""
+	user : UserDoc
+	sourceKey : json formatted array that contains the key file
+	imports a key formatted as an array into a key file and assignes it to a user
+	throws exceptions if key if has wrong format
+	"""
 	def isEthereumKey(keyFile):
 		required_entries = set(["address", "crypto", "id", "version"])
 		if not required_entries.issubset(set(keyFile.keys())):
@@ -98,6 +123,12 @@ def importNewKey(user, sourceKey):
 	}
 
 def exportKey(user, address, delete=False):
+	"""
+	user : UserDoc
+	address : 20bytes of the address
+	delete : boolean for deleting the key from the user
+	returns the given key and removes it if delete is set to True
+	"""
 	exportedKey = user.getKey(address)
 	
 	if exportedKey and delete and exportedKey.get('local_account') is True:

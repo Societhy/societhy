@@ -170,7 +170,12 @@ def joinOrga(user, password, orga_id, tag="member"):
 		"status": 200
 	}
 
-def getOrgaMemberList(token, orga_id):
+def getOrgaMemberList(user, orga_id):
+	"""
+	user : UserDoc
+	orga_id : string for the mongo id
+	"""
+
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}

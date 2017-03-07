@@ -68,11 +68,11 @@ def joinOrga(user):
 	else:
 		return make_response("Wrong request format", 400)
 
-@router.route('/getOrgaMemberList/<token>/<orga_id>', methods=['GET'])
+@router.route('/getOrgaMemberList/<orga_id>', methods=['GET'])
 @populate_user
-def getOrgaMemberList(user, token, orga_id):
+def getOrgaMemberList(user, orga_id):
 	if orga_id:
-		ret = base_orga.getOrgaMemberList(token, orga_id)
+		ret = base_orga.getOrgaMemberList(orga_id)
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
