@@ -1,5 +1,6 @@
 """
-Ceci est un test de documentation
+This module is fot hangling all the basic organisations-related requests.
+Every function is defined by her own.
 """
 
 from flask import session, request, Response
@@ -18,7 +19,12 @@ from models.clients import db_filesystem
 
 def getOrgaDocument(user, _id=None, name=None):
 	"""
-	Ceci est un test de documentation
+	user : user model document that represent the user who made the request.
+	id : ObjectId who represent the organisation.
+	name : name of the orga
+	You must provide id OR name.
+
+	The function will return a description of the requested organisation and the associated rights.
 	"""
 
 	orga = None
@@ -52,9 +58,8 @@ def getOrgaDocument(user, _id=None, name=None):
 
 def getAllOrganizations():
 	"""
-	Ceci est un test de documentation
+	Return all the registered organisations.
 	"""
-
 	orgas = list(organizations.find({}, organizations.public_info))
 	return {
 		"data": orgas,
@@ -63,7 +68,15 @@ def getAllOrganizations():
 
 def createOrga(user, password, newOrga):
 	"""
-	Ceci est un test de documentation
+	user : user model document that represent the user who made the request.
+	password : password of the user's ethereum wallet. Needed to trigger the action on the blockchain.
+	newOrga : define the organisation the user want to create.
+
+	The purpose of this function is to create an new organisation on Sociehty.
+	It first unlock the ethereum account of the user who want to create an organisation.
+	Then, it instanciate a new organisation model documentation.
+	Then, it try to deploy the contract who represent the organisation on the blockchain.
+	Status 200 is returned if all is OK, if not 400 is returned.
 	"""
 
 	if not user.unlockAccount(password=password):
@@ -81,7 +94,13 @@ def createOrga(user, password, newOrga):
 
 def addOrgaProfilePicture(user, orga_id, pic, pic_type):
 	"""
-	Ceci est un test de documentation
+	user : user model document that represent the user who made the request.
+	orga_id : id of the organisation the user want to add a profile picture.
+	pic : the photo's bytes.
+	pic_type : the MIME type of the photo. e.g. : image/jpeg.
+
+	This function insert in the database the new photo of a given organisation.
+	Thanks to the GridFS sytem, photos can be inserted in a database without performance loss.
 	"""
 
 	_id = db_filesystem.put(pic)
@@ -92,17 +111,26 @@ def addOrgaProfilePicture(user, orga_id, pic, pic_type):
 
 def addOrgaDocuments(user, orga_id, doc, name, doc_type):
 	"""
-	Ceci est un test de documentation
-	"""
+	user : user model document that represent the user who made the request.
+	orga_id : id of the organisation the user want to add documents.
+	doc : document bytes
+	name : document name
+	doc_type : MIME type of the document.
 
+	This function insert in the database documents related to a given organisation.
+	Thanks to the GridFS sytem, documents can be inserted in a database without performance loss.
+	"""
 	_id = db_filesystem.put(doc, doc_type=doc_type, name=name)
 	ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {"$addToSet": { "uploaded_documents" : {"doc_id": _id, "doc_type": doc_type, "doc_name":name} } })
-	print("LALALALA " + str(ret.modified_count))
-	return {"ok"}
+	return {"data":"OK", "status":200}
 
 def getOrgaUploadedDocument(user, doc_id, doc_name):
 	"""
-	Ceci est un test de documentation
+	user : user model document that represent the user who made the request.
+	doc_id : id of the document user want to retrieve.
+	do_name : name of the document user want to retrieve.
+
+	This fuction allow user to download a document who has been previously uploaded.
 	"""
 
 	gfile = db_filesystem.get(objectid.ObjectId(doc_id))
@@ -112,6 +140,8 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
 	return rep
 
 def joinOrga(user, password, orga_id, tag="member"):
+	"""
+	"""
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})

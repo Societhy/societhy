@@ -3,7 +3,7 @@ This module handle all the authentification process.
 The two mains functions are login and register. They contains theirs owns userful functions.
 """
 
- import time
+import time
 import jwt
 import scrypt
 from base64 import b64decode, b64encode
@@ -36,7 +36,7 @@ def login(credentials):
 
 	def authUser(credentials):
 		"""
-		This function is for find the user who attempt to log-in when he does have a regular account
+		This function is for finding the user who attempt to log-in when he does have a regular account
 		To check if a user exist, the password is salt according to the security specifications.
 		After this, a db request is performed with the find_one method of the user model.
 		Then, None or User variable is returned.
