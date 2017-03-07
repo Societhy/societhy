@@ -1,3 +1,8 @@
+"""
+This module handle all the authentification process.
+The two mains functions are login and register. They contains theirs owns userful functions.
+"""
+
 import time
 import jwt
 import scrypt
@@ -15,10 +20,6 @@ from . import secret_key, SALT_LOGIN_PASSWORD
 from rlp.utils import encode_hex
 # generates token for session
 
-"""
-This module handle all the authentification process.
-The two mains functions are login and register. They contains theirs owns userful functions.
-"""
 
 def login(credentials):
 	"""
@@ -35,7 +36,7 @@ def login(credentials):
 
 	def authUser(credentials):
 		"""
-		This function is for find the user who attempt to log-in when he does have a regular account
+		This function is for finding the user who attempt to log-in when he does have a regular account
 		To check if a user exist, the password is salt according to the security specifications.
 		After this, a db request is performed with the find_one method of the user model.
 		Then, None or User variable is returned.
