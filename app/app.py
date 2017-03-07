@@ -6,6 +6,7 @@ from signal import signal, SIGINT
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
 
+from api import MongoSessionInterface as MongoSessionInterface
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
@@ -20,6 +21,7 @@ from models import organizations, users, projects
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
+app.session_interface = MongoSessionInterface()
 
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
