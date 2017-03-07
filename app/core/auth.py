@@ -106,7 +106,7 @@ def signUp(newUser):
 		UserDocument represent the user data model, it is defined in the model folder.
 		- The user is inserted in database thanks to the save() method of the user model.
 		- The ethereum key is populated
-		- The login object containing the user data is returned the the client with a 200 status code.
+		- The login object containing the user data is returned to the client with a 200 status code.
 	If this is a social connections:
 		- There is a verifcation the check if the request complies to the API specifications, and if the users does not exist.
 		If this is the case, a 403 status code

@@ -182,7 +182,18 @@ def getOrgaMemberList(token, orga_id):
 
 def donateToOrga(user, password, orga_id, donation):
 	"""
-	Ceci est un test de documentation
+	user : user who want to give funds to an organisation.
+	password : used to unlock the wallet of the user.
+	orga_id : orga who will receive the funds.
+	donation : amount of the donation.
+
+	Function used to transfert funds from an user to an organisation.
+
+	- The user account is unlocked thanks to the password.
+	- The organisation is retrieved from the database.
+	- A check is performed on the user wallet to see if he do have enough funds.
+	- The transfert is lauched on the blockchain.
+	- error -> 400 ; OK -> 200
 	"""
 
 	if not user.unlockAccount(password=password):
