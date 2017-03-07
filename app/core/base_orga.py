@@ -141,6 +141,18 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
 
 def joinOrga(user, password, orga_id, tag="member"):
 	"""
+	user : user model document that represent the user who made the request
+	password : password used to unlock the ethereum account of the user.
+	orga_id : id of the orga the user want to join-in.
+	rtag : role attribued to the user. Default is regular member.
+
+	This function is called to add an user to an organisation.
+
+	First, the eth. account is unlocked.
+	The organisation in retrieved from database.
+	The join() method of the orga model document is called to insert this new user in database.
+	A notification is pushed.
+	On an error, 400 is returned, on an OK 200 is returned.
 	"""
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
@@ -159,10 +171,6 @@ def joinOrga(user, password, orga_id, tag="member"):
 	}
 
 def getOrgaMemberList(token, orga_id):
-	"""
-	Ceci est un test de documentation
-	"""
-
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
