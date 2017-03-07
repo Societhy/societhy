@@ -18,11 +18,11 @@ class BlockchainWatcher:
 
 
     """
-        eventQueue : shared queue where the current events are stored
-        newBlockFilter : ethereum event that retrieves new block as they are mined
-        newBlockEvent : eventlet event triggered when a new block is mined
-        currentWorker : greenthread associated with the routine
-        running : boolean controlling the status of the watcher
+    eventQueue : shared queue where the current events are stored
+    newBlockFilter : ethereum event that retrieves new block as they are mined
+    newBlockEvent : eventlet event triggered when a new block is mined
+    currentWorker : greenthread associated with the routine
+    running : boolean controlling the status of the watcher
 
     """
     eventQueue = None

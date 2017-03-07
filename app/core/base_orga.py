@@ -158,9 +158,10 @@ def joinOrga(user, password, orga_id, tag="member"):
 		"status": 200
 	}
 
-def getOrgaMemberList(token, orga_id):
+def getOrgaMemberList(user, orga_id):
 	"""
-	Ceci est un test de documentation
+	user : UserDoc
+	orga_id : string for the mongo id
 	"""
 
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})

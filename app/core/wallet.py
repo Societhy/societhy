@@ -42,6 +42,13 @@ def refreshBalance(user, account=None):
 		}
 
 def transfer(from_, to_, amount, local=False, password=None):
+	"""
+	from_ : address of the sender
+	to_ : address of the recipient
+	amount : value of the transfer, in wei (1O*-18)
+	local : boolean indicating the context
+	password : password for unlocking the account
+	"""
 	if not local:
 		ret = from_.unlockAccount(password=password)
 		ret = eth_cli.transfer(from_.get('account'), to_, amount)	
@@ -52,6 +59,12 @@ def transfer(from_, to_, amount, local=False, password=None):
 
 
 def getTxHistory(user, account):
+	"""
+	user : UserDoc
+	account : address 
+	Retrieves the transaction history for a given address using etherchain api
+	Returns the json response.
+	"""
 	# r = requests.get('https://etherchain.org/api/account/%s/tx/0' % account)
 	print("REQUESTING : ", "https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0")
 	r = requests.get('https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0')
