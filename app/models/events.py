@@ -6,11 +6,11 @@ from ethereum.abi import decode_abi
 from rlp.utils import decode_hex
 
 from .clients import eth_cli, socketio
-
-# from core.chat import socketio
 from core.utils import to32bytes
 
-# BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
+"""
+this module defines classes that represent event fired by the smart contracts. They are registred as requests are made by users that requires a transaction on the blockchain.
+"""
 
 def makeTopics(signature, *args):
 	
@@ -33,6 +33,11 @@ def computeEventTypes(event_name, abi):
 
 
 class Event:
+
+	"""
+	 BASE CLASS FOR AN EVENT, EVERY EVENT CLASS MUST OVERRIDE IT
+	 Interface that defines 2 main methods, triggering the callback and sending the asynchronous responses through socketio to notified users.
+	"""
 
 	filter_params = None
 	filter_id = None
@@ -58,6 +63,9 @@ class Event:
 			self.callbacks = [callbacks]
 
 	def notifyUsers(self, data=None):
+		"""
+		For each user registered on the event, send a socketio message for notifying the transaction and its results
+		"""
 		if self.users:
 			if data is not None:
 				for user in list(self.users):
@@ -71,6 +79,9 @@ class Event:
 		return False
 
 	def process(self):
+		"""
+		Retrieves data from the transaction receipt and triggers callback(s)
+		"""
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		print("PROCESSING EVENT", self.tx_hash, "--------------", self.tx_receipt)
 		for cb in self.callbacks:
@@ -80,6 +91,10 @@ class Event:
 
 # EVENT CLASS FOR CONTRACT CREATION
 class ContractCreationEvent(Event):
+
+	"""
+	Event specific to contract deployment on the blockchain
+	"""
 
 	name = "contractCreation"
 
@@ -92,6 +107,9 @@ class ContractCreationEvent(Event):
 
 class LogEvent(Event):
 
+	"""
+	Event specific to log events (see further documentation) contained in the state of the blockchain.
+	"""
 	def __init__(self, name, tx_hash, contract_address, topics=None, users=[], callbacks=None, event_abi=None):
 		super().__init__(users=users, tx_hash=tx_hash, callbacks=callbacks)
 		self.logs = None
@@ -101,6 +119,10 @@ class LogEvent(Event):
 		self.event_abi = event_abi
 
 	def process(self):
+		"""
+		When processing a log event, the data contained in the payload must be decoded and formatted
+		The data is then transmitted in the callbacks.
+		"""
 		print("PROCESSING EVENT", self.name)
 		tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		self.logs = tx_receipt.get('logs')
@@ -119,11 +141,15 @@ class LogEvent(Event):
 # SAFE QUEUE FOR EVENTS
 class EventQueue(deque):
 
-	lock = None
-
+	"""
+	Overrides a deque and stores all the event registered by the models.
+	"""
 	def yieldEvents(self, transactions):
+		"""
+		transactions : list of dict of each new transaction
+		Compares the transaction currently being stored to those contained in the new block
+		"""
 		ret = list()
-		# YIELD TRANSACTION EVENTS
 		for tx in transactions:
 			for event in list(self):
 				if event.tx_hash == tx.get('hash'):
