@@ -9,6 +9,10 @@ from models.clients import eth_cli
 
 
 def refreshAllBalances(user):
+	"""
+	user : UserDoc
+	reloads all the balances of a user retrieving the current data of the blockchain
+	"""
 	accounts = user.get('eth').get('keys', {})
 	ret = dict()
 	for account in accounts.keys():
@@ -19,6 +23,12 @@ def refreshAllBalances(user):
 	}
 
 def refreshBalance(user, account=None):
+	"""
+	user : UserDoc
+	account : 20bytes of the address we want to retrieve the balance from
+	returns the current balance of a given account or the main one
+	returns an error if account is specified and not owned by the user
+	"""
 	if account is None or account in user.get('eth').get('keys').keys():
 		balance = user.refreshBalance(address=account)
 		return {
