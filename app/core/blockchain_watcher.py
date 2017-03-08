@@ -1,4 +1,3 @@
-
 """
 This class is an abstraction of a greenthread co-routine. It also contains a shared container where events can be stored and being "watched on".
 Every second, the function watch() is ran, new events are retrieved from the blockchain and compared to the registered events. A match triggers the callback stored into the event object (see Event class)
