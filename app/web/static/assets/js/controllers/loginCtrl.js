@@ -10,6 +10,9 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
     	   ctrl.wallet.refreshAllBalances();
        }
 
+    /**
+     * Ask for login to the server.
+     */
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 			$http.post('/login', {
@@ -43,8 +46,8 @@ ctrl.coinbase_register = function ()
     OAuth.popup('coinbase').done(function(result) {
         console.log(result)
         result.me().done(function (data) {
-            $http.post('/newUser', {"social" : 
-                { "coinbase" : 
+            $http.post('/newUser', {"social" :
+                { "coinbase" :
 	                {
 		                "firstname" : data.firstname,
 		                "lastname" : data.lastname,
@@ -73,7 +76,7 @@ ctrl.fb_register = function ()
         facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
             console.log(userData);
             $http.post('/newUser',
-                {"social" : 
+                {"social" :
 	                {"facebook" :
     		            {
             		        "firstname" : userData.first_name,
@@ -104,7 +107,7 @@ ctrl.twitter_register = function ()
     OAuth.popup('twitter').done(function(result) {
         result.me().done(function(userData) {
             $http.post('/newUser',
-                {"social" : 
+                {"social" :
                 	{"twitter" :
 	                {
 	                    "firstname" : userData.name,
@@ -135,7 +138,7 @@ OAuth.popup('linkedin').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
             $http.post('/newUser',
-                {"social" : 
+                {"social" :
                 {"linkedin" :
                 {
                     "firstname" : userData.firstname,
@@ -165,7 +168,7 @@ OAuth.popup('github').done(function(result) {
     console.log(result)
     result.me().done(function(userData) {
             $http.post('/newUser',
-                {"social" : 
+                {"social" :
                 {"github" :
                 {
                     "firstname" : userData.name,
@@ -246,7 +249,7 @@ ctrl.coinbase_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loggedIn", '');					
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -271,7 +274,7 @@ ctrl.fb_connect = function ()
 					$sessionStorage.username = response.data.user.name;
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
-                    $rootScope.$emit("loggedIn", '');					
+                    $rootScope.$emit("loggedIn", '');
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -289,7 +292,7 @@ ctrl.twitter_connect = function ()
 				$http.post('/login', {
 					"provider": "twitter",
 					"socialId": userData.id,
-					"socketid": $rootScope.sessionId					
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -314,7 +317,7 @@ OAuth.popup('linkedin').done(function(result) {
 				$http.post('/login', {
 					"provider": "linkedin",
 					"socialId": userData.id,
-					"socketid": $rootScope.sessionId					
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
@@ -366,7 +369,7 @@ ctrl.google_connect = function ()
 				$http.post('/login', {
 					"provider": "google",
 					"socialId": userData.id,
-					"socketid": $rootScope.sessionId					
+					"socketid": $rootScope.sessionId
 				}).then(function(response) {
 					console.log("RECEIVED = ", response);
 					sessionStorage.user = JSON.stringify(response.data.user);
