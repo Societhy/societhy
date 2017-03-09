@@ -108,7 +108,10 @@ class UserDocument(Document):
 		"""
 		password : password to unlock the account
 		There are different types of account, based on how they have been created. An account can either be :
-			remote_hashed : it means 
+			remote_hashed : means the user created key at account creation and his wallet password is the same as his Societhy account
+			local_hashed : means the user created its wallet independently and created its own password.
+			local : means the user imported its wallet and that the password is not a hash
+		Once the password has been correctly formatted, unlock the account and return a boolean for the success of the action
 		"""
 		if not self.get('account'):
 			return False
@@ -125,9 +128,16 @@ class UserDocument(Document):
 			return False
 
 	def hashPassword(self, password):
+		"""
+		password : string to hash
+		Returns a hash of the string passed as parameter, using the scrypt algorithm and a fixed salt
+		"""
 		return encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
 
 	def populateKey(self):
+		"""
+		Generates and add a key to the user based on the existing password (Societhy account)
+		"""
 		from core.keys import genBaseKey
 		newKey = genBaseKey(self["password"])
 		if newKey:
@@ -138,6 +148,9 @@ class UserDocument(Document):
 		self.save_partial()
 
 	def generatePersonalDataFromSocial(self):
+		"""
+		Uses social media account (if exists) to populate personal informations in the document
+		"""
 		fields = {"firstname", "lastname", "pictureURL", "email", "company"}
 		if 'social' in self:
 			for socialProvider, socialData in self['social'].items():
@@ -147,6 +160,10 @@ class UserDocument(Document):
 		self.save_partial()
 
 	def setDefaultKey(self, account):
+		"""
+		account : address to be used as main account
+		Set the key with public key "account" as the main one (the one used in all transactions)
+		"""
 		if account in self.get('eth').get('keys'):
 			defaultKey = self["eth"]["keys"][account]
 			self["account"] = defaultKey.get('address')
@@ -155,6 +172,14 @@ class UserDocument(Document):
 			self.save_partial()
 
 	def addKey(self, account, local_account, password_type, balance=0, keyfile=None):
+		"""
+		account : address of the account
+		local_account : boolean. True if the key file is not stored on the server
+		password_type : string. See unlockAccount method for more info
+		balance : balance for the given account
+		keyfile : name of the file if local_account is False. Defaults to None.
+		Add a new key to the user's keyring with parameters. If the key 'account' is the first one to be added, it is set as the main (=default) one.
+		"""
 		if self.get('account') is None:
 			self["account"] = account
 			self["local_account"] = local_account
@@ -173,6 +198,10 @@ class UserDocument(Document):
 		self.save_partial()
 
 	def removeKey(self, key, local_account):
+		"""
+		key : address of the account
+		local_account : True if the keyfile is not stored on the webserver
+		"""
 		for publicKey in self["eth"]["keys"].keys():
 			if publicKey == key:
 				del self["eth"]["keys"][publicKey]
@@ -184,6 +213,10 @@ class UserDocument(Document):
 				return
 
 	def getKey(self, publicKey=None):
+		"""
+		publicKey : address
+		Returns the main account's address. If publicKey is specified, returns the key data corresponding to the address if it is contained in the user's keyring, otherwise None
+		"""
 		if publicKey is None:
 			return self.get('account')
 		else:
@@ -193,6 +226,11 @@ class UserDocument(Document):
 			return None
 
 	def refreshBalance(self, address=None):
+		"""
+		address : address of the account for which the balance is retrieved
+		Refreshes the balance of the user, the main one by default or 'address' if specified.
+		The balance is returned.
+		"""
 		address = address or self.get('account')
 		if address:
 			balance = fromWei(eth_cli.eth_getBalance(address))
@@ -203,15 +241,25 @@ class UserDocument(Document):
 		return None
 
 	def public(self):
+		"""
+		Returns the public information on the user
+		"""
 		return {
 			key: self.get(key) for key in self if key in users.public_info
 		}
 
 	def delete(self):
+		"""
+		Remove this user from the db.
+		"""
 		return self.mongokat_collection.remove({"_id": ObjectId(self.get('_id'))})
 
 
 class UserCollection(Collection):
+	"""
+	Abstraction of the 'users' mongo collection
+	Overrides a mongokat.Collection
+	"""
 	user_info = [
 		"_id",
 		"name",
@@ -258,6 +306,11 @@ class UserCollection(Collection):
 	document_class = UserDocument
 
 	def lookup(self, query):
+		"""
+		query : either a string or a regex
+		Look for a name matching 'query'
+		Returns the list of the results. Each result is tagged with a flag {"category": "user"}
+		"""
 		results = list(super().find({"name": query}, ["_id", "name", "account"]))
 		for doc in results:
 			doc.update({"category": "user"})
