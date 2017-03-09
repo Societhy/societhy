@@ -14,12 +14,21 @@ from core.utils import fromWei, toWei, to20bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
+"""
+This module implements the organization class alongside with all its methods
+"""
+
 class OrganisationInitializationError(Exception):
 	pass
 
 governances = ["democracy", "entreprise", "association", "private"]
 
 class OrgaDocument(Document):
+
+	"""
+	Overrides a mongokat.Document and add custom methods
+	This class is used everytime a controller needs to manipulate an organisation
+	"""
 
 	contract = None
 	rules = None
@@ -90,6 +99,18 @@ class OrgaDocument(Document):
 				gen_skel=False,
 				contract=None,
 				owner=None):
+		"""
+		doc : dict containing the data to be initialized from
+		mongokat_collection : see mongokat.Document (mongo collection associated with the doc)
+		fetched_fileds : see mongokat.Document
+		gen_skel : boolean. If set to true, the document is initialized with the fields described in OrgaCollection.structure
+		contract : string containing the name of the contract (stored in app/contracts/, .sol must be absent)
+		owner : either an address or a UserDoc, set at creation only
+		Initialization function called in different context :
+		At the creation of an organization, the argument 'contract' is specified, its code is compiled and stored into a new ContractDocument
+		At the initialization of an existing orga, if the contract id is specified in the document then build a Contract object to interact with it
+		An owner can be specified, it will then be used by default for deploying the contract
+		"""
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
 		if contract:
 			self.contract = Contract(contract, owner.get('account'))
@@ -104,6 +125,10 @@ class OrgaDocument(Document):
 	####
 
 	def _loadContract(self):
+		"""
+		Build a ContractDocument object to use its methods and interact with the smart contract via its interface
+		Update the balance of the contract
+		"""
 		if self.get('contract_id'):
 			self.contract = contracts.find_one({"_id": self['contract_id']})
 			balance = self.getTotalFunds()
@@ -112,6 +137,12 @@ class OrgaDocument(Document):
 				self.save_partial()
 
 	def deployContract(self, from_=None, password=None, args=[]):
+		"""
+		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+		password : password to unlock the account
+		args : list of arguments to be passed upon the contract creation
+		Deploy the contract on the blockchain
+		"""
 		if from_ is None:
 			from_ = self["owner"]
 
@@ -127,7 +158,12 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt, users=[]):
+	def register(self, tx_receipt):
+		"""
+		tx_receipt : dict containing the receipt of the contract creation transaction
+		Callback called after a ContractCreationEvent happened : the address, balance, rules and id of the newly created contract are saved in mongo
+		The organisation document is returned
+		"""
 		self.contract["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.contract["is_deployed"] = True
@@ -142,6 +178,11 @@ class OrgaDocument(Document):
 		return resp
 
 	def memberJoined(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
+		The organisation is returned alongside the rights of the new member
+		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
@@ -155,6 +196,11 @@ class OrgaDocument(Document):
 		return False
 
 	def memberLeft(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member is part of the members, remove it
+		The organisation is returned alongside the rights of the user, which is no longer a member
+		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			member = self.getMember(address)
@@ -165,6 +211,10 @@ class OrgaDocument(Document):
 		return False
 
 	def newDonation(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, add the amount of the donation to the member's data
+		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
 			self["balance"] = self.getTotalFunds()
@@ -178,6 +228,10 @@ class OrgaDocument(Document):
 		return False
 
 	def projectCreated(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
@@ -200,6 +254,12 @@ class OrgaDocument(Document):
 		pass
 
 	def can(self, user, action):
+		"""
+		user : userDoc
+		action : string describing the action (see self.rights. eg : "create_project")
+		Chef if 'user' has permission to execute action 'action'.
+		Returns a boolean
+		"""
 		# get action signature
 		# get member key
 		member = self.getMember(user)
@@ -214,22 +274,30 @@ class OrgaDocument(Document):
 	####
 
 	def public(self, additional_infos=None, public_members=False):
+		"""
+		additional_infos : list of all the fields we want to include in the return value
+		public_members : boolean. If set to True, information about the members is returned
+		Returns a public version of the document stored in db that can be read by all users
+		"""
+
 		to_be_public = organizations.public_info
 		if additional_infos:
 			to_be_public += additional_infos
+		ret = {key: self.get(key) for key in self if key in to_be_public}
+
 		if public_members:
-			ret = {key: self.get(key) for key in self if key in to_be_public}
 			ret.update({"members":{account: {"name": member["name"],
 											"_id": member["_id"],
 											"account": account,
 											"tag": member["tag"]} for account, member in self.get('members').items()}})
-			return ret
-		return {
-			key: self.get(key) for key in self if key in to_be_public
-		}
+		return ret
 
 
 	def getMember(self, user):
+		"""
+		user : UserDoc
+		Returns the member corresponding to the user passed as param, None if there is no match
+		"""
 		if isinstance(user, User):
 			account = user.get('account')
 			if account in self["members"]:
@@ -243,14 +311,28 @@ class OrgaDocument(Document):
 		return None
 
 	def getTotalFunds(self):
+		"""
+		Returns the total balance of the contract, in ether
+		"""
 		return fromWei(self.contract.getBalance())
 
 	def getMemberList(self):
+		"""
+		Returns a list of all members. Only the public data is returned.
+		"""
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.contract.call("getMemberList")]
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.public_info)
 		return list(memberList)
 
 	def join(self, user, tag="member", password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		tag : string used to determine the rights of the new member
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
 		tx_hash = self.contract.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newMember").get('signature'), user.get('account'))
@@ -260,8 +342,15 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-	def leave(self, user, password=None):
-		tx_hash = self.contract.call('leave', local=False, from_=user.get('account'), password=password)
+	def leave(self, user, password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
+		tx_hash = self.contract.call('leave', local=local, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("memberLeft").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("memberLeft", tx_hash, self.contract["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user))
@@ -270,10 +359,17 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-	def donate(self, user, amount, password=None):
+	def donate(self, user, amount, password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
 		if toWei(user.refreshBalance()) < amount:
 			return False
-		tx_hash = self.contract.call('donate', local=False, from_=user.get('account'), value=amount, password=password)
+		tx_hash = self.contract.call('donate', local=local, from_=user.get('account'), value=amount, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.contract.getAbi("newDonation").get('signature'), user.get('account'))
 			bw.pushEvent(LogEvent("newDonation", tx_hash, self.contract["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
@@ -286,6 +382,13 @@ class OrgaDocument(Document):
 		return None
 
 	def createProject(self, user, project, password=None):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
 		tx_hash = self.contract.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
@@ -309,6 +412,11 @@ class OrgaDocument(Document):
 
 
 class OrgaCollection(Collection):
+	"""
+	Abstraction of the 'organizations' mongo collection
+	Overrides a mongokat.Collection
+	"""
+
 	document_class = OrgaDocument
 
 	orga_info = [
@@ -348,6 +456,11 @@ class OrgaCollection(Collection):
 	}
 
 	def lookup(self, query):
+		"""
+		query : either a string or a regex
+		Look for a name matching 'query'
+		Returns the list of the results. Each result is tagged with a flag {"category": "organization"}
+		"""
 		results = list(super().find({"name": query}, ["_id", "name", "address"]))
 		for doc in results:
 			doc.update({"category": "organization"})
@@ -355,6 +468,11 @@ class OrgaCollection(Collection):
 
 	@find_method
 	def find_one(self, *args, **kwargs):
+		"""
+		args : see mongokat.Collection.find_one
+		kwargs : see mongokat.Collection.find_one
+		Overload the parent find_one function to initialize the Contract object which has its _id contained in the orga document
+		"""
 		doc = super().find_one(*args, **kwargs)
 		doc.__init__()
 		return doc
