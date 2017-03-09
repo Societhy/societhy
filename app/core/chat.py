@@ -1,3 +1,11 @@
+"""
+This module handle the request for the chat features of Socethy website.
+Thoses requests are special one, they are made through a SocketIO socket instead of a classic HTTP request.
+SocketIO enables bidirectional communication, so the server can push data to a client without any previous request from the client.
+There is in this module two global arrays, one NC_clients who contains the logged user without an open SocketIO socket, the other one Clients for the connected ones.
+"""
+
+
 from pymongo import ASCENDING
 from datetime import datetime
 from bson.json_util import dumps
@@ -15,12 +23,22 @@ NC_Clients = {} #Not connected clients
 Clients = {} #Clients connected ready to chat
 
 class Client:
+    """
+    This class is used to modelise the client (the user).
+    It will contain the sessionId used to push request to the client from the server whithout any previous request.
+    """
     def __init__(self, sid):
+        """
+        initialise the client's data.
+        """
         self.sessionId = sid
         self.initialized = False
         self.id = ''
 
     def init(self, id):
+        """
+        initialise the client's data.
+        """
         if self.initialized == False:
             self.id = id
             self.initialized = True
@@ -28,10 +46,17 @@ class Client:
 
 
     def __repr__(self):
+        """
+        Used to print the client socket data.
+        """
         return 'Id: ' + str(self.id) + ' sessionId: '+ str(self.sessionId)
 
 @socketio.on('connect', namespace='/')
 def connect():
+    """
+    Function used to establish a socketIO socket between the client and the server.
+
+    If the client is ???    """
     if not NC_Clients.get(request.sid) or NC_Clients.get(request.sid).sessionId != request.sid:
         NC_Clients[request.sid] = Client(request.sid)
         emit('sessionId', request.sid, namespace='/', room=request.sid)
