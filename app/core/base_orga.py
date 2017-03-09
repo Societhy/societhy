@@ -218,7 +218,18 @@ def donateToOrga(user, password, orga_id, donation):
 
 def createProjectFromOrga(user, password, orga_id, newProject):
 	"""
-	Ceci est un test de documentation
+	user : user who want to give funds to an organisation.
+	password : used to unlock the wallet of the user.
+	orga_id : orga who will receive the funds.
+	newProject : object that defines the projet user want to create.
+
+	This function is used when an user want to create a project.
+
+
+	- The wallet is unlocked.
+	- The organisation is retrieved in database.
+	- The project creations is commited on the blockchain.
+	- error -> 400 ; OK -> 200
 	"""
 
 	if not user.unlockAccount(password=password):
@@ -238,7 +249,15 @@ def createProjectFromOrga(user, password, orga_id, newProject):
 
 def leaveOrga(user, password, orga_id):
 	"""
-	Ceci est un test de documentation
+	user : user who want to give funds to an organisation.
+	password : used to unlock the wallet of the user.
+	orga_id : id of the orga the user want to leave.
+
+	This function is called when an user want to leave an organisation.
+
+	- The wallet is unlocked.
+	- The leave order is commited on the blockchain.
+	- error -> 400 ; OK -> 200
 	"""
 
 	if not user.unlockAccount(password=password):
