@@ -98,6 +98,10 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
         })
     };
 
+    /**
+     * Join a new organization by it's tag.
+     * @param {string} tag - Tag of the organization.
+     */
     ctrl.joinOrga = function(tag) {
 		if ($scope.doVerifications()) {
 			$scope.completeBlockchainAction(
@@ -119,6 +123,11 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}
 	}
 
+	/**
+	 * Leave the organization
+	 *
+	 * @return {type}  description
+	 */
 	ctrl.leaveOrga = function() {
 
 		if ($scope.doVerifications()) {
@@ -140,6 +149,9 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		}
 	}
 
+	/**
+	 * Create a project from the organization.
+	 */
 	ctrl.createProject = function() {
 		if ($scope.doVerifications()) {
 			$scope.completeBlockchainAction(
@@ -163,6 +175,9 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 		});
 	}
 
+	/**
+	 * Make a donation to the organization.
+	 */
 	ctrl.makeDonation = function() {
 		donationAmount = $("#donationAmount").val();
 		if (donationAmount > 0 && $scope.doVerifications()) {

@@ -6,13 +6,16 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
     console.log("Initializing OAuth ..")
     OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
+    /**
+     * Connection with coinbase logs.
+     */
     ctrl.coinbase_connect = function ()
     {
         OAuth.popup('coinbase').done(function(result) {
             console.log(result)
             result.me().done(function (data) {
-                $http.post('/updateUser', {"social" : 
-                    { "coinbase" : 
+                $http.post('/updateUser', {"social" :
+                    { "coinbase" :
                     {
                         "firstname" : data.firstname,
                         "lastname" : data.lastname,
@@ -27,6 +30,9 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         })
     }
 
+    /**
+     * Connection with facebook logs.
+     */
     ctrl.fb_connect = function ()
     {
         res = OAuth.popup('facebook').done(function(facebook) {
@@ -34,7 +40,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
             facebook.get("/me?fields=id,first_name,last_name,picture,email").done(function(userData) {
                 console.log(userData);
                 $http.post('/updateUser',
-                    {"social" : 
+                    {"social" :
                     {"facebook" :
                     {
                         "firstname" : userData.first_name,
@@ -54,12 +60,15 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         });
     }
 
+    /**
+     * Connection with twitter logs.
+     */
     ctrl.twitter_connect = function ()
     {
         OAuth.popup('twitter').done(function(result) {
             result.me().done(function(userData) {
                 $http.post('/updateUser',
-                    {"social" : 
+                    {"social" :
                     {"twitter" :
                     {
                         "firstname" : userData.name,
@@ -77,13 +86,16 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         })
     }
 
+    /**
+     * Connection with linkedin logs.
+     */
     ctrl.linkedin_connect = function()
     {
         OAuth.popup('linkedin').done(function(result) {
             console.log(result)
             result.me().done(function(userData) {
                 $http.post('/updateUser',
-                    {"social" : 
+                    {"social" :
                     {"linkedin" :
                     {
                         "firstname" : userData.firstname,
@@ -101,13 +113,16 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         })
     }
 
+    /**
+     * Connection with github logs.
+     */
     ctrl.github_connect = function ()
     {
         OAuth.popup('github').done(function(result) {
             console.log(result)
             result.me().done(function(userData) {
                 $http.post('/updateUser',
-                    {"social" : 
+                    {"social" :
                     {"github" :
                     {
                         "firstname" : userData.name,
@@ -126,6 +141,9 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         })
     }
 
+    /**
+     * Connection with google logs.
+     */
     ctrl.google_connect = function ()
     {
         console.log("hello");
@@ -134,7 +152,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
             result.me().done(function(userData) {
                 console.log(userData);
                 $http.post('/updateUser',
-                    {"social" : 
+                    {"social" :
                     {"google" :
                     {
                         "firstname" : userData.firstname,
@@ -157,6 +175,9 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         });
     }
 
+    /**
+     * Delete the user account.
+     */
     ctrl.deleteAccount = function() {
         $http.get('/deleteUser').then(function(response) {
             $rootScope.toogleSuccess(response.data);
@@ -169,6 +190,11 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
          });
       };
 
+    /**
+     * Update user's informations.
+     * @param {string} name -
+     * @param {type} oldVal -
+     */
     ctrl.updateUser = function(name, oldVal) {
     	if ($rootScope.user != null)
     	{
@@ -190,7 +216,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
     }
 
     /*
-    ** Watch user data for any modifications
+    * Watch user's data for any modifications.
     */
     var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
     $rootScope.$watch("user", function(newVal, oldVal, obj) {
@@ -205,7 +231,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
     }, true);
 
     /*
-    ** Animate user info's inputs
+    * Animate user info's inputs.
     */
     function animation() {
         $("a.userDataEditable").hover(function() {

@@ -6,6 +6,9 @@
  app.controller('ChatCtrl', function ($scope, $rootScope, $http, socketIO) {
     $scope.user = $rootScope.user;
 
+    /**
+     * Load all necessary ressources and initialize the connection with the chat server.
+     */
     var load = function () {
         $scope.user = $rootScope.user;
         $scope.noAvatarImg = "static/assets/images/default-user.png";
@@ -21,6 +24,12 @@
         }
     }
 
+    /**
+     * Set the conversation window to the user selected.
+     * @param {string} id - The id of the user selected.
+     * @param {string} firstname - The firstname of the user.
+     * @param {string} lastname - The lastname of the user.
+     */
     $scope.setChat = function (id, firstname, lastname) {
         $scope.otherIdUser = id;
         $scope.otherName = firstname + " " + lastname;
@@ -31,10 +40,19 @@
             'otherId': $scope.otherIdUser});
     }
 
+    /**
+     * Add a user to the contact list.
+     * @param {json} user
+     * @deprecated not used anymore.
+     */
     $scope.addUser = function (user) {
         $scope.usersList.push(user);
     }
 
+    /**
+     * Add a new message to the list chat.
+     * @param {message} data - The message data.
+     */
     var receiveMessage = function (data) {
         var newMessage = {
             "date": data.date,
@@ -47,10 +65,18 @@
         $scope.chatMessage = '';
     };
 
+    /**
+     * SocketIo event triggered when a new message income.
+     * @param {message} data - The message data.
+     */
     socketIO.on('send_message', function (data) {
         receiveMessage(data);
     })
 
+    /**
+     * SocketIo event triggered when the server push the last messages of the conversation.
+     * @param {list} data - The list of the last messages.
+     */
     socketIO.on('last_messages', function (data) {
         data = JSON.parse(data);
         for (var message in data) {
@@ -58,6 +84,10 @@
         }
     })
 
+    /**
+     * SocketIo event triggered when the server send the session ID. Used to synchronize user with is session ID.
+     * @param {number} data - The session ID.
+     */
     socketIO.on('sessionId', function (data) {
         $rootScope.sessionId = data;
         if ($rootScope.user && data != $rootScope.user.socketid ) {
@@ -72,13 +102,20 @@
     //     console.log("yesy", data);
     // })
 
+    /**
+     * SocketIo event triggered when a user not in the contact list send a message.
+     * Change the contact list with the new one.
+     * @param {list} data - The new contact list.
+     */
     socketIO.on('new_contact_list', function (data) {
         $rootScope.user.contact_list = data;
         $scope.user = $rootScope.user;
         $scope.usersList = $scope.user.contact_list;
     })
 
-
+    /**
+     * Send the current typed message and send it via SocketIo to the server.
+     */
     $scope.sendMessage = function () {
         var newMessage = {
             "date": new Date(),
@@ -95,10 +132,16 @@
         $scope.chatMessage = '';
     };
 
+    /**
+     * Angular event triggered when chat must be reloaded.
+     */
     $rootScope.$on('loadChat', function(event, data) {
         load();
     });
 
+    /**
+     * Angular event triggered when chat must be reloaded after login.
+     */
     $rootScope.$on('loggedIn', function(event, data) {
         load();
     });
