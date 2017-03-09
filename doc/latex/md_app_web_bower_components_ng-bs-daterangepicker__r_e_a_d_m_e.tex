@@ -1,0 +1,123 @@
+Angular directive for Dan Grossman\textquotesingle{}s \href{https://github.com/dangrossman/bootstrap-daterangepicker}{\tt bootstrap-\/daterangepicker}.
+
+Demo\+: \href{http://luisfarzati.github.io/ng-bs-daterangepicker}{\tt http\+://luisfarzati.\+github.\+io/ng-\/bs-\/daterangepicker}
+
+\subsection*{Installation }
+
+Using bower\+: 
+\begin{DoxyCode}
+bower install ng-bs-daterangepicker
+\end{DoxyCode}
+
+
+Using npm\+: 
+\begin{DoxyCode}
+npm install ng-bs-daterangepicker
+\end{DoxyCode}
+
+
+\subsection*{How to use it }
+
+You should already have a bunch of scripts and C\+SS required for bootstrap-\/daterangepicker\+:
+
+C\+SS\+: 
+\begin{DoxyCode}
+<link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="daterangepicker-bs3.css">
+\end{DoxyCode}
+
+
+Java\+Script\+: 
+\begin{DoxyCode}
+<script src="jquery.min.js"></script>
+<script src="bootstrap.min.js"></script>
+<script src="moment.min.js"></script>
+<script src="daterangepicker.js"></script>
+<script src="angular.min.js"></script>
+\end{DoxyCode}
+
+
+to the list above, you should add\+:
+
+
+\begin{DoxyCode}
+<script src="ng-bs-daterangepicker.js"></script>
+\end{DoxyCode}
+
+
+Then, inject {\ttfamily ng\+Bootstrap} in your application module\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['ngBootstrap']);
+\end{DoxyCode}
+
+
+and then just add an {\ttfamily input} of type {\ttfamily daterange}\+:
+
+
+\begin{DoxyCode}
+<input type="daterange" ng-model="myDateRange" />
+\end{DoxyCode}
+
+
+The result object {\ttfamily \$scope.\+my\+Date\+Range} has a {\ttfamily start\+Date} and {\ttfamily end\+Date} properties, which are instances of {\ttfamily moment()}.
+
+\subsubsection*{Implemented features so far\+:}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily start\+Date}, {\ttfamily end\+Date}\+: are taken from the {\ttfamily ng-\/model} object;
+\item {\ttfamily min\+Date}, {\ttfamily max\+Date}\+: mapped from {\ttfamily min-\/date} and {\ttfamily max-\/date} attributes;
+\item {\ttfamily date\+Limit}\+: mapped from {\ttfamily limit} attribute;
+\item {\ttfamily format}\+: mapped from {\ttfamily format} attribute;
+\item {\ttfamily separator}\+: mapped from {\ttfamily separator} attribute.
+\item {\ttfamily enable\+Time\+Picker}\+: mapped from {\ttfamily time\+Picker} attribute.
+\item {\ttfamily ranges}\+: mapped from {\ttfamily ranges} attribute. Can be a J\+S\+ON string or scoped object. (check daterangepicker for formatting)
+\item {\ttfamily opens}\+: mapped from {\ttfamily open} attribute. Can be {\ttfamily right} or {\ttfamily left}.
+\end{DoxyItemize}
+
+Example with all above features\+:
+
+
+\begin{DoxyCode}
+<input
+    type="daterange"
+    ng-model="dates"
+    min-date="2013-09-10"
+    max-date="2013-09-25"
+    limit="3 days"
+    format="L"
+    separator="/"
+    ranges="\{'Special Range':\{'startDate': '2013-09-2', 'endDate': '2013-09-5'\}\}">
+\end{DoxyCode}
+
+
+The {\ttfamily limit} attribute lets you specify a number and unit similarly as you would invoke {\ttfamily moment.\+duration()}.
+
+\subsubsection*{Features to be implemented\+:}
+
+
+\begin{DoxyItemize}
+\item Some {\ttfamily time\+Picker$\ast$}
+\item {\ttfamily show$\ast$}
+\item other formatting options like {\ttfamily $\ast$\+Class} and stuff
+\end{DoxyItemize}
+
+\subsubsection*{Build}
+
+You can run the tests by running\+: 
+\begin{DoxyCode}
+npm install
+bower install
+grunt
+\end{DoxyCode}
+
+
+assuming you already have {\ttfamily grunt} installed, otherwise you also need to do\+: 
+\begin{DoxyCode}
+npm install -g grunt-cli
+\end{DoxyCode}
+
+
+\href{https://bitdeli.com/free}{\tt } 

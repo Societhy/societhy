@@ -1,0 +1,349 @@
+\href{https://gitter.im/mattlewis92/angular-bootstrap-calendar?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge}{\tt } \href{https://travis-ci.org/mattlewis92/angular-bootstrap-calendar}{\tt } \href{http://badge.fury.io/bo/angular-bootstrap-calendar}{\tt } \href{http://badge.fury.io/js/angular-bootstrap-calendar}{\tt } \href{https://david-dm.org/mattlewis92/angular-bootstrap-calendar#info=peerDependencies}{\tt } \href{https://david-dm.org/mattlewis92/angular-bootstrap-calendar#info=devDependencies}{\tt } \href{https://github.com/mattlewis92/angular-bootstrap-calendar/issues}{\tt } \href{https://github.com/mattlewis92/angular-bootstrap-calendar/stargazers}{\tt } \href{https://raw.githubusercontent.com/mattlewis92/angular-bootstrap-calendar/master/LICENSE}{\tt }
+
+\subsection*{Table of contents}
+
+
+\begin{DoxyItemize}
+\item \href{#about}{\tt About}
+\item \href{#installation}{\tt Installation}
+\item \href{#documentation}{\tt Documentation}
+\item \href{#demo}{\tt Demo}
+\item \href{#development}{\tt Development}
+\item \href{#licence}{\tt License}
+\end{DoxyItemize}
+
+\subsection*{About}
+
+This plugin is an Angular\+JS port of the original j\+Query bootstrap calendar that can be found here\+: \href{http://bootstrap-calendar.azurewebsites.net/}{\tt http\+://bootstrap-\/calendar.\+azurewebsites.\+net/}
+
+The layout and functionality is intended to be exactly the same, but without the overhead of including j\+Query just for a calendar.
+
+All credits for the U\+I/\+UX and the less files of the calendar go to the original author.
+
+Pull requests are welcome.
+
+\subsection*{Installation}
+
+The calendar has a few dependencies, these are as follows, and must be included before this libraries files\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://angularjs.org/}{\tt Angular\+JS} 1.\+3.\+x, 1.\+4.\+x and 1.\+5.\+x are supported
+\item \href{http://getbootstrap.com/}{\tt Bootstrap} 3+ (C\+SS only)
+\item \href{http://momentjs.com/}{\tt Moment.\+js}
+\item \href{http://angular-ui.github.io/bootstrap/}{\tt ui-\/bootstrap} (0.\+14.\+0+, optional, include for collapse animations and tooltips.
+\item \href{http://interactjs.io/}{\tt interact.\+js} (optional, include to allow drag and drop on the calendar)
+\item \href{https://docs.angularjs.org/api/ngTouch}{\tt ng\+Touch} (optional, include if using the calendar on mobile devices)
+\end{DoxyItemize}
+
+You can install through bower\+:
+
+
+\begin{DoxyCode}
+bower install --save angular-bootstrap-calendar
+\end{DoxyCode}
+
+
+You will then need to include the JS and C\+SS files for the plugin\+:
+
+
+\begin{DoxyCode}
+<link href="bower\_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css"
+       rel="stylesheet">
+<script
+       src="bower\_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.min.js"></script>
+\end{DoxyCode}
+
+
+And finally add the module dependency in your Angular\+JS app (you can remove ui.\+bootstrap if you don\textquotesingle{}t want the extra dependency -\/ it is only required for collapse animations and tooltips)\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['mwl.calendar', 'ui.bootstrap']);
+\end{DoxyCode}
+
+
+Alternatively you can install through npm\+: 
+\begin{DoxyCode}
+npm install --save angular-bootstrap-calendar
+\end{DoxyCode}
+
+
+Or if using npm 3+ where peer dependencies aren\textquotesingle{}t automatically installed\+: 
+\begin{DoxyCode}
+npm install --save angular-bootstrap-calendar angular bootstrap moment angular-ui-bootstrap
+\end{DoxyCode}
+
+
+Then add as a dependency to your app\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', [require('angular-bootstrap-calendar'), require('angular-ui-bootstrap')]);
+\end{DoxyCode}
+
+
+\subsection*{Documentation}
+
+There is a single directive exposed to create the calendar, use it like so\+: 
+\begin{DoxyCode}
+<mwl-calendar
+    view="calendarView"
+    view-date="calendarDate"
+    events="events"
+    view-title="calendarTitle"
+    on-event-click="eventClicked(calendarEvent)"
+    on-event-times-changed="calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt =
+       calendarNewEventEnd"
+    edit-event-html="'<i class=\(\backslash\)'glyphicon glyphicon-pencil\(\backslash\)'></i>'"
+    delete-event-html="'<i class=\(\backslash\)'glyphicon glyphicon-remove\(\backslash\)'></i>'"
+    on-edit-event-click="eventEdited(calendarEvent)"
+    on-delete-event-click="eventDeleted(calendarEvent)"
+    cell-is-open="true">
+</mwl-calendar>
+\end{DoxyCode}
+
+
+An explanation of the properties is as follows\+:
+
+\subsubsection*{view (required attribute)}
+
+This variable is a string that can be either {\ttfamily year}, {\ttfamily month}, {\ttfamily week} or {\ttfamily day}. Changing it will change the view of the calendar.
+
+For the calendar to display this variable needs to be set like so\+: 
+\begin{DoxyCode}
+$scope.calendarView = 'month';
+\end{DoxyCode}
+
+
+\subsubsection*{view-\/date (required attribute)}
+
+This variable holds the current date the calendar is centralised on. Each view will decide on its current year / month / week / day depending on the value of this variable.
+
+\subsubsection*{events (required attribute)}
+
+An array of events to display on the calendar. For example\+: 
+\begin{DoxyCode}
+$scope.events = [
+  \{
+    title: 'My event title', // The title of the event
+    type: 'info', // The type of the event (determines its color). Can be important, warning, info,
+       inverse, success or special
+    startsAt: new Date(2013,5,1,1), // A javascript date object for when the event starts
+    endsAt: new Date(2014,8,26,15), // Optional - a javascript date object for when the event ends
+    editable: false, // If edit-event-html is set and this field is explicitly set to false then dont make
+       it editable.
+    deletable: false, // If delete-event-html is set and this field is explicitly set to false then dont
+       make it deleteable
+    draggable: true, //Allow an event to be dragged and dropped
+    resizable: true, //Allow an event to be resizable
+    incrementsBadgeTotal: true, //If set to false then will not count towards the badge total amount on the
+       month and year view
+    recursOn: 'year', // If set the event will recur on the given period. Valid values are year or month
+    cssClass: 'a-css-class-name' //A CSS class (or more, just separate with spaces) that will be added to
+       the event when it is displayed on each view. Useful for marking an event as selected / active etc
+  \}
+];
+\end{DoxyCode}
+
+
+{\ttfamily title}, {\ttfamily type} and {\ttfamily starts\+At} are required for all events.
+
+\subsubsection*{view-\/title}
+
+This variable will be assigned to the calendar title. If you want to change the formatting you can use the {\ttfamily calendar\+Config} or just override the appropriate method in the {\ttfamily calendar\+Title} factory.
+
+\subsubsection*{on-\/event-\/click}
+
+This expression is called when an event is clicked on the calendar. {\ttfamily calendar\+Event} can be used in the expression and contains the calendar event that was clicked on.
+
+\subsubsection*{on-\/event-\/times-\/changed}
+
+This expression is called when an event is dragged and dropped or resized into a different date / time on the calendar. The available values that are passed to the expression are\+: {\ttfamily calendar\+Event}, {\ttfamily calendar\+New\+Event\+Start}, {\ttfamily calendar\+New\+Event\+End} and {\ttfamily calendar\+Dragged\+From\+Date} (month view only). The directive won\textquotesingle{}t change the event object and leaves that up to you to implement. Please note drag and drop is only available by including the \href{http://interactjs.io/}{\tt interact.\+js} library.
+
+\subsubsection*{edit-\/event-\/html}
+
+If provided this piece of html will be displayed next to an event on the year and month view and will fire the function passed to edit-\/event-\/click.
+
+\subsubsection*{delete-\/event-\/html}
+
+If provided this piece of html will be displayed next to an event on the year and month view and will fire the function passed to delete-\/event-\/click.
+
+\subsubsection*{on-\/edit-\/event-\/click}
+
+This expression is called when an event edit link is clicked on the calendar. {\ttfamily calendar\+Event} can be used in the expression and contains the calendar event that was clicked on.
+
+\subsubsection*{on-\/delete-\/event-\/click}
+
+This expression is called when an event delete link is clicked on the calendar. {\ttfamily calendar\+Event} can be used in the expression and contains the calendar event that was clicked on.
+
+\subsubsection*{on-\/timespan-\/click}
+
+This expression is called when a month, day or hour on the calendar is clicked on the year, month and day views respectively. {\ttfamily calendar\+Date} can be used in the expression and contains the start of the month, day or hour that was clicked on. If on the month or year view {\ttfamily calendar\+Cell} will contain cell data for the clicked day or month which you can then modify.
+
+\subsubsection*{cell-\/is-\/open}
+
+A 2 way bound variable that when set to true will open the year or month view cell that corresponds to the date passed to the date object passed to {\ttfamily view-\/date}.
+
+\subsubsection*{day-\/view-\/start}
+
+An interpolated string in the form of hh\+:mm to start the day view at, e.\+g. setting it to 06\+:00 will start the day view at 6am
+
+\subsubsection*{day-\/view-\/end}
+
+An interpolated string in the form of hh\+:mm to end the day view at, e.\+g. setting it to 22\+:00 will end the day view at 10pm
+
+\subsubsection*{day-\/view-\/split}
+
+The number of chunks to split the day view hours up into. Can be either 10, 15 or 30. Default\+: 30
+
+\subsubsection*{on-\/view-\/change-\/click}
+
+An optional expression that is evaluated when the view is changed by clicking on a date. Return false from the expression function to disable the view change. {\ttfamily calendar\+Date} can be used in the expression and contains the date that was selected. {\ttfamily calendar\+Next\+View} is the view that the calendar will be changed to.
+
+\subsubsection*{cell-\/modifier}
+
+An optional expression that is evaluated on each cell generated for the year and month views. {\ttfamily calendar\+Cell} can be used in the expression and is an object containing the current cell data which you can modify (see the {\ttfamily calendar\+Helper} service source code or just console.\+log it to see what data is available). If you add the {\ttfamily css\+Class} property it will be applied to the cell.
+
+\subsection*{Configuring the calendar default config}
+
+You can easily customise the date formats and i18n strings used throughout the calendar by using the {\ttfamily calendar\+Config} value. Please note that these example formats are those used by moment.\+js and these won\textquotesingle{}t work if using angular as the date formatter. Example usage\+:
+
+
+\begin{DoxyCode}
+angular.module('myModule')
+  .config(function(calendarConfig) \{
+
+    console.log(calendarConfig); //view all available config
+
+    calendarConfig.templates.calendarMonthView = 'path/to/custom/template.html'; //change the month view
+       template to a custom template
+
+    calendarConfig.dateFormatter = 'moment'; //use either moment or angular to format dates on the
+       calendar. Default angular. Setting this will override any date formats you have already set.
+
+    calendarConfig.allDateFormats.moment.date.hour = 'HH:mm'; //this will configure times on the day view
+       to display in 24 hour format rather than the default of 12 hour
+
+    calendarConfig.allDateFormats.moment.title.day = 'ddd D MMM'; //this will configure the day view title
+       to be shorter
+
+    calendarConfig.i18nStrings.eventsLabel = 'Events'; //This will set the events label on the day view
+
+    calendarConfig.displayAllMonthEvents = true; //This will display all events on a month view even if
+       they're not in the current month. Default false.
+
+    calendarConfig.displayEventEndTimes = true; //This will display event end times on the month and year
+       views. Default false.
+
+    calendarConfig.showTimesOnWeekView = true; //Make the week view more like the day view, with the caveat
+       that event end times are ignored.
+
+  \});
+\end{DoxyCode}
+
+
+\subsection*{Custom directive templates}
+
+All calendar template urls can be changed using the {\ttfamily calendar\+Config} as illustrated above.
+
+\subsection*{The mwl-\/date-\/modifier directive}
+
+There is also a helper directive that you can use for the next, today and previous buttons. Use it like so\+:
+
+
+\begin{DoxyCode}
+<button
+  class="btn btn-primary"
+  mwl-date-modifier
+  date="calendarDay"
+  decrement="calendarView">
+  Previous
+</button>
+
+<button
+  class="btn btn-default"
+  mwl-date-modifier
+  date="calendarDay"
+  set-to-today>
+  Today
+</button>
+
+<button
+  class="btn btn-primary"
+  mwl-date-modifier
+  date="calendarDay"
+  increment="calendarView">
+  Next
+</button>
+\end{DoxyCode}
+
+
+\subsection*{Internationalization and localization}
+
+You can either use angular\textquotesingle{}s date filter or moment.\+js to format dates. The default is to use angular. You can change the formatter to be moment like so\+:
+
+
+\begin{DoxyCode}
+angular.module('myModule')
+  .config(function(calendarConfig) \{
+
+    calendarConfig.dateFormatter = 'moment'; // use moment to format dates
+
+  \});
+\end{DoxyCode}
+
+
+Then you just need to include the appropriate locale files for your app.
+
+If you want to dynamically change the locale for angular and not include all of the available angular locale files \href{https://github.com/lgalfaso/angular-dynamic-locale}{\tt try this library}.
+
+Otherwise if using moment you can call `moment.locale(\textquotesingle{}Y\+O\+U\+R\+\_\+\+L\+O\+C\+A\+L\+E\+\_\+\+S\+T\+R\+I\+NG\textquotesingle{})` to change the locale and the calendar will auto update.
+
+To set Monday as the first day of the week, configure it in moment like so (even if using angular for formatting dates)\+: 
+\begin{DoxyCode}
+moment.locale('en', \{
+  week : \{
+    dow : 1 // Monday is the first day of the week
+  \}
+\});
+\end{DoxyCode}
+
+
+For a full list of all available formats and their defaults see \href{https://github.com/mattlewis92/angular-bootstrap-calendar/blob/master/src/services/calendarConfig.js}{\tt calendar\+Config.\+js}
+
+\subsection*{Demo}
+
+\href{http://mattlewis92.github.io/angular-bootstrap-calendar/}{\tt http\+://mattlewis92.\+github.\+io/angular-\/bootstrap-\/calendar/}
+
+\subsection*{Development}
+
+\subsubsection*{Prepare your environment}
+
+
+\begin{DoxyItemize}
+\item Install \href{http://nodejs.org/}{\tt Node.\+js} and N\+PM (should come with)
+\item Install local dev dependencies\+: {\ttfamily npm install} while current directory is this repo
+\end{DoxyItemize}
+
+\subsubsection*{Development server}
+
+Run {\ttfamily npm start} to start a development server on port 8000 with auto reload + run tests.
+
+\subsubsection*{Testing}
+
+Run {\ttfamily npm test} to run tests once or {\ttfamily npm run test\+:watch} to continually run tests (this is automatic when you run {\ttfamily npm start}).
+
+\subsubsection*{Build}
+
+Run {\ttfamily npm run build} to build the project files in the dist folder
+
+\subsection*{License}
+
+The M\+IT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \char`\"{}\+Software\char`\"{}), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions\+:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+T\+HE S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED \char`\"{}\+A\+S I\+S\char`\"{}, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+TY OF A\+NY K\+I\+ND, E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED, I\+N\+C\+L\+U\+D\+I\+NG B\+UT N\+OT L\+I\+M\+I\+T\+ED TO T\+HE W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY, F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+ND N\+O\+N\+I\+N\+F\+R\+I\+N\+G\+E\+M\+E\+NT. IN NO E\+V\+E\+NT S\+H\+A\+LL T\+HE A\+U\+T\+H\+O\+RS OR C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+E\+RS BE L\+I\+A\+B\+LE F\+OR A\+NY C\+L\+A\+IM, D\+A\+M\+A\+G\+ES OR O\+T\+H\+ER L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN AN A\+C\+T\+I\+ON OF C\+O\+N\+T\+R\+A\+CT, T\+O\+RT OR O\+T\+H\+E\+R\+W\+I\+SE, A\+R\+I\+S\+I\+NG F\+R\+OM, O\+UT OF OR IN C\+O\+N\+N\+E\+C\+T\+I\+ON W\+I\+TH T\+HE S\+O\+F\+T\+W\+A\+RE OR T\+HE U\+SE OR O\+T\+H\+ER D\+E\+A\+L\+I\+N\+GS IN T\+HE S\+O\+F\+T\+W\+A\+RE. 

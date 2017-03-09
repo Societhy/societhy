@@ -1,3 +1,7 @@
+"""
+module that controls all the keys related features
+"""
+
 import time
 import json
 import scrypt
@@ -14,10 +18,6 @@ from . import SALT_WALLET_PASSWORD
 from core.utils import normalizeAddress, fromWei
 
 from rlp.utils import encode_hex
-
-"""
-module that controls all the keys related features
-"""
 
 keyDirectory = environ.get('KEYS_DIRECTORY')
 

@@ -1,0 +1,82 @@
+Elastic (autosize) textareas for Angular\+JS, without j\+Query dependency.
+
+\href{http://monospaced.github.io/angular-elastic}{\tt See it in action}.
+
+\subsection*{Usage }
+
+as attribute \begin{DoxyVerb}<textarea msd-elastic ng-model="foo">
+  ...
+</textarea>
+\end{DoxyVerb}
+
+
+as class \begin{DoxyVerb}<textarea class="msd-elastic" ng-model="bar">
+  ...
+</textarea>
+\end{DoxyVerb}
+
+
+optionally append whitespace to the end of the height calculation (an extra newline improves the apperance when animating) \begin{DoxyVerb}<textarea msd-elastic="\n" ng-model="foo">
+  ...
+</textarea>
+
+<textarea class="msd-elastic: \n;" ng-model="bar">
+  ...
+</textarea>
+\end{DoxyVerb}
+
+
+or configure whitespace globally \begin{DoxyVerb}app.config(['msdElasticConfig', function(config) {
+  config.append = '\n\n';
+}])
+\end{DoxyVerb}
+
+
+\subsection*{Install }
+
+\begin{DoxyVerb}bower install angular-elastic
+
+npm install angular-elastic
+\end{DoxyVerb}
+
+
+Include the {\ttfamily elastic.\+js} script provided by this component in your app.
+
+Make sure to add {\ttfamily monospaced.\+elastic} to your app’s module dependencies.
+
+``` angular .module(\textquotesingle{}your\+App\textquotesingle{}, \mbox{[} \textquotesingle{}monospaced.\+elastic\textquotesingle{} \mbox{]}); ````
+
+\subsection*{Support }
+
+{\bfseries Modern browsers} only—\+Internet Explorer 6, 7 \& 8 retain their default textarea behaviour.
+
+\subsection*{Demo }
+
+
+\begin{DoxyItemize}
+\item \href{http://monospaced.github.io/angular-elastic}{\tt monospaced.\+github.\+io/angular-\/elastic}
+\item \href{http://plnkr.co/edit/9y6YLriAwsK9hqdu72WT?p=preview}{\tt plunker}
+\end{DoxyItemize}
+
+\subsection*{How it works }
+
+By creating a hidden textarea that mirrors the textarea to which the directive was applied, Angular Elastic can measure the required height and adjust the textarea accordingly. Adjustments are done on\+:
+
+
+\begin{DoxyItemize}
+\item Keystroke events
+\item Window resize events
+\item Model changes
+\end{DoxyItemize}
+
+This works well in most cases with no additional code required other than described in the Usage section above. However, it may occur that the adjustment must be invoked manually at a time that is not covered by the events listed above. E.\+g. textareas with the style {\ttfamily display\+: none;} may not have a valid width in Safari which produces incorrect adjustments. In this case the adjustment needs to be invoked once these textareas become visible. For that Angular Elastic listens to the {\ttfamily elastic\+:adjust} event on its scope. To invoke the adjustment for all textareas covered by Angular Elastic use\+: \begin{DoxyVerb}$rootScope.$broadcast('elastic:adjust');
+\end{DoxyVerb}
+
+
+\subsection*{Inspiration }
+
+
+\begin{DoxyItemize}
+\item \href{http://www.jacklmoore.com/autosize/}{\tt j\+Query Autosize}
+\item \href{http://unwrongest.com/projects/elastic/}{\tt j\+Query Elastic} 
+\end{DoxyItemize}

@@ -1,0 +1,190 @@
+
+
+ title\+: Polar Area Chart \subsection*{anchor\+: polar-\/area-\/chart }
+
+\subsubsection*{Introduction}
+
+Polar area charts are similar to pie charts, but each segment has the same angle -\/ the radius of the segment differs depending on the value.
+
+This type of chart is often useful when we want to show a comparison data similar to a pie chart, but also show a scale of values for context.
+
+ $<$canvas width=\char`\"{}250\char`\"{} height=\char`\"{}125\char`\"{}$>$$<$/canvas$>$ 
+
+\subsubsection*{Example usage}
+
+
+\begin{DoxyCode}
+new Chart(ctx).PolarArea(data, options);
+\end{DoxyCode}
+
+
+\subsubsection*{Data structure}
+
+
+\begin{DoxyCode}
+var data = [
+    \{
+        value: 300,
+        color:"#F7464A",
+        highlight: "#FF5A5E",
+        label: "Red"
+    \},
+    \{
+        value: 50,
+        color: "#46BFBD",
+        highlight: "#5AD3D1",
+        label: "Green"
+    \},
+    \{
+        value: 100,
+        color: "#FDB45C",
+        highlight: "#FFC870",
+        label: "Yellow"
+    \},
+    \{
+        value: 40,
+        color: "#949FB1",
+        highlight: "#A8B3C5",
+        label: "Grey"
+    \},
+    \{
+        value: 120,
+        color: "#4D5360",
+        highlight: "#616774",
+        label: "Dark Grey"
+    \}
+
+];
+\end{DoxyCode}
+ As you can see, for the chart data you pass in an array of objects, with a value and a colour. The value attribute should be a number, while the color attribute should be a string. Similar to C\+SS, for this string you can use H\+EX notation, R\+GB, R\+G\+BA or H\+SL.
+
+\subsubsection*{Chart options}
+
+These are the customisation options specific to Polar Area charts. These options are merged with the \href{#getting-started-global-chart-configuration}{\tt global chart configuration options}, and form the options of the chart.
+
+
+\begin{DoxyCode}
+\{
+    //Boolean - Show a backdrop to the scale label
+    scaleShowLabelBackdrop : true,
+
+    //String - The colour of the label backdrop
+    scaleBackdropColor : "rgba(255,255,255,0.75)",
+
+    // Boolean - Whether the scale should begin at zero
+    scaleBeginAtZero : true,
+
+    //Number - The backdrop padding above & below the label in pixels
+    scaleBackdropPaddingY : 2,
+
+    //Number - The backdrop padding to the side of the label in pixels
+    scaleBackdropPaddingX : 2,
+
+    //Boolean - Show line for each value in the scale
+    scaleShowLine : true,
+
+    //Boolean - Stroke a line around each segment in the chart
+    segmentShowStroke : true,
+
+    //String - The colour of the stroke on each segement.
+    segmentStrokeColor : "#fff",
+
+    //Number - The width of the stroke value in pixels
+    segmentStrokeWidth : 2,
+
+    //Number - Amount of animation steps
+    animationSteps : 100,
+
+    //String - Animation easing effect.
+    animationEasing : "easeOutBounce",
+
+    //Boolean - Whether to animate the rotation of the chart
+    animateRotate : true,
+
+    //Boolean - Whether to animate scaling the chart from the centre
+    animateScale : false,
+    \{% raw %\}
+    //String - A legend template
+    legendTemplate : "<ul class=\(\backslash\)"<%=name.toLowerCase()%>-legend\(\backslash\)"><% for (var i=0; i<segments.length;
+       i++)\{%><li><span
+       style=\(\backslash\)"background-color:<%=segments[i].fillColor%>\(\backslash\)"></span><%if(segments[i].label)\{%><%=segments[i].label%><%\}%></li><%\}%></ul>"
+    \{% endraw %\}
+\}
+\end{DoxyCode}
+
+
+You can override these for your {\ttfamily Chart} instance by passing a second argument into the {\ttfamily Polar\+Area} method as an object with the keys you want to override.
+
+For example, we could have a polar area chart with a black stroke on each segment like so\+:
+
+
+\begin{DoxyCode}
+new Chart(ctx).PolarArea(data, \{
+    segmentStrokeColor: "#000000"
+\});
+// This will create a chart with all of the default options, merged from the global config,
+// and the PolarArea chart defaults but this particular instance will have `segmentStrokeColor` set to
+       `"#000000"`.
+\end{DoxyCode}
+
+
+We can also change these defaults values for each Polar\+Area type that is created, this object is available at {\ttfamily Chart.\+defaults.\+Polar\+Area}.
+
+\subsubsection*{Prototype methods}
+
+\paragraph*{.get\+Segments\+At\+Event( event )}
+
+Calling {\ttfamily get\+Segments\+At\+Event(event)} on your Chart instance passing an argument of an event, or j\+Query event, will return the segment elements that are at that the same position of that event.
+
+
+\begin{DoxyCode}
+canvas.onclick = function(evt)\{
+    var activePoints = myPolarAreaChart.getSegmentsAtEvent(evt);
+    // => activePoints is an array of segments on the canvas that are at the same position as the click
+       event.
+\};
+\end{DoxyCode}
+
+
+This functionality may be useful for implementing D\+OM based tooltips, or triggering custom behaviour in your application.
+
+\paragraph*{.update( )}
+
+Calling {\ttfamily update()} on your Chart instance will re-\/render the chart with any updated values, allowing you to edit the value of multiple existing points, then render those in one animated render loop.
+
+
+\begin{DoxyCode}
+myPolarAreaChart.segments[1].value = 10;
+// Would update the first dataset's value of 'Green' to be 10
+myPolarAreaChart.update();
+// Calling update now animates the position of Green from 50 to 10.
+\end{DoxyCode}
+
+
+\paragraph*{.add\+Data( segment\+Data, index )}
+
+Calling {\ttfamily add\+Data(segment\+Data, index)} on your Chart instance passing an object in the same format as in the constructor. There is an option second argument of \textquotesingle{}index\textquotesingle{}, this determines at what index the new segment should be inserted into the chart.
+
+
+\begin{DoxyCode}
+// An object in the same format as the original data source
+myPolarAreaChart.addData(\{
+    value: 130,
+    color: "#B48EAD",
+    highlight: "#C69CBE",
+    label: "Purple"
+\});
+// The new segment will now animate in.
+\end{DoxyCode}
+
+
+\paragraph*{.remove\+Data( index )}
+
+Calling {\ttfamily remove\+Data(index)} on your Chart instance will remove segment at that particular index. If none is provided, it will default to the last segment.
+
+
+\begin{DoxyCode}
+myPolarAreaChart.removeData();
+// Other segments will update to fill the empty space left.
+\end{DoxyCode}
+ 

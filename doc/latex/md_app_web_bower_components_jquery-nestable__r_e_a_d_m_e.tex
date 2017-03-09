@@ -1,0 +1,119 @@
+\subsection*{P\+L\+E\+A\+SE N\+O\+TE}
+
+{\bfseries I cannot provide any support or guidance beyond this R\+E\+A\+D\+ME. If this code helps you that\textquotesingle{}s great but I have no plans to develop Nestable beyond this demo (it\textquotesingle{}s not a final product and has limited functionality). I cannot reply to any requests for help.}
+
+
+
+
+
+\subsubsection*{Drag \& drop hierarchical list with mouse and touch compatibility (j\+Query / Zepto plugin)}
+
+\href{http://dbushell.github.com/Nestable/}{\tt {\bfseries Try Nestable Demo}}
+
+Nestable is an experimental example and not under active development. If it suits your requirements feel free to expand upon it!
+
+\subsection*{Usage}
+
+Write your nested H\+T\+ML lists like so\+: \begin{DoxyVerb}<div class="dd">
+    <ol class="dd-list">
+        <li class="dd-item" data-id="1">
+            <div class="dd-handle">Item 1</div>
+        </li>
+        <li class="dd-item" data-id="2">
+            <div class="dd-handle">Item 2</div>
+        </li>
+        <li class="dd-item" data-id="3">
+            <div class="dd-handle">Item 3</div>
+            <ol class="dd-list">
+                <li class="dd-item" data-id="4">
+                    <div class="dd-handle">Item 4</div>
+                </li>
+                <li class="dd-item" data-id="5">
+                    <div class="dd-handle">Item 5</div>
+                </li>
+            </ol>
+        </li>
+    </ol>
+</div>
+\end{DoxyVerb}
+
+
+Then activate with j\+Query like so\+: \begin{DoxyVerb}$('.dd').nestable({ /* config options */ });
+\end{DoxyVerb}
+
+
+\subsubsection*{Events}
+
+The {\ttfamily change} event is fired when items are reordered. \begin{DoxyVerb}$('.dd').on('change', function() {
+    /* on change event */
+});
+\end{DoxyVerb}
+
+
+\subsubsection*{Methods}
+
+You can get a serialised object with all {\ttfamily data-\/$\ast$} attributes for each item. \begin{DoxyVerb}$('.dd').nestable('serialize');
+\end{DoxyVerb}
+
+
+The serialised J\+S\+ON for the example above would be\+: \begin{DoxyVerb}[{"id":1},{"id":2},{"id":3,"children":[{"id":4},{"id":5}]}]
+\end{DoxyVerb}
+
+
+\subsubsection*{Configuration}
+
+You can change the follow options\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily max\+Depth} number of levels an item can be nested (default {\ttfamily 5})
+\item {\ttfamily group} group ID to allow dragging between lists (default {\ttfamily 0})
+\end{DoxyItemize}
+
+These advanced config options are also available\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily list\+Node\+Name} The H\+T\+ML element to create for lists (default {\ttfamily \textquotesingle{}ol\textquotesingle{}})
+\item {\ttfamily item\+Node\+Name} The H\+T\+ML element to create for list items (default {\ttfamily \textquotesingle{}li\textquotesingle{}})
+\item {\ttfamily root\+Class} The class of the root element {\ttfamily .nestable()} was used on (default {\ttfamily \textquotesingle{}dd\textquotesingle{}})
+\item {\ttfamily list\+Class} The class of all list elements (default {\ttfamily \textquotesingle{}dd-\/list\textquotesingle{}})
+\item {\ttfamily item\+Class} The class of all list item elements (default {\ttfamily \textquotesingle{}dd-\/item\textquotesingle{}})
+\item {\ttfamily drag\+Class} The class applied to the list element that is being dragged (default {\ttfamily \textquotesingle{}dd-\/dragel\textquotesingle{}})
+\item {\ttfamily handle\+Class} The class of the content element inside each list item (default {\ttfamily \textquotesingle{}dd-\/handle\textquotesingle{}})
+\item {\ttfamily collapsed\+Class} The class applied to lists that have been collapsed (default {\ttfamily \textquotesingle{}dd-\/collapsed\textquotesingle{}})
+\item {\ttfamily place\+Class} The class of the placeholder element (default {\ttfamily \textquotesingle{}dd-\/placeholder\textquotesingle{}})
+\item {\ttfamily empty\+Class} The class used for empty list placeholder elements (default {\ttfamily \textquotesingle{}dd-\/empty\textquotesingle{}})
+\item {\ttfamily expand\+Btn\+H\+T\+ML} The H\+T\+ML text used to generate a list item expand button (default `\textquotesingle{}$<$button data-\/action=\char`\"{}expand\char`\"{}$>$Expand$>$$<$/button$>$\textquotesingle{}{\ttfamily ) $\ast$}collapse\+Btn\+H\+T\+ML{\ttfamily The H\+T\+ML text used to generate a list item collapse button (default}\textquotesingle{}$<$button data-\/action=\char`\"{}collapse\char`\"{}$>$Collapse$<$/button$>$\textquotesingle{}`)
+\end{DoxyItemize}
+
+{\bfseries Inspect the \href{http://dbushell.github.com/Nestable/}{\tt Nestable Demo} for guidance.}
+
+\subsection*{Change Log}
+
+\subsubsection*{15th October 2012}
+
+
+\begin{DoxyItemize}
+\item Merge for Zepto.\+js support
+\item Merge fix for remove/detach items
+\end{DoxyItemize}
+
+\subsubsection*{27th June 2012}
+
+
+\begin{DoxyItemize}
+\item Added {\ttfamily max\+Depth} option (default to 5)
+\item Added empty placeholder
+\item Updated C\+SS class structure with options for {\ttfamily list\+Class} and {\ttfamily item\+Class}.
+\item Fixed to allow drag and drop between multiple Nestable instances (off by default).
+\item Added {\ttfamily group} option to enabled the above.
+\end{DoxyItemize}
+
+
+
+
+
+Author\+: David Bushell \href{http://dbushell.com/}{\tt http\+://dbushell.\+com} \href{http://twitter.com/dbushell/}{\tt }
+
+Copyright © 2012 David Bushell $\vert$ B\+SD \& M\+IT license 

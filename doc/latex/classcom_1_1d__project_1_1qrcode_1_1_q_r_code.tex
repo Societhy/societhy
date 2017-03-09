@@ -1,0 +1,212 @@
+\hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code}{}\section{com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code Class Reference}
+\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code}\index{com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code@{com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a699e462d3798ba2108fb799663ad33d0}{Q\+R\+Code} ()
+\item 
+int \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_af6f185ec98bccbd9cc31afece4da1502}{get\+Type\+Number} ()
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_aa782d70c42402337b427e832693dce85}{set\+Type\+Number} (int type\+Number)
+\item 
+int \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9b1f2ec05c5c1aea9511eb59e667e142}{get\+Error\+Correct\+Level} ()
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a546e3cb567be9ab0b5c0a76e6affaea0}{set\+Error\+Correct\+Level} (int error\+Correct\+Level)
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72e943bfffcf27b05e7a25e4fc66f1c7}{add\+Data} (String data)
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72202b3b8879939138329b105340b6a2}{add\+Data} (String data, int mode)
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a0d24014f5527224c63e13a6f671e8365}{clear\+Data} ()
+\item 
+boolean \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9e31b998c5437dd6780b3c0d4ec97497}{is\+Dark} (int row, int col)
+\item 
+int \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3cb1e7626961e1e5f02e249cc4dfb9f7}{get\+Module\+Count} ()
+\item 
+void \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7e01d7c43b72d913ef3e3369bb8af4df}{make} ()
+\item 
+Buffered\+Image \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7b60e442e66eef831ba7c7dcf6c25245}{create\+Image} (int cell\+Size, int margin)  throws I\+O\+Exception 
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a076cc8dee5deb77a09d1ea6ec527fc30}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a076cc8dee5deb77a09d1ea6ec527fc30}} 
+static byte \mbox{[}$\,$\mbox{]} {\bfseries create\+Data} (int type\+Number, int error\+Correct\+Level, \hyperlink{class_q_r_data}{Q\+R\+Data}\mbox{[}$\,$\mbox{]} data\+Array)
+\item 
+static \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code}{Q\+R\+Code} \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3130b29d5ceadb1fa74064c0e34bfc6a}{get\+Minimum\+Q\+R\+Code} (String data, int error\+Correct\+Level)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_ad68ee39041521c1c0cb74538773067d2}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_ad68ee39041521c1c0cb74538773067d2}} 
+void {\bfseries add\+Data} (\hyperlink{class_q_r_data}{Q\+R\+Data} qr\+Data)
+\item 
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_aea41346573520fbccbbff27d6aec9535}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_aea41346573520fbccbbff27d6aec9535}} 
+int {\bfseries get\+Data\+Count} ()
+\item 
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a8ab36d337ab1140c2e0abb8d493c30e9}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a8ab36d337ab1140c2e0abb8d493c30e9}} 
+\hyperlink{class_q_r_data}{Q\+R\+Data} {\bfseries get\+Data} (int index)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Q\+Rコード. ~\newline
+■使い方 ~\newline
+(1) 誤り訂正レベル、データ等、諸パラメータを設定します。 ~\newline
+(2) \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7e01d7c43b72d913ef3e3369bb8af4df}{make()} を呼び出して\+Q\+Rコードを作成します。 ~\newline
+(3) \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3cb1e7626961e1e5f02e249cc4dfb9f7}{get\+Module\+Count()} と \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9e31b998c5437dd6780b3c0d4ec97497}{is\+Dark()} で、\+Q\+Rコードのデータを取得します。 ~\newline
+ \begin{DoxyAuthor}{Author}
+Kazuhiko Arase 
+\end{DoxyAuthor}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a699e462d3798ba2108fb799663ad33d0}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a699e462d3798ba2108fb799663ad33d0}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!Q\+R\+Code@{Q\+R\+Code}}
+\index{Q\+R\+Code@{Q\+R\+Code}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{Q\+R\+Code()}{QRCode()}}
+{\footnotesize\ttfamily com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+Q\+R\+Code (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+コンストラクタ ~\newline
+型番1, 誤り訂正レベルH の\+Q\+Rコードのインスタンスを生成します。 \begin{DoxySeeAlso}{See also}
+\hyperlink{interfacecom_1_1d__project_1_1qrcode_1_1_error_correct_level}{Error\+Correct\+Level} 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72e943bfffcf27b05e7a25e4fc66f1c7}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72e943bfffcf27b05e7a25e4fc66f1c7}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!add\+Data@{add\+Data}}
+\index{add\+Data@{add\+Data}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{add\+Data()}{addData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+add\+Data (\begin{DoxyParamCaption}\item[{String}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+データを追加する。 
+\begin{DoxyParams}{Parameters}
+{\em data} & データ \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72202b3b8879939138329b105340b6a2}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a72202b3b8879939138329b105340b6a2}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!add\+Data@{add\+Data}}
+\index{add\+Data@{add\+Data}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{add\+Data()}{addData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+add\+Data (\begin{DoxyParamCaption}\item[{String}]{data,  }\item[{int}]{mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+モードを指定してデータを追加する。 
+\begin{DoxyParams}{Parameters}
+{\em data} & データ \\
+\hline
+{\em mode} & モード \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{interfacecom_1_1d__project_1_1qrcode_1_1_mode}{Mode} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a0d24014f5527224c63e13a6f671e8365}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a0d24014f5527224c63e13a6f671e8365}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!clear\+Data@{clear\+Data}}
+\index{clear\+Data@{clear\+Data}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{clear\+Data()}{clearData()}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+clear\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+データをクリアする。 ~\newline
+add\+Data で追加されたデータをクリアします。 \mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7b60e442e66eef831ba7c7dcf6c25245}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7b60e442e66eef831ba7c7dcf6c25245}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!create\+Image@{create\+Image}}
+\index{create\+Image@{create\+Image}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{create\+Image()}{createImage()}}
+{\footnotesize\ttfamily Buffered\+Image com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+create\+Image (\begin{DoxyParamCaption}\item[{int}]{cell\+Size,  }\item[{int}]{margin }\end{DoxyParamCaption}) throws I\+O\+Exception\hspace{0.3cm}{\ttfamily [inline]}}
+
+イメージを取得する。 
+\begin{DoxyParams}{Parameters}
+{\em cell\+Size} & セルのサイズ(pixel) \\
+\hline
+{\em margin} & 余白(pixel) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9b1f2ec05c5c1aea9511eb59e667e142}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9b1f2ec05c5c1aea9511eb59e667e142}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!get\+Error\+Correct\+Level@{get\+Error\+Correct\+Level}}
+\index{get\+Error\+Correct\+Level@{get\+Error\+Correct\+Level}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{get\+Error\+Correct\+Level()}{getErrorCorrectLevel()}}
+{\footnotesize\ttfamily int com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+get\+Error\+Correct\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+誤り訂正レベルを取得する。 \begin{DoxyReturn}{Returns}
+誤り訂正レベル 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{interfacecom_1_1d__project_1_1qrcode_1_1_error_correct_level}{Error\+Correct\+Level} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3130b29d5ceadb1fa74064c0e34bfc6a}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3130b29d5ceadb1fa74064c0e34bfc6a}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!get\+Minimum\+Q\+R\+Code@{get\+Minimum\+Q\+R\+Code}}
+\index{get\+Minimum\+Q\+R\+Code@{get\+Minimum\+Q\+R\+Code}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{get\+Minimum\+Q\+R\+Code()}{getMinimumQRCode()}}
+{\footnotesize\ttfamily static \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code}{Q\+R\+Code} com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+get\+Minimum\+Q\+R\+Code (\begin{DoxyParamCaption}\item[{String}]{data,  }\item[{int}]{error\+Correct\+Level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}
+
+最小の型番となる \hyperlink{classcom_1_1d__project_1_1qrcode_1_1_q_r_code}{Q\+R\+Code} を作成する。 
+\begin{DoxyParams}{Parameters}
+{\em data} & データ \\
+\hline
+{\em error\+Correct\+Level} & 誤り訂正レベル \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3cb1e7626961e1e5f02e249cc4dfb9f7}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a3cb1e7626961e1e5f02e249cc4dfb9f7}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!get\+Module\+Count@{get\+Module\+Count}}
+\index{get\+Module\+Count@{get\+Module\+Count}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{get\+Module\+Count()}{getModuleCount()}}
+{\footnotesize\ttfamily int com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+get\+Module\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+モジュール数を取得する。 \mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_af6f185ec98bccbd9cc31afece4da1502}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_af6f185ec98bccbd9cc31afece4da1502}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!get\+Type\+Number@{get\+Type\+Number}}
+\index{get\+Type\+Number@{get\+Type\+Number}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{get\+Type\+Number()}{getTypeNumber()}}
+{\footnotesize\ttfamily int com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+get\+Type\+Number (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+型番を取得する。 \begin{DoxyReturn}{Returns}
+型番 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9e31b998c5437dd6780b3c0d4ec97497}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a9e31b998c5437dd6780b3c0d4ec97497}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!is\+Dark@{is\+Dark}}
+\index{is\+Dark@{is\+Dark}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{is\+Dark()}{isDark()}}
+{\footnotesize\ttfamily boolean com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+is\+Dark (\begin{DoxyParamCaption}\item[{int}]{row,  }\item[{int}]{col }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+暗モジュールかどうかを取得する。 
+\begin{DoxyParams}{Parameters}
+{\em row} & 行 (0 ～ モジュール数 -\/ 1) \\
+\hline
+{\em col} & 列 (0 ～ モジュール数 -\/ 1) \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7e01d7c43b72d913ef3e3369bb8af4df}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a7e01d7c43b72d913ef3e3369bb8af4df}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!make@{make}}
+\index{make@{make}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{make()}{make()}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+make (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Q\+Rコードを作成する。 \mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a546e3cb567be9ab0b5c0a76e6affaea0}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_a546e3cb567be9ab0b5c0a76e6affaea0}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!set\+Error\+Correct\+Level@{set\+Error\+Correct\+Level}}
+\index{set\+Error\+Correct\+Level@{set\+Error\+Correct\+Level}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{set\+Error\+Correct\+Level()}{setErrorCorrectLevel()}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+set\+Error\+Correct\+Level (\begin{DoxyParamCaption}\item[{int}]{error\+Correct\+Level }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+誤り訂正レベルを設定する。 
+\begin{DoxyParams}{Parameters}
+{\em error\+Correct\+Level} & 誤り訂正レベル \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{interfacecom_1_1d__project_1_1qrcode_1_1_error_correct_level}{Error\+Correct\+Level} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_aa782d70c42402337b427e832693dce85}\label{classcom_1_1d__project_1_1qrcode_1_1_q_r_code_aa782d70c42402337b427e832693dce85}} 
+\index{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}!set\+Type\+Number@{set\+Type\+Number}}
+\index{set\+Type\+Number@{set\+Type\+Number}!com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code@{com\+::d\+\_\+project\+::qrcode\+::\+Q\+R\+Code}}
+\subsubsection{\texorpdfstring{set\+Type\+Number()}{setTypeNumber()}}
+{\footnotesize\ttfamily void com.\+d\+\_\+project.\+qrcode.\+Q\+R\+Code.\+set\+Type\+Number (\begin{DoxyParamCaption}\item[{int}]{type\+Number }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+型番を設定する。 
+\begin{DoxyParams}{Parameters}
+{\em type\+Number} & 型番 \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/web/bower\+\_\+components/qrcode-\/generator/java/src/java/com/d\+\_\+project/qrcode/Q\+R\+Code.\+java\end{DoxyCompactItemize}

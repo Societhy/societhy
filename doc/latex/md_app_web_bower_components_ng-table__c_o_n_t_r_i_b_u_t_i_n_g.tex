@@ -1,0 +1,25 @@
+
+\begin{DoxyEnumerate}
+\item Fork the repo.
+\item {\ttfamily npm install}
+\item {\ttfamily bower install}
+\item Run the build\+: {\ttfamily grunt}
+\begin{DoxyItemize}
+\item builds dist/ng-\/table.\+js and associated files
+\end{DoxyItemize}
+\item Run the tests\+: {\ttfamily karma start}
+\begin{DoxyItemize}
+\item ie prove existing code before making your changes
+\end{DoxyItemize}
+\item Make changes in source folder ({\ttfamily src})
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Minify source files\+: {\ttfamily grunt}
+\item Make the test pass
+\item Commit changes\+:
+\begin{DoxyItemize}
+\item include O\+N\+LY source files ie do N\+OT commit files under the dist/ folder
+\item use a commit message that follows https\+://github.com/ajoslin/conventional-\/changelog/blob/master/conventions/angular.\+md \char`\"{}conventions\char`\"{}
+\end{DoxyItemize}
+\item Push your changes to your fork and submit a pull request 
+\end{DoxyEnumerate}

@@ -1,0 +1,305 @@
+Angular is only dependency (no j\+Query). 8K minified or 2K gzipped.
+
+\subsection*{Example }
+
+Check out \href{http://oblador.github.io/angular-scroll/}{\tt the live demo} or the \href{https://github.com/oblador/angular-scroll/blob/master/example/index.html}{\tt source code}.
+
+\subsection*{Install }
+
+\paragraph*{With bower\+:}
+
+\begin{DoxyVerb}$ bower install angular-scroll
+\end{DoxyVerb}
+
+
+\paragraph*{With npm (for use with browserify)\+:}
+
+\begin{DoxyVerb}$ npm install angular-scroll
+\end{DoxyVerb}
+
+
+You can also download the \href{https://raw.github.com/oblador/angular-scroll/master/angular-scroll.min.js}{\tt production version}or the \href{https://raw.github.com/oblador/angular-scroll/master/angular-scroll.js}{\tt development version}.
+
+If you prefer a C\+DN hosted version (which might speed up your load times), check out \href{https://cdnjs.com/libraries/angular-scroll}{\tt cdnjs.\+com/libraries/angular-\/scroll}.
+
+Don\textquotesingle{}t forget to add {\ttfamily du\+Scroll} to your module dependencies.
+
+\subsection*{{\ttfamily angular.\+element} Scroll A\+PI }
+
+This module extends the {\ttfamily angular.\+element} object with a few j\+Query like functions. Note that {\ttfamily \$document} is an {\ttfamily angular.\+element}, for usage example see below. In case of name collisions existing j\+Query or jqlite functions will be preserved, just use the prefixed version\+: ie {\ttfamily .du\+Scroll\+To()} instead of {\ttfamily .scroll\+To()}.
+
+\paragraph*{{\ttfamily .scroll\+To( left, top \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} )}}
+
+Scrolls the element/window to the specified left/top position. If {\ttfamily duration} is specified the scrolling is animated for n milliseconds. If {\ttfamily easing} is ommited the animation will default to the {\ttfamily du\+Scroll\+Easing} function.
+
+\paragraph*{{\ttfamily .scroll\+To( element \mbox{[}, offset, \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} \mbox{]} )}}
+
+Alias of {\ttfamily .scroll\+To\+Element}.
+
+\paragraph*{{\ttfamily .scroll\+To\+Element( element \mbox{[}, offset, \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} \mbox{]} )}}
+
+Scrolls to the specified element, if {\ttfamily offset} is passed it will be subtracted from the elements position which is good if one uses floating menus.
+
+\paragraph*{{\ttfamily .scroll\+To\+Element\+Animated( element \mbox{[}, offset, \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} \mbox{]} )}}
+
+Convenience function. Works exactly the same as {\ttfamily scroll\+To\+Element} but uses the default values from {\ttfamily du\+Scroll\+Offset}, {\ttfamily du\+Scroll\+Duration} and {\ttfamily du\+Scroll\+Easing} unless otherwise specified.
+
+\paragraph*{{\ttfamily .scroll\+Top$\vert$scroll\+Left( )}}
+
+Returns current scroll position.
+
+\paragraph*{{\ttfamily .scroll\+Top$\vert$scroll\+Left( top \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} )}}
+
+Scrolls to specified position in either axis, with optional animation.
+
+\paragraph*{{\ttfamily .scroll\+Top\+Animated$\vert$scroll\+Left\+Animated( top \mbox{[}, duration \mbox{[}, easing \mbox{]} \mbox{]} )}}
+
+Convenience function like {\ttfamily scroll\+To\+Element\+Animated} but for {\ttfamily scroll\+Top}/{\ttfamily scroll\+Left}.
+
+\paragraph*{Promises}
+
+Animated scrolling returns a {\ttfamily \$q} promise, it will resolve when the scrolling has finished or be rejected if cancelled (by starting another scroll animation before it finished).
+
+\#\#\#\# Example 
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).
+  controller('myCtrl', function($scope, $document) \{
+    var top = 400;
+    var duration = 2000; //milliseconds
+
+    //Scroll to the exact position
+    $document.scrollTop(top, duration).then(function() \{
+      console && console.log('You just scrolled to the top!');
+    \});
+
+    var offset = 30; //pixels; adjust for floating menu, context etc
+    //Scroll to #some-id with 30 px "padding"
+    //Note: Use this in a directive, not with document.getElementById 
+    var someElement = angular.element(document.getElementById('some-id'));
+    $document.scrollToElement(someElement, offset, duration);
+  \}
+);
+\end{DoxyCode}
+
+
+The above example can be achieved by configuration instead of arguments\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll'])
+  .value('duScrollDuration', 2000)
+  .value('duScrollOffset', 30)
+  .controller('myCtrl', function($scope, $document) \{
+    $document.scrollTopAnimated(400).then(function() \{
+      console && console.log('You just scrolled to the top!');
+    \});
+
+    var someElement = angular.element(document.getElementById('some-id'));
+    $document.scrollToElementAnimated(someElement);
+  \}
+);
+\end{DoxyCode}
+
+
+\subsection*{Directives }
+
+\subsubsection*{{\ttfamily du-\/smooth-\/scroll}}
+
+Provides smooth anchor scrolling. 
+\begin{DoxyCode}
+<a href="#anchor" du-smooth-scroll>Scroll it!</a>
+\end{DoxyCode}
+
+
+\subsubsection*{{\ttfamily du-\/scrollspy}}
+
+Observes whether the target element is at the top of the viewport (or container) and adds an {\ttfamily active} class if so. Takes optional {\ttfamily offset} and {\ttfamily duration} attributes which is passed on to {\ttfamily .scroll\+To},
+
+
+\begin{DoxyCode}
+<a href="#anchor" du-scrollspy>Am i active?</a>
+\end{DoxyCode}
+
+
+or together with Bootstrap
+
+
+\begin{DoxyCode}
+<ul class="nav navbar-nav">
+  <li du-scrollspy="anchor"><a href="#anchor">Link</a></li>
+</ul>
+\end{DoxyCode}
+
+
+\subsubsection*{{\ttfamily du-\/spy-\/context}}
+
+Enables multiple sets of spies on the same target element. Takes optional {\ttfamily offset} attribute to
+
+
+\begin{DoxyCode}
+<ul du-spy-context class="nav navbar-nav">
+  <li du-scrollspy="anchor"><a href="#anchor">Link</a></li>
+</ul>
+<ul du-spy-context class="nav navbar-nav">
+  <li du-scrollspy="anchor"><a href="#anchor">Link</a></li>
+</ul>
+\end{DoxyCode}
+ \subsubsection*{{\ttfamily du-\/scroll-\/container}}
+
+Modifies behavior of {\ttfamily du-\/scrollspy} and {\ttfamily du-\/smooth-\/scroll} to observe/scroll within and element instead of the window/document. Good for modals/elements with {\ttfamily overflow\+: auto/scroll}.
+
+
+\begin{DoxyCode}
+<div du-scroll-container>
+  <p id="top">This is the top</p>
+  <p id="anchor">Scroll to me, or <a href="#top" du-smooth-scroll>the top</a></p>
+</div>
+\end{DoxyCode}
+
+
+If your links lie outside of the scrollable element, wrap them with the {\ttfamily du-\/scroll-\/container} directive and send the element id as argument\+:
+
+
+\begin{DoxyCode}
+<ul du-scroll-container="scroll-container">
+  <li><a href="#anchor" du-smooth-scroll>Link</a></li>
+</ul>
+<div id="scroll-container">
+  [...]
+</div>
+\end{DoxyCode}
+
+
+\subsubsection*{\href{http://www.youtube.com/watch?v=cx4KtTezEFg&feature=kp}{\tt All in together now}}
+
+The directives play well together, try \href{http://oblador.github.io/angular-scroll/container.html}{\tt the demo} or inspect its \href{https://github.com/oblador/angular-scroll/blob/master/example/container.html}{\tt source code}.
+
+
+\begin{DoxyCode}
+<ul du-spy-context du-scroll-container="scroll-container">
+  <li><a href="#anchor" offset="30" du-smooth-scroll du-scrollspy>Link</a></li>
+</ul>
+<ul du-spy-context du-scroll-container="scroll-container">
+  <li><a href="#anchor" offset="30" du-smooth-scroll du-scrollspy>Link</a></li>
+</ul>
+<div id="scroll-container">
+  [...]
+</div>
+\end{DoxyCode}
+
+
+\subsection*{Observing Scroll Position }
+
+{\bfseries N\+O\+TE\+:} the {\ttfamily \$du\+Scroll\+Changed} event and the {\ttfamily scroll\+Position} service are deprecated. Use {\ttfamily angular.\+element().on()} together with {\ttfamily .scroll\+Top()} instead.
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).
+  controller('MyCtrl', function($scope, $document)\{
+    $document.on('scroll', function() \{
+      console.log('Document scrolled to ', $document.scrollLeft(), $document.scrollTop());
+    \});
+    var container = angular.element(document.getElementById('container'));
+    container.on('scroll', function() \{
+      console.log('Container scrolled to ', container.scrollLeft(), container.scrollTop());
+    \});
+  \}
+);
+\end{DoxyCode}
+
+
+\subsection*{Configuration }
+
+\subsubsection*{Scroll speed}
+
+Duration is defined in milliseconds.
+
+To set a scroll duration on a single anchor\+: 
+\begin{DoxyCode}
+<a href="#anchor" du-smooth-scroll duration="5000">Scroll it!</a>
+\end{DoxyCode}
+
+
+To change the default duration\+: 
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).value('duScrollDuration', 5000);
+\end{DoxyCode}
+
+
+\subsubsection*{Scroll easing}
+
+Set the {\ttfamily du\+Scroll\+Easing} value to a function that takes and returns a value between 0 to 1. Here\textquotesingle{}s \href{https://gist.github.com/gre/1650294}{\tt a few examples} to choose from.
+
+
+\begin{DoxyCode}
+function invertedEasingFunction(x) \{
+  return 1-x;
+\}
+angular.module('myApp', ['duScroll']).value('duScrollEasing', invertedEasingFunction);
+\end{DoxyCode}
+
+
+You can also pass a custom easing function as the fourth argument in {\ttfamily scroll\+To}.
+
+\subsubsection*{Greedy option}
+
+Set the {\ttfamily du\+Scroll\+Greedy} value to {\ttfamily true} if the elements you are observing are not wrapping the whole section you want to observe, but merely the first one in the section (such as headlines).
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).value('duScrollGreedy', true);
+\end{DoxyCode}
+
+
+\subsubsection*{Offset}
+
+To change default offset (in pixels) for the {\ttfamily du-\/smooth-\/scroll} directive\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).value('duScrollOffset', 30);
+\end{DoxyCode}
+
+
+\subsection*{Events }
+
+The {\ttfamily du\+Scrollspy} directive fires the global events {\ttfamily du\+Scrollspy\+:became\+Active} and {\ttfamily du\+Scrollspy\+:became\+Inactive} with an angular.\+element wrapped element as first argument. This is nice to have if you want the U\+RL bar to reflect where on the page the visitor are, like this\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['duScroll']).
+  config(function($locationProvider) \{
+    $locationProvider.html5Mode(true);
+  \}).
+  run(function($rootScope, $location)\{
+    $rootScope.$on('duScrollspy:becameActive', function($event, $element)\{
+      //Automaticly update location
+      var hash = $element.prop('hash');
+      if(hash) \{
+        $location.hash(hash.substr(1)).replace();
+        $rootScope.$apply();
+      \}
+    \});
+  \});
+\end{DoxyCode}
+
+
+\subsection*{Building }
+
+\begin{DoxyVerb}$ gulp
+\end{DoxyVerb}
+
+
+\subsection*{Tests }
+
+\subsubsection*{Unit tests}
+
+\begin{DoxyVerb}$ npm test
+\end{DoxyVerb}
+
+
+\subsubsection*{End to end tests}
+
+\begin{DoxyVerb}$ npm run update-webdriver
+$ npm run protractor\end{DoxyVerb}
+ 

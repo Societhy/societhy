@@ -1,0 +1,82 @@
+\subsection*{Releases Code}
+
+This repository contains the official release versions of \href{http://ckeditor.com}{\tt C\+K\+Editor}.
+
+There are four versions for each release --- {\ttfamily standard-\/all}, {\ttfamily basic}, {\ttfamily standard}, and {\ttfamily full}. They differ in the number of plugins that are compiled into the main {\ttfamily ckeditor.\+js} file as well as the toolbar configuration.
+
+See the \href{http://ckeditor.com/presets}{\tt comparison} of the {\ttfamily basic}, {\ttfamily standard}, and {\ttfamily full} installation presets for more details.
+
+The {\ttfamily standard-\/all} build includes all official C\+K\+Source plugins with only those from the {\ttfamily standard} installation preset compiled into the {\ttfamily ckeditor.\+js} file and enabled in the configuration.
+
+All versions available in this repository were built using \href{http://ckeditor.com/builder}{\tt C\+K\+Builder}, so they are optimized and ready to be used in a production environment.
+
+\subsection*{Documentation}
+
+Developer documentation for C\+K\+Editor is available online at\+: \href{http://docs.ckeditor.com}{\tt http\+://docs.\+ckeditor.\+com}.
+
+\subsection*{Installation}
+
+\subsubsection*{Git clone}
+
+To install one of the available releases, just clone this repository and switch to the respective branch (see next section)\+: \begin{DoxyVerb}git clone -b <release branch> git://github.com/ckeditor/ckeditor-releases.git
+\end{DoxyVerb}
+
+
+\subsubsection*{Git submodule}
+
+If you are using git for your project and you want to integrate C\+K\+Editor, we recommend to add this repository as a \href{http://git-scm.com/book/en/Git-Tools-Submodules}{\tt submodule}. \begin{DoxyVerb}git submodule add -b <release branch> git://github.com/ckeditor/ckeditor-releases.git <clone dir>
+git commit -m "Added CKEditor submodule in <clone dir> directory."
+\end{DoxyVerb}
+
+
+\subsubsection*{Using Package Managers}
+
+See the \href{http://docs.ckeditor.com/#!/guide/dev_package_managers}{\tt Installing C\+K\+Editor with Package Managers} article for more details about installing C\+K\+Editor with \href{http://bower.io/}{\tt Bower}, \href{https://getcomposer.org/}{\tt Composer} and \href{https://www.npmjs.com/}{\tt npm}.
+
+\subsection*{Repository Structure}
+
+\subsubsection*{Branches}
+
+This repository contains the following branches\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily master} and {\ttfamily latest} -- the latest release of the {\ttfamily standard-\/all} preset (including betas).
+\item {\ttfamily stable} -- the latest stable release of the {\ttfamily standard-\/all} preset (non-\/beta).
+\item {\ttfamily A.\+B.\+x} (e.\+g. {\ttfamily 4.\+3.\+x}) -- the latest release of the {\ttfamily standard-\/all} preset in the {\ttfamily A.\+B} branch.
+\item {\ttfamily (basic$\vert$standard$\vert$full)/stable} -- the latest stable release tag point (non-\/beta).
+\item {\ttfamily (basic$\vert$standard$\vert$full)/latest} -- the latest release tag point (including betas).
+\item {\ttfamily (basic$\vert$standard$\vert$full)/A.B.\+x} (e.\+g. {\ttfamily basic/4.\+0.\+x}) -- the latest releases in the {\ttfamily A.\+B} branch.
+\end{DoxyItemize}
+
+\subsubsection*{Tags}
+
+{\bfseries Since version 4.\+3.\+3} this repository uses the following tag naming rules\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily x.\+y.\+z} -- contains the {\ttfamily standard-\/all} editor build, e.\+g. {\ttfamily 4.\+3.\+3}, {\ttfamily 4.\+4.\+0} etc.
+\item {\ttfamily (basic$\vert$standard$\vert$full)/x.y.\+z} -- contains the editor build with a given preset, e.\+g. {\ttfamily basic/4.\+3.\+3}.
+\end{DoxyItemize}
+
+The version numbers follow the \href{http://semver.org/}{\tt Semantic Versioning 2.\+0.\+0} scheme.
+
+Up to version {\bfseries 4.\+3.\+2} the tags were released in the following form {\ttfamily x.\+y\mbox{[}.z\mbox{]}/(basic$\vert$standard$\vert$full)}. For example\+: {\ttfamily 4.\+0/basic}, {\ttfamily 4.\+0.\+1/standard}. This convention was changed in C\+K\+Editor 4.\+3.\+3 to conform to the Semantic Versioning scheme.
+
+\subsection*{Checking Your Installation}
+
+The editor comes with a sample page that can be used to verify if the installation succeeded. Take a look at the {\ttfamily samples} directory.
+
+To test your installation, just call the following page for your website\+: \begin{DoxyVerb}http://<your site>/<CKEditor installation path>/samples/index.html
+\end{DoxyVerb}
+
+
+For example\+: \begin{DoxyVerb}http://www.example.com/ckeditor/samples/index.html
+\end{DoxyVerb}
+
+
+\subsubsection*{License}
+
+Licensed under the G\+PL, L\+G\+PL, and M\+PL licenses, at your choice.
+
+Please check the {\ttfamily L\+I\+C\+E\+N\+S\+E.\+md} file for more information about the license. 

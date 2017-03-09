@@ -1,0 +1,176 @@
+\href{https://travis-ci.org/webcomponents/webcomponentsjs}{\tt }
+
+A suite of polyfills supporting the \href{http://webcomponents.org}{\tt Web Components} specs\+:
+
+{\bfseries Custom Elements}\+: allows authors to define their own custom tags (\href{https://w3c.github.io/webcomponents/spec/custom/}{\tt spec}).
+
+{\bfseries H\+T\+ML Imports}\+: a way to include and reuse H\+T\+ML documents via other H\+T\+ML documents (\href{https://w3c.github.io/webcomponents/spec/imports/}{\tt spec}).
+
+{\bfseries Shadow D\+OM}\+: provides encapsulation by hiding D\+OM subtrees under shadow roots (\href{https://w3c.github.io/webcomponents/spec/shadow/}{\tt spec}).
+
+This also folds in polyfills for {\ttfamily Mutation\+Observer} and {\ttfamily Weak\+Map}.
+
+\subsection*{Releases}
+
+Pre-\/built (concatenated \& minified) versions of the polyfills are maintained in the \href{https://github.com/webcomponents/webcomponentsjs/releases}{\tt tagged versions} of this repo. There are two variants\+:
+
+{\ttfamily webcomponents.\+js} includes all of the polyfills.
+
+{\ttfamily webcomponents-\/lite.\+js} includes all polyfills except for shadow D\+OM.
+
+\subsection*{Browser Support}
+
+Our polyfills are intended to work in the latest versions of evergreen browsers. See below for our complete browser support matrix\+:
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{8}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Polyfill }&\PBS\centering \textbf{ I\+E10 }&\PBS\centering \textbf{ I\+E11+ }&\PBS\centering \textbf{ Chrome$\ast$ }&\PBS\centering \textbf{ Firefox$\ast$ }&\PBS\centering \textbf{ Safari 7+$\ast$ }&\PBS\centering \textbf{ Chrome Android$\ast$ }&\PBS\centering \textbf{ Mobile Safari$\ast$  }\\\cline{1-8}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Polyfill }&\PBS\centering \textbf{ I\+E10 }&\PBS\centering \textbf{ I\+E11+ }&\PBS\centering \textbf{ Chrome$\ast$ }&\PBS\centering \textbf{ Firefox$\ast$ }&\PBS\centering \textbf{ Safari 7+$\ast$ }&\PBS\centering \textbf{ Chrome Android$\ast$ }&\PBS\centering \textbf{ Mobile Safari$\ast$  }\\\cline{1-8}
+\endhead
+Custom Elements &\PBS\centering $\sim$ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓&\PBS\centering ✓ \\\cline{1-8}
+H\+T\+ML Imports &\PBS\centering $\sim$ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓&\PBS\centering ✓&\PBS\centering ✓ \\\cline{1-8}
+Shadow D\+OM &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ \\\cline{1-8}
+Templates &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓&\PBS\centering ✓ &\PBS\centering ✓ &\PBS\centering ✓ \\\cline{1-8}
+\end{longtabu}
+
+
+$\ast$\+Indicates the current version of the browser
+
+$\sim$\+Indicates support may be flaky. If using Custom Elements or H\+T\+ML Imports with Shadow D\+OM, you will get the non-\/flaky Mutation Observer polyfill that Shadow D\+OM includes.
+
+The polyfills may work in older browsers, however require additional polyfills (such as class\+List) to be used. We cannot guarantee support for browsers outside of our compatibility matrix.
+
+\subsubsection*{Manually Building}
+
+If you wish to build the polyfills yourself, you\textquotesingle{}ll need {\ttfamily node} and {\ttfamily gulp} on your system\+:
+
+
+\begin{DoxyItemize}
+\item install \href{http://nodejs.org/}{\tt node.\+js} using the instructions on their website
+\item use {\ttfamily npm} to install \href{http://gulpjs.com/}{\tt gulp.\+js}\+: {\ttfamily npm install -\/g gulp}
+\end{DoxyItemize}
+
+Now you are ready to build the polyfills with\+: \begin{DoxyVerb}# install dependencies
+npm install
+# build
+gulp build
+\end{DoxyVerb}
+
+
+The builds will be placed into the {\ttfamily dist/} directory.
+
+\subsection*{Contribute}
+
+See the contributing guide
+
+\subsection*{License}
+
+Everything in this repository is B\+SD style license unless otherwise specified.
+
+Copyright (c) 2015 The Polymer Authors. All rights reserved.
+
+\subsection*{Helper utilities}
+
+\subsubsection*{{\ttfamily Web\+Components\+Ready}}
+
+Under native H\+T\+ML Imports, {\ttfamily $<$script$>$} tags in the main document block the loading of such imports. This is to ensure the imports have loaded and any registered elements in them have been upgraded.
+
+The webcomponents.\+js and webcomponents-\/lite.\+js polyfills parse element definitions and handle their upgrade asynchronously. If prematurely fetching the element from the D\+OM before it has an opportunity to upgrade, you\textquotesingle{}ll be working with an {\ttfamily H\+T\+M\+L\+Unknown\+Element}.
+
+For these situations (or when you need an approximate replacement for the Polymer 0.\+5 {\ttfamily polymer-\/ready} behavior), you can use the {\ttfamily Web\+Components\+Ready} event as a signal before interacting with the element. The criteria for this event to fire is all Custom Elements with definitions registered by the time H\+T\+ML Imports available at load time have loaded have upgraded.
+
+
+\begin{DoxyCode}
+window.addEventListener('WebComponentsReady', function(e) \{
+  // imports are loaded and elements have been registered
+  console.log('Components are ready');
+\});
+\end{DoxyCode}
+
+
+\subsection*{Known Issues}
+
+
+\begin{DoxyItemize}
+\item \href{#encapsulation}{\tt Limited C\+SS encapsulation}
+\item \href{#wrapping}{\tt Element wrapping / unwrapping limitations}
+\item \href{#constructor}{\tt Custom element\textquotesingle{}s constructor property is unreliable}
+\item \href{#contentedit}{\tt Contenteditable elements do not trigger Mutation\+Observer}
+\item \href{#hostcontext}{\tt Shadow\+C\+S\+S\+: \+:host-\/context(...)\+:host(...) doesn\textquotesingle{}t work}
+\item \href{#nestedparens}{\tt Shadow\+C\+S\+S\+: \+:host(.zot\+:not(.bar\+:nth-\/child(2))) doesn\textquotesingle{}t work}
+\item \href{#currentscript}{\tt H\+T\+ML imports\+: document.\+current\+Script doesn\textquotesingle{}t work as expected}
+\item \href{#execcommand}{\tt exec\+Command isn\textquotesingle{}t supported under Shadow D\+OM}
+\end{DoxyItemize}
+
+\subsubsection*{Limited C\+SS encapsulation }
+
+Under native Shadow D\+OM, C\+SS selectors cannot cross the shadow boundary. This means document level styles don\textquotesingle{}t apply to shadow roots, and styles defined within a shadow root don\textquotesingle{}t apply outside of that shadow root. \href{http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom-201/}{\tt Several selectors} are provided to be able to deal with the shadow boundary.
+
+The Shadow D\+OM polyfill can\textquotesingle{}t prevent document styles from leaking into shadow roots. It can, however, encapsulate styles within shadow roots to some extent. This behavior isn\textquotesingle{}t automatically emulated by the Shadow D\+OM polyfill, but it can be achieved by manually using the included Shadow\+C\+SS shim\+:
+
+
+\begin{DoxyCode}
+WebComponents.ShadowCSS.shimStyling( shadowRoot, scope );
+\end{DoxyCode}
+
+
+... where {\ttfamily shadow\+Root} is the shadow root of a D\+OM element, and {\ttfamily scope} is the name of the scope used to prefix the selectors. This removes all {\ttfamily $<$style$>$} elements from the shadow root, rewrites it rules using the given scope and reinserts the style as a document level stylesheet. Note that the {\ttfamily \+:host} and {\ttfamily \+:host-\/context} pseudo classes are also rewritten.
+
+For a full explanation on the implementation and both the possibilities and the limitations of Shadow\+C\+SS please view the documentation in the \href{src/ShadowCSS/ShadowCSS.js}{\tt Shadow\+C\+SS source}.
+
+\subsubsection*{Element wrapping / unwrapping limitations }
+
+The Shadow D\+OM polyfill is implemented by \href{http://webcomponents.org/polyfills/shadow-dom/#wrappers}{\tt wrapping} D\+OM elements whenever possible. It does this by wrapping methods like {\ttfamily document.\+query\+Selector} to return wrapped D\+OM elements. This has a few caveats\+:
+\begin{DoxyItemize}
+\item Not {\itshape everything} can be wrapped. For example, elements like {\ttfamily document}, {\ttfamily window}, {\ttfamily document.\+body}, {\ttfamily document.\+fullscreen\+Element} and others are non-\/configurable and thus cannot be overridden.
+\item Wrappers don\textquotesingle{}t support \href{https://developer.mozilla.org/en-US/docs/Web/API/NodeList#A_sometimes-live_collection}{\tt live Node\+Lists} like {\ttfamily H\+T\+M\+L\+Element.\+child\+Nodes} and {\ttfamily H\+T\+M\+L\+Form\+Element.\+elements}. All Node\+Lists are snapshotted upon read. See \href{https://github.com/webcomponents/webcomponentsjs/issues/217}{\tt \#217} for an explanation.
+\end{DoxyItemize}
+
+In order to work around these limitations the polyfill provides the {\ttfamily Shadow\+D\+O\+M\+Polyfill.\+wrap} and {\ttfamily Shadow\+D\+O\+M\+Polyfill.\+unwrap} methods to respectively wrap and unwrap D\+OM elements manually.
+
+\subsubsection*{Custom element\textquotesingle{}s constructor property is unreliable }
+
+See \href{https://github.com/webcomponents/webcomponentsjs/issues/215}{\tt \#215} for background.
+
+In Safari and IE, instances of Custom Elements have a {\ttfamily constructor} property of {\ttfamily H\+T\+M\+L\+Unknown\+Element\+Constructor} and {\ttfamily H\+T\+M\+L\+Unknown\+Element}, respectively. It\textquotesingle{}s unsafe to rely on this property for checking element types.
+
+It\textquotesingle{}s worth noting that {\ttfamily custom\+Element.\+\_\+\+\_\+proto\+\_\+\+\_\+.\+\_\+\+\_\+proto\+\_\+\+\_\+.\+constructor} is {\ttfamily H\+T\+M\+L\+Element\+Prototype} and that the prototype chain isn\textquotesingle{}t modified by the polyfills(onto {\ttfamily Element\+Prototype}, etc.)
+
+\subsubsection*{Contenteditable elements do not trigger Mutation\+Observer }
+
+Using the Mutation\+Observer polyfill, it isn\textquotesingle{}t possible to monitor mutations of an element marked {\ttfamily contenteditable}. See \href{https://groups.google.com/forum/#!msg/polymer-dev/LHdtRVXXVsA/v1sGoiTYWUkJ}{\tt the mailing list}
+
+\subsubsection*{Shadow\+C\+SS\+: \+:host-\/context(...)\+:host(...) doesn\textquotesingle{}t work }
+
+See \href{https://github.com/webcomponents/webcomponentsjs/issues/16}{\tt \#16} for background.
+
+Under the shadow D\+OM polyfill, rules like\+: 
+\begin{DoxyCode}
+:host-context(.foo):host(.bar) \{...\}
+\end{DoxyCode}
+ don\textquotesingle{}t work, despite working under native Shadow D\+OM. The solution is to use {\ttfamily polyfill-\/next-\/selector} like\+:
+
+
+\begin{DoxyCode}
+polyfill-next-selector \{ content: '.foo :host.bar, :host.foo.bar'; \}
+\end{DoxyCode}
+
+
+\subsubsection*{Shadow\+C\+SS\+: \+:host(.zot\+:not(.bar\+:nth-\/child(2))) doesn\textquotesingle{}t work }
+
+Shadow\+C\+SS {\ttfamily \+:host()} rules can only have (at most) 1-\/level of nested parentheses in its argument selector under Shadow\+C\+SS. For example, {\ttfamily \+:host(.zot)} and {\ttfamily \+:host(.zot\+:not(.bar))} both work, but {\ttfamily \+:host(.zot\+:not(.bar\+:nth-\/child(2)))} does not.
+
+\subsubsection*{H\+T\+ML imports\+: document.\+current\+Script doesn\textquotesingle{}t work as expected }
+
+In native H\+T\+ML Imports, document.\+current\+Script.\+owner\+Document references the import document itself. In the polyfill use document.\+\_\+current\+Script.\+owner\+Document (note the underscore).
+
+\subsubsection*{exec\+Command and contenteditable isn\textquotesingle{}t supported under Shadow D\+OM }
+
+See \href{https://github.com/webcomponents/webcomponentsjs/issues/212}{\tt \#212}
+
+{\ttfamily exec\+Command}, and {\ttfamily contenteditable} aren\textquotesingle{}t supported under the Shadow\+D\+OM polyfill, with commands that insert or remove nodes being especially prone to failure. 

@@ -1,0 +1,27 @@
+\href{https://npmjs.org/package/moment}{\tt } \href{https://npmjs.org/package/moment}{\tt } \mbox{[}\mbox{]}\mbox{[}license-\/url\mbox{]} \href{http://travis-ci.org/moment/moment}{\tt }
+
+A lightweight javascript date library for parsing, validating, manipulating, and formatting dates.
+
+\subsection*{\href{http://momentjs.com/docs/}{\tt Documentation}}
+
+\subsection*{Upgrading to 2.\+0.\+0}
+
+There are a number of small backwards incompatible changes with version 2.\+0.\+0. \href{https://gist.github.com/timrwood/e72f2eef320ed9e37c51#backwards-incompatible-changes}{\tt See the full descriptions here}
+
+
+\begin{DoxyItemize}
+\item Changed language ordinal method to return the number + ordinal instead of just the ordinal.
+\item Changed two digit year parsing cutoff to match strptime.
+\item Removed {\ttfamily moment\+::sod} and {\ttfamily moment\+::eod} in favor of {\ttfamily moment\+::start\+Of} and {\ttfamily moment\+::end\+Of}.
+\item Removed {\ttfamily moment.\+humanize\+Duration()} in favor of {\ttfamily moment.\+duration().humanize()}.
+\item Removed the lang data objects from the top level namespace.
+\item Duplicate {\ttfamily Date} passed to {\ttfamily moment()} instead of referencing it.
+\end{DoxyItemize}
+
+\subsection*{C\+H\+A\+N\+G\+E\+L\+O\+G.\+md \char`\"{}\+Changelog\char`\"{}}
+
+\subsection*{C\+O\+N\+T\+R\+I\+B\+U\+T\+I\+N\+G.\+md \char`\"{}\+Contributing\char`\"{}}
+
+\subsection*{License}
+
+Moment.\+js is freely distributable under the terms of the \mbox{[}M\+IT license\mbox{]}(L\+I\+C\+E\+N\+SE). 

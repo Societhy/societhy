@@ -1,0 +1,62 @@
+Off canvas side menu for use with ui-\/bootstrap 0.\+14+. Extends ui-\/bootstrap\textquotesingle{}s {\ttfamily \$uib\+Modal} provider.
+
+\+:information\+\_\+desk\+\_\+person\+: Please use v1.\+2.\+x for ui-\/bootstrap versions 0.\+13 and below.
+
+\subsubsection*{\href{http://plnkr.co/edit/G7vMSv?p=preview}{\tt Live Demo}}
+
+\subsection*{Install}
+
+\#\#\#\# Bower\+: 
+\begin{DoxyCode}
+$ bower install angular-aside
+\end{DoxyCode}
+ Then, include css/js in html.
+
+\#\#\#\# N\+PM 
+\begin{DoxyCode}
+$ npm install angular-aside
+\end{DoxyCode}
+
+
+\subsection*{Usage}
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['ui.bootstrap', 'ngAside']);
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+angular.module('myApp')
+  .controller('MyController', function($scope, $aside) \{
+    var asideInstance = $aside.open(\{
+      templateUrl: 'aside.html',
+      controller: 'AsideCtrl',
+      placement: 'left',
+      size: 'lg'
+    \});
+  \});
+\end{DoxyCode}
+
+
+Supports all configuration that {\ttfamily \$uib\+Modal} has. Can be used with both {\ttfamily template} and {\ttfamily template\+Url}. For more info hit {\bfseries Modal} section on \href{http://angular-ui.github.io/bootstrap}{\tt angular-\/ui bootstrap} documentation.
+
+\subsection*{Additional Config}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily placement} -\/ Aside placement can be {\ttfamily \textquotesingle{}left\textquotesingle{}}, {\ttfamily \textquotesingle{}right\textquotesingle{}}, {\ttfamily \textquotesingle{}top\textquotesingle{}}, or {\ttfamily \textquotesingle{}bottom\textquotesingle{}}.
+\end{DoxyItemize}
+
+\subsection*{Credits}
+
+
+\begin{DoxyItemize}
+\item \href{angular-ui.github.io/bootstrap/}{\tt Angular UI Bootstrap}
+\item \href{http://daneden.github.io/animate.css/}{\tt Animate.\+css}
+\end{DoxyItemize}
+
+\subsection*{Author}
+
+İsmail Demirbilek (\href{https://twitter.com/dbtek}{\tt }) 

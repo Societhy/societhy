@@ -1,0 +1,1434 @@
+` element.
+
+\subsection*{C\+K\+Editor 4.\+5.\+11}
+
+{\bfseries Security Updates\+:}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}Severity\+: minor\mbox{]} Fixed the target=\char`\"{}\+\_\+blank\char`\"{} vulnerability reported by James Gaskell.
+
+Issue summary\+: If a victim had access to a spoofed version of ckeditor.\+com via H\+T\+TP (e.\+g. due to D\+NS spoofing, using a hacked public network or mailicious hotspot), then when using a link to the ckeditor.\+com website it was possible for the attacker to change the current U\+RL of the opening page, even if the opening page was protected with S\+SL.
+
+An upgrade is recommended.
+\end{DoxyItemize}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/14747}{\tt \#14747}\+: The \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} caption now supports the link {\ttfamily target} attribute.
+\item \href{http://dev.ckeditor.com/ticket/7154}{\tt \#7154}\+: Added support for the \char`\"{}\+Display Text\char`\"{} field to the \href{http://ckeditor.com/addon/link}{\tt Link} dialog. Thanks to \href{https://github.com/ryanguill}{\tt Ryan Guill}!
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13362}{\tt \#13362}\+: \mbox{[}Blink, Web\+Kit\mbox{]} Fixed\+: Active widget element is not cached when it is losing focus and it is inside an editable element.
+\item \href{http://dev.ckeditor.com/ticket/13755}{\tt \#13755}\+: \mbox{[}Edge\mbox{]} Fixed\+: Pasting images does not work.
+\item \href{http://dev.ckeditor.com/ticket/13548}{\tt \#13548}\+: \mbox{[}IE\mbox{]} Fixed\+: Clicking the \href{http://ckeditor.com/addon/elementspath}{\tt elements path} disables Cut and Copy icons.
+\item \href{http://dev.ckeditor.com/ticket/13812}{\tt \#13812}\+: Fixed\+: When aborting file upload the placeholder for image is left.
+\item \href{http://dev.ckeditor.com/ticket/14659}{\tt \#14659}\+: \mbox{[}Blink\mbox{]} Fixed\+: Content scrolled to the top after closing the dialog in a \href{http://ckeditor.com/addon/divarea}{\tt {\ttfamily $<$div$>$}-\/based editor}.
+\item \href{http://dev.ckeditor.com/ticket/14825}{\tt \#14825}\+: \mbox{[}Edge\mbox{]} Fixed\+: Focusing the editor causes unwanted scrolling due to dropped support for the {\ttfamily set\+Active} method.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+10}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10750}{\tt \#10750}\+: Fixed\+: The editor does not escape the {\ttfamily font-\/style} family property correctly, removing quotes and whitespace from font names.
+\item \href{http://dev.ckeditor.com/ticket/14413}{\tt \#14413}\+: Fixed\+: The \href{http://ckeditor.com/addon/autogrow}{\tt Auto Grow} plugin with the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-autoGrow_onStartup}{\tt {\ttfamily config.\+auto\+Grow\+\_\+on\+Startup}} option set to {\ttfamily true} does not work properly for an editor that is not visible.
+\item \href{http://dev.ckeditor.com/ticket/14451}{\tt \#14451}\+: Fixed\+: Numeric element ID not escaped properly. Thanks to \href{https://github.com/chaluja7}{\tt Jakub Chalupa}!
+\item \href{http://dev.ckeditor.com/ticket/14590}{\tt \#14590}\+: Fixed\+: Additional line break appearing after inline elements when switching modes. Thanks to \href{https://github.com/dpidcock}{\tt dpidcock}!
+\item \href{https://dev.ckeditor.com/ticket/14539}{\tt \#14539}\+: Fixed\+: J\+A\+WS reads \char`\"{}selected Blank\char`\"{} instead of \char`\"{}selected $<$widget name$>$\char`\"{} when selecting a widget.
+\item \href{http://dev.ckeditor.com/ticket/14701}{\tt \#14701}\+: Fixed\+: More precise labels for \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} and \href{http://ckeditor.com/addon/placeholder}{\tt Placeholder} widgets.
+\item \href{http://dev.ckeditor.com/ticket/14667}{\tt \#14667}\+: \mbox{[}IE\mbox{]} Fixed\+: Removing background color from selected text removes background color from the whole paragraph.
+\item \href{http://dev.ckeditor.com/ticket/14252}{\tt \#14252}\+: \mbox{[}IE\mbox{]} Fixed\+: Styles drop-\/down list does not always reflect the current style of the text line.
+\item \href{http://dev.ckeditor.com/ticket/14275}{\tt \#14275}\+: \mbox{[}I\+E9+\mbox{]} Fixed\+: {\ttfamily onerror} and {\ttfamily onload} events are not used in browsers it could have been used when loading scripts dynamically.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+9}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10685}{\tt \#10685}\+: Fixed\+: Unreadable toolbar icons after updating to the new editor version. Fixed with \href{https://github.com/ckeditor/ckeditor-dev/commit/6876179db4ee97e786b07b8fd72e6b4120732185}{\tt 6876179} in \href{https://github.com/ckeditor/ckeditor-dev}{\tt ckeditor-\/dev} and \href{https://github.com/ckeditor/ckeditor-presets/commit/6c9189f46392d2c126854fe8889b820b8c76d291}{\tt 6c9189f4} in \href{https://github.com/ckeditor/ckeditor-presets}{\tt ckeditor-\/presets}.
+\item \href{https://dev.ckeditor.com/ticket/14573}{\tt \#14573}\+: Fixed\+: Missing \href{http://ckeditor.com/addon/widget}{\tt Widget} drag handler C\+SS when there are multiple editor instances.
+\item \href{https://dev.ckeditor.com/ticket/14620}{\tt \#14620}\+: Fixed\+: Setting both the {\ttfamily min-\/height} style for the {\ttfamily $<$body$>$} element and the {\ttfamily height} style for the {\ttfamily $<$html$>$} element breaks the \href{http://ckeditor.com/addon/autogrow}{\tt Auto Grow} plugin.
+\item \href{http://dev.ckeditor.com/ticket/14538}{\tt \#14538}\+: Fixed\+: Keyboard focus goes into an embedded {\ttfamily $<$iframe$>$} element.
+\item \href{http://dev.ckeditor.com/ticket/14602}{\tt \#14602}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-removeAttribute}{\tt {\ttfamily dom.\+element.\+remove\+Attribute()}} method does not remove all attributes if no parameter is given.
+\item \href{http://dev.ckeditor.com/ticket/8679}{\tt \#8679}\+: Fixed\+: Better focus indication and ability to style the selected color in the \href{http://ckeditor.com/addon/colordialog}{\tt color picker dialog}.
+\item \href{http://dev.ckeditor.com/ticket/11697}{\tt \#11697}\+: Fixed\+: Content is replaced ignoring the letter case setting in the \href{http://ckeditor.com/addon/find}{\tt Find and Replace} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/13886}{\tt \#13886}\+: Fixed\+: Invalid handling of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style}} instance with the {\ttfamily styles} property by \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+filter}}.
+\item \href{http://dev.ckeditor.com/ticket/14535}{\tt \#14535}\+: Fixed\+: C\+SS syntax corrections. Thanks to \href{https://github.com/mdjdenormandie}{\tt mdjdenormandie}!
+\item \href{http://dev.ckeditor.com/ticket/14312}{\tt \#14312}\+: \mbox{[}IE\mbox{]} Fixed\+: Artifact is visible after pasting any text.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+8}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12440}{\tt \#12440}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-colorButton_enableAutomatic}{\tt {\ttfamily config.\+color\+Button\+\_\+enable\+Automatic}} option to allow hiding the \char`\"{}\+Automatic\char`\"{} option in the \href{http://ckeditor.com/addon/colorbutton}{\tt color picker}.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10448}{\tt \#10448}\+: Fixed\+: Lack of scrollbar in the \href{http://ckeditor.com/addon/bidi}{\tt right-\/to-\/left text direction}.
+\item \href{http://dev.ckeditor.com/ticket/12707}{\tt \#12707}\+: Fixed\+: The order of table elements does not comply with the H\+T\+ML specification.
+\item \href{http://dev.ckeditor.com/ticket/13756}{\tt \#13756}\+: \mbox{[}Edge\mbox{]} Fixed\+: Context menus are cut-\/off.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+7}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/14327}{\tt \#14327}\+: Added Swiss German localization. Thanks to \href{https://twitter.com/mirogrenda}{\tt Miro Grenda}!
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13816}{\tt \#13816}\+: Introduced a new strategy for Filling Character handling to avoid changes in D\+OM. This fixes the following issues\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12727}{\tt \#12727}\+: \mbox{[}Blink\mbox{]} {\ttfamily Index\+Size\+Error} when using the \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area} and \href{http://ckeditor.com/addon/templates}{\tt Content Templates} plugins.
+\item \href{http://dev.ckeditor.com/ticket/13377}{\tt \#13377}\+: \href{http://ckeditor.com/addon/widget}{\tt Widget} plugin issue when typing in Korean.
+\item \href{http://dev.ckeditor.com/ticket/13389}{\tt \#13389}\+: \mbox{[}Blink\mbox{]} \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getData}{\tt {\ttfamily editor.\+get\+Data()}} fails when the cursor is next to an {\ttfamily $<$hr$>$} tag.
+\item \href{http://dev.ckeditor.com/ticket/13513}{\tt \#13513}\+: \mbox{[}Blink, Web\+Kit\mbox{]} \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getData}{\tt {\ttfamily editor.\+get\+Data()}} throw an error when an image is the only data in the editor.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13884}{\tt \#13884}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Copying and pasting a table results in just the first cell being pasted.
+\item \href{http://dev.ckeditor.com/ticket/14234}{\tt \#14234}\+: Fixed\+: U\+RL input field is not marked as required in the \href{http://ckeditor.com/addon/embed}{\tt Media Embed} dialog.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+6}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-getCookie}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+get\+Cookie()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-setCookie}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+set\+Cookie()}} methods for accessing cookies.
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-getCsrfToken}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+get\+Csrf\+Token()}} method. The C\+S\+RF token is now automatically sent by the \href{http://ckeditor.com/addon/filebrowser}{\tt File Browser} and \href{http://ckeditor.com/addon/filetools}{\tt File Tools} plugins during file uploads. The server-\/side upload handlers may check it and use it to additionally secure the communication.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item Updated \href{http://ckeditor.com/addon/scayt}{\tt S\+C\+A\+YT} (Spell Check As You Type)\+:
+\begin{DoxyItemize}
+\item New features\+:
+\begin{DoxyItemize}
+\item C\+K\+Editor \href{http://ckeditor.com/addon/language}{\tt Language} plugin support.
+\item C\+K\+Editor \href{http://ckeditor.com/addon/placeholder}{\tt Placeholder} plugin support.
+\item \href{http://sdk.ckeditor.com/samples/fileupload.html}{\tt Drag\&Drop} support.
+\item {\bfseries Experimental} \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-grayt_autoStartup}{\tt G\+R\+A\+YT} (Grammar As You Type) functionality.
+\end{DoxyItemize}
+\item Fixed issues\+:
+\begin{DoxyItemize}
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/98}{\tt \#98}\+: S\+C\+A\+YT affects dialog double-\/click. Fixed in S\+C\+A\+YT core.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/102}{\tt \#102}\+: S\+C\+A\+YT core performance enhancements.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/104}{\tt \#104}\+: S\+C\+A\+YT\textquotesingle{}s spans leak into the clipboard and after pasting.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/105}{\tt \#105}\+: A Java\+Script error fired in case of multiple instances of C\+K\+Editor on one page.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/107}{\tt \#107}\+: S\+C\+A\+YT should not check non-\/editable parts of content.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/108}{\tt \#108}\+: Latest S\+C\+A\+YT copies the ID of the editor element to the iframe.
+\item S\+C\+A\+YT stops working when C\+K\+Editor \href{http://ckeditor.com/addon/undo}{\tt Undo plugin} not enabled.
+\item Issue with pasting S\+C\+A\+YT markup in C\+K\+Editor.
+\item S\+C\+A\+YT stops working after pressing the {\itshape Cancel} button in the W\+SC dialog.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+5}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://dev.ckeditor.com/ticket/13887}{\tt \#13887}\+: Fixed\+: \href{http://ckeditor.com/addon/link}{\tt Link} plugin alters the {\ttfamily target} attribute value. Thanks to \href{https://github.com/SamZiemer}{\tt Sam\+Ziemer}!
+\item \href{http://dev.ckeditor.com/ticket/12189}{\tt \#12189}\+: Fixed\+: The \href{http://ckeditor.com/addon/link}{\tt Link} plugin dialog does not display the subject of email links if the subject parameter is not lowercase.
+\item \href{http://dev.ckeditor.com/ticket/9192}{\tt \#9192}\+: Fixed\+: An {\ttfamily undefined} string is appended to an email address added with the \href{http://ckeditor.com/addon/link}{\tt Link} plugin if subject and email body are empty and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-emailProtection}{\tt {\ttfamily config.\+email\+Protection}} is set to {\ttfamily encode}.
+\item \href{https://dev.ckeditor.com/ticket/13790}{\tt \#13790}\+: Fixed\+: It is not possible to destroy the editor {\ttfamily $<$iframe$>$} after the editor was detached from D\+OM. Thanks to \href{https://github.com/StefanRijnhart}{\tt Stefan Rijnhart}!
+\item \href{https://dev.ckeditor.com/ticket/13803}{\tt \#13803}\+: Fixed\+: The editor cannot be destroyed before being fully initialized. Thanks to \href{https://github.com/cyril-sf}{\tt Cyril Fluck}!
+\item \href{http://dev.ckeditor.com/ticket/13867}{\tt \#13867}\+: Fixed\+: C\+K\+Editor does not work when the {\ttfamily class\+List} polyfill is used.
+\item \href{http://dev.ckeditor.com/ticket/13885}{\tt \#13885}\+: Fixed\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} requires the \href{http://ckeditor.com/addon/link}{\tt Link} plugin to link an image.
+\item \href{http://dev.ckeditor.com/ticket/13883}{\tt \#13883}\+: Fixed\+: Copying a table using the context menu strips off styles.
+\item \href{http://dev.ckeditor.com/ticket/13872}{\tt \#13872}\+: Fixed\+: Cutting is possible in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-readOnly}{\tt read-\/only} mode.
+\item \href{http://dev.ckeditor.com/ticket/12848}{\tt \#12848}\+: \mbox{[}Blink\mbox{]} Fixed\+: Opening the \href{http://ckeditor.com/addon/find}{\tt Find and Replace} dialog window in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-readOnly}{\tt read-\/only} mode throws an exception.
+\item \href{http://dev.ckeditor.com/ticket/13879}{\tt \#13879}\+: Fixed\+: It is not possible to prevent the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-drop}{\tt {\ttfamily editor.\+drop}} event.
+\item \href{http://dev.ckeditor.com/ticket/13361}{\tt \#13361}\+: Fixed\+: Skin images fail when the site path includes parentheses because the {\ttfamily background-\/image} path needs single quotes around the U\+RL value.
+\item \href{http://dev.ckeditor.com/ticket/13771}{\tt \#13771}\+: Fixed\+: The {\ttfamily contents.\+css} style is not used if the \href{http://ckeditor.com/addon/wysiwygarea}{\tt I\+Frame Editing Area} plugin is missing.
+\item \href{http://dev.ckeditor.com/ticket/13782}{\tt \#13782}\+: Fixed\+: Unclear log messages.
+\item \href{http://dev.ckeditor.com/ticket/13919}{\tt \#13919}\+: \mbox{[}Edge\mbox{]} Fixed\+: Browser window crashes when accessing the {\ttfamily is\+Content\+Editable} property of an {\ttfamily $<$input$>$} D\+OM element.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13859}{\tt \#13859}\+: Test cases created with {\ttfamily bender.\+tools.\+create\+Tests\+For\+Editors} will also receive editor bot as a second parameter.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+4}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13632}{\tt \#13632}\+: Introduce error logging mechanism.
+\item \href{http://dev.ckeditor.com/ticket/13730}{\tt \#13730}\+: Switch to the new error logging mechanism.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9856}{\tt \#9856}\+: Fixed\+: Cannot use the native context menu together with the \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area} plugin. Thanks to \href{https://github.com/mark-wade}{\tt Mark Wade}!
+\item \href{http://dev.ckeditor.com/ticket/12733}{\tt \#12733}\+: \mbox{[}I\+E9+\mbox{]} Fixed\+: Radio button {\ttfamily on\+Change} does not work. Thanks to \href{https://github.com/iliyakostadinov}{\tt Iliya Kostadinov}!
+\item \href{http://dev.ckeditor.com/ticket/13142}{\tt \#13142}\+: \mbox{[}Edge\mbox{]} Fixed\+: {\itshape Ctrl+A} and then {\itshape Backspace} result in an empty {\ttfamily $<$div$>$} element.
+\item \href{http://dev.ckeditor.com/ticket/13599}{\tt \#13599}\+: Fixed\+: Cross-\/editor drag and drop of an inline widget results in error/artifacts.
+\item \href{http://dev.ckeditor.com/ticket/13640}{\tt \#13640}\+: \mbox{[}IE\mbox{]} Fixed\+: Dropping a widget outside the {\ttfamily $<$body$>$} element is not handled correctly.
+\item \href{http://dev.ckeditor.com/ticket/13533}{\tt \#13533}\+: Fixed\+: No progress during upload.
+\item \href{http://dev.ckeditor.com/ticket/13680}{\tt \#13680}\+: Fixed\+: The parser should allow the {\ttfamily $<$h1-\/6$>$} element to be a child of the `$\ast$ \href{http://dev.ckeditor.com/ticket/11724}{\tt \#11724}\+: \mbox{[}Touch devices\mbox{]} Fixed\+: Drop-\/downs often hide right after opening them.
+\item \href{http://dev.ckeditor.com/ticket/13690}{\tt \#13690}\+: Fixed\+: Copying content from IE to Chrome adds an extra paragraph.
+\item \href{http://dev.ckeditor.com/ticket/13284}{\tt \#13284}\+: Fixed\+: Cannot drag and drop a widget if the text caret is placed just after the widget instance.
+\item \href{http://dev.ckeditor.com/ticket/13516}{\tt \#13516}\+: Fixed\+: C\+K\+Editor removes empty H\+T\+M\+L5 anchors without the {\ttfamily name} attribute.
+\item \href{http://dev.ckeditor.com/ticket/13765}{\tt \#13765}\+: \mbox{[}Safari 9\mbox{]} Fixed\+: Problems with rendering samples.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11725}{\tt \#11725}\+: Marked \href{http://docs.ckeditor.com/#!/api/CKEDITOR.env-property-mobile}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+env.\+mobile}} as deprecated. The reason is that it is no longer clear what \char`\"{}mobile\char`\"{} means.
+\item \href{http://dev.ckeditor.com/ticket/13737}{\tt \#13737}\+: Upgraded \href{https://github.com/benderjs/benderjs}{\tt Bender.\+js} to 0.\+4.\+1.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+3}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13501}{\tt \#13501}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-fileTools_defaultFileName}{\tt {\ttfamily config.\+file\+Tools\+\_\+default\+File\+Name}} option to allow setting a default file name for paste uploads.
+\item \href{http://dev.ckeditor.com/ticket/13603}{\tt \#13603}\+: Added support for uploading dropped B\+MP images.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13590}{\tt \#13590}\+: Fixed\+: Various issues related to the \href{http://ckeditor.com/addon/pastefromword}{\tt Paste from Word} feature. Fixes also\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11215}{\tt \#11215},
+\item \href{http://dev.ckeditor.com/ticket/8780}{\tt \#8780},
+\item \href{http://dev.ckeditor.com/ticket/12762}{\tt \#12762}.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13386}{\tt \#13386}\+: \mbox{[}Edge\mbox{]} Fixed\+: Issues with selecting and editing images.
+\item \href{http://dev.ckeditor.com/ticket/13568}{\tt \#13568}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSelectedHtml}{\tt {\ttfamily editor.\+get\+Selected\+Html()}} method returns invalid results for entire content selection.
+\item \href{http://dev.ckeditor.com/ticket/13453}{\tt \#13453}\+: Fixed\+: Drag\&drop of entire editor content throws an error.
+\item \href{http://dev.ckeditor.com/ticket/13465}{\tt \#13465}\+: Fixed\+: Error is thrown and the widget is lost on drag\&drop if it is the only content of the editor.
+\item \href{http://dev.ckeditor.com/ticket/13414}{\tt \#13414}\+: Fixed\+: Content auto paragraphing in a nested editable despite editor configuration.
+\item \href{http://dev.ckeditor.com/ticket/13429}{\tt \#13429}\+: Fixed\+: Incorrect selection after content insertion by the \href{http://ckeditor.com/addon/autoembed}{\tt Auto Embed} plugin.
+\item \href{http://dev.ckeditor.com/ticket/13388}{\tt \#13388}\+: Fixed\+: \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} integration with \href{http://ckeditor.com/addon/undo}{\tt Undo} is broken.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://dev.ckeditor.com/ticket/13637}{\tt \#13637}\+: Several icons were refactored.
+\item Updated \href{https://github.com/benderjs/benderjs}{\tt Bender.\+js} to 0.\+3.\+0 and introduced the ability to run tests via H\+T\+T\+Ps (\href{https://dev.ckeditor.com/ticket/13265}{\tt \#13265}).
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+2}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13609}{\tt \#13609}\+: \mbox{[}Edge\mbox{]} Fixed\+: The browser crashes when switching to the source mode. Thanks to \href{http://webxsolution.com/}{\tt Andrew Williams and Mark Smeed}!
+\item \href{https://github.com/ckeditor/ckeditor-dev/pull/201}{\tt PR\#201}\+: Fixed\+: Buttons in the toolbar configurator cause form submission. Thanks to \href{https://github.com/colemanw}{\tt colemanw}!
+\item \href{http://dev.ckeditor.com/ticket/13422}{\tt \#13422}\+: Fixed\+: A monospaced font should be used in the {\ttfamily $<$textarea$>$} element storing editor configuration in the toolbar configurator.
+\item \href{http://dev.ckeditor.com/ticket/13494}{\tt \#13494}\+: Fixed\+: Error thrown in the toolbar configurator if plugin requirements are not met.
+\item \href{http://dev.ckeditor.com/ticket/13409}{\tt \#13409}\+: Fixed\+: List elements incorrectly merged when pressing {\itshape Backspace} or {\itshape Delete}.
+\item \href{http://dev.ckeditor.com/ticket/13434}{\tt \#13434}\+: Fixed\+: Dialog state indicator broken in Right–\+To–\+Left environments.
+\item \href{http://dev.ckeditor.com/ticket/13460}{\tt \#13460}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Copying inline widgets is broken when \href{http://docs.ckeditor.com/#!/guide/dev_acf}{\tt Advanced Content Filter} is disabled.
+\item \href{http://dev.ckeditor.com/ticket/13495}{\tt \#13495}\+: \mbox{[}Firefox, IE\mbox{]} Fixed\+: Text is not word-\/wrapped in the Paste dialog window.
+\item \href{http://dev.ckeditor.com/ticket/13528}{\tt \#13528}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Content copied from Microsoft Word and other external applications is pasted as a plain text. Removed the {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+plugins.\+clipboard.\+is\+Html\+In\+External\+Data\+Transfer} property as the check must be dynamic.
+\item \href{http://dev.ckeditor.com/ticket/13583}{\tt \#13583}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.clipboard.dataTransfer-method-getData}{\tt {\ttfamily Data\+Transfer.\+get\+Data()}} should work consistently in all browsers and should not strip valuable content. Fixed pasting tables from Microsoft Excel on Chrome.
+\item \href{http://dev.ckeditor.com/ticket/13468}{\tt \#13468}\+: \mbox{[}IE\mbox{]} Fixed\+: Binding drag\&drop {\ttfamily data\+Transfer} does not work if {\ttfamily text} data was set in the meantime.
+\item \href{http://dev.ckeditor.com/ticket/13451}{\tt \#13451}\+: \mbox{[}I\+E8-\/9\mbox{]} Fixed\+: One drag\&drop operation may affect following ones.
+\item \href{http://dev.ckeditor.com/ticket/13184}{\tt \#13184}\+: Fixed\+: Web page reloaded after a drop on editor UI.
+\item \href{http://dev.ckeditor.com/ticket/13129}{\tt \#13129} Fixed\+: Block widget blurred after a drop followed by an undo.
+\item \href{http://dev.ckeditor.com/ticket/13397}{\tt \#13397}\+: Fixed\+: Drag\&drop of a widget inside its nested widget crashes the editor.
+\item \href{http://dev.ckeditor.com/ticket/13385}{\tt \#13385}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSnapshot}{\tt {\ttfamily editor.\+get\+Snapshot()}} may return a non-\/string value.
+\item \href{http://dev.ckeditor.com/ticket/13419}{\tt \#13419}\+: Fixed\+: The \href{http://ckeditor.com/addon/autolink}{\tt Auto Link} plugin does not encode double quotes in U\+R\+Ls.
+\item \href{http://dev.ckeditor.com/ticket/13420}{\tt \#13420}\+: Fixed\+: The \href{http://ckeditor.com/addon/autoembed}{\tt Auto Embed} plugin ignores encoded characters in U\+RL parameters.
+\item \href{http://dev.ckeditor.com/ticket/13410}{\tt \#13410}\+: Fixed\+: Error thrown in the \href{http://ckeditor.com/addon/autoembed}{\tt Auto Embed} plugin when undoing right after pasting a link.
+\item \href{http://dev.ckeditor.com/ticket/13566}{\tt \#13566}\+: Fixed\+: Suppressed notifications in the \href{http://ckeditor.com/addon/embedbase}{\tt Media Embed Base} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11616}{\tt \#11616}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Resizing the editor while it is not displayed breaks the editable. Fixes also \href{http://dev.ckeditor.com/ticket/9160}{\tt \#9160} and \href{http://dev.ckeditor.com/ticket/9715}{\tt \#9715}.
+\item \href{http://dev.ckeditor.com/ticket/11376}{\tt \#11376}\+: \mbox{[}I\+E11\mbox{]} Fixed\+: Loss of text when pasting bulleted lists from Microsoft Word.
+\item \href{http://dev.ckeditor.com/ticket/13143}{\tt \#13143}\+: \mbox{[}Edge\mbox{]} Fixed\+: Focus lost when opening the panel.
+\item \href{http://dev.ckeditor.com/ticket/13387}{\tt \#13387}\+: \mbox{[}Edge\mbox{]} Fixed\+: \char`\"{}\+Permission denied\char`\"{} error thrown when loading the editor with developer tools open.
+\item \href{http://dev.ckeditor.com/ticket/13574}{\tt \#13574}\+: \mbox{[}Edge\mbox{]} Fixed\+: \char`\"{}\+Permission denied\char`\"{} error thrown when opening editor dialog windows.
+\item \href{http://dev.ckeditor.com/ticket/13441}{\tt \#13441}\+: \mbox{[}Edge\mbox{]} Fixed\+: The \href{http://ckeditor.com/addon/clipboard}{\tt Clipboard} plugin breaks the state of \href{http://ckeditor.com/addon/undo}{\tt Undo} commands after a paste.
+\item \href{http://dev.ckeditor.com/ticket/13554}{\tt \#13554}\+: \mbox{[}Edge\mbox{]} Fixed\+: Paste dialog\textquotesingle{}s iframe does not receive focus on show.
+\item \href{http://dev.ckeditor.com/ticket/13440}{\tt \#13440}\+: \mbox{[}Edge\mbox{]} Fixed\+: Unable to paste a widget.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13421}{\tt \#13421}\+: UX improvements to notifications in the \href{http://ckeditor.com/addon/autoembed}{\tt Auto Embed} plugin.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5.\+1}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13486}{\tt \#13486}\+: Fixed\+: The \href{http://ckeditor.com/addon/uploadimage}{\tt Upload Image} plugin should log an error, not throw an error when upload U\+RL is not set.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13304}{\tt \#13304}\+: Added support for passing D\+OM elements to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-sharedSpaces}{\tt {\ttfamily config.\+shared\+Spaces}}. Thanks to \href{https://github.com/Undergrounder}{\tt Undergrounder}!
+\item \href{http://dev.ckeditor.com/ticket/13215}{\tt \#13215}\+: Added ability to cancel fetching a resource by the Embed plugins.
+\item \href{http://dev.ckeditor.com/ticket/13213}{\tt \#13213}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dialog-method-setState}{\tt {\ttfamily dialog\+::set\+State()}} method and used it in the \href{http://ckeditor.com/addon/embed}{\tt Embed} dialog to indicate that a resource is being loaded.
+\item \href{http://dev.ckeditor.com/ticket/13337}{\tt \#13337}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-method-onWidget}{\tt {\ttfamily repository.\+on\+Widget()}} method --- a convenient way to listen to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget}{\tt widget} events through the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository}{\tt repository}.
+\item \href{http://dev.ckeditor.com/ticket/13214}{\tt \#13214}\+: Added support for pasting links that convert into embeddable resources on the fly.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13334}{\tt \#13334}\+: Fixed\+: Error after nesting widgets and playing with undo/redo.
+\item \href{http://dev.ckeditor.com/ticket/13118}{\tt \#13118}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSelectedHtml}{\tt {\ttfamily editor.\+get\+Selected\+Html()}} method throws an error when called in the source mode.
+\item \href{http://dev.ckeditor.com/ticket/13158}{\tt \#13158}\+: Fixed\+: Error after canceling a dialog when creating a widget.
+\item \href{http://dev.ckeditor.com/ticket/13197}{\tt \#13197}\+: Fixed\+: Linked inline \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} alignment class is not transferred to the widget wrapper.
+\item \href{http://dev.ckeditor.com/ticket/13199}{\tt \#13199}\+: Fixed\+: \href{http://ckeditor.com/addon/embedsemantic}{\tt Semantic Embed} does not support widget classes.
+\item \href{http://dev.ckeditor.com/ticket/13003}{\tt \#13003}\+: Fixed\+: Anchors are uploaded when moving them by drag and drop.
+\item \href{http://dev.ckeditor.com/ticket/13032}{\tt \#13032}\+: Fixed\+: When upload is done, notification update should be marked as important.
+\item \href{http://dev.ckeditor.com/ticket/13300}{\tt \#13300}\+: Fixed\+: The {\ttfamily internal\+Commit} argument in the \href{http://ckeditor.com/addon/image}{\tt Image} dialog seems to be never used.
+\item \href{http://dev.ckeditor.com/ticket/13036}{\tt \#13036}\+: Fixed\+: Notifications are moved 10px to the right.
+\item \href{http://dev.ckeditor.com/ticket/13280}{\tt \#13280}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Undo after inline widget drag\&drop throws an error.
+\item \href{http://dev.ckeditor.com/ticket/13186}{\tt \#13186}\+: Fixed\+: Content dropped into a nested editable is not filtered by \href{http://docs.ckeditor.com/#!/guide/dev_acf}{\tt Advanced Content Filter}.
+\item \href{http://dev.ckeditor.com/ticket/13140}{\tt \#13140}\+: Fixed\+: Error thrown when dropping a block widget right after itself.
+\item \href{http://dev.ckeditor.com/ticket/13176}{\tt \#13176}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Errors on drag\&drop of embed widgets.
+\item \href{http://dev.ckeditor.com/ticket/13015}{\tt \#13015}\+: Fixed\+: Dropping an image file on \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} causes a page reload.
+\item \href{http://dev.ckeditor.com/ticket/13080}{\tt \#13080}\+: Fixed\+: Ugly notification shown when the response contains H\+T\+ML content.
+\item \href{http://dev.ckeditor.com/ticket/13011}{\tt \#13011}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Anchors are duplicated on drag\&drop in specific locations.
+\item \href{http://dev.ckeditor.com/ticket/13105}{\tt \#13105}\+: Fixed\+: Various issues related to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-htmlEncode}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+html\+Encode()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-htmlDecode}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+html\+Decode()}} methods.
+\item \href{http://dev.ckeditor.com/ticket/11976}{\tt \#11976}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Copy\&paste and drag\&drop lists from Microsoft Word.
+\item \href{http://dev.ckeditor.com/ticket/13128}{\tt \#13128}\+: Fixed\+: Various issues with cloning element I\+Ds\+:
+\begin{DoxyItemize}
+\item Fixed the default behavior of \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-cloneContents}{\tt {\ttfamily range.\+clone\+Contents()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-extractContents}{\tt {\ttfamily range.\+extract\+Contents()}} methods which now clone I\+Ds similarly to their native counterparts.
+\item Added {\ttfamily clone\+Id} arguments to the above methods, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-splitBlock}{\tt {\ttfamily range.\+split\+Block()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-breakParent}{\tt {\ttfamily element.\+break\+Parent()}}. Mind the default values and special behavior in the {\ttfamily extract\+Contents()} method!
+\item Fixed issues where I\+Ds were lost on copy\&paste and drag\&drop.
+\end{DoxyItemize}
+\item Toolbar configurators\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13185}{\tt \#13185}\+: Fixed\+: Wrong position of the suggestion box if there is not enough space below the caret.
+\item \href{http://dev.ckeditor.com/ticket/13138}{\tt \#13138}\+: Fixed\+: The \char`\"{}\+Toggle empty elements\char`\"{} button label is unclear.
+\item \href{http://dev.ckeditor.com/ticket/13136}{\tt \#13136}\+: Fixed\+: Autocompleter is far too intrusive.
+\item \href{http://dev.ckeditor.com/ticket/13133}{\tt \#13133}\+: Fixed\+: Tab leaves the editor.
+\item \href{http://dev.ckeditor.com/ticket/13173}{\tt \#13173}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-removeButtons}{\tt {\ttfamily config.\+remove\+Buttons}} is ignored by the advanced toolbar configurator.
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13119}{\tt \#13119}\+: Improved compatibility of editor skins (\href{http://ckeditor.com/addon/moono}{\tt Moono} and \href{http://ckeditor.com/addon/kama}{\tt Kama}) with external web page style sheets.
+\item Toolbar configurators\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13147}{\tt \#13147}\+: Added buttons to the sticky toolbar.
+\item \href{http://dev.ckeditor.com/ticket/13207}{\tt \#13207}\+: Used modal window to display toolbar configurator help.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/13316}{\tt \#13316}\+: Made \href{http://docs.ckeditor.com/#!/api/CKEDITOR.env-property-isCompatible}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+env.\+is\+Compatible}} a blacklist rather than a whitelist. More about the change in the \href{http://docs.ckeditor.com/#!/guide/dev_browsers}{\tt Browser Compatibility} guide.
+\item \href{http://dev.ckeditor.com/ticket/13398}{\tt \#13398}\+: Renamed {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+file\+Tools.\+Uploads\+Repository} to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.fileTools.uploadRepository}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+file\+Tools.\+Upload\+Repository}} and changed all related properties.
+\item \href{http://dev.ckeditor.com/ticket/13279}{\tt \#13279}\+: Reviewed C\+SS vendor prefixes.
+\item \href{http://dev.ckeditor.com/ticket/13454}{\tt \#13454}\+: Removed unused {\ttfamily lang.\+image.\+alert\+Url} token from the \href{http://ckeditor.com/addon/image}{\tt Image} plugin.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+5 Beta}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item Clipboard (copy\&paste, drag\&drop) and file uploading features and improvements (\href{http://dev.ckeditor.com/ticket/11437}{\tt \#11437}).
+\begin{DoxyItemize}
+\item Major features\+:
+\begin{DoxyItemize}
+\item Support for dropping and pasting files into the editor was introduced. Through a set of new facades for native A\+P\+Is it is now possible to easily intercept and process inserted files.
+\item \href{http://docs.ckeditor.com/#!/api/CKEDITOR.fileTools}{\tt File upload tools} were introduced in order to simplify controlling the loading, uploading and handling server response, properly handle \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-uploadUrl}{\tt new upload configuration} options, etc.
+\item \href{http://ckeditor.com/addon/uploadimage}{\tt Upload Image} widget was introduced to upload dropped images. A base class for the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.fileTools.uploadWidgetDefinition}{\tt upload widget} was exposed, too, to make it simple to create new types of upload widgets which can handle any type of dropped file, show the upload progress and update the content when the process is done. It also handles editing and undo/redo operations when a file is being uploaded and integrates with the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.notificationAggregator}{\tt notification aggregator} to show progress and success or error.
+\item All drag and drop operations were integrated with the editor. All dropped content is passed through the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-paste}{\tt {\ttfamily editor\+::paste}} event and a set of new editor events was introduced --- \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-dragstart}{\tt {\ttfamily dragstart}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-drop}{\tt {\ttfamily drop}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-dragend}{\tt {\ttfamily dragend}}.
+\item The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.clipboard.dataTransfer}{\tt Data Transfer} facade was introduced to unify access to data in various types and files. \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.clipboard.dataTransfer}{\tt Data Transfer} is now always available in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-paste}{\tt {\ttfamily editor\+::paste}} event.
+\item Switched from the pastebin to using the native clipboard access whenever possible. This solved many issues related to pastebin such as unnecessary scrolling or data loss. Additionally, on copy and cut from the editor the clipboard data is set. Therefore, on paste the editor has access to clean data, undisturbed by the browsers.
+\item Drag and drop of inline and block widgets was integrated with the standard clipboard A\+P\+Is. By listening to drag events you will thus be notified about widgets, too. This opens a possibility to filter pasted and dropped widgets.
+\item The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-paste}{\tt {\ttfamily editor\+::paste}} event can have the {\ttfamily range} parameter so it is possible to change the paste position in the listener or paste in the not selectable position. Also the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertHtml}{\tt {\ttfamily editor.\+insert\+Html()}} method now accepts {\ttfamily range} as an additional parameter.
+\item \href{http://dev.ckeditor.com/ticket/11621}{\tt \#11621}\+: A configurable \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-pasteFilter}{\tt paste filter} was introduced. The filter is by default turned to {\ttfamily \textquotesingle{}semantic-\/content\textquotesingle{}} on Webkit and Blink for all pasted content coming from external sources because of the low quality of H\+T\+ML that these engines put into the clipboard. Internal and cross-\/editor paste is safe due to the change explained in the previous point.
+\end{DoxyItemize}
+\item Other changes and related fixes\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12095}{\tt \#12095}\+: On drag and copy of widgets \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSelectedHtml}{\tt the same method} is used to get selected H\+T\+ML as in the normal case. Thanks to that styles applied to inline widgets are not lost.
+\item \href{http://dev.ckeditor.com/ticket/11219}{\tt \#11219}\+: Fixed\+: Dragging a \href{http://ckeditor.com/addon/image2}{\tt captioned image} does not fire the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-paste}{\tt {\ttfamily editor\+::paste}} event.
+\item \href{http://dev.ckeditor.com/ticket/9554}{\tt \#9554}\+: \mbox{[}Webkit Mac\mbox{]} Fixed\+: Editor scrolls on paste.
+\item \href{http://dev.ckeditor.com/ticket/9898}{\tt \#9898}\+: \mbox{[}Webkit\&Divarea\mbox{]} Fixed\+: Pasting causes undesirable scrolling.
+\item \href{http://dev.ckeditor.com/ticket/11993}{\tt \#11993}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Pasting content scrolls the document.
+\item \href{http://dev.ckeditor.com/ticket/12613}{\tt \#12613}\+: Show the user that they can not drop on editor UI (toolbar, bottom bar).
+\item \href{http://dev.ckeditor.com/ticket/12851}{\tt \#12851}\+: \mbox{[}Blink/\+Webkit\mbox{]} Fixed\+: Formatting disappears when pasting content into cells.
+\item \href{http://dev.ckeditor.com/ticket/12914}{\tt \#12914}\+: Fixed\+: Copy/\+Paste of table broken in {\ttfamily div}-\/based editor.
+\end{DoxyItemize}
+\item Browser support.~\newline
+Browser support for related features varies significantly (see \href{http://caniuse.com/clipboard}{\tt http\+://caniuse.\+com/clipboard}).
+\begin{DoxyItemize}
+\item File A\+P\+Is needed to operate and file upload is not supported in Internet Explorer 9 and below.
+\item Only Chrome and Safari on Mac OS support setting custom data items in the clipboard, so currently it is possible to recognize the origin of the copied content in these browsers only. All drag and drop operations can be identified thanks to the new Data Transfer facade.
+\item No Internet Explorer browser supports the standard clipboard A\+PI which results in small glitches like where only plain text can be dropped from outside the editor. Thanks to the new Data Transfer facade, internal and cross-\/editor drag and drop supports the full range of data.
+\item Direct access to clipboard could only be implemented in Chrome, Safari on Mac OS, Opera and Firefox. In other browsers the pastebin must still be used.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12875}{\tt \#12875}\+: Samples and toolbar configuration tools.
+\begin{DoxyItemize}
+\item The old set of samples shipped with every C\+K\+Editor package was replaced with a shiny new single-\/page sample. This change concluded a long term plan which started from introducing the \href{http://sdk.ckeditor.com/}{\tt C\+K\+Editor S\+DK} and \href{http://docs.ckeditor.com/#!/guide/dev_features}{\tt C\+K\+Editor Functionality Overview} section in the documentation which essentially redefined the old samples.
+\item Toolbar configurators with live previews were introduced. They will be shipped with every C\+K\+Editor package and are meant to help in configuring toolbar layouts.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10925}{\tt \#10925}\+: The \href{http://ckeditor.com/addon/embed}{\tt Media Embed} and \href{http://ckeditor.com/addon/embedsemantic}{\tt Semantic Media Embed} plugins were introduced. Read more about the new features in the \href{http://docs.ckeditor.com/#!/guide/dev_media_embed}{\tt Embedding Content} article.
+\item \href{http://dev.ckeditor.com/ticket/10931}{\tt \#10931}\+: Added support for nesting widgets. It is now possible to insert one widget into another widget\textquotesingle{}s nested editable. Note that unless nested editable\textquotesingle{}s \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.nestedEditable.definition-property-allowedContent}{\tt allowed content} is defined precisely, starting from C\+K\+Editor 4.\+5 some widget buttons may become enabled. This feature is not supported in I\+E8. Included issues\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12018}{\tt \#12018}\+: Fixed and reviewed\+: Nested widgets garbage collection.
+\item \href{http://dev.ckeditor.com/ticket/12024}{\tt \#12024}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Outline is extended to the left by unpositioned drag handlers.
+\item \href{http://dev.ckeditor.com/ticket/12006}{\tt \#12006}\+: Fixed\+: Drag and drop of nested block widgets.
+\item \href{http://dev.ckeditor.com/ticket/12008}{\tt \#12008}\+: Fixed various cases of inserting a single non-\/editable element using the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertHtml}{\tt {\ttfamily editor.\+insert\+Html()}} method. Fixes pasting a widget with a nested editable inside another widget\textquotesingle{}s nested editable.
+\end{DoxyItemize}
+\item Notification system\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11580}{\tt \#11580}\+: Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.notification}{\tt notification system}.
+\item \href{http://dev.ckeditor.com/ticket/12810}{\tt \#12810}\+: Introduced a \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.notificationAggregator}{\tt notification aggregator} for the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.notification}{\tt notification system} which simplifies displaying progress of many concurrent tasks.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11636}{\tt \#11636}\+: Introduced new, U\+X-\/focused, methods for getting selected H\+T\+ML and deleting it --- \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSelectedHtml}{\tt {\ttfamily editor.\+get\+Selected\+Html()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getSelectedHtml}{\tt {\ttfamily editor.\+delete\+Selected\+Html()}}.
+\item \href{http://dev.ckeditor.com/ticket/12416}{\tt \#12416}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.definition-property-upcastPriority}{\tt {\ttfamily widget.\+definition.\+upcast\+Priority}} property which gives more control over widget upcasting order to the widget author.
+\item \href{http://dev.ckeditor.com/ticket/12036}{\tt \#12036}\+: Initialize the editor in \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-readOnly}{\tt read-\/only} mode when the {\ttfamily $<$textarea$>$} element has a {\ttfamily readonly} attribute.
+\item \href{http://dev.ckeditor.com/ticket/11905}{\tt \#11905}\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-resize}{\tt {\ttfamily resize} event} passes the current dimensions in its data.
+\item \href{http://dev.ckeditor.com/ticket/12126}{\tt \#12126}\+: Introduced \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-image_prefillDimensions}{\tt {\ttfamily config.\+image\+\_\+prefill\+Dimensions}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-image2_prefillDimensions}{\tt {\ttfamily config.\+image2\+\_\+prefill\+Dimensions}} to make pre-\/filling {\ttfamily width} and {\ttfamily height} configurable for the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}.
+\item \href{http://dev.ckeditor.com/ticket/12746}{\tt \#12746}\+: Added a new configuration option to hide the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} resizer.
+\item \href{http://dev.ckeditor.com/ticket/12150}{\tt \#12150}\+: Exposed the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-static-method-getNestedEditable}{\tt {\ttfamily get\+Nested\+Editable()}} and {\ttfamily is$\ast$} \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget}{\tt widget helper} functions (see the static methods).
+\item \href{http://dev.ckeditor.com/ticket/12448}{\tt \#12448}\+: Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertHtmlIntoRange}{\tt {\ttfamily editable.\+insert\+Html\+Into\+Range}} method.
+\item \href{http://dev.ckeditor.com/ticket/12143}{\tt \#12143}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-floatSpacePreferRight}{\tt {\ttfamily config.\+float\+Space\+Prefer\+Right}} configuration option that switches the alignment of the floating toolbar. Thanks to \href{http://github.com/InvisibleBacon}{\tt Invisible\+Bacon}!
+\item \href{http://dev.ckeditor.com/ticket/10986}{\tt \#10986}\+: Added support for changing dialog input and textarea text directions by using the {\itshape Shift+\+Alt+\+Home/\+End} keystrokes. The direction is stored in the value of the input by prepending the \href{http://unicode.org/cldr/utility/character.jsp?a=202A}{\tt {\ttfamily \textbackslash{}u202A}} or \href{http://unicode.org/cldr/utility/character.jsp?a=202B}{\tt {\ttfamily \textbackslash{}u202B}} marker to it. Read more in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dialog.definition.textInput-property-bidi}{\tt documentation}. Thanks to \href{https://github.com/edithkk}{\tt edithkk}!
+\item \href{http://dev.ckeditor.com/ticket/12770}{\tt \#12770}\+: Added support for passing \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget}{\tt widget}\textquotesingle{}s startup data as a widget command\textquotesingle{}s argument. Thanks to \href{https://github.com/zipp3r}{\tt Rebrov Boris} and \href{https://github.com/tiemevanveen}{\tt Tieme van Veen}!
+\item \href{http://dev.ckeditor.com/ticket/11583}{\tt \#11583}\+: Added support for the H\+T\+M\+L5 {\ttfamily required} attribute in various form elements. Thanks to \href{https://github.com/sbusse}{\tt Steven Busse}!
+\end{DoxyItemize}
+
+Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12858}{\tt \#12858}\+: Basic \href{http://blogs.windows.com/bloggingwindows/2015/03/30/introducing-project-spartan-the-new-browser-built-for-windows-10/}{\tt Spartan} browser compatibility. Full compatibility will be introduced later, because at the moment Spartan is still too unstable to be used for tests and we see many changes from version to version.
+\item \href{http://dev.ckeditor.com/ticket/12948}{\tt \#12948}\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-mathJaxLib}{\tt {\ttfamily config.\+math\+Jax\+Library}} option does not default to the Math\+Jax C\+DN any more. It needs to be configured to enable the \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} plugin now.
+\item \href{http://dev.ckeditor.com/ticket/13069}{\tt \#13069}\+: Fixed inconsistencies between \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertElement}{\tt {\ttfamily editable.\+insert\+Html()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertElement}{\tt {\ttfamily editable.\+insert\+Element()}} when the {\ttfamily range} parameter is used. Now, the {\ttfamily editor.\+insert\+Element()} method works on a higher level, which means that it saves undo snapshots and sets the selection after insertion. Use the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertElementIntoRange}{\tt {\ttfamily editable.\+insert\+Element\+Into\+Range()}} method directly for the pre 4.\+5 behavior of {\ttfamily editable.\+insert\+Element()}.
+\item \href{http://dev.ckeditor.com/ticket/12870}{\tt \#12870}\+: Use \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-showNotification}{\tt {\ttfamily editor.\+show\+Notification()}} instead of {\ttfamily alert()} directly whenever possible. When the \href{http://ckeditor.com/addon/notification}{\tt Notification plugin} is loaded, the notification system is used automatically. Otherwise, the native {\ttfamily alert()} is displayed.
+\item \href{http://dev.ckeditor.com/ticket/8024}{\tt \#8024}\+: Swapped behavior of the Split Cell Vertically and Horizontally features of the \href{http://ckeditor.com/addon/tabletools}{\tt Table Tools} plugin to be more intuitive. Thanks to \href{https://github.com/kevinisagit}{\tt kevinisagit}!
+\item \href{http://dev.ckeditor.com/ticket/10903}{\tt \#10903}\+: Performance improvements for the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-addClass}{\tt {\ttfamily dom.\+element.\+add\+Class()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-removeClass}{\tt {\ttfamily dom.\+element.\+remove\+Class()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-hasClass}{\tt {\ttfamily dom.\+element.\+has\+Class()}} methods. Note\+: The previous implementation allowed passing multiple classes to {\ttfamily add\+Class()} although it was only a side effect of that implementation. The new implementation does not allow this.
+\item \href{http://dev.ckeditor.com/ticket/11856}{\tt \#11856}\+: The j\+Query adapter throws a meaningful error if C\+K\+Editor or j\+Query are not loaded.
+\end{DoxyItemize}
+
+Fixed issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11586}{\tt \#11586}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-cloneContents}{\tt {\ttfamily range.\+clone\+Contents()}} should not change the D\+OM in order not to affect selection.
+\item \href{http://dev.ckeditor.com/ticket/12148}{\tt \#12148}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-getChild}{\tt {\ttfamily dom.\+element.\+get\+Child()}} should not modify a passed array.
+\item \href{http://dev.ckeditor.com/ticket/12503}{\tt \#12503}\+: \mbox{[}Blink/\+Webkit\mbox{]} Fixed\+: Incorrect result of Select All and {\itshape Backspace} or {\itshape Delete}.
+\item \href{http://dev.ckeditor.com/ticket/13001}{\tt \#13001}\+: \mbox{[}Firefox\mbox{]} Fixed\+: The {\ttfamily $<$br /$>$} filler is placed in the wrong position by the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-fixBlock}{\tt {\ttfamily range.\+fix\+Block()}} method due to quirky Firefox behavior.
+\item \href{http://dev.ckeditor.com/ticket/13101}{\tt \#13101}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Colons are prepended to H\+T\+M\+L5 element names when cloning them.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+8}
+
+{\bfseries Security Updates\+:}
+
+
+\begin{DoxyItemize}
+\item Fixed X\+SS vulnerability in the H\+T\+ML parser reported by \href{https://twitter.com/dheerajhere}{\tt Dheeraj Joshi} and \href{https://twitter.com/iAmPr3m}{\tt Prem Kumar}.
+
+Issue summary\+: It was possible to execute X\+SS inside C\+K\+Editor after persuading the victim to\+: (i) switch C\+K\+Editor to source mode, then (ii) paste a specially crafted H\+T\+ML code, prepared by the attacker, into the opened C\+K\+Editor source area, and (iii) switch back to W\+Y\+S\+I\+W\+YG mode.
+\end{DoxyItemize}
+
+{\bfseries An upgrade is highly recommended!}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12899}{\tt \#12899}\+: Fixed\+: Corrected wrong tag ending for horizontal box definition in the \href{http://ckeditor.com/addon/dialogui}{\tt Dialog User Interface} plugin. Thanks to \href{https://github.com/mizafish}{\tt mizafish}!
+\item \href{http://dev.ckeditor.com/ticket/13254}{\tt \#13254}\+: Fixed\+: Cannot outdent block after indent when using the \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area} plugin. Thanks to \href{https://github.com/jcttrll}{\tt Jonathan Cottrill}!
+\item \href{http://dev.ckeditor.com/ticket/13268}{\tt \#13268}\+: Fixed\+: Documentation for \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.text}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+dom.\+text}} is incorrect. Thanks to \href{https://github.com/benkiefer}{\tt Ben Kiefer}!
+\item \href{http://dev.ckeditor.com/ticket/12739}{\tt \#12739}\+: Fixed\+: Link loses inline styles when edited without the \href{http://ckeditor.com/addon/dialogadvtab}{\tt Advanced Tab for Dialogs} plugin. Thanks to \href{https://github.com/asmforce}{\tt Віталій Крутько}!
+\item \href{http://dev.ckeditor.com/ticket/13292}{\tt \#13292}\+: Fixed\+: Protection pattern does not work in attribute in self-\/closing elements with no space before {\ttfamily /$>$}. Thanks to \href{https://github.com/asmforce}{\tt Віталій Крутько}!
+\item \href{https://github.com/ckeditor/ckeditor-dev/pull/192}{\tt PR\#192}\+: Fixed\+: Variable name typo in the \href{http://ckeditor.com/addon/dialogui}{\tt Dialog User Interface} plugin which caused \href{http://docs.ckeditor.com/#!/api/CKEDITOR.ui.dialog.radio}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+ui.\+dialog.\+radio}} validation to not work. Thanks to \href{https://github.com/FlorianLudwig}{\tt Florian Ludwig}!
+\item \href{http://dev.ckeditor.com/ticket/13232}{\tt \#13232}\+: \mbox{[}Safari\mbox{]} Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-appendText}{\tt {\ttfamily element.\+append\+Text()}} method does not work properly for empty elements.
+\item \href{http://dev.ckeditor.com/ticket/13233}{\tt \#13233}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlDataProcessor}{\tt H\+T\+M\+L\+Data\+Processor} can process {\ttfamily foo\+:href} attributes.
+\item \href{http://dev.ckeditor.com/ticket/12796}{\tt \#12796}\+: Fixed\+: The \href{http://ckeditor.com/addon/indentlist}{\tt Indent List} plugin unwraps parent {\ttfamily $<$li$>$} elements. Thanks to \href{https://github.com/andrewstucki}{\tt Andrew Stucki}!
+\item \href{http://dev.ckeditor.com/ticket/12885}{\tt \#12885}\+: Added missing \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getData}{\tt {\ttfamily editor.\+get\+Data()}} parameter documentation.
+\item \href{http://dev.ckeditor.com/ticket/11982}{\tt \#11982}\+: Fixed\+: Bullet added in a wrong position after the {\itshape Enter} key is pressed in a nested list.
+\item \href{http://dev.ckeditor.com/ticket/13027}{\tt \#13027}\+: Fixed\+: Keyboard navigation in dialog windows with multiple tabs not following I\+BM CI 162 instructions or \href{http://www.w3.org/TR/2013/WD-wai-aria-practices-20130307/#tabpanel}{\tt A\+R\+IA Authoring Practices}.
+\item \href{http://dev.ckeditor.com/ticket/12256}{\tt \#12256}\+: Fixed\+: Basic styles classes are lost when pasting from Microsoft Word if \href{http://ckeditor.com/addon/basicstyles}{\tt basic styles} were configured to use classes.
+\item \href{http://dev.ckeditor.com/ticket/12729}{\tt \#12729}\+: Fixed\+: Incorrect structure created when merging a block into a list item on {\itshape Backspace} and {\itshape Delete}.
+\item \href{http://dev.ckeditor.com/ticket/13031}{\tt \#13031}\+: \mbox{[}Firefox\mbox{]} Fixed\+: No more line breaks in source view since Firefox 36.
+\item \href{http://dev.ckeditor.com/ticket/13131}{\tt \#13131}\+: Fixed\+: The \href{http://ckeditor.com/addon/codesnippet}{\tt Code Snippet} plugin cannot be used without the \href{http://ckeditor.com/addon/wysiwygarea}{\tt I\+Frame Editing Area} plugin.
+\item \href{http://dev.ckeditor.com/ticket/9086}{\tt \#9086}\+: Fixed\+: Invalid A\+R\+IA property used on paste area {\ttfamily $<$iframe$>$}.
+\item \href{http://dev.ckeditor.com/ticket/13164}{\tt \#13164}\+: Fixed\+: Error when inserting a hidden field.
+\item \href{http://dev.ckeditor.com/ticket/13155}{\tt \#13155}\+: Fixed\+: Incorrect \href{http://ckeditor.com/addon/lineutils}{\tt Line Utilities} positioning when {\ttfamily $<$body$>$} has a margin.
+\item \href{http://dev.ckeditor.com/ticket/13351}{\tt \#13351}\+: Fixed\+: Link lost when editing a linked image with the Link tab disabled. This also fixed a bug when inserting an image into a fully selected link would throw an error (\href{https://dev.ckeditor.com/ticket/12847}{\tt \#12847}).
+\item \href{http://dev.ckeditor.com/ticket/13344}{\tt \#13344}\+: \mbox{[}Web\+Kit/\+Blink\mbox{]} Fixed\+: It is possible to remove or change editor content in \href{http://docs.ckeditor.com/#!/guide/dev_readonly}{\tt read-\/only mode}.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12844}{\tt \#12844} and \href{http://dev.ckeditor.com/ticket/13103}{\tt \#13103}\+: Upgraded the \href{http://docs.ckeditor.com/#!/guide/dev_tests}{\tt testing environment} to \href{https://github.com/benderjs/benderjs}{\tt Bender.\+js} {\ttfamily 0.\+2.\+3}.
+\item \href{http://dev.ckeditor.com/ticket/12930}{\tt \#12930}\+: Because of licensing issues, {\ttfamily truncated-\/mathjax/} is now removed from the {\ttfamily tests/} directory. Now {\ttfamily bender.\+config.\+math\+Jax\+Lib\+Path} must be configured manually in order to run \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} plugin tests.
+\item \href{http://dev.ckeditor.com/ticket/13266}{\tt \#13266}\+: Added more shades of gray in the \href{http://ckeditor.com/addon/colordialog}{\tt Color Dialog} window. Thanks to \href{https://github.com/mizafish}{\tt mizafish}!
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+7}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12825}{\tt \#12825}\+: Fixed\+: Preventing the \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} plugin from operating on elements outside the editor. Thanks to \href{https://github.com/Paul-Martin}{\tt Paul Martin}!
+\item \href{http://dev.ckeditor.com/ticket/12157}{\tt \#12157}\+: Fixed\+: Lost text formatting on pressing {\itshape Tab} when the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-tabSpaces}{\tt {\ttfamily config.\+tab\+Spaces}} configuration option value was greater than zero.
+\item \href{http://dev.ckeditor.com/ticket/12777}{\tt \#12777}\+: Fixed\+: The {\ttfamily table-\/layout} C\+SS property should be reset by skins. Thanks to \href{https://github.com/vita10gy}{\tt vita10gy}!
+\item \href{http://dev.ckeditor.com/ticket/12812}{\tt \#12812}\+: Fixed\+: An uncaught security exception is thrown when \href{http://ckeditor.com/addon/lineutils}{\tt Line Utilities} are used in an inline editor loaded in a cross-\/domain {\ttfamily iframe}. Thanks to \href{https://github.com/thecatontheflat}{\tt Vitaliy Zurian}!
+\item \href{http://dev.ckeditor.com/ticket/12735}{\tt \#12735}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-fillEmptyBlocks}{\tt {\ttfamily config.\+fill\+Empty\+Blocks}} should only apply when outputting data.
+\item \href{http://dev.ckeditor.com/ticket/10032}{\tt \#10032}\+: Fixed\+: \href{http://ckeditor.com/addon/pastefromword}{\tt Paste from Word} filter is executed for every paste after using the button.
+\item \href{http://dev.ckeditor.com/ticket/12597}{\tt \#12597}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: Multi-\/byte Japanese characters entry not working properly after {\itshape Shift+\+Enter}.
+\item \href{http://dev.ckeditor.com/ticket/12387}{\tt \#12387}\+: Fixed\+: An error is thrown if a skin does not have the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.skin-method-chameleon}{\tt {\ttfamily chameleon}} property defined and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-uiColor}{\tt {\ttfamily config.\+ui\+Color}} is defined.
+\item \href{http://dev.ckeditor.com/ticket/12747}{\tt \#12747}\+: \mbox{[}I\+E8-\/10\mbox{]} Fixed\+: Opening a drop-\/down for a specific selection when the editor is maximized results in incorrect drop-\/down panel position.
+\item \href{http://dev.ckeditor.com/ticket/12850}{\tt \#12850}\+: \mbox{[}I\+E\+QM\mbox{]} Fixed\+: An error is thrown after focusing the editor.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+6}
+
+{\bfseries Security Updates\+:}
+
+
+\begin{DoxyItemize}
+\item Fixed X\+SS vulnerability in the H\+T\+ML parser reported by \href{https://www.facebook.com/Maaacoooo}{\tt Maco Cortes}.
+
+Issue summary\+: It was possible to execute X\+SS inside C\+K\+Editor after persuading the victim to\+: (i) switch C\+K\+Editor to source mode, then (ii) paste a specially crafted H\+T\+ML code, prepared by the attacker, into the opened C\+K\+Editor source area, and (iii) switch back to W\+Y\+S\+I\+W\+YG mode.
+\end{DoxyItemize}
+
+{\bfseries An upgrade is highly recommended!}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12501}{\tt \#12501}\+: Allowed dashes in element names in the \href{http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules-section-string-format}{\tt string format of allowed content rules}.
+\item \href{http://dev.ckeditor.com/ticket/12550}{\tt \#12550}\+: Added the {\ttfamily $<$main$>$} element to the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dtd}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+dtd}}.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12506}{\tt \#12506}\+: \mbox{[}Safari\mbox{]} Fixed\+: Cannot paste into inline editor if the page has {\ttfamily user-\/select\+: none} style. Thanks to \href{https://github.com/shaohua}{\tt shaohua}!
+\item \href{http://dev.ckeditor.com/ticket/12683}{\tt \#12683}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/guide/dev_acf}{\tt Filter} fails to remove custom tags. Thanks to \href{https://github.com/timselier}{\tt timselier}!
+\item \href{http://dev.ckeditor.com/ticket/12489}{\tt \#12489} and \href{http://dev.ckeditor.com/ticket/12491}{\tt \#12491}\+: Fixed\+: Various issues related to restoring the selection after performing operations on filler character. See the \href{http://dev.ckeditor.com/ticket/12491#comment:4}{\tt fixed cases}.
+\item \href{http://dev.ckeditor.com/ticket/12621}{\tt \#12621}\+: Fixed\+: Cannot remove inline styles (bold, italic, etc.) in empty lines.
+\item \href{http://dev.ckeditor.com/ticket/12630}{\tt \#12630}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Selection is placed outside the paragraph when the \href{http://ckeditor.com/addon/newpage}{\tt New Page} button is clicked. This patch significantly simplified the way how the initial selection (a selection after the content of the editable is overwritten) is being fixed. That might have fixed many related scenarios in all browsers.
+\item \href{http://dev.ckeditor.com/ticket/11647}{\tt \#11647}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-blur}{\tt {\ttfamily editor.\+blur}} event is not fired on first blur after initializing the inline editor on an already focused element.
+\item \href{http://dev.ckeditor.com/ticket/12601}{\tt \#12601}\+: Fixed\+: \href{http://ckeditor.com/addon/basicstyles}{\tt Strikethrough} button tooltip spelling.
+\item \href{http://dev.ckeditor.com/ticket/12546}{\tt \#12546}\+: Fixed\+: The Preview tab in the \href{http://ckeditor.com/addon/docprops}{\tt Document Properties} dialog window is always disabled.
+\item \href{http://dev.ckeditor.com/ticket/12300}{\tt \#12300}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-change}{\tt {\ttfamily editor.\+change}} event fired on first navigation key press after typing.
+\item \href{http://dev.ckeditor.com/ticket/12141}{\tt \#12141}\+: Fixed\+: List items are lost when indenting a list item with content wrapped with a block element.
+\item \href{http://dev.ckeditor.com/ticket/12515}{\tt \#12515}\+: Fixed\+: Cursor is in the wrong position when undoing after adding an image and typing some text.
+\item \href{http://dev.ckeditor.com/ticket/12484}{\tt \#12484}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: D\+OM is changed outside the editor area in a certain case.
+\item \href{http://dev.ckeditor.com/ticket/12688}{\tt \#12688}\+: Improved the tests of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style}{\tt styles system} and fixed two minor issues.
+\item \href{http://dev.ckeditor.com/ticket/12403}{\tt \#12403}\+: Fixed\+: Changing the \href{http://ckeditor.com/addon/font}{\tt font} style should not lead to nesting it in the previous style element.
+\item \href{http://dev.ckeditor.com/ticket/12609}{\tt \#12609}\+: Fixed\+: Incorrect {\ttfamily config.\+magicline\+\_\+put\+Everywhere} name used for a \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} all-\/encompassing \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-magicline_everywhere}{\tt {\ttfamily config.\+magicline\+\_\+everywhere}} configuration option.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+5}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12279}{\tt \#12279}\+: Added a possibility to pass a custom evaluator to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.node-method-getAscendant}{\tt {\ttfamily node.\+get\+Ascendant()}}.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12423}{\tt \#12423}\+: \mbox{[}Safari7.\+1+\mbox{]} Fixed\+: {\itshape Enter} key moved cursor to a strange position.
+\item \href{http://dev.ckeditor.com/ticket/12381}{\tt \#12381}\+: \mbox{[}i\+OS\mbox{]} Fixed\+: Selection issue. Thanks to \href{https://github.com/Remiremi}{\tt Remiremi}!
+\item \href{http://dev.ckeditor.com/ticket/10804}{\tt \#10804}\+: Fixed\+: {\ttfamily C\+K\+E\+D\+I\+T\+O\+R\+\_\+\+G\+E\+T\+U\+RL} is not used with some plugins where it should be used. Thanks to \href{https://github.com/tandraschko}{\tt Thomas Andraschko}!
+\item \href{http://dev.ckeditor.com/ticket/9137}{\tt \#9137}\+: Fixed\+: The {\ttfamily $<$base$>$} tag is not created when {\ttfamily $<$head$>$} has an attribute. Thanks to \href{https://github.com/naoki-fujikawa}{\tt naoki.\+fujikawa}!
+\item \href{http://dev.ckeditor.com/ticket/12377}{\tt \#12377}\+: Fixed\+: Errors thrown in the \href{http://ckeditor.com/addon/image}{\tt Image} plugin when removing preview from the dialog window definition. Thanks to \href{https://github.com/Axinet}{\tt Axinet}!
+\item \href{http://dev.ckeditor.com/ticket/12162}{\tt \#12162}\+: Fixed\+: Auto paragraphing and {\itshape Enter} key in nested editables.
+\item \href{http://dev.ckeditor.com/ticket/12315}{\tt \#12315}\+: Fixed\+: Marked \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-autoParagraph}{\tt {\ttfamily config.\+auto\+Paragraph}} as deprecated.
+\item \href{http://dev.ckeditor.com/ticket/12113}{\tt \#12113}\+: Fixed\+: A \href{http://ckeditor.com/addon/codesnippet}{\tt code snippet} should be presented in the \href{http://ckeditor.com/addon/elementspath}{\tt elements path} as \char`\"{}code snippet\char`\"{} (translatable).
+\item \href{http://dev.ckeditor.com/ticket/12311}{\tt \#12311}\+: Fixed\+: \href{http://ckeditor.com/addon/removeformat}{\tt Remove Format} should also remove {\ttfamily $<$cite$>$} elements.
+\item \href{http://dev.ckeditor.com/ticket/12261}{\tt \#12261}\+: Fixed\+: Filter has to be destroyed and removed from \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter-static-property-instances}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+filter.\+instances}} on editor destroy.
+\item \href{http://dev.ckeditor.com/ticket/12398}{\tt \#12398}\+: Fixed\+: \href{http://ckeditor.com/addon/maximize}{\tt Maximize} does not work on an instance without a \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-title}{\tt title}.
+\item \href{http://dev.ckeditor.com/ticket/12097}{\tt \#12097}\+: Fixed\+: J\+A\+WS not reading the number of options correctly in the \href{http://ckeditor.com/addon/colorbutton}{\tt Text Color and Background Color} button menu.
+\item \href{http://dev.ckeditor.com/ticket/12411}{\tt \#12411}\+: Fixed\+: \href{http://ckeditor.com/addon/pagebreak}{\tt Page Break} used directly in the editable breaks the editor.
+\item \href{http://dev.ckeditor.com/ticket/12354}{\tt \#12354}\+: Fixed\+: Various issues in undo manager when holding keys.
+\item \href{http://dev.ckeditor.com/ticket/12324}{\tt \#12324}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Undo steps are not recorded when changing the caret position by clicking below the body.
+\item \href{http://dev.ckeditor.com/ticket/12332}{\tt \#12332}\+: Fixed\+: Lowered D\+OM events listeners\textquotesingle{} priorities in undo manager in order to avoid ambiguity.
+\item \href{http://dev.ckeditor.com/ticket/12402}{\tt \#12402}\+: \mbox{[}Blink\mbox{]} Fixed\+: Workaround for Blink bug with {\ttfamily document.\+title} which breaks updating title in the full H\+T\+ML mode.
+\item \href{http://dev.ckeditor.com/ticket/12338}{\tt \#12338}\+: Fixed\+: The C\+K\+Editor package contains unoptimized images.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+4}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12268}{\tt \#12268}\+: Cleanup of \href{http://ckeditor.com/addon/uicolor}{\tt UI Color} Y\+UI styles. Thanks to \href{https://github.com/CasherWest}{\tt Casher\+West}!
+\item \href{http://dev.ckeditor.com/ticket/12263}{\tt \#12263}\+: Fixed\+: \href{http://ckeditor.com/addon/pastefromword}{\tt Paste from Word} filter does not properly normalize semicolons style text. Thanks to \href{https://github.com/mesmerizero}{\tt Alin Purcaru}!
+\item \href{http://dev.ckeditor.com/ticket/12243}{\tt \#12243}\+: Fixed\+: Text formatting lost when pasting from Word. Thanks to \href{https://github.com/mesmerizero}{\tt Alin Purcaru}!
+\item \href{http://dev.ckeditor.com/ticket/11739}{\tt \#111739}\+: Fixed\+: {\ttfamily keypress} listeners should not be used in the undo manager. A complete rewrite of keyboard handling in the undo manager was made. Numerous smaller issues were fixed, among others\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10926}{\tt \#10926}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Typing does not record snapshots and does not fire the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-change}{\tt {\ttfamily editor.\+change}} event.
+\item \href{http://dev.ckeditor.com/ticket/11611}{\tt \#11611}\+: \mbox{[}Firefox\mbox{]} Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-change}{\tt {\ttfamily editor.\+change}} event is fired when pressing Arrow keys.
+\item \href{http://dev.ckeditor.com/ticket/12219}{\tt \#12219}\+: \mbox{[}Safari\mbox{]} Fixed\+: Some modifications of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.undo.UndoManager-property-locked}{\tt {\ttfamily Undo\+Manager.\+locked}} property violate strict mode in the \href{http://ckeditor.com/addon/undo}{\tt Undo} plugin.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10916}{\tt \#10916}\+: Fixed\+: \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} icon in Right-\/\+To-\/\+Left environments.
+\item \href{http://dev.ckeditor.com/ticket/11970}{\tt \#11970}\+: \mbox{[}IE\mbox{]} Fixed\+: C\+K\+Editor {\ttfamily paste} event is not fired when pasting with {\itshape Shift+\+Ins}.
+\item \href{http://dev.ckeditor.com/ticket/12111}{\tt \#12111}\+: Fixed\+: Linked image attributes are not read when opening the image dialog window by doubleclicking.
+\item \href{http://dev.ckeditor.com/ticket/10030}{\tt \#10030}\+: \mbox{[}IE\mbox{]} Fixed\+: Prevented \char`\"{}\+Unspecified Error\char`\"{} thrown in various cases when I\+E8-\/9 does not allow access to {\ttfamily document.\+active\+Element}.
+\item \href{http://dev.ckeditor.com/ticket/12273}{\tt \#12273}\+: Fixed\+: Applying block style in a description list breaks it.
+\item \href{http://dev.ckeditor.com/ticket/12218}{\tt \#12218}\+: Fixed\+: Minor syntax issue in C\+SS files.
+\item \href{http://dev.ckeditor.com/ticket/12178}{\tt \#12178}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: Iterator does not return the block if the selection is located at the end of it.
+\item \href{http://dev.ckeditor.com/ticket/12185}{\tt \#12185}\+: \mbox{[}I\+E9\+QM\mbox{]} Fixed\+: Error thrown when moving the mouse over focused editor\textquotesingle{}s scrollbar.
+\item \href{http://dev.ckeditor.com/ticket/12215}{\tt \#12215}\+: Fixed\+: Basepath resolution does not recognize semicolon as a query separator.
+\item \href{http://dev.ckeditor.com/ticket/12135}{\tt \#12135}\+: Fixed\+: \href{http://ckeditor.com/addon/removeformat}{\tt Remove Format} does not work on widgets.
+\item \href{http://dev.ckeditor.com/ticket/12298}{\tt \#12298}\+: \mbox{[}I\+E11\mbox{]} Fixed\+: Clicking below {\ttfamily $<$body$>$} in Compatibility Mode will no longer reset selection to the first line.
+\item \href{http://dev.ckeditor.com/ticket/12204}{\tt \#12204}\+: Fixed\+: Editor\textquotesingle{}s voice label is not affected by \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-title}{\tt {\ttfamily config.\+title}}.
+\item \href{http://dev.ckeditor.com/ticket/11915}{\tt \#11915}\+: Fixed\+: With \href{http://ckeditor.com/addon/scayt}{\tt S\+C\+A\+YT} enabled, cursor moves to the beginning of the first highlighted, misspelled word after typing or pasting into the editor.
+\item \href{https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/69}{\tt S\+C\+A\+YT}\+: Fixed\+: Error thrown in the console after enabling \href{http://ckeditor.com/addon/scayt}{\tt S\+C\+A\+YT} and trying to add a new image.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12296}{\tt \#12296}\+: Merged {\ttfamily benderjs-\/ckeditor} into the main C\+K\+Editor repository.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+3}
+
+{\bfseries Security Updates\+:}
+
+
+\begin{DoxyItemize}
+\item Fixed X\+SS vulnerability in the Preview plugin reported by Mario Heiderich of \href{https://cure53.de/}{\tt Cure53}.
+\end{DoxyItemize}
+
+{\bfseries An upgrade is highly recommended!}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12164}{\tt \#12164}\+: Added the \char`\"{}\+Justify\char`\"{} option to the \char`\"{}\+Horizontal Alignment\char`\"{} drop-\/down in the Table Cell Properties dialog window.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/12110}{\tt \#12110}\+: Fixed\+: Editor crash after deleting a table. Thanks to \href{https://github.com/mesmerizero}{\tt Alin Purcaru}!
+\item \href{http://dev.ckeditor.com/ticket/11897}{\tt \#11897}\+: Fixed\+: {\itshape Enter} key used in an empty list item creates a new line instead of breaking the list. Thanks to \href{https://github.com/noam-si}{\tt noam-\/si}!
+\item \href{http://dev.ckeditor.com/ticket/12140}{\tt \#12140}\+: Fixed\+: Double-\/clicking linked widgets opens two dialog windows.
+\item \href{http://dev.ckeditor.com/ticket/12132}{\tt \#12132}\+: Fixed\+: Image is inserted with {\ttfamily width} and {\ttfamily height} styles even when they are not allowed.
+\item \href{http://dev.ckeditor.com/ticket/9317}{\tt \#9317}\+: \mbox{[}IE\mbox{]} Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-disableObjectResizing}{\tt {\ttfamily config.\+disable\+Object\+Resizing}} does not work on IE. {\bfseries Note}\+: We were not able to fix this issue on I\+E11+ because necessary events stopped working. See a \href{http://dev.ckeditor.com/ticket/9317#comment:16}{\tt last resort workaround} and make sure to \href{https://connect.microsoft.com/IE/feedback/details/742593/please-respect-execcommand-enableobjectresizing-in-contenteditable-elements}{\tt support our complaint to Microsoft}.
+\item \href{http://dev.ckeditor.com/ticket/9638}{\tt \#9638}\+: Fixed\+: There should be no information about accessibility help available under the {\itshape Alt+0} keyboard shortcut if the \href{http://ckeditor.com/addon/a11yhelp}{\tt Accessibility Help} plugin is not available.
+\item \href{http://dev.ckeditor.com/ticket/8117}{\tt \#8117} and \href{http://dev.ckeditor.com/ticket/9186}{\tt \#9186}\+: Fixed\+: In H\+T\+M\+L5 {\ttfamily $<$meta$>$} tags should be allowed everywhere, including inside the {\ttfamily $<$body$>$} element.
+\item \href{http://dev.ckeditor.com/ticket/10422}{\tt \#10422}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-fillEmptyBlocks}{\tt {\ttfamily config.\+fill\+Empty\+Blocks}} not working properly if a function is specified.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+2}
+
+Important Notes\+:
+
+
+\begin{DoxyItemize}
+\item The C\+K\+Editor testing environment is now publicly available. Read more about how to set up the environment and execute tests in the \href{http://docs.ckeditor.com/#!/guide/dev_tests}{\tt C\+K\+Editor Testing Environment} guide. Please note that the \href{https://github.com/ckeditor/ckeditor-dev/tree/master/tests}{\tt {\ttfamily tests/}} directory which contains editor tests is not available in release packages. It can only be found in the development version of C\+K\+Editor on \href{https://github.com/ckeditor/ckeditor-dev/}{\tt Git\+Hub}.
+\end{DoxyItemize}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11909}{\tt \#11909}\+: Introduced a parameter to prevent the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setData}{\tt {\ttfamily editor.\+set\+Data()}} method from recording undo snapshots.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11757}{\tt \#11757}\+: Fixed\+: Imperfections in the \href{http://ckeditor.com/addon/moono}{\tt Moono} skin. Thanks to \href{https://github.com/danyaPostfactum}{\tt danya\+Postfactum}!
+\item \href{http://dev.ckeditor.com/ticket/10091}{\tt \#10091}\+: Blockquote should be treated like an object by the styles system. Thanks to \href{https://github.com/dan-james-deeson}{\tt dan-\/james-\/deeson}!
+\item \href{http://dev.ckeditor.com/ticket/11478}{\tt \#11478}\+: Fixed\+: Issue with passing j\+Query objects to \href{http://docs.ckeditor.com/#!/guide/dev_jquery}{\tt adapter} configuration.
+\item \href{http://dev.ckeditor.com/ticket/10867}{\tt \#10867}\+: Fixed\+: Issue with setting encoded U\+RI as image link.
+\item \href{http://dev.ckeditor.com/ticket/11983}{\tt \#11983}\+: Fixed\+: Clicking a nested widget does not focus it. Additionally, performance of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-method-getByElement}{\tt {\ttfamily widget.\+repository.\+get\+By\+Element()}} method was improved.
+\item \href{http://dev.ckeditor.com/ticket/12000}{\tt \#12000}\+: Fixed\+: Nested widgets should be initialized on \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setData}{\tt {\ttfamily editor.\+set\+Data()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.nestedEditable-method-setData}{\tt {\ttfamily nested\+Editable.\+set\+Data()}}.
+\item \href{http://dev.ckeditor.com/ticket/12022}{\tt \#12022}\+: Fixed\+: Outer widget\textquotesingle{}s drag handler is not created at all if it has any nested widgets inside.
+\item \href{http://dev.ckeditor.com/ticket/11960}{\tt \#11960}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: The caret should be scrolled into view on {\itshape Backspace} and {\itshape Delete} (covers only the merging blocks case).
+\item \href{http://dev.ckeditor.com/ticket/11306}{\tt \#11306}\+: \mbox{[}O\+SX\mbox{]}\mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: No widget entries in the context menu on widget right-\/click.
+\item \href{http://dev.ckeditor.com/ticket/11957}{\tt \#11957}\+: Fixed\+: Alignment labels in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} dialog window are not translated.
+\item \href{http://dev.ckeditor.com/ticket/11980}{\tt \#11980}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: {\ttfamily $<$span$>$} elements created when joining adjacent elements (non-\/collapsed selection).
+\item \href{http://dev.ckeditor.com/ticket/12009}{\tt \#12009}\+: \mbox{[}Nested widgets\mbox{]} Integration with the \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11387}{\tt \#11387}\+: Fixed\+: {\ttfamily role=\char`\"{}radiogroup\char`\"{}} should be applied only to radio inputs\textquotesingle{} container.
+\item \href{http://dev.ckeditor.com/ticket/7975}{\tt \#7975}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Errors when trying to select an empty table cell.
+\item \href{http://dev.ckeditor.com/ticket/11947}{\tt \#11947}\+: \mbox{[}Firefox+\+I\+E11\mbox{]} Fixed\+: {\itshape Shift+\+Enter} in lists produces two line breaks.
+\item \href{http://dev.ckeditor.com/ticket/11972}{\tt \#11972}\+: Fixed\+: Feature detection in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-setText}{\tt {\ttfamily element.\+set\+Text()}} method should not trigger the layout engine.
+\item \href{http://dev.ckeditor.com/ticket/7634}{\tt \#7634}\+: Fixed\+: The \href{http://ckeditor.com/addon/flash}{\tt Flash Dialog} plugin omits the {\ttfamily allow\+Full\+Screen} parameter in the editor data if set to {\ttfamily true}.
+\item \href{http://dev.ckeditor.com/ticket/11910}{\tt \#11910}\+: Fixed\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} does not take \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-baseHref}{\tt {\ttfamily config.\+base\+Href}} into account when updating image dimensions.
+\item \href{http://dev.ckeditor.com/ticket/11753}{\tt \#11753}\+: Fixed\+: Wrong \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-checkDirty}{\tt {\ttfamily check\+Dirty()}} method value after focusing or blurring a widget.
+\item \href{http://dev.ckeditor.com/ticket/11830}{\tt \#11830}\+: Fixed\+: Impossible to pass some arguments to \href{https://github.com/ckeditor/ckbuilder}{\tt C\+K\+Builder} when using the {\ttfamily /dev/builder/build.sh} script.
+\item \href{http://dev.ckeditor.com/ticket/11945}{\tt \#11945}\+: Fixed\+: \href{http://ckeditor.com/addon/forms}{\tt Form Elements} plugin should not change a core method.
+\item \href{http://dev.ckeditor.com/ticket/11384}{\tt \#11384}\+: \mbox{[}I\+E9+\mbox{]} Fixed\+: {\ttfamily Index\+Size\+Error} thrown when pasting into a non-\/empty selection anchored in one text node.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4.\+1}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9661}{\tt \#9661}\+: Added the option to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-linkJavaScriptLinksAllowed}{\tt configure} anchor tags with Java\+Script code in the {\ttfamily href} attribute.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11861}{\tt \#11861}\+: \mbox{[}Web\+Kit/\+Blink\mbox{]} Fixed\+: Span elements created while joining adjacent elements. {\bfseries Note\+:} This patch only covers cases when {\itshape Backspace} or {\itshape Delete} is pressed on a collapsed (empty) selection. The remaining case, with a non-\/empty selection, will be fixed in the next release.
+\item \href{http://dev.ckeditor.com/ticket/10714}{\tt \#10714}\+: \mbox{[}i\+OS\mbox{]} Fixed\+: Selection and drop-\/downs are broken if a touch event listener is used due to a \href{https://bugs.webkit.org/show_bug.cgi?id=128924}{\tt Web\+Kit bug}. Thanks to \href{https://github.com/artygus}{\tt Arty Gus}!
+\item \href{http://dev.ckeditor.com/ticket/11911}{\tt \#11911}\+: Fixed setting the {\ttfamily dir} attribute for a preloaded language in \href{http://docs.ckeditor.com/#!/api/CKEDITOR.lang}{\tt C\+K\+E\+D\+I\+T\+O\+R.\+lang}. Thanks to \href{https://github.com/akashmohapatra}{\tt Akash Mohapatra}!
+\item \href{http://dev.ckeditor.com/ticket/11926}{\tt \#11926}\+: Fixed\+: \href{http://ckeditor.com/addon/codesnippet}{\tt Code Snippet} does not decode H\+T\+ML entities when loading code from the {\ttfamily $<$code$>$} element.
+\item \href{http://dev.ckeditor.com/ticket/11223}{\tt \#11223}\+: Fixed\+: Issue when \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-protectedSource}{\tt Protected Source} was not working in the {\ttfamily $<$title$>$} element.
+\item \href{http://dev.ckeditor.com/ticket/11859}{\tt \#11859}\+: Fixed\+: Removed the \href{http://ckeditor.com/addon/sourcedialog}{\tt Source Dialog} plugin dependency from the \href{http://ckeditor.com/addon/codesnippet}{\tt Code Snippet} sample.
+\item \href{http://dev.ckeditor.com/ticket/11754}{\tt \#11754}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Infinite loop when content includes not closed attributes.
+\item \href{http://dev.ckeditor.com/ticket/11848}{\tt \#11848}\+: \mbox{[}IE\mbox{]} Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertElement}{\tt {\ttfamily editor.\+insert\+Element()}} throwing an exception when there was no selection in the editor.
+\item \href{http://dev.ckeditor.com/ticket/11801}{\tt \#11801}\+: Fixed\+: Editor anchors unavailable when linking the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} widget.
+\item \href{http://dev.ckeditor.com/ticket/11626}{\tt \#11626}\+: Fixed\+: \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} sets invalid column width.
+\item \href{http://dev.ckeditor.com/ticket/11872}{\tt \#11872}\+: Made \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-addClass}{\tt {\ttfamily element.\+add\+Class()}} chainable symmetrically to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-removeClass}{\tt {\ttfamily element.\+remove\+Class()}}.
+\item \href{http://dev.ckeditor.com/ticket/11813}{\tt \#11813}\+: Fixed\+: Link lost while pasting a captioned image and restoring an undo snapshot (\href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}).
+\item \href{http://dev.ckeditor.com/ticket/11814}{\tt \#11814}\+: Fixed\+: {\itshape Link} and {\itshape Unlink} entries persistently displayed in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} context menu.
+\item \href{http://dev.ckeditor.com/ticket/11839}{\tt \#11839}\+: \mbox{[}I\+E9\mbox{]} Fixed\+: The caret jumps out of the editable area when resizing the editor in the source mode.
+\item \href{http://dev.ckeditor.com/ticket/11822}{\tt \#11822}\+: \mbox{[}Web\+Kit\mbox{]} Fixed\+: Editing anchors by double-\/click is broken in some cases.
+\item \href{http://dev.ckeditor.com/ticket/11823}{\tt \#11823}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} throws an error over scrollbar.
+\item \href{http://dev.ckeditor.com/ticket/11788}{\tt \#11788}\+: Fixed\+: It is not possible to change the language back to {\itshape Not set} in the \href{http://ckeditor.com/addon/codesnippet}{\tt Code Snippet} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/11788}{\tt \#11788}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.filter}{\tt Filter} rules are not applied inside elements with the {\ttfamily contenteditable} attribute set to {\ttfamily true}.
+\item \href{http://dev.ckeditor.com/ticket/11798}{\tt \#11798}\+: Fixed\+: Inserting a non-\/editable element inside a table cell breaks the table.
+\item \href{http://dev.ckeditor.com/ticket/11793}{\tt \#11793}\+: Fixed\+: Drop-\/down is not \char`\"{}on\char`\"{} when clicking it while the editor is blurred.
+\item \href{http://dev.ckeditor.com/ticket/11850}{\tt \#11850}\+: Fixed\+: Fake objects with the {\ttfamily contenteditable} attribute set to {\ttfamily false} are not downcasted properly.
+\item \href{http://dev.ckeditor.com/ticket/11811}{\tt \#11811}\+: Fixed\+: Widget\textquotesingle{}s data is not encoded correctly when passed to an attribute.
+\item \href{http://dev.ckeditor.com/ticket/11777}{\tt \#11777}\+: Fixed encoding ampersand in the \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11880}{\tt \#11880}\+: \mbox{[}I\+E8-\/9\mbox{]} Fixed\+: Linked image has a default thick border.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11807}{\tt \#11807}\+: Updated j\+Query version used in the sample to 1.\+11.\+0 and tested C\+K\+Editor j\+Query Adapter with version 1.\+11.\+0 and 2.\+1.\+0.
+\item \href{http://dev.ckeditor.com/ticket/9504}{\tt \#9504}\+: Stopped using deprecated {\ttfamily attribute.\+specified} in all browsers except Internet Explorer.
+\item \href{http://dev.ckeditor.com/ticket/11809}{\tt \#11809}\+: Changed tab size in {\ttfamily $<$pre$>$} to 4 spaces.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+4}
+
+{\bfseries Important Notes\+:}
+
+
+\begin{DoxyItemize}
+\item Marked the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-beforePaste}{\tt {\ttfamily editor.\+before\+Paste}} event as deprecated.
+\item The default class of captioned images has changed to {\ttfamily image} (was\+: {\ttfamily caption}). Please note that once edited in C\+K\+Editor 4.\+4+, all existing images of the {\ttfamily caption} class ({\ttfamily $<$figure class=\char`\"{}caption\char`\"{}$>$}) will be \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt filtered out} unless the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-image2_captionedClass}{\tt {\ttfamily config.\+image2\+\_\+captioned\+Class}} option is set to {\ttfamily caption}. For backward compatibility (i.\+e. when upgrading), it is highly recommended to use this setting, which also helps prevent C\+SS conflicts, etc. This does not apply to new C\+K\+Editor integrations.
+\item Widgets without defined buttons are no longer registered automatically to the \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Advanced Content Filter}. Before C\+K\+Editor 4.\+4 widgets were registered to the A\+CF which was an incorrect behavior (\href{http://dev.ckeditor.com/ticket/11567}{\tt \#11567}). This change should not have any impact on standard scenarios, but if your button does not execute the widget command, you need to set \href{http://docs.ckeditor.com/#!/api/CKEDITOR.feature-property-allowedContent}{\tt {\ttfamily allowed\+Content}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.feature-property-requiredContent}{\tt {\ttfamily required\+Content}} properties for it manually, because the editor will not be able to find them.
+\item The \href{http://ckeditor.com/addon/showborders}{\tt Show Borders} plugin was added to the Standard installation package in order to ensure that unstyled tables are still visible for the user (\href{http://dev.ckeditor.com/ticket/11665}{\tt \#11665}).
+\item Since C\+K\+Editor 4.\+4 the editor instance should be passed to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style}} methods to ensure full compatibility with other features (e.\+g. applying styles to widgets requires that). We ensured backward compatibility though, so the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style}} will work even when the editor instance is not provided.
+\end{DoxyItemize}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11297}{\tt \#11297}\+: Styles can now be applied to widgets. The definition of a style which can be applied to a specific widget must contain two additional properties --- {\ttfamily type} and {\ttfamily widget}. Read more in the \href{http://docs.ckeditor.com/#!/guide/dev_styles-section-widget-styles}{\tt Widget Styles} section of the \char`\"{}\+Syles Drop-\/down\char`\"{} guide. Note that by default, widgets support only classes and no other attributes or styles. Related changes and features\+:
+\begin{DoxyItemize}
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style-static-method-addCustomHandler}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style.\+add\+Custom\+Handler()}} method for registering custom style handlers.
+\item The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style-method-apply}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style.\+apply()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style-method-remove}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style.\+remove()}} methods are now called with an editor instance instead of the document so they can be reused by the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-applyStyle}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+editor.\+apply\+Style()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-removeStyle}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+editor.\+remove\+Style()}} methods. Backward compatibility was preserved, but from C\+K\+Editor 4.\+4 it is highly recommended to pass an editor instead of a document to these methods.
+\item Many new methods and properties were introduced in the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget}{\tt Widget A\+PI} to make the handling of styles by widgets fully customizable. See\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.definition-property-styleableElements}{\tt {\ttfamily widget.\+definition.\+styleable\+Elements}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.definition-property-styleToAllowedContentRules}{\tt {\ttfamily widget.\+definition.\+style\+To\+Allowed\+Content\+Rule}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-addClass}{\tt {\ttfamily widget.\+add\+Class()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-removeClass}{\tt {\ttfamily widget.\+remove\+Class()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-getClasses}{\tt {\ttfamily widget.\+get\+Classes()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-hasClass}{\tt {\ttfamily widget.\+has\+Class()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-applyStyle}{\tt {\ttfamily widget.\+apply\+Style()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-removeStyle}{\tt {\ttfamily widget.\+remove\+Style()}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-method-checkStyleActive}{\tt {\ttfamily widget.\+check\+Style\+Active()}}.
+\item Integration with the \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Allowed Content Filter} required an introduction of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.style-method-toAllowedContentRules}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+style.\+to\+Allowed\+Content()}} method which can be implemented by the custom style handler and if exists, it is used by the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+filter}} to translate a style to \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter.allowedContentRules}{\tt allowed content rules}.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11300}{\tt \#11300}\+: Various changes in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} plugin\+:
+\begin{DoxyItemize}
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-image2_captionedClass}{\tt {\ttfamily config.\+image2\+\_\+captioned\+Class}} option to configure the class of captioned images.
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-image2_alignClasses}{\tt {\ttfamily config.\+image2\+\_\+align\+Classes}} option to configure the way images are aligned with C\+SS classes. If this setting is defined, the editor produces classes instead of inline styles for aligned images.
+\item Default image caption can be translated (customized) with the {\ttfamily editor.\+lang.\+image2.\+caption\+Placeholder} string.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11341}{\tt \#11341}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} plugin\+: It is now possible to add a link to any image type.
+\item \href{http://dev.ckeditor.com/ticket/10202}{\tt \#10202}\+: Introduced wildcard support in the \href{http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules}{\tt Allowed Content Rules} format.
+\item \href{http://dev.ckeditor.com/ticket/10276}{\tt \#10276}\+: Introduced blacklisting in the \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Allowed Content Filter}.
+\item \href{http://dev.ckeditor.com/ticket/10480}{\tt \#10480}\+: Introduced code snippets with code highlighting. There are two versions available so far --- the default \href{http://ckeditor.com/addon/codesnippet}{\tt Code Snippet} which uses the \href{http://highlightjs.org}{\tt highlight.\+js} library and the \href{http://ckeditor.com/addon/codesnippetgeshi}{\tt Code Snippet Ge\+S\+Hi} which uses the \href{http://qbnz.com/highlighter/}{\tt Ge\+S\+Hi} library.
+\item \href{http://dev.ckeditor.com/ticket/11737}{\tt \#11737}\+: Introduced an option to prevent \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt filtering} of an element that matches custom criteria (see \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter-method-addElementCallback}{\tt {\ttfamily filter.\+add\+Element\+Callback()}}).
+\item \href{http://dev.ckeditor.com/ticket/11532}{\tt \#11532}\+: Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-addContentsCss}{\tt {\ttfamily editor.\+add\+Contents\+Css()}} method that can be used for \href{http://docs.ckeditor.com/#!/guide/plugin_sdk_styles}{\tt adding custom C\+SS files}.
+\item \href{http://dev.ckeditor.com/ticket/11536}{\tt \#11536}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-htmlDecode}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+html\+Decode()}} method for decoding H\+T\+ML entities.
+\item \href{http://dev.ckeditor.com/ticket/11225}{\tt \#11225}\+: Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-property-transparentImageData}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+transparent\+Image\+Data}} property which contains transparent image data to be used in C\+SS or as image source.
+\end{DoxyItemize}
+
+Other Changes\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11377}{\tt \#11377}\+: Unified internal representation of empty anchors using the \href{http://ckeditor.com/addon/fakeobjects}{\tt fake objects}.
+\item \href{http://dev.ckeditor.com/ticket/11422}{\tt \#11422}\+: Removed Firefox 3.\+x, Internet Explorer 6 and Opera 12.\+x leftovers in code.
+\item \href{http://dev.ckeditor.com/ticket/5217}{\tt \#5217}\+: Setting data (including switching between modes) creates a new undo snapshot. Besides that\+:
+\begin{DoxyItemize}
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-property-status}{\tt {\ttfamily editable.\+status}} property.
+\item Introduced a new {\ttfamily force\+Update} option for the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-lockSnapshot}{\tt {\ttfamily editor.\+lock\+Snapshot}} event.
+\item Fixed\+: Selection not being unlocked in inline editor after setting data (\href{http://dev.ckeditor.com/ticket/11500}{\tt \#11500}).
+\end{DoxyItemize}
+\item The \href{http://ckeditor.com/addon/wsc}{\tt Web\+Spell\+Checker} plugin was updated to the latest version.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10190}{\tt \#10190}\+: Fixed\+: Removing block style with \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-removeStyle}{\tt {\ttfamily editor.\+remove\+Style()}} should result in a paragraph and not a div.
+\item \href{http://dev.ckeditor.com/ticket/11727}{\tt \#11727}\+: Fixed\+: The editor tries to select a non-\/editable image which was clicked.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+3.\+5}
+
+New Features\+:
+
+
+\begin{DoxyItemize}
+\item Added new translation\+: Tatar.
+\end{DoxyItemize}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11677}{\tt \#11677}\+: Fixed\+: Undo/\+Redo keystrokes are blocked in the source mode.
+\item \href{http://dev.ckeditor.com/ticket/11717}{\tt \#11717}\+: \href{http://ckeditor.com/addon/docprops}{\tt Document Properties} plugin requires the \href{http://ckeditor.com/addon/colordialog}{\tt Color Dialog} plugin to work.
+\end{DoxyItemize}
+
+\subsection*{C\+K\+Editor 4.\+3.\+4}
+
+Fixed Issues\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11597}{\tt \#11597}\+: \mbox{[}I\+E11\mbox{]} Fixed\+: Error thrown when trying to open the \href{http://ckeditor.com/addon/preview}{\tt preview} using the keyboard.
+\item \href{http://dev.ckeditor.com/ticket/11544}{\tt \#11544}\+: \href{http://ckeditor.com/addon/placeholder}{\tt Placeholders} will no longer be upcasted in parents not accepting {\ttfamily $<$span$>$} elements.
+\item \href{http://dev.ckeditor.com/ticket/8663}{\tt \#8663}\+: Fixed \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-renameNode}{\tt {\ttfamily element.\+rename\+Node()}} not clearing the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.element-method-getName}{\tt {\ttfamily element.\+get\+Name()}} cache.
+\item \href{http://dev.ckeditor.com/ticket/11574}{\tt \#11574}\+: Fixed\+: {\itshape Backspace} destroying the D\+OM structure if an inline editable is placed in a list item.
+\item \href{http://dev.ckeditor.com/ticket/11603}{\tt \#11603}\+: Fixed\+: \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} attaches to tables outside the editable.
+\item \href{http://dev.ckeditor.com/ticket/9205}{\tt \#9205}, \href{http://dev.ckeditor.com/ticket/7805}{\tt \#7805}, \href{http://dev.ckeditor.com/ticket/8216}{\tt \#8216}\+: Fixed\+: {\ttfamily \{cke\+\_\+protected\+\_\+1\}} appearing in data in various cases where H\+T\+ML comments are placed next to {\ttfamily \char`\"{}$<$/tt$>$ or $<$tt$>$\textquotesingle{}$<$/tt$>$.
+$\ast$ $<$a href=\char`\"{}\href{http://dev.ckeditor.com/ticket/11635}{\tt http\+://dev.\+ckeditor.\+com/ticket/11635}\char`\"{}$>$\#11635$<$/a$>$\+: Fixed\+: Some attributes are not protected before the content is passed through the fix bin.
+$\ast$ $<$a href=\char`\"{}\href{http://dev.ckeditor.com/ticket/11660}{\tt http\+://dev.\+ckeditor.\+com/ticket/11660}\char`\"{}$>$\#11660$<$/a$>$\+: \mbox{[}\+I\+E\mbox{]} Fixed\+: Table content is lost when some extra markup is inside the table.
+$\ast$ $<$a href=\char`\"{}\href{http://dev.ckeditor.com/ticket/11641}{\tt http\+://dev.\+ckeditor.\+com/ticket/11641}\char`\"{}$>$\#11641$<$/a$>$\+: Fixed\+: Switching between modes in the classic editor removes content styles for the inline editor.
+$\ast$ $<$a href=\char`\"{}\href{http://dev.ckeditor.com/ticket/11568}{\tt http\+://dev.\+ckeditor.\+com/ticket/11568}\char`\"{}$>$\#11568$<$/a$>$\+: Fixed\+: $<$a href=\char`\"{}\href{http://ckeditor.com/addon/stylescombo}{\tt http\+://ckeditor.\+com/addon/stylescombo}"$>$Styles drop-\/down list is not enabled on selection change.}
+\end{DoxyItemize}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+3.\+3}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11500}{\tt \#11500}\+: \mbox{[}Web\+Kit/\+Blink\mbox{]} Fixed\+: Selection lost when setting data in another inline editor. Additionally, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.selection-method-removeAllRanges}{\tt {\ttfamily selection.\+remove\+All\+Ranges()}} is now scoped to selection\textquotesingle{}s \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.selection-property-root}{\tt root}.
+\item \href{http://dev.ckeditor.com/ticket/11104}{\tt \#11104}\+: \mbox{[}IE\mbox{]} Fixed\+: Various issues with scrolling and selection when focusing widgets.
+\item \href{http://dev.ckeditor.com/ticket/11487}{\tt \#11487}\+: Moving mouse over the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} widget will no longer change the value returned by the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-checkDirty}{\tt {\ttfamily editor.\+check\+Dirty()}} method.
+\item \href{http://dev.ckeditor.com/ticket/8673}{\tt \#8673}\+: \mbox{[}Web\+Kit\mbox{]} Fixed\+: Cannot select and remove the \href{http://ckeditor.com/addon/pagebreak}{\tt Page Break}.
+\item \href{http://dev.ckeditor.com/ticket/11413}{\tt \#11413}\+: Fixed\+: Incorrect \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-execCommand}{\tt {\ttfamily editor.\+exec\+Command()}} behavior.
+\item \href{http://dev.ckeditor.com/ticket/11438}{\tt \#11438}\+: Splitting table cells vertically is no longer changing table structure.
+\item \href{http://dev.ckeditor.com/ticket/8899}{\tt \#8899}\+: Fixed\+: Links in the \href{http://ckeditor.com/addon/about}{\tt About C\+K\+Editor} dialog window now open in a new browser window or tab.
+\item \href{http://dev.ckeditor.com/ticket/11490}{\tt \#11490}\+: Fixed\+: \href{http://ckeditor.com/addon/menubutton}{\tt Menu button} panel not showing in the source mode.
+\item \href{http://dev.ckeditor.com/ticket/11417}{\tt \#11417}\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget-event-doubleclick}{\tt {\ttfamily widget.\+doubleclick}} event is not canceled anymore after editing was triggered.
+\item \href{http://dev.ckeditor.com/ticket/11253}{\tt \#11253}\+: \mbox{[}IE\mbox{]} Fixed\+: Clipped upload button in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/11359}{\tt \#11359}\+: Standardized the way anchors are discovered by the \href{http://ckeditor.com/addon/link}{\tt Link} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11058}{\tt \#11058}\+: \mbox{[}I\+E8\mbox{]} Fixed\+: Error when deleting a table row.
+\item \href{http://dev.ckeditor.com/ticket/11508}{\tt \#11508}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlDataProcessor}{\tt {\ttfamily html\+Data\+Processor}} discovering protected attributes within other attributes\textquotesingle{} values.
+\item \href{http://dev.ckeditor.com/ticket/11533}{\tt \#11533}\+: Widgets\+: Avoid recurring upcasts if the D\+OM structure was modified during an upcast.
+\item \href{http://dev.ckeditor.com/ticket/11400}{\tt \#11400}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.domObject-method-removeAllListeners}{\tt {\ttfamily dom\+Object.\+remove\+All\+Listeners()}} method does not remove custom listeners completely.
+\item \href{http://dev.ckeditor.com/ticket/11493}{\tt \#11493}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.selection-method-getRanges}{\tt {\ttfamily selection.\+get\+Ranges()}} method does not override cached ranges when used with the {\ttfamily only\+Editables} argument.
+\item \href{http://dev.ckeditor.com/ticket/11390}{\tt \#11390}\+: \mbox{[}IE\mbox{]} All \href{http://ckeditor.com/addon/xml}{\tt X\+ML} plugin \href{http://docs.ckeditor.com/#!/api/CKEDITOR.xml}{\tt methods} now work in I\+E10+.
+\item \href{http://dev.ckeditor.com/ticket/11542}{\tt \#11542}\+: \mbox{[}I\+E11\mbox{]} Fixed\+: Blurry toolbar icons when Right-\/to-\/\+Left UI language is set.
+\item \href{http://dev.ckeditor.com/ticket/11504}{\tt \#11504}\+: Fixed\+: When \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-fullPage}{\tt {\ttfamily config.\+full\+Page}} is set to {\ttfamily true}, entities are not encoded in editor output.
+\item \href{http://dev.ckeditor.com/ticket/11004}{\tt \#11004}\+: Integrated \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} dialog window with \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Advanced Content Filter}.
+\item \href{http://dev.ckeditor.com/ticket/11439}{\tt \#11439}\+: Fixed\+: Properties get cloned in the Cell Properties dialog window if multiple cells are selected.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+3.\+2}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11331}{\tt \#11331}\+: A menu button will have a changed label when selected instead of using the {\ttfamily aria-\/pressed} attribute.
+\item \href{http://dev.ckeditor.com/ticket/11177}{\tt \#11177}\+: Widget drag handler improvements\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11176}{\tt \#11176}\+: Fixed\+: Initial position is not updated when the widget data object is empty.
+\item \href{http://dev.ckeditor.com/ticket/11001}{\tt \#11001}\+: Fixed\+: Multiple synchronous layout recalculations are caused by initial drag handler positioning causing performance issues.
+\item \href{http://dev.ckeditor.com/ticket/11161}{\tt \#11161}\+: Fixed\+: Drag handler is not repositioned in various situations.
+\item \href{http://dev.ckeditor.com/ticket/11281}{\tt \#11281}\+: Fixed\+: Drag handler and mask are duplicated after widget reinitialization.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11207}{\tt \#11207}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Misplaced \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} resizer in the inline editor.
+\item \href{http://dev.ckeditor.com/ticket/11102}{\tt \#11102}\+: {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+template} improvements\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11102}{\tt \#11102}\+: Added newline character support.
+\item \href{http://dev.ckeditor.com/ticket/11216}{\tt \#11216}\+: Added \char`\"{}\textbackslash{}\textbackslash{}\textquotesingle{}\char`\"{} substring support.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11121}{\tt \#11121}\+: \mbox{[}Firefox\mbox{]} Fixed\+: High Contrast mode is enabled when the editor is loaded in a hidden iframe.
+\item \href{http://dev.ckeditor.com/ticket/11350}{\tt \#11350}\+: The default value of \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-contentsCss}{\tt {\ttfamily config.\+contents\+Css}} is affected by \href{http://docs.ckeditor.com/#!/api/CKEDITOR-method-getUrl}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+get\+Url()}}.
+\item \href{http://dev.ckeditor.com/ticket/11097}{\tt \#11097}\+: Improved the \href{http://ckeditor.com/addon/autogrow}{\tt Autogrow} plugin performance when dealing with very big tables.
+\item \href{http://dev.ckeditor.com/ticket/11290}{\tt \#11290}\+: Removed redundant code in the \href{http://ckeditor.com/addon/sourcedialog}{\tt Source Dialog} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11133}{\tt \#11133}\+: \href{http://ckeditor.com/addon/pagebreak}{\tt Page Break} becomes editable if pasted.
+\item \href{http://dev.ckeditor.com/ticket/11126}{\tt \#11126}\+: Fixed\+: Native Undo executed once the bottom of the snapshot stack is reached.
+\item \href{http://dev.ckeditor.com/ticket/11131}{\tt \#11131}\+: \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area}\+: Fixed\+: Error thrown when switching to source mode if the selection was in widget\textquotesingle{}s nested editable.
+\item \href{http://dev.ckeditor.com/ticket/11139}{\tt \#11139}\+: \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area}\+: Fixed\+: Elements Path is not cleared after switching to source mode.
+\item \href{http://dev.ckeditor.com/ticket/10778}{\tt \#10778}\+: Fixed a bug with range enlargement. The range no longer expands to visible whitespace.
+\item \href{http://dev.ckeditor.com/ticket/11146}{\tt \#11146}\+: \mbox{[}IE\mbox{]} Fixed\+: Preview window switches Internet Explorer to Quirks Mode.
+\item \href{http://dev.ckeditor.com/ticket/10762}{\tt \#10762}\+: \mbox{[}IE\mbox{]} Fixed\+: Java\+Script code displayed in preview window\textquotesingle{}s U\+RL bar.
+\item \href{http://dev.ckeditor.com/ticket/11186}{\tt \#11186}\+: Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-method-addUpcastCallback}{\tt {\ttfamily widgets.\+repository.\+add\+Upcast\+Callback()}} method that allows to block upcasting given element to a widget.
+\item \href{http://dev.ckeditor.com/ticket/11307}{\tt \#11307}\+: Fixed\+: Paste as Plain Text conflict with the \href{http://mootools.net}{\tt Moo\+Tools} library.
+\item \href{http://dev.ckeditor.com/ticket/11140}{\tt \#11140}\+: \mbox{[}I\+E11\mbox{]} Fixed\+: Anchors are not draggable.
+\item \href{http://dev.ckeditor.com/ticket/11379}{\tt \#11379}\+: Changed default contents {\ttfamily line-\/height} to unitless values to avoid huge text overlapping (like in \href{http://dev.ckeditor.com/ticket/9696}{\tt \#9696}).
+\item \href{http://dev.ckeditor.com/ticket/10787}{\tt \#10787}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Broken replacement of text while pasting into {\ttfamily div}-\/based editor.
+\item \href{http://dev.ckeditor.com/ticket/10884}{\tt \#10884}\+: Widgets integration with the \href{http://ckeditor.com/addon/showblocks}{\tt Show Blocks} plugin.
+\item \href{http://dev.ckeditor.com/ticket/11021}{\tt \#11021}\+: Fixed\+: An error thrown when selecting entire editable contents while fake selection is on.
+\item \href{http://dev.ckeditor.com/ticket/11086}{\tt \#11086}\+: \mbox{[}I\+E8\mbox{]} Re-\/enable inline widgets drag\&drop in Internet Explorer 8.
+\item \href{http://dev.ckeditor.com/ticket/11372}{\tt \#11372}\+: Widgets\+: Special characters encoded twice in nested editables.
+\item \href{http://dev.ckeditor.com/ticket/10068}{\tt \#10068}\+: Fixed\+: Support for protocol-\/relative U\+R\+Ls.
+\item \href{http://dev.ckeditor.com/ticket/11283}{\tt \#11283}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: A {\ttfamily $<$div$>$} element with {\ttfamily text-\/align\+: center} and an image inside is not recognised correctly.
+\item \href{http://dev.ckeditor.com/ticket/11196}{\tt \#11196}\+: \href{http://ckeditor.com/addon/a11yhelp}{\tt Accessibility Instructions}\+: Allowed additional keyboard button labels to be translated in the dialog window.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+3.\+1}}
+
+{\ttfamily }
+
+{\ttfamily {\bfseries Important Notes\+:}}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item To match the naming convention, the {\ttfamily language} button is now {\ttfamily Language} (\href{http://dev.ckeditor.com/ticket/11201}{\tt \#11201}).
+\item \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} button, context menu, command, and icon names match those of the \href{http://ckeditor.com/addon/image}{\tt Image} plugin (\href{http://dev.ckeditor.com/ticket/11222}{\tt \#11222}).
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/11244}{\tt \#11244}\+: Changed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-method-checkWidgets}{\tt {\ttfamily widget.\+repository.\+check\+Widgets()}} method now fires the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-event-checkWidgets}{\tt {\ttfamily widget.\+repository.\+check\+Widgets}} event, so from C\+K\+Editor 4.\+3.\+1 it is preferred to use the method rather than fire the event.
+\item \href{http://dev.ckeditor.com/ticket/11171}{\tt \#11171}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertElement}{\tt {\ttfamily editor.\+insert\+Element()}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertText}{\tt {\ttfamily editor.\+insert\+Text()}} methods do not call the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.repository-method-checkWidgets}{\tt {\ttfamily widget.\+repository.\+check\+Widgets()}} method.
+\item \href{http://dev.ckeditor.com/ticket/11085}{\tt \#11085}\+: \mbox{[}I\+E8\mbox{]} Replaced preview generated by the \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} widget with a placeholder.
+\item \href{http://dev.ckeditor.com/ticket/11044}{\tt \#11044}\+: Enhanced W\+A\+I-\/\+A\+R\+IA support for the \href{http://ckeditor.com/addon/language}{\tt Language} plugin drop-\/down menu.
+\item \href{http://dev.ckeditor.com/ticket/11075}{\tt \#11075}\+: With drop-\/down menu button focused, pressing the {\itshape Down Arrow} key will now open the menu and focus its first option.
+\item \href{http://dev.ckeditor.com/ticket/11165}{\tt \#11165}\+: Fixed\+: The \href{http://ckeditor.com/addon/filebrowser}{\tt File Browser} plugin cannot be removed from the editor.
+\item \href{http://dev.ckeditor.com/ticket/11159}{\tt \#11159}\+: \mbox{[}I\+E9-\/10\mbox{]} \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Fixed buggy discovery of image dimensions.
+\item \href{http://dev.ckeditor.com/ticket/11101}{\tt \#11101}\+: Drop-\/down lists no longer break when given double quotes.
+\item \href{http://dev.ckeditor.com/ticket/11077}{\tt \#11077}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Empty undo step recorded when resizing the image.
+\item \href{http://dev.ckeditor.com/ticket/10853}{\tt \#10853}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Widget has paragraph wrapper when de-\/captioning unaligned image.
+\item \href{http://dev.ckeditor.com/ticket/11198}{\tt \#11198}\+: Widgets\+: Drag handler is not fully visible when an inline widget is in a heading.
+\item \href{http://dev.ckeditor.com/ticket/11132}{\tt \#11132}\+: \mbox{[}Firefox\mbox{]} Fixed\+: Caret is lost after drag and drop of an inline widget.
+\item \href{http://dev.ckeditor.com/ticket/11182}{\tt \#11182}\+: \mbox{[}I\+E10-\/11\mbox{]} Fixed\+: Editor crashes (I\+E11) or works with minor issues (I\+E10) if a page is loaded in Quirks Mode. See \href{http://docs.ckeditor.com/#!/api/CKEDITOR.env-property-quirks}{\tt {\ttfamily env.\+quirks}} for more details.
+\item \href{http://dev.ckeditor.com/ticket/11204}{\tt \#11204}\+: Added {\ttfamily figure} and {\ttfamily figcaption} styles to the {\ttfamily contents.\+css} file so \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} looks nicer.
+\item \href{http://dev.ckeditor.com/ticket/11202}{\tt \#11202}\+: Fixed\+: No newline in \href{http://ckeditor.com/addon/bbcode}{\tt B\+B\+Code} mode.
+\item \href{http://dev.ckeditor.com/ticket/10890}{\tt \#10890}\+: Fixed\+: Error thrown when pressing the {\itshape Delete} key in a list item.
+\item \href{http://dev.ckeditor.com/ticket/10055}{\tt \#10055}\+: \mbox{[}I\+E8-\/10\mbox{]} Fixed\+: {\itshape Delete} pressed on a selected image causes the browser to go back.
+\item \href{http://dev.ckeditor.com/ticket/11183}{\tt \#11183}\+: Fixed\+: Inserting a horizontal rule or a table in multiple row selection causes a browser crash. Additionally, the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-insertElement}{\tt {\ttfamily editor.\+insert\+Element()}} method does not insert the element into every range of a selection any more.
+\item \href{http://dev.ckeditor.com/ticket/11042}{\tt \#11042}\+: Fixed\+: Selection made on an element containing a non-\/editable element was not auto faked.
+\item \href{http://dev.ckeditor.com/ticket/11125}{\tt \#11125}\+: Fixed\+: Keyboard navigation through menu and drop-\/down items will now cycle.
+\item \href{http://dev.ckeditor.com/ticket/11011}{\tt \#11011}\+: Fixed\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-applyStyle}{\tt {\ttfamily editor.\+apply\+Style()}} method removes attributes from nested elements.
+\item \href{http://dev.ckeditor.com/ticket/11179}{\tt \#11179}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-destroy}{\tt {\ttfamily editor.\+destroy()}} does not cleanup content generated by the \href{http://ckeditor.com/addon/tableresize}{\tt Table Resize} plugin for inline editors.
+\item \href{http://dev.ckeditor.com/ticket/11237}{\tt \#11237}\+: Fixed\+: Table border attribute value is deleted when pasting content from Microsoft Word.
+\item \href{http://dev.ckeditor.com/ticket/11250}{\tt \#11250}\+: Fixed\+: H\+T\+ML entities inside the {\ttfamily $<$textarea$>$} element are not encoded.
+\item \href{http://dev.ckeditor.com/ticket/11260}{\tt \#11260}\+: Fixed\+: Initially disabled buttons are not read by J\+A\+WS as disabled.
+\item \href{http://dev.ckeditor.com/ticket/11200}{\tt \#11200}\+: Added \href{http://ckeditor.com/addon/clipboard}{\tt Clipboard} plugin as a dependency for \href{http://ckeditor.com/addon/widget}{\tt Widget} to fix drag and drop.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+3}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10612}{\tt \#10612}\+: Internet Explorer 11 support.
+\item \href{http://dev.ckeditor.com/ticket/10869}{\tt \#10869}\+: Widgets\+: Added better integration with the \href{http://ckeditor.com/addon/elementspath}{\tt Elements Path} plugin.
+\item \href{http://dev.ckeditor.com/ticket/10886}{\tt \#10886}\+: Widgets\+: Added tooltip to the drag handle.
+\item \href{http://dev.ckeditor.com/ticket/10933}{\tt \#10933}\+: Widgets\+: Introduced drag and drop of block widgets with the \href{http://ckeditor.com/addon/lineutils}{\tt Line Utilities} plugin.
+\item \href{http://dev.ckeditor.com/ticket/10936}{\tt \#10936}\+: Widget System changes for easier integration with other dialog systems.
+\item \href{http://dev.ckeditor.com/ticket/10895}{\tt \#10895}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Added file browser integration.
+\item \href{http://dev.ckeditor.com/ticket/11002}{\tt \#11002}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget.definition-property-draggable}{\tt {\ttfamily draggable}} option to disable drag and drop support for widgets.
+\item \href{http://dev.ckeditor.com/ticket/10937}{\tt \#10937}\+: \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} widget improvements\+:
+\begin{DoxyItemize}
+\item loading indicator (\href{http://dev.ckeditor.com/ticket/10948}{\tt \#10948}),
+\item applying paragraph changes (like font color change) to iframe (\href{http://dev.ckeditor.com/ticket/10841}{\tt \#10841}),
+\item Firefox and I\+E9 clipboard fixes (\href{http://dev.ckeditor.com/ticket/10857}{\tt \#10857}),
+\item fixing same origin policy issue (\href{http://dev.ckeditor.com/ticket/10840}{\tt \#10840}),
+\item fixing undo bugs (\href{http://dev.ckeditor.com/ticket/10842}{\tt \#10842}, \href{http://dev.ckeditor.com/ticket/10930}{\tt \#10930}),
+\item fixing other minor bugs.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10862}{\tt \#10862}\+: \href{http://ckeditor.com/addon/placeholder}{\tt Placeholder} plugin was rewritten as a widget.
+\item \href{http://dev.ckeditor.com/ticket/10822}{\tt \#10822}\+: Added styles system integration with non-\/editable elements (for example widgets) and their nested editables. Styles cannot change non-\/editable content and are applied in nested editable only if allowed by its type and content filter.
+\item \href{http://dev.ckeditor.com/ticket/10856}{\tt \#10856}\+: Menu buttons will now toggle the visibility of their panels when clicked multiple times. \href{http://ckeditor.com/addon/language}{\tt Language} plugin fixes\+: Added active language highlighting, added an option to remove the language.
+\item \href{http://dev.ckeditor.com/ticket/10028}{\tt \#10028}\+: New \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-dialog_noConfirmCancel}{\tt {\ttfamily config.\+dialog\+\_\+no\+Confirm\+Cancel}} configuration option that eliminates the need to confirm closing of a dialog window when the user changed any of its fields.
+\item \href{http://dev.ckeditor.com/ticket/10848}{\tt \#10848}\+: Integrate remaining plugins (\href{http://ckeditor.com/addon/stylescombo}{\tt Styles}, \href{http://ckeditor.com/addon/format}{\tt Format}, \href{http://ckeditor.com/addon/font}{\tt Font}, \href{http://ckeditor.com/addon/colorbutton}{\tt Color Button}, \href{http://ckeditor.com/addon/language}{\tt Language} and \href{http://ckeditor.com/addon/indent}{\tt Indent}) with \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-activeFilter}{\tt active filter}.
+\item \href{http://dev.ckeditor.com/ticket/10855}{\tt \#10855}\+: Change the extension of emoticons in the \href{http://ckeditor.com/addon/bbcode}{\tt B\+B\+Code} sample from G\+IF to P\+NG.
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10831}{\tt \#10831}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Merged {\ttfamily image2inline} and {\ttfamily image2block} into one {\ttfamily image2} widget.
+\item \href{http://dev.ckeditor.com/ticket/10835}{\tt \#10835}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Improved visibility of the resize handle.
+\item \href{http://dev.ckeditor.com/ticket/10836}{\tt \#10836}\+: \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: Preserve custom mouse cursor while resizing the image.
+\item \href{http://dev.ckeditor.com/ticket/10939}{\tt \#10939}\+: \mbox{[}Firefox\mbox{]} \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image}\+: hovering the image causes it to change.
+\item \href{http://dev.ckeditor.com/ticket/10866}{\tt \#10866}\+: Fixed\+: Broken {\itshape Tab} key navigation in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/10833}{\tt \#10833}\+: Fixed\+: {\itshape Lock ratio} option should be on by default in the \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/10881}{\tt \#10881}\+: Various improvements to {\itshape Enter} key behavior in nested editables.
+\item \href{http://dev.ckeditor.com/ticket/10879}{\tt \#10879}\+: \href{http://ckeditor.com/addon/removeformat}{\tt Remove Format} should not leak from a nested editable.
+\item \href{http://dev.ckeditor.com/ticket/10877}{\tt \#10877}\+: Fixed\+: \href{http://ckeditor.com/addon/wsc}{\tt Web\+Spell\+Checker} fails to apply changes if a nested editable was focused.
+\item \href{http://dev.ckeditor.com/ticket/10877}{\tt \#10877}\+: Fixed\+: \href{http://ckeditor.com/addon/wsc}{\tt S\+C\+A\+YT} blocks typing in nested editables.
+\item \href{http://dev.ckeditor.com/ticket/11079}{\tt \#11079}\+: Add button icons to the \href{http://ckeditor.com/addon/placeholder}{\tt Placeholder} sample.
+\item \href{http://dev.ckeditor.com/ticket/10870}{\tt \#10870}\+: The {\ttfamily paste} command is no longer being disabled when the clipboard is empty.
+\item \href{http://dev.ckeditor.com/ticket/10854}{\tt \#10854}\+: Fixed\+: Firefox prepends {\ttfamily $<$br$>$} to {\ttfamily $<$body$>$}, so it is stripped by the H\+T\+ML data processor.
+\item \href{http://dev.ckeditor.com/ticket/10823}{\tt \#10823}\+: Fixed\+: \href{http://ckeditor.com/addon/link}{\tt Link} plugin does not work with non-\/editable content.
+\item \href{http://dev.ckeditor.com/ticket/10828}{\tt \#10828}\+: \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} integration with the Widget System.
+\item \href{http://dev.ckeditor.com/ticket/10865}{\tt \#10865}\+: Improved hiding copybin, so copying widgets works smoothly.
+\item \href{http://dev.ckeditor.com/ticket/11066}{\tt \#11066}\+: Widget\textquotesingle{}s private parts use C\+SS reset.
+\item \href{http://dev.ckeditor.com/ticket/11027}{\tt \#11027}\+: Fixed\+: Block commands break on widgets; added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-contentDomInvalidated}{\tt {\ttfamily content\+Dom\+Invalidated}} event.
+\item \href{http://dev.ckeditor.com/ticket/10430}{\tt \#10430}\+: Resolve dependence of the \href{http://ckeditor.com/addon/image}{\tt Image} plugin on the \href{http://ckeditor.com/addon/forms}{\tt Form Elements} plugin.
+\item \href{http://dev.ckeditor.com/ticket/10911}{\tt \#10911}\+: Fixed\+: Browser {\itshape Alt} hotkeys will no longer be blocked while a widget is focused.
+\item \href{http://dev.ckeditor.com/ticket/11082}{\tt \#11082}\+: Fixed\+: Selected widget is not copied or cut when using toolbar buttons or context menu.
+\item \href{http://dev.ckeditor.com/ticket/11083}{\tt \#11083}\+: Fixed list and div element application to block widgets.
+\item \href{http://dev.ckeditor.com/ticket/10887}{\tt \#10887}\+: Internet Explorer 8 compatibility issues related to the Widget System.
+\item \href{http://dev.ckeditor.com/ticket/11074}{\tt \#11074}\+: Temporarily disabled inline widget drag and drop, because of seriously buggy native {\ttfamily range\+::move\+To\+Point} method.
+\item \href{http://dev.ckeditor.com/ticket/11098}{\tt \#11098}\+: Fixed\+: Wrong selection position after undoing widget drag and drop.
+\item \href{http://dev.ckeditor.com/ticket/11110}{\tt \#11110}\+: Fixed\+: I\+Frame and Flash objects are being incorrectly pasted in certain conditions.
+\item \href{http://dev.ckeditor.com/ticket/11129}{\tt \#11129}\+: Page break is lost when loading data.
+\item \href{http://dev.ckeditor.com/ticket/11123}{\tt \#11123}\+: \mbox{[}Firefox\mbox{]} Widget is destroyed after being dragged outside of {\ttfamily $<$body$>$}.
+\item \href{http://dev.ckeditor.com/ticket/11124}{\tt \#11124}\+: Fixed the \href{http://ckeditor.com/addon/elementspath}{\tt Elements Path} in an editor using the \href{http://ckeditor.com/addon/divarea}{\tt Div Editing Area}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+3 Beta}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9764}{\tt \#9764}\+: Widget System.
+\begin{DoxyItemize}
+\item \href{http://ckeditor.com/addon/widget}{\tt Widget plugin} introducing the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.widget}{\tt Widget A\+PI}.
+\item New \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-enterMode}{\tt {\ttfamily editor.\+enter\+Mode}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-shiftEnterMode}{\tt {\ttfamily editor.\+shift\+Enter\+Mode}} properties -- normalized versions of \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-enterMode}{\tt {\ttfamily config.\+enter\+Mode}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-shiftEnterMode}{\tt {\ttfamily config.\+shift\+Enter\+Mode}}.
+\item Dynamic editor settings. Starting from C\+K\+Editor 4.\+3 Beta, {\itshape Enter} mode values and \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt content filter} instances may be changed dynamically (for example when the caret was placed in an element in which editor features should be adjusted). When you are implementing a new editor feature, you should base its behavior on \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-activeEnterMode}{\tt dynamic} or \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-enterMode}{\tt static} {\itshape Enter} mode values depending on whether this feature works in selection context or globally on editor content.
+\begin{DoxyItemize}
+\item Dynamic {\itshape Enter} mode values -- \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setActiveEnterMode}{\tt {\ttfamily editor.\+set\+Active\+Enter\+Mode()}} method, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-activeEnterModeChange}{\tt {\ttfamily editor.\+active\+Enter\+Mode\+Change}} event, and two properties\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-activeEnterMode}{\tt {\ttfamily editor.\+active\+Enter\+Mode}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-activeShiftEnterMode}{\tt {\ttfamily editor.\+active\+Shift\+Enter\+Mode}}.
+\item Dynamic content filter instances -- \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setActiveFilter}{\tt {\ttfamily editor.\+set\+Active\+Filter()}} method, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-activeFilterChange}{\tt {\ttfamily editor.\+active\+Filter\+Change}} event, and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-activeFilter}{\tt {\ttfamily editor.\+active\+Filter}} property.
+\end{DoxyItemize}
+\item \char`\"{}\+Fake\char`\"{} selection was introduced. It makes it possible to virtually select any element when the real selection remains hidden. See the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.selection-method-fake}{\tt {\ttfamily selection.\+fake()}} method.
+\item Default \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.filter}{\tt {\ttfamily html\+Parser.\+filter}} rules are not applied to non-\/editable elements (elements with {\ttfamily contenteditable} attribute set to {\ttfamily false} and their descendants) anymore. To add a rule which will be applied to all elements you need to pass an additional argument to the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.filter-method-addRules}{\tt {\ttfamily filter.\+add\+Rules()}} method.
+\item Dozens of new methods were introduced -- most interesting ones\+:
+\begin{DoxyItemize}
+\item \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.document-method-find}{\tt {\ttfamily document.\+find()}},
+\item \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.document-method-findOne}{\tt {\ttfamily document.\+find\+One()}},
+\item \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertElementIntoRange}{\tt {\ttfamily editable.\+insert\+Element\+Into\+Range()}},
+\item \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-moveToClosestEditablePosition}{\tt {\ttfamily range.\+move\+To\+Closest\+Editable\+Position()}},
+\item New methods for \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.node}{\tt {\ttfamily html\+Parser.\+node}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.element}{\tt {\ttfamily html\+Parser.\+element}}.
+\end{DoxyItemize}
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10659}{\tt \#10659}\+: New \href{http://ckeditor.com/addon/image2}{\tt Enhanced Image} plugin that introduces a widget with integrated image captions, an option to center images, and dynamic \char`\"{}click and drag\char`\"{} resizing.
+\item \href{http://dev.ckeditor.com/ticket/10664}{\tt \#10664}\+: New \href{http://ckeditor.com/addon/mathjax}{\tt Mathematical Formulas} plugin that introduces the Math\+Jax widget.
+\item \href{https://dev.ckeditor.com/ticket/7987}{\tt \#7987}\+: New \href{http://ckeditor.com/addon/language}{\tt Language} plugin that implements Language toolbar button to support \href{http://www.w3.org/TR/UNDERSTANDING-WCAG20/meaning-other-lang-id.html}{\tt W\+C\+AG 3.\+1.\+2 Language of Parts}.
+\item \href{http://dev.ckeditor.com/ticket/10708}{\tt \#10708}\+: New \href{http://ckeditor.com/addon/smiley}{\tt smileys}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+2.\+3}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10994}{\tt \#10994}\+: Fixed\+: Loading external j\+Query library when opening the \href{http://docs.ckeditor.com/#!/guide/dev_jquery}{\tt j\+Query Adapter} sample directly from file.
+\item \href{http://dev.ckeditor.com/ticket/10975}{\tt \#10975}\+: \mbox{[}IE\mbox{]} Fixed\+: Error thrown while opening the color palette.
+\item \href{http://dev.ckeditor.com/ticket/9929}{\tt \#9929}\+: \mbox{[}Blink/\+Web\+Kit\mbox{]} Fixed\+: A non-\/breaking space is created once a character is deleted and a regular space is typed.
+\item \href{http://dev.ckeditor.com/ticket/10963}{\tt \#10963}\+: Fixed\+: J\+A\+WS issue with the keyboard shortcut for \href{http://ckeditor.com/addon/magicline}{\tt Magic Line}.
+\item \href{http://dev.ckeditor.com/ticket/11096}{\tt \#11096}\+: Fixed\+: Type\+Error\+: Object has no method \textquotesingle{}is\textquotesingle{}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+2.\+2}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9314}{\tt \#9314}\+: Fixed\+: Incorrect error message on closing a dialog window without saving changs.
+\item \href{http://dev.ckeditor.com/ticket/10308}{\tt \#10308}\+: \mbox{[}I\+E10\mbox{]} Fixed\+: Unspecified error when deleting a row.
+\item \href{http://dev.ckeditor.com/ticket/10945}{\tt \#10945}\+: \mbox{[}Chrome\mbox{]} Fixed\+: Clicking with a mouse inside the editor does not show the caret.
+\item \href{http://dev.ckeditor.com/ticket/10912}{\tt \#10912}\+: Prevent default action when content of a non-\/editable link is clicked.
+\item \href{http://dev.ckeditor.com/ticket/10913}{\tt \#10913}\+: Fixed \href{http://docs.ckeditor.com/#!/api/CKEDITOR.resourceManager-method-addExternal}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+plugins.\+add\+External()}} not handling paths including file name specified.
+\item \href{http://dev.ckeditor.com/ticket/10666}{\tt \#10666}\+: Fixed \href{http://docs.ckeditor.com/#!/api/CKEDITOR.tools-method-isArray}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+tools.\+is\+Array()}} not working cross frame.
+\item \href{http://dev.ckeditor.com/ticket/10910}{\tt \#10910}\+: \mbox{[}I\+E9\mbox{]} Fixed Java\+Script error thrown in Compatibility Mode when clicking and/or typing in the editing area.
+\item \href{http://dev.ckeditor.com/ticket/10868}{\tt \#10868}\+: \mbox{[}I\+E8\mbox{]} Prevent the browser from crashing when applying the Inline Quotation style.
+\item \href{http://dev.ckeditor.com/ticket/10915}{\tt \#10915}\+: Fixed\+: Invalid C\+SS filter in the Kama skin.
+\item \href{http://dev.ckeditor.com/ticket/10914}{\tt \#10914}\+: Plugins \href{http://ckeditor.com/addon/indentlist}{\tt Indent List} and \href{http://ckeditor.com/addon/indentblock}{\tt Indent Block} are now included in the build configuration.
+\item \href{http://dev.ckeditor.com/ticket/10812}{\tt \#10812}\+: Fixed \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dom.range-method-createBookmark2}{\tt {\ttfamily range.\+create\+Bookmark2()}} incorrectly normalizing offsets. This bug was causing many issues\+: \href{http://dev.ckeditor.com/ticket/10850}{\tt \#10850}, \href{http://dev.ckeditor.com/ticket/10842}{\tt \#10842}.
+\item \href{http://dev.ckeditor.com/ticket/10951}{\tt \#10951}\+: Reviewed and optimized focus handling on panels (combo, menu buttons, color buttons, and context menu) to enhance accessibility. Fixed \href{http://dev.ckeditor.com/ticket/10705}{\tt \#10705}, \href{http://dev.ckeditor.com/ticket/10706}{\tt \#10706} and \href{http://dev.ckeditor.com/ticket/10707}{\tt \#10707}.
+\item \href{http://dev.ckeditor.com/ticket/10704}{\tt \#10704}\+: Fixed a J\+A\+WS issue with the Select Color dialog window title not being announced.
+\item \href{http://dev.ckeditor.com/ticket/10753}{\tt \#10753}\+: The floating toolbar in inline instances now has a dedicated accessibility label.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+2.\+1}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10301}{\tt \#10301}\+: \mbox{[}I\+E9-\/10\mbox{]} Undo fails after 3+ consecutive paste actions with a Java\+Script error.
+\item \href{http://dev.ckeditor.com/ticket/10689}{\tt \#10689}\+: Save toolbar button saves only the first editor instance.
+\item \href{http://dev.ckeditor.com/ticket/10368}{\tt \#10368}\+: Move language reading direction definition ({\ttfamily dir}) from main language file to core.
+\item \href{http://dev.ckeditor.com/ticket/9330}{\tt \#9330}\+: Fixed pasting anchors from MS Word.
+\item \href{http://dev.ckeditor.com/ticket/8103}{\tt \#8103}\+: Fixed pasting nested lists from MS Word.
+\item \href{http://dev.ckeditor.com/ticket/9958}{\tt \#9958}\+: \mbox{[}I\+E9\mbox{]} Pressing the \char`\"{}\+O\+K\char`\"{} button will trigger the {\ttfamily onbeforeunload} event in the popup dialog.
+\item \href{http://dev.ckeditor.com/ticket/10662}{\tt \#10662}\+: Fixed styles from the Styles drop-\/down list not registering to the A\+CF in case when the \href{http://ckeditor.com/addon/sharedspace}{\tt Shared Spaces plugin} is used.
+\item \href{http://dev.ckeditor.com/ticket/9654}{\tt \#9654}\+: Problems with Internet Explorer 10 Quirks Mode.
+\item \href{http://dev.ckeditor.com/ticket/9816}{\tt \#9816}\+: Floating toolbar does not reposition vertically in several cases.
+\item \href{http://dev.ckeditor.com/ticket/10646}{\tt \#10646}\+: Removing a selected sublist or nested table with {\itshape Backspace/\+Delete} removes the parent element.
+\item \href{http://dev.ckeditor.com/ticket/10623}{\tt \#10623}\+: \mbox{[}Web\+Kit\mbox{]} Page is scrolled when opening a drop-\/down list.
+\item \href{http://dev.ckeditor.com/ticket/10004}{\tt \#10004}\+: \mbox{[}Chrome\+Vox\mbox{]} Button names are not announced.
+\item \href{http://dev.ckeditor.com/ticket/10731}{\tt \#10731}\+: \href{http://ckeditor.com/addon/wsc}{\tt Web\+Spell\+Checker} plugin breaks cloning of editor configuration.
+\item It is now possible to set per instance \href{http://ckeditor.com/addon/wsc}{\tt Web\+Spell\+Checker} plugin configuration instead of setting the configuration globally.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+2}}
+
+{\ttfamily }
+
+{\ttfamily {\bfseries Important Notes\+:}}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item Dropped compatibility support for Internet Explorer 7 and Firefox 3.\+6.
+\item Both the Basic and the Standard distribution packages will not contain the new \href{http://ckeditor.com/addon/indentblock}{\tt Indent Block} plugin. Because of this the \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Advanced Content Filter} might remove block indentations from existing contents. If you want to prevent this, either \href{http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules}{\tt add an appropriate A\+CF rule to your filter} or create a custom build based on the Basic/\+Standard package and add the Indent Block plugin in \href{http://ckeditor.com/builder}{\tt C\+K\+Builder}.
+\end{DoxyItemize}}
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10027}{\tt \#10027}\+: Separated list and block indentation into two plugins\+: \href{http://ckeditor.com/addon/indentlist}{\tt Indent List} and \href{http://ckeditor.com/addon/indentblock}{\tt Indent Block}.
+\item \href{http://dev.ckeditor.com/ticket/8244}{\tt \#8244}\+: Use $\ast$(Shift+)Tab$\ast$ to indent and outdent lists.
+\item \href{http://dev.ckeditor.com/ticket/10281}{\tt \#10281}\+: The \href{http://docs.ckeditor.com/#!/guide/dev_jquery}{\tt j\+Query Adapter} is now available. Several j\+Query-\/related issues fixed\+: \href{http://dev.ckeditor.com/ticket/8261}{\tt \#8261}, \href{http://dev.ckeditor.com/ticket/9077}{\tt \#9077}, \href{http://dev.ckeditor.com/ticket/8710}{\tt \#8710}, \href{http://dev.ckeditor.com/ticket/8530}{\tt \#8530}, \href{http://dev.ckeditor.com/ticket/9019}{\tt \#9019}, \href{http://dev.ckeditor.com/ticket/6181}{\tt \#6181}, \href{http://dev.ckeditor.com/ticket/7876}{\tt \#7876}, \href{http://dev.ckeditor.com/ticket/6906}{\tt \#6906}.
+\item \href{http://dev.ckeditor.com/ticket/10042}{\tt \#10042}\+: Introduced \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-title}{\tt {\ttfamily config.\+title}} setting to change the human-\/readable title of the editor.
+\item \href{http://dev.ckeditor.com/ticket/9794}{\tt \#9794}\+: Added \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-change}{\tt {\ttfamily editor.\+change}} event.
+\item \href{http://dev.ckeditor.com/ticket/9923}{\tt \#9923}\+: Hi\+D\+PI support in the editor UI. Hi\+D\+PI icons for \href{http://ckeditor.com/addon/moono}{\tt Moono skin} added.
+\item \href{http://dev.ckeditor.com/ticket/8031}{\tt \#8031}\+: Handle {\ttfamily required} attributes on {\ttfamily $<$textarea$>$} elements --- introduced \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-required}{\tt {\ttfamily editor.\+required}} event.
+\item \href{http://dev.ckeditor.com/ticket/10280}{\tt \#10280}\+: Ability to replace {\ttfamily $<$textarea$>$} elements with the inline editor.
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10599}{\tt \#10599}\+: \href{http://ckeditor.com/addon/indent}{\tt Indent} plugin is no longer required by the \href{http://ckeditor.com/addon/list}{\tt List} plugin.
+\item \href{http://dev.ckeditor.com/ticket/10370}{\tt \#10370}\+: Inconsistency in data events between framed and inline editors.
+\item \href{http://dev.ckeditor.com/ticket/10438}{\tt \#10438}\+: \mbox{[}FF, IE\mbox{]} No selection is done on an editable element on executing \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setData}{\tt {\ttfamily editor.\+set\+Data()}}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+1.\+3}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item Added new translation\+: Indonesian.
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10644}{\tt \#10644}\+: Fixed a critical bug when pasting plain text in Blink-\/based browsers.
+\item \href{http://dev.ckeditor.com/ticket/5189}{\tt \#5189}\+: \href{http://ckeditor.com/addon/find}{\tt Find/\+Replace} dialog window\+: rename \char`\"{}\+Cancel\char`\"{} button to \char`\"{}\+Close\char`\"{}.
+\item \href{http://dev.ckeditor.com/ticket/10562}{\tt \#10562}\+: \mbox{[}Housekeeping\mbox{]} Unified C\+SS gradient filter formats in the \href{http://ckeditor.com/addon/moono}{\tt Moono} skin.
+\item \href{http://dev.ckeditor.com/ticket/10537}{\tt \#10537}\+: Advanced Content Filter should register a default rule for \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-shiftEnterMode}{\tt {\ttfamily config.\+shift\+Enter\+Mode}}.
+\item \href{http://dev.ckeditor.com/ticket/10610}{\tt \#10610}\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.dialog-static-method-addIframe}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+dialog.\+add\+Iframe()}} incorrectly sets the iframe size in dialog windows.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+1.\+2}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item Added new translation\+: Sinhala.
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10339}{\tt \#10339}\+: Fixed\+: Error thrown when inserted data was totally stripped out after filtering and processing.
+\item \href{http://dev.ckeditor.com/ticket/10298}{\tt \#10298}\+: Fixed\+: Data processor breaks attributes containing protected parts.
+\item \href{http://dev.ckeditor.com/ticket/10367}{\tt \#10367}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editable-method-insertText}{\tt {\ttfamily editable.\+insert\+Text()}} loses characters when {\ttfamily Reg\+Exp} replace controls are being inserted.
+\item \href{http://dev.ckeditor.com/ticket/10165}{\tt \#10165}\+: \mbox{[}IE\mbox{]} Access denied error when {\ttfamily document.\+domain} has been altered.
+\item \href{http://dev.ckeditor.com/ticket/9761}{\tt \#9761}\+: Update the {\itshape Backspace} key state in \href{http://docs.ckeditor.com/#!/api/CKEDITOR.keystrokeHandler-property-blockedKeystrokes}{\tt {\ttfamily keystroke\+Handler.\+blocked\+Keystrokes}} when calling \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-setReadOnly}{\tt {\ttfamily editor.\+set\+Read\+Only()}}.
+\item \href{http://dev.ckeditor.com/ticket/6504}{\tt \#6504}\+: Fixed\+: Race condition while loading several \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-customConfig}{\tt {\ttfamily config.\+custom\+Config}} files.
+\item \href{http://dev.ckeditor.com/ticket/10146}{\tt \#10146}\+: \mbox{[}Firefox\mbox{]} Empty lines are being removed while \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-enterMode}{\tt {\ttfamily config.\+enter\+Mode}} is \href{http://docs.ckeditor.com/#!/api/CKEDITOR-property-ENTER_BR}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+E\+N\+T\+E\+R\+\_\+\+BR}}.
+\item \href{http://dev.ckeditor.com/ticket/10360}{\tt \#10360}\+: Fixed\+: A\+R\+IA {\ttfamily role=\char`\"{}application\char`\"{}} should not be used for dialog windows.
+\item \href{http://dev.ckeditor.com/ticket/10361}{\tt \#10361}\+: Fixed\+: A\+R\+IA {\ttfamily role=\char`\"{}application\char`\"{}} should not be used for floating panels.
+\item \href{http://dev.ckeditor.com/ticket/10510}{\tt \#10510}\+: Introduced unique voice labels to differentiate between different editor instances.
+\item \href{http://dev.ckeditor.com/ticket/9945}{\tt \#9945}\+: \mbox{[}i\+OS\mbox{]} Scrolling not possible on i\+Pad.
+\item \href{http://dev.ckeditor.com/ticket/10389}{\tt \#10389}\+: Fixed\+: Invalid H\+T\+ML in the \char`\"{}\+Text and Table\char`\"{} template.
+\item \href{http://ckeditor.com/addon/wsc}{\tt Web\+Spell\+Checker} plugin user interface was changed to match C\+K\+Editor 4 style.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+1.\+1}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item Added new translation\+: Albanian.
+\end{DoxyItemize}}
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10172}{\tt \#10172}\+: Pressing {\itshape Delete} or {\itshape Backspace} in an empty table cell moves the cursor to the next/previous cell.
+\item \href{http://dev.ckeditor.com/ticket/10219}{\tt \#10219}\+: Error thrown when destroying an editor instance in parallel with a {\ttfamily mouseup} event.
+\item \href{http://dev.ckeditor.com/ticket/10265}{\tt \#10265}\+: Wrong loop type in the \href{http://ckeditor.com/addon/filebrowser}{\tt File Browser} plugin.
+\item \href{http://dev.ckeditor.com/ticket/10249}{\tt \#10249}\+: Wrong undo/redo states at start.
+\item \href{http://dev.ckeditor.com/ticket/10268}{\tt \#10268}\+: \href{http://ckeditor.com/addon/showblocks}{\tt Show Blocks} does not recover after switching to Source view.
+\item \href{http://dev.ckeditor.com/ticket/9995}{\tt \#9995}\+: H\+T\+ML code in the {\ttfamily $<$textarea$>$} should not be modified by the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlDataProcessor}{\tt {\ttfamily html\+Data\+Processor}}.
+\item \href{http://dev.ckeditor.com/ticket/10320}{\tt \#10320}\+: \href{http://ckeditor.com/addon/justify}{\tt Justify} plugin should add elements to Advanced Content Filter based on current \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-enterMode}{\tt Enter mode}.
+\item \href{http://dev.ckeditor.com/ticket/10260}{\tt \#10260}\+: Fixed\+: Advanced Content Filter blocks \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-tabSpaces}{\tt {\ttfamily tab\+Spaces}}. Unified {\ttfamily data-\/cke-\/$\ast$} attributes filtering.
+\item \href{http://dev.ckeditor.com/ticket/10315}{\tt \#10315}\+: \mbox{[}Web\+Kit\mbox{]} \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.undo.UndoManager}{\tt Undo manager} should not record snapshots after a filling character was added/removed.
+\item \href{http://dev.ckeditor.com/ticket/10291}{\tt \#10291}\+: \mbox{[}Web\+Kit\mbox{]} Space after a filling character should be secured.
+\item \href{http://dev.ckeditor.com/ticket/10330}{\tt \#10330}\+: \mbox{[}Web\+Kit\mbox{]} The filling character is not removed on {\ttfamily keydown} in specific cases.
+\item \href{http://dev.ckeditor.com/ticket/10285}{\tt \#10285}\+: Fixed\+: Styled text pasted from MS Word causes an infinite loop.
+\item \href{http://dev.ckeditor.com/ticket/10131}{\tt \#10131}\+: Fixed\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.plugins.undo.UndoManager-method-update}{\tt {\ttfamily undo\+Manager.\+update()}} does not refresh the command state.
+\item \href{http://dev.ckeditor.com/ticket/10337}{\tt \#10337}\+: Fixed\+: Unable to remove {\ttfamily $<$s$>$} using \href{http://ckeditor.com/addon/removeformat}{\tt Remove Format}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+1}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10192}{\tt \#10192}\+: Closing lists with the {\itshape Enter} key does not work with \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt Advanced Content Filter} in several cases.
+\item \href{http://dev.ckeditor.com/ticket/10191}{\tt \#10191}\+: Fixed allowed content rules unification, so the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter-property-allowedContent}{\tt {\ttfamily filter.\+allowed\+Content}} property always contains rules in the same format.
+\item \href{http://dev.ckeditor.com/ticket/10224}{\tt \#10224}\+: Advanced Content Filter does not remove non-\/empty {\ttfamily $<$a$>$} elements anymore.
+\item Minor issues in plugin integration with Advanced Content Filter\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10166}{\tt \#10166}\+: Added transformation from the {\ttfamily align} attribute to {\ttfamily float} style to preserve backward compatibility after the introduction of Advanced Content Filter.
+\item \href{http://dev.ckeditor.com/ticket/10195}{\tt \#10195}\+: \href{http://ckeditor.com/addon/image}{\tt Image} plugin no longer registers rules for links to Advanced Content Filter.
+\item \href{http://dev.ckeditor.com/ticket/10213}{\tt \#10213}\+: \href{http://ckeditor.com/addon/justify}{\tt Justify} plugin is now correctly registering rules to Advanced Content Filter when \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-justifyClasses}{\tt {\ttfamily config.\+justify\+Classes}} is defined.
+\end{DoxyItemize}
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+1 RC}}
+
+{\ttfamily }
+
+{\ttfamily New Features\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9829}{\tt \#9829}\+: Advanced Content Filter -\/ data and features activation based on editor configuration.
+
+Brand new data filtering system that works in 2 modes\+:
+\begin{DoxyItemize}
+\item Based on loaded features (toolbar items, plugins) -\/ the data will be filtered according to what the editor in its current configuration can handle.
+\item Based on \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-allowedContent}{\tt {\ttfamily config.\+allowed\+Content}} rules -\/ the data will be filtered and the editor features (toolbar items, commands, keystrokes) will be enabled if they are allowed.
+\end{DoxyItemize}
+
+See the {\ttfamily datafiltering.\+html} sample, \href{http://docs.ckeditor.com/#!/guide/dev_advanced_content_filter}{\tt guides} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.filter}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+filter} A\+PI documentation}.
+\item \href{http://dev.ckeditor.com/ticket/9387}{\tt \#9387}\+: Reintroduced \href{http://ckeditor.com/addon/sharedspace}{\tt Shared Spaces} -\/ the ability to display toolbar and bottom editor space in selected locations and to share them by different editor instances.
+\item \href{http://dev.ckeditor.com/ticket/9907}{\tt \#9907}\+: Added the \href{http://docs.ckeditor.com/#!/api/CKEDITOR-event-contentPreview}{\tt {\ttfamily content\+Preview}} event for preview data manipulation.
+\item \href{http://dev.ckeditor.com/ticket/9713}{\tt \#9713}\+: Introduced the \href{http://ckeditor.com/addon/sourcedialog}{\tt Source Dialog} plugin that brings raw H\+T\+ML editing for inline editor instances.
+\item Included in \href{http://dev.ckeditor.com/ticket/9829}{\tt \#9829}\+: Introduced new events, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-toHtml}{\tt {\ttfamily to\+Html}} and \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-toDataFormat}{\tt {\ttfamily to\+Data\+Format}}, allowing for better integration with data processing.
+\item \href{http://dev.ckeditor.com/ticket/9981}{\tt \#9981}\+: Added ability to filter \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.fragment}{\tt {\ttfamily html\+Parser.\+fragment}}, \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.element}{\tt {\ttfamily html\+Parser.\+element}} etc. by many \href{http://docs.ckeditor.com/#!/api/CKEDITOR.htmlParser.filter}{\tt {\ttfamily html\+Parser.\+filter}}s before writing structure to an H\+T\+ML string.
+\item Included in \href{http://dev.ckeditor.com/ticket/10103}{\tt \#10103}\+:
+\begin{DoxyItemize}
+\item Introduced the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-status}{\tt {\ttfamily editor.\+status}} property to make it easier to check the current status of the editor.
+\item Default \href{http://docs.ckeditor.com/#!/api/CKEDITOR.command}{\tt {\ttfamily command}} state is now \href{http://docs.ckeditor.com/#!/api/CKEDITOR-property-TRISTATE_DISABLED}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+T\+R\+I\+S\+T\+A\+T\+E\+\_\+\+D\+I\+S\+A\+B\+LE}}. It will be activated on \href{http://docs.ckeditor.com/#!/api/CKEDITOR-event-instanceReady}{\tt {\ttfamily editor.\+instance\+Ready}} or immediately after being added if the editor is already initialized.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9796}{\tt \#9796}\+: Introduced {\ttfamily $<$s$>$} as a default tag for strikethrough, which replaces obsolete {\ttfamily $<$strike$>$} in H\+T\+M\+L5.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+0.\+3}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/10196}{\tt \#10196}\+: Fixed context menus not opening with keyboard shortcuts when \href{http://ckeditor.com/addon/autogrow}{\tt Autogrow} is enabled.
+\item \href{http://dev.ckeditor.com/ticket/10212}{\tt \#10212}\+: \mbox{[}I\+E7-\/10\mbox{]} Undo command throws errors after multiple switches between Source and W\+Y\+S\+I\+W\+YG view.
+\item \href{http://dev.ckeditor.com/ticket/10219}{\tt \#10219}\+: \mbox{[}Inline editor\mbox{]} Error thrown after calling \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-destroy}{\tt {\ttfamily editor.\+destroy()}}.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+0.\+2}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9779}{\tt \#9779}\+: Fixed overriding \href{http://docs.ckeditor.com/#!/api/CKEDITOR-method-getUrl}{\tt {\ttfamily C\+K\+E\+D\+I\+T\+O\+R.\+get\+Url()}} with {\ttfamily C\+K\+E\+D\+I\+T\+O\+R\+\_\+\+G\+E\+T\+U\+RL}.
+\item \href{http://dev.ckeditor.com/ticket/9772}{\tt \#9772}\+: Custom buttons in the dialog window footer have different look and size (\href{http://ckeditor.com/addon/moono}{\tt Moono}, \href{http://ckeditor.com/addon/kama}{\tt Kama} skins).
+\item \href{http://dev.ckeditor.com/ticket/9029}{\tt \#9029}\+: Custom styles added with the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.stylesSet-method-add}{\tt {\ttfamily styles\+Set.\+add()}} are displayed in the wrong order.
+\item \href{http://dev.ckeditor.com/ticket/9887}{\tt \#9887}\+: Disable \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} when \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-property-readOnly}{\tt {\ttfamily editor.\+read\+Only}} is set.
+\item \href{http://dev.ckeditor.com/ticket/9882}{\tt \#9882}\+: Fixed empty document title on \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-getData}{\tt {\ttfamily editor.\+get\+Data()}} if set via the Document Properties dialog window.
+\item \href{http://dev.ckeditor.com/ticket/9773}{\tt \#9773}\+: Fixed rendering problems with selection fields in the Kama skin.
+\item \href{http://dev.ckeditor.com/ticket/9851}{\tt \#9851}\+: The \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-selectionChange}{\tt {\ttfamily selection\+Change}} event is not fired when mouse selection ended outside editable.
+\item \href{http://dev.ckeditor.com/ticket/9903}{\tt \#9903}\+: \mbox{[}Inline editor\mbox{]} Bad positioning of floating space with page horizontal scroll.
+\item \href{http://dev.ckeditor.com/ticket/9872}{\tt \#9872}\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-checkDirty}{\tt {\ttfamily editor.\+check\+Dirty()}} returns {\ttfamily true} when called onload. Removed the obsolete {\ttfamily editor.\+may\+Be\+Dirty} flag.
+\item \href{http://dev.ckeditor.com/ticket/9893}{\tt \#9893}\+: \mbox{[}IE\mbox{]} Fixed broken toolbar when editing mixed direction content in Quirks mode.
+\item \href{http://dev.ckeditor.com/ticket/9845}{\tt \#9845}\+: Fixed T\+AB navigation in the \href{http://ckeditor.com/addon/link}{\tt Link} dialog window when the Anchor option is used and no anchors are available.
+\item \href{http://dev.ckeditor.com/ticket/9883}{\tt \#9883}\+: Maximizing was making the entire page editable with \href{http://ckeditor.com/addon/divarea}{\tt divarea}-\/based editors.
+\item \href{http://dev.ckeditor.com/ticket/9940}{\tt \#9940}\+: \mbox{[}Firefox\mbox{]} Navigating back to a page with the editor was making the entire page editable.
+\item \href{http://dev.ckeditor.com/ticket/9966}{\tt \#9966}\+: Fixed\+: Unable to type square brackets with French keyboard layout. Changed \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} keystrokes.
+\item \href{http://dev.ckeditor.com/ticket/9507}{\tt \#9507}\+: \mbox{[}Firefox\mbox{]} Selection is moved before editable position when the editor is focused for the first time.
+\item \href{http://dev.ckeditor.com/ticket/9947}{\tt \#9947}\+: \mbox{[}Web\+Kit\mbox{]} Editor overflows parent container in some edge cases.
+\item \href{http://dev.ckeditor.com/ticket/10105}{\tt \#10105}\+: Fixed\+: Broken \href{http://ckeditor.com/addon/sourcearea}{\tt sourcearea} view when an R\+TL language is set.
+\item \href{http://dev.ckeditor.com/ticket/10123}{\tt \#10123}\+: \mbox{[}Web\+Kit\mbox{]} Fixed\+: Several dialog windows have broken layout since the latest Web\+Kit release.
+\item \href{http://dev.ckeditor.com/ticket/10152}{\tt \#10152}\+: Fixed\+: Invalid A\+R\+IA property used on menu items.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+0.\+1.\+1}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item Security update\+: Added protection against X\+SS attack and possible path disclosure in the P\+HP sample.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+0.\+1}}
+
+{\ttfamily }
+
+{\ttfamily Fixed Issues\+:}
+
+{\ttfamily 
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9655}{\tt \#9655}\+: Support for IE Quirks Mode in the new \href{http://ckeditor.com/addon/moono}{\tt Moono skin}.
+\item Accessibility issues (mainly in inline editor)\+: \href{http://dev.ckeditor.com/ticket/9364}{\tt \#9364}, \href{http://dev.ckeditor.com/ticket/9368}{\tt \#9368}, \href{http://dev.ckeditor.com/ticket/9369}{\tt \#9369}, \href{http://dev.ckeditor.com/ticket/9370}{\tt \#9370}, \href{http://dev.ckeditor.com/ticket/9541}{\tt \#9541}, \href{http://dev.ckeditor.com/ticket/9543}{\tt \#9543}, \href{http://dev.ckeditor.com/ticket/9841}{\tt \#9841}, \href{http://dev.ckeditor.com/ticket/9844}{\tt \#9844}.
+\item \href{http://ckeditor.com/addon/magicline}{\tt Magic Line} plugin\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9481}{\tt \#9481}\+: Added accessibility support for Magic Line.
+\item \href{http://dev.ckeditor.com/ticket/9509}{\tt \#9509}\+: Added Magic Line support for forms.
+\item \href{http://dev.ckeditor.com/ticket/9573}{\tt \#9573}\+: Magic Line does not disappear on {\ttfamily mouseout} in a specific case.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9754}{\tt \#9754}\+: \mbox{[}Web\+Kit\mbox{]} Cutting \& pasting simple unformatted text generates an inline wrapper in Web\+Kit browsers.
+\item \href{http://dev.ckeditor.com/ticket/9456}{\tt \#9456}\+: \mbox{[}Chrome\mbox{]} Properly paste bullet list style from MS Word.
+\item \href{http://dev.ckeditor.com/ticket/9699}{\tt \#9699}, \href{http://dev.ckeditor.com/ticket/9758}{\tt \#9758}\+: Improved selection locking when selecting by dragging.
+\item Context menu\+:
+\begin{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9712}{\tt \#9712}\+: Opening the context menu destroys editor focus.
+\item \href{http://dev.ckeditor.com/ticket/9366}{\tt \#9366}\+: Context menu should be displayed over the floating toolbar.
+\item \href{http://dev.ckeditor.com/ticket/9706}{\tt \#9706}\+: Context menu generates a Java\+Script error in inline mode when the editor is attached to a header element.
+\end{DoxyItemize}
+\item \href{http://dev.ckeditor.com/ticket/9800}{\tt \#9800}\+: Hide float panel when resizing the window.
+\item \href{http://dev.ckeditor.com/ticket/9721}{\tt \#9721}\+: Padding in content of div-\/based editor puts the editing area under the bottom UI space.
+\item \href{http://dev.ckeditor.com/ticket/9528}{\tt \#9528}\+: Host page {\ttfamily box-\/sizing} style should not influence the editor UI elements.
+\item \href{http://dev.ckeditor.com/ticket/9503}{\tt \#9503}\+: \href{http://ckeditor.com/addon/forms}{\tt Form Elements} plugin adds context menu listeners only on supported input types. Added support for {\ttfamily tel}, {\ttfamily email}, {\ttfamily search} and {\ttfamily url} input types.
+\item \href{http://dev.ckeditor.com/ticket/9769}{\tt \#9769}\+: Improved floating toolbar positioning in a narrow window.
+\item \href{http://dev.ckeditor.com/ticket/9875}{\tt \#9875}\+: Table dialog window does not populate width correctly.
+\item \href{http://dev.ckeditor.com/ticket/8675}{\tt \#8675}\+: Deleting cells in a nested table removes the outer table cell.
+\item \href{http://dev.ckeditor.com/ticket/9815}{\tt \#9815}\+: Cannot edit dialog window fields in an editor initialized in the j\+Query UI modal dialog.
+\item \href{http://dev.ckeditor.com/ticket/8888}{\tt \#8888}\+: C\+K\+Editor dialog windows do not show completely in a small window.
+\item \href{http://dev.ckeditor.com/ticket/9360}{\tt \#9360}\+: \mbox{[}Inline editor\mbox{]} Blocks shown for a {\ttfamily $<$div$>$} element stay permanently even after the user exits editing the {\ttfamily $<$div$>$}.
+\item \href{http://dev.ckeditor.com/ticket/9531}{\tt \#9531}\+: \mbox{[}Firefox \& Inline editor\mbox{]} Toolbar is lost when closing the Format drop-\/down list by clicking its button.
+\item \href{http://dev.ckeditor.com/ticket/9553}{\tt \#9553}\+: Table width incorrectly set when the {\ttfamily border-\/width} style is specified.
+\item \href{http://dev.ckeditor.com/ticket/9594}{\tt \#9594}\+: Cannot tab past C\+K\+Editor when it is in read-\/only mode.
+\item \href{http://dev.ckeditor.com/ticket/9658}{\tt \#9658}\+: \mbox{[}I\+E9\mbox{]} Justify not working on selected images.
+\item \href{http://dev.ckeditor.com/ticket/9686}{\tt \#9686}\+: Added missing contents styles for {\ttfamily $<$pre$>$} elements.
+\item \href{http://dev.ckeditor.com/ticket/9709}{\tt \#9709}\+: \href{http://ckeditor.com/addon/pastefromword}{\tt Paste from Word} should not depend on configuration from other styles.
+\item \href{http://dev.ckeditor.com/ticket/9726}{\tt \#9726}\+: Removed \href{http://ckeditor.com/addon/colordialog}{\tt Color Dialog} plugin dependency from \href{http://ckeditor.com/addon/tabletools}{\tt Table Tools}.
+\item \href{http://dev.ckeditor.com/ticket/9765}{\tt \#9765}\+: Toolbar Collapse command documented incorrectly in the \href{http://ckeditor.com/addon/a11yhelp}{\tt Accessibility Instructions} dialog window.
+\item \href{http://dev.ckeditor.com/ticket/9771}{\tt \#9771}\+: \mbox{[}Web\+Kit \& Opera\mbox{]} Fixed scrolling issues when pasting.
+\item \href{http://dev.ckeditor.com/ticket/9787}{\tt \#9787}\+: \mbox{[}I\+E9\mbox{]} {\ttfamily on\+Change} is not fired for checkboxes in dialogs.
+\item \href{http://dev.ckeditor.com/ticket/9842}{\tt \#9842}\+: \mbox{[}Firefox 17\mbox{]} When opening a toolbar menu for the first time and pressing the {\itshape Down Arrow} key, focus goes to the next toolbar button instead of the menu options.
+\item \href{http://dev.ckeditor.com/ticket/9847}{\tt \#9847}\+: \href{http://ckeditor.com/addon/elementspath}{\tt Elements Path} should not be initialized in the inline editor.
+\item \href{http://dev.ckeditor.com/ticket/9853}{\tt \#9853}\+: \href{http://docs.ckeditor.com/#!/api/CKEDITOR.editor-method-addRemoveFormatFilter}{\tt {\ttfamily editor.\+add\+Remove\+Format\+Filter()}} is exposed before it really works.
+\item \href{http://dev.ckeditor.com/ticket/8893}{\tt \#8893}\+: Value of the \href{http://docs.ckeditor.com/#!/api/CKEDITOR.config-cfg-pasteFromWordCleanupFile}{\tt {\ttfamily paste\+From\+Word\+Cleanup\+File}} configuration option is now taken from the instance configuration.
+\item \href{http://dev.ckeditor.com/ticket/9693}{\tt \#9693}\+: Removed \char`\"{}\+Live Preview\char`\"{} checkbox from UI color picker.
+\end{DoxyItemize}}
+
+{\ttfamily \subsection*{C\+K\+Editor 4.\+0}}
+
+{\ttfamily }
+
+{\ttfamily The first stable release of the new C\+K\+Editor 4 code line.}
+
+{\ttfamily The C\+K\+Editor Java\+Script A\+PI has been kept compatible with C\+K\+Editor 4, whenever possible. The list of relevant changes can be found in the \href{http://docs.ckeditor.com/#!/guide/dev_api_changes}{\tt A\+PI Changes page of the C\+K\+Editor 4 documentation}. }

@@ -1,3 +1,7 @@
+"""
+module that controls all the wallet related features
+"""
+
 import time
 import json
 import requests

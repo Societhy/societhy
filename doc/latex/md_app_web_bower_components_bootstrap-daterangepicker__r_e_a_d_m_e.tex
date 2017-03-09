@@ -1,0 +1,178 @@
+
+
+This date range picker component for Bootstrap creates a dropdown menu from which a user can select a range of dates. I created it while building the UI for \href{http://www.improvely.com}{\tt Improvely}, which needed a way to select date ranges for reports.
+
+If invoked with no options, it will present two calendars to choose a start and end date from. Optionally, you can provide a list of date ranges the user can select from instead of choosing dates from the calendars. If attached to a text input, the selected dates will be inserted into the text box. Otherwise, you can provide a custom callback function to receive the selection.
+
+The component can also be used as a single date picker by setting the {\ttfamily single\+Date\+Picker} option to {\ttfamily true}.
+
+{\bfseries \href{http://www.dangrossman.info/2012/08/20/a-date-range-picker-for-twitter-bootstrap/}{\tt View a demo}} or {\bfseries \href{https://awio.iljmp.com/5/drpdemogh}{\tt Try it in a live application}}
+
+\subsection*{Usage}
+
+This component relies on \href{http://getbootstrap.com}{\tt Bootstrap}, \href{http://momentjs.com/}{\tt Moment.\+js} and \href{http://jquery.com/}{\tt j\+Query}.
+
+Separate stylesheets are included for use with Bootstrap 2 or Bootstrap 3.
+
+Basic usage\+:
+
+
+\begin{DoxyCode}
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="moment.js"></script>
+<script type="text/javascript" src="daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="daterangepicker-bs3.css" />
+
+<script type="text/javascript">
+$(document).ready(function() \{
+  $('input[name="daterange"]').daterangepicker();
+\});
+</script>
+\end{DoxyCode}
+
+
+The constructor also takes an optional options object and callback function. The function will be called whenever the selected date range has been changed by the user, and is passed the start and end dates (moment date objects) and the predefined range label chosen (if any), as parameters. It will not fire if the picker is closed without any change to the selected dates.
+
+
+\begin{DoxyCode}
+$('input[name="daterange"]').daterangepicker(
+  \{ 
+    format: 'YYYY-MM-DD',
+    startDate: '2013-01-01',
+    endDate: '2013-12-31'
+  \},
+  function(start, end, label) \{
+    alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+  \}
+);
+\end{DoxyCode}
+
+
+\subsection*{Options}
+
+{\ttfamily start\+Date}\+: (Date object, moment object or string) The start of the initially selected date range
+
+{\ttfamily end\+Date}\+: (Date object, moment object or string) The end of the initially selected date range
+
+{\ttfamily min\+Date}\+: (Date object, moment object or string) The earliest date a user may select
+
+{\ttfamily max\+Date}\+: (Date object, moment object or string) The latest date a user may select
+
+{\ttfamily date\+Limit}\+: (object) The maximum span between the selected start and end dates. Can have any property you can add to a moment object (i.\+e. days, months)
+
+{\ttfamily time\+Zone}\+: (string or number) The timezone that will be used to display the start\+Date and end\+Date in the calendar. This may be a string such as \char`\"{}-\/08\+:00\char`\"{} or an offset in minutes from Greenwich Mean Time. Uses Moment.\+js \#zone, \href{http://momentjs.com/docs/#/manipulating/timezone-offset/}{\tt see the docs here} for more information. If the time\+Zone option is not set, the calendar will use the time zone set on the start\+Date that has been passed in through the options, if it has one. Defaults to the local time zone
+
+{\ttfamily show\+Dropdowns}\+: (boolean) Show year and month select boxes above calendars to jump to a specific month and year
+
+{\ttfamily show\+Week\+Numbers}\+: (boolean) Show week numbers at the start of each week on the calendars
+
+{\ttfamily time\+Picker}\+: (boolean) Allow selection of dates with times, not just dates
+
+{\ttfamily time\+Picker\+Increment}\+: (number) Increment of the minutes selection list for times (i.\+e. 30 to allow only selection of times ending in 0 or 30)
+
+{\ttfamily time\+Picker12\+Hour}\+: (boolean) Use 12-\/hour instead of 24-\/hour times, adding an A\+M/\+PM select box
+
+{\ttfamily time\+Picker\+Seconds}\+: (boolean) Show seconds in the time\+Picker
+
+{\ttfamily ranges}\+: (object) Set predefined date ranges the user can select from. Each key is the label for the range, and its value an array with two dates representing the bounds of the range
+
+{\ttfamily opens}\+: (string\+: \textquotesingle{}left\textquotesingle{}/\textquotesingle{}right\textquotesingle{}/\textquotesingle{}center\textquotesingle{}) Whether the picker appears aligned to the left, to the right, or centered under the H\+T\+ML element it\textquotesingle{}s attached to
+
+{\ttfamily button\+Classes}\+: (array) C\+SS class names that will be added to all buttons in the picker
+
+{\ttfamily apply\+Class}\+: (string) C\+SS class string that will be added to the apply button
+
+{\ttfamily cancel\+Class}\+: (string) C\+SS class string that will be added to the cancel button
+
+{\ttfamily format}\+: (string) Date/time format string used by moment when parsing or displaying the selected dates
+
+{\ttfamily separator}\+: (string) Separator string to display between the start and end date when populating a text input the picker is attached to
+
+{\ttfamily locale}\+: (object) Allows you to provide localized strings for buttons and labels, and the first day of week for the calendars
+
+{\ttfamily single\+Date\+Picker}\+: (boolean) Show only a single calendar to choose one date, instead of a range picker with two calendars; the start and end dates provided to your callback will be the same single date chosen
+
+{\ttfamily parent\+El}\+: (string) j\+Query selector of the parent element that the date range picker will be added to, if not provided this will be {\ttfamily \textquotesingle{}body\textquotesingle{}}
+
+\subsection*{Functions}
+
+Several functions are provided for updating the picker\textquotesingle{}s option and state after initialization\+:
+
+{\ttfamily set\+Options(object, function)}\+: This function has the same signature and purpose as the date range picker\textquotesingle{}s constructor\+: it sets the picker\textquotesingle{}s options to their defaults, overrides them with any values in an options object you provide, and sets the callback for selection changes to whatever function you provide
+
+{\ttfamily set\+Start\+Date(Date/moment/string)}\+: Sets the date range picker\textquotesingle{}s currently selected start date to the provided date
+
+{\ttfamily set\+End\+Date(Date/moment/string)}\+: Sets the date range picker\textquotesingle{}s currently selected end date to the provided date
+
+Example usage\+:
+
+
+\begin{DoxyCode}
+//create a new date range picker
+$('#daterange').daterangepicker(\{ startDate: '2014-03-05', endDate: '2014-03-06' \});
+
+//change the selected date range of that picker
+$('#daterange').data('daterangepicker').setStartDate('2014-03-01');
+$('#daterange').data('daterangepicker').setEndDate('2014-03-31');
+\end{DoxyCode}
+
+
+\subsection*{Events}
+
+Several events are triggered on the element you attach the picker to, which you can listen for\+:
+
+{\ttfamily show.\+daterangepicker}\+: Triggered when the picker is shown
+
+{\ttfamily hide.\+daterangepicker}\+: Triggered when the picker is hidden
+
+{\ttfamily show\+Calendar.\+daterangepicker}\+: Triggered when the calendar is shown
+
+{\ttfamily hide\+Calendar.\+daterangepicker}\+: Triggered when the calendar is hidden
+
+{\ttfamily apply.\+daterangepicker}\+: Triggered when the apply button is clicked
+
+{\ttfamily cancel.\+daterangepicker}\+: Triggered when the cancel button is clicked
+
+Some applications need a \char`\"{}clear\char`\"{} instead of a \char`\"{}cancel\char`\"{} functionality, which can be achieved by changing the button label and watching for the cancel event\+:
+
+
+\begin{DoxyCode}
+$('#daterange').daterangepicker(\{
+  locale: \{ cancelLabel: 'Clear' \}  
+\});
+
+$('#daterange').on('cancel.daterangepicker', function(ev, picker) \{
+  //do something, like clearing an input
+  $('#daterange').val('');
+\});
+\end{DoxyCode}
+
+
+While passing in a callback to the constructor is the easiest way to listen for changes in the selected date range, you can also do something every time the apply button is clicked even if the selection hasn\textquotesingle{}t changed\+:
+
+
+\begin{DoxyCode}
+$('#daterange').daterangepicker();
+$('#daterange').on('apply.daterangepicker', function(ev, picker) \{
+  console.log(picker.startDate.format('YYYY-MM-DD'));
+  console.log(picker.endDate.format('YYYY-MM-DD'));
+\});
+\end{DoxyCode}
+
+
+\subsection*{License}
+
+This code is made available under the same license as Bootstrap. Moment.\+js is included in this repository for convenience. It is available under the \href{http://www.opensource.org/licenses/mit-license.php}{\tt M\+IT license}. 
+
+
+
+The M\+IT License (M\+IT)
+
+Copyright (c) 2012-\/2014 Dan Grossman
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \char`\"{}\+Software\char`\"{}), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions\+:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+T\+HE S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED \char`\"{}\+A\+S I\+S\char`\"{}, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+TY OF A\+NY K\+I\+ND, E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED, I\+N\+C\+L\+U\+D\+I\+NG B\+UT N\+OT L\+I\+M\+I\+T\+ED TO T\+HE W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY, F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+ND N\+O\+N\+I\+N\+F\+R\+I\+N\+G\+E\+M\+E\+NT. IN NO E\+V\+E\+NT S\+H\+A\+LL T\+HE A\+U\+T\+H\+O\+RS OR C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+E\+RS BE L\+I\+A\+B\+LE F\+OR A\+NY C\+L\+A\+IM, D\+A\+M\+A\+G\+ES OR O\+T\+H\+ER L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN AN A\+C\+T\+I\+ON OF C\+O\+N\+T\+R\+A\+CT, T\+O\+RT OR O\+T\+H\+E\+R\+W\+I\+SE, A\+R\+I\+S\+I\+NG F\+R\+OM, O\+UT OF OR IN C\+O\+N\+N\+E\+C\+T\+I\+ON W\+I\+TH T\+HE S\+O\+F\+T\+W\+A\+RE OR T\+HE U\+SE OR O\+T\+H\+ER D\+E\+A\+L\+I\+N\+GS IN T\+HE S\+O\+F\+T\+W\+A\+RE. 

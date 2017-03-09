@@ -1,0 +1,72 @@
+$<$qrcode$>$$<$/qrcode$>$
+
+An Angular\+JS directive to creates QR Codes using Kazuhiko Arase’s \href{https://github.com/kazuhikoarase/qrcode-generator}{\tt qrcode-\/generator} library.
+
+\href{http://monospaced.github.io/angular-qrcode}{\tt See it in action}.
+
+\subsection*{Important! }
+
+The {\ttfamily version} and {\ttfamily error-\/correction-\/level} parameters are very important.
+
+{\bfseries The selected {\ttfamily version} and {\ttfamily error-\/correction-\/level} must give a high enough capacity for the amount of {\ttfamily data} (bits) you are encoding, or the {\ttfamily qrcode} will not render}.
+
+For more information see \href{http://www.qrcode.com/en/about/version.html}{\tt http\+://www.\+qrcode.\+com/en/about/version.\+html}.
+
+\subsection*{Usage }
+
+as element \begin{DoxyVerb}<qrcode data="string"></qrcode>
+\end{DoxyVerb}
+
+
+with QR options \begin{DoxyVerb}<qrcode version="2" error-correction-level="M" size="200" data="string"></qrcode>
+\end{DoxyVerb}
+
+
+as a downloadable image \begin{DoxyVerb}<qrcode data="string" download></qrcode>
+\end{DoxyVerb}
+
+
+as a link to U\+RL \begin{DoxyVerb}<qrcode data="http://example.com" href="http://example.com"></qrcode>
+\end{DoxyVerb}
+
+
+{\ttfamily download} and {\ttfamily href} can’t be used on the same element (if {\ttfamily download} is present, {\ttfamily href} will be ignored)
+
+with expressions, observe changes \begin{DoxyVerb}<qrcode version="{{version}}" error-correction-level="{{level}}" size="{{size}}" data="{{var}}" href="{{var}}" download></qrcode>
+\end{DoxyVerb}
+
+
+\subsection*{Options }
+
+Permitted values
+
+
+\begin{DoxyItemize}
+\item version\+: 1-\/40
+\item error-\/correction-\/level\+: \textquotesingle{}L\textquotesingle{}, \textquotesingle{}M\textquotesingle{}, \textquotesingle{}Q\textquotesingle{}, \textquotesingle{}H\textquotesingle{}
+\item size\+: integer
+\item download\+: boolean
+\item href\+: U\+RL
+\end{DoxyItemize}
+
+The amount of data (measured in bits) must be within capacity according to the selected version and error correction level, see \href{http://www.qrcode.com/en/about/version.html}{\tt http\+://www.\+qrcode.\+com/en/about/version.\+html}.
+
+\subsection*{Install }
+
+\begin{DoxyVerb}bower install monospaced/angular-qrcode
+
+npm install angular-qrcode
+\end{DoxyVerb}
+
+
+Include the \href{https://raw.github.com/monospaced/bower-qrcode-generator/master/js/qrcode.js}{\tt qrcode generator library} and the {\ttfamily angular-\/qrcode.\+js} script provided by this component in your app, and add {\ttfamily monospaced.\+qrcode} to your app’s dependencies.
+
+\subsection*{Demo }
+
+\href{http://monospaced.github.io/angular-qrcode}{\tt monospaced.\+github.\+io/angular-\/qrcode}
+
+\subsection*{Reference }
+
+\href{http://www.qrcode.com/en/about/version.html}{\tt QR Code versions}
+
+\href{http://www.qrcode.com/en/about/error_correction.html}{\tt QR Code error correction} 

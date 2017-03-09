@@ -1,0 +1,546 @@
+
+
+ \subsection*{Standard select boxes}
+
+ 
+
+Make this\+:
+
+
+
+ $<$select$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$
+
+ 
+
+Become this\+:
+
+
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+ \subsection*{Select boxes with optgroups}
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$optgroup label=\char`\"{}\+Picnic\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/optgroup$>$ $<$optgroup label=\char`\"{}\+Camping\char`\"{}$>$ $<$option$>$Tent$<$/option$>$ $<$option$>$Flashlight$<$/option$>$ $<$option$>$Toilet Paper$<$/option$>$ $<$/optgroup$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <optgroup label="Picnic">
+    <option>Mustard</option>
+    <option>Ketchup</option>
+    <option>Relish</option>
+  </optgroup>
+  <optgroup label="Camping">
+    <option>Tent</option>
+    <option>Flashlight</option>
+    <option>Toilet Paper</option>
+  </optgroup>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Multiple select boxes}
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple$>$=\char`\"{}\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple>
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\section*{Live search}
+
+
+
+
+
+\subsection*{Live search}
+
+You can add a search input by passing {\ttfamily data-\/live-\/search=\char`\"{}true\char`\"{}} attribute\+:
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} data-\/live-\/search=\char`\"{}true\char`\"{}$>$ $<$option$>$Hot Dog, Fries and a Soda$<$/option$>$ $<$option$>$Burger, Shake and a Smile$<$/option$>$ $<$option$>$Sugar, Spice and all things nice$<$/option$>$ $<$/select$>$ 
+
+\subsection*{Key words}
+
+Add key words to options to improve their searchability using {\ttfamily data-\/tokens}.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} data-\/live-\/search=\char`\"{}true\char`\"{}$>$ $<$option data-\/tokens=\char`\"{}ketchup mustard\char`\"{}$>$Hot Dog, Fries and a Soda$<$/option$>$ $<$option data-\/tokens=\char`\"{}mustard\char`\"{}$>$Burger, Shake and a Smile$<$/option$>$ $<$option data-\/tokens=\char`\"{}frosting\char`\"{}$>$Sugar, Spice and all things nice$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-live-search="true">
+  <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+  <option data-tokens="mustard">Burger, Shake and a Smile</option>
+  <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+</select>
+\end{DoxyCode}
+
+
+\section*{Limit the number of selections}
+
+Limit the number of options that can be selected via the {\ttfamily data-\/max-\/options} attribute. It also works for option groups. Customize the message displayed when the limit is reached with {\ttfamily max\+Options\+Text}.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple=\char`\"{}\char`\"{} data-\/max-\/options=\char`\"{}2\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple$>$=\char`\"{}\char`\"{}$>$ $<$optgroup label=\char`\"{}\+Condiments\char`\"{} data-\/max-\/options=\char`\"{}2\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/optgroup$>$ $<$optgroup label=\char`\"{}\+Breads\char`\"{} data-\/max-\/options=\char`\"{}2\char`\"{}$>$ $<$option$>$Plain$<$/option$>$ $<$option$>$Steamed$<$/option$>$ $<$option$>$Toasted$<$/option$>$ $<$/optgroup$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple data-max-options="2">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+
+<select class="selectpicker" multiple>
+  <optgroup label="Condiments" data-max-options="2">
+    <option>Mustard</option>
+    <option>Ketchup</option>
+    <option>Relish</option>
+  </optgroup>
+  <optgroup label="Breads" data-max-options="2">
+    <option>Plain</option>
+    <option>Steamed</option>
+    <option>Toasted</option>
+  </optgroup>
+</select>
+\end{DoxyCode}
+
+
+\section*{Custom button text}
+
+
+
+
+
+\subsection*{Placeholder}
+
+Using the {\ttfamily title} attribute will set the default placeholder text when nothing is selected. This works for both multiple and standard select boxes\+:
+
+  $<$label$>$Multiple$<$/label$>$ $<$select class=\char`\"{}selectpicker\char`\"{} multiple=\char`\"{}\char`\"{} title=\char`\"{}\+Choose one of the following...\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+  $<$label$>$Standard$<$/label$>$ $<$select class=\char`\"{}selectpicker\char`\"{} title=\char`\"{}\+Choose one of the following...\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$  
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple title="Choose one of the following...">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Selected text}
+
+Set the {\ttfamily title} attribute on individual options to display alternative text when the option is selected\+:
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option title=\char`\"{}\+Combo 1\char`\"{}$>$Hot Dog, Fries and a Soda$<$/option$>$ $<$option title=\char`\"{}\+Combo 2\char`\"{}$>$Burger, Shake and a Smile$<$/option$>$ $<$option title=\char`\"{}\+Combo 3\char`\"{}$>$Sugar, Spice and all things nice$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option title="Combo 1">Hot Dog, Fries and a Soda</option>
+  <option title="Combo 2">Burger, Shake and a Smile</option>
+  <option title="Combo 3">Sugar, Spice and all things nice</option>
+</select>
+\end{DoxyCode}
+ \subsection*{Selected text format}
+
+Specify how the selection is displayed with the {\ttfamily data-\/selected-\/text-\/format} attribute on a multiple select.
+
+The supported values are\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily values}\+: A comma delimited list of selected values (default)
+\item {\ttfamily count}\+: If one item is selected, then the option value is shown. If more than one is selected then the number of selected items is displayed, e.\+g. {\ttfamily 2 of 6 selected}
+\item {\ttfamily count $>$ x}\+: Where {\ttfamily x} is the number of items selected when the display format changes from {\ttfamily values} to {\ttfamily count}
+\item {\ttfamily static}\+: Always show the select title (placeholder), regardless of selection
+\end{DoxyItemize}
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple=\char`\"{}\char`\"{} data-\/selected-\/text-\/format=\char`\"{}count\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple data-selected-text-format="count">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple=\char`\"{}\char`\"{} data-\/selected-\/text-\/format=\char`\"{}count $>$ 3\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Onions$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple data-selected-text-format="count > 3">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+  <option>Onions</option>
+</select>
+\end{DoxyCode}
+
+
+\section*{Styling}
+
+
+
+
+
+\subsection*{Button classes}
+
+You can set the button classes via the {\ttfamily data-\/style} attribute\+:
+
+  $<$select class=\char`\"{}selectpicker\char`\"{} data-\/style=\char`\"{}btn-\/primary\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$   $<$select class=\char`\"{}selectpicker\char`\"{} data-\/style=\char`\"{}btn-\/info\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$   $<$select class=\char`\"{}selectpicker\char`\"{} data-\/style=\char`\"{}btn-\/success\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$   $<$select class=\char`\"{}selectpicker\char`\"{} data-\/style=\char`\"{}btn-\/warning\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$   $<$select class=\char`\"{}selectpicker\char`\"{} data-\/style=\char`\"{}btn-\/danger\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$  
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-style="btn-primary">
+  ...
+</select>
+
+<select class="selectpicker" data-style="btn-info">
+  ...
+</select>
+
+<select class="selectpicker" data-style="btn-success">
+  ...
+</select>
+
+<select class="selectpicker" data-style="btn-warning">
+  ...
+</select>
+
+<select class="selectpicker" data-style="btn-danger">
+  ...
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Checkmark on selected option}
+
+You can also show the checkmark icon on standard select boxes with the {\ttfamily show-\/tick} class\+:
+
+ $<$select class=\char`\"{}selectpicker show-\/tick\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker show-tick">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Menu arrow}
+
+The Bootstrap menu arrow can be added with the {\ttfamily show-\/menu-\/arrow} class\+:
+
+ $<$select class=\char`\"{}selectpicker show-\/menu-\/arrow\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker show-menu-arrow">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Style individual options}
+
+Classes and styles added to options are transferred to the select box\+:
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option class=\char`\"{}special\char`\"{}$>$Ketchup$<$/option$>$ $<$option style=\char`\"{}background\+: \#5cb85c; color\+: \#fff;\char`\"{}$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option>Mustard</option>
+  <option class="special">Ketchup</option>
+  <option style="background: #5cb85c; color: #fff;">Relish</option>
+</select>
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+.special \{
+  font-weight: bold !important;
+  color: #fff !important;
+  background: #bc0000 !important;
+  text-transform: uppercase;
+\}
+\end{DoxyCode}
+
+
+\subsection*{Width}
+
+Wrap selects in grid columns, or any custom parent element, to easily enforce desired widths.
+
+    $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$     $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$       $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$     $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$       $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$     $<$select class=\char`\"{}selectpicker form-\/control\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$    
+
+
+\begin{DoxyCode}
+<div class="row">
+  <div class="col-xs-3">
+    <div class="form-group">
+      <select class="selectpicker form-control">
+        <option>Mustard</option>
+        <option>Ketchup</option>
+        <option>Relish</option>
+      </select>
+    </div>
+  </div>
+</div>
+\end{DoxyCode}
+
+
+
+
+Alternatively, use the {\ttfamily data-\/width} attribute to set the width of the select. Set {\ttfamily data-\/width} to {\ttfamily \textquotesingle{}auto\textquotesingle{}} to automatically adjust the width of the select to its widest option. {\ttfamily \textquotesingle{}fit\textquotesingle{}} automatically adjusts the width of the select to the width of its currently selected option. An exact value can also be specified, e.\+g., {\ttfamily 300px} or {\ttfamily 50\%}.
+
+    $<$label$>$width\+: \textquotesingle{}auto\textquotesingle{}$<$/label$>$ $<$select class=\char`\"{}selectpicker form-\/control\char`\"{} data-\/width=\char`\"{}auto\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$All of the above (and much, much more!)$<$/option$>$ $<$/select$>$       $<$label$>$width\+: \textquotesingle{}fit\textquotesingle{}$<$/label$>$ $<$select class=\char`\"{}selectpicker form-\/control\char`\"{} data-\/width=\char`\"{}fit\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$All of the above (and much, much more!)$<$/option$>$ $<$/select$>$       $<$label$>$width\+: \textquotesingle{}100px\textquotesingle{}$<$/label$>$ $<$select class=\char`\"{}selectpicker form-\/control\char`\"{} data-\/width=\char`\"{}100px\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$All of the above (and much, much more!)$<$/option$>$ $<$/select$>$       $<$label$>$width\+: \textquotesingle{}75\textquotesingle{}$<$/label$>$ $<$select class=\char`\"{}selectpicker form-\/control\char`\"{} data-\/width=\char`\"{}75\%\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$All of the above (and much, much more!)$<$/option$>$ $<$/select$>$    
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-width="auto">
+  ...
+</select>
+<select class="selectpicker" data-width="fit">
+  ...
+</select>
+<select class="selectpicker" data-width="100px">
+  ...
+</select>
+<select class="selectpicker" data-width="75%">
+  ...
+</select>
+\end{DoxyCode}
+
+
+\section*{Customize options}
+
+
+
+
+
+\subsection*{Icons}
+
+Add an icon to an option or optgroup with the {\ttfamily data-\/icon} attribute\+:
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option data-\/icon=\char`\"{}glyphicon-\/glass\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/icon=\char`\"{}glyphicon-\/heart\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/icon=\char`\"{}glyphicon-\/film\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/icon=\char`\"{}glyphicon-\/home\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/icon=\char`\"{}glyphicon-\/print\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option data-icon="glyphicon-heart">Ketchup</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Custom content}
+
+Insert custom H\+T\+ML into the option with the {\ttfamily data-\/content} attribute\+:
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option data-\/content=\char`\"{}$<$span class=\textquotesingle{}label label-\/warning\textquotesingle{}$>$\+Mustard$<$/span$>$\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/content=\char`\"{}$<$span class=\textquotesingle{}label label-\/danger label-\/important\textquotesingle{}$>$\+Ketchup$<$/span$>$\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/content=\char`\"{}$<$span class=\textquotesingle{}label label-\/success\textquotesingle{}$>$\+Relish$<$/span$>$\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/content=\char`\"{}$<$span class=\textquotesingle{}label label-\/info\textquotesingle{}$>$\+Mayonnaise$<$/span$>$\char`\"{}$>$Mayonnaise$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option data-content="<span class='label label-success'>Relish</span>">Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Subtext}
+
+Add subtext to an option or optgroup with the {\ttfamily data-\/subtext} attribute\+:
+
+  $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option data-\/subtext=\char`\"{}\+French\textquotesingle{}s\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Heinz\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Miracle Whip\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Honey\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Ranch\char`\"{}$>$Salad Dressing$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet \& Spicy\char`\"{}$>$Tabasco$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Chunky\char`\"{}$>$Salsa$<$/option$>$ $<$/select$>$ 
+
+  $<$select class=\char`\"{}selectpicker\char`\"{} data-\/show-\/subtext=\char`\"{}true\char`\"{}$>$ $<$option data-\/subtext=\char`\"{}\+French\textquotesingle{}s\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Heinz\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Miracle Whip\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Honey\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Ranch\char`\"{}$>$Salad Dressing$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet \& Spicy\char`\"{}$>$Tabasco$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Chunky\char`\"{}$>$Salsa$<$/option$>$ $<$/select$>$ With {\ttfamily show\+Subtext} set to true.  
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-size="5">
+  <option data-subtext="Heinz">Ketchup</option>
+</select>
+\end{DoxyCode}
+
+
+\section*{Customize menu}
+
+
+
+
+
+\subsection*{Menu size}
+
+The {\ttfamily size} option is set to {\ttfamily \textquotesingle{}auto\textquotesingle{}} by default. When {\ttfamily size} is set to {\ttfamily \textquotesingle{}auto\textquotesingle{}}, the menu always opens up to show as many items as the window will allow without being cut off. Set {\ttfamily size} to {\ttfamily false} to always show all items. The size of the menu can also be specifed using the {\ttfamily data-\/size} attribute.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Mayonnaise$<$/option$>$ $<$option$>$Barbecue Sauce$<$/option$>$ $<$option$>$Salad Dressing$<$/option$>$ $<$option$>$Tabasco$<$/option$>$ $<$option$>$Salsa$<$/option$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Mayonnaise$<$/option$>$ $<$option$>$Barbecue Sauce$<$/option$>$ $<$option$>$Salad Dressing$<$/option$>$ $<$option$>$Tabasco$<$/option$>$ $<$option$>$Salsa$<$/option$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Mayonnaise$<$/option$>$ $<$option$>$Barbecue Sauce$<$/option$>$ $<$option$>$Salad Dressing$<$/option$>$ $<$option$>$Tabasco$<$/option$>$ $<$option$>$Salsa$<$/option$>$ $<$/select$>$ 
+
+Specify a number for {\ttfamily data-\/size} to choose the maximum number of items to show in the menu.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} data-\/size=\char`\"{}5\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Mayonnaise$<$/option$>$ $<$option$>$Barbecue Sauce$<$/option$>$ $<$option$>$Salad Dressing$<$/option$>$ $<$option$>$Tabasco$<$/option$>$ $<$option$>$Salsa$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-size="5">
+  ...
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Select/deselect all options}
+
+Adds two buttons to the top of the menu -\/ {\bfseries Select All} \& {\bfseries Deselect All} with {\ttfamily data-\/actions-\/box=\char`\"{}true\char`\"{}}.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} multiple=\char`\"{}\char`\"{} data-\/actions-\/box=\char`\"{}true\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" multiple data-actions-box="true">
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Divider}
+
+Add {\ttfamily data-\/divider=\char`\"{}true\char`\"{}} to an option to turn it into a divider.
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$option$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option$>$Barbecue Sauce$<$/option$>$ $<$option$>$Salad Dressing$<$/option$>$ $<$option$>$Tabasco$<$/option$>$ $<$option$>$Salsa$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-size="5">
+  <option data-divider="true"></option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Menu header}
+
+Add a header to the dropdown menu, e.\+g. {\ttfamily header\+: \textquotesingle{}Select a condiment\textquotesingle{}} or {\ttfamily data-\/header=\char`\"{}\+Select a condiment\char`\"{}}
+
+  $<$select class=\char`\"{}selectpicker\char`\"{} data-\/header=\char`\"{}\+Select a condiment\char`\"{}$>$ $<$option data-\/subtext=\char`\"{}\+French\textquotesingle{}s\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Heinz\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Miracle Whip\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Honey\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Ranch\char`\"{}$>$Salad Dressing$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet \& Spicy\char`\"{}$>$Tabasco$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Chunky\char`\"{}$>$Salsa$<$/option$>$ $<$/select$>$  
+
+
+\begin{DoxyCode}
+<select class="selectpicker" data-header="Select a condiment">
+  ...
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Container}
+
+Append the select to a specific element, e.\+g. {\ttfamily container\+: \textquotesingle{}body\textquotesingle{}} or {\ttfamily data-\/container=\char`\"{}.\+main-\/content\char`\"{}}
+
+  $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option data-\/subtext=\char`\"{}\+French\textquotesingle{}s\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Heinz\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Miracle Whip\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Honey\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Ranch\char`\"{}$>$Salad Dressing$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet \& Spicy\char`\"{}$>$Tabasco$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Chunky\char`\"{}$>$Salsa$<$/option$>$ $<$/select$>$ $<$select class=\char`\"{}selectpicker\char`\"{} data-\/container=\char`\"{}body\char`\"{}$>$ $<$option data-\/subtext=\char`\"{}\+French\textquotesingle{}s\char`\"{}$>$Mustard$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Heinz\char`\"{}$>$Ketchup$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet\char`\"{}$>$Relish$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Miracle Whip\char`\"{}$>$Mayonnaise$<$/option$>$ $<$option data-\/divider=\char`\"{}true\char`\"{}$>$$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Honey\char`\"{}$>$Barbecue Sauce$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Ranch\char`\"{}$>$Salad Dressing$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Sweet \& Spicy\char`\"{}$>$Tabasco$<$/option$>$ $<$option data-\/subtext=\char`\"{}\+Chunky\char`\"{}$>$Salsa$<$/option$>$ $<$/select$>$  
+
+
+\begin{DoxyCode}
+<div style="overflow:hidden;">
+  <select class="selectpicker">
+    ...
+  </select>
+  <select class="selectpicker" data-container="body">
+    ...
+  </select>
+</div>
+\end{DoxyCode}
+
+
+\subsection*{Dropup menu}
+
+{\ttfamily dropup\+Auto} is set to true by default, which automatically determines whether or not the menu should display above or below the select box. If {\ttfamily dropup\+Auto} is set to false, manually make the select a dropup menu by adding the {\ttfamily .dropup} class to the select.
+
+ $<$select class=\char`\"{}selectpicker dropup\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker dropup">
+  ...
+</select>
+\end{DoxyCode}
+
+
+\section*{Disabled}
+
+
+
+
+
+\subsection*{Disabled select box}
+
+ $<$select class=\char`\"{}selectpicker\char`\"{} disabled$>$=\char`\"{}\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker" disabled>
+  <option>Mustard</option>
+  <option>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Disabled options}
+
+ $<$select class=\char`\"{}selectpicker\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option disabled$>$=\char`\"{}\char`\"{}$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker">
+  <option>Mustard</option>
+  <option disabled>Ketchup</option>
+  <option>Relish</option>
+</select>
+\end{DoxyCode}
+
+
+\subsection*{Disabled option groups}
+
+ $<$select class=\char`\"{}selectpicker test\char`\"{}$>$ $<$optgroup label=\char`\"{}\+Picnic\char`\"{} disabled$>$=\char`\"{}\char`\"{}$>$ $<$option$>$Mustard$<$/option$>$ $<$option$>$Ketchup$<$/option$>$ $<$option$>$Relish$<$/option$>$ $<$/optgroup$>$ $<$optgroup label=\char`\"{}\+Camping\char`\"{}$>$ $<$option$>$Tent$<$/option$>$ $<$option$>$Flashlight$<$/option$>$ $<$option$>$Toilet Paper$<$/option$>$ $<$/optgroup$>$ $<$/select$>$ 
+
+
+\begin{DoxyCode}
+<select class="selectpicker test">
+  <optgroup label="Picnic" disabled>
+    <option>Mustard</option>
+    <option>Ketchup</option>
+    <option>Relish</option>
+  </optgroup>
+  <optgroup label="Camping">
+    <option>Tent</option>
+    <option>Flashlight</option>
+    <option>Toilet Paper</option>
+  </optgroup>
+</select>
+\end{DoxyCode}
+ 

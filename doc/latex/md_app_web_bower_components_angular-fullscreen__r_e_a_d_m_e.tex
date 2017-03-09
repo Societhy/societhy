@@ -1,0 +1,141 @@
+An Angular\+JS service and a directive to quickly use the H\+T\+M\+L5 fullscreen A\+PI and set the fullscreen to the document or to a specific element.
+
+\subsection*{Example}
+
+Live demo\+: \href{http://www.fabiobiondi.com/demo/github/angular-fullscreen/demo/}{\tt http\+://www.\+fabiobiondi.\+com/demo/github/angular-\/fullscreen/demo/}
+
+\subsection*{Usage}
+
+Add Angular\+JS and the angular-\/fullscreen.\+js to your main file (index.\+html)
+
+
+\begin{DoxyCode}
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+<script src="angular-fullscreen.js"></script>
+\end{DoxyCode}
+
+
+Set {\ttfamily F\+B\+Angular} as a dependency in your module\+:
+
+
+\begin{DoxyCode}
+var app = angular.module('YourApp', ['FBAngular'])
+\end{DoxyCode}
+
+
+\subsection*{Fullscreen Directive}
+
+Set the {\ttfamily fullscreen} attribute to a specific element\+:
+
+
+\begin{DoxyCode}
+<img id="img1" src="imgs/P1030188.JPG" fullscreen />
+\end{DoxyCode}
+ The only requirement is to set a different ID to all elements that you will flag as {\ttfamily fullscreen}.
+
+\subsection*{Fullscreen Service}
+
+You can also use the {\ttfamily Fullscreen} service into your controller\+:
+
+Controller\+: 
+\begin{DoxyCode}
+function MainCtrl($scope, Fullscreen) \{
+
+   $scope.goFullscreen = function () \{
+
+      if (Fullscreen.isEnabled())
+         Fullscreen.cancel();
+      else
+         Fullscreen.all();
+
+      // Set Fullscreen to a specific element (bad practice)
+      // Fullscreen.enable( document.getElementById('img') )
+
+   \}
+
+\}
+\end{DoxyCode}
+
+
+H\+T\+ML\+: 
+\begin{DoxyCode}
+<button ng-click="goFullscreen()">Enable/Disable fullscreen</button>
+\end{DoxyCode}
+
+
+\subsection*{Alternative Approach}
+
+You may pass in the name of a scope property to watch. When the property becomes truthy, the element will become full screen\+:
+
+Controller\+: 
+\begin{DoxyCode}
+function MainCtrl($scope) \{
+    // Initially, do not go into full screen
+    $scope.isFullscreen = false;
+
+    $scope.toggleFullScreen = function() \{
+        $scope.isFullscreen = !$scope.isFullscreen;
+    \}
+\}
+\end{DoxyCode}
+
+
+H\+T\+ML\+: 
+\begin{DoxyCode}
+<div fullscreen="isFullscreen">Lorem ipsum...</div>
+<button ng-click="toggleFullScreen()">Toggle Full Screen</button>
+\end{DoxyCode}
+
+
+If you want to disable the click fullscreen trigger for this alternative approach, add the attribute {\ttfamily only-\/watched-\/property} to the {\ttfamily fullscreen} directive, like this\+:
+
+
+\begin{DoxyCode}
+<div fullscreen="isFullscreen" only-watched-property>Lorem ipsum...</div>
+\end{DoxyCode}
+
+
+In this case, {\itshape only} a change of the property will trigger the fullscreen.
+
+\paragraph*{Available Methods}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Method }&\textbf{ Details  }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Method }&\textbf{ Details  }\\\cline{1-2}
+\endhead
+all() &enable document fullscreen \\\cline{1-2}
+toggle\+All() &enable or disable the document fullscreen \\\cline{1-2}
+enable(element\+I\+D) &enable fullscreen to a specific element \\\cline{1-2}
+cancel() &disable fullscreen \\\cline{1-2}
+is\+Enabled() &return true if fullscreen is enabled, otherwise false \\\cline{1-2}
+is\+Supported() &return true if fullscreen A\+PI is supported by your browser \\\cline{1-2}
+\end{longtabu}
+\paragraph*{Available Events}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Event }&\textbf{ Arguments }&\textbf{ Details  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Event }&\textbf{ Arguments }&\textbf{ Details  }\\\cline{1-3}
+\endhead
+F\+B\+Fullscreen.\+change &is\+Enabled &fired when fullscreen state change \\\cline{1-3}
+\end{longtabu}
+\subsection*{Example}
+
+You can check out this live example here\+: \href{http://www.fabiobiondi.com/demo/github/angular-fullscreen/demo/}{\tt http\+://www.\+fabiobiondi.\+com/demo/github/angular-\/fullscreen/demo/}
+
+\subsection*{License}
+
+The M\+IT License
+
+Copyright (c) 2014 \href{http://www.fabiobiondi.com}{\tt Fabio Biondi} \& \href{http://it.linkedin.com/in/matteoronchi}{\tt Matteo Ronchi} 

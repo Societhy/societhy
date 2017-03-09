@@ -1,0 +1,296 @@
+\href{https://travis-ci.org/gsklee/ngStorage}{\tt } \href{https://david-dm.org/gsklee/ngStorage}{\tt } \href{https://david-dm.org/gsklee/ngStorage#info=devDependencies}{\tt }
+
+An \href{https://github.com/angular/angular.js}{\tt Angular\+JS} module that makes Web Storage working in the {\itshape Angular Way}. Contains two services\+: {\ttfamily \$local\+Storage} and {\ttfamily \$session\+Storage}.
+
+\subsubsection*{Differences with Other Implementations}
+
+
+\begin{DoxyItemize}
+\item {\bfseries No Getter \textquotesingle{}n\textquotesingle{} Setter Bullshit} -\/ Right from Angular\+JS homepage\+: \char`\"{}\+Unlike other frameworks, there is no need to \mbox{[}...\mbox{]} wrap the model in accessors methods. Just plain old Java\+Script here.\char`\"{} Now you can enjoy the same benefit while achieving data persistence with Web Storage.
+\item {\bfseries session\+Storage} -\/ We got this often-\/overlooked buddy covered.
+\item {\bfseries Cleanly-\/\+Authored Code} -\/ Written in the {\itshape Angular Way}, well-\/structured with testability in mind.
+\item {\bfseries No Cookie Fallback} -\/ With Web Storage being \href{http://caniuse.com/namevalue-storage}{\tt readily available} in \href{http://docs.angularjs.org/misc/faq#canidownloadthesourcebuildandhosttheangularjsenvironmentlocally}{\tt all the browsers Angular\+JS officially supports}, such fallback is largely redundant.
+\end{DoxyItemize}
+
+\section*{Install }
+
+\subsubsection*{Bower}
+
+
+\begin{DoxyCode}
+bower install ngstorage
+\end{DoxyCode}
+
+
+{\itshape N\+O\+TE\+:} We are {\ttfamily ngstorage} and {\itshape N\+OT} {\ttfamily ng\+Storage}. The casing is important!
+
+\#\#\# N\+PM 
+\begin{DoxyCode}
+npm install ngstorage
+\end{DoxyCode}
+
+
+{\itshape N\+O\+TE\+:} We are {\ttfamily ngstorage} and {\itshape N\+OT} {\ttfamily ng\+Storage}. The casing is important!
+
+\subsubsection*{nuget}
+
+
+\begin{DoxyCode}
+Install-Package gsklee.ngStorage
+\end{DoxyCode}
+
+
+Or search for {\ttfamily Angular ng\+Storage} in the nuget package manager. \href{https://www.nuget.org/packages/gsklee.ngStorage}{\tt https\+://www.\+nuget.\+org/packages/gsklee.\+ng\+Storage}
+
+\section*{C\+DN }
+
+\subsubsection*{cdnjs}
+
+cdnjs now hosts ng\+Storage at \href{https://cdnjs.com/libraries/ngStorage}{\tt https\+://cdnjs.\+com/libraries/ng\+Storage}
+
+To use it
+
+
+\begin{DoxyCode}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
+\end{DoxyCode}
+
+
+\subsubsection*{js\+Delivr}
+
+js\+Delivr hosts ng\+Storage at \href{http://www.jsdelivr.com/#!ngstorage}{\tt http\+://www.\+jsdelivr.\+com/\#!ngstorage}
+
+To use is
+
+
+\begin{DoxyCode}
+<script src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+\end{DoxyCode}
+
+
+\section*{Usage }
+
+\subsubsection*{Require ng\+Storage and Inject the Services}
+
+
+\begin{DoxyCode}
+angular.module('app', [
+    'ngStorage'
+]).controller('Ctrl', function(
+    $scope,
+    $localStorage,
+    $sessionStorage
+)\{\});
+\end{DoxyCode}
+
+
+\subsubsection*{Read and Write $\vert$ \href{http://plnkr.co/edit/3vfRkvG7R9DgQxtWbGHz?p=preview}{\tt Demo}}
+
+Pass {\ttfamily \$local\+Storage} (or {\ttfamily \$session\+Storage}) by reference to a hook under {\ttfamily \$scope} in plain ol\textquotesingle{} Java\+Script\+:
+
+
+\begin{DoxyCode}
+$scope.$storage = $localStorage;
+\end{DoxyCode}
+
+
+And use it like you-\/already-\/know\+:
+
+
+\begin{DoxyCode}
+<body ng-controller="Ctrl">
+    <button ng-click="$storage.counter = $storage.counter + 1">\{\{$storage.counter\}\}</button>
+</body>
+\end{DoxyCode}
+
+
+\begin{quote}
+Optionally, specify default values using the {\ttfamily \$default()} method\+:
+
+
+\begin{DoxyCode}
+$scope.$storage = $localStorage.$default(\{
+    counter: 42
+\});
+\end{DoxyCode}
+ \end{quote}
+
+
+With this setup, changes will be automatically sync\textquotesingle{}d between {\ttfamily \$scope.\$storage}, {\ttfamily \$local\+Storage}, and local\+Storage -\/ even across different browser tabs!
+
+\subsubsection*{Read and Write Alternative (Not Recommended) $\vert$ \href{http://plnkr.co/edit/9ZmkzRkYzS3iZkG8J5IK?p=preview}{\tt Demo}}
+
+If you\textquotesingle{}re not fond of the presence of {\ttfamily \$scope.\$storage}, you can always use watchers\+:
+
+
+\begin{DoxyCode}
+$scope.counter = $localStorage.counter || 42;
+
+$scope.$watch('counter', function() \{
+    $localStorage.counter = $scope.counter;
+\});
+
+$scope.$watch(function() \{
+    return angular.toJson($localStorage);
+\}, function() \{
+    $scope.counter = $localStorage.counter;
+\});
+\end{DoxyCode}
+
+
+This, however, is not the way ng\+Storage is designed to be used with. As can be easily seen by comparing the demos, this approach is way more verbose, and may have potential performance implications as the values being watched quickly grow.
+
+\subsubsection*{Delete $\vert$ \href{http://plnkr.co/edit/o4w3VGqmp8opfrWzvsJy?p=preview}{\tt Demo}}
+
+Plain ol\textquotesingle{} Java\+Script again, what else could you better expect?
+
+
+\begin{DoxyCode}
+// Both will do
+delete $scope.$storage.counter;
+delete $localStorage.counter;
+\end{DoxyCode}
+
+
+This will delete the corresponding entry inside the Web Storage.
+
+\subsubsection*{Delete Everything $\vert$ \href{http://plnkr.co/edit/YiG28KTFdkeFXskolZqs?p=preview}{\tt Demo}}
+
+If you wish to clear the Storage in one go, use the {\ttfamily \$reset()} method\+:
+
+```javascript \$local\+Storage.\$reset(); ````
+
+\begin{quote}
+Optionally, pass in an object you\textquotesingle{}d like the Storage to reset to\+:
+
+
+\begin{DoxyCode}
+$localStorage.$reset(\{
+    counter: 42
+\});
+\end{DoxyCode}
+ \end{quote}
+
+
+\subsubsection*{Permitted Values $\vert$ \href{http://plnkr.co/edit/n0acYLdhk3AeZmPOGY9Z?p=preview}{\tt Demo}}
+
+You can store anything except those \href{http://www.json.org/js.html}{\tt not supported by J\+S\+ON}\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily Infinity}, {\ttfamily NaN} -\/ Will be replaced with {\ttfamily null}.
+\item {\ttfamily undefined}, Function -\/ Will be removed.
+\end{DoxyItemize}
+
+\subsubsection*{Usage from config phase}
+
+To read and set values during the Angular config phase use the {\ttfamily .get/.set} functions provided by the provider.
+
+
+\begin{DoxyCode}
+var app = angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider',
+    function ($localStorageProvider) \{
+        $localStorageProvider.get('MyKey');
+
+        $localStorageProvider.set('MyKey', \{ k: 'value' \});
+    \}]);
+\end{DoxyCode}
+
+
+\subsubsection*{Prefix}
+
+To change the prefix used by ng\+Storage use the provider function {\ttfamily set\+Key\+Prefix} during the config phase.
+
+
+\begin{DoxyCode}
+var app = angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider',
+    function ($localStorageProvider) \{
+        $localStorageProvider.setKeyPrefix('NewPrefix');
+    \}])
+\end{DoxyCode}
+
+
+\subsubsection*{Custom serialization}
+
+To change how ng\+Storage serializes and deserializes values (uses J\+S\+ON by default) you can use your own functions.
+
+
+\begin{DoxyCode}
+angular.module('app', ['ngStorage'])
+.config(['$localStorageProvider', 
+  function ($localStorageProvider) \{
+    var mySerializer = function (value) \{
+      // Do what you want with the value.
+      return value;
+    \};
+
+    var myDeserializer = function (value) \{
+      return value;
+    \};
+
+    $localStorageProvider.setSerializer(mySerializer);
+    $localStorageProvider.setDeserializer(myDeserializer);
+  \}];)
+\end{DoxyCode}
+
+
+\subsubsection*{Minification}
+
+Just run {\ttfamily \$ npm install} to install dependencies. Then run {\ttfamily \$ grunt} for minification.
+
+\subsubsection*{Hints}
+
+\paragraph*{Watch the watch}
+
+ng\+Storage internally uses an Angular watch to monitor changes to the {\ttfamily \$storage}/{\ttfamily \$local\+Storage} objects. That means that a digest cycle is required to persist your new values into the browser local storage. Normally this is not a problem, but, for example, if you launch a new window after saving a value...
+
+
+\begin{DoxyCode}
+$scope.$storage.school = theSchool;
+$log.debug("launching " + url);
+var myWindow = $window.open("", "\_self");
+myWindow.document.write(response.data);
+\end{DoxyCode}
+
+
+the new values will not reliably be saved into the browser local storage. Allow a digest cycle to occur by using a zero-\/value {\ttfamily \$timeout} as\+:
+
+
+\begin{DoxyCode}
+$scope.$storage.school = theSchool;
+$log.debug("launching and saving the new value" + url);
+$timeout(function()\{
+   var myWindow = $window.open("", "\_self");
+   myWindow.document.write(response.data);
+\});
+\end{DoxyCode}
+
+
+or better using {\ttfamily \$scope.\$eval\+Async} as\+:
+
+
+\begin{DoxyCode}
+$scope.$storage.school = theSchool;
+$log.debug("launching and saving the new value" + url);
+$scope.$evalAsync(function()\{
+   var myWindow = $window.open("", "\_self");
+   myWindow.document.write(response.data);
+\});
+\end{DoxyCode}
+
+
+And your new values will be persisted correctly.
+
+\section*{Todos }
+
+
+\begin{DoxyItemize}
+\item ngdoc Documentation
+\item Namespace Support
+\item Unit Tests
+\item Grunt Tasks
+\end{DoxyItemize}
+
+Any contribution will be appreciated. 

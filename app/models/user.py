@@ -10,22 +10,48 @@ from .clients import client, eth_cli
 from core import SALT_WALLET_PASSWORD
 from core.utils import fromWei
 
+"""
+This module implements the UserDoc class alongside with all its methods
+"""
+
 class UserDocument(Document):
 
+	"""
+	Overrides a mongokat.Document and add custom methods
+	This class is used everytime a controller needs to manipulate a user (and everytime a used sends a request with an authentification token)
+	"""
+
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None):
+		"""
+		doc : dict containing the data to be initialized from
+		mongokat_collection : see mongokat.Document (mongo collection associated with the doc)
+		fetched_fileds : see mongokat.Document
+		gen_skel : boolean. If set to true, the document is initialized with the fields described in OrgaCollection.structure
+		session : token associated with the user's session
+		"""
 		super().__init__(doc, users, fetched_fields, gen_skel)
 		self.session_token = session
 
 	def needsReloading(self):
+		"""
+		This function is called when a transaction is sent to the eth node. The for this is that when the callback is called, the UserDoc data is modified in mongo but not in the session
+		At the next request by the same user, the session will reload its data directly from the database.
+		"""
 		if self.session_token:
 			session[self.session_token]["needs_reloading"] = True
 
 	def reload(self):
+		"""
+		Reloads the document from the database
+		"""
 		if self['_id'] and type(self['_id']) is str:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().reload()
 
 	def save_partial(self, data=None, allow_protected_fields=False, **kwargs):
+		"""
+		Save the fields currently set in the object in the db. Other fields remain untouched.
+		"""
 		if self['_id'] and type(self['_id']) is str:
 			self['_id'] = ObjectId(self.get('_id')) if type(self.get('_id')) is str else self['_id']
 		super().save_partial(data, allow_protected_fields, **kwargs)
@@ -33,6 +59,11 @@ class UserDocument(Document):
 	# CALLBACKS FOR UPDATE
 
 	def joinedOrga(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
+		None is returned if everything went fine, False otherwise
+		"""
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
@@ -44,6 +75,11 @@ class UserDocument(Document):
 		return None
 
 	def leftOrga(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the orga is in the member's orga, the orga is removed
+		None is returned if everything went fine, False otherwise
+		"""
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
@@ -55,6 +91,11 @@ class UserDocument(Document):
 		return None
 
 	def madeDonation(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, the total amount of donation is incremented by the value of the new one
+		None is returned
+		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
 			self["donations"] = self.get('donations', 0) + donation_amount
@@ -64,6 +105,11 @@ class UserDocument(Document):
 	# KEY MANAGEMENT
 
 	def unlockAccount(self, password=None):
+		"""
+		password : password to unlock the account
+		There are different types of account, based on how they have been created. An account can either be :
+			remote_hashed : it means 
+		"""
 		if not self.get('account'):
 			return False
 		elif self["password_type"] == "remote_hashed":

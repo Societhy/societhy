@@ -1,0 +1,217 @@
+\href{https://gitter.im/devmark/angular-slick-carousel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge}{\tt }
+
+Angular directive for \href{http://kenwheeler.github.io/slick/}{\tt slick-\/carousel}
+
+\subsection*{Summary}
+
+
+\begin{DoxyItemize}
+\item \href{#usage}{\tt Usage}
+\item \href{#attributes&event}{\tt Attributes \& Event}
+\item \href{#enable/disableslick}{\tt Enable/disable slick}
+\item \href{#method}{\tt Method}
+\item \href{#slidedata}{\tt Slide data}
+\item \href{#globalconfig}{\tt Global Config}
+\item \href{#faq}{\tt faq}
+\item \href{#examples}{\tt Examples}
+\item \href{#creator}{\tt Creator}
+\end{DoxyItemize}
+
+\subsection*{\#\# Usage }
+
+
+\begin{DoxyItemize}
+\item Using \href{http://bower.io/}{\tt bower} to install it. {\ttfamily bower install angular-\/slick-\/carousel}
+\item Add {\ttfamily jquery}, {\ttfamily angular}, {\ttfamily slick-\/carousel} and {\ttfamily angular-\/slick-\/carousel} to your code.
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+<link rel="stylesheet" href="../bower\_components/slick-carousel/slick/slick.css">
+<link rel="stylesheet" href="../bower\_components/slick-carousel/slick/slick-theme.css">
+
+<script src="../bower\_components/jquery/jquery.js"></script>
+<script src="../bower\_components/angular/angular.js"></script>
+<script src="../bower\_components/slick-carousel/slick/slick.js"></script>
+<script src="../bower\_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item Add the sortable module as a dependency to your application module\+: {\ttfamily slick\+Carousel}
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+var myAppModule = angular.module('MyApp', ['slickCarousel'])
+\end{DoxyCode}
+
+
+This directive allows you to use the slick-\/carousel plugin as an angular directive. It can be specified in your H\+T\+ML as either a {\ttfamily $<$div$>$} attribute or a {\ttfamily $<$slick$>$} element.
+
+
+\begin{DoxyCode}
+<slick infinite=true slides-to-show=3 slides-to-scroll=3>
+...
+</slick>
+
+<slick 
+    settings="slickConfig" ng-if="numberLoaded">
+</slick>
+\end{DoxyCode}
+
+
+\subsection*{Attributes \& Event}
+
+{\ttfamily settings}\+: optional {\ttfamily Object} containing any of the slick options. Consult \href{http://kenwheeler.github.io/slick/#settings}{\tt here}.
+\begin{DoxyItemize}
+\item {\ttfamily enabled} should slick be enabled or not. Default to true. Example below
+\item {\ttfamily method} optional containing slick method. discussed \href{#method}{\tt below} in detail
+\item {\ttfamily event} optional containing slick event
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+$scope.slickConfig = \{
+    enabled: true,
+    autoplay: true,
+    draggable: false,  
+    autoplaySpeed: 3000,
+    method: \{\},
+    event: \{
+        beforeChange: function (event, slick, currentSlide, nextSlide) \{
+        \},
+        afterChange: function (event, slick, currentSlide, nextSlide) \{
+        \}
+    \}
+\};
+\end{DoxyCode}
+ \subsection*{Enable/disable slick}
+
+Slick can be easily switched on and off by using {\ttfamily enabled} settings flag. 
+\begin{DoxyCode}
+$scope.slickConfig = \{
+    enabled: true,
+\}
+$scope.toggleSlick = function() \{
+  $scope.slickConfig.enabled = !$scope.slickConfig.enabled;
+\}
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+<slick settings="slickConfig">
+ ...
+</slick>
+<button ng-click="toggleSlick()">Toggle</button>
+\end{DoxyCode}
+
+
+\subsection*{Method}
+
+
+\begin{DoxyEnumerate}
+\item All the functions in the plugin are exposed through a control attribute.
+\item To utilize this architecture, and have two-\/way data-\/binding, define an empty control handle on scope\+: 
+\begin{DoxyCode}
+$scope.slickConfig = \{
+    method: \{\}
+\}
+\end{DoxyCode}
+
+\item Pass it as the value to control attribute. Now, you can call any plugin methods as shown in the example.
+\end{DoxyEnumerate}
+
+
+\begin{DoxyCode}
+<button ng-click="slickConfig.method.slickGoTo(2)">slickGoTo(2)</button>
+<button ng-click="slickConfig.method.slickPrev()">slickPrev()</button>
+<button ng-click="slickConfig.method.slickNext()">slickNext()</button>
+<button ng-click='slickConfig.method.slickAdd("<div>New</div>")'>slickAdd()</button>
+<button ng-click='slickConfig.method.slickRemove(3)'>slickRemove(3)</button>
+<button ng-click='slickConfig.method.slickPlay()'>slickPlay()</button>
+<button ng-click='slickConfig.method.slickPause()'>slickPause()</button>
+\end{DoxyCode}
+
+
+\subsection*{Slide data}
+
+For change slide content, you have to set {\ttfamily ng-\/if} to destroy and init it
+
+
+\begin{DoxyItemize}
+\item controller\+: 
+\begin{DoxyCode}
+$scope.number = [\{label: 1\}, \{label: 2\}, \{label: 3\}, \{label: 4\}, \{label: 5\}, \{label: 6\}, \{label: 7\},
+       \{label: 8\}];
+$scope.numberLoaded = true;
+$scope.numberUpdate = function()\{
+    $scope.numberLoaded = false; // disable slick
+
+    //number update
+
+    $scope.numberLoaded = true; // enable slick
+\};
+\end{DoxyCode}
+
+\item html\+: 
+\begin{DoxyCode}
+<script type="text/ng-template" id="tpl.html">
+    <h3>\{\{ i.label \}\}</h3>
+</script>
+
+<slick ng-if="numberLoaded">
+    <div ng-repeat="i in number">
+        <div class="" ng-include="'tpl.html'"></div>
+    </div>
+</slick>
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\#\# \hyperlink{class_global}{Global} config 
+\begin{DoxyCode}
+config(['slickCarouselConfig', function (slickCarouselConfig) \{
+    slickCarouselConfig.dots = true;
+    slickCarouselConfig.autoplay = false;
+\}])
+\end{DoxyCode}
+
+
+\subsection*{F\+AQ}
+
+Q\+: After change data, could i keep the current slide index? A\+: For this directive, this will destroy and init slick when updating data. You could get current index by event. example\+: 
+\begin{DoxyCode}
+$scope.currentIndex = 0;
+$scope.slickConfig = \{
+    event: \{
+        afterChange: function (event, slick, currentSlide, nextSlide) \{
+          $scope.currentIndex = currentSlide; // save current index each time
+        \}
+        init: function (event, slick) \{
+          slick.slickGoTo($scope.currentIndex); // slide to correct index when init
+        \}
+    \}
+\};
+\end{DoxyCode}
+
+
+\subsection*{Examples}
+
+You need be running a server to see the samples\+:
+
+Go to your terminal and run\+:
+
+
+\begin{DoxyCode}
+python -m SimpleHTTPServer
+\end{DoxyCode}
+ after this command you will be loading a python Server in you local machine in most the cases loads in the port 8000, you will be able to see the port when the server starts like that\+: 
+\begin{DoxyCode}
+Serving HTTP on 0.0.0.0 port 8000 ...
+\end{DoxyCode}
+
+
+so you can see the samples with this adress\+: \href{http://localhost:8000/examples/#/}{\tt http\+://localhost\+:8000/examples/\#/}
+
+\subsection*{Creator}

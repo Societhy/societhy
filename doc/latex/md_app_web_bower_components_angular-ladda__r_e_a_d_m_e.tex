@@ -1,0 +1,240 @@
+  \href{https://www.npmjs.com/package/angular-ladda}{\tt } \href{https://travis-ci.org/remotty/angular-ladda}{\tt }
+
+An angular directive wrapper for Ladda.
+
+\href{http://remotty.github.io/angular-ladda}{\tt Check out the demo page.}
+
+\subsection*{Getting started}
+
+(1) Get angular-\/ladda via \href{http://bower.io/}{\tt Bower}
+
+
+\begin{DoxyCode}
+$ bower install angular-ladda
+\end{DoxyCode}
+ or add bower.\+json 
+\begin{DoxyCode}
+$ bower install angular-ladda --save
+\end{DoxyCode}
+
+
+(2) add css \& javascript link to html
+
+
+\begin{DoxyCode}
+...
+<link rel="stylesheet" href="bower\_components/ladda/dist/ladda-themeless.min.css">
+...
+<script src="bower\_components/ladda/dist/spin.min.js"></script>
+<script src="bower\_components/ladda/dist/ladda.min.js"></script>
+<script src="bower\_components/angular-ladda/dist/angular-ladda.min.js"></script>
+...
+\end{DoxyCode}
+
+
+{\bfseries !!!\+Order of $\ast$.js includes is very important!!!}
+
+(3) add {\ttfamily \textquotesingle{}angular-\/ladda\textquotesingle{}} to your main module\textquotesingle{}s list of dependencies
+
+
+\begin{DoxyCode}
+var myApp = angular.module('myApp', ['angular-ladda']);
+\end{DoxyCode}
+
+
+(4) enjoy!
+
+\subsection*{Quick example}
+
+\subsubsection*{options}
+
+use {\ttfamily ladda\+Provider}
+
+
+\begin{DoxyItemize}
+\item style
+\begin{DoxyItemize}
+\item expand-\/left
+\item expand-\/right
+\item expand-\/up
+\item expand-\/down
+\item zoom-\/in
+\item zoom-\/out
+\item slide-\/left
+\item slide-\/right
+\item slide-\/up
+\item slide-\/down
+\item contract
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+angular.module(xxxx)
+  .config(function (laddaProvider) \{
+    laddaProvider.setOption(\{ /* optional */
+      style: 'expand-left',
+      spinnerSize: 35,
+      spinnerColor: '#ffffff'
+    \});
+  \})
+\end{DoxyCode}
+
+
+\subsubsection*{controller}
+
+
+\begin{DoxyCode}
+$scope.login = function() \{
+  // start loading
+  $scope.loginLoading = true;
+  loginService.login(function() \{
+    // stop loading
+    $scope.loginLoading = false;
+  \});
+\}
+\end{DoxyCode}
+
+
+\subsubsection*{view}
+
+basic
+
+
+\begin{DoxyCode}
+<button ladda="loginLoading" ng-click="login()">
+  Login
+</button>
+\end{DoxyCode}
+
+
+change style of effect
+
+
+\begin{DoxyCode}
+<button ladda="loginLoading" ng-click="login()" data-style="expand-left">
+  Login
+</button>
+\end{DoxyCode}
+
+
+change size of spinner
+
+
+\begin{DoxyCode}
+<button ladda="loginLoading" ng-click="login()" data-spinner-size="10">
+  Login
+</button>
+\end{DoxyCode}
+
+
+change color of spinner
+
+
+\begin{DoxyCode}
+<button ladda="loginLoading" ng-click="login()" data-spinner-color="#FF0000">
+  Login
+</button>
+\end{DoxyCode}
+
+
+\subsection*{Browserify support}
+
+angular-\/ladda doesn\textquotesingle{}t work properly with browserify, since it references the Spinner and Ladda libraries, which are not proper A\+MD modules (and are also not always used as such in angular-\/ladda\textquotesingle{}s code). In order to make it works with browserify you will need to use browserify-\/shim.
+
+
+\begin{DoxyCode}
+$ npm install --save browserify-shim
+\end{DoxyCode}
+
+
+in your package.\+json, add the following object\+:
+
+
+\begin{DoxyCode}
+"dependencies": \{
+    ...
+\},
+"browserify-shim": \{
+    "ladda": "global:Ladda",
+    "spin.js": "global:Spinner"
+\}
+\end{DoxyCode}
+
+
+require Spinner, Ladda and angular-\/ladda wherever you usually require external modules (the ordering here is important)\+:
+
+
+\begin{DoxyCode}
+window.Spinner = require('/components/ladda/js/spin');
+window.Ladda = require('/components/ladda/js/ladda');
+require('/components/angular-ladda/dist/angular-ladda');
+\end{DoxyCode}
+
+
+\subsection*{Using ladda-\/themeless.\+min.\+css}
+
+overrides in your {\ttfamily bower.\+json} (Thanks )
+
+
+\begin{DoxyCode}
+\{
+  "name": "client",
+  "version": "0.0.0",
+  "dependencies": \{
+    "ladda": "~0.9.8"
+  \},
+  "overrides": \{
+      "ladda": \{
+          "main": [
+              "dist/ladda-themeless.min.css"
+          ]
+      \}
+  \}
+\}
+\end{DoxyCode}
+
+
+\subsection*{Links}
+
+
+\begin{DoxyItemize}
+\item \href{http://lab.hakim.se/ladda/}{\tt Ladda}
+\end{DoxyItemize}
+
+\subsection*{Contributing}
+
+
+\begin{DoxyEnumerate}
+\item Fork it ( \href{https://github.com/remotty/angular-ladda/fork}{\tt https\+://github.\+com/remotty/angular-\/ladda/fork} )
+\item Create your feature branch ({\ttfamily git checkout -\/b my-\/new-\/feature})
+\item Commit your changes ({\ttfamily git commit -\/am \textquotesingle{}Add some feature\textquotesingle{}})
+\item Push to the branch ({\ttfamily git push origin my-\/new-\/feature})
+\item Create a new Pull Request
+\end{DoxyEnumerate}
+
+\subsubsection*{setup}
+
+
+\begin{DoxyCode}
+$ bower install
+$ npm install
+$ node\_modules/protractor/bin/webdriver-manager update
+\end{DoxyCode}
+
+
+\subsubsection*{test}
+
+
+\begin{DoxyCode}
+$ gulp test
+\end{DoxyCode}
+
+
+\subsubsection*{build}
+
+
+\begin{DoxyCode}
+$ gulp
+\end{DoxyCode}
+ 

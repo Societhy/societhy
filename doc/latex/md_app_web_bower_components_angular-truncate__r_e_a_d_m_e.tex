@@ -1,0 +1,37 @@
+This project is a filter for Angularjs to truncate text strings to a set number of characters or words and add ellipses when needed.
+
+\href{http://sparkalow.github.io/angular-truncate/}{\tt Demo}
+
+\subsection*{How to use angular truncate}
+
+\subsubsection*{Include the javascript file.}
+
+
+\begin{DoxyCode}
+<script src="truncate.js"></script>
+\end{DoxyCode}
+
+
+\subsubsection*{Inject the {\ttfamily truncate} filter into your app module.}
+
+
+\begin{DoxyCode}
+var myApp = angular.module('myApp', ['truncate']);
+\end{DoxyCode}
+
+
+\#\#\#\+When outputting text, apply the filter. 
+\begin{DoxyCode}
+ <p>
+    \{\{ text | characters:25 \}\} or \{\{ text | words:5 \}\}
+</p>
+\end{DoxyCode}
+
+
+By default, a {\itshape word} will not be truncated. Set the optional boolean after the character count to true. 
+\begin{DoxyCode}
+<p>
+    \{\{ text | characters:25 :true\}\}
+</p>
+\end{DoxyCode}
+ 

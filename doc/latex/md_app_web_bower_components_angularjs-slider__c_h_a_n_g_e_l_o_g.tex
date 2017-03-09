@@ -1,0 +1,678 @@
+\subsection*{Fixes}
+
+
+\begin{DoxyItemize}
+\item Ensure model value is current when custom translate function runs for tick values
+\end{DoxyItemize}
+
+\section*{6.\+0.\+0 (2017-\/01-\/02)}
+
+\subsection*{Refactoring}
+
+
+\begin{DoxyItemize}
+\item Refactor/simplify the css rules to ease the customisation.
+\end{DoxyItemize}
+
+{\bfseries You might want to check that all your custom styles are still correctly applied...}
+
+\section*{5.\+9.\+0 (2016-\/12-\/12)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add selection\+Bar\+Gradient option to customize the selection bar (\#473)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+9 (2016-\/12-\/11)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Add autoprefixer for C\+SS builds (\#472)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+8 (2016-\/12-\/11)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Prevent angular being loaded twice when using with browserify (\#474)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+7 (2016-\/11-\/09)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Add Math.\+round for positions and dimensions -\/ thanks to  (\#454)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+6 (2016-\/11-\/08)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Apply the push\+Range with max\+Range -\/ thanks to  (\#456)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+5 (2016-\/11-\/05)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix overlapping max and ceil labels in some cases (\#396)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+4 (2016-\/11-\/05)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Refactor auto\+Hiding algorithm for labels (fix \#446)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+3 (2016-\/11-\/03)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Generate a S\+C\+SS file (simple copy of the css file) in the dist folder so it can be imported (\#449)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+2 (2016-\/11-\/03)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix ceil label positioning (\#448)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+1 (2016-\/10-\/27)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Enable using with Browserify (\#436)
+\end{DoxyItemize}
+
+\section*{5.\+8.\+0 (2016-\/10-\/22)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Handle Date object in steps\+Array (\#424 )
+\end{DoxyItemize}
+
+\subsection*{Fixes}
+
+
+\begin{DoxyItemize}
+\item Fix style for disabled range slider and ticks (\#394)
+\item Fix slider goes back when moved and scaled (\#346)
+\end{DoxyItemize}
+
+\section*{5.\+7.\+0 (2016-\/10-\/16)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily log\+Scale} option to display the slider using a logarithmic scale (\#280).
+\item Add {\ttfamily custom\+Value\+To\+Position} and {\ttfamily custom\+Position\+To\+Value} options to display the slider using a custom scale (\#280).
+\end{DoxyItemize}
+
+\section*{5.\+6.\+0 (2016-\/10-\/16)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily ticks\+Array} option to display ticks at specific positions (\#426).
+\end{DoxyItemize}
+
+To enable this new feature, the way the ticks are rendered has been changed. Now each tick is positioned absolutely using a {\ttfamily transform\+: translate()} instruction.
+
+\section*{5.\+5.\+1 (2016-\/09-\/22)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Prevent losing focus when slider is rerendered (\#415).
+\end{DoxyItemize}
+
+\section*{5.\+5.\+0 (2016-\/09-\/06)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add an {\ttfamily auto\+Hide\+Limit\+Labels} to disable the auto-\/hiding of limit labels (\#405).
+\end{DoxyItemize}
+
+\section*{5.\+4.\+3 (2016-\/08-\/07)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix min\+Limit/max\+Limit bugged for draggable\+Range (\#384).
+\end{DoxyItemize}
+
+\section*{5.\+4.\+2 (2016-\/08-\/02)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix minimum value goes below floor when using max\+Range (\#377).
+\end{DoxyItemize}
+
+\section*{5.\+4.\+1 (2016-\/07-\/17)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix showing limit labels when pointer labels are always hidden (\#373).
+\end{DoxyItemize}
+
+\section*{5.\+4.\+0 (2016-\/07-\/13)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add function to customize color of ticks (\#372).
+\end{DoxyItemize}
+
+\section*{5.\+3.\+0 (2016-\/07-\/11)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Expose labels on scope in template (\#358).
+\end{DoxyItemize}
+
+\section*{5.\+2.\+0 (2016-\/07-\/07)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily custom\+Template\+Scope} option (\#354).
+\end{DoxyItemize}
+
+\section*{5.\+1.\+1 (2016-\/07-\/06)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix the way to check when event properties are undefined (\#365).
+\end{DoxyItemize}
+
+\section*{5.\+1.\+0 (2016-\/07-\/02)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily push\+Range} option (\#341).
+\end{DoxyItemize}
+
+\section*{5.\+0.\+1 (2016-\/07-\/01)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Switch from using opacity to visibility to show/hide elements (\#362).
+\end{DoxyItemize}
+
+\section*{5.\+0.\+0 (2016-\/06-\/30)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item A\+M\+D/\+Common\+JS exported module\+: export module name instead of module (\#360).
+\end{DoxyItemize}
+
+\subsection*{Breaking change}
+
+Code that relies on the module object to be exported (accessing the name via .name for example) will break, since the name is now directly returned.
+
+\section*{4.\+1.\+0 (2016-\/06-\/30)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily bind\+Index\+For\+Steps\+Array} option that enable to use {\ttfamily steps\+Array} with the same behavior as before 4.\+0 (\#345).
+\end{DoxyItemize}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Hide floor/ceil label when overlapped on combo label (\#357).
+\item Fix switching from steps array to regular steps (\#361).
+\end{DoxyItemize}
+
+\section*{4.\+0.\+2 (2016-\/06-\/07)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily merge\+Range\+Labels\+If\+Same} option (\#245).
+\end{DoxyItemize}
+
+\section*{4.\+0.\+1 (2016-\/06-\/04)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item Add a pointer\+Type arg for the callbacks (on\+Start, on\+Change and on\+End) to identify which handle is used (\#339).
+\end{DoxyItemize}
+
+\section*{4.\+0.\+0 (2016-\/06-\/04)}
+
+\subsection*{Improvement}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily steps\+Array}\+: Bind rz\+Slider\+Model and rz\+Slider\+High to the actual value (\#335).
+\end{DoxyItemize}
+
+\subsection*{Breaking changes}
+
+
+\begin{DoxyItemize}
+\item From now on, when using the {\ttfamily steps\+Array} feature, you should directly provide the actual value to rz\+Slider\+Model and rz\+Slider\+High instead of passing the index of this value. Thus, you need to update your config like in the following example\+: 
+\begin{DoxyCode}
+/* before 4.0 version */
+vm.slider = \{
+    value: 4, // index of the 'E' value in the array
+    options: \{
+        stepsArray: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+    \}
+\}
+
+/* from 4.0 version */
+vm.slider = \{
+    value: 'E',
+    options: \{
+        stepsArray: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+    \}
+\}
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\section*{3.\+0.\+0 (2016-\/06-\/02)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add I\+E8 support (\#314).
+\item Consolidate on\+Start, on\+Change and on\+End for keyboard (\#319).
+\item Added {\ttfamily rz-\/floor} and {\ttfamily rz-\/ceil} classes to floor and ceil label to allow styling (\#337).
+\end{DoxyItemize}
+
+\subsection*{Breaking changes}
+
+
+\begin{DoxyItemize}
+\item From now on, to allow the I\+E8 support, the directive is configured with {\ttfamily replace\+: true}. Thus, you need to update your custom C\+SS rules like in the following example\+: 
+\begin{DoxyCode}
+/* before 3.0 version */
+rzslider \{
+  color: red;
+\}
+
+/* from 3.0 version */
+.rzslider \{
+  color: red;
+\}
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\section*{2.\+14.\+0 (2016-\/05-\/22)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add {\ttfamily min\+Limit} and {\ttfamily max\+Limit} options (\#332).
+\item Add a {\ttfamily max\+Range} option (\#333).
+\item Add {\ttfamily bound\+Pointer\+Labels} option (\#323).
+\end{DoxyItemize}
+
+\section*{2.\+13.\+0 (2016-\/04-\/24)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily get\+Legend} option (\#318).
+\item Handle objects in {\ttfamily steps\+Array} that can contain {\ttfamily value} and {\ttfamily legend} properties.
+\end{DoxyItemize}
+
+\section*{2.\+12.\+0 (2016-\/04-\/22)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Accept numbers for show\+Ticks/show\+Ticks\+Values to display ticks at intermediate positions (\#264).
+\end{DoxyItemize}
+
+\section*{2.\+11.\+0 (2016-\/04-\/01)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a hide\+Pointer\+Labels option (\#273).
+\end{DoxyItemize}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Position long labels on vertical sliders correctly (\#306).
+\end{DoxyItemize}
+
+\section*{2.\+10.\+4 (2016-\/03-\/16)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix the floor limit when floor is different than 0 (\#293).
+\end{DoxyItemize}
+
+\section*{2.\+10.\+3 (2016-\/03-\/14)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Prefix all C\+SS classes with rz-\/ to prevent conflicts (\#292).
+\end{DoxyItemize}
+
+\section*{2.\+10.\+2 (2016-\/03-\/01)}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Remove the dist folder from gitignore.
+\end{DoxyItemize}
+
+\section*{2.\+10.\+1 (2016-\/03-\/01)}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Republish the npm module since dist files were missing.
+\end{DoxyItemize}
+
+\section*{2.\+10.\+0 (2016-\/02-\/29)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Added {\ttfamily right\+To\+Left} option for R\+TL support (\#270). Thanks -\/\+Ryan \+:).
+\end{DoxyItemize}
+
+\section*{2.\+9.\+0 (2016-\/02-\/18)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Change {\ttfamily rz\+Slider\+Options} to use expression binding (\#266).
+\end{DoxyItemize}
+
+\section*{2.\+8.\+0 (2016-\/02-\/08)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily get\+Pointer\+Color} option to dynamically change the pointers color (\#253).
+\end{DoxyItemize}
+
+\section*{2.\+7.\+1 (2016-\/02-\/06)}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Fix high label positioning when size is different than the ceil one.
+\end{DoxyItemize}
+
+\section*{2.\+7.\+0 (2016-\/02-\/06)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add an {\ttfamily enforce\+Step} option (defaults to true) (\#246).
+\item Add a {\ttfamily show\+Selection\+Bar\+From\+Value} options (\#250).
+\item Use jq\+Lite html() method to display label values so the translate function can return formated content (\#251).
+\item Pass a label string as third arg to the {\ttfamily translate} function to differentiate the labels (\#252).
+\end{DoxyItemize}
+
+\subsection*{Fix}
+
+
+\begin{DoxyItemize}
+\item Improve combined label position and show only one value if min==max (\#245).
+\end{DoxyItemize}
+
+\section*{2.\+6.\+0 (2016-\/01-\/31)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily no\+Switching} option to prevent the user from switching the min and max handles (\#233).
+\end{DoxyItemize}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Refactor the internal {\ttfamily round\+Step} function that was too strict (5d130f09d).
+\end{DoxyItemize}
+
+\section*{2.\+5.\+0 (2016-\/01-\/24)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily min\+Range} option to set a minimal range (\#231).
+\item Pass the slider values to the {\ttfamily on\+Start}, {\ttfamily on\+Change} and {\ttfamily on\+End} callbacks.
+\item Rollback and improve the callback changes brought with 2.\+4.\+1 that were no applying the last update to the scope anymore.
+\end{DoxyItemize}
+
+\section*{2.\+4.\+1 (2016-\/01-\/15)}
+
+\subsection*{Performance improvements}
+
+
+\begin{DoxyItemize}
+\item Remove the \$timeout call in the init method (\#223).
+\item Remove the \$timeout call in the on\+Start callback.
+\item Remove the \$timeout call in the on\+Change callback (\#229).
+\end{DoxyItemize}
+
+\section*{2.\+4.\+0 (2015-\/12-\/30)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add an {\ttfamily enforce\+Range} options to round the {\ttfamily rz\+Slider\+Model} and {\ttfamily rz\+Slider\+High} to the slider range even when modified from outside the slider.(\#208).
+\item Add a {\ttfamily ticks\+Tooltip} option used to display a tooltip when a tick is hovered (\#209).
+\item Add an {\ttfamily only\+Bind\+Handles} option to only bind events on slider handles (\#212).
+\item Add a {\ttfamily show\+Selection\+Bar\+End} option to display the selection bar after the value (\#214).
+\end{DoxyItemize}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Fix reset of maxH element (\#204).
+\item Change the watchers order to prevent unwanted model modifications (\#207).
+\end{DoxyItemize}
+
+\section*{2.\+3.\+0 (2015-\/12-\/22)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add keyboard support (activated by default with {\ttfamily keyboard\+Support} set to true) (\#191).
+\item Add a {\ttfamily draggable\+Range\+Only} options (\#203).
+\end{DoxyItemize}
+
+\section*{2.\+2.\+0 (2015-\/12-\/17)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily get\+Selection\+Bar\+Color} option to dynamically change the selection bar color (\#197).
+\end{DoxyItemize}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Fix negative float values rendering (\#190).
+\end{DoxyItemize}
+
+\section*{2.\+1.\+0 (2015-\/11-\/29)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily vertical} options to display vertical sliders (\#185).
+\item Pass the options.\+id to the on\+Start, on\+Change and on\+End callbacks (\#182).
+\item Force labels to stay contained within element containing slider (\#175).
+\end{DoxyItemize}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item add vendor-\/prefix to {\ttfamily display\+: flex} used by ticks (\#160).
+\end{DoxyItemize}
+
+\section*{2.\+0.\+0 (2015-\/11-\/12)}
+
+\subsection*{Breaking changes}
+
+
+\begin{DoxyItemize}
+\item All attributes except {\ttfamily rz\+Slider\+Model} and {\ttfamily rz\+Slider\+High} are moved to {\ttfamily rz\+Slider\+Options}. (See the new documentation in Read\+Me)
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily rz\+Slider\+Options} attribute to pass options to the slider.
+\item Add a {\ttfamily Rz\+Slider\+Options.\+options()} method to set global options.
+\item Add a {\ttfamily scale} option to fix sliders displayed in an element that uses {\ttfamily transform\+: scale(0.\+5)}.
+\item Add a {\ttfamily steps\+Array} option (\#163)
+\item Add an {\ttfamily id} option that is passed to the translate function as second arg (\#161)
+\item Add a {\ttfamily ticks\+Values\+Tooltip} option that is used to display a tooltip on the ticks values (requires angular-\/ui bootstrap).
+\end{DoxyItemize}
+
+\section*{1.\+1.\+0 (2015-\/11-\/07)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Configurable update interval (\#153)
+\end{DoxyItemize}
+
+\subsection*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Update floor label so that it hides correctly when using single slider. (\#155)
+\item Fix ticks values when step is a float.
+\item Remove the delta checking in update\+Low\+Handle because it leads to hard-\/to-\/debug bugs.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+0 (2015-\/10-\/13)}
+
+
+\begin{DoxyItemize}
+\item Rename the N\+PM package from jusas-\/angularjs-\/slider to angularjs-\/slider because jusas was added by mistake during a PR.-\/ Start to use semantic versioning.
+\end{DoxyItemize}
+
+\section*{0.\+1.\+36 (2015-\/10-\/12)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Separate the L\+E\+SS variables from the main file to ease versioning of local customisations.
+\end{DoxyItemize}
+
+\section*{0.\+1.\+35 (2015-\/10-\/08)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add enabled/disabled option for slider\+: {\ttfamily rz-\/slider-\/disabled=\char`\"{}boolean\char`\"{}}
+\end{DoxyItemize}
+
+\section*{0.\+1.\+34 (2015-\/10-\/03)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Support ticks for range sliders and slider with always visible bars.
+\end{DoxyItemize}
+
+\section*{0.\+1.\+33 (2015-\/10-\/02)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item Add a {\ttfamily rz\+Slider\+Show\+Ticks} to show a tick on each step.
+\item Add a {\ttfamily rz\+Slider\+Show\+Ticks\+Value} to show a tick and its value on each step. 
+\end{DoxyItemize}

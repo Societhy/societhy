@@ -1,0 +1,371 @@
+\label{_0.6.3}%
+ \section*{0.\+6.\+3 (2015-\/03-\/09)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item detect file type when path contains url parameters (\href{https://github.com/ocombe/ocLazyLoad/commit/57e1801d933f978060954bd8707f586b51544906}{\tt 57e1801d}, \href{https://github.com/ocombe/ocLazyLoad/issues/137}{\tt \#137})
+\item rejected promise should be returned immediately (\href{https://github.com/ocombe/ocLazyLoad/commit/887a67c4196fa4bbd65c34f6eba1d8b2bca9fed3}{\tt 887a67c4})
+\end{DoxyItemize}
+
+\label{_0.6.2}%
+ \section*{0.\+6.\+2 (2015-\/03-\/05)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item first step on supporting systemjs \& import (\href{https://github.com/ocombe/ocLazyLoad/commit/cb8dd62ed9052995cbaf132d94092d1d103dd74d}{\tt cb8dd62e})
+\end{DoxyItemize}
+
+\label{_0.6.1}%
+ \section*{0.\+6.\+1 (2015-\/03-\/05)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item karma hack isn\textquotesingle{}t needed anymore (\href{https://github.com/ocombe/ocLazyLoad/commit/3108296e9d78da822e58333f2f7d674531ae937b}{\tt 3108296e})
+\item angular.\+bootstrap now adds modules to init, not replace them (\href{https://github.com/ocombe/ocLazyLoad/commit/bdc03dd9128eca7fca2421317b9f7b103c9b419c}{\tt bdc03dd9})
+\item fixed Type\+Error\+: Converting circular structure to J\+S\+ON (\href{https://github.com/ocombe/ocLazyLoad/commit/11da36d90bc5bae588fa3770430d371d5f935aae}{\tt 11da36d9})
+\item don\textquotesingle{}t watch for angular.\+module calls when you\textquotesingle{}re not lazy loading (\href{https://github.com/ocombe/ocLazyLoad/commit/35f7eb5be57f7753a20d7460c5a380f44e3ac175}{\tt 35f7eb5b})
+\end{DoxyItemize}
+
+\subsection*{Performance Improvements}
+
+
+\begin{DoxyItemize}
+\item hash the signature to optimize memory consumption (\href{https://github.com/ocombe/ocLazyLoad/commit/1cd9676e8799cff03458f7d2d4d144f624da9cfa}{\tt 1cd9676e})
+\end{DoxyItemize}
+
+\label{_0.6.0}%
+ \section*{0.\+6.\+0 (2015-\/02-\/27)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item staged lines missing from last commit (\href{https://github.com/ocombe/ocLazyLoad/commit/dd24bcdd573821ce7def60c173a15cbee2540de7}{\tt dd24bcdd})
+\item don\textquotesingle{}t throw for karma (\href{https://github.com/ocombe/ocLazyLoad/commit/633bec8b38635e7d78aaa0e4ea8f1a8cdb85050e}{\tt 633bec8b}, \href{https://github.com/ocombe/ocLazyLoad/issues/129}{\tt \#129})
+\item Require\+JS should be able to load js files with no extension (default behavior) (\href{https://github.com/ocombe/ocLazyLoad/commit/4f60d05d02039b700908545b60b71c3e2ca9bbf6}{\tt 4f60d05d})
+\item null constants should work (\href{https://github.com/ocombe/ocLazyLoad/commit/83d416f97d357d148efe97bafbaf2836ed7b3a3d}{\tt 83d416f9}, \href{https://github.com/ocombe/ocLazyLoad/issues/111}{\tt \#111})
+\item keep track of components signatures instead of just the names (\href{https://github.com/ocombe/ocLazyLoad/commit/6bbaed971cf2d23bb35a6ba5f29c6e6162edc5b5}{\tt 6bbaed97}, \href{https://github.com/ocombe/ocLazyLoad/issues/120}{\tt \#120})
+\item improve bootstrap \& added compatibility with karma (\href{https://github.com/ocombe/ocLazyLoad/commit/ff6afcf5d3ef00e8e931fd548051f3103225cea8}{\tt ff6afcf5}, \href{https://github.com/ocombe/ocLazyLoad/issues/111}{\tt \#111})
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item you don\textquotesingle{}t need to specify the name of the lazy loaded modules anymore!! (\href{https://github.com/ocombe/ocLazyLoad/commit/6634cbee6c5ce84363be84ae5529a61a633585b5}{\tt 6634cbee})
+\item added support for specifying the type of a file. (\href{https://github.com/ocombe/ocLazyLoad/commit/a3549eea93c67cfc4881ebe9d44c73c220790461}{\tt a3549eea})
+\end{DoxyItemize}
+
+\subsection*{Documentation}
+
+
+\begin{DoxyItemize}
+\item adding a table of contents (\href{https://github.com/ocombe/ocLazyLoad/commit/98aad14141e2eae1d04f9fc1fe09d85cd4b14713}{\tt 98aad141})
+\end{DoxyItemize}
+
+\label{_0.5.2}%
+ \section*{0.\+5.\+2 (2014-\/12-\/30)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item use init for bootstrapped apps \& removed the need for loaded\+Modules (\href{https://github.com/ocombe/ocLazyLoad/commit/01936cd6fe0e0f89a203408ee0bbb927f5b44d07}{\tt 01936cd6}, \href{https://github.com/ocombe/ocLazyLoad/issues/84}{\tt \#84}, \href{https://github.com/ocombe/ocLazyLoad/issues/102}{\tt \#102}, \href{https://github.com/ocombe/ocLazyLoad/issues/109}{\tt \#109})
+\end{DoxyItemize}
+
+\subsection*{Documentation}
+
+
+\begin{DoxyItemize}
+\item added a link to a new lesson from egghead.\+io (\href{https://github.com/ocombe/ocLazyLoad/commit/ef8d2871a445b29588f779a27cb3b702d0da6a13}{\tt ef8d2871})
+\end{DoxyItemize}
+
+\label{_0.5.1}%
+ \section*{0.\+5.\+1 (2014-\/11-\/20)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item don\textquotesingle{}t use async when you load files in serie (\href{https://github.com/ocombe/ocLazyLoad/commit/9af93ed30cf05c6c64594d206dc9bf36a318f46e}{\tt 9af93ed3}, \href{https://github.com/ocombe/ocLazyLoad/issues/95}{\tt \#95})
+\item avoid errors thrown on empty template files (\href{https://github.com/ocombe/ocLazyLoad/commit/768b9d751a613a0a10cb476d5c3eac5fdf44f627}{\tt 768b9d75})
+\item compatibility with jasmine (\href{https://github.com/ocombe/ocLazyLoad/commit/d4985e1d7ce98315ca64a72730d8c10524929d58}{\tt d4985e1d}, \href{https://github.com/ocombe/ocLazyLoad/issues/94}{\tt \#94})
+\end{DoxyItemize}
+
+\label{_0.5.0}%
+ \section*{0.\+5.\+0 (2014-\/11-\/11)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item added a new param {\ttfamily insert\+Before} (\href{https://github.com/ocombe/ocLazyLoad/commit/c4f10385cb6a9122c3a03d28b1bb6837710cc3f7}{\tt c4f10385}, \href{https://github.com/ocombe/ocLazyLoad/issues/91}{\tt \#91})
+\item started unit tests (\href{https://github.com/ocombe/ocLazyLoad/commit/dcc4ff639df23a1b934899b020a483e47e6ab290}{\tt dcc4ff63})
+\end{DoxyItemize}
+
+\subsection*{Documentation}
+
+
+\begin{DoxyItemize}
+\item updated loaders signatures (\href{https://github.com/ocombe/ocLazyLoad/commit/ba022894841222989cf699f07fe21f04f7ad3307}{\tt ba022894})
+\end{DoxyItemize}
+
+\label{_0.4.2}%
+ \section*{0.\+4.\+2 (2014-\/11-\/10)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item extend config to params for the register method (\href{https://github.com/ocombe/ocLazyLoad/commit/31157941ccabfa8f8c55edc00dc2b5758bf073b2}{\tt 31157941}, \href{https://github.com/ocombe/ocLazyLoad/issues/89}{\tt \#89})
+\end{DoxyItemize}
+
+\label{_0.4.1}%
+ \section*{0.\+4.\+1 (2014-\/11-\/09)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item keep global params pristine when loading files (\href{https://github.com/ocombe/ocLazyLoad/commit/6b2306b71543542c9b592766644c7bba1297bae4}{\tt 6b2306b7}, \href{https://github.com/ocombe/ocLazyLoad/issues/89}{\tt \#89})
+\item defining new run blocks will replace previous ones (\href{https://github.com/ocombe/ocLazyLoad/commit/af2627b5e627b2b4d83cdd043eff68b1c1430740}{\tt af2627b5}, \href{https://github.com/ocombe/ocLazyLoad/issues/89}{\tt \#89})
+\end{DoxyItemize}
+
+\label{_0.4.0}%
+ \section*{0.\+4.\+0 (2014-\/11-\/09)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item new parameter {\ttfamily serie} to load files in serie (\href{https://github.com/ocombe/ocLazyLoad/commit/4ae7a3f3de6ad4de74baa6cc771aee556bce812e}{\tt 4ae7a3f3}, \href{https://github.com/ocombe/ocLazyLoad/issues/47}{\tt \#47}, \href{https://github.com/ocombe/ocLazyLoad/issues/86}{\tt \#86})
+\item new parameter {\ttfamily rerun} to rerun the run blocks (\href{https://github.com/ocombe/ocLazyLoad/commit/26a64a38b0c21b6ca28cfa7e512b0b290fdca619}{\tt 26a64a38}, \href{https://github.com/ocombe/ocLazyLoad/issues/89}{\tt \#89})
+\item new function\+: {\ttfamily is\+Loaded} to check if a module has been loaded (\href{https://github.com/ocombe/ocLazyLoad/commit/364c9e9ffd8350e5ca46a708bd3846ea6de9421c}{\tt 364c9e9f}, \href{https://github.com/ocombe/ocLazyLoad/issues/79}{\tt \#79})
+\end{DoxyItemize}
+
+\label{_0.3.10}%
+ \section*{0.\+3.\+10 (2014-\/11-\/09)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item fix for error\+:\mbox{[}\$compile\+:multidir\mbox{]} Multiple directives (\href{https://github.com/ocombe/ocLazyLoad/commit/61fd4dd3b8131245d33eb2314dcf37a9188a6728}{\tt 61fd4dd3}, \href{https://github.com/ocombe/ocLazyLoad/issues/84}{\tt \#84}, \href{https://github.com/ocombe/ocLazyLoad/issues/78}{\tt \#78}, \href{https://github.com/ocombe/ocLazyLoad/issues/73}{\tt \#73}, \href{https://github.com/ocombe/ocLazyLoad/issues/58}{\tt \#58})
+\item css onload patch for some old browsers (\href{https://github.com/ocombe/ocLazyLoad/commit/14ce34066e0e865c8fa86f663d38e046f7a32abb}{\tt 14ce3406})
+\item content inside the oc-\/lazy-\/load directive is now compiled on load (\href{https://github.com/ocombe/ocLazyLoad/commit/9962e2ef163e9449e295dd3297f6019267a0e0e1}{\tt 9962e2ef}, \href{https://github.com/ocombe/ocLazyLoad/issues/80}{\tt \#80})
+\end{DoxyItemize}
+
+\label{_0.3.9}%
+ \section*{0.\+3.\+9 (2014-\/11-\/02)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item allow components with the same name from different types/modules (\href{https://github.com/ocombe/ocLazyLoad/commit/f981c33749e4e61fa4dfd7c3c41df9beffcbf734}{\tt f981c337}, \href{https://github.com/ocombe/ocLazyLoad/issues/67}{\tt \#67})
+\item initial modules not registered (\href{https://github.com/ocombe/ocLazyLoad/commit/bcf50004b8a1172aff4c769746fdcb9e5d5d9cba}{\tt bcf50004}, \href{https://github.com/ocombe/ocLazyLoad/issues/58}{\tt \#58}, \href{https://github.com/ocombe/ocLazyLoad/issues/71}{\tt \#71}, \href{https://github.com/ocombe/ocLazyLoad/issues/73}{\tt \#73}, \href{https://github.com/ocombe/ocLazyLoad/issues/77}{\tt \#77})
+\item add support for angular 1.\+3 in bower (\href{https://github.com/ocombe/ocLazyLoad/commit/bda921b68ce30645d992982325adc4eebfdcd361}{\tt bda921b6}, \href{https://github.com/ocombe/ocLazyLoad/issues/76}{\tt \#76})
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item broadcast for component\+Loaded event provides more info (module name and type) (\href{https://github.com/ocombe/ocLazyLoad/commit/d41b9f53a46ff8c97b780d4c24f6f64e16017b89}{\tt d41b9f53})
+\item example1 now uses ui-\/grid instead of ng-\/grid (\href{https://github.com/ocombe/ocLazyLoad/commit/e7cf1e83ff1453ee5adb8112052d393f9dc09e27}{\tt e7cf1e83})
+\end{DoxyItemize}
+
+\subsection*{Documentation}
+
+
+\begin{DoxyItemize}
+\item added link to a new article by  (\href{https://github.com/ocombe/ocLazyLoad/commit/cc6b41db5e0dbcfe68754df325bf9f09e5709bf2}{\tt cc6b41db})
+\item added a link to a new lesson from egghead.\+io (\href{https://github.com/ocombe/ocLazyLoad/commit/e231f3cbfd6fb3338479a5f4d8a9ce00d374646e}{\tt e231f3cb})
+\item added a link to a new lesson from egghead.\+io (\href{https://github.com/ocombe/ocLazyLoad/commit/9b3c48e49800dd3ed6a01dad7c1d958f8625eddb}{\tt 9b3c48e4})
+\end{DoxyItemize}
+
+\label{_0.3.8}%
+ \section*{0.\+3.\+8 (2014-\/09-\/25)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item reject on load error (\href{https://github.com/ocombe/ocLazyLoad/commit/d83f52b56a77a5cdb230260c497ee2db7283e077}{\tt d83f52b5}, \href{https://github.com/ocombe/ocLazyLoad/issues/66}{\tt \#66})
+\end{DoxyItemize}
+
+\label{_0.3.7}%
+ \section*{0.\+3.\+7 (2014-\/09-\/10)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item don\textquotesingle{}t reload a dependency that was just loaded (\href{https://github.com/ocombe/ocLazyLoad/commit/6752bb948093f196311572530d814231dc2dcd3a}{\tt 6752bb94}, \href{https://github.com/ocombe/ocLazyLoad/issues/64}{\tt \#64})
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item new event oc\+Lazy\+Load.\+module\+Reloaded (\href{https://github.com/ocombe/ocLazyLoad/commit/5010d144d1b250424be2bcfa98faf50c6782bf96}{\tt 5010d144})
+\end{DoxyItemize}
+
+\label{_0.3.6}%
+ \section*{0.\+3.\+6 (2014-\/09-\/02)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item concurrency lazy loads (thanks ) (\href{https://github.com/ocombe/ocLazyLoad/commit/4899ea1a09bee145f70aec3dd964f885060422d8}{\tt 4899ea1a}, \href{https://github.com/ocombe/ocLazyLoad/issues/44}{\tt \#44})
+\end{DoxyItemize}
+
+\subsection*{Documentation}
+
+
+\begin{DoxyItemize}
+\item added a few links to other examples
+\end{DoxyItemize}
+
+\label{_0.3.5}%
+ \section*{0.\+3.\+5 (2014-\/08-\/26)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item fixed cases where the config block would not be called (\href{https://github.com/ocombe/ocLazyLoad/commit/1e29c9d438d494cd053cd7533921e02e3fe5e5d0}{\tt 1e29c9d4}, \href{https://github.com/ocombe/ocLazyLoad/issues/5}{\tt \#5}). The config block would not be called if\+:
+\begin{DoxyItemize}
+\item defined multiple times (only the first 1 would be invoked)
+\item defined with an auto injected module\+: \mbox{[}\textquotesingle{}...\textquotesingle{}, function() \{\}\mbox{]}
+\item defined after another component\+: angular.\+module().controler().config()
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\label{_0.3.4}%
+ \section*{0.\+3.\+4 (2014-\/08-\/26)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item make sure reconfig\+:true always run all invoke blocks (\href{https://github.com/ocombe/ocLazyLoad/commit/361ae6b7d319cb5ada1ab022a6761d4a67a31b58}{\tt 361ae6b7}, \href{https://github.com/ocombe/ocLazyLoad/issues/54}{\tt \#54})
+\item the config/run blocks were not invoked without reconfig\+: true (\href{https://github.com/ocombe/ocLazyLoad/commit/300882a016e4f9d538e322be9718f21740048296}{\tt 300882a0}, \href{https://github.com/ocombe/ocLazyLoad/issues/5}{\tt \#5})
+\item index\+Of polyfill for I\+E8 (\href{https://github.com/ocombe/ocLazyLoad/commit/5f71c09cad4255932e84c760b07d16a4a2b016d9}{\tt 5f71c09c}, \href{https://github.com/ocombe/ocLazyLoad/issues/52}{\tt \#52})
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item more log messages for debug (\href{https://github.com/ocombe/ocLazyLoad/commit/bcbca814049863b4dd7a6c5c1071efd760094966}{\tt bcbca814})
+\end{DoxyItemize}
+
+\label{_0.3.3}%
+ \section*{0.\+3.\+3 (2014-\/07-\/23)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item don\textquotesingle{}t execute config blocks multiple times by default (\href{https://github.com/ocombe/ocLazyLoad/commit/e2fec59ee7ff1e95e7e78ef8397c4fe500d8e7c0}{\tt e2fec59e}, \href{https://github.com/ocombe/ocLazyLoad/issues/43}{\tt \#43}, \href{https://github.com/ocombe/ocLazyLoad/issues/41}{\tt \#41})
+\item don\textquotesingle{}t test for .js in path because of requirejs (\href{https://github.com/ocombe/ocLazyLoad/commit/6045214b6a4cc2d9dee1c1f2f89946687d963828}{\tt 6045214b})
+\item test order (\href{https://github.com/ocombe/ocLazyLoad/commit/8412cb431bfc742f2c4151e5b089f3313a70035e}{\tt 8412cb43})
+\end{DoxyItemize}
+
+\label{_0.3.2}%
+ \section*{0.\+3.\+2 (2014-\/07-\/23)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item allow \$oc\+Lazy\+Load\+Provider.\+config to be called multiple times (\href{https://github.com/ocombe/ocLazyLoad/commit/c590579c9512e0dd3fae2c33c0aefc0bb0f7ca7e}{\tt c590579c}, \href{https://github.com/ocombe/ocLazyLoad/issues/43}{\tt \#43})
+\item prevent duplicate loadings (\href{https://github.com/ocombe/ocLazyLoad/commit/12bc6b2b2d1561517d56c14c56c15c332d578344}{\tt 12bc6b2b}, \href{https://github.com/ocombe/ocLazyLoad/issues/35}{\tt \#35}, \href{https://github.com/ocombe/ocLazyLoad/issues/38}{\tt \#38})
+\end{DoxyItemize}
+
+\label{_0.3.1}%
+ \section*{0.\+3.\+1 (2014-\/07-\/14)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item don\textquotesingle{}t reject file load with custom file loaders such as requirejs (\href{https://github.com/ocombe/ocLazyLoad/commit/91ed522f724c3d384146053623bbd1e7c2c86751}{\tt 91ed522f}, \href{https://github.com/ocombe/ocLazyLoad/issues/33}{\tt \#33})
+\end{DoxyItemize}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item auto changelog from commits msg (\href{https://github.com/ocombe/ocLazyLoad/commit/c089e085431d9f1a968e94c78f3c5ac5af71fa72}{\tt c089e085})
+\item prevent duplicate loadings \& add a cache busting param (\href{https://github.com/ocombe/ocLazyLoad/commit/5a5d7f108578fe31c5ca1f7c8dfc2d3bccfd1106}{\tt 5a5d7f10}, \href{https://github.com/ocombe/ocLazyLoad/issues/38}{\tt \#38})
+\end{DoxyItemize}
+
+\section*{0.\+3.\+0 (17 June 2014)}
+
+\subsection*{Features}
+
+
+\begin{DoxyItemize}
+\item \$oc\+Lazy\+Load will now reject promises on errors
+\item Use the parameter {\ttfamily debug} to show log messages in the console
+\item JS / C\+SS / Template loaders are available by default in \$oc\+Lazy\+Load but you can overwrite them with the config
+\item Better doc (finally! /)
+\item Example1 is now much better !
+\item Events broadcasted on module / component / file load (\#21)
+\end{DoxyItemize}
+
+\section*{0.\+2.\+0 (20 May 2014)}
+
+
+\begin{DoxyItemize}
+\item Added support for \$animate\+Provider \#19
+\item Added support for C\+SS Loading (And perhaps other file types in the future) \#19
+\item Added load\+All function for use when a state requires resolve on more than one asset. \#19
+\item F\+IX\+: Angular JS 1.\+3.\+0-\/beta.\+8 changed the way config blocks are handled (now invoked last) \#19
+\item Adopted the M\+IT license as requested in \#20
+\item Added a gulpfile to build dist files (and, in the future, to do tests before the build). Run {\ttfamily npm install} to install the new dependencies and {\ttfamily npm build} to build the dist files.
+\item {\bfseries Breaking change} moved the src files to /src and the dist files to /dist. Installations via bower will only see the dist folder
+\item Moved the examples to /examples
+\end{DoxyItemize}
+
+\section*{0.\+1.\+3 (30 April 2014)}
+
+
+\begin{DoxyItemize}
+\item Fix for bug \#18\+: merged files and incorrect module loading
+\end{DoxyItemize}
+
+\section*{0.\+1.\+2 (14 April 2014)}
+
+
+\begin{DoxyItemize}
+\item Fix for bug \#16\+: config blocks didn\textquotesingle{}t work for module dependencies
+\end{DoxyItemize}
+
+\section*{0.\+1.\+1 (08 April 2014)}
+
+
+\begin{DoxyItemize}
+\item Fix for bug \#8\+: run\+Blocks can now load new modules (thanks to )
+\item Added an example that makes use of requirejs and uses ng\+Grid as a lazy loaded module (thanks to )
+\end{DoxyItemize}
+
+\section*{0.\+1.\+0 (04 April 2014)}
+
+
+\begin{DoxyItemize}
+\item Added a changelog !
+\item Added {\ttfamily load\+Template\+File} function.
+\item Merge pull request \#6 from Ben\+Blazely/master (Extension of lazy loading to the angular.\+module DI block, refactored to use promises for tracking progress.)
+\item Merge pull request \#7 from rolandzwaga/master (Added some improvements for apps using angular.\+boostrap \& for duplicated modules)
+\item Fixed a bug with run blocks not working when they used unloaded modules. Not a complete fix though, more to come when bug \#8 is fixed 
+\end{DoxyItemize}

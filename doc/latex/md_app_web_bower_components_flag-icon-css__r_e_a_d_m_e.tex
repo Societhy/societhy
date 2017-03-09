@@ -1,0 +1,60 @@
+\href{https://badge.fury.io/js/flag-icon-css}{\tt } \href{https://badge.fury.io/bo/flag-icon-css}{\tt }
+
+C\+SS for vector based country flags. See the \href{http://lipis.github.io/flag-icon-css/}{\tt demo}.
+
+\subsection*{Usage }
+
+For using the flags inline with text add the classes {\ttfamily .flag-\/icon} and {\ttfamily .flag-\/icon-\/xx} (where {\ttfamily xx} is the \href{http://www.iso.org/iso/country_names_and_code_elements}{\tt I\+SO 3166-\/1-\/alpha-\/2 code} of a country) to an empty {\ttfamily $<$span$>$}. If you want to have a squared version flag then add the class {\ttfamily flag-\/icon-\/squared} as well. Example\+:
+
+
+\begin{DoxyCode}
+<span class="flag-icon flag-icon-gr"></span>
+<span class="flag-icon flag-icon-gr flag-icon-squared"></span>
+\end{DoxyCode}
+
+
+You could also apply this to any element, but in that case you\textquotesingle{}ll have to use the {\ttfamily flag-\/icon-\/background} instead of {\ttfamily flag-\/icon} and you\textquotesingle{}re set. This will add the correct background with the following C\+SS properties\+:
+
+
+\begin{DoxyCode}
+background-size: contain;
+background-position: 50%;
+background-repeat: no-repeat;
+\end{DoxyCode}
+
+
+Which means that the flag is just going to appear in the middle of an element, so you will have to set manually the correct size of 4 by 3 ratio or if it\textquotesingle{}s squared add also the {\ttfamily flag-\/icon-\/squared} class.
+
+\subsection*{Development }
+
+Run the {\ttfamily npm install} to install the dependencies after cloning the project and you\textquotesingle{}ll be able to\+:
+
+To watch for changes and live reload if served
+
+
+\begin{DoxyCode}
+$ grunt
+\end{DoxyCode}
+
+
+To build {\ttfamily $\ast$.less} files
+
+
+\begin{DoxyCode}
+$ grunt build
+\end{DoxyCode}
+
+
+To serve it on {\ttfamily localhost\+:8000}
+
+
+\begin{DoxyCode}
+$ grunt connect
+\end{DoxyCode}
+
+
+To have only specific countries in the css file, remove the ones that you don\textquotesingle{}t need from the \href{https://github.com/lipis/flag-icon-css/blob/master/less/flag-icon-list.less}{\tt {\ttfamily flag-\/icon-\/list.\+less}} file and build it again.
+
+\subsection*{Credits }
+
+This project wouldn\textquotesingle{}t exist without the awesome and now deleted collection of S\+VG flags by \href{https://github.com/koppi}{\tt koppi}. 

@@ -1,0 +1,87 @@
+
+
+
+
+{\itshape {\bfseries Note\+: Hopefully, they will add rtl support to the next major release of bootstrap, so this project will be absolete. However, it\textquotesingle{}s going to be updated for the next 3.\+x releases.}}
+
+\begin{quote}
+Bootstrap is a sleek, intuitive, and powerful front-\/end framework for faster and easier web development. \end{quote}
+
+
+Bootstrap R\+TL provides simple yet robust right-\/to-\/left capability for Bootstrap 3, by employing new theming feature of it. Simply put its C\+SS after bootstrap\textquotesingle{}s original C\+SS, to the pages designed by Bootstrap 3. It works just like an extension on top of the original Bootstrap\+:
+
+
+\begin{DoxyCode}
+<link rel="stylesheet" href="bootstrap.css">
+
+
+<link rel="stylesheet" href="bootstrap-rtl.css">
+\end{DoxyCode}
+
+
+Or load it from C\+DN\+:
+
+
+\begin{DoxyCode}
+<link rel="stylesheet" href="//cdn.rawgit.com/morteza/bootstrap-rtl/master/dist/css/bootstrap-rtl.min.css">
+\end{DoxyCode}
+
+
+\subsection*{Quick start}
+
+To get started, {\bfseries \href{https://github.com/morteza/bootstrap-rtl/releases/latest}{\tt download latest release}}. Check {\ttfamily examples/} directory for more. It\textquotesingle{}s just like Bootstrap 3, nothing special. You can also install it via bower\+:
+
+
+\begin{DoxyItemize}
+\item Run {\ttfamily bower install bootstrap-\/rtl} and latest version will be installed under {\itshape bower\+\_\+components/bootstrap-\/rtl/} directory.
+\end{DoxyItemize}
+
+In addition to bootstrap distribution, L\+E\+SS codes for R\+TL theme and compiled C\+SS ({\ttfamily bootstrap-\/rtl.\+css}) are provided, as well as minified C\+SS ({\ttfamily bootstrap-\/rtl.\+min.\+css}). Check {\ttfamily dist/} directory for all the codes you need.
+
+\paragraph*{Auto Flip ({\ttfamily .flip})}
+
+To automatically flip placements from right to left and vice versa (in bilingual pages), use {\ttfamily .flip} alongside {\ttfamily .pull-\/right} and {\ttfamily .pull-\/left}. This is a custom class and is not available in the original Bootstrap 3.
+
+\subsection*{Building C\+SS and Java\+Script}
+
+Bootstrap R\+TL uses \href{http://gruntjs.com/}{\tt Grunt} for working with the framework. Follow these simple steps to prepare and compile\+:
+
+
+\begin{DoxyEnumerate}
+\item Run {\ttfamily npm install} to download and prepare dependencies.
+\item Run {\ttfamily grunt}, and check {\ttfamily dist/} directory for outputs.
+\end{DoxyEnumerate}
+
+\subsection*{Development}
+
+Contributors to Bootstrap R\+TL must agree the license by signing on the bottom of the {\ttfamily C\+O\+N\+T\+R\+I\+B\+U\+T\+O\+R\+S.\+md} file. To contribute\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/morteza/bootstrap-rtl/fork}{\tt fork the bootstrap-\/rtl repository}.
+\item make your changes
+\item {\itshape first time contributors}\+: Sign {\ttfamily C\+O\+N\+T\+R\+I\+B\+U\+T\+O\+R\+S.\+md} by adding your github username, full name, email address, and first contribution date. As follows\+: {\ttfamily Y\+Y\+Y\+Y/\+M\+M/\+DD, Github Username, Full Name, Email Address}
+\item commit your changes.
+\item send a pull request.
+\end{DoxyItemize}
+
+$\ast$$\ast$$\ast$\+Important Notice\+:$\ast$ Before submitting any pull request, please ensure that your changes merge cleanly with the main repository at morteza/bootstrap-\/rtl.$\ast$$\ast$
+
+\subsubsection*{Feature requests, and bug fixes}
+
+If you want a feature or a bug fixed, \href{https://github.com/morteza/bootstrap-rtl/issues}{\tt report it via project\textquotesingle{}s issues tracker}. However, if it\textquotesingle{}s something you can fix yourself, {\itshape fork} the project, {\itshape do} whatever it takes to resolve it, and finally submit a {\itshape pull} request. I will personally thank you, and add your name to the list of contributors.
+
+\subsection*{Author}
+
+{\bfseries Morteza Ansarinia}
+
+
+\begin{DoxyItemize}
+\item \href{http://github.com/morteza}{\tt http\+://github.\+com/morteza}
+\end{DoxyItemize}
+
+\subsection*{License}
+
+I have no idea what licenses are for exactly. So there is no license control over this bootstrap-\/rtl project. However bootstrap itself is licensed by Twitter, Inc. under \href{LICENSE.bootstrap}{\tt the M\+IT License (M\+IT)}.
+
+If it really matters to you to have a license to avoid litigations, this is an unlicensed public domain software. Read \mbox{[}U\+N\+L\+I\+C\+E\+N\+SE file\mbox{]}(U\+N\+L\+I\+C\+E\+N\+SE) for more. 

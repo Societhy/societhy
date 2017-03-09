@@ -1,0 +1,263 @@
+Angular directive slider control.
+
+{\bfseries No J\+Q\+U\+E\+RY dependency needed anymore}
+
+{\bfseries Skins available}
+
+\subsection*{Why }
+
+Original implementation provides very nice features but too much for my needs, this one just simplified.
+
+Source files were divided in several files, and not angular integrated.
+
+\subsection*{Screenshot }
+
+
+
+\subsection*{Demo }
+
+\href{http://darul75.github.io/angular-awesome-slider/}{\tt http\+://darul75.\+github.\+io/angular-\/awesome-\/slider/}
+
+\href{http://jsfiddle.net/darul75/g9e9n8xc/}{\tt http\+://jsfiddle.\+net/darul75/g9e9n8xc/}
+
+\subsection*{How to use it }
+
+You should already have script required for Angular.
+
+
+\begin{DoxyCode}
+<script type="text/javascript" src="angular.min.js"></script>
+\end{DoxyCode}
+
+
+to the list above, you should add\+:
+
+
+\begin{DoxyCode}
+<link rel="stylesheet" type="text/css" href="angular-awesome-slider.min.css">
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+<script type="text/javascript" src="angular-awesome-slider.min.js"></script>
+\end{DoxyCode}
+ in case you want to use your own template, omit the last line and instead add some template code to your project\+: 
+\begin{DoxyCode}
+<script type="text/ng-template" id="aw-select.tmpl.html">
+    ....
+</script>
+\end{DoxyCode}
+
+
+Then, inject {\ttfamily angular\+Awesome\+Slider} in your application module\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['angularAwesomeSlider']);
+\end{DoxyCode}
+
+
+and then just add an {\ttfamily input} with {\ttfamily slider} directive name attribute, {\ttfamily value} and {\ttfamily options} scope variable attribute.
+
+
+\begin{DoxyCode}
+<input ng-model="value" type="text" id="mySlider1" slider options="options" />
+\end{DoxyCode}
+
+
+\textquotesingle{}value\textquotesingle{} your slider scope end value, as string. \textquotesingle{}options\textquotesingle{} slider scope options value as json. \textquotesingle{}ng-\/disabled\textquotesingle{} angular common attribute.
+
+
+\begin{DoxyCode}
+$scope.value = "10";
+// $scope.value = "10;15"; FOR DOUBLE VIEW
+\end{DoxyCode}
+
+
+\subsubsection*{Options}
+
+Options for your slider in json format \{from\+:.....\}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily from}\+: start value
+\item {\ttfamily to}\+: end value
+\item {\ttfamily step}\+: step value
+\item {\ttfamily dimension}\+: string, example \char`\"{} \$\char`\"{}
+\item {\ttfamily scale}\+: array for scale
+\item {\ttfamily round}\+: how many numbers allowed after comma
+\item {\ttfamily smooth}\+: true/false; false snaps the button to value
+\item {\ttfamily vertical}\+: true/false; vertical slider, default false
+\item {\ttfamily skin}\+: empty or \textquotesingle{}blue\textquotesingle{} \textquotesingle{}plastic\textquotesingle{} \textquotesingle{}round\textquotesingle{}
+\item {\ttfamily css}\+: hash object, do not mix with \textquotesingle{}skin\textquotesingle{} !
+\item {\ttfamily class\+Name}\+: custom class added to root slider D\+OM
+\item {\ttfamily realtime}\+: triggers changes and model update on every moves
+\item {\ttfamily threshold}\+: minimum distance allowed between 2 pointers, default both pointers overlap
+\item {\ttfamily limits}\+: true/false; toggles bounds labels visibility
+\item {\ttfamily model\+Labels}\+: custom model for pointers labels based on pointer value
+\item {\ttfamily watch\+Options}\+: default is \textquotesingle{}true\textquotesingle{}, watch this options changes by \href{https://docs.angularjs.org/api/ng/function/angular.equals}{\tt equals}
+\item {\ttfamily heterogeneity}\+: array \mbox{[}percentage of point on slider\mbox{]}/\mbox{[}value in that point\mbox{]}
+\end{DoxyItemize}
+
+ ``` css\+: \{ background\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}silver\char`\"{}\}, before\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}purple\char`\"{}\},// zone before default value default\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}white\char`\"{}\}, // default value\+: 1px after\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}green\char`\"{}\}, // zone after default value pointer\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}red\char`\"{}\} // circle pointer range\+: \{\char`\"{}background-\/color\char`\"{}\+: \char`\"{}red\char`\"{}\} // use it if double value \} ```{\ttfamily  $\ast$}callback` \+: function triggering current value, can be useful
+
+
+\begin{DoxyCode}
+// example
+callback: function(value, released) \{
+    // useful when combined with 'realtime' option
+    // released it triggered when mouse up
+    console.log(value + " " + released);
+\}
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily scale} \+: model for slide scale
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+// divide slider into parts
+scale: [0, '|', 10, '|', 20, '|' , 30, '|', 40]
+
+// or with some custom labels
+scale: [\{val:10, label:'low'\}, \{val:25, label:'middle'\}, \{val:30, label:'high'\}]
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily model\+Labels} \+: model for pointers labels by object or function
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+// overrides default value label displayed combined with 'dimension' by an arbitrary label model
+modelLabels: \{1: 'top', 2: 'middle', 3: 'bottom'\};
+
+// or dynamicaly based
+modelLabels: function(value) \{
+    return 'my value is' + value; // momentjs external library call...
+\}
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily heterogeneity} \+: repartition of possible values 
+\begin{DoxyCode}
+// example here, first value is percentage of slider length, second is value
+heterogeneity: ['50/100', '75/250'] // 50% value is 100, 75% value must be 250
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\subsection*{Installation }
+
+Using npm\+:
+
+
+\begin{DoxyCode}
+npm install angular-awesome-slider
+\end{DoxyCode}
+
+
+Using bower\+:
+
+
+\begin{DoxyCode}
+bower install angular-awesome-slider
+\end{DoxyCode}
+
+
+\subsection*{R\+E\+L\+E\+A\+SE }
+
+
+\begin{DoxyItemize}
+\item 2.\+4.\+4\+: move by grabbing the label
+\item 2.\+4.\+3\+: fix label + switch from range $<$=$>$ one value
+\item 2.\+4.\+2\+: update angular version + fix for programmatic movement of slider (double value)
+\item 2.\+4.\+1\+: non-\/minified version added + bower update
+\item 2.\+4.\+0\+: fix while updating both range values from code
+\item 2.\+3.\+9\+: callback not fired in case slider is on threshold values
+\item 2.\+3.\+8\+: bind to touch A\+ND non touch events
+\item 2.\+3.\+7\+: heterogeneity option
+\item 2.\+3.\+6\+: watch options, fix threshold and click handler + date display testing.
+\item 2.\+3.\+5\+: do not remember
+\item 2.\+3.\+4\+: fix css regressions + model\+Labels with function
+\item 2.\+3.\+3\+: details for model\+Labels options + merge show\+Labels option
+\item 2.\+3.\+2\+: fix css pointer position + hover sking pointers background positions
+\item 2.\+3.\+1\+: fix from and to in floating values
+\item 2.\+3.\+0\+: new module name, no more ng-\/sorry-\/prefix, classname option, sass/scss support, scale object option
+\item 2.\+2.\+6\+: refactoring classnames
+\item 2.\+2.\+5\+: skin availables + less all css
+\item 2.\+2.\+4\+: fix when 2 pointers overlap on limits
+\item 2.\+2.\+3\+: mouse up event indicator in callback
+\item 2.\+2.\+2\+: default indicator display + visibility and move events
+\item 2.\+2.\+1\+: fix disable+default position css+decimal value on init value
+\item 2.\+2.\+0\+: handle from greater than to + gap pointer threshold option
+\item 2.\+1.\+9\+: fix labels positions while gluing, gap was too big + options changed watch by value
+\item 2.\+1.\+8\+: fix labels positions while gluing + realtime model changes option + ng\+Disable option fix
+\item 2.\+1.\+7\+: fix pointer position on click for double value
+\item 2.\+1.\+6\+: starting mocha tests
+\item 2.\+1.\+5\+: directive refactoring
+\item 2.\+1.\+4\+: fix overlap on labels
+\item 2.\+1.\+3\+: bug fixes, refactoring, inline options param
+\item 2.\+1.\+2\+: bug fixes, changes in z-\/index via C\+SS and not js
+\item 2.\+1.\+1\+: override css, colors...
+\item 2.\+1.\+0\+: bug fixes
+\item 2.\+0.\+0\+: no J\+Query
+\end{DoxyItemize}
+
+\subsubsection*{Build}
+
+You can run the tests by running
+
+
+\begin{DoxyCode}
+npm install
+\end{DoxyCode}
+ or 
+\begin{DoxyCode}
+npm test
+\end{DoxyCode}
+
+
+assuming you already have {\ttfamily grunt} installed, otherwise you also need to do\+:
+
+
+\begin{DoxyCode}
+npm install -g grunt-cli
+\end{DoxyCode}
+
+
+\subsubsection*{Issue}
+
+To help me on reproducing any issues, please feel free to modify/fork this fiddle\+: \href{http://jsfiddle.net/darul75/b09m7183/}{\tt http\+://jsfiddle.\+net/darul75/b09m7183/}
+
+\subsection*{Metrics}
+
+\href{https://nodei.co/npm/ng-slider/}{\tt }
+
+\subsection*{who\textquotesingle{}s who}
+
+Who use it ? feel free add issue or edit readme with PR, to see how you use it and give some ideas, thx
+
+\href{https://www.openenergygroup.com/}{\tt openenergygroup}
+
+\href{https://www.google.com}{\tt google?}
+
+\subsection*{License}
+
+The M\+IT License (M\+IT)
+
+Copyright (c) 2013 Julien Valéry
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \char`\"{}\+Software\char`\"{}), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions\+:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+T\+HE S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED \char`\"{}\+A\+S I\+S\char`\"{}, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+TY OF A\+NY K\+I\+ND, E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED, I\+N\+C\+L\+U\+D\+I\+NG B\+UT N\+OT L\+I\+M\+I\+T\+ED TO T\+HE W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY, F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+ND N\+O\+N\+I\+N\+F\+R\+I\+N\+G\+E\+M\+E\+NT. IN NO E\+V\+E\+NT S\+H\+A\+LL T\+HE A\+U\+T\+H\+O\+RS OR C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+E\+RS BE L\+I\+A\+B\+LE F\+OR A\+NY C\+L\+A\+IM, D\+A\+M\+A\+G\+ES OR O\+T\+H\+ER L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN AN A\+C\+T\+I\+ON OF C\+O\+N\+T\+R\+A\+CT, T\+O\+RT OR O\+T\+H\+E\+R\+W\+I\+SE, A\+R\+I\+S\+I\+NG F\+R\+OM, O\+UT OF OR IN C\+O\+N\+N\+E\+C\+T\+I\+ON W\+I\+TH T\+HE S\+O\+F\+T\+W\+A\+RE OR T\+HE U\+SE OR O\+T\+H\+ER D\+E\+A\+L\+I\+N\+GS IN T\+HE S\+O\+F\+T\+W\+A\+RE. 

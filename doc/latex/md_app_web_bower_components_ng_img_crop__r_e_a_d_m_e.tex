@@ -1,0 +1,190 @@
+Simple Image Crop directive for Angular\+JS. Enables to crop a circle or a square out of an image.
+
+\subsection*{Screenshots}
+
+
+
+
+
+\subsection*{Live demo}
+
+\href{http://jsfiddle.net/alexk111/rw6q9/}{\tt Live demo on J\+S\+Fiddle}
+
+\subsection*{Requirements}
+
+
+\begin{DoxyItemize}
+\item Angular\+JS
+\item Modern Browser supporting $<$canvas$>$
+\end{DoxyItemize}
+
+\subsection*{Installing}
+
+\subsubsection*{Download}
+
+You have two options to get the files\+:
+\begin{DoxyItemize}
+\item \href{https://github.com/alexk111/ngImgCrop/archive/master.zip}{\tt Download ng\+Img\+Crop} files from Git\+Hub.
+\item Use Bower to download the files. Just run {\ttfamily bower install ng\+Img\+Crop}.
+\end{DoxyItemize}
+
+\subsubsection*{Add files}
+
+Add the scripts to your application. Make sure the {\ttfamily ng-\/img-\/crop.\+js} file is inserted {\bfseries after} the {\ttfamily angular.\+js} library\+:
+
+
+\begin{DoxyCode}
+<script src="angular.js"></script>
+<script src="ng-img-crop.js"></script>
+<link rel="stylesheet" type="text/css" href="ng-img-crop.css">
+\end{DoxyCode}
+
+
+\subsubsection*{Add a dependancy}
+
+Add the image crop module as a dependancy to your application module\+:
+
+
+\begin{DoxyCode}
+var myAppModule = angular.module('MyApp', ['ngImgCrop']);
+\end{DoxyCode}
+
+
+\subsection*{Usage}
+
+
+\begin{DoxyEnumerate}
+\item Add the image crop directive {\ttfamily $<$img-\/crop$>$} to the H\+T\+ML file where you want to use an image crop control. {\itshape Note\+:} a container, you place the directive to, should have some pre-\/defined size (absolute or relative to its parent). That\textquotesingle{}s required, because the image crop control fits the size of its container.
+\item Bind the directive to a source image property (using {\bfseries image=\char`\"{}\char`\"{}} option). The directive will read the image data from that property and watch for updates. The property can be a url to an image, or a data uri.
+\item Bind the directive to a result image property (using {\bfseries result-\/image=\char`\"{}\char`\"{}} option). On each update, the directive will put the content of the crop area to that property in the data uri format.
+\item Set up the options that make sense to your application.
+\item Done!
+\end{DoxyEnumerate}
+
+\subsection*{Result image}
+
+The result image will always be a square for the both circle and square area types. It\textquotesingle{}s highly recommended to store the image as a square on your back-\/end, because this will enable you to easily update your pics later, if you decide to implement some design changes. Showing a square image as a circle on the front-\/end is not a problem -\/ it is as easy as adding a {\itshape border-\/radius} style for that image in a css.
+
+\subsection*{Example code}
+
+The following code enables to select an image using a file input and crop it. The cropped image data is inserted into img each time the crop area updates.
+
+
+\begin{DoxyCode}
+<html>
+<head>
+  <script src="angular.js"></script>
+  <script src="ng-img-crop.js"></script>
+  <link rel="stylesheet" type="text/css" href="ng-img-crop.css">
+  <style>
+    .cropArea \{
+      background: #E4E4E4;
+      overflow: hidden;
+      width:500px;
+      height:350px;
+    \}
+  </style>
+  <script>
+    angular.module('app', ['ngImgCrop'])
+      .controller('Ctrl', function($scope) \{
+        $scope.myImage='';
+        $scope.myCroppedImage='';
+
+        var handleFileSelect=function(evt) \{
+          var file=evt.currentTarget.files[0];
+          var reader = new FileReader();
+          reader.onload = function (evt) \{
+            $scope.$apply(function($scope)\{
+              $scope.myImage=evt.target.result;
+            \});
+          \};
+          reader.readAsDataURL(file);
+        \};
+        angular.element(document.querySelector('#fileInput')).on('change',handleFileSelect);
+      \});
+  </script>
+</head>
+<body ng-app="app" ng-controller="Ctrl">
+  <div>Select an image file: <input type="file" id="fileInput" /></div>
+  <div class="cropArea">
+    <img-crop image="myImage" result-image="myCroppedImage"></img-crop>
+  </div>
+  <div>Cropped Image:</div>
+  <div><img ng-src="\{\{myCroppedImage\}\}" /></div>
+</body>
+</html>
+\end{DoxyCode}
+
+
+\subsection*{Options}
+
+
+\begin{DoxyCode}
+<img-crop
+    image="\{string\}"
+    result-image="\{string\}"
+   [change-on-fly="\{boolean\}"]
+   [area-type="\{circle|square\}"]
+   [area-min-size="\{number\}"]
+   [result-image-size="\{number\}"]
+   [result-image-format="\{string\}"]
+   [result-image-quality="\{number\}"]
+   [on-change="\{expression\}"]
+   [on-load-begin="\{expression"]
+   [on-load-done="\{expression"]
+   [on-load-error="\{expression"]
+></img-crop>
+\end{DoxyCode}
+
+
+\subsubsection*{image}
+
+Assignable angular expression to data-\/bind to. Ng\+Img\+Crop gets an image for cropping from it.
+
+\subsubsection*{result-\/image}
+
+Assignable angular expression to data-\/bind to. Ng\+Img\+Crop puts a data uri of a cropped image into it.
+
+\subsubsection*{change-\/on-\/fly}
+
+{\itshape Optional}. By default, to reduce C\+PU usage, when a user drags/resizes the crop area, the result image is only updated after the user stops dragging/resizing. Set true to always update the result image as the user drags/resizes the crop area.
+
+\subsubsection*{area-\/type}
+
+{\itshape Optional}. Type of the crop area. Possible values\+: circle$\vert$square. Default\+: circle.
+
+\subsubsection*{area-\/min-\/size}
+
+{\itshape Optional}. Min. width/height of the crop area (in pixels). Default\+: 80.
+
+\subsubsection*{result-\/image-\/size}
+
+{\itshape Optional}. Width/height of the result image (in pixels). Default\+: 200.
+
+\subsubsection*{result-\/image-\/format}
+
+{\itshape Optional}. Format of result image. Possible values include image/jpeg, image/png, and image/webp. Browser support varies. Default\+: image/png.
+
+\subsubsection*{result-\/image-\/quality}
+
+{\itshape Optional}. Quality of result image. Possible values between 0.\+0 and 1.\+0 inclusive. Default\+: browser default.
+
+\subsubsection*{on-\/change}
+
+{\itshape Optional}. Expression to evaluate upon changing the cropped part of the image. The cropped image data is available as \$data\+U\+RI.
+
+\subsubsection*{on-\/load-\/begin}
+
+{\itshape Optional}. Expression to evaluate when the source image starts loading.
+
+\subsubsection*{on-\/load-\/done}
+
+{\itshape Optional}. Expression to evaluate when the source image successfully loaded.
+
+\subsubsection*{on-\/load-\/error}
+
+{\itshape Optional}. Expression to evaluate when the source image didn\textquotesingle{}t load.
+
+\subsection*{License}
+
+See the \href{https://github.com/alexk111/ngImgCrop/blob/master/LICENSE}{\tt L\+I\+C\+E\+N\+SE} file. 

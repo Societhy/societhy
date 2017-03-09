@@ -1,0 +1,169 @@
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1563\mbox{]}\+: key word searching broken in \href{https://github.com/silviomoreto/bootstrap-select/issues/1516}{\tt \#1516}.
+\item \mbox{[}\#1570\mbox{]}\+: properly adjust size when inside form-\/group-\/sm or form-\/group-\/lg
+\item \mbox{[}\#1590\mbox{]}\+: menu height calculated improperly when using live\+Search and input has custom height
+\end{DoxyItemize}
+
+
+
+
+
+\subsubsection*{v1.\+12.\+1 (2016-\/11-\/22)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/silviomoreto/bootstrap-select/issues/1167}{\tt \#1167}, \mbox{[}\#1366\mbox{]}\+: using a method before initializing bootstrap-\/select throws an error
+\end{DoxyItemize}
+
+
+
+
+
+\subsubsection*{v1.\+12.\+0 (2016-\/11-\/18)}
+
+\subsection*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1220\mbox{]}\+: unescape button title
+\item \mbox{[}\#1348\mbox{]}\+: escape H\+T\+ML for optgroup label
+\item \mbox{[}\#1506\mbox{]}\+: Fix bs-\/placeholder usage for j\+Query$>$=3.\+0
+\item \mbox{[}\#1509\mbox{]}\+: inline style Content Security Policy
+\item \mbox{[}\#1477\mbox{]}\+: using live\+Search\+Normalize and live\+Search\+Style=\char`\"{}starts\+With\char`\"{} simultaneously breaks search
+\item \href{https://github.com/silviomoreto/bootstrap-select/issues/1489}{\tt \#1489} fix select\+On\+Tab with live\+Search enabled which was broken when \href{https://github.com/silviomoreto/bootstrap-select/issues/1489}{\tt \#1489} was fixed
+\item \mbox{[}\#1533\mbox{]}\+: remove touchstart event listener (issues with Fast\+Click)
+\item remove destroy\+Li function -\/ improve refresh() performance
+\item \mbox{[}\#1531\mbox{]}\+: add Spanish (Spain) translations
+\item \mbox{[}\#1553\mbox{]}\+: don\textquotesingle{}t use replace in normalize\+To\+Base if text is undefined (throws error otherwise)
+\end{DoxyItemize}
+
+\subsection*{New Features}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1503\mbox{]}\+: Add window\+Padding option (either a number or an array of numbers -\/ \mbox{[}top, right, bottom, left\mbox{]})
+\item \mbox{[}\#1516\mbox{]}\+: Improve live\+Search performance (addresses \href{https://github.com/silviomoreto/bootstrap-select/issues/1275}{\tt \#1275})
+\item \mbox{[}\#1440\mbox{]}\+: allow H\+T\+ML in placeholder title for non-\/multiple selects
+\item \mbox{[}\#1555\mbox{]}\+: Use default with S\+C\+SS variables
+\end{DoxyItemize}
+
+
+
+
+
+\subsubsection*{v1.\+11.\+2 (2016-\/09-\/09)}
+
+\paragraph*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item fix source\+Mapping\+U\+RL in bootstrap-\/select.\+min.\+js 
+
+
+\end{DoxyItemize}
+
+\subsubsection*{v1.\+11.\+1 (2016-\/09-\/09)}
+
+\paragraph*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1475\mbox{]}\+: fix Cannot read property \textquotesingle{}apply\textquotesingle{} of null error
+\item \mbox{[}\#1484\mbox{]}\+: Change events fire twice on I\+E8
+\item \mbox{[}\#1489\mbox{]}\+: hide.\+bs.\+select and hidden.\+bs.\+select events not fired when \char`\"{}\+Esc\char`\"{} key pressed with live search enabled
+\end{DoxyItemize}
+
+
+
+
+
+\subsubsection*{v1.\+11.\+0 (2016-\/08-\/16)}
+
+\paragraph*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1291\mbox{]}\+: don\textquotesingle{}t trigger change event if selecting an option that passes the limit
+\item \mbox{[}\#1284\mbox{]}\+: check if all options are already selected/deselected before triggering changed/changed.\+bs.\+select
+\item \href{https://github.com/silviomoreto/bootstrap-select/issues/1245}{\tt \#1245}, \mbox{[}\#1310\mbox{]}\+: With livesearch, when keypress, focus to search field isn\textquotesingle{}t working with some characters
+\item \mbox{[}\#1257\mbox{]}\+: fix issue with Norwegian translation
+\item \mbox{[}\#1346\mbox{]}\+: fix edge case where default values are not respected when initializing the plugin
+\item \mbox{[}\#1338\mbox{]}\+: improve support for disabled optgroups and hidden options
+\item \mbox{[}\#1373\mbox{]}\+: prevent select\+All and deselect\+All from being called on standard select boxes
+\item \mbox{[}\#1363\mbox{]}\+: if hide\+Disabled is enabled, and all options in an optgroup are disabled, the optgroup is still visible
+\item \mbox{[}\#1422\mbox{]}\+: fix menu position inside a scrolling container
+\item \mbox{[}\#1451\mbox{]}\+: fix select with input-\/group-\/addon on both sides
+\item \mbox{[}\#1465\mbox{]}\+: changed.\+bs.\+select not firing for native mobile menu
+\item \mbox{[}\#1459\mbox{]}\+: j\+Query 3 support -\/ \$.expr\mbox{[}\textquotesingle{}\+:\textquotesingle{}\mbox{]} -\/$>$ \$.expr.\+pseudos
+\end{DoxyItemize}
+
+\paragraph*{New Features}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1139\mbox{]}\+: add placeholder styling via {\ttfamily bs-\/placeholder} class
+\item \mbox{[}\#1290\mbox{]}\+: auto close the menu if max\+Options is set to 1 (instead of leaving open)
+\item \href{https://github.com/silviomoreto/bootstrap-select/issues/1127}{\tt \#1127}, \href{https://github.com/silviomoreto/bootstrap-select/issues/1016}{\tt \#1016}, \href{https://github.com/silviomoreto/bootstrap-select/issues/1160}{\tt \#1160}, \mbox{[}\#1269\mbox{]}\+: add \textquotesingle{}auto\textquotesingle{} option for dropdown\+Align\+Right
+\item \mbox{[}58ed408\mbox{]}\+: support using a string for max\+Options\+Text
+\item \mbox{[}\#541\mbox{]}\+: A\+R\+IA -\/ Accessibility
+\end{DoxyItemize}
+
+
+
+
+
+\subsubsection*{v1.\+10.\+0 (2016-\/02-\/17)}
+
+\paragraph*{Bug Fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1268\mbox{]}\+: performance bug in click\+Listener
+\item \mbox{[}\#1273\mbox{]}\+: html5 validation message disappears in Chrome 47+
+\item \mbox{[}\#1295\mbox{]}\+: hide select by default (so there is no flash of unstyled content)
+\end{DoxyItemize}
+
+\paragraph*{New Features}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#950\mbox{]}\+: add `.selectpicker(\textquotesingle{}toggle\textquotesingle{})` method to allow menu to be open/closed programmatically
+\item \mbox{[}\#1272\mbox{]}\+: add show\+Tick option
+\item \mbox{[}\#1284\mbox{]}\+: select\+All and deselect\+All now trigger the {\ttfamily changed.\+bs.\+select} event
+\end{DoxyItemize}
+
+Add Lithuanian translations.
+
+
+
+
+
+\subsubsection*{v1.\+9.\+4 (2016-\/01-\/18)}
+
+\paragraph*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item \mbox{[}\#1250\mbox{]}\+: don\textquotesingle{}t destroy original select when using {\ttfamily destroy} method
+\item \mbox{[}\#1230\mbox{]}\+: Optgroup label missing when first option is disabled and {\ttfamily hide\+Disabled} is true
+\end{DoxyItemize}
+
+Add new translations.
+
+
+
+
+
+\subsubsection*{v1.\+9.\+3 (2015-\/12-\/16)}
+
+\paragraph*{Bug fixes}
+
+
+\begin{DoxyItemize}
+\item Fix \href{https://github.com/silviomoreto/bootstrap-select/issues/1235}{\tt \#1235} -\/ issue with selects that had {\ttfamily form-\/control} class 
+\end{DoxyItemize}

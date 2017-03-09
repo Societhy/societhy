@@ -1,0 +1,137 @@
+\#\+Sweet\+Alert
+
+An awesome replacement for Java\+Script\textquotesingle{}s alert.
+
+
+
+\href{http://tristanedwards.me/sweetalert}{\tt See it in action!}
+
+\href{https://www.ludu.co/lesson/how-to-use-sweetalert}{\tt Learn how to use it!}
+
+\#\+Usage
+
+You can install Sweet\+Alert through bower\+:
+
+
+\begin{DoxyCode}
+bower install sweetalert
+\end{DoxyCode}
+
+
+Or through npm\+:
+
+
+\begin{DoxyCode}
+npm install sweetalert
+\end{DoxyCode}
+
+
+Alternatively, download the package and reference the Java\+Script and C\+SS files manually\+:
+
+
+\begin{DoxyCode}
+<script src="lib/sweet-alert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/sweet-alert.css">
+\end{DoxyCode}
+
+
+\#\+Tutorial
+
+The easiest way to get started is follow the \href{https://www.ludu.co/lesson/how-to-use-sweetalert}{\tt Sweet\+Alert tutorial on Ludu}!
+
+\#\+Examples
+
+The most basic message\+:
+
+
+\begin{DoxyCode}
+sweetAlert("Hello world!");
+\end{DoxyCode}
+
+
+A message signaling an error\+:
+
+
+\begin{DoxyCode}
+sweetAlert("Oops...", "Something went wrong!", "error");
+\end{DoxyCode}
+
+
+A warning message, with a function attached to the \char`\"{}\+Confirm\char`\"{}-\/button\+:
+
+
+\begin{DoxyCode}
+sweetAlert(\{
+  title: "Are you sure?",
+  text: "You will not be able to recover this imaginary file!",
+  type: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#DD6B55",
+  confirmButtonText: "Yes, delete it!",
+  closeOnConfirm: false,
+  html: false
+\}, function()\{
+  swal("Deleted!",
+  "Your imaginary file has been deleted.",
+  "success");
+\});
+\end{DoxyCode}
+
+
+A prompt modal where the user\textquotesingle{}s input is logged\+:
+
+
+\begin{DoxyCode}
+sweerAlert(\{
+  title: "An input!",
+  text: 'Write something interesting:',
+  type: 'input',
+  showCancelButton: true,
+  closeOnConfirm: false,
+  animation: "slide-from-top"
+\}, function(inputValue)\{
+  console.log("You wrote", inputValue);   
+\});
+\end{DoxyCode}
+
+
+\href{http://tristanedwards.me/sweetalert}{\tt View more examples}
+
+\#\+Browser compatibility
+
+Sweet\+Alert works in all major browsers (yes, even IE). Some details\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries I\+E8}\+: Works, but icons (checkmark, x-\/mark...) are hidden.
+\item {\bfseries I\+E9}\+: Works, but icons are not animated.
+\item $\ast$$\ast$\+I\+E10+$\ast$$\ast$\+: Works!
+\item $\ast$$\ast$\+Safari 4+$\ast$$\ast$\+: Works!
+\item $\ast$$\ast$\+Firefox 3+$\ast$$\ast$\+: Works!
+\item $\ast$$\ast$\+Chrome 14+$\ast$$\ast$\+: Works!
+\item $\ast$$\ast$\+Opera 15+$\ast$$\ast$\+: Works!
+\end{DoxyItemize}
+
+\#\+Contributing
+
+If you want to contribute\+:
+
+
+\begin{DoxyItemize}
+\item Fork the repo
+\item Make sure you have \href{http://nodejs.org/}{\tt Node}, \href{https://www.npmjs.com/}{\tt N\+PM} and \href{http://gulpjs.com/}{\tt Gulp} installed. When in the Sweet\+Alert directory, run the command\+: 
+\begin{DoxyCode}
+npm install
+\end{DoxyCode}
+ to install the dependencies. Then run {\ttfamily gulp} while working to automatically minify the S\+C\+SS and J\+S-\/files.
+\item After you\textquotesingle{}re done, make a pull request and wait for approval! \+:)
+\end{DoxyItemize}
+
+\#\+Related projects
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/pedant/sweet-alert-dialog}{\tt Sweet\+Alert for Android}
+\item \href{https://github.com/lipis/bootstrap-sweetalert}{\tt Sweet\+Alert for Bootstrap}
+\item \href{https://github.com/oitozero/ngSweetAlert}{\tt Sweet\+Alert for Angular\+JS} 
+\end{DoxyItemize}

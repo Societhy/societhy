@@ -1,0 +1,35 @@
+Angular\+JS directive for list of checkboxes
+
+\subsubsection*{Why this is needed?}
+
+In Angular one checkbox {\ttfamily $<$input type=\char`\"{}checkbox\char`\"{} ng-\/model=\char`\"{}...\char`\"{}$>$} is linked with one model. But in practice we usually want one model to store array of checked values from several checkboxes. {\bfseries Checklist-\/model} solves that task without additional code in controller. You should play with attributes of {\ttfamily $<$input$>$} tag\+:
+
+
+\begin{DoxyEnumerate}
+\item set {\ttfamily checklist-\/model} instead of {\ttfamily ng-\/model}
+\item set {\ttfamily checklist-\/value} -\/ what should be picked as array item
+\end{DoxyEnumerate}
+
+Please, try out live demo\+: \href{http://vitalets.github.io/checklist-model}{\tt http\+://vitalets.\+github.\+io/checklist-\/model}
+
+Jsfiddle\+: \href{http://jsfiddle.net/Ebv3p/2/}{\tt http\+://jsfiddle.\+net/\+Ebv3p/2/} Plunker (more advanced)\+: \href{http://plnkr.co/edit/pZLF0KesMDnIap0eCfSG?p=preview}{\tt http\+://plnkr.\+co/edit/p\+Z\+L\+F0\+Kes\+M\+Dn\+Iap0e\+Cf\+S\+G?p=preview}
+
+\subsubsection*{Installation}
+
+
+\begin{DoxyEnumerate}
+\item \href{https://github.com/vitalets/checklist-model/releases}{\tt Download latest release} or use bower\+: 
+\begin{DoxyCode}
+bower install checklist-model 
+\end{DoxyCode}
+
+\item Add to app dependencies\+: 
+\begin{DoxyCode}
+var app = angular.module("app", ["checklist-model"]);
+\end{DoxyCode}
+
+\end{DoxyEnumerate}
+
+\subsubsection*{License}
+
+M\+IT 
