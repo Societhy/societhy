@@ -110,6 +110,6 @@ app.constant('JS_REQUIRES', {
         files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }, {
         name:'qrcode',
-        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
+        files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
     }]
 });
