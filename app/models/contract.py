@@ -15,9 +15,9 @@ from ethereum._solidity import compile_file, get_solidity
 from ethereum.abi import encode_abi
 
 class ContractDocument(Document):
-"""
-Variables represents the fields in the database.
-"""
+	"""
+	Variables represents the fields in the database.
+	"""
 	contract_directory = "/societhy/contracts"
 	evm_code = None
 	abi = None

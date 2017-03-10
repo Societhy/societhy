@@ -81,13 +81,13 @@ def addToContact(user, data):
 	- If he is found, he is added to the user contact list.
 	- OK-> 200, error->400
 	"""
-    if users.find_one({'_id': ObjectId(data['contact']['id'])}) is None:
-        return {'data': 'User doesn\' exists.',
-            'status': 401}
-    users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
-    user = users.find_one({"_id": ObjectId(data["_id"])})
-    return {"data": user,
-        "status": 200}
+	if users.find_one({'_id': ObjectId(data['contact']['id'])}) is None:
+		return {'data': 'User doesn\' exists.',
+                        'status': 401}
+		users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
+		user = users.find_one({"_id": ObjectId(data["_id"])})
+		return {"data": user,
+        		"status": 200}
 
 def delFromContact(user, data):
 	"""
@@ -99,10 +99,10 @@ def delFromContact(user, data):
 	- An update is perform in the database.	
 	- OK-> 200, error->400
 	"""
-    users.update({"_id": ObjectId(data["_id"])}, {"$pull": {"contact_list": {"id": data["contact"]["id"]}}})
-    user = users.find_one({"_id": ObjectId(data["_id"])})
-    return {"data": user,
-        "status": 200}
+	users.update({"_id": ObjectId(data["_id"])}, {"$pull": {"contact_list": {"id": data["contact"]["id"]}}})
+	user = users.find_one({"_id": ObjectId(data["_id"])})
+	return {"data": user,
+        	"status": 200}
 
 def isInContactList(userId, contactId):
 	"""
@@ -113,9 +113,9 @@ def isInContactList(userId, contactId):
 	- An search is perform in the database.	
 	- OK-> 200, error->400
 	"""
-    if users.find_one({'_id': ObjectId(userId), 'contact_list.id': contactId}) != None:
-        return True
-    return False
+	if users.find_one({'_id': ObjectId(userId), 'contact_list.id': contactId}) != None:
+		return True
+	return False
 
 def findUser(data):
 	"""

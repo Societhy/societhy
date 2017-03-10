@@ -10,7 +10,7 @@ class UserJSONEncoder(json.JSONEncoder):
 	Used to change ObjectId object in sring in order to be transmitted on a HTTP pipe.
 	Otherwise, ObjectId can't be transmitted.
 	"""
-    def default(self, o):
+def default(self, o):
         if isinstance(o, ObjectId):
             return str(o)
         return json.JSONEncoder.default(self, o)
