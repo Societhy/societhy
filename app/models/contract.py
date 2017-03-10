@@ -1,3 +1,8 @@
+"""
+This module implement the ContractDocument class.
+This model represent the ethereum contracts that will be deployed on the blockchain.
+"""
+
 from os import path, listdir
 
 from mongokat import Collection, Document
@@ -10,7 +15,9 @@ from ethereum._solidity import compile_file, get_solidity
 from ethereum.abi import encode_abi
 
 class ContractDocument(Document):
-
+"""
+Variables represents the fields in the database.
+"""
 	contract_directory = "/societhy/contracts"
 	evm_code = None
 	abi = None
@@ -36,6 +43,10 @@ class ContractDocument(Document):
 			self["owner"] = owner.get('account') if type(owner) is User else owner
 
 	def compile(self):
+		"""
+		Compile the contract from a .sol file to an ABI file.
+		Then put the signature.
+		"""
 		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
 		compiled = compile_file(self["contract_file"]).get(solc_key)
 		self["evm_code"] = '0x' + compiled.get('bin_hex')
@@ -50,6 +61,12 @@ class ContractDocument(Document):
 			abi_item["signature"] = signature
 
 	def deploy(self, from_, args=[]):
+		"""
+		from_ : emitting address.
+		args = addtionals arguments.
+
+		Deploy the contract on the blockchain.
+		"""
 		evm_code = self["evm_code"]
 		if len(args):
 			constructor_abi = self.getAbi("constructor")
@@ -62,16 +79,27 @@ class ContractDocument(Document):
 		return self["creation_tx_hash"]
 
 	def getAbi(self, elem):
+		"""
+		Return the Application Binary Interface.
+		"""
 		for abi_item in self.get('abi'):
 			if (elem == "constructor" and abi_item.get('type') == "constructor") or abi_item.get('name') == elem:
 				return abi_item
 
 	def getBalance(self):
+		"""
+		Return the ETH balance of the contract.
+		"""
 		return eth_cli.eth_getBalance(self["address"])
 
 	def call(self, function, local=True, **kwargs):
+		"""
+		Used to call a specified function of a deployed contract
+		"""
 
 		def computeReturnTypes(function_name, abi):
+			"""
+			"""
 			return_types = list()
 			signature = None
 			for function in abi:
@@ -91,6 +119,9 @@ class ContractDocument(Document):
 		return result[0] if len(result) == 1 else result
 
 	def send_tx(self, function, *args):
+		"""
+		In developpement.
+		"""
 		pass
 
 
