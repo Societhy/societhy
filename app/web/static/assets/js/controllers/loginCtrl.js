@@ -1,3 +1,9 @@
+/**
+ * Controller for login.
+ *
+ * @class LoginCtrl
+ */
+
 app.controller('LoginController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
 
 	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
@@ -12,6 +18,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 
     /**
      * Ask for login to the server.
+     * @method login
      */
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
@@ -32,6 +39,10 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 		}
 	}
 
+    /**
+     * Logout from the server.
+     * @method logout
+     */
 	ctrl.logout = function() {
 		$http.get('/logout').then(function(reponse) {
 			delete $sessionStorage.SociethyToken;
@@ -41,6 +52,10 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 	}
 
 
+/**
+ * Registration via coinbase.
+ * @method coinbase_register
+ */
 ctrl.coinbase_register = function ()
 {
     OAuth.popup('coinbase').done(function(result) {
@@ -69,6 +84,10 @@ ctrl.coinbase_register = function ()
     })
 }
 
+/**
+ * Registration via facebook.
+ * @method facebook_register
+ */
 ctrl.fb_register = function ()
 {
     res = OAuth.popup('facebook').done(function(facebook) {
@@ -102,6 +121,10 @@ ctrl.fb_register = function ()
     });
 }
 
+/**
+ * Registration via twitter.
+ * @method twitter_register
+ */
 ctrl.twitter_register = function ()
 {
     OAuth.popup('twitter').done(function(result) {
@@ -132,6 +155,10 @@ ctrl.twitter_register = function ()
 })
 }
 
+/**
+ * Registration via linkedin.
+ * @method linkedin_register
+ */
 ctrl.linkedin_register = function()
 {
 OAuth.popup('linkedin').done(function(result) {
@@ -162,6 +189,10 @@ OAuth.popup('linkedin').done(function(result) {
 })
 }
 
+/**
+ * Registration via github.
+ * @method github_register
+ */
 ctrl.github_register = function ()
 {
 OAuth.popup('github').done(function(result) {
@@ -194,6 +225,10 @@ OAuth.popup('github').done(function(result) {
 })
 }
 
+/**
+ * Registration via google.
+ * @method google_register
+ */
 ctrl.google_register = function ()
 {
     console.log("hello");
@@ -233,6 +268,10 @@ ctrl.google_register = function ()
 }
 
 
+/**
+ * Connection via coinbase.
+ * @method coinbase_connect
+ */
 ctrl.coinbase_connect = function ()
 {
     OAuth.popup('coinbase').done(function(result) {
@@ -258,6 +297,10 @@ ctrl.coinbase_connect = function ()
     })
 }
 
+/**
+ * Connection via facebook.
+ * @method fb_connect
+ */
 ctrl.fb_connect = function ()
 {
     res = OAuth.popup('facebook').done(function(facebook) {
@@ -285,6 +328,10 @@ ctrl.fb_connect = function ()
     });
 }
 
+/**
+ * Connection via twitter.
+ * @method twitter_connect
+ */
 ctrl.twitter_connect = function ()
 {
     OAuth.popup('twitter').done(function(result) {
@@ -309,6 +356,10 @@ ctrl.twitter_connect = function ()
 })
 }
 
+/**
+ * Connection via linkedin.
+ * @method linkedin_connect
+ */
 ctrl.linkedin_connect= function()
 {
 OAuth.popup('linkedin').done(function(result) {
@@ -334,6 +385,10 @@ OAuth.popup('linkedin').done(function(result) {
 })
 }
 
+/**
+ * Connection via github.
+ * @method github_connect
+ */
 ctrl.github_connect = function ()
 {
 OAuth.popup('github').done(function(result) {
@@ -359,6 +414,10 @@ OAuth.popup('github').done(function(result) {
 })
 }
 
+/**
+ * Connection via google.
+ * @method google_connect
+ */
 ctrl.google_connect = function ()
 {
     console.log("hello");
@@ -389,10 +448,10 @@ ctrl.google_connect = function ()
     });
 }
 
-    /*
-    ** REGISTRATION
-    */
-
+    /**
+     * REGISTRATION
+     * @method register
+     */
    ctrl.register = function() {
 
 		if (ctrl.username && ctrl.password) {
@@ -442,9 +501,10 @@ ctrl.google_connect = function ()
 	    updateDisplay()
 	});
 
-	/*
-	** Enable submit button when all mandatory field are filled
-	*/
+	/**
+	 * Enable submit button when all mandatory field are filled.
+     * @method updateSubmitButtonState
+	 */
 	function updateSubmitButtonState () {
 	    if ($(".formChecker.disabled").length != 4) {
 	    	$("button#submit").prop("disabled", true);
@@ -456,9 +516,10 @@ ctrl.google_connect = function ()
 	    }
 	};
 
-	/*
-	** Enable/Disable previous and next button
-	*/
+	/**
+	 * Enable/Disable previous and next button.
+     * @method updateDisplay
+	 */
 	function updateDisplay() {
 	    if (step == 1)
 		$("div#stepAdvancement button#btn-prev").prop("disabled", true);

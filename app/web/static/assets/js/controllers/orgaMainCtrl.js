@@ -1,3 +1,7 @@
+/**
+ * Main controller for organizations.
+ * @class OrgaMainController
+ */
 app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
 
 	var ctrl = this;
@@ -82,6 +86,10 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
         $scope.currentProd = product;
     }
 
+    /**
+     * Get the organizations list.
+     * @method onLoad
+     */
     onLoad = function() {
         $http.post('/getOrganization', {
             "id": $state.params._id
@@ -101,6 +109,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
     /**
      * Join a new organization by it's tag.
      * @param {string} tag - Tag of the organization.
+     * @method joinOrga
      */
     ctrl.joinOrga = function(tag) {
 		if ($scope.doVerifications()) {
@@ -124,9 +133,8 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	}
 
 	/**
-	 * Leave the organization
-	 *
-	 * @return {type}  description
+	 * Leave the current organization.
+	 * @method leaveOrga
 	 */
 	ctrl.leaveOrga = function() {
 
@@ -151,6 +159,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 
 	/**
 	 * Create a project from the organization.
+     * @method createProject
 	 */
 	ctrl.createProject = function() {
 		if ($scope.doVerifications()) {
@@ -177,6 +186,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 
 	/**
 	 * Make a donation to the organization.
+     * @method makeDonation
 	 */
 	ctrl.makeDonation = function() {
 		donationAmount = $("#donationAmount").val();

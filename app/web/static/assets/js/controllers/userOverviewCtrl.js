@@ -1,3 +1,7 @@
+/**
+ * User Overview controller.
+ * @class userOverviewCtrl
+ */
 app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope, $state, $controller, $sessionStorage) {
     var ctrl = this;
 
@@ -8,6 +12,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with coinbase logs.
+     * @method coinbase_connect
      */
     ctrl.coinbase_connect = function ()
     {
@@ -32,6 +37,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with facebook logs.
+     * @method fb_connect
      */
     ctrl.fb_connect = function ()
     {
@@ -62,6 +68,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with twitter logs.
+     * @method twitter_connect
      */
     ctrl.twitter_connect = function ()
     {
@@ -88,6 +95,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with linkedin logs.
+     * @method linkedin_connect
      */
     ctrl.linkedin_connect = function()
     {
@@ -115,6 +123,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with github logs.
+     * @method github_connect
      */
     ctrl.github_connect = function ()
     {
@@ -143,6 +152,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Connection with google logs.
+     * @method google_connect
      */
     ctrl.google_connect = function ()
     {
@@ -177,6 +187,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
 
     /**
      * Delete the user account.
+     * @method deleteAccount
      */
     ctrl.deleteAccount = function() {
         $http.get('/deleteUser').then(function(response) {
@@ -194,6 +205,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
      * Update user's informations.
      * @param {string} name -
      * @param {type} oldVal -
+     * @method updateUser
      */
     ctrl.updateUser = function(name, oldVal) {
     	if ($rootScope.user != null)
@@ -215,8 +227,9 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         console.log("User not logged in");
     }
 
-    /*
+    /**
     * Watch user's data for any modifications.
+    * @method watch
     */
     var fields = ['firstname', 'lastname', 'email','phone', 'address', 'city', 'birthday']
     $rootScope.$watch("user", function(newVal, oldVal, obj) {
@@ -230,8 +243,9 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         }
     }, true);
 
-    /*
+    /**
     * Animate user info's inputs.
+    * @method animation
     */
     function animation() {
         $("a.userDataEditable").hover(function() {
