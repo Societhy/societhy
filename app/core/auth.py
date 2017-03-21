@@ -155,7 +155,7 @@ def signUp(newUser):
 
 	if 'social' not in newUser:
 		failure = wrongSignupRequest(newUser) or userExists(newUser)
-		if failure is True:
+		if failure:
 			return failure
 
 		unencryptedPassword = newUser.get('password')
@@ -169,7 +169,7 @@ def signUp(newUser):
 			user["eth"] = {"keys":{}}
 			user.save_partial()
 
-		return login({"id": b64encode(bytearray(newUser.get('name'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
+		return login({"id": b64encode(bytearray(newUser.get('email'), 'utf-8') + b':' + bytearray(unencryptedPassword, 'utf-8')),
 					"socketid": newUser.get('socketid')})
 
 	else:
