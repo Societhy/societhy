@@ -53,7 +53,7 @@ class ContractDocument(Document):
 		self["abi"] = compiled.get('abi')
 		for abi_item in self["abi"]:
 			signature = abi_item.get('name', self["name"]) + '('
-			for _input in abi_item.get('inputs'):
+			for _input in abi_item.get('inputs', []):
 				if signature[-1] != '(':
 					signature += ','
 				signature += _input.get('type')
@@ -112,6 +112,7 @@ class ContractDocument(Document):
 
 		signature, return_types = computeReturnTypes(function, self["abi"])
 		if local is True:
+			print('---------------', signature, return_types)
 			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')

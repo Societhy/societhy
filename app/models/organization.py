@@ -98,13 +98,15 @@ class OrgaDocument(Document):
 				fetched_fields=None,
 				gen_skel=False,
 				contract=None,
+				rules=None,
 				owner=None):
 		"""
 		doc : dict containing the data to be initialized from
 		mongokat_collection : see mongokat.Document (mongo collection associated with the doc)
 		fetched_fileds : see mongokat.Document
 		gen_skel : boolean. If set to true, the document is initialized with the fields described in OrgaCollection.structure
-		contract : string containing the name of the contract (stored in app/contracts/, .sol must be absent)
+		contract : string containing the name of the orga contract (stored in app/contracts/, .sol must be absent)
+		rules : string containing the name of the rules contract
 		owner : either an address or a UserDoc, set at creation only
 		Initialization function called in different context :
 		At the creation of an organization, the argument 'contract' is specified, its code is compiled and stored into a new ContractDocument
@@ -112,9 +114,11 @@ class OrgaDocument(Document):
 		An owner can be specified, it will then be used by default for deploying the contract
 		"""
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
-		if contract:
+		if contract and rules:
 			self.contract = Contract(contract, owner.get('account'))
 			self.contract.compile()
+			self.rules = Contract(rules, owner.get('account'))
+			self.rules.compile()
 		elif self.get("contract_id"):
 			self._loadContract()
 		if owner:
@@ -149,6 +153,11 @@ class OrgaDocument(Document):
 		if not from_.unlockAccount(password=password):
 			return "Failed to unlock account"
 
+		tx_hash = self.rules.deploy(from_.get('account'), args=[])
+		bw.waitTx(tx_hash)
+		print("Rules are mined !", eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress'))
+		rules_address = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
+		args.append(rules_address)
 		tx_hash = self.contract.deploy(from_.get('account'), args=args)
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
 		return tx_hash
@@ -401,10 +410,27 @@ class OrgaDocument(Document):
 	def killProject(self, project):
 		return None
 
-	def createProposal(self, proposal):
+	def createProposal(self, user, proposal):
+		"""
+		canSenderPropose
+		check proposal (_name, _type, , _description, _proxy, _debatePeriod, _destination, _value, _calldata)
+		"""
 		return None
 
-	def killProposal(self, proposal):
+	def killProposal(self, user, proposal):
+		return None
+
+
+	def voteForProposal(self, user, proposal):
+		return None
+
+	def executeProposal(self, user, proposal):
+		return None
+
+	def changeConstitution(self, user, constitution):
+		"""
+		deploy new Rules contract and call changeRules with the address of the new contract
+		"""
 		return None
 
 	def transferOwnership(self, from_, to_):
