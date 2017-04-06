@@ -1,6 +1,6 @@
 
 <!-- start: ORGA DASHBOARD PROFILE -->
-<div class="container-fluid container-fullw bg-white">
+<div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
   <div class="row">
     <div class="col-md-12">
       <div>
@@ -187,15 +187,18 @@
          </div>
        </uib-tab>
  -->
-       <uib-tab heading="Sales" active="editActive">
-           <div class="row" style="margin-right: 10" ng-controller="OrgaMainController as ctrl">
+       <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
+           <div class="row" style="margin-right: 10">
                <div class="col-md-3">
-                   <button class="btn btn-green" ng-click="ctrl.addNewProduct()">Add a new product</button>
-                   <div class="dd ng-scope">
-                       <ol class="dd-list">
-                           <li class="dd-handle" ng-repeat="product in listProducts" ng-click="ctrl.setProduct(product)">{{product.name}}</li>
-                       </ol>
-                   </div>
+                   <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
+
+                   <table ng-table="tableParams" class="table table-condensed table-bordered table-hover">
+                       <tbody>
+                           <tr ng-repeat="product in listProducts" class="ng-scope">
+                               <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
+                           </tr>
+                       </tbody>
+                   </table>
                </div>
 
                <div class="col-md-9 panel panel-white padding-20" style="min-height: 60%">

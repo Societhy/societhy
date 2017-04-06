@@ -108,6 +108,6 @@ def addProductOrga(user):
         return make_response('Something went wrong', 400)
 
 @router.route('/getOrgaProducts/<orga_id>', methods=['GET'])
-def getOrgaProducts(user, orga_id):
+def getOrgaProducts(orga_id):
     products = sales_platform.getProductsByOwner(orga_id)
     return make_response(jsonify(products.get('data')), products.get('status'))
