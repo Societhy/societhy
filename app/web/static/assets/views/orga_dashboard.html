@@ -190,7 +190,7 @@
        <uib-tab heading="Sales" active="editActive">
            <div class="row" style="margin-right: 10" ng-controller="OrgaMainController as ctrl">
                <div class="col-md-3">
-                   <button class="btn btn-green">Add a new product</button>
+                   <button class="btn btn-green" ng-click="ctrl.addNewProduct()">Add a new product</button>
                    <div class="dd ng-scope">
                        <ol class="dd-list">
                            <li class="dd-handle" ng-repeat="product in listProducts" ng-click="ctrl.setProduct(product)">{{product.name}}</li>

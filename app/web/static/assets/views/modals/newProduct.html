@@ -1,0 +1,101 @@
+<div class="modal-header ng-scope">
+    <h3 class="modal-title">Add a new product</h3>
+</div>
+<form name="ProductForm" id="form" ng-controller="ProductModalController as ctrl" class="margin-15">
+    <fieldset>
+        <legend>Product inforamtions</legend>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error':ProductForm.name.$dirty && ProductForm.name.$invalid, 'has-success':ProductForm.name.$valid}">
+                    <label class="control-label">Product Name <span class="symbol required"/></label>
+                    <input type="text" placeholder="Enter your product name" class="form-control" name="name" ng-required>
+                    <span class="error text-small block" ng-if="ProductForm.name.$dirty && ProductForm.name.$invalid">Name is mandatory</span>
+                    <span class="success text-small block" ng-if="ProductForm.name.$valid"></span>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error':ProductForm.description.$dirty && ProductForm.description.$invalid, 'has-success':ProductForm.description.$valid}">
+                    <label class="control-label">Product Description <span class="symbol required"/></label>
+                    <textarea placeholder="Enter your product description" class="form-control" name="description" rows="7" cols="73" wrap="hard" ng-required/>
+                    <span class="error text-small block" ng-if="ProductForm.description.$dirty && ProductForm.description.$invalid">Description is mandatory</span>
+                    <span class="success text-small block" ng-if="ProductForm.description.$valid"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Stock : </label>
+                    <div class="input-group bootstrap-touchspin">
+                        <input id="stock" type="text" value="10" max="99999" name="stock" touchspin="" data-verticalbuttons="true" class="form-control" style="display: block;">
+                    </div>
+                </div>
+
+                <div class="checkbox clip-check check-primary">
+                    <input id="digitalCheckBox" type="checkbox" name="digitalCheckbox" value="1" />
+                    <label for="digitalCheckBox">Is your product digital ?</label>
+                </div>
+            </div>
+
+            <div class="col-md-6" ng-show="productImageUploader.isHTML5">
+                <div class="row">
+                    <label class="control-label">Picture of your product <span class="symbol required"/></br></label>
+                    <span class="btn btn-primary btn-o btn-file" ng-show="!productImageUploader.queue.length">
+                        <input type="file" nv-file-select="" uploader="productImageUploader">
+                        Browse files ...
+                    </span>
+                </div>
+                <div class="row">
+                    <table class="table">
+                        <tr ng-repeat="pic in productImageUploader.queue">
+                            <td>
+                                <strong>{{ pic.file.name }}</strong>
+                                <div ng-show="productImageUploader.isHTML5" ng-thumb="{ file: pic.file, height: 100 }" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Payment Informations</legend>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div>
+                    <label>Price of your product : </label>
+                    <div class="input-group bootstrap-touchspin">
+                        <input type="text" value="10" name="price" touchspin="" data-min="0" data-max="99999" data-step="0.1" data-decimals="2" data-boostat="5" data-maxboostedstep="10" data-postfix="€" class="form-control" style="text-align:right;" style="display: block;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Select your payment mode : </label>
+                    <select id="paymentMode" class="form-control">
+                        <option value="cb">CB</option>
+                        <option value="paypal">PayPal</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="digitalCheckBox">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">Select your shipping mode : </label>
+                    <select id="shippingMode" class="form-control">
+                        <option value="ups">UPS</option>
+                        <option value="colissimo">Colissimo</option>
+                        <option value="dhl">DHL</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="btn-group btn-group-justified btn-block">
+        <a ng-click="ctrl.cancel()" class="btn btn-dark-red">Cancel</a>
+        <a type="submit" ng-click="ctrl.pushProduct()" class="btn btn-green">Submit</a>
+    </div>
+</form>

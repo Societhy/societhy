@@ -1,85 +1,55 @@
-app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
+app.controller('ProductModalController', function($scope, $uibModalInstance, $sessionStorage, SweetAlert, $rootScope, FileUploader, ctrl) {
+
+    var productImageUploader = $scope.productImageUploader = new FileUploader({
+        url: '/productImageUploader',
+        alias: 'product',
+        headers: {
+            Authentification: $sessionStorage.SociethyToken
+        }
+    });
+
+    productImageUploader.filters.push({
+        name: 'imageFilter',
+        fn: function (item, options) {
+            var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    });
+
+    ctrl.pushProduct = function() {
+        console.log("Push the product !");
+    };
+
+    ctrl.cancel = function() {
+        $rootScope.productModal.close('a');
+    }
+});
+
+app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal) {
 
 	var ctrl = this;
 	$scope.isMember = false;
 	ctrl.wallet = $controller("WalletController");
 
-    $scope.listProducts = [{
-            "name": "Product1",
-            "description": "Ceci est le product1 de test 1",
-            "price": 10,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product2",
-            "description": "Ceci est le product2 de test 2",
-            "price": 20,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product3",
-            "description": "Ceci est le product3 de test 3",
-            "price": 30,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product4",
-            "description": "Ceci est le product4 de test 4",
-            "price": 40,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product5",
-            "description": "Ceci est le product5 de test 5",
-            "price": 50,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product6",
-            "description": "Ceci est le product6 de test 6",
-            "price": 60,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product7",
-            "description": "Ceci est le product7 de test 7",
-            "price": 70,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product8",
-            "description": "Ceci est le product8 de test 8",
-            "price": 80,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product9",
-            "description": "Ceci est le product9 de test 9",
-            "price": 90,
-            "stock": 1000,
-            "picture": ""
-        },
-        {
-            "name": "Product10",
-            "description": "Ceci est le product10 de test 10",
-            "price": 100,
-            "stock": 1000,
-            "picture": ""
-        },
-    ];
+    $scope.listProducts = [];
     $scope.currentProd = $scope.listProducts[0];
 
     ctrl.setProduct = function(product) {
         $scope.currentProd = product;
     }
+
+    ctrl.addNewProduct = function() {
+		$rootScope.productModal = $uibModal.open({
+			templateUrl: "static/assets/views/modals/newProduct.html",
+			controller: 'ProductModalController',
+            size: 'lg',
+			resolve: {
+				ctrl : function() {
+					return ctrl;
+				}
+			}
+		});
+	};
 
     onLoad = function() {
         $http.post('/getOrganization', {
