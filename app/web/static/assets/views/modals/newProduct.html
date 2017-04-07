@@ -1,7 +1,7 @@
 <div class="modal-header ng-scope">
     <h3 class="modal-title">Add a new product</h3>
 </div>
-<form name="ProductForm" id="form" ng-controller="ProductModalController as ctrl" class="margin-15">
+<form name="ProductForm" id="form" class="margin-15" novalidate>
     <fieldset>
         <legend>Product inforamtions</legend>
 
@@ -9,14 +9,14 @@
             <div class="col-md-6">
                 <div class="form-group" ng-class="{'has-error':ProductForm.name.$dirty && ProductForm.name.$invalid, 'has-success':ProductForm.name.$valid}">
                     <label class="control-label">Product Name <span class="symbol required"/></label>
-                    <input type="text" placeholder="Enter your product name" class="form-control" name="name" ng-required>
+                    <input type="text" placeholder="Enter your product name" class="form-control" ng-model="product.name" name="name" required>
                     <span class="error text-small block" ng-if="ProductForm.name.$dirty && ProductForm.name.$invalid">Name is mandatory</span>
                     <span class="success text-small block" ng-if="ProductForm.name.$valid"></span>
                 </div>
 
                 <div class="form-group" ng-class="{'has-error':ProductForm.description.$dirty && ProductForm.description.$invalid, 'has-success':ProductForm.description.$valid}">
                     <label class="control-label">Product Description <span class="symbol required"/></label>
-                    <textarea placeholder="Enter your product description" class="form-control" name="description" rows="7" cols="73" wrap="hard" ng-required/>
+                    <textarea placeholder="Enter your product description" class="form-control" ng-model="product.description" name="description" rows="7" cols="73" wrap="hard" required/>
                     <span class="error text-small block" ng-if="ProductForm.description.$dirty && ProductForm.description.$invalid">Description is mandatory</span>
                     <span class="success text-small block" ng-if="ProductForm.description.$valid"></span>
                 </div>
@@ -24,19 +24,19 @@
                 <div class="form-group">
                     <label class="control-label">Stock : </label>
                     <div class="input-group bootstrap-touchspin">
-                        <input id="stock" type="text" value="10" max="99999" name="stock" touchspin="" data-verticalbuttons="true" class="form-control" style="display: block;">
+                        <input type="text" id="stock" ng-model="product.stock" max="99999" name="stock" touchspin="" data-verticalbuttons="true" class="form-control" style="display: block;">
                     </div>
                 </div>
 
                 <div class="checkbox clip-check check-primary">
-                    <input id="digitalCheckBox" type="checkbox" name="digitalCheckbox" value="1" />
+                    <input type="checkbox" id="digitalCheckBox" ng-model="product.isDigital" name="isDigital" />
                     <label for="digitalCheckBox">Is your product digital ?</label>
                 </div>
             </div>
 
             <div class="col-md-6" ng-show="productImageUploader.isHTML5">
-                <div class="row">
-                    <label class="control-label">Picture of your product <span class="symbol required"/></br></label>
+                <div class="row form-group">
+                    <label class="control-label">Picture of your product</br></label>
                     <span class="btn btn-primary btn-o btn-file" ng-show="!productImageUploader.queue.length">
                         <input type="file" nv-file-select="" uploader="productImageUploader">
                         Browse files ...
@@ -64,7 +64,7 @@
                 <div>
                     <label>Price of your product : </label>
                     <div class="input-group bootstrap-touchspin">
-                        <input type="text" value="10" name="price" touchspin="" data-min="0" data-max="99999" data-step="0.1" data-decimals="2" data-boostat="5" data-maxboostedstep="10" data-postfix="€" class="form-control" style="text-align:right;" style="display: block;">
+                        <input type="text" ng-model="product.price" name="price" touchspin="" data-min="0" data-max="99999" data-step="1" data-boostat="5" data-maxboostedstep="10" data-postfix="eth" class="form-control" style="text-align:right;" style="display: block;">
                     </div>
                 </div>
             </div>
@@ -72,19 +72,19 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Select your payment mode : </label>
-                    <select id="paymentMode" class="form-control">
-                        <option value="cb">CB</option>
-                        <option value="paypal">PayPal</option>
+                    <select ng-model="product.paymentMode" ng-init="product.paymentMode = 'direct'" class="form-control">
+                        <option value="direct">Direct Payment</option>
+                        <option value="escrow">Escrow</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="row" ng-show="digitalCheckBox">
+        <div class="row" ng-if="!product.isDigital">
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Select your shipping mode : </label>
-                    <select id="shippingMode" class="form-control">
+                    <select ng-model="product.shippingMode" ng-init="product.shippingMode = 'ups'" class="form-control">
                         <option value="ups">UPS</option>
                         <option value="colissimo">Colissimo</option>
                         <option value="dhl">DHL</option>
@@ -95,7 +95,7 @@
     </fieldset>
 
     <div class="btn-group btn-group-justified btn-block">
-        <a ng-click="ctrl.cancel()" class="btn btn-dark-red">Cancel</a>
-        <a type="submit" ng-click="ctrl.pushProduct()" class="btn btn-green">Submit</a>
+        <a ng-click="cancel()" class="btn btn-dark-red">Cancel</a>
+        <a type="submit" ng-click="form.submit(ProductForm)" class="btn btn-green">Submit</a>
     </div>
 </form>

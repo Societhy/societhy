@@ -22,6 +22,10 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 				}
 			}
 		});
+
+        $rootScope.productModal.result.then(function() {}, function () {
+            ctrl.loadProducts();
+        });
 	};
 
     ctrl.loadProducts = function() {

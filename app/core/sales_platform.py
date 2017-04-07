@@ -4,7 +4,8 @@ from models.product import products, ProductsDocument
 from models.organization import organizations
 
 def addProduct(newProduct):
-    orga = organizations.find_one({'_id': ObjectId(newProduct['owner'])})
+    newProduct['owner'] = ObjectId(newProduct['owner'])
+    orga = organizations.find_one({'_id': newProduct['owner']})
     if orga is None:
         return {'data': 'Organization does not exist', 'status': 400}
     product = ProductsDocument(newProduct)

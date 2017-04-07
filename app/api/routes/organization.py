@@ -101,8 +101,8 @@ def leaveOrga(user):
 @router.route('/addNewProduct', methods=['POST'])
 @requires_auth
 def addProductOrga(user):
-    if ensure_fields(['name', 'owner', 'description', 'price', 'paymentMode', 'isDigital', 'shippingMode', 'stock', 'picture'], request.json):
-        ret = sales_platform.addProduct({request.json})
+    if ensure_fields(['name', 'owner', 'description', 'price', 'paymentMode', 'isDigital', 'shippingMode', 'stock'], request.json):
+        ret = sales_platform.addProduct(request.json)
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response('Something went wrong', 400)
