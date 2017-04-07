@@ -1,0 +1,431 @@
+\subsubsection*{2.\+8.\+4 \href{https://gist.github.com/ichernev/a4fcb0a46d74e4b9b996}{\tt See full changelog}}
+
+Features\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/2000}{\tt \#2000} Add L\+TS localised format that includes seconds
+\item \href{https://github.com/moment/moment/issues/1960}{\tt \#1960} added format\+Token \textquotesingle{}x\textquotesingle{} for unix offset in milliseconds \#1938
+\item \href{https://github.com/moment/moment/issues/1965}{\tt \#1965} Support 24\+:00\+:00.\+000 to mean next day, at midnight.
+\item \href{https://github.com/moment/moment/issues/2002}{\tt \#2002} Accept \textquotesingle{}date\textquotesingle{} key when creating moment with object
+\item \href{https://github.com/moment/moment/issues/2009}{\tt \#2009} Use native to\+I\+S\+O\+String when we can
+\end{DoxyItemize}
+
+Some bugfixes and language improvements -- \href{https://gist.github.com/ichernev/a4fcb0a46d74e4b9b996}{\tt full changelog}
+
+\subsubsection*{2.\+8.\+3}
+
+Bugfixes\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1801}{\tt \#1801} proper pluralization for Arabic
+\item \href{https://github.com/moment/moment/issues/1833}{\tt \#1833} improve spm integration
+\item \href{https://github.com/moment/moment/issues/1871}{\tt \#1871} fix zone bug caused by Firefox 24
+\item \href{https://github.com/moment/moment/issues/1882}{\tt \#1882} Use hh\+:mm in Czech
+\item \href{https://github.com/moment/moment/issues/1883}{\tt \#1883} Fix 2.\+8.\+0 regression in duration as conversions
+\item \href{https://github.com/moment/moment/issues/1890}{\tt \#1890} Faster travis builds
+\item \href{https://github.com/moment/moment/issues/1892}{\tt \#1892} Faster is\+Before/\+After/\+Same
+\item \href{https://github.com/moment/moment/issues/1848}{\tt \#1848} Fix flaky month diffs
+\item \href{https://github.com/moment/moment/issues/1895}{\tt \#1895} Fix 2.\+8.\+0 regression in moment.\+utc with format array
+\item \href{https://github.com/moment/moment/issues/1896}{\tt \#1896} Support setting invalid instance locale (noop)
+\item \href{https://github.com/moment/moment/issues/1897}{\tt \#1897} Support moment(\mbox{[}str\mbox{]}) in addition to moment(\mbox{[}int\mbox{]})
+\end{DoxyItemize}
+
+\subsubsection*{2.\+8.\+2}
+
+Minor bugfixes\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1874}{\tt \#1874} use {\ttfamily Object.\+prototype.\+has\+Own\+Property} instead of {\ttfamily obj.\+has\+Own\+Property} (ie8 bug)
+\item \href{https://github.com/moment/moment/issues/1873}{\tt \#1873} add {\ttfamily duration\+::to\+String()}
+\item \href{https://github.com/moment/moment/issues/1859}{\tt \#1859} better month/weekday names in norwegian
+\item \href{https://github.com/moment/moment/issues/1812}{\tt \#1812} meridiem parsing for greek
+\item \href{https://github.com/moment/moment/issues/1804}{\tt \#1804} spanish del -\/$>$ de
+\item \href{https://github.com/moment/moment/issues/1800}{\tt \#1800} korean LT improvement
+\end{DoxyItemize}
+
+\subsubsection*{2.\+8.\+1}
+
+
+\begin{DoxyItemize}
+\item bugfix \href{https://github.com/moment/moment/issues/1813}{\tt \#1813}\+: fix moment().lang(\mbox{[}key\mbox{]}) incompatibility
+\end{DoxyItemize}
+
+\subsubsection*{2.\+8.\+0 \href{https://gist.github.com/ichernev/ac3899324a5fa6c8c9b4}{\tt See changelog}}
+
+
+\begin{DoxyItemize}
+\item incompatible changes
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1761}{\tt \#1761}\+: moments created without a language are no longer following the global language, in case it changes. Only newly created moments take the global language by default. In case you\textquotesingle{}re affected by this, wait, comment on \href{https://github.com/moment/moment/issues/1797}{\tt \#1797} and wait for a proper reimplementation
+\item \href{https://github.com/moment/moment/issues/1642}{\tt \#1642}\+: 45 days is no longer \char`\"{}a month\char`\"{} according to humanize, cutoffs for month, and year have changed. Hopefully your code does not depend on a particular answer from humanize (which it shouldn\textquotesingle{}t anyway)
+\item \href{https://github.com/moment/moment/issues/1784}{\tt \#1784}\+: if you use the human readable English datetime format in a weird way (like storing them in a database) that would break when the format changes you\textquotesingle{}re at risk.
+\end{DoxyItemize}
+\item deprecations (old behavior will be dropped in 3.\+0)
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1761}{\tt \#1761} {\ttfamily lang} is renamed to {\ttfamily locale}, {\ttfamily lang\+Data} -\/$>$ {\ttfamily locale\+Data}. Also there is now {\ttfamily define\+Locale} that should be used when creating new locales
+\item \href{https://github.com/moment/moment/issues/1763}{\tt \#1763} {\ttfamily add(unit, value)} and {\ttfamily subtract(unit, value)} are now deprecated. Use {\ttfamily add(value, unit)} and {\ttfamily subtract(value, unit)} instead.
+\item \href{https://github.com/moment/moment/issues/1759}{\tt \#1759} rename {\ttfamily duration.\+to\+Iso\+String} to {\ttfamily duration.\+to\+I\+S\+O\+String}. The js standard library and moment\textquotesingle{}s {\ttfamily to\+I\+S\+O\+String} follow that convention.
+\end{DoxyItemize}
+\item new locales
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1789}{\tt \#1789} Tibetan (bo)
+\item \href{https://github.com/moment/moment/issues/1786}{\tt \#1786} Africaans (af)
+\item \href{https://github.com/moment/moment/issues/1778}{\tt \#1778} Burmese (my)
+\item \href{https://github.com/moment/moment/issues/1727}{\tt \#1727} Belarusian (be)
+\end{DoxyItemize}
+\item bugfixes, locale bugfixes, performance improvements, features
+\end{DoxyItemize}
+
+\subsubsection*{2.\+7.\+0 \href{https://gist.github.com/ichernev/b0a3d456d5a84c9901d7}{\tt See changelog}}
+
+
+\begin{DoxyItemize}
+\item new languages
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1678}{\tt \#1678} Bengali (bn)
+\item \href{https://github.com/moment/moment/issues/1628}{\tt \#1628} Azerbaijani (az)
+\item \href{https://github.com/moment/moment/issues/1633}{\tt \#1633} Arabic, Saudi Arabia (ar-\/sa)
+\item \href{https://github.com/moment/moment/issues/1648}{\tt \#1648} Austrian German (de-\/at)
+\end{DoxyItemize}
+\item features
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1663}{\tt \#1663} configurable relative time thresholds
+\item \href{https://github.com/moment/moment/issues/1554}{\tt \#1554} support anchor time in moment.\+calendar
+\item \href{https://github.com/moment/moment/issues/1693}{\tt \#1693} support moment.\+I\+S\+O\+\_\+8601 as parsing format
+\item \href{https://github.com/moment/moment/issues/1637}{\tt \#1637} add moment.\+min and moment.\+max and deprecate min/max instance methods
+\item \href{https://github.com/moment/moment/issues/1704}{\tt \#1704} support string value in add/subtract
+\item \href{https://github.com/moment/moment/issues/1647}{\tt \#1647} add spm support (package manager)
+\end{DoxyItemize}
+\item bugfixes
+\end{DoxyItemize}
+
+\subsubsection*{2.\+6.\+0 \href{https://gist.github.com/ichernev/10544682}{\tt See changelog}}
+
+
+\begin{DoxyItemize}
+\item languages
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1529}{\tt \#1529} Serbian-\/\+Cyrillic (sr-\/cyr)
+\item \href{https://github.com/moment/moment/issues/1544}{\tt \#1544}, \href{https://github.com/moment/moment/issues/1546}{\tt \#1546} Khmer Cambodia (km)
+\end{DoxyItemize}
+\item features
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1419}{\tt \#1419}, \href{https://github.com/moment/moment/issues/1468}{\tt \#1468}, \href{https://github.com/moment/moment/issues/1467}{\tt \#1467}, \href{https://github.com/moment/moment/issues/1546}{\tt \#1546} better handling of timezone-\/d moments around D\+ST
+\item \href{https://github.com/moment/moment/issues/1462}{\tt \#1462} add weeks\+In\+Year and iso\+Weeks\+In\+Year
+\item \href{https://github.com/moment/moment/issues/1475}{\tt \#1475} support ordinal parsing
+\item \href{https://github.com/moment/moment/issues/1499}{\tt \#1499} composer support
+\item \href{https://github.com/moment/moment/issues/1577}{\tt \#1577}, \href{https://github.com/moment/moment/issues/1604}{\tt \#1604} put Date parsing in moment.\+create\+From\+Input\+Fallback so it can be properly deprecated and controlled in the future
+\item \href{https://github.com/moment/moment/issues/1545}{\tt \#1545} extract two-\/digit year parsing in moment.\+parse\+Two\+Digit\+Year, so it can be overwritten
+\item \href{https://github.com/moment/moment/issues/1590}{\tt \#1590} (see \href{https://github.com/moment/moment/issues/1574}{\tt \#1574}) set A\+MD global before module definition to better support non A\+MD module dependencies used in A\+MD environment
+\item \href{https://github.com/moment/moment/issues/1589}{\tt \#1589} remove global in Node.\+JS environment (was not working before, nobody complained, was scheduled for removal anyway)
+\item \href{https://github.com/moment/moment/issues/1586}{\tt \#1586} support quarter setting and parsing
+\end{DoxyItemize}
+\item 18 bugs fixed
+\end{DoxyItemize}
+
+\subsubsection*{2.\+5.\+1}
+
+
+\begin{DoxyItemize}
+\item languages
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1392}{\tt \#1392} Armenian (hy-\/am)
+\end{DoxyItemize}
+\item bugfixes
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1429}{\tt \#1429} fixes \href{https://github.com/moment/moment/issues/1423}{\tt \#1423} weird chrome-\/32 bug with js object creation
+\item \href{https://github.com/moment/moment/issues/1421}{\tt \#1421} remove html entities from Welsh
+\item \href{https://github.com/moment/moment/issues/1418}{\tt \#1418} fixes \href{https://github.com/moment/moment/issues/1401}{\tt \#1401} improved non-\/padded tokens in strict matching
+\item \href{https://github.com/moment/moment/issues/1417}{\tt \#1417} fixes \href{https://github.com/moment/moment/issues/1404}{\tt \#1404} handle buggy moment object created by property cloning
+\item \href{https://github.com/moment/moment/issues/1398}{\tt \#1398} fixes \href{https://github.com/moment/moment/issues/1397}{\tt \#1397} fix Arabic-\/like week number parsing
+\item \href{https://github.com/moment/moment/issues/1396}{\tt \#1396} add left\+Zero\+Fill(4) to G\+G\+GG and gggg formats
+\item \href{https://github.com/moment/moment/issues/1373}{\tt \#1373} use lowercase for months and days in Catalan
+\end{DoxyItemize}
+\item testing
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1374}{\tt \#1374} run tests on multiple browser/os combos via Sauce\+Labs and Travis
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsubsection*{2.\+5.\+0 \href{https://gist.github.com/ichernev/8104451}{\tt See changelog}}
+
+
+\begin{DoxyItemize}
+\item New languages
+\begin{DoxyItemize}
+\item Luxemburish (lb) \href{https://github.com/moment/moment/issues/1247}{\tt 1247}
+\item Serbian (rs) \href{https://github.com/moment/moment/issues/1319}{\tt 1319}
+\item Tamil (ta) \href{https://github.com/moment/moment/issues/1324}{\tt 1324}
+\item Macedonian (mk) \href{https://github.com/moment/moment/issues/1337}{\tt 1337}
+\end{DoxyItemize}
+\item Features
+\begin{DoxyItemize}
+\item \href{https://github.com/moment/moment/issues/1311}{\tt 1311} Add quarter getter and format token {\ttfamily Q}
+\item \href{https://github.com/moment/moment/issues/1303}{\tt 1303} strict parsing now respects number of digits per token (fix \href{https://github.com/moment/moment/issues/1196}{\tt 1196})
+\item 0d30bb7 add jspm support
+\item \href{https://github.com/moment/moment/issues/1347}{\tt 1347} improve zone parsing
+\item \href{https://github.com/moment/moment/issues/1362}{\tt 1362} support merideam parsing in Korean
+\end{DoxyItemize}
+\item 22 bugfixes
+\end{DoxyItemize}
+
+\subsubsection*{2.\+4.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries Deprecate} globally exported moment, will be removed in next major
+\item New languages
+\begin{DoxyItemize}
+\item Farose (fo) \href{https://github.com/moment/moment/issues/1206}{\tt \#1206}
+\item Tagalog/\+Filipino (tl-\/ph) \href{https://github.com/moment/moment/issues/1197}{\tt \#1197}
+\item Welsh (cy) \href{https://github.com/moment/moment/issues/1215}{\tt \#1215}
+\end{DoxyItemize}
+\item Bugfixes
+\begin{DoxyItemize}
+\item properly handle Z at the end of iso Reg\+Exp \href{https://github.com/moment/moment/issues/1187}{\tt \#1187}
+\item chinese meridian time improvements \href{https://github.com/moment/moment/issues/1076}{\tt \#1076}
+\item fix language tests \href{https://github.com/moment/moment/issues/1177}{\tt \#1177}
+\item remove some failing tests (that should have never existed \+:)) \href{https://github.com/moment/moment/issues/1185}{\tt \#1185} \href{https://github.com/moment/moment/issues/1183}{\tt \#1183}
+\item handle russian noun cases in weird cases \href{https://github.com/moment/moment/issues/1195}{\tt \#1195}
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsubsection*{2.\+3.\+1}
+
+Removed a trailing comma \mbox{[}1169\mbox{]} and fixed a bug with {\ttfamily months}, {\ttfamily weekdays} getters \href{https://github.com/moment/moment/issues/1171}{\tt \#1171}.
+
+\subsubsection*{2.\+3.\+0 \href{https://gist.github.com/ichernev/6864354}{\tt See changelog}}
+
+Changed is\+Valid, added strict parsing. Week tokens parsing.
+
+\subsubsection*{2.\+2.\+1}
+
+Fixed bug in string prototype test. Updated authors and contributors.
+
+\subsubsection*{2.\+2.\+0 \href{https://gist.github.com/ichernev/00f837a9baf46a3565e4}{\tt See changelog}}
+
+Added bower support.
+
+Language files now use U\+MD.
+
+Creating moment defaults to current date/month/year.
+
+Added a bundle of moment and all language files.
+
+\subsubsection*{2.\+1.\+0 \href{https://gist.github.com/timrwood/b8c2d90d528eddb53ab5}{\tt See changelog}}
+
+Added better week support.
+
+Added ability to set offset with {\ttfamily moment\+::zone}.
+
+Added ability to set month or weekday from a string.
+
+Added {\ttfamily moment\+::min} and {\ttfamily moment\+::max}
+
+\subsubsection*{2.\+0.\+0 \href{https://gist.github.com/timrwood/e72f2eef320ed9e37c51}{\tt See changelog}}
+
+Added short form localized tokens.
+
+Added ability to define language a string should be parsed in.
+
+Added support for reversed add/subtract arguments.
+
+Added support for `end\+Of(\textquotesingle{}week\textquotesingle{}){\ttfamily and}start\+Of(\textquotesingle{}week\textquotesingle{})`.
+
+Fixed the logic for `moment\#diff(Moment, \textquotesingle{}months\textquotesingle{}){\ttfamily and}moment\+::diff(Moment, \textquotesingle{}years\textquotesingle{})`
+
+{\ttfamily moment\+::diff} now floors instead of rounds.
+
+Normalized {\ttfamily moment\+::to\+String}.
+
+Added {\ttfamily is\+Same}, {\ttfamily is\+After}, and {\ttfamily is\+Before} methods.
+
+Added better week support.
+
+Added {\ttfamily moment\+::to\+J\+S\+ON}
+
+Bugfix\+: Fixed parsing of first century dates
+
+Bugfix\+: Parsing 10\+Sep2001 should work as expected
+
+Bugfix\+: Fixed wierdness with {\ttfamily moment.\+utc()} parsing.
+
+Changed language ordinal method to return the number + ordinal instead of just the ordinal.
+
+Changed two digit year parsing cutoff to match strptime.
+
+Removed {\ttfamily moment\+::sod} and {\ttfamily moment\+::eod} in favor of {\ttfamily moment\+::start\+Of} and {\ttfamily moment\+::end\+Of}.
+
+Removed {\ttfamily moment.\+humanize\+Duration()} in favor of {\ttfamily moment.\+duration().humanize()}.
+
+Removed the lang data objects from the top level namespace.
+
+Duplicate {\ttfamily Date} passed to {\ttfamily moment()} instead of referencing it.
+
+\subsubsection*{1.\+7.\+2 \href{https://github.com/timrwood/moment/issues/456}{\tt See discussion}}
+
+Bugfixes
+
+\subsubsection*{1.\+7.\+1 \href{https://github.com/timrwood/moment/issues/384}{\tt See discussion}}
+
+Bugfixes
+
+\subsubsection*{1.\+7.\+0 \href{https://github.com/timrwood/moment/issues/288}{\tt See discussion}}
+
+Added {\ttfamily moment.\+fn.\+end\+Of()} and {\ttfamily moment.\+fn.\+start\+Of()}.
+
+Added validation via {\ttfamily moment.\+fn.\+is\+Valid()}.
+
+Made formatting method 3x faster. \href{http://jsperf.com/momentjs-cached-format-functions}{\tt http\+://jsperf.\+com/momentjs-\/cached-\/format-\/functions}
+
+Add support for month/weekday callbacks in {\ttfamily moment.\+fn.\+format()}
+
+Added instance specific languages.
+
+Added two letter weekday abbreviations with the formatting token {\ttfamily dd}.
+
+Various language updates.
+
+Various bugfixes.
+
+\subsubsection*{1.\+6.\+0 \href{https://github.com/timrwood/moment/pull/268}{\tt See discussion}}
+
+Added Durations.
+
+Revamped parser to support parsing non-\/separated strings (Y\+Y\+Y\+Y\+M\+M\+DD vs Y\+Y\+Y\+Y-\/\+M\+M-\/\+DD).
+
+Added support for millisecond parsing and formatting tokens (S SS S\+SS)
+
+Added a getter for {\ttfamily moment.\+lang()}
+
+Various bugfixes.
+
+There are a few things deprecated in the 1.\+6.\+0 release.
+
+
+\begin{DoxyEnumerate}
+\item The format tokens {\ttfamily z} and {\ttfamily zz} (timezone abbreviations like E\+ST C\+ST M\+ST etc) will no longer be supported. Due to inconsistent browser support, we are unable to consistently produce this value. See \href{https://github.com/timrwood/moment/issues/162}{\tt this issue} for more background.
+\item The method {\ttfamily moment.\+fn.\+native} is deprecated in favor of {\ttfamily moment.\+fn.\+to\+Date}. There continue to be issues with Google Closure Compiler throwing errors when using {\ttfamily native}, even in valid instances.
+\item The way to customize am/pm strings is being changed. This would only affect you if you created a custom language file. For more information, see \href{https://github.com/timrwood/moment/pull/222}{\tt this issue}.
+\end{DoxyEnumerate}
+
+\subsubsection*{1.\+5.\+0 \href{https://github.com/timrwood/moment/issues?milestone=10&page=1&state=closed}{\tt See milestone}}
+
+Added U\+TC mode.
+
+Added automatic I\+S\+O8601 parsing.
+
+Various bugfixes.
+
+\subsubsection*{1.\+4.\+0 \href{https://github.com/timrwood/moment/issues?milestone=8&state=closed}{\tt See milestone}}
+
+Added {\ttfamily moment.\+fn.\+to\+Date} as a replacement for {\ttfamily moment.\+fn.\+native}.
+
+Added {\ttfamily moment.\+fn.\+sod} and {\ttfamily moment.\+fn.\+eod} to get the start and end of day.
+
+Various bugfixes.
+
+\subsubsection*{1.\+3.\+0 \href{https://github.com/timrwood/moment/issues?milestone=7&state=closed}{\tt See milestone}}
+
+Added support for parsing month names in the current language.
+
+Added escape blocks for parsing tokens.
+
+Added {\ttfamily moment.\+fn.\+calendar} to format strings like \textquotesingle{}Today 2\+:30 PM\textquotesingle{}, \textquotesingle{}Tomorrow 1\+:25 AM\textquotesingle{}, and \textquotesingle{}Last Sunday 4\+:30 AM\textquotesingle{}.
+
+Added {\ttfamily moment.\+fn.\+day} as a setter.
+
+Various bugfixes
+
+\subsubsection*{1.\+2.\+0 \href{https://github.com/timrwood/moment/issues?milestone=4&state=closed}{\tt See milestone}}
+
+Added timezones to parser and formatter.
+
+Added {\ttfamily moment.\+fn.\+is\+D\+ST}.
+
+Added {\ttfamily moment.\+fn.\+zone} to get the timezone offset in minutes.
+
+\subsubsection*{1.\+1.\+2 \href{https://github.com/timrwood/moment/issues?milestone=6&state=closed}{\tt See milestone}}
+
+Various bugfixes
+
+\subsubsection*{1.\+1.\+1 \href{https://github.com/timrwood/moment/issues?milestone=5&state=closed}{\tt See milestone}}
+
+Added time specific diffs (months, days, hours, etc)
+
+\subsubsection*{1.\+1.\+0}
+
+Added {\ttfamily moment.\+fn.\+format} localized masks. \textquotesingle{}L LL L\+LL L\+L\+LL\textquotesingle{} \href{https://github.com/timrwood/moment/pull/29}{\tt issue 29}
+
+Fixed \href{https://github.com/timrwood/moment/pull/31}{\tt issue 31}.
+
+\subsubsection*{1.\+0.\+1}
+
+Added {\ttfamily moment.\+version} to get the current version.
+
+Removed {\ttfamily window !== undefined} when checking if module exists to support browserify. \href{https://github.com/timrwood/moment/pull/25}{\tt issue 25}
+
+\subsubsection*{1.\+0.\+0}
+
+Added convenience methods for getting and setting date parts.
+
+Added better support for {\ttfamily moment.\+add()}.
+
+Added better lang support in Node\+JS.
+
+Renamed library from underscore.\+date to Moment.\+js
+
+\subsubsection*{0.\+6.\+1}
+
+Added Portuguese, Italian, and French language support
+
+\subsubsection*{0.\+6.\+0}
+
+Added \+\_\+date.\+lang() support. Added support for passing multiple formats to try to parse a date. \+\_\+date(\char`\"{}07-\/10-\/1986\char`\"{}, \mbox{[}\char`\"{}\+M\+M-\/\+D\+D-\/\+Y\+Y\+Y\+Y\char`\"{}, \char`\"{}\+Y\+Y\+Y\+Y-\/\+M\+M-\/\+D\+D\char`\"{}\mbox{]}); Made parse from string and single format 25\% faster.
+
+\subsubsection*{0.\+5.\+2}
+
+Bugfix for \href{https://github.com/timrwood/underscore.date/pull/8}{\tt issue 8} and \href{https://github.com/timrwood/underscore.date/pull/9}{\tt issue 9}.
+
+\subsubsection*{0.\+5.\+1}
+
+Bugfix for \href{https://github.com/timrwood/underscore.date/pull/5}{\tt issue 5}.
+
+\subsubsection*{0.\+5.\+0}
+
+Dropped the redundant {\ttfamily \+\_\+date.\+date()} in favor of {\ttfamily \+\_\+date()}. Removed {\ttfamily \+\_\+date.\+now()}, as it is a duplicate of {\ttfamily \+\_\+date()} with no parameters. Removed {\ttfamily \+\_\+date.\+is\+Leap\+Year(year\+Number)}. Use {\ttfamily \+\_\+date(\mbox{[}year\+Number\mbox{]}).is\+Leap\+Year()} instead. Exposed customization options through the {\ttfamily \+\_\+date.\+relative\+Time}, {\ttfamily \+\_\+date.\+weekdays}, {\ttfamily \+\_\+date.\+weekdays\+Short}, {\ttfamily \+\_\+date.\+months}, {\ttfamily \+\_\+date.\+months\+Short}, and {\ttfamily \+\_\+date.\+ordinal} variables instead of the {\ttfamily \+\_\+date.\+customize()} function.
+
+\subsubsection*{0.\+4.\+1}
+
+Added date input formats for input strings.
+
+\subsubsection*{0.\+4.\+0}
+
+Added underscore.\+date to npm. Removed dependencies on underscore.
+
+\subsubsection*{0.\+3.\+2}
+
+Added {\ttfamily \textquotesingle{}z\textquotesingle{}} and {\ttfamily \textquotesingle{}zz\textquotesingle{}} to {\ttfamily \+\_\+.\+date().format()}. Cleaned up some redundant code to trim off some bytes.
+
+\subsubsection*{0.\+3.\+1}
+
+Cleaned up the namespace. Moved all date manipulation and display functions to the \+\_\+.\+date() object.
+
+\subsubsection*{0.\+3.\+0}
+
+Switched to the Underscore methodology of not mucking with the native objects\textquotesingle{} prototypes. Made chaining possible.
+
+\subsubsection*{0.\+2.\+1}
+
+Changed date names to be a more pseudo standardized \textquotesingle{}dddd, M\+M\+MM Do Y\+Y\+YY, h\+:mm\+:ss a\textquotesingle{}. Added {\ttfamily Date.\+prototype} functions {\ttfamily add}, {\ttfamily subtract}, {\ttfamily isdst}, and {\ttfamily isleapyear}.
+
+\subsubsection*{0.\+2.\+0}
+
+Changed function names to be more concise. Changed date format from php date format to custom format.
+
+\subsubsection*{0.\+1.\+0}
+
+Initial release 

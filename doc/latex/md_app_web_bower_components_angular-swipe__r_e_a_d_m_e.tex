@@ -1,0 +1,116 @@
+Simple vertical/horizontal swipe gesture directives and a swipe service for angular js $>$= 1.\+4. Small extension of the existing angular \$swipe service.
+
+\subsection*{Install}
+
+
+\begin{DoxyItemize}
+\item Add this line to your {\itshape bower.\+json} dependencies and run {\itshape bower install} afterwards.
+\end{DoxyItemize}
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+"angular-swipe": "~0.1.0"
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item Include the required source file (this path or similar)
+\end{DoxyItemize}
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<script src="bower\_components/dist/angular-swipe.js"></script>
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item Inject the {\ttfamily swipe} module into your app.
+\end{DoxyItemize}
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+angular.module('app', ['swipe']);
+\end{DoxyCode}
+
+
+\subsection*{Usage}
+
+\paragraph*{Module Name (Dependency)}
+
+
+\begin{DoxyItemize}
+\item swipe
+\end{DoxyItemize}
+
+\paragraph*{Directives}
+
+
+\begin{DoxyItemize}
+\item ng-\/swipe-\/up
+\item ng-\/swipe-\/down
+\item ng-\/swipe-\/left
+\item ng-\/swipe-\/right
+\end{DoxyItemize}
+
+\paragraph*{Directive Attributes}
+
+{\ttfamily ng-\/swipe-\/disable-\/mouse} \char`\"{}\+This attribute is useful for text that should still be selectable by the mouse and not trigger the swipe action.\char`\"{}
+
+\paragraph*{Service}
+
+
+\begin{DoxyItemize}
+\item swipe
+\end{DoxyItemize}
+
+\subsection*{Example}
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<div class="page" ng-controller="AppCtrl">
+    <div class="container" ng-swipe-up="swipe($event)">
+      <h1>Swipe me up!</h1>
+    </div>
+</div>
+\end{DoxyCode}
+
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+var app = angular.module('app', [ 'swipe' ]);
+app.controller('AppCtrl', function AppCtrl($scope) \{
+  $scope.swipe = function($event) \{
+    console.log($event);
+  \};
+\})
+\end{DoxyCode}
+
+
+\subsection*{Known issues and workarounds}
+
+
+\begin{DoxyItemize}
+\item ng-\/swipe-\/up and ng-\/swipe-\/down uses prevent\+Default when you start swiping. This prevents clicks from giving focus to input fields. Adding a {\ttfamily no\+Prevent\+Default} class to these elements will not prevent\+Default when the swipe start on them and thus allow clicks to work. 
+\end{DoxyItemize}

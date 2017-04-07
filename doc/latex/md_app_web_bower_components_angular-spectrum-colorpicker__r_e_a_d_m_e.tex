@@ -1,0 +1,212 @@
+\href{https://travis-ci.org/Jimdo/angular-spectrum-colorpicker}{\tt } \href{https://coveralls.io/r/Jimdo/angular-spectrum-colorpicker?branch=master}{\tt } \href{https://david-dm.org/Jimdo/angular-spectrum-colorpicker#info=devDependencies}{\tt }
+
+Angularified \href{http://bgrins.github.io/spectrum/}{\tt spectrum color picker}
+
+This module bases on the \href{http://bgrins.github.io/spectrum/}{\tt spectrum color picker} and can be embedded in any angular project via dependency injection\+:
+
+
+\begin{DoxyCode}
+var myApp = angular.module('myApp', ['angularSpectrumColorpicker']);
+\end{DoxyCode}
+
+
+To use it, put the Angular Spectrum color picker directive in your html code and bind it to your project scope\+:
+
+
+\begin{DoxyCode}
+<spectrum-colorpicker ng-model="someModel"></spectrum-colorpicker>
+\end{DoxyCode}
+
+
+\subsection*{Dependencies }
+
+
+\begin{DoxyItemize}
+\item \href{http://jquery.com/}{\tt J\+Query}
+\item \href{http://angularjs.org/}{\tt Angular\+Js}
+\item \href{http://bgrins.github.io/spectrum/}{\tt Spectrum}
+\end{DoxyItemize}
+
+\subsection*{Installation }
+
+
+\begin{DoxyCode}
+bower install angular-spectrum-colorpicker
+\end{DoxyCode}
+
+
+\subsection*{Usage }
+
+
+\begin{DoxyEnumerate}
+\item Include dependencies \begin{DoxyVerb} jquery.js
+ angular.js
+ spectrum.css
+ spectrum.js
+ angular-spectrum-colorpicker.js
+\end{DoxyVerb}
+
+\item Add angular spectrum color picker module to your angular app 
+\begin{DoxyCode}
+angular.module('yourFancyApp', ['angularSpectrumColorpicker']);
+\end{DoxyCode}
+
+\item Use the directive wherever you want 
+\begin{DoxyCode}
+<spectrum-colorpicker ng-model="yourFancyModel"></spectrum-colorpicker>
+\end{DoxyCode}
+
+\begin{DoxyItemize}
+\item (Optional) Customize color picker with spectrum params via the options attribute\+: 
+\begin{DoxyCode}
+<spectrum-colorpicker
+  ng-model="yourFancyModel"
+  options="\{showInput: true, showAlpha: true\}">
+</spectrum-colorpicker>
+\end{DoxyCode}
+ All valid options\+: \href{http://bgrins.github.io/spectrum/#options}{\tt http\+://bgrins.\+github.\+io/spectrum/\#options}
+\item (Optional) Choose a output format 
+\begin{DoxyCode}
+<spectrum-colorpicker format="'hex'"></spectrum-colorpicker>
+\end{DoxyCode}
+ Changes the format of the final value. A list of formats can be found in the \href{http://bgrins.github.io/spectrum/#details-acceptedColorInputs}{\tt spectrum documentation}.
+\end{DoxyItemize}
+\end{DoxyEnumerate}
+\begin{DoxyItemize}
+\item (Optional) use events 
+\begin{DoxyCode}
+<spectrum-colorpicker
+  on-change="myOnChange(color)"
+  on-show="myOnShow(color)"
+  on-hide="myOnHide(color)"
+  on-move="myOnMove(color)"
+  on-before-show="myOnBeforeShow(color)"
+  >
+</spectrum-colorpicker>
+\end{DoxyCode}
+
+\item (Optional) bind palette 
+\begin{DoxyCode}
+<spectrum-colorpicker
+  palette="colors">
+</spectrum-colorpicker>
+\end{DoxyCode}
+
+\item (Optional) stop eventing 
+\begin{DoxyCode}
+<spectrum-colorpicker
+  on-change-options="\{ update : false \}"
+  on-show-options="\{ update : false \}"
+  on-hide-options="\{ update : false \}"
+  on-move-options="\{ update : false \}"
+  >
+</spectrum-colorpicker>
+\end{DoxyCode}
+ A description of the events can be found in the \href{https://bgrins.github.io/spectrum/#events}{\tt spectrum documentation}.
+\item Attribute mode (since 1.\+4.\+1) 
+\begin{DoxyCode}
+<input type="color" spectrum-colorpicker ...>
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\subsection*{Initialize the source project }
+
+
+\begin{DoxyCode}
+npm install && npm run setup
+\end{DoxyCode}
+
+
+\subsection*{Run demo }
+
+
+\begin{DoxyCode}
+grunt demo
+\end{DoxyCode}
+
+
+\href{http://localhost:8000/demo/index.html}{\tt http\+://localhost\+:8000/demo/index.\+html}
+
+\subsection*{Grunt Tasks }
+
+
+\begin{DoxyItemize}
+\item {\ttfamily grunt}\+: Execute tests
+\item {\ttfamily grunt coverage}\+: Serve coverage report on port 7000
+\item {\ttfamily grunt test}\+: Just test
+\item {\ttfamily grunt test\+:e2e}\+: Just test end to end
+\item {\ttfamily grunt test\+:unit}\+: Just test unit
+\item {\ttfamily grunt tdd}\+: Watch source and test files and run tests
+\item {\ttfamily grunt tdd\+:e2e}\+: Watch and test just end to end
+\item {\ttfamily grunt tdd\+:unit}\+: Watch and test just unit
+\item {\ttfamily grunt build}\+: Just build
+\item {\ttfamily grunt release}\+: Test, build, bump patch version, commit, add version tag and push
+\end{DoxyItemize}
+
+{\ttfamily test} tasks have a {\ttfamily -\/-\/browsers} option to specify the browsers you want to use
+
+Browsers can also be set by the following environment-\/variables 
+\begin{DoxyCode}
+PROTRACTOR\_BROWSERS=Firefox,Chrome
+KARMA\_BROWSERS=Firefox,PhantomJS
+\end{DoxyCode}
+
+
+{\itshape See Gruntfile.\+js and tasks/options for all task details.}
+
+\subsection*{Version history }
+
+
+\begin{DoxyItemize}
+\item 1.\+4.\+1
+\begin{DoxyItemize}
+\item Attribute mode (thanks )
+\end{DoxyItemize}
+\item 1.\+4.\+0
+\begin{DoxyItemize}
+\item demo fixes (thanks )
+\item destroy event fixes (thanks )
+\item palette attribute option (thanks )
+\item possibility to disable eventing (thanks )
+\item Update to spectrum 1.\+7.\+0
+\end{DoxyItemize}
+\item 1.\+3.\+4
+\begin{DoxyItemize}
+\item re-\/adds {\ttfamily \$scope.\$apply} around model value change, because it caused problems
+\end{DoxyItemize}
+\item 1.\+3.\+3
+\begin{DoxyItemize}
+\item refactor triggers to work with delayed D\+OM
+\end{DoxyItemize}
+\item 1.\+3.\+2
+\begin{DoxyItemize}
+\item not released (grunt release fup)
+\end{DoxyItemize}
+\item 1.\+3.\+1
+\begin{DoxyItemize}
+\item Add handling of disabled attribute. See \#15.
+\end{DoxyItemize}
+\item 1.\+3.\+0
+\begin{DoxyItemize}
+\item reintegrate with \href{https://github.com/Jimdo/angular-directive-seed}{\tt Jimdo/angular-\/directive-\/seed}.
+\item Add eventing (partially backwards-\/incompatible due to how the triggering of {\ttfamily on\+Change} is handled). See \#21.
+\end{DoxyItemize}
+\item 1.\+2.\+0
+\begin{DoxyItemize}
+\item backwards incompatible change of {\ttfamily format=\char`\"{}hex\char`\"{}} to `format=\char`\"{}\textquotesingle{}hex\textquotesingle{}\char`\"{}` in order to allow changing the output format after initializing. See \#12.
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsection*{L\+I\+C\+E\+N\+SE }
+
+\begin{quote}
+The M\+IT License
+
+Copyright (c) 2014 Jimdo GmbH \href{http://jimdo.com}{\tt http\+://jimdo.\+com}
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \char`\"{}\+Software\char`\"{}), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions\+:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+T\+HE S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED \char`\"{}\+A\+S I\+S\char`\"{}, W\+I\+T\+H\+O\+UT W\+A\+R\+R\+A\+N\+TY OF A\+NY K\+I\+ND, E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED, I\+N\+C\+L\+U\+D\+I\+NG B\+UT N\+OT L\+I\+M\+I\+T\+ED TO T\+HE W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY, F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+ND N\+O\+N\+I\+N\+F\+R\+I\+N\+G\+E\+M\+E\+NT. IN NO E\+V\+E\+NT S\+H\+A\+LL T\+HE A\+U\+T\+H\+O\+RS OR C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+E\+RS BE L\+I\+A\+B\+LE F\+OR A\+NY C\+L\+A\+IM, D\+A\+M\+A\+G\+ES OR O\+T\+H\+ER L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN AN A\+C\+T\+I\+ON OF C\+O\+N\+T\+R\+A\+CT, T\+O\+RT OR O\+T\+H\+E\+R\+W\+I\+SE, A\+R\+I\+S\+I\+NG F\+R\+OM, O\+UT OF OR IN C\+O\+N\+N\+E\+C\+T\+I\+ON W\+I\+TH T\+HE S\+O\+F\+T\+W\+A\+RE OR T\+HE U\+SE OR O\+T\+H\+ER D\+E\+A\+L\+I\+N\+GS IN T\+HE S\+O\+F\+T\+W\+A\+RE.\end{quote}

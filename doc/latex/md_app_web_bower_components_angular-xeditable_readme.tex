@@ -1,0 +1,51 @@
+\mbox{[}\mbox{]}() \mbox{[}\mbox{]}()
+
+Edit in place for Angular\+JS
+
+\subsection*{Overview}
+
+{\bfseries Angular-\/xeditable} is a bundle of \href{http://angularjs.org}{\tt Angular\+JS} directives that allows you to create {\itshape editable} elements in your projects. Such technique is also known as {\itshape click-\/to-\/edit} or {\itshape edit-\/in-\/place}. It is based on ideas of \href{http://vitalets.github.io/x-editable}{\tt x-\/editable} but was written from scratch to use power of angular and support complex forms / editable grids.
+
+\subsection*{Demo and docs}
+
+{\bfseries \href{http://vitalets.github.io/angular-xeditable}{\tt http\+://vitalets.\+github.\+io/angular-\/xeditable}}
+
+\subsection*{Installation}
+
+\#\#\#\# Bower 
+\begin{DoxyCode}
+bower install angular-xeditable
+\end{DoxyCode}
+ \#\#\#\# N\+PM 
+\begin{DoxyCode}
+npm install angular-xeditable
+\end{DoxyCode}
+ \paragraph*{Manual}
+
+Download latest version from \href{http://vitalets.github.io/angular-xeditable}{\tt project homepage}. \#\#\#\# Insert dependency 
+\begin{DoxyCode}
+var app = angular.module("app", ["xeditable"]);
+\end{DoxyCode}
+
+
+\subsection*{Dependencies}
+
+Basically it does not depend on any libraries except \href{http://angularjs.org}{\tt Angular\+JS} itself. For themes you may need to include \href{http://getbootstrap.com}{\tt Twitter Bootstrap} C\+SS. For some extra controls (e.\+g. datepicker) you may need to include \href{http://angular-ui.github.io/bootstrap/}{\tt angular-\/ui bootstrap}. To use ui-\/select you will need to include \href{https://github.com/angular-ui/ui-select/}{\tt angular-\/ui ui-\/select}.
+
+\subsection*{js\+Fiddle / Plunker}
+
+Please use these live templates when creating issues\+: \href{http://jsfiddle.net/NfPcH/3}{\tt http\+://jsfiddle.\+net/\+Nf\+Pc\+H/3} \href{http://plnkr.co/edit/BjWwXIlYyyLvRnVwO8m8?p=preview}{\tt http\+://plnkr.\+co/edit/\+Bj\+Ww\+X\+Il\+Yyy\+Lv\+Rn\+Vw\+O8m8?p=preview}
+
+\subsection*{Roadmap}
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/vitalets/checklist-model}{\tt checklist}
+\item \href{https://github.com/vitalets/combodate}{\tt combodate}
+\item popup mode (waiting \href{https://github.com/angular-ui/bootstrap/pull/1391}{\tt https\+://github.\+com/angular-\/ui/bootstrap/pull/1391})
+\item internally move to \href{https://github.com/vitalets/lazy-model}{\tt lazy-\/model}
+\end{DoxyItemize}
+
+\subsection*{License}
+
+\mbox{[}M\+IT\mbox{]}(L\+I\+C\+E\+N\+SE) 

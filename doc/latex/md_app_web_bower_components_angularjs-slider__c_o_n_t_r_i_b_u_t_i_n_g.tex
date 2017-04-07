@@ -1,0 +1,25 @@
+Make sure the report is accompanied by a reproducible demo. The ideal demo is created by forking \href{http://jsfiddle.net/cwhgLcjv/}{\tt our standard js\+Fiddle}, adding your own code and stripping it down to an absolute minimum needed to demonstrate the bug.
+
+\subsection*{Submittting a Pull Request}
+
+To contribute to the project, please follow these steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Get approval for the idea by filing an issue and talking with me about the changes
+\item Fork the repo
+\item Make a branch for your change
+\item Run {\ttfamily npm install}
+\item Run {\ttfamily npm run test}
+\item Make your changes
+\item Test your changes (if you need a new test file, please copy the {\ttfamily test-\/template.\+js} file in the tests/specs folder.)
+\item Run {\ttfamily npm run build} to generate the dist files
+\item Run {\ttfamily git add -\/A} to add your changes
+\item Run {\ttfamily npm run commit} ({\bfseries Do not} use {\ttfamily git commit}) -\/ follow the prompts to create your git message
+\item Push your changes with {\ttfamily git push}
+\item Create the Pull Request (a demo showing what the PR does is always good so you can fork \href{http://jsfiddle.net/cwhgLcjv/}{\tt this fiddle})
+\item If there are several commits, please \href{https://github.com/edx/edx-platform/wiki/How-to-Rebase-a-Pull-Request}{\tt rebase} and \href{https://github.com/edx/edx-platform/wiki/How-to-Rebase-a-Pull-Request#squash-your-changes}{\tt squash} everything to only get one commit.
+\item Get merged and celebrate
+\end{DoxyEnumerate}
+
+{\bfseries Working on your first Pull Request?} You can learn how from this {\itshape free} series \href{https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github}{\tt How to Contribute to an Open Source Project on Git\+Hub} 

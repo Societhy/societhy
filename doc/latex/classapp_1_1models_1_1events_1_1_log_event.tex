@@ -1,0 +1,57 @@
+\hypertarget{classapp_1_1models_1_1events_1_1_log_event}{}\section{app.\+models.\+events.\+Log\+Event Class Reference}
+\label{classapp_1_1models_1_1events_1_1_log_event}\index{app.\+models.\+events.\+Log\+Event@{app.\+models.\+events.\+Log\+Event}}
+Inheritance diagram for app.\+models.\+events.\+Log\+Event\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classapp_1_1models_1_1events_1_1_log_event}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a7649d5370cc93b9c72aaaa6c8ab80824}\label{classapp_1_1models_1_1events_1_1_log_event_a7649d5370cc93b9c72aaaa6c8ab80824}} 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, name, tx\+\_\+hash, contract\+\_\+address, topics=None, users=\mbox{[}$\,$\mbox{]}, callbacks=None, event\+\_\+abi=None)
+\item 
+def \hyperlink{classapp_1_1models_1_1events_1_1_log_event_aa6ef2fc83a7537e2f286147deb948544}{process} (self)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a3868f4639083433f0b9f99214ade1c1e}\label{classapp_1_1models_1_1events_1_1_log_event_a3868f4639083433f0b9f99214ade1c1e}} 
+{\bfseries logs}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a9de37620958f6e3db9b2c78f05269738}\label{classapp_1_1models_1_1events_1_1_log_event_a9de37620958f6e3db9b2c78f05269738}} 
+{\bfseries topics}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a7a51f6b7f14c3f5e59a903a4e689d621}\label{classapp_1_1models_1_1events_1_1_log_event_a7a51f6b7f14c3f5e59a903a4e689d621}} 
+{\bfseries name}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a99a8938e34aecd0c8a59516c0e67a6cb}\label{classapp_1_1models_1_1events_1_1_log_event_a99a8938e34aecd0c8a59516c0e67a6cb}} 
+{\bfseries contract\+\_\+address}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_a666f5f498564f077a0a704957b8e1c4e}\label{classapp_1_1models_1_1events_1_1_log_event_a666f5f498564f077a0a704957b8e1c4e}} 
+{\bfseries event\+\_\+abi}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}Event specific to log events (see further documentation) contained in the state of the blockchain.
+\end{DoxyVerb}
+ 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classapp_1_1models_1_1events_1_1_log_event_aa6ef2fc83a7537e2f286147deb948544}\label{classapp_1_1models_1_1events_1_1_log_event_aa6ef2fc83a7537e2f286147deb948544}} 
+\index{app\+::models\+::events\+::\+Log\+Event@{app\+::models\+::events\+::\+Log\+Event}!process@{process}}
+\index{process@{process}!app\+::models\+::events\+::\+Log\+Event@{app\+::models\+::events\+::\+Log\+Event}}
+\subsubsection{\texorpdfstring{process()}{process()}}
+{\footnotesize\ttfamily def app.\+models.\+events.\+Log\+Event.\+process (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}When processing a log event, the data contained in the payload must be decoded and formatted
+The data is then transmitted in the callbacks.
+\end{DoxyVerb}
+ 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/models/events.\+py\end{DoxyCompactItemize}

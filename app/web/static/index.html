@@ -1,4 +1,4 @@
-<!DOCT0YPE html>
+<!DOCTYPE html>
 <html lang="en" data-ng-app="app">
 
     <head>
@@ -14,8 +14,9 @@
     <link rel="icon" href="static/favicon.ico?v=2">
     <!-- Angular Xeditable -->
     <link href="static/assets/css/account.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
     <!-- Google fonts -->
-    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />
+    <!--<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic" rel="stylesheet" type="text/css" />-->
     <!-- DatePicker -->
     <link href="static/assets/css/bootstrap-datepicker3.min.css" rel="stylesheet">
     <!-- Bootstrap -->
@@ -47,7 +48,7 @@
     <!-- V-Button Css -->
     <link rel="stylesheet" href="bower_components/v-button/dist/v-button.min.css">
     <!-- Sweet Alert Css -->
-    <link rel="stylesheet" href="bower_components/sweetalert/dist/sweetalert.css">
+    <link rel="stylesheet" href="bower_components/sweetalert/lib/sweet-alert.css">
     <!-- Ladda Buttons Css -->
     <link rel="stylesheet" href="bower_components/ladda/dist/ladda-themeless.min.css">
     <!-- Angular Awesome Slider Css -->
@@ -60,8 +61,17 @@
     <link rel="stylesheet" href="static/assets/css/plugins.css">
     <!-- Packet Theme -->
     <link rel="stylesheet" data-ng-href="static/assets/css/themes/{{ app.layout.theme }}.css" />
+    <!-- Range Slider -->
+    <link rel="stylesheet" href="static/assets/css/jQDateRangeSlider-min.css">
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico" />
+    <!-- Boostrap-select -->
+    <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css">
+    <!-- Slider -->
+    <link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.css"/>
+    <!-- MultiSelect -->
+    <link rel="stylesheet" href="static/assets/css/isteven-multi-select.css">
+
 </head>
 <body ng-controller="AppCtrl">
     <div ui-view id="app" class="lyt-4" ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}"></div>
@@ -81,7 +91,7 @@
     <!-- Date Range Picker -->
     <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- Sweet Alert -->
-    <script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="bower_components/sweetalert/lib/sweet-alert.min.js"></script>
     <!-- Spin -->
     <script src="bower_components/spin.js/spin.js"></script>
     <!-- Ladda Buttons -->
@@ -90,6 +100,7 @@
     <script src="bower_components/slick-carousel/slick/slick.min.js"></script>
     <!-- Angular -->
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angularjs-slider/dist/rzslider.min.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/angular-touch/angular-touch.min.js"></script>
@@ -145,6 +156,10 @@
     <script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
     <!-- Angular Slick Carousel -->
     <script src="bower_components/angular-slick-carousel/dist/angular-slick.min.js"></script>
+    <!-- jquery-ui.js -->
+    <!-- <script src="bower_components/jquery-ui/jquery-ui.min.js"></script> -->
+    <!-- RangerSlider.js -->
+    <!-- <script src="static/assets/js/jQDateRangeSlider-min.js"></script> -->
     <!-- Packet Scripts -->
     <script src="static/assets/js/app.js"></script>
     <script src="static/assets/js/main.js"></script>
@@ -172,5 +187,9 @@
     <!-- Packet Controllers -->
     <script src="static/assets/js/controllers/mainCtrl.js"></script>
     <script src="static/assets/js/controllers/bootstrapCtrl.js"></script>
+    <!-- Boostrap-select -->
+    <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+    <!-- Multiselect-->
+    <script src="static/assets/js/directives/isteven-multi-select.js"></script>
 </body>
 </html>

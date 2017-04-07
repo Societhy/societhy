@@ -1,0 +1,173 @@
+The idea is simple\+: Add a loading bar / progress bar whenever an X\+HR request goes out in angular. Multiple requests within the same time period get bundled together such that each response increments the progress bar by the appropriate amount.
+
+This is mostly cool because you simply include it in your app, and it works. There\textquotesingle{}s no complicated setup, and no need to maintain the state of the loading bar; it\textquotesingle{}s all handled automatically by the interceptor.
+
+{\bfseries Requirements\+:} Angular\+JS 1.\+2+
+
+{\bfseries File Size\+:} 2.\+4\+Kb minified, 0.\+5\+Kb gzipped
+
+\subsection*{Usage\+:}
+
+
+\begin{DoxyEnumerate}
+\item include the loading bar as a dependency for your app. If you want animations, include {\ttfamily ng\+Animate} as well. {\itshape note\+: ng\+Animate is optional}
+
+```js angular.\+module(\textquotesingle{}my\+App\textquotesingle{}, \mbox{[}\textquotesingle{}angular-\/loading-\/bar\textquotesingle{}, \textquotesingle{}ng\+Animate\textquotesingle{}\mbox{]}) ```
+\item include the supplied C\+SS file (or create your own).
+\item That\textquotesingle{}s it -- you\textquotesingle{}re done!
+\end{DoxyEnumerate}
+
+\#\#\#\# via bower\+: 
+\begin{DoxyCode}
+$ bower install angular-loading-bar
+\end{DoxyCode}
+ \#\#\#\# via npm\+: 
+\begin{DoxyCode}
+$ npm install angular-loading-bar
+\end{DoxyCode}
+
+
+\subsection*{Why I created this}
+
+There are a couple projects similar to this out there, but none were ideal for me. All implementations I\textquotesingle{}ve seen require that you maintain state on behalf of the loading bar. In other words, you\textquotesingle{}re setting the value of the loading/progress bar manually from potentially many different locations. This becomes complicated when you have a very large application with several services all making independant X\+HR requests. It becomes even more complicated if you want these services to be loosly coupled.
+
+Additionally, Angular was created as a highly testable framework, so it pains me to see Angular modules without tests. That is not the case here as this loading bar ships with 100\% code coverage.
+
+{\bfseries Goals for this project\+:}
+
+
+\begin{DoxyEnumerate}
+\item Make it automatic
+\item Unit tests, 100\% coverage
+\item Must work well with ng\+Animate
+\item Must be styled via external C\+SS (not inline)
+\item No j\+Query dependencies
+\end{DoxyEnumerate}
+
+\subsection*{Configuration}
+
+\paragraph*{Turn the spinner on or off\+:}
+
+The insertion of the spinner can be controlled through configuration. It\textquotesingle{}s on by default, but if you\textquotesingle{}d like to turn it off, simply configure the service\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['angular-loading-bar'])
+  .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) \{
+    cfpLoadingBarProvider.includeSpinner = false;
+  \}])
+\end{DoxyCode}
+
+
+\paragraph*{Turn the loading bar on or off\+:}
+
+Like the spinner configuration above, the loading bar can also be turned off for cases where you only want the spinner\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['angular-loading-bar'])
+  .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) \{
+    cfpLoadingBarProvider.includeBar = false;
+  \}])
+\end{DoxyCode}
+
+
+\paragraph*{Latency Threshold}
+
+By default, the loading bar will only display after it has been waiting for a response for over 100ms. This helps keep things feeling snappy, and avoids the annoyingness of showing a loading bar every few seconds on really chatty applications. This threshold is totally configurable\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['angular-loading-bar'])
+  .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) \{
+    cfpLoadingBarProvider.latencyThreshold = 500;
+  \}])
+\end{DoxyCode}
+
+
+\paragraph*{Ignoring particular X\+HR requests\+:}
+
+The loading bar can also be forced to ignore certain requests, for example, when long-\/polling or periodically sending debugging information back to the server.
+
+
+\begin{DoxyCode}
+// ignore particular $http requests:
+$http.get('/status', \{
+  ignoreLoadingBar: true
+\});
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+// ignore particular $resource requests:
+.factory('Restaurant', function($resource) \{
+  return $resource('/api/restaurant/:id', \{id: '@id'\}, \{
+    query: \{
+      method: 'GET',
+      isArray: true,
+      ignoreLoadingBar: true
+    \}
+  \});
+\});
+\end{DoxyCode}
+
+
+\subsection*{How it works\+:}
+
+This library is split into two modules, an \$http {\ttfamily interceptor}, and a {\ttfamily service}\+:
+
+{\bfseries Interceptor} The interceptor simply listens for all outgoing X\+HR requests, and then instructs the loading\+Bar service to start, stop, and increment accordingly. There is no public A\+PI for the interceptor. It can be used stand-\/alone by including {\ttfamily cfp.\+loading\+Bar\+Interceptor} as a dependency for your module.
+
+{\bfseries Service} The service is responsible for the presentation of the loading bar. It injects the loading bar into the D\+OM, adjusts the width whenever {\ttfamily set()} is called, and {\ttfamily complete()}s the whole show by removing the loading bar from the D\+OM.
+
+\subsection*{Service A\+PI (advanced usage)}
+
+Under normal circumstances you won\textquotesingle{}t need to use this. However, if you wish to use the loading bar without the interceptor, you can do that as well. Simply include the loading bar service as a dependency instead of the main {\ttfamily angular-\/loading-\/bar} module\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['cfp.loadingBar'])
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+cfpLoadingBar.start();
+// will insert the loading bar into the DOM, and display its progress at 1%.
+// It will automatically call `inc()` repeatedly to give the illusion that the page load is progressing.
+
+cfpLoadingBar.inc();
+// increments the loading bar by a random amount.
+// It is important to note that the auto incrementing will begin to slow down as
+// the progress increases.  This is to prevent the loading bar from appearing
+// completed (or almost complete) before the XHR request has responded. 
+
+cfpLoadingBar.set(0.3) // Set the loading bar to 30%
+cfpLoadingBar.status() // Returns the loading bar's progress.
+// -> 0.3
+
+cfpLoadingBar.complete()
+// Set the loading bar's progress to 100%, and then remove it from the DOM.
+\end{DoxyCode}
+
+
+\subsection*{Events}
+
+The loading bar broadcasts the following events over \$root\+Scope allowing further customization\+:
+
+$\ast$$\ast${\ttfamily cfp\+Loading\+Bar\+:loading}$\ast$$\ast$ triggered upon each X\+HR request that is not already cached
+
+$\ast$$\ast${\ttfamily cfp\+Loading\+Bar\+:loaded}$\ast$$\ast$ triggered each time an X\+HR request recieves a response (either successful or error)
+
+$\ast$$\ast${\ttfamily cfp\+Loading\+Bar\+:started}$\ast$$\ast$ triggered once upon the first X\+HR request. Will trigger again if another request goes out after {\ttfamily cfp\+Loading\+Bar\+:completed} has triggered.
+
+$\ast$$\ast${\ttfamily cfp\+Loading\+Bar\+:completed}$\ast$$\ast$ triggered once when the all X\+HR requests have returned (either successfully or not)
+
+\subsection*{Credits\+:}
+
+Credit goes to \href{https://github.com/rstacruz}{\tt rstacruz} for his excellent \href{https://github.com/rstacruz/nprogress}{\tt n\+Progress}.
+
+\subsection*{License\+:}
+
+Licensed under the M\+IT license 

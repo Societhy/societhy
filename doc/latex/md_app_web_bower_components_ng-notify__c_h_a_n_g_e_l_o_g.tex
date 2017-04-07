@@ -1,0 +1,137 @@
+\#ng-\/notify Change Log
+
+\subsection*{v0.\+7.\+2}
+
+
+\begin{DoxyItemize}
+\item bugfix\+: fixed issue with requirement of Angular 1.\+4, changed to allow Anuglar 1.\+x. w/ help from \href{https://github.com/solo12zw74}{\tt solo12zw74}.
+\end{DoxyItemize}
+
+\subsection*{v0.\+7.\+1}
+
+
+\begin{DoxyItemize}
+\item version bump to work around the npm \char`\"{}feature\char`\"{} that republishing is no longer supported, while I was figuring out how the publish process works.
+\end{DoxyItemize}
+
+\subsection*{v0.\+7.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries new feature}\+: new parameter to disable the close button for sticky notifications. w/ help from \href{https://github.com/programming-kid}{\tt programming-\/kid} and \href{https://github.com/maksad}{\tt maksad}.
+\item bugfix\+: timeout added to avoid compiling issue when setting config in the run block. solution by \href{https://github.com/idpaterson}{\tt idpaterson} in \href{https://github.com/matowens/ng-notify/pull/23}{\tt \#23}.
+\item added to npm. w/ help from \href{https://github.com/totaskin}{\tt totaskin} and \href{https://github.com/simiographics}{\tt simiographics}
+\end{DoxyItemize}
+
+\subsection*{v0.\+6.\+3}
+
+
+\begin{DoxyItemize}
+\item bugfix\+: concurrent triggers of set() or dismiss() caused infinite, permanent display issues. w/ help from \href{https://github.com/nzamosenchuk}{\tt nzamosenchuk} in \href{https://github.com/matowens/ng-notify/issues/17}{\tt \#17} and \href{https://github.com/Droritos}{\tt Droritos} in \href{https://github.com/matowens/ng-notify/issues/18}{\tt \#18}
+\end{DoxyItemize}
+
+\subsection*{v0.\+6.\+2}
+
+
+\begin{DoxyItemize}
+\item refactored fade functionality to utilize ng\+Style.
+\item added unit tests for sticky and duration cases.
+\item test coverage integration, report generated when {\ttfamily grunt test} is fired.
+\item minor bugfix\+: setting either {\itshape html} or {\itshape sticky} to false on individual notifications was ignored and remained true if global config for either was set to true.
+\item additional code organization updates.
+\end{DoxyItemize}
+
+\subsection*{v0.\+6.\+1}
+
+
+\begin{DoxyItemize}
+\item unit tests and \href{https://travis-ci.org/matowens/ng-notify}{\tt Travis CI} integration.
+\item \href{https://codeclimate.com/github/matowens/ng-notify}{\tt code climate} monitoring.
+\item cdn addition via \href{http://www.jsdelivr.com/#!angular.ng-notify}{\tt js\+Delivr}.
+\item updated to angular 1.\+4.\+0.
+\item minor code cleanup.
+\end{DoxyItemize}
+
+\subsection*{v0.\+6.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries new feature}\+: html notifications, possible if ng\+Sanitize is included. w/ help from \href{https://github.com/gaetancollaud}{\tt gaetancollaud} and \href{https://github.com/NetanelBasal}{\tt Netanel\+Basal} in \href{https://github.com/matowens/ng-notify/issues/12}{\tt \#12}, \href{https://github.com/deegale}{\tt deegale} in \href{https://github.com/matowens/ng-notify/issues/6}{\tt \#6}, and \href{https://github.com/epigos}{\tt epigos} in \href{https://github.com/matowens/ng-notify/pull/4}{\tt \#4}
+\end{DoxyItemize}
+
+\subsection*{v0.\+5.\+3}
+
+
+\begin{DoxyItemize}
+\item improvement to ensure notifications display on top layer via z-\/index. \href{https://github.com/matowens/ng-notify/pull/10}{\tt \#10} -\/ addition by \href{https://github.com/jessamynsmith}{\tt jessamynsmith} and \href{https://github.com/mgoku}{\tt mgoku}
+\end{DoxyItemize}
+
+\subsection*{v0.\+5.\+2}
+
+
+\begin{DoxyItemize}
+\item leverage template cache. \href{https://github.com/matowens/ng-notify/pull/7}{\tt \#7} -\/ addition by \href{https://github.com/fduch2k}{\tt fduch2k}
+\end{DoxyItemize}
+
+\subsection*{v0.\+5.\+1}
+
+
+\begin{DoxyItemize}
+\item use ng-\/html for scope variable injection. -\/ \href{https://github.com/matowens/ng-notify/pull/4}{\tt \#4} -\/ fix by \href{https://github.com/epigos}{\tt epigos}
+\item container with {\ttfamily ngn} class can interfere with other fixed-\/position divs. -\/ \href{https://github.com/matowens/ng-notify/issues/5}{\tt \#5} -\/ fix by \href{https://github.com/antch}{\tt antch}
+\item introduced contributors.
+\end{DoxyItemize}
+
+\subsection*{v0.\+5.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries new feature}\+: added a dismiss method to give additional dev control over how notifications display.
+\end{DoxyItemize}
+
+\subsection*{v0.\+4.\+2}
+
+
+\begin{DoxyItemize}
+\item update for version bumps.
+\item same path fix for the package.\+json file.
+\end{DoxyItemize}
+
+\subsection*{v0.\+4.\+1}
+
+
+\begin{DoxyItemize}
+\item path fix for bower, bower.\+json file. -\/ \href{https://github.com/matowens/ng-notify/pull/3/files}{\tt \#3} -\/ fix by \href{https://github.com/genu}{\tt genu}
+\end{DoxyItemize}
+
+\subsection*{v0.\+4.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries new feature}\+: sticky notifications, dismissible by the user.
+\item standardized comments throughout module.
+\item organized module structure.
+\end{DoxyItemize}
+
+\subsection*{v0.\+3.\+0}
+
+
+\begin{DoxyItemize}
+\item {\bfseries new feature}\+: configurable options for individual notifications.
+\item renamed type option from {\itshape default\+Type} to just {\itshape type} for consistency.
+\item introduced change log
+\end{DoxyItemize}
+
+\subsection*{v0.\+2.\+1}
+
+
+\begin{DoxyItemize}
+\item better organized for bower distribution.
+\end{DoxyItemize}
+
+\subsection*{v0.\+2.\+0}
+
+
+\begin{DoxyItemize}
+\item initial bower release. 
+\end{DoxyItemize}

@@ -1,0 +1,351 @@
+Load modules on demand (lazy load) in Angular\+JS
+
+\subsection*{Table of contents}
+
+
+\begin{DoxyEnumerate}
+\item \href{#key-features}{\tt Key features}
+\item \href{#usage}{\tt Usage}
+\item \href{#service}{\tt Service}
+\item \href{#directive}{\tt Directive}
+\item \href{#bonus-use-dependency-injection}{\tt Dependency injection}
+\item \href{#configuration}{\tt Configuration}
+\item \href{#works-well-with-your-router}{\tt Router usage}
+\item \href{#other-functions}{\tt Other function}
+\item \href{#contribute}{\tt Contribute}
+\item \href{#karma--unit-tests}{\tt Karma \& unit tests}
+\end{DoxyEnumerate}
+
+\subsection*{Key features}
+
+
+\begin{DoxyItemize}
+\item Dependencies are automatically loaded
+\item Debugger friendly (no eval code)
+\item The ability to mix normal boot and load on demand
+\item Load via the service or the directive
+\item Use the embedded async loader or use your own (require\+JS, ...)
+\item Load js (angular or not) / css / templates files
+\item Compatible with Angular\+JS 1.\+2.\+x and 1.\+3.\+x
+\end{DoxyItemize}
+
+\subsection*{Usage}
+
+
+\begin{DoxyItemize}
+\item Put oc\+Lazy\+Load.\+js into you project
+\item Add the module {\ttfamily oc.\+lazy\+Load} to your application (you can install it with {\ttfamily bower install oclazyload} or {\ttfamily npm install oclazyload})
+\item Load on demand\+: With \$oc\+Lazy\+Load you can load angular modules, but if you want to load any component (controllers / services / filters / ...) without defining a new module it\textquotesingle{}s entirely possible (just make sure that you define this component within an existing module).
+\end{DoxyItemize}
+
+There are multiple ways to use {\ttfamily \$oc\+Lazy\+Load} to load your files, just choose the one that fits you the best.
+
+\subparagraph*{More examples / tutorials / articles}
+
+You can find three basic examples in the example folder. If you need more, check out these links\+:
+\begin{DoxyItemize}
+\item Lazy loading with requirejs, oc\+Lazy\+Load and ui-\/router\+: \href{http://plnkr.co/edit/OGvi01?p=preview}{\tt using the template\+Provider} / \href{http://plnkr.co/edit/6CLDsz?p=preview}{\tt using the ui\+Router\+Decorator} -\/ by 
+\item Lazy Loading ui-\/router states with requirejs, oc\+Lazy\+Load and ui-\/router-\/extras future\+States, \href{http://bardo.io/posts/oclazyload-future-states/}{\tt part 1} / \href{http://bardo.io/posts/ng-deferred-bootstrap-like-with-oclazyload/}{\tt part 2} -\/ by 
+\item Lazy loading Angular modules with oc\+Lazy\+Load, \href{https://egghead.io/lessons/angularjs-lazy-loading-angular-modules-with-oclazyload}{\tt part 1} / \href{https://egghead.io/lessons/angularjs-lazy-loading-modules-with-ui-router-and-oclazyload}{\tt part 2} / \href{https://egghead.io/lessons/angularjs-simple-lazy-loaded-angular-module-syntax-with-oclazyload}{\tt part 3} / \href{https://egghead.io/lessons/angularjs-lazy-loading-non-angular-libraries-with-oclazyload}{\tt part 4} -\/ An Angular\+JS lesson by \href{https://twitter.com/johnlindquist}{\tt } on \href{https://egghead.io/}{\tt egghead.\+io}
+\end{DoxyItemize}
+
+\subsubsection*{Service}
+
+You can include {\ttfamily \$oc\+Lazy\+Load} and use the function {\ttfamily load} which returns a promise. It supports a single dependency (object) or multiple dependencies (array of objects).
+
+Load one or more modules \& components with one file\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load('testModule.js');
+\end{DoxyCode}
+
+
+Load one or more modules \& components with multiple files\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(['testModule.js', 'testModuleCtrl.js', 'testModuleService.js']);
+\end{DoxyCode}
+
+
+Load one or more modules with multiple files and specify a type where necessary\+: Note\+: When using the require\+JS style formatting (with {\ttfamily js!} at the beginning for example), do not specify a file extension. Use one or the other. 
+\begin{DoxyCode}
+$ocLazyLoad.load([
+   'testModule.js',
+   \{type: 'css', path: 'testModuleCtrl'\},
+   \{type: 'html', path: 'testModuleCtrl.html'\},
+   \{type: 'js', path: 'testModuleCtrl'\},
+   'js!testModuleService',
+   'less!testModuleLessFile'
+]);
+\end{DoxyCode}
+
+
+You can also load external libs (not angular)\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js', 'anotherModule.js']);
+\end{DoxyCode}
+
+
+You can also load css and template files\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load([
+    'bower\_components/bootstrap/dist/js/bootstrap.js',
+    'bower\_components/bootstrap/dist/css/bootstrap.css',
+    'partials/template1.html'
+]);
+\end{DoxyCode}
+
+
+If you want to load templates, the template file should be an html (or htm) file with regular \href{https://docs.angularjs.org/api/ng/directive/script}{\tt script templates}. It looks like this\+: 
+\begin{DoxyCode}
+<script type="text/ng-template" id="/tpl.html">
+  Content of the template.
+</script>
+\end{DoxyCode}
+
+
+You can put more than one template script in your template file, just make sure to use different ids\+: 
+\begin{DoxyCode}
+<script type="text/ng-template" id="/tpl1.html">
+  Content of the first template.
+</script>
+
+<script type="text/ng-template" id="/tpl2.html">
+  Content of the second template.
+</script>
+\end{DoxyCode}
+
+
+There are two ways to define config options for the load function. You can use a second optional parameter that will define configs for all the modules that you will load, or you can define optional parameters to each module. For example, these are equivalent\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load([\{
+  files: ['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js'],
+  cache: false
+\},\{
+  files: ['anotherModule.js'],
+  cache: true
+\}]);
+\end{DoxyCode}
+ And 
+\begin{DoxyCode}
+$ocLazyLoad.load(
+  ['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js', 'anotherModule.js'],
+  \{cache: false\}
+);
+\end{DoxyCode}
+
+
+If you load a template with the native template loader, you can use any parameter from the \$http service (check\+: \href{https://docs.angularjs.org/api/ng/service/$http#usage}{\tt https\+://docs.\+angularjs.\+org/api/ng/service/\$http\#usage}). 
+\begin{DoxyCode}
+$ocLazyLoad.load(
+    ['partials/template1.html', 'partials/template2.html'],
+    \{cache: false, timeout: 5000\}
+);
+\end{DoxyCode}
+
+
+The existing parameters that you can use are {\ttfamily cache}, {\ttfamily reconfig}, {\ttfamily rerun}, {\ttfamily serie} and {\ttfamily insert\+Before}. The parameter {\ttfamily cache\+: false} works for all native loaders ({\bfseries all requests are cached by default})\+:
+
+
+\begin{DoxyCode}
+$ocLazyLoad.load(\{
+    cache: false,
+    files: ['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js']
+\});
+\end{DoxyCode}
+
+
+By default, if you reload a module, the config block won\textquotesingle{}t be invoked again (because often it will lead to unexpected results). But if you really need to execute the config function again, use the parameter {\ttfamily reconfig\+: true}\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(\{
+    reconfig: true,
+    files: ['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js']
+\});
+\end{DoxyCode}
+
+
+The same problem might happen with run blocks, use {\ttfamily rerun\+: true} to rerun the run blocks\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(\{
+    rerun: true,
+    files: ['testModule.js', 'bower\_components/bootstrap/dist/js/bootstrap.js']
+\});
+\end{DoxyCode}
+
+
+By default the native loaders will load your files in parallel. If you need to load your files in serie, you can use {\ttfamily serie\+: true}\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(\{
+    serie: true,
+    files: [
+        'bower\_components/angular-strap/dist/angular-strap.js',
+        'bower\_components/angular-strap/dist/angular-strap.tpl.js'
+    ]
+\});
+\end{DoxyCode}
+
+
+The files, by default, will be inserted before the last child of the {\ttfamily head} element. You can override this by using {\ttfamily insert\+Before\+: \textquotesingle{}css\+Selector\textquotesingle{}}\+: 
+\begin{DoxyCode}
+$ocLazyLoad.load(\{
+    insertBefore: '#load\_css\_before',
+    files: ['bower\_components/bootstrap/dist/css/bootstrap.css']
+\});
+\end{DoxyCode}
+
+
+\subsubsection*{Directive}
+
+The directive usage is very similar to the service. The main interest here is that the content will be included and compiled once your modules have been loaded. This means that you can use directives that will be lazy loaded inside the oc-\/lazy-\/load directive.
+
+Use the same parameters as a service\+: 
+\begin{DoxyCode}
+<div oc-lazy-load="\{['js/testModule.js', 'partials/lazyLoadTemplate.html']\}">
+    // Use a directive from TestModule
+    <test-directive></test-directive>
+</div>
+\end{DoxyCode}
+
+
+You can use variables to store parameters\+: 
+\begin{DoxyCode}
+$scope.lazyLoadParams = [
+    'js/testModule.js',
+    'partials/lazyLoadTemplate.html'
+];
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+<div oc-lazy-load="lazyLoadParams"></div>
+\end{DoxyCode}
+
+
+\subsubsection*{Bonus\+: Use dependency injection}
+
+As a convenience you can also load dependencies by placing a module definition in the dependency injection block of your module. This will only work for lazy loaded modules\+: 
+\begin{DoxyCode}
+angular.module('MyModule', ['pascalprecht.translate', \{
+  '/components/TestModule/TestModule.js',
+  [
+    '/components/bootstrap/css/bootstrap.css',
+    '/components/bootstrap/js/bootstrap.js'
+  ]
+]);
+\end{DoxyCode}
+
+
+\subsection*{Configuration}
+
+You can configure the service provider {\ttfamily \$oc\+Lazy\+Load\+Provider} in the config function of your application\+:
+
+
+\begin{DoxyCode}
+angular.module('app').config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) \{
+    $ocLazyLoadProvider.config(\{
+        ...
+    \});
+\}]);
+\end{DoxyCode}
+
+
+The options are\+:
+\begin{DoxyItemize}
+\item {\ttfamily js\+Loader}\+: You can use your own async loader. The one provided with \$oc\+Lazy\+Load is based on \$script.\+js, but you can use require\+JS or any other async loader that works with the following syntax\+: ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ js\+Loader\+: function(\mbox{[}\+Array of files\mbox{]}, callback, params); \}); ```
+\item {\ttfamily css\+Loader}\+: You can also define your own css async loader. The rules and syntax are the same as js\+Loader. ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ css\+Loader\+: function(\mbox{[}\+Array of files\mbox{]}, callback, params); \}); ```
+\item {\ttfamily templates\+Loader}\+: You can use your template loader. It\textquotesingle{}s similar to the {\ttfamily js\+Loader} but it uses an optional config parameter ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ templates\+Loader\+: function(\mbox{[}\+Array of files\mbox{]}, callback, params); \}); ```
+\item {\ttfamily debug}\+: \$oc\+Lazy\+Load returns a promise that can be rejected if there is an error. If you set debug to true, \$oc\+Lazy\+Load will also log all errors to the console. ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ debug\+: true \}); ```
+\item {\ttfamily events}\+: \$oc\+Lazy\+Load can broadcast an event when you load a module, a component and a file (js/css/template). It is disabled by default, set events to true to activate it. The events are {\ttfamily oc\+Lazy\+Load.\+module\+Loaded}, {\ttfamily oc\+Lazy\+Load.\+module\+Reloaded}, {\ttfamily oc\+Lazy\+Load.\+component\+Loaded}, {\ttfamily oc\+Lazy\+Load.\+file\+Loaded}. ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ events\+: true \}); {\ttfamily  }js \$scope.\$on(\textquotesingle{}oc\+Lazy\+Load.\+module\+Loaded\textquotesingle{}, function(e, module) \{ console.\+log(\textquotesingle{}module loaded\textquotesingle{}, module); \}); ```
+\item {\ttfamily modules}\+: predefine the configuration of your modules for a later use. You will have to specify the name of the module here so that we can find the reference later. ```js \$oc\+Lazy\+Load\+Provider.\+config(\{ modules\+: \mbox{[}\{ name\+: \textquotesingle{}Test\+Module\textquotesingle{}, files\+: \mbox{[}\textquotesingle{}js/\+Test\+Module.\+js\textquotesingle{}\mbox{]} \}\mbox{]} \}); {\ttfamily  }js \$oc\+Lazy\+Load.\+load(\textquotesingle{}Test\+Module\textquotesingle{}); ```
+\end{DoxyItemize}
+
+\subsection*{Works well with your router}
+
+{\ttfamily \$oc\+Lazy\+Load} works well with routers and especially \href{https://github.com/angular-ui/ui-router}{\tt ui-\/router}. Since it returns a promise, use the \href{https://github.com/angular-ui/ui-router/wiki#resolve}{\tt resolve property} to make sure that your components are loaded before the view is resolved\+: 
+\begin{DoxyCode}
+$stateProvider.state('index', \{
+    url: "/", // root route
+    views: \{
+        "lazyLoadView": \{
+            controller: 'AppCtrl', // This view will use AppCtrl loaded below in the resolve
+            templateUrl: 'partials/main.html'
+        \}
+    \},
+    resolve: \{ // Any property in resolve should return a promise and is executed before the view is loaded
+        loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) \{
+            // you can lazy load files for an existing module
+             return $ocLazyLoad.load('js/AppCtrl.js');
+        \}]
+    \}
+\});
+\end{DoxyCode}
+
+
+If you have nested views, make sure to include the resolve from the parent to load your components in the right order\+: 
+\begin{DoxyCode}
+$stateProvider.state('parent', \{
+    url: "/",
+    resolve: \{
+        loadMyService: ['$ocLazyLoad', function($ocLazyLoad) \{
+             return $ocLazyLoad.load('js/ServiceTest.js');
+        \}]
+    \}
+\})
+.state('parent.child', \{
+    resolve: \{
+        test: ['loadMyService', '$ServiceTest', function(loadMyService, $ServiceTest) \{
+            // you can use your service
+            $ServiceTest.doSomething();
+        \}]
+    \}
+\});
+\end{DoxyCode}
+
+
+It also works for sibling resolves\+: 
+\begin{DoxyCode}
+$stateProvider.state('index', \{
+    url: "/",
+    resolve: \{
+        loadMyService: ['$ocLazyLoad', function($ocLazyLoad) \{
+             return $ocLazyLoad.load('js/ServiceTest.js');
+        \}],
+        test: ['loadMyService', '$serviceTest', function(loadMyService, $serviceTest) \{
+            // you can use your service
+            $serviceTest.doSomething();
+        \}]
+    \}
+\});
+\end{DoxyCode}
+
+
+Of course, if you want to use the loaded files immediately, you don\textquotesingle{}t need to define two resolves, you can also use the injector (it works anywhere, not just in the router)\+: 
+\begin{DoxyCode}
+$stateProvider.state('index', \{
+  url: "/",
+  resolve: \{
+    loadMyService: ['$ocLazyLoad', '$injector', function($ocLazyLoad, $injector) \{
+      return $ocLazyLoad.load('js/ServiceTest.js').then(function() \{
+        var $serviceTest = $injector.get("$serviceTest");
+        $serviceTest.doSomething();
+      \});
+    \}]
+  \}
+\});
+\end{DoxyCode}
+
+
+\subsection*{Other functions}
+
+{\ttfamily \$oc\+Lazy\+Load} provides a few other functions that might help you in a few specific cases\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily set\+Module\+Config(module\+Config)}\+: Lets you define a module config object
+\item {\ttfamily get\+Module\+Config(module\+Name)}\+: Lets you get a module config object
+\item {\ttfamily get\+Modules()}\+: Returns the list of loaded modules
+\item {\ttfamily is\+Loaded(modules\+Names)}\+: Lets you check if a module (or a list of modules) has been loaded into Angular or not
+\end{DoxyItemize}
+
+\subsection*{Contribute}
+
+If you want to get started and the docs are not enough, see the examples in the \textquotesingle{}examples\textquotesingle{} folder!
+
+If you want to contribute, it would be really awesome to add some tests, or more examples \+:) 

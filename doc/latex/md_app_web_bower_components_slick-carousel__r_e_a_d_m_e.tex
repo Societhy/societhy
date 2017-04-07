@@ -1,0 +1,325 @@
+{\itshape the last carousel you\textquotesingle{}ll ever need}
+
+\paragraph*{Demo}
+
+\href{http://kenwheeler.github.io/slick/}{\tt http\+://kenwheeler.\+github.\+io/slick}
+
+\paragraph*{C\+DN}
+
+To start working with Slick right away, there\textquotesingle{}s a couple of C\+DN choices availabile to serve the files as close, and fast as possible to your users\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://cdnjs.com/libraries/slick-carousel}{\tt https\+://cdnjs.\+com/libraries/slick-\/carousel}
+\item \href{https://www.jsdelivr.com/projects/jquery.slick}{\tt https\+://www.\+jsdelivr.\+com/projects/jquery.\+slick}
+\end{DoxyItemize}
+
+\subparagraph*{Example using js\+Delivr}
+
+Just add a link to the css file in your {\ttfamily $<$head$>$}\+: 
+\begin{DoxyCode}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css"/>
+
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css"/>
+\end{DoxyCode}
+
+
+Then, before your closing {\ttfamily $<$body$>$} tag add\+:
+
+
+\begin{DoxyCode}
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js"></script>
+\end{DoxyCode}
+
+
+\paragraph*{Package Managers}
+
+
+\begin{DoxyCode}
+# Bower
+bower install --save slick-carousel
+
+# NPM
+npm install slick-carousel
+\end{DoxyCode}
+
+
+\paragraph*{Contributing}
+
+P\+L\+E\+A\+SE review C\+O\+N\+T\+R\+I\+B\+U\+T\+I\+N\+G.\+markdown prior to requesting a feature, filing a pull request or filing an issue.
+
+\subsubsection*{Data Attribute Settings}
+
+In slick 1.\+5 you can now add settings using the data-\/slick attribute. You still need to call .slick() to initialize slick on the element.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<div data-slick='\{"slidesToShow": 4, "slidesToScroll": 4\}'>
+  <div><h3>1</h3></div>
+  <div><h3>2</h3></div>
+  <div><h3>3</h3></div>
+  <div><h3>4</h3></div>
+  <div><h3>5</h3></div>
+  <div><h3>6</h3></div>
+</div>
+\end{DoxyCode}
+
+
+\subsubsection*{Settings}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Option }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Option }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endhead
+accessibility &boolean &true &Enables tabbing and arrow key navigation \\\cline{1-4}
+adaptive\+Height &boolean &false &Adapts slider height to the current slide \\\cline{1-4}
+autoplay &boolean &false &Enables auto play of slides \\\cline{1-4}
+autoplay\+Speed &int &3000 &Auto play change interval \\\cline{1-4}
+center\+Mode &boolean &false &Enables centered view with partial prev/next slides. Use with odd numbered slides\+To\+Show counts. \\\cline{1-4}
+center\+Padding &string &\textquotesingle{}50px\textquotesingle{} &Side padding when in center mode. (px or \%) \\\cline{1-4}
+css\+Ease &string &\textquotesingle{}ease\textquotesingle{} &C\+S\+S3 easing \\\cline{1-4}
+custom\+Paging &function &n/a &Custom paging templates. See source for use example. \\\cline{1-4}
+dots &boolean &false &Current slide indicator dots \\\cline{1-4}
+dots\+Class &string &\textquotesingle{}slick-\/dots\textquotesingle{} &Class for slide indicator dots container \\\cline{1-4}
+draggable &boolean &true &Enables desktop dragging \\\cline{1-4}
+easing &string &\textquotesingle{}linear\textquotesingle{} &animate() fallback easing \\\cline{1-4}
+edge\+Friction &integer &0.\+15 &Resistance when swiping edges of non-\/infinite carousels \\\cline{1-4}
+fade &boolean &false &Enables fade \\\cline{1-4}
+arrows &boolean &true &Enable Next/\+Prev arrows \\\cline{1-4}
+append\+Arrows &string &&Change where the navigation arrows are attached (Selector, html\+String, Array, Element, j\+Query object) \\\cline{1-4}
+append\+Dots &string &&Change where the navigation dots are attached (Selector, html\+String, Array, Element, j\+Query object) \\\cline{1-4}
+mobile\+First &boolean &false &Responsive settings use mobile first calculation \\\cline{1-4}
+prev\+Arrow &string (html $|$ j\+Query selector) $|$ object (D\+OM node $|$ j\+Query object) &{\ttfamily $<$button type=\char`\"{}button\char`\"{} class=\char`\"{}slick-\/prev\char`\"{}$>$Previous$<$/button$>$} &Allows you to select a node or customize the H\+T\+ML for the \char`\"{}\+Previous\char`\"{} arrow. \\\cline{1-4}
+next\+Arrow &string (html $|$ j\+Query selector) $|$ object (D\+OM node $|$ j\+Query object) &{\ttfamily $<$button type=\char`\"{}button\char`\"{} class=\char`\"{}slick-\/next\char`\"{}$>$Next$<$/button$>$} &Allows you to select a node or customize the H\+T\+ML for the \char`\"{}\+Next\char`\"{} arrow. \\\cline{1-4}
+infinite &boolean &true &Infinite looping \\\cline{1-4}
+initial\+Slide &integer &0 &Slide to start on \\\cline{1-4}
+lazy\+Load &string &\textquotesingle{}ondemand\textquotesingle{} &Accepts \textquotesingle{}ondemand\textquotesingle{} or \textquotesingle{}progressive\textquotesingle{} for lazy load technique. \textquotesingle{}ondemand\textquotesingle{} will load the image as soon as you slide to it, \textquotesingle{}progressive\textquotesingle{} loads one image after the other when the page loads. \\\cline{1-4}
+pause\+On\+Focus &boolean &true &Pauses autoplay when slider is focussed \\\cline{1-4}
+pause\+On\+Hover &boolean &true &Pauses autoplay on hover \\\cline{1-4}
+pause\+On\+Dots\+Hover &boolean &false &Pauses autoplay when a dot is hovered \\\cline{1-4}
+respond\+To &string &\textquotesingle{}window\textquotesingle{} &Width that responsive object responds to. Can be \textquotesingle{}window\textquotesingle{}, \textquotesingle{}slider\textquotesingle{} or \textquotesingle{}min\textquotesingle{} (the smaller of the two). \\\cline{1-4}
+responsive &array &null &Array of objects \href{#responsive-option-example}{\tt containing breakpoints and settings objects (see example)}. Enables settings at given {\ttfamily breakpoint}. Set {\ttfamily settings} to \char`\"{}unslick\char`\"{} instead of an object to disable slick at a given breakpoint. \\\cline{1-4}
+rows &int &1 &Setting this to more than 1 initializes grid mode. Use slides\+Per\+Row to set how many slides should be in each row. \\\cline{1-4}
+slide &string &\textquotesingle{}\textquotesingle{} &Slide element query \\\cline{1-4}
+slides\+Per\+Row &int &1 &With grid mode initialized via the rows option, this sets how many slides are in each grid row. \\\cline{1-4}
+slides\+To\+Show &int &1 &\# of slides to show at a time \\\cline{1-4}
+slides\+To\+Scroll &int &1 &\# of slides to scroll at a time \\\cline{1-4}
+speed &int &300 &Transition speed \\\cline{1-4}
+swipe &boolean &true &Enables touch swipe \\\cline{1-4}
+swipe\+To\+Slide &boolean &false &Swipe to slide irrespective of slides\+To\+Scroll \\\cline{1-4}
+touch\+Move &boolean &true &Enables slide moving with touch \\\cline{1-4}
+touch\+Threshold &int &5 &To advance slides, the user must swipe a length of (1/touch\+Threshold) $\ast$ the width of the slider. \\\cline{1-4}
+use\+C\+SS &boolean &true &Enable/\+Disable C\+SS Transitions \\\cline{1-4}
+use\+Transform &boolean &true &Enable/\+Disable C\+SS Transforms \\\cline{1-4}
+variable\+Width &boolean &false &Disables automatic slide width calculation \\\cline{1-4}
+vertical &boolean &false &Vertical slide direction \\\cline{1-4}
+vertical\+Swiping &boolean &false &Changes swipe direction to vertical \\\cline{1-4}
+rtl &boolean &false &Change the slider\textquotesingle{}s direction to become right-\/to-\/left \\\cline{1-4}
+wait\+For\+Animate &boolean &true &Ignores requests to advance the slide while animating \\\cline{1-4}
+z\+Index &number &1000 &Set the z\+Index values for slides, useful for I\+E9 and lower \\\cline{1-4}
+\end{longtabu}
+\subparagraph*{Responsive Option Example}
+
+The responsive option, and value, is quite unique and powerful. You can use it like so\+:
+
+
+\begin{DoxyCode}
+$(".slider").slick(\{
+
+  // normal options...
+  infinite: false,
+
+  // the magic
+  responsive: [\{
+
+      breakpoint: 1024,
+      settings: \{
+        slidesToShow: 3,
+        infinite: true
+      \}
+
+    \}, \{
+
+      breakpoint: 600,
+      settings: \{
+        slidesToShow: 2,
+        dots: true
+      \}
+
+    \}, \{
+
+      breakpoint: 300,
+      settings: "unslick" // destroys slick
+
+    \}]
+\});
+\end{DoxyCode}
+
+
+\subsubsection*{Events}
+
+In slick 1.\+4, callback methods were deprecated and replaced with events. Use them before the initialization of slick as shown below\+:
+
+
+\begin{DoxyCode}
+// On swipe event
+$('.your-element').on('swipe', function(event, slick, direction)\{
+  console.log(direction);
+  // left
+\});
+
+// On edge hit
+$('.your-element').on('edge', function(event, slick, direction)\{
+  console.log('edge was hit')
+\});
+
+// On before slide change
+$('.your-element').on('beforeChange', function(event, slick, currentSlide, nextSlide)\{
+  console.log(nextSlide);
+\});
+\end{DoxyCode}
+
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Event }&\textbf{ Params }&\textbf{ Description  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Event }&\textbf{ Params }&\textbf{ Description  }\\\cline{1-3}
+\endhead
+after\+Change &event, slick, current\+Slide &After slide change callback \\\cline{1-3}
+before\+Change &event, slick, current\+Slide, next\+Slide &Before slide change callback \\\cline{1-3}
+breakpoint &event, slick, breakpoint &Fires after a breakpoint is hit \\\cline{1-3}
+destroy &event, slick &When slider is destroyed, or unslicked. \\\cline{1-3}
+edge &event, slick, direction &Fires when an edge is overscrolled in non-\/infinite mode. \\\cline{1-3}
+init &event, slick &When Slick initializes for the first time callback. Note that this event should be defined before initializing the slider. \\\cline{1-3}
+re\+Init &event, slick &Every time Slick (re-\/)initializes callback \\\cline{1-3}
+set\+Position &event, slick &Every time Slick recalculates position \\\cline{1-3}
+swipe &event, slick, direction &Fires after swipe/drag \\\cline{1-3}
+lazy\+Loaded &event, slick, image, image\+Source &Fires after image loads lazily \\\cline{1-3}
+lazy\+Load\+Error &event, slick, image, image\+Source &Fires after image fails to load \\\cline{1-3}
+\end{longtabu}
+
+
+\paragraph*{Methods}
+
+Methods are called on slick instances through the slick method itself in version 1.\+4, see below\+:
+
+
+\begin{DoxyCode}
+// Add a slide
+$('.your-element').slick('slickAdd',"<div></div>");
+
+// Get the current slide
+var currentSlide = $('.your-element').slick('slickCurrentSlide');
+\end{DoxyCode}
+
+
+This new syntax allows you to call any internal slick method as well\+:
+
+
+\begin{DoxyCode}
+// Manually refresh positioning of slick
+$('.your-element').slick('setPosition');
+\end{DoxyCode}
+
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Method }&\textbf{ Argument }&\textbf{ Description  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Method }&\textbf{ Argument }&\textbf{ Description  }\\\cline{1-3}
+\endhead
+{\ttfamily slick} &options \+: object &Initializes Slick \\\cline{1-3}
+{\ttfamily unslick} &&Destroys Slick \\\cline{1-3}
+{\ttfamily slick\+Next} &&Triggers next slide \\\cline{1-3}
+{\ttfamily slick\+Prev} &&Triggers previous slide \\\cline{1-3}
+{\ttfamily slick\+Pause} &&Pause Autoplay \\\cline{1-3}
+{\ttfamily slick\+Play} &&Start Autoplay ({\itshape will also set {\ttfamily autoplay} option to {\ttfamily true}}) \\\cline{1-3}
+{\ttfamily slick\+Go\+To} &index \+: int, dont\+Animate \+: bool &Goes to slide by index, skipping animation if second parameter is set to true \\\cline{1-3}
+{\ttfamily slick\+Current\+Slide} &&Returns the current slide index \\\cline{1-3}
+\end{longtabu}
+{\ttfamily slick\+Add} $\vert$ element \+: html or D\+OM object, index\+: int, add\+Before\+: bool $\vert$ Add a slide. If an index is provided, will add at that index, or before if add\+Before is set. If no index is provided, add to the end or to the beginning if add\+Before is set. Accepts H\+T\+ML String $\vert$$\vert$ Object {\ttfamily slick\+Remove} $\vert$ index\+: int, remove\+Before\+: bool $\vert$ Remove slide by index. If remove\+Before is set true, remove slide preceding index, or the first slide if no index is specified. If remove\+Before is set to false, remove the slide following index, or the last slide if no index is set. {\ttfamily slick\+Filter} $\vert$ filter \+: selector or function $\vert$ Filters slides using j\+Query .filter syntax {\ttfamily slick\+Unfilter} $\vert$ $\vert$ Removes applied filter {\ttfamily slick\+Get\+Option} $\vert$ option \+: string(option name) $\vert$ Gets an option value. {\ttfamily slick\+Set\+Option} $\vert$ change an option, {\ttfamily refresh} is always {\ttfamily boolean} and will update UI changes... $\vert$ {\ttfamily option, value, refresh} $\vert$ change a \href{https://github.com/kenwheeler/slick#settings}{\tt single {\ttfamily option}} to given {\ttfamily value}; {\ttfamily refresh} is optional. $\vert$ {\ttfamily \char`\"{}responsive\char`\"{}, \mbox{[}\{ breakpoint\+: n, settings\+: \{\} \}, ... \mbox{]}, refresh} $\vert$ change or add \href{#responsive-option-example}{\tt whole sets of responsive options} $\vert$ {\ttfamily \{ option\+: value, option\+: value, ... \}, refresh} $\vert$ change \href{https://github.com/kenwheeler/slick#settings}{\tt multiple {\ttfamily option}s} to corresponding {\ttfamily value}s.
+
+\paragraph*{Example}
+
+Initialize with\+:
+
+
+\begin{DoxyCode}
+$(element).slick(\{
+  dots: true,
+  speed: 500
+\});
+\end{DoxyCode}
+
+
+Change the speed with\+:
+
+
+\begin{DoxyCode}
+$(element).slick('slickSetOption', 'speed', 5000, true);
+\end{DoxyCode}
+
+
+Destroy with\+:
+
+
+\begin{DoxyCode}
+$(element).slick('unslick');
+\end{DoxyCode}
+
+
+\paragraph*{Sass Variables}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Variable }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Variable }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endhead
+\$slick-\/font-\/path &string &\char`\"{}./fonts/\char`\"{} &Directory path for the slick icon font \\\cline{1-4}
+\$slick-\/font-\/family &string &\char`\"{}slick\char`\"{} &Font-\/family for slick icon font \\\cline{1-4}
+\$slick-\/loader-\/path &string &\char`\"{}./\char`\"{} &Directory path for the loader image \\\cline{1-4}
+\$slick-\/arrow-\/color &color &white &Color of the left/right arrow icons \\\cline{1-4}
+\$slick-\/dot-\/color &color &black &Color of the navigation dots \\\cline{1-4}
+\$slick-\/dot-\/color-\/active &color &\$slick-\/dot-\/color &Color of the active navigation dot \\\cline{1-4}
+\$slick-\/prev-\/character &string &\textquotesingle{}\textbackslash{}2190\textquotesingle{} &Unicode character code for the previous arrow icon \\\cline{1-4}
+\$slick-\/next-\/character &string &\textquotesingle{}\textbackslash{}2192\textquotesingle{} &Unicode character code for the next arrow icon \\\cline{1-4}
+\$slick-\/dot-\/character &string &\textquotesingle{}\textbackslash{}2022\textquotesingle{} &Unicode character code for the navigation dot icon \\\cline{1-4}
+\$slick-\/dot-\/size &pixels &6px &Size of the navigation dots \\\cline{1-4}
+\end{longtabu}
+\paragraph*{Browser support}
+
+Slick works on I\+E8+ in addition to other modern browsers such as Chrome, Firefox, and Safari.
+
+\paragraph*{Dependencies}
+
+j\+Query 1.\+7
+
+\paragraph*{License}
+
+Copyright (c) 2014 Ken Wheeler
+
+Licensed under the M\+IT license.
+
+Free as in Bacon. 

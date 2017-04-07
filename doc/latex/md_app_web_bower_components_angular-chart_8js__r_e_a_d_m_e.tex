@@ -1,0 +1,224 @@
+\href{http://badge.fury.io/bo/angular-chart.js}{\tt } \href{http://badge.fury.io/js/angular-chart.js}{\tt } \href{https://travis-ci.org/jtblin/angular-chart.js}{\tt } \href{https://codeclimate.com/github/jtblin/angular-chart.js}{\tt } \href{https://codeclimate.com/github/jtblin/angular-chart.js}{\tt }
+
+Beautiful, reactive, responsive charts for Angular.\+JS using \href{http://www.chartjs.org/}{\tt Chart.\+js}.
+
+\href{http://jtblin.github.io/angular-chart.js/}{\tt Demo}
+
+\section*{Chart.\+js 2.\+0}
+
+If you are interested by the upcoming 2.\+0 version of Chart.\+js, please checkout the \href{https://github.com/jtblin/angular-chart.js/tree/chartjs-2.0}{\tt chartjs-\/2.\+0 branch}. Report issues and feedback for this version by opening issues prefixed by \char`\"{}chartjs-\/2.\+0\char`\"{} in the title.
+
+See \href{https://github.com/jtblin/angular-chart.js/issues/123}{\tt https\+://github.\+com/jtblin/angular-\/chart.\+js/issues/123} for more details and subscribe to it to get the latest progress on Chart.\+js 2.\+0 integration.
+
+\section*{Installation}
+
+\subsubsection*{bower}
+
+\begin{DoxyVerb}bower install --save angular-chart.js
+\end{DoxyVerb}
+
+
+\subsubsection*{npm}
+
+\begin{DoxyVerb}npm install --save angular-chart.js
+\end{DoxyVerb}
+
+
+\subsubsection*{cdn}
+
+\begin{DoxyVerb}//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js
+//cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.css
+\end{DoxyVerb}
+
+
+\subsubsection*{manually}
+
+or copy the files from {\ttfamily dist/}.
+
+Then add the sources to your code (adjust paths as needed) after adding the dependencies for Angular and Chart.\+js first\+:
+
+
+\begin{DoxyCode}
+<head>
+  <link rel="stylesheet" href="bower\_components/angular-chart.js/dist/angular-chart.css" />
+<head>
+<body>
+  ...
+</body>
+  <script src="bower\_components/angular/angular.min.js"></script>
+  <script src="bower\_components/Chart.js/Chart.min.js"></script>
+  <script src="bower\_components/angular-chart.js/dist/angular-chart.min.js"></script>
+\end{DoxyCode}
+
+
+\section*{Utilisation}
+
+There are 6 types of charts so 6 directives\+: {\ttfamily chart-\/line}, {\ttfamily chart-\/bar}, {\ttfamily chart-\/radar}, {\ttfamily chart-\/pie}, {\ttfamily chart-\/polar-\/area}, {\ttfamily chart-\/doughnut}.
+
+They all use mostly the same A\+PI ({\ttfamily \mbox{[}chart-\/\mbox{]}} indicates an optional but recommended prefix)\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}data}\+: series data
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}labels}\+: x axis labels (line, bar, radar) or series labels (pie, doughnut, polar area)
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}options}\+: chart options (as from \href{http://www.chartjs.org/docs/}{\tt Chart.\+js documentation})
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}series}\+: (default\+: {\ttfamily \mbox{[}\mbox{]}})\+: series labels (line, bar, radar)
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}colours}\+: data colours (will use default colours if not specified)
+\item {\ttfamily get\+Colour}\+: function that returns a colour in case there are not enough (will use random colours if not specified)
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}click}\+: onclick event handler
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}hover}\+: onmousemove event handler
+\item {\ttfamily \mbox{[}chart-\/\mbox{]}legend}\+: (default\+: {\ttfamily false})\+: show legend below the chart
+\end{DoxyItemize}
+
+{\itshape D\+E\+P\+R\+E\+C\+A\+T\+I\+ON W\+A\+R\+N\+I\+NG}\+: Note that all attributes which do {\itshape not} use the {\ttfamily \mbox{[}chart-\/\mbox{]}} prefix are deprecated and may be removed in a future version.
+
+There is another directive {\ttfamily chart-\/base} that takes an extra attribute {\ttfamily chart-\/type} to define the type dynamically, see \href{http://jtblin.github.io/angular-chart.js/examples/stacked-bars.html}{\tt stacked bar example}.
+
+\section*{Example}
+
+\subsection*{Markup}
+
+
+\begin{DoxyCode}
+<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" 
+    chart-legend="true" chart-series="series" chart-click="onClick"></canvas> 
+\end{DoxyCode}
+
+
+\subsection*{Javascript}
+
+
+\begin{DoxyCode}
+angular.module("app", ["chart.js"])
+  // Optional configuration
+  .config(['ChartJsProvider', function (ChartJsProvider) \{
+    // Configure all charts
+    ChartJsProvider.setOptions(\{
+      colours: ['#FF5252', '#FF8A80'],
+      responsive: false
+    \});
+    // Configure all line charts
+    ChartJsProvider.setOptions('Line', \{
+      datasetFill: false
+    \});
+  \}])
+  .controller("LineCtrl", ['$scope', '$timeout', function ($scope, $timeout) \{
+
+  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+  $scope.series = ['Series A', 'Series B'];
+  $scope.data = [
+    [65, 59, 80, 81, 56, 55, 40],
+    [28, 48, 40, 19, 86, 27, 90]
+  ];
+  $scope.onClick = function (points, evt) \{
+    console.log(points, evt);
+  \};
+
+  // Simulate async data update
+  $timeout(function () \{
+    $scope.data = [
+      [28, 48, 40, 19, 86, 27, 90],
+      [65, 59, 80, 81, 56, 55, 40]
+    ];
+  \}, 3000);
+\}]);
+\end{DoxyCode}
+
+
+\subsection*{A\+MD Require\+JS}
+
+See \href{examples/amd.js}{\tt a simple A\+MD example}
+
+\subsection*{Common\+JS e.\+g. webpack}
+
+Module should work with Common\+JS out of the box e.\+g. \href{http://browserify.org/}{\tt browserify} or \href{http://webpack.github.io/}{\tt webpack}, see a \href{examples/webpack.config.js}{\tt webpack example}.
+
+\section*{Reactive}
+
+angular-\/chart.\+js watch updates on data, series, labels, colours and options and will update, or destroy and recreate, the chart on changes.
+
+\section*{Events}
+
+angular-\/chart.\+js emits the following events on the {\ttfamily scope} and pass the chart as argument\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily create}\+: when chart is created
+\item {\ttfamily update}\+: when chart is updated
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+$scope.$on('create', function (event, chart) \{
+  console.log(chart);
+\});
+\end{DoxyCode}
+
+
+{\bfseries Note}\+: the event can be emitted multiple times for each chart as the chart can be destroyed and created multiple times during angular {\ttfamily watch} lifecycle.
+
+angular-\/chart.\+js listen to the scope {\ttfamily destroy} event and destroy the chart when it happens.
+
+\section*{Colours}
+
+There are a set of 7 default colours. Colours can be replaced using the {\ttfamily colours} attribute. If there is more data than colours, colours are generated randomly or can be provided via a function through the {\ttfamily get\+Colour} attribute.
+
+Hex colours are converted to Chart.\+js colours automatically, including different shades for highlight, fill, stroke, etc.
+
+\section*{Issues}
+
+{\bfseries Issues or feature requests for Chart.\+js (e.\+g. new chart type, new axis, etc.) need to be opened on \href{https://github.com/nnnick/Chart.js/issues}{\tt Chart.\+js issues tracker}}
+
+{\bfseries For general questions about usage, please use \href{http://stackoverflow.com/}{\tt http\+://stackoverflow.\+com/}}
+
+Please check if issue exists first, otherwise open issue in \href{https://github.com/jtblin/angular-chart.js/issues}{\tt github}. {\bfseries Ensure you add a link to a plunker, jsbin, or equivalent.} Here is a \href{http://jsbin.com/dufibi/3/edit?html,js,output}{\tt jsbin template} for convenience.
+
+\subsection*{Browser compatibility}
+
+For I\+E8 and older browsers, you will need to include \href{https://code.google.com/p/explorercanvas/wiki/Instructions}{\tt excanvas}. You will also need a \href{https://github.com/es-shims/es5-shim}{\tt shim} for E\+S5 functions.
+
+You also need to have {\ttfamily height} and {\ttfamily width} attributes for the {\ttfamily $<$canvas$>$} tag of your chart if using I\+E8 and older browsers. If you {\itshape do not} have these attributes, you will need a \href{https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/getComputedStyle/polyfill.js}{\tt get\+Computed\+Style shim} and the line {\ttfamily document.\+default\+View = window;}, but there still may be errors (due to code in Chart.\+js).
+
+
+\begin{DoxyCode}
+<head>
+
+</head>
+\end{DoxyCode}
+
+
+\section*{Contributing}
+
+Pull requests welcome!
+
+
+\begin{DoxyEnumerate}
+\item Fork the repo
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Install dependencies\+: {\ttfamily npm install} and {\ttfamily bower install}
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Make your changes
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Install \href{http://www.graphicsmagick.org/}{\tt Graphics\+Magick}
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Run tests\+: {\ttfamily npm test}
+\end{DoxyEnumerate}
+\begin{DoxyEnumerate}
+\item Submit pull request
+\end{DoxyEnumerate}
+
+\subsection*{Contributors}
+
+Thank you to the \href{https://github.com/jtblin/angular-chart.js/graphs/contributors}{\tt contributors}!
+
+\section*{Author}
+
+Jerome Touffe-\/\+Blin, \href{https://twitter.com/jtblin}{\tt }, \href{http://about.me/jtblin}{\tt About me}
+
+\section*{License}
+
+angular-\/chart.\+js is copyright 2015 Jerome Touffe-\/\+Blin and contributors. It is licensed under the B\+SD license. See the include L\+I\+C\+E\+N\+SE file for details. 

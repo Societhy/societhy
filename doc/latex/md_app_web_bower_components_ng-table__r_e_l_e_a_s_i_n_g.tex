@@ -1,0 +1,31 @@
+
+\begin{DoxyEnumerate}
+\item Update \href{http://semver.org/}{\tt semver} version number in\+:
+\begin{DoxyItemize}
+\item package.\+json
+\item bower.\+json
+\end{DoxyItemize}
+\item Minify source files\+: {\ttfamily grunt}
+\item Make the test pass\+: {\ttfamily karma start}
+\item Update C\+H\+A\+N\+G\+E\+L\+O\+G.\+md\+:
+\begin{DoxyEnumerate}
+\item {\ttfamily node changelog.\+js n.\+n.\+n} where {\ttfamily n.\+n.\+n} is the version number used in step 1. above
+\item copy-\/paste the generated text into the top of C\+H\+A\+N\+G\+E\+L\+O\+G.\+md
+\item as required, modify the generated text pasted into C\+H\+A\+N\+G\+E\+L\+O\+G.\+md
+\end{DoxyEnumerate}
+\item Check in the following updated files to git\+:
+\begin{DoxyItemize}
+\item dist/$\ast$.$\ast$
+\item bower.\+json
+\item package.\+json
+\item C\+H\+A\+N\+G\+E\+L\+O\+G.\+md
+\end{DoxyItemize}
+\item Commit and push to master\+:
+\begin{DoxyItemize}
+\item use the commit message \textquotesingle{}chore(release)\+: n.\+n.\+n distribution files\textquotesingle{} where \textquotesingle{}n.\+n.\+n\textquotesingle{} is the version number used in step 1
+\end{DoxyItemize}
+\item Create a \href{https://help.github.com/articles/creating-releases/}{\tt github release} with same version used in steps above
+\begin{DoxyItemize}
+\item copy-\/paste the text just added to C\+H\+A\+N\+G\+E\+L\+O\+G.\+md as release notes 
+\end{DoxyItemize}
+\end{DoxyEnumerate}

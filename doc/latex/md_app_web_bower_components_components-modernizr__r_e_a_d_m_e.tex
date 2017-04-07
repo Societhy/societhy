@@ -1,0 +1,64 @@
+\subparagraph*{Modernizr is a Java\+Script library that detects H\+T\+M\+L5 and C\+S\+S3 features in the user’s browser.}
+
+
+\begin{DoxyItemize}
+\item \href{http://www.modernizr.com}{\tt Website}
+\item \href{http://www.modernizr.com/docs/}{\tt Documentation}
+\end{DoxyItemize}
+
+Modernizr tests which native C\+S\+S3 and H\+T\+M\+L5 features are available in the current UA and makes the results available to you in two ways\+: as properties on a global {\ttfamily Modernizr} object, and as classes on the {\ttfamily $<$html$>$} element. This information allows you to progressively enhance your pages with a granular level of control over the experience.
+
+Modernizr has an optional ({\itshape not included}) conditional resource loader called {\ttfamily Modernizr.\+load()}, based on \href{http://yepnopejs.com}{\tt Yepnope.\+js}. You can get a build that includes {\ttfamily Modernizr.\+load()}, as well as choosing which feature tests to include on the \href{http://www.modernizr.com/download/}{\tt Download page}.
+
+\subsection*{Test suite}
+
+Run the \href{http://modernizr.github.com/Modernizr/test/}{\tt test suite}
+
+\subsection*{Building Modernizr v3}
+
+\subsubsection*{To generate everything in \textquotesingle{}config-\/all.\+json\textquotesingle{}\+:}
+
+
+\begin{DoxyCode}
+grunt build
+//outputs to ./dist/modernizr-build.js
+\end{DoxyCode}
+
+
+\subsubsection*{To run tests (in phantom)\+:}
+
+
+\begin{DoxyCode}
+grunt qunit
+\end{DoxyCode}
+
+
+\subsubsection*{To run tests (in browser)\+:}
+
+
+\begin{DoxyCode}
+grunt build
+serve .
+visit <url>/tests
+\end{DoxyCode}
+
+
+\subsubsection*{To see simple build in browser\+:}
+
+serve the root dir, {\ttfamily $<$url$>$/test/modular.html}
+
+\subsubsection*{To see the build tool\+:}
+
+
+\begin{DoxyItemize}
+\item checkout the modernizr.\+com code
+\item install all your gems and bundles and jekyll and shit
+\item {\ttfamily jekyll}
+\item {\ttfamily serve ./\+\_\+sites}
+\item visit $<$url$>$/download
+\item It should be just a big list of things you can build with no frills.
+\end{DoxyItemize}
+
+\subsection*{License}
+
+M\+IT license 

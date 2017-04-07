@@ -1,0 +1,45 @@
+This project is an animated counter for Angularjs. The directive counts from one number to another over a configured duration. This forked version updates the original repository by including \href{https://docs.angularjs.org/api/ng/filter}{\tt Angular\+JS filter} options as well as the ability to display floating values. \href{http://pfitzpaddy.github.io/angular-filter-count-to/}{\tt Demo}
+
+\subsection*{Install via bower}
+
+
+\begin{DoxyCode}
+$ bower install angular-filter-count-to
+\end{DoxyCode}
+
+
+\subsection*{How to use angular count-\/to}
+
+Inject the {\ttfamily count-\/to} directive in your app.
+
+
+\begin{DoxyCode}
+var myApp = angular.module('myApp', ['countTo']);
+\end{DoxyCode}
+
+
+Apply the directive to a dom element. 
+\begin{DoxyCode}
+<span count-to="\{\{countTo\}\}" value="\{\{countFrom\}\}" duration="4" filter="number"></span>
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+<span count-to="\{\{countTo\}\}" value="\{\{countFrom\}\}" duration="4" filter="currency" params="$"></span>
+\end{DoxyCode}
+
+
+\subsubsection*{Attributes}
+
+The following attributes can be set as numbers on the directive element.
+
+
+\begin{DoxyItemize}
+\item {\ttfamily count-\/to} the number to count to.
+\item {\ttfamily value} the number to start counting from.
+\item {\ttfamily duration} how long the count should take in seconds.
+\item {\ttfamily filter} the \href{https://docs.angularjs.org/api/ng/filter}{\tt Angular\+JS filter}.
+\item {\ttfamily params} the string of filter options.
+\item {\ttfamily fraction\+Size} the decimal formatting. 
+\end{DoxyItemize}

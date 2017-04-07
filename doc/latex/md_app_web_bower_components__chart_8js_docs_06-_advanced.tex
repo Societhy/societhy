@@ -1,0 +1,209 @@
+
+
+ title\+: Advanced usage \subsection*{anchor\+: advanced-\/usage }
+
+\subsubsection*{Prototype methods}
+
+For each chart, there are a set of global prototype methods on the shared {\ttfamily Chart\+Type} which you may find useful. These are available on all charts created with Chart.\+js, but for the examples, let\textquotesingle{}s use a line chart we\textquotesingle{}ve made.
+
+
+\begin{DoxyCode}
+// For example:
+var myLineChart = new Chart(ctx).Line(data);
+\end{DoxyCode}
+
+
+\paragraph*{.clear()}
+
+Will clear the chart canvas. Used extensively internally between animation frames, but you might find it useful.
+
+
+\begin{DoxyCode}
+// Will clear the canvas that myLineChart is drawn on
+myLineChart.clear();
+// => returns 'this' for chainability
+\end{DoxyCode}
+
+
+\paragraph*{.stop()}
+
+Use this to stop any current animation loop. This will pause the chart during any current animation frame. Call {\ttfamily .render()} to re-\/animate.
+
+
+\begin{DoxyCode}
+// Stops the charts animation loop at its current frame
+myLineChart.stop();
+// => returns 'this' for chainability
+\end{DoxyCode}
+
+
+\paragraph*{.resize()}
+
+Use this to manually resize the canvas element. This is run each time the browser is resized, but you can call this method manually if you change the size of the canvas nodes container element.
+
+
+\begin{DoxyCode}
+// Resizes & redraws to fill its container element
+myLineChart.resize();
+// => returns 'this' for chainability
+\end{DoxyCode}
+
+
+\paragraph*{.destroy()}
+
+Use this to destroy any chart instances that are created. This will clean up any references stored to the chart object within Chart.\+js, along with any associated event listeners attached by Chart.\+js.
+
+
+\begin{DoxyCode}
+// Destroys a specific chart instance
+myLineChart.destroy();
+\end{DoxyCode}
+
+
+\paragraph*{.to\+Base64\+Image()}
+
+This returns a base 64 encoded string of the chart in it\textquotesingle{}s current state.
+
+
+\begin{DoxyCode}
+myLineChart.toBase64Image();
+// => returns png data url of the image on the canvas
+\end{DoxyCode}
+
+
+\paragraph*{.generate\+Legend()}
+
+Returns an H\+T\+ML string of a legend for that chart. The template for this legend is at {\ttfamily legend\+Template} in the chart options.
+
+
+\begin{DoxyCode}
+myLineChart.generateLegend();
+// => returns HTML string of a legend for this chart
+\end{DoxyCode}
+
+
+\subsubsection*{External Tooltips}
+
+You can enable custom tooltips in the global or chart configuration like so\+:
+
+
+\begin{DoxyCode}
+var myPieChart = new Chart(ctx).Pie(data, \{
+    customTooltips: function(tooltip) \{
+
+        // tooltip will be false if tooltip is not visible or should be hidden
+        if (!tooltip) \{
+            return;
+        \}
+
+        // Otherwise, tooltip will be an object with all tooltip properties like:
+
+        // tooltip.caretHeight
+        // tooltip.caretPadding
+        // tooltip.chart
+        // tooltip.cornerRadius
+        // tooltip.fillColor
+        // tooltip.font...
+        // tooltip.text
+        // tooltip.x
+        // tooltip.y
+        // etc...
+
+    \};
+\});
+\end{DoxyCode}
+
+
+See files {\ttfamily sample/pie-\/custom\+Tooltips.\+html} and {\ttfamily sample/line-\/custom\+Tooltips.\+html} for examples on how to get started.
+
+\subsubsection*{Writing new chart types}
+
+Chart.\+js 1.\+0 has been rewritten to provide a platform for developers to create their own custom chart types, and be able to share and utilise them through the Chart.\+js A\+PI.
+
+The format is relatively simple, there are a set of utility helper methods under {\ttfamily Chart.\+helpers}, including things such as looping over collections, requesting animation frames, and easing equations.
+
+On top of this, there are also some simple base classes of Chart elements, these all extend from {\ttfamily Chart.\+Element}, and include things such as points, bars and scales.
+
+
+\begin{DoxyCode}
+Chart.Type.extend(\{
+    // Passing in a name registers this chart in the Chart namespace
+    name: "Scatter",
+    // Providing a defaults will also register the deafults in the chart namespace
+    defaults : \{
+        options: "Here",
+        available: "at this.options"
+    \},
+    // Initialize is fired when the chart is initialized - Data is passed in as a parameter
+    // Config is automatically merged by the core of Chart.js, and is available at this.options
+    initialize:  function(data)\{
+        this.chart.ctx // The drawing context for this chart
+        this.chart.canvas // the canvas node for this chart
+    \},
+    // Used to draw something on the canvas
+    draw: function() \{
+    \}
+\});
+
+// Now we can create a new instance of our chart, using the Chart.js API
+new Chart(ctx).Scatter(data);
+// initialize is now run
+\end{DoxyCode}
+
+
+\subsubsection*{Extending existing chart types}
+
+We can also extend existing chart types, and expose them to the A\+PI in the same way. Let\textquotesingle{}s say for example, we might want to run some more code when we initialize every Line chart.
+
+
+\begin{DoxyCode}
+// Notice now we're extending the particular Line chart type, rather than the base class.
+Chart.types.Line.extend(\{
+    // Passing in a name registers this chart in the Chart namespace in the same way
+    name: "LineAlt",
+    initialize: function(data)\{
+        console.log('My Line chart extension');
+        Chart.types.Line.prototype.initialize.apply(this, arguments);
+    \}
+\});
+
+// Creates a line chart in the same way
+new Chart(ctx).LineAlt(data);
+// but this logs 'My Line chart extension' in the console.
+\end{DoxyCode}
+
+
+\subsubsection*{Community extensions}
+
+
+\begin{DoxyItemize}
+\item $<$a href=\char`\"{}https\+://github.\+com/\+Regaddi/\+Chart.\+Stacked\+Bar.\+js\char`\"{} target\char`\"{}\+\_\+blank\char`\"{}$>$Stacked Bar Chart by \href{https://twitter.com/Regaddi}{\tt }
+\item $<$a href=\char`\"{}https\+://github.\+com/\+C\+A\+Ydenberg/\+Chart.\+js\char`\"{} target\char`\"{}\+\_\+blank\char`\"{}$>$Error bars (bar and line charts) by \href{https://twitter.com/CAYdenberg}{\tt }
+\end{DoxyItemize}
+
+\subsubsection*{Creating custom builds}
+
+Chart.\+js uses \href{http://gulpjs.com/}{\tt gulp} to build the library into a single Java\+Script file. We can use this same build script with custom parameters in order to build a custom version.
+
+Firstly, we need to ensure development dependencies are installed. With node and npm installed, after cloning the Chart.\+js repo to a local directory, and navigating to that directory in the command line, we can run the following\+:
+
+
+\begin{DoxyCode}
+npm install
+npm install -g gulp
+\end{DoxyCode}
+
+
+This will install the local development dependencies for Chart.\+js, along with a C\+LI for the Java\+Script task runner \href{http://gulpjs.com/}{\tt gulp}.
+
+Now, we can run the {\ttfamily gulp build} task, and pass in a comma seperated list of types as an argument to build a custom version of Chart.\+js with only specified chart types.
+
+Here we will create a version of Chart.\+js with only Line, Radar and Bar charts included\+:
+
+
+\begin{DoxyCode}
+gulp build --types=Line,Radar,Bar
+\end{DoxyCode}
+
+
+This will output to the {\ttfamily /custom} directory, and write two files, Chart.\+js, and Chart.\+min.\+js with only those chart types included. 

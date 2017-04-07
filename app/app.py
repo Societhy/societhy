@@ -1,14 +1,16 @@
 from os import environ
+from sys import exit
 import re
+from signal import signal, SIGINT
 
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
 
+from api import MongoSessionInterface as MongoSessionInterface
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
-from api import MongoSessionInterface as MongoSessionInterface
 
 from core import secret_key
 from core.utils import UserJSONEncoder
@@ -20,6 +22,15 @@ app = Flask(__name__, template_folder='web/static/', static_url_path='', static_
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
 app.session_interface = MongoSessionInterface()
+
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'societhycompany@gmail.com'
+app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
 
 workers_pool = GreenPool(size=3)
 
@@ -76,6 +87,15 @@ def searchForAnything(query):
 
 
 socketio.init_app(app)
+
+def stopServer(signal, frame):
+	if blockchain_watcher.running:
+		blockchain_watcher.stopWithSignal(signal, frame)
+	app.session_interface.store.remove({})
+	socketio.stop()
+	exit()
+signal(SIGINT, stopServer)
+
 
 if __name__ == '__main__':
 	if environ.get('MINING'):

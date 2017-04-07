@@ -1,0 +1,104 @@
+\href{https://travis-ci.org/lemonde/angular-ckeditor}{\tt } \href{https://david-dm.org/lemonde/angular-ckeditor}{\tt } \href{https://david-dm.org/lemonde/angular-ckeditor#info=devDependencies}{\tt }
+
+C\+K\+Editor directive for Angular.
+
+\subsection*{Install}
+
+\subsubsection*{Using bower}
+
+
+\begin{DoxyCode}
+bower install angular-ckeditor
+\end{DoxyCode}
+
+
+Note \+: obviously this plugin expects the presence of Angular\+JS and C\+K\+Editor.
+
+\subsection*{Usage}
+
+\subsubsection*{Example}
+
+H\+T\+ML\+:
+
+
+\begin{DoxyCode}
+<script src="angular.js"></script>
+<script src="ckeditor.js"></script>
+<script src="angular-ckeditor.js"></script>
+
+<div ng-controller="CkeditorCtrl">
+  <div ckeditor="options" ng-model="content" ready="onReady()"></div>
+</div>
+\end{DoxyCode}
+
+
+Java\+Script\+:
+
+
+\begin{DoxyCode}
+angular.module('controllers.ckeditor', ['ckeditor'])
+.controller('CkeditorCtrl', ['$scope', function ($scope) \{
+
+  // Editor options.
+  $scope.options = \{
+    language: 'en',
+    allowedContent: true,
+    entities: false
+  \};
+
+  // Called when the editor is completely ready.
+  $scope.onReady = function () \{
+    // ...
+  \};
+\}]);
+\end{DoxyCode}
+
+
+\subsubsection*{\char`\"{}ckeditor\char`\"{} directive}
+
+
+\begin{DoxyItemize}
+\item \char`\"{}ckeditor\char`\"{} editor options. Accepts an Object.
+\item \char`\"{}ng-\/model\char`\"{} bound scope variable.
+\item \char`\"{}ready\char`\"{} (optional) callback called when the editor is completely ready. Accepts an Angular expression.
+\item \char`\"{}contenteditable\char`\"{} (optional) if set to true, inline editing mode is enabled
+\end{DoxyItemize}
+
+{\bfseries I\+M\+P\+O\+R\+T\+A\+NT N\+O\+T\+I\+CE} Angular-\/ckeditor uses {\ttfamily ng-\/model}. If you add an {\ttfamily ng-\/if} on the element to whom this directive is attached, changes in the editor won\textquotesingle{}t be forwarded to your code anymore, due to the extra scope created by {\ttfamily ng-\/if}. A solution is to explicitely bypass the extra scope \+: {\ttfamily ng-\/model=\char`\"{}\$parent.\+model\char`\"{}}. See \href{http://stackoverflow.com/questions/18342917/angularjs-ng-model-doesnt-work-inside-ng-if}{\tt http\+://stackoverflow.\+com/questions/18342917/angularjs-\/ng-\/model-\/doesnt-\/work-\/inside-\/ng-\/if}
+
+\subsection*{Advanced usage}
+
+\subsubsection*{getting internal ckeditor instance}
+
+Internally, C\+K\+Editor gives a name to its instances, either {\bfseries the id of the element it\textquotesingle{}s on} or automatic name (editor1, editor2...). If you plan to look for your instances programmatically via {\ttfamily C\+K\+Editor.\+istances}, be sure to give them a unique id=\char`\"{}...\char`\"{} (Beware of re-\/usable directives).
+
+In a directive on the same element, you can also use \+: 
+\begin{DoxyCode}
+link: function (scope, element) \{
+  var ckeditorController = element.controller('ckeditor'); // angular-ckeditor controller
+  var ckeditorInstance = ckeditorController.instance;
+\end{DoxyCode}
+
+
+\subsection*{See also}
+
+You may find this other directive useful \+: \href{https://github.com/lemonde/angular-ckeditor-placeholder}{\tt https\+://github.\+com/lemonde/angular-\/ckeditor-\/placeholder}
+
+\subsection*{License}
+
+M\+IT
+
+\subsection*{Contributing}
+
+
+\begin{DoxyItemize}
+\item clone repo
+\item ensure your editor is decent and pick up the {\ttfamily .editorconfig} and {\ttfamily .jshintrc} files
+\item {\ttfamily npm install}
+\item {\ttfamily npm test}
+\item add tests, add features
+\item {\ttfamily grunt} (to generate minified version)
+\item send a PR
+\end{DoxyItemize}
+
+Thanks ! 

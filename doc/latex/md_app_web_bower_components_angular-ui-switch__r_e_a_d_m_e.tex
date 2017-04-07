@@ -1,0 +1,97 @@
+This is a simple i\+OS 7 style switch directive for Angular\+JS. You can use this module as you would use the default H\+T\+ML checkbox input element. This is a super lightweight module and you can completely change the design using just C\+SS.
+
+Supported by all modern browsers\+: Chrome, Firefox, Opera, Safari, I\+E8+
+
+
+
+Inspired by \href{https://github.com/abpetkov/switchery}{\tt switchery} -\/ in angular way.
+
+\subsection*{Installation}
+
+Download the package from {\ttfamily github}. The package is also available over {\ttfamily npm install angular-\/ui-\/switch} or {\ttfamily bower install angular-\/ui-\/switch}.
+
+Include {\ttfamily javascript} and {\ttfamily css} files into your page.
+
+
+\begin{DoxyCode}
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+  ...
+  <link rel="stylesheet" href="/ui-switch.min.css"/>
+</head>
+<body>
+  ...
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.3/angular.min.js"></script>
+  <script src="/ui-switch.min.js"></script>
+</body>
+</html>
+\end{DoxyCode}
+
+
+Declare a dependency on the module.
+
+
+\begin{DoxyCode}
+angular.module('myModule', ['uiSwitch']);
+\end{DoxyCode}
+
+
+Insert the switch in your html template.
+
+
+\begin{DoxyCode}
+<form>
+  <switch id="enabled" name="enabled" ng-model="enabled" class="green"></switch>
+  <br>\{\{ enabled \}\}
+</form>
+\end{DoxyCode}
+
+
+Add optional on/off text 
+\begin{DoxyCode}
+<form>
+  <switch id="enabled" name="enabled" ng-model="enabled" on="On" off="Off" class="green"></switch>
+  <br>\{\{ enabled \}\}
+</form>
+\end{DoxyCode}
+
+
+Disabled state 
+\begin{DoxyCode}
+<form>
+  <switch id="enabled" name="enabled" ng-model="enabled" disabled="true" class="green"></switch>
+  <br>\{\{ enabled \}\}
+</form>
+\end{DoxyCode}
+
+
+\subsection*{Design}
+
+You can completely change the design. All the magic is hidden inside two C\+SS classes.
+
+
+\begin{DoxyCode}
+.switch \{
+  /* frame */
+\}
+.switch small \{
+  /* button */
+\}
+.switch.checked \{
+  /* frame when enabled */
+\}
+.switch.checked small \{
+  /* button when enabled */
+\}
+\end{DoxyCode}
+
+
+\subsection*{Publishing}
+
+
+\begin{DoxyEnumerate}
+\item Update version in {\ttfamily package.\+json} and {\ttfamily bower.\+json}.
+\item Run {\ttfamily make compile} to minify files.
+\item Run {\ttfamily make publish} to publish. 
+\end{DoxyEnumerate}

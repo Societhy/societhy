@@ -1,0 +1,71 @@
+Angular\+JS directives allow you to create buttons with a nice ripple effect and \char`\"{}busy\char`\"{} indicator. Inspired by \href{http://www.google.com/design/spec/material-design/introduction.html}{\tt Google material design}.
+
+\subsection*{Demos}
+
+
+\begin{DoxyItemize}
+\item \href{http://lukaszwatroba.github.io/v-button}{\tt Git\+Hub}
+\item \href{http://codepen.io/LukaszWatroba/pen/YPNvpX}{\tt Code\+Pen}
+\end{DoxyItemize}
+
+\subsection*{Installation}
+
+
+\begin{DoxyItemize}
+\item Use \href{http://bower.io/}{\tt bower} {\ttfamily bower install v-\/button}, or download files \href{./dist}{\tt from the github repo}
+\item Reference {\ttfamily v-\/button.\+css} and {\ttfamily v-\/button.\+js} in your index.\+html file
+\item Reference the module in your app\+: `angular.module(\textquotesingle{}my\+App\textquotesingle{}, \mbox{[} \textquotesingle{}v\+Button\textquotesingle{} \mbox{]})`
+\end{DoxyItemize}
+
+\subsection*{Usage}
+
+\begin{quote}
+app.\+js \end{quote}
+
+
+
+\begin{DoxyCode}
+angular.module('myApp', ['vButton'])
+
+.controller('MyCtrl', function ($scope) \{
+  $scope.isBusy = false;
+
+  $scope.buttonClick = function () \{
+    $scope.isBusy = !$scope.isBusy;
+  \};
+\});
+\end{DoxyCode}
+
+
+\begin{quote}
+index.\+html \end{quote}
+
+
+
+\begin{DoxyCode}
+<button class="Button" ng-click="isBusy = !isBusy" v-busy="isBusy" v-busy-label="Please wait"
+       v-pressable>Busy Button</button>
+\end{DoxyCode}
+
+
+Result html\+: (if button is pressed and the {\ttfamily is\+Busy} value is equal {\ttfamily true})
+
+
+\begin{DoxyCode}
+<button class="Button is-busy is-pressed" ng-click="isBusy = !isBusy" v-busy="isBusy" v-busy-label="Please
+       wait" v-pressable>
+  <span>Please wait</span>
+  <v-ripple></v-ripple>
+</button>
+\end{DoxyCode}
+
+
+When working with attribute having dynamic values (here we have an example with angular-\/translate), you may do it like this\+:
+
+
+\begin{DoxyCode}
+<button class="Button" ng-click="isBusy = !isBusy" v-busy="isBusy" v-busy-label="\{\{'translation\_key' |
+       translate\}\}" v-busy-text="\{\{'translation\_key' | translate\}\}"  v-pressable><span
+       translate>translation\_key</span></button>
+\end{DoxyCode}
+ 

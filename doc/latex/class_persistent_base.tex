@@ -1,0 +1,86 @@
+\hypertarget{class_persistent_base}{}\section{Persistent\+Base$<$ T $>$ Class Template Reference}
+\label{class_persistent_base}\index{Persistent\+Base$<$ T $>$@{Persistent\+Base$<$ T $>$}}
+Inheritance diagram for Persistent\+Base$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_persistent_base}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_persistent_base_aea3d2d04de88357b7823be9eb788a3fa}\label{class_persistent_base_aea3d2d04de88357b7823be9eb788a3fa}} 
+void {\bfseries Reset} ()
+\item 
+\mbox{\Hypertarget{class_persistent_base_ac8f10d732a311ec697eb47d965789445}\label{class_persistent_base_ac8f10d732a311ec697eb47d965789445}} 
+{\footnotesize template$<$typename S $>$ }\\void {\bfseries Reset} (const v8\+::\+Local$<$ S $>$ \&other)
+\item 
+\mbox{\Hypertarget{class_persistent_base_ae9b297f9d5ff18114d7a6608f5424d47}\label{class_persistent_base_ae9b297f9d5ff18114d7a6608f5424d47}} 
+{\footnotesize template$<$typename S $>$ }\\void {\bfseries Reset} (const \hyperlink{class_persistent_base}{Persistent\+Base}$<$ S $>$ \&other)
+\item 
+\mbox{\Hypertarget{class_persistent_base_ac4ba73f6261d418d97f8b106a7f5e980}\label{class_persistent_base_ac4ba73f6261d418d97f8b106a7f5e980}} 
+bool {\bfseries Is\+Empty} () const
+\item 
+\mbox{\Hypertarget{class_persistent_base_a02b30a3b00fca9d562a11b72b1ffd1b0}\label{class_persistent_base_a02b30a3b00fca9d562a11b72b1ffd1b0}} 
+void {\bfseries Empty} ()
+\item 
+\mbox{\Hypertarget{class_persistent_base_acc2c0a9b3aecdda97e97aee7e307c72f}\label{class_persistent_base_acc2c0a9b3aecdda97e97aee7e307c72f}} 
+{\footnotesize template$<$typename S $>$ }\\bool {\bfseries operator==} (const \hyperlink{class_persistent_base}{Persistent\+Base}$<$ S $>$ \&that) const
+\item 
+\mbox{\Hypertarget{class_persistent_base_a7c7601829fc6470b3cb0fccd12c78c1a}\label{class_persistent_base_a7c7601829fc6470b3cb0fccd12c78c1a}} 
+{\footnotesize template$<$typename S $>$ }\\bool {\bfseries operator==} (const v8\+::\+Local$<$ S $>$ \&that) const
+\item 
+\mbox{\Hypertarget{class_persistent_base_a04e33fd01ed8ee4b4efe05e866f577bc}\label{class_persistent_base_a04e33fd01ed8ee4b4efe05e866f577bc}} 
+{\footnotesize template$<$typename S $>$ }\\bool {\bfseries operator!=} (const \hyperlink{class_persistent_base}{Persistent\+Base}$<$ S $>$ \&that) const
+\item 
+\mbox{\Hypertarget{class_persistent_base_af92f868d96b415eab5e8975d58a69802}\label{class_persistent_base_af92f868d96b415eab5e8975d58a69802}} 
+{\footnotesize template$<$typename S $>$ }\\bool {\bfseries operator!=} (const v8\+::\+Local$<$ S $>$ \&that) const
+\item 
+\mbox{\Hypertarget{class_persistent_base_abca5a8d5f69f235307238d56b934eee3}\label{class_persistent_base_abca5a8d5f69f235307238d56b934eee3}} 
+{\footnotesize template$<$typename P $>$ }\\void {\bfseries Set\+Weak} (P $\ast$parameter, typename \hyperlink{class_weak_callback_info}{Weak\+Callback\+Info}$<$ P $>$\+::Callback callback, Weak\+Callback\+Type type)
+\item 
+\mbox{\Hypertarget{class_persistent_base_a6d06225b41ddb49b42897871775fc51b}\label{class_persistent_base_a6d06225b41ddb49b42897871775fc51b}} 
+void {\bfseries Clear\+Weak} ()
+\item 
+\mbox{\Hypertarget{class_persistent_base_ad0bd3b13b99a46ee8bf8ad0c8a493a79}\label{class_persistent_base_ad0bd3b13b99a46ee8bf8ad0c8a493a79}} 
+void {\bfseries Mark\+Independent} ()
+\item 
+\mbox{\Hypertarget{class_persistent_base_a1786e5f36d7e00866e5af1d7b011f97a}\label{class_persistent_base_a1786e5f36d7e00866e5af1d7b011f97a}} 
+bool {\bfseries Is\+Independent} () const
+\item 
+\mbox{\Hypertarget{class_persistent_base_ae0a0935191a19e7026e179a5d316cab9}\label{class_persistent_base_ae0a0935191a19e7026e179a5d316cab9}} 
+bool {\bfseries Is\+Near\+Death} () const
+\item 
+\mbox{\Hypertarget{class_persistent_base_afbfc214cc4a3f4ff913d532628be9a2e}\label{class_persistent_base_afbfc214cc4a3f4ff913d532628be9a2e}} 
+bool {\bfseries Is\+Weak} () const
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_persistent_base_a53f604d3d6f2dc0647df33c9979f116a}\label{class_persistent_base_a53f604d3d6f2dc0647df33c9979f116a}} 
+{\footnotesize template$<$typename S $>$ }\\class {\bfseries Return\+Value}
+\item 
+\mbox{\Hypertarget{class_persistent_base_ad845ec8872174be0a9ca9a3dd1898d30}\label{class_persistent_base_ad845ec8872174be0a9ca9a3dd1898d30}} 
+{\footnotesize template$<$typename S , typename M $>$ }\\class {\bfseries Persistent}
+\item 
+\mbox{\Hypertarget{class_persistent_base_adc49d0fc7441cf7e3b5f039334e44243}\label{class_persistent_base_adc49d0fc7441cf7e3b5f039334e44243}} 
+{\footnotesize template$<$typename S $>$ }\\class {\bfseries Global}
+\item 
+\mbox{\Hypertarget{class_persistent_base_aa768a749e991f292d109b060d1c74f75}\label{class_persistent_base_aa768a749e991f292d109b060d1c74f75}} 
+class {\bfseries Object\+Wrap}
+\item 
+\mbox{\Hypertarget{class_persistent_base_a871dabd1b6ac9eb7dcffa832c3310aec}\label{class_persistent_base_a871dabd1b6ac9eb7dcffa832c3310aec}} 
+{\footnotesize template$<$typename U $>$ }\\v8\+::\+Local$<$ U $>$ {\bfseries New} (const \hyperlink{class_persistent_base}{Persistent\+Base}$<$ U $>$ \&p)
+\item 
+\mbox{\Hypertarget{class_persistent_base_aeffcba0d3279a5385f16e575a0eac558}\label{class_persistent_base_aeffcba0d3279a5385f16e575a0eac558}} 
+{\footnotesize template$<$typename U , typename M $>$ }\\v8\+::\+Local$<$ U $>$ {\bfseries New} (const \hyperlink{class_persistent}{Persistent}$<$ U, M $>$ \&p)
+\item 
+\mbox{\Hypertarget{class_persistent_base_a2843d3677825f486a341bf8ef4f91771}\label{class_persistent_base_a2843d3677825f486a341bf8ef4f91771}} 
+{\footnotesize template$<$typename U $>$ }\\v8\+::\+Local$<$ U $>$ {\bfseries New} (const \hyperlink{class_global}{Global}$<$ U $>$ \&p)
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+app/web/node\+\_\+modules/nan/nan\+\_\+persistent\+\_\+pre\+\_\+12\+\_\+inl.\+h\item 
+app/web/node\+\_\+modules/nan/nan\+\_\+weak.\+h\end{DoxyCompactItemize}

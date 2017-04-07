@@ -1,0 +1,148 @@
+Highlight.\+js нужен для подсветки синтаксиса в примерах кода в блогах, форумах и вообще на любых веб-\/страницах. Пользоваться им очень просто, потому что работает он автоматически\+: сам находит блоки кода, сам определяет язык, сам подсвечивает.
+
+Автоопределением языка можно управлять, когда оно не справляется само (см. дальше \char`\"{}Эвристика\char`\"{}).
+
+\subsection*{Простое использование}
+
+Подключите библиотеку и стиль на страницу и повесть вызов подсветки на загрузку страницы\+:
+
+
+\begin{DoxyCode}
+<link rel="stylesheet" href="styles/default.css">
+<script src="highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+\end{DoxyCode}
+
+
+Весь код на странице, обрамлённый в теги {\ttfamily $<$pre$>$$<$code$>$ .. $<$/code$>$$<$/pre$>$} будет автоматически подсвечен. Если вы используете другие теги или хотите подсвечивать блоки кода динамически, читайте \char`\"{}Инициализацию вручную\char`\"{} ниже.
+
+
+\begin{DoxyItemize}
+\item Вы можете скачать собственную версию \char`\"{}highlight.\+pack.\+js\char`\"{} или сослаться на захостенный файл, как описано на странице загрузки\+: \href{http://highlightjs.org/download/}{\tt http\+://highlightjs.\+org/download/}
+\item Стилевые темы можно найти в загруженном архиве или также использовать захостенные. Чтобы сделать собственный стиль для своего сайта, вам будет полезен \href{http://highlightjs.readthedocs.org/en/latest/css-classes-reference.html}{\tt C\+SS classes reference}, который тоже есть в архиве.
+\end{DoxyItemize}
+
+\subsection*{node.\+js}
+
+Highlight.\+js можно использовать в node.\+js. Библиотеку со всеми возможными языками можно установить с N\+PM\+: \begin{DoxyVerb}npm install highlight.js
+\end{DoxyVerb}
+
+
+Также её можно собрать из исходников с только теми языками, которые нужны\+: \begin{DoxyVerb}python3 tools/build.py -tnode lang1 lang2 ..
+\end{DoxyVerb}
+
+
+Использование библиотеки\+:
+
+
+\begin{DoxyCode}
+var hljs = require('highlight.js');
+
+// Если вы знаете язык
+hljs.highlight(lang, code).value;
+
+// Автоопределение языка
+hljs.highlightAuto(code).value;
+\end{DoxyCode}
+
+
+\subsection*{A\+MD}
+
+Highlight.\+js можно использовать с загрузчиком A\+M\+D-\/модулей. Для этого его нужно собрать из исходников следующей командой\+:
+
+
+\begin{DoxyCode}
+$ python3 tools/build.py -tamd lang1 lang2 ..
+\end{DoxyCode}
+
+
+Она создаст файл {\ttfamily build/highlight.\+pack.\+js}, который является загружаемым A\+M\+D-\/модулем и содержит все выбранные при сборке языки. Используется он так\+:
+
+
+\begin{DoxyCode}
+require(["highlight.js/build/highlight.pack"], function(hljs)\{
+
+  // Если вы знаете язык
+  hljs.highlight(lang, code).value;
+
+  // Автоопределение языка
+  hljs.highlightAuto(code).value;
+\});
+\end{DoxyCode}
+
+
+\subsection*{Замена T\+A\+Bов}
+
+Также вы можете заменить символы T\+AB (\textquotesingle{}\textquotesingle{}), используемые для отступов, на фиксированное количество пробелов или на отдельный {\ttfamily $<$span$>$}, чтобы задать ему какой-\/нибудь специальный стиль\+:
+
+
+\begin{DoxyCode}
+<script type="text/javascript">
+  hljs.configure(\{tabReplace: '    '\}); // 4 spaces
+  // ... or
+  hljs.configure(\{tabReplace: '<span class="indent">\(\backslash\)t</span>'\});
+
+  hljs.initHighlightingOnLoad();
+</script>
+\end{DoxyCode}
+
+
+\subsection*{Инициализация вручную}
+
+Если вы используете другие теги для блоков кода, вы можете инициализировать их явно с помощью функции {\ttfamily highlight\+Block(code)}. Она принимает D\+O\+M-\/элемент с текстом расцвечиваемого кода и опционально -\/ строчку для замены символов T\+AB.
+
+Например с использованием j\+Query код инициализации может выглядеть так\+:
+
+
+\begin{DoxyCode}
+$(document).ready(function() \{
+  $('pre code').each(function(i, e) \{hljs.highlightBlock(e)\});
+\});
+\end{DoxyCode}
+
+
+{\ttfamily highlight\+Block} можно также использовать, чтобы подсветить блоки кода, добавленные на страницу динамически. Только убедитесь, что вы не делаете этого повторно для уже раскрашенных блоков.
+
+Если ваш блок кода использует {\ttfamily $<$br$>$} вместо переводов строки (т.\+е. если это не {\ttfamily $<$pre$>$}), включите опцию {\ttfamily use\+BR}\+:
+
+
+\begin{DoxyCode}
+hljs.configure(\{useBR: true\});
+$('div.code').each(function(i, e) \{hljs.highlightBlock(e)\});
+\end{DoxyCode}
+
+
+\subsection*{Эвристика}
+
+Определение языка, на котором написан фрагмент, делается с помощью довольно простой эвристики\+: программа пытается расцветить фрагмент всеми языками подряд, и для каждого языка считает количество подошедших синтаксически конструкций и ключевых слов. Для какого языка нашлось больше, тот и выбирается.
+
+Это означает, что в коротких фрагментах высока вероятность ошибки, что периодически и случается. Чтобы указать язык фрагмента явно, надо написать его название в виде класса к элементу {\ttfamily $<$code$>$}\+:
+
+```html 
+\begin{DoxyPre}{\ttfamily ...}\end{DoxyPre}
+ 
+\begin{DoxyCode}
+Можно использовать рекомендованные в HTML5 названия классов:
+"language-html", "language-php". Также можно назначать классы на элемент
+`<pre>`.
+
+Чтобы запретить расцветку фрагмента вообще, используется класс "no-highlight":
+
+```html
+<pre><code class="no-highlight">...</code></pre>
+\end{DoxyCode}
+
+
+\subsection*{Экспорт}
+
+В файле export.\+html находится небольшая программка, которая показывает и дает скопировать непосредственно H\+T\+M\+L-\/код подсветки для любого заданного фрагмента кода. Это может понадобится например на сайте, на котором нельзя подключить сам скрипт highlight.\+js.
+
+\subsection*{Координаты}
+
+
+\begin{DoxyItemize}
+\item Версия\+: 8.\+0
+\item U\+RL\+: \href{http://highlightjs.org/}{\tt http\+://highlightjs.\+org/}
+\end{DoxyItemize}
+
+Лицензионное соглашение читайте в файле L\+I\+C\+E\+N\+SE. Список авторов и соавторов читайте в файле A\+U\+T\+H\+O\+R\+S.\+ru.\+txt 

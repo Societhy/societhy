@@ -1,0 +1,316 @@
+Angular\+JS directive and filters for \href{http://www.momentjs.com}{\tt Moment.\+JS}.
+
+Copyright (C) 2013, 2014, 2015, 2016, Uri Shaked \href{mailto:uri@urish.org}{\tt uri@urish.\+org}
+
+\href{https://travis-ci.org/urish/angular-moment}{\tt } \href{https://coveralls.io/r/urish/angular-moment}{\tt }
+
+\subsubsection*{Angular 2 version is now available\+: \href{https://github.com/urish/angular2-moment}{\tt angular2-\/moment}}
+
+
+
+
+
+\subsection*{Installation }
+
+You can choose your preferred method of installation\+:
+\begin{DoxyItemize}
+\item Through bower\+: {\ttfamily bower install angular-\/moment -\/-\/save}
+\item Through npm\+: {\ttfamily npm install angular-\/moment moment -\/-\/save}
+\item Through Nu\+Get\+: {\ttfamily Install-\/\+Package angular-\/moment Moment.\+js}
+\item From a C\+DN\+: \href{https://cdn.jsdelivr.net/angular.moment/1.0.0/angular-moment.min.js}{\tt js\+Delivr} or \href{https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.0/angular-moment.min.js}{\tt C\+D\+N\+JS}
+\item Download from github\+: \href{https://raw.github.com/urish/angular-moment/master/angular-moment.min.js}{\tt angular-\/moment.\+min.\+js}
+\end{DoxyItemize}
+
+\subsection*{Instructions for using moment-\/timezone with webpack }
+
+Even if you have {\ttfamily moment-\/timezone} in your {\ttfamily package.\+json}, {\ttfamily angular-\/moment} will not be able to use it unless you override moment using Angular\textquotesingle{}s dependency injection \href{https://github.com/urish/angular-moment/pull/234}{\tt See Resolved Issue}
+
+
+\begin{DoxyCode}
+var angular = require('angular');
+require('angular-moment');
+var ngModule = angular.module('ngApp',['angularMoment']);
+ngModule.constant('moment', require('moment-timezone'));
+\end{DoxyCode}
+
+
+\subsection*{Usage }
+
+Include both {\bfseries moment.\+js} and {\bfseries angular-\/moment.\+js} in your application.
+
+
+\begin{DoxyCode}
+<script src="components/moment/moment.js"></script>
+<script src="components/angular-moment/angular-moment.js"></script>
+\end{DoxyCode}
+
+
+Add the module {\ttfamily angular\+Moment} as a dependency to your app module\+:
+
+
+\begin{DoxyCode}
+var myapp = angular.module('myapp', ['angularMoment']);
+\end{DoxyCode}
+
+
+If you need internationalization support, load specified moment.\+js locale file right after moment.\+js\+:
+
+
+\begin{DoxyCode}
+<script src="components/moment/moment.js"></script>
+<script src="components/moment/locale/de.js"></script>
+<script src="components/angular-moment/angular-moment.js"></script>
+\end{DoxyCode}
+
+
+Then call the {\ttfamily am\+Moment.\+change\+Locale()} method (e.\+g. inside your app\textquotesingle{}s run() callback)\+:
+
+
+\begin{DoxyCode}
+myapp.run(function(amMoment) \{
+    amMoment.changeLocale('de');
+\});
+\end{DoxyCode}
+
+
+\subsubsection*{Use in controller/service/factory}
+
+Inject the {\ttfamily moment}-\/constant into your dependency injection. For example\+:
+
+
+\begin{DoxyCode}
+angular.module('fooApp')
+    .controller('FooCtrl', ['$scope', 'moment', function ($scope, moment) \{
+        $scope.exampleDate = moment().hour(8).minute(0).second(0).toDate();
+    \}]);
+\end{DoxyCode}
+
+
+\subsubsection*{am-\/time-\/ago directive}
+
+Use the {\ttfamily am-\/time-\/ago} directive to format your relative timestamps. For example\+:
+
+
+\begin{DoxyCode}
+<span am-time-ago="message.time"></span>
+\end{DoxyCode}
+
+
+angular-\/moment will dynamically update the span to indicate how much time passed since the message was created. So, if your controller contains the following code\+: 
+\begin{DoxyCode}
+$scope.message = \{
+   text: 'hello world!',
+   time: new Date()
+\};
+\end{DoxyCode}
+
+
+The user will initially see \char`\"{}a few seconds ago\char`\"{}, and about a minute after the span will automatically update with the text \char`\"{}a minute ago\char`\"{}, etc.
+
+\subsubsection*{am\+Parse filter}
+
+Parses a custom-\/formatted date into a moment object that can be used with the {\ttfamily am-\/time-\/ago} directive and the other filters. For example, the following code will accept dates that are formatted like "2015.\+04.\+25 22\+:00\+:15\textquotesingle{}\+:
+
+
+\begin{DoxyCode}
+<span am-time-ago="message.time | amParse:'YYYY.MM.DD HH:mm:ss'"></span>
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+Parse}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+From\+Unix filter}
+
+Converts a unix-\/timestamp (seconds since 1/1/1970) into a moment object. Example\+:
+
+
+\begin{DoxyCode}
+<span am-time-ago="message.unixTime | amFromUnix">
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+From\+Unix}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+Utc filter}
+
+Create / switch the current moment object into U\+TC mode. For example, given a date object in {\ttfamily message.\+date}, the following code will display the time in U\+TC instead of the local timezone\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.date | amUtc | amDateFormat:'MM.DD.YYYY HH:mm:ss'\}\}</span>
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+Utc}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+Utc\+Offset filter}
+
+Uses the given utc offset when displaying a date. For example, the following code will display the date with a U\+TC + 3 hours time offset\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.date | amUtcOffset:'+0300' | amDateFormat:'MM.DD.YYYY HH:mm:ss'\}\}</span>
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+Utc\+Offset}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+Local filter}
+
+Changes the given moment object to be in the local timezone. Usually used in conjunction with {\ttfamily am\+Utc} / {\ttfamily am\+Timezone} for timezone conversion. For example, the following will convert the given U\+TC date to local time\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.date | amUtc | amLocal | amDateFormat:'MM.DD.YYYY HH:mm:ss'\}\}</span>
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+Local}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+Timezone filter}
+
+Applies a timezone to the given date / moment object. You need to include {\ttfamily moment-\/timezone.\+js} in your project and load timezone data in order to use this filter. The following example displays the time in Israel\textquotesingle{}s timezone\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.date | amTimezone:'Israel' | amDateFormat:'MM.DD.YYYY HH:mm:ss'\}\}</span>
+\end{DoxyCode}
+
+
+Note\+: To use {\ttfamily am\+Timezone}, install angular-\/moment version 1.\+0.\+0-\/beta.\+3 or newer
+
+\subsubsection*{am\+Date\+Format filter}
+
+Format dates using moment.\+js format() method. Example\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.time | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a'\}\}</span>
+\end{DoxyCode}
+
+
+This snippet will format the given time as \char`\"{}\+Monday, October 7th 2013, 12\+:36\+:29 am\char`\"{}.
+
+For more information about Moment.\+JS formatting options, see the \href{http://momentjs.com/docs/#/displaying/format/}{\tt docs for the format() function}.
+
+\subsubsection*{am\+Calendar filter}
+
+Format dates using moment.\+js calendar() method. Example\+:
+
+
+\begin{DoxyCode}
+<span>\{\{message.time | amCalendar:referenceTime:formats\}\}</span>
+\end{DoxyCode}
+
+
+This snippet will format the given time as e.\+g. \char`\"{}\+Today 2\+:30 A\+M\char`\"{} or \char`\"{}\+Last Monday 2\+:30 A\+M\char`\"{} etc..
+
+For more information about Moment.\+JS calendar time format, see the \href{http://momentjs.com/docs/#/displaying/calendar-time/}{\tt docs for the calendar() function}.
+
+\subsubsection*{am\+Difference filter}
+
+Get the difference between two dates in milliseconds. Parameters are date, units and use\+Precision. Date defaults to current date. Example\+:
+
+
+\begin{DoxyCode}
+<span>Scheduled \{\{message.createdAt | amDifference : null : 'days' \}\} days from now</span>
+\end{DoxyCode}
+
+
+This snippet will return the number of days between the current date and the date filtered.
+
+For more information about Moment.\+JS difference function, see the \href{http://momentjs.com/docs/#/displaying/difference/}{\tt docs for the diff() function}.
+
+\subsubsection*{am\+Duration\+Format filter}
+
+Formats a duration (such as 5 days) in a human readable format. See \href{http://momentjs.com/docs/#/durations/creating/}{\tt Moment.\+JS documentation} for a list of supported duration formats, and \href{http://momentjs.com/docs/#/durations/humanize/}{\tt {\ttfamily humanize() documentation}} for explanation about the formatting algorithm.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<span>Message age: \{\{message.ageInMinutes | amDurationFormat : 'minute' \}\}</span>
+\end{DoxyCode}
+
+
+Will display the age of the message (e.\+g. 10 minutes, 1 hour, 2 days, etc).
+
+\subsubsection*{am\+Subtract filter}
+
+Subtract values (hours, minutes, seconds ...) from a specified date.
+
+See \href{http://momentjs.com/docs/#/durations/creating/}{\tt Moment.\+JS documentation} for a list of supported duration formats.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<span>Start time: \{\{day.start | amSubtract : '1' : 'hours' | amDateFormat : 'hh'\}\} : \{\{day.start |
+       amSubtract : '30' : 'minutes' | amDateFormat : 'mm'\}\}</span>
+\end{DoxyCode}
+
+
+\subsubsection*{am\+Add filter}
+
+Add values (hours, minutes, seconds ...) to a specified date.
+
+See \href{http://momentjs.com/docs/#/durations/creating/}{\tt Moment.\+JS documentation} for a list of supported duration formats.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<span>Start time: \{\{day.start | amAdd : '1' : 'hours' | amDateFormat : 'hh'\}\} : \{\{day.start | amAdd : '30'
+       : 'minutes' | amDateFormat : 'mm'\}\}</span>
+\end{DoxyCode}
+
+
+\subsubsection*{am\+Start\+Of filter}
+
+Mutates the original moment by setting it to the start of a unit(minute, hour, day..) of time.
+
+See \href{http://momentjs.com/docs/#/manipulating/start-of/}{\tt Moment.\+JS documentation} for a list of supported duration formats.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<span>\{\{ date | amStartOf:'month' | amLocal \}\}</span>
+\end{DoxyCode}
+
+
+\subsubsection*{am\+End\+Of filter}
+
+Mutates the original moment by setting it to the end of a unit(minute, hour, day..) of time.
+
+See \href{http://momentjs.com/docs/#/manipulating/end-of/}{\tt Moment.\+JS documentation} for a list of supported duration formats.
+
+Example\+:
+
+
+\begin{DoxyCode}
+<span>\{\{ date | amEndOf:'month' | amLocal \}\}</span>
+\end{DoxyCode}
+
+
+\subsubsection*{Time zone support}
+
+The {\ttfamily am\+Date\+Format} and {\ttfamily am\+Calendar} filters can be configured to display dates aligned to a specific timezone. You can configure the timezone using the following syntax\+:
+
+
+\begin{DoxyCode}
+angular.module('myapp').constant('angularMomentConfig', \{
+    timezone: 'Name of Timezone' // e.g. 'Europe/London'
+\});
+\end{DoxyCode}
+
+
+Remember to include {\ttfamily moment-\/timezone.\+js} v0.\+3.\+0 or greater in your project, otherwise the custom timezone functionality will not be available. You will also need to include a timezone data file that you can create using the \href{http://momentjs.com/timezone/}{\tt Timezone Data Builder} or simply download from \href{https://rawgithub.com/qw4n7y/7282780/raw/6ae3b334b295f93047e8f3ad300db6bc4387e235/moment-timezone-data.js}{\tt here}.
+
+\subsubsection*{Accessing {\ttfamily moment()} in your javascript}
+
+If you wish to use {\ttfamily moment()} in your services, controllers, or directives, simply inject the {\ttfamily moment} variable into the constructor.
+
+\subsection*{License }
+
+Released under the terms of the \mbox{[}M\+IT License\mbox{]}(L\+I\+C\+E\+N\+SE). 

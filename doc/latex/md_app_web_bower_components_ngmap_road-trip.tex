@@ -1,0 +1,69 @@
+Road Trip With Google Street View
+
+
+\begin{DoxyEnumerate}
+\item map
+\item directions
+\item street-\/view-\/panorama
+\item places-\/auto-\/complete
+\end{DoxyEnumerate}
+
+You need a map. \begin{DoxyVerb}<map zoom="18" center="current-position">
+</map>
+\end{DoxyVerb}
+
+
+First, plan your trip. In other words, set a driving direction \begin{DoxyVerb}Start: <input places-auto-complete ng-model="origin" size=40 />    
+End:   <input places-auto-complete ng-model="destination" size=40 />
+<map zoom="18" center="current-position">
+</map>
+\end{DoxyVerb}
+
+
+Next, see your road trip plan on the map \begin{DoxyVerb}Start: <input places-auto-complete ng-model="origin" size=40 />    
+End:   <input places-auto-complete ng-model="destination" size=40 />
+<map zoom="18" center="current-position">
+  <directions origin="{{origin}}" destination="{{destination}}"></directions>
+</map>
+\end{DoxyVerb}
+
+
+Finally, see the road with streetview \begin{DoxyVerb}Start: <input places-auto-complete ng-model="origin" size=40 />    
+End:   <input places-auto-complete ng-model="destination" size=40 />
+<map zoom="18" center="current-position">
+  <directions origin="{{origin}}" destination="{{destination}}"></directions>
+  <street-view-panorama container="streetview"></street-view-panorama> 
+</map>
+<div id="streetview"></div> 
+\end{DoxyVerb}
+
+
+Well done!! Now, you are ready to see your trip with street view.
+\begin{DoxyEnumerate}
+\item Click around the street view, then you will see your position on the map.
+\item Drag your streetview icon around on the map, then you will see the street view applied accordingly.
+\end{DoxyEnumerate}
+
+However, you want more than that. You want to drive the directions from start point to end point, but you are tired of clicking streetview. You want the map follows the driving directions automatically on every second, and you want to see the street accordingly.
+
+Then, you need some coding for that. yes. some, but not much.
+
+First, you need to get driving paths when driving direction is changed. \begin{DoxyVerb}<directions origin="{{origin}}" destination="{{destination}}" on-directions_changed="getPath(e)" ></directions>
+
+$scope.directionsChanged = function() {
+  $scope.paths = this.directions.routes[0].overview_path;  //save path
+  $scope.map.getStreetView().setPosition($scope.paths[0]); //reset streetview
+}
+\end{DoxyVerb}
+
+
+Second, when click a button, it plays automatically \begin{DoxyVerb}<button ng-click="play()">Play/Stop</button>
+
+$scope.play = function() {
+  var svp = $scope.map.getStreetView();
+  var index = 0;
+  $interval(function() {
+    svp.setPosition($scope.paths[index++]);
+  }, 1000);
+};\end{DoxyVerb}
+ 

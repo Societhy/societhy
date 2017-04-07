@@ -78,7 +78,14 @@ def delFromContact(user):
 @router.route('/findUser', methods=['POST'])
 def findUser():
 	ret = user_management.findUser(request.json)
-	return jsonify(ret.get('data')), ret.get('status')
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getUserNotif', methods=['GET'])
+@requires_auth
+def getUserNotif(user):
+	ret = user_management.getUserNotif(user)
+	return make_response(ret.get('data'), ret.get('status'))
+
 
 ####################
 ## KEY MANAGEMENT ##
@@ -95,7 +102,7 @@ def genLinkedKey(user):
 @requires_auth
 def keyWasGenerated(user, address):
 	ret = keys.keyWasGenerated(user, address)
-	return make_response(jsonify(ret.get('data')), ret.get('status'))
+	return make_response(ret.get('data'), ret.get('status'))
 
 @router.route('/importNewKey', methods=['POST'])
 @requires_auth

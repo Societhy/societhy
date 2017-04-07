@@ -1,0 +1,95 @@
+A j\+Query plugin provides appear and disappear events to do lazyload, infinite scroll or else effect.
+
+\subsection*{Demo}
+
+\href{http://emn178.github.io/jquery-appear/samples/lazyload/}{\tt Lazyload} (\href{http://emn178.github.io/jquery-appear/samples/overflow/}{\tt Overflow and Tabs}) (You could also refer to \href{http://github.io/emn178/jquery-lazyload-any/}{\tt j\+Query-\/lazyload-\/any}) \href{http://emn178.github.io/jquery-appear/samples/infinite-scroll/}{\tt Infinite Scroll}
+
+\subsection*{Download}
+
+\href{https://raw.github.com/emn178/jquery-appear/master/build/jquery.appear.min.js}{\tt Compress} \href{https://raw.github.com/emn178/jquery-appear/master/src/jquery.appear.js}{\tt Uncompress}
+
+\subsection*{Installation}
+
+You can also install jquery-\/appear by using Bower. 
+\begin{DoxyCode}
+bower install jquery-appear
+\end{DoxyCode}
+
+
+\subsection*{Usage}
+
+You could just use j\+Query {\ttfamily bind}, {\ttfamily delegate} or {\ttfamily on} to listen event. H\+T\+ML 
+\begin{DoxyCode}
+<div id="#you-want-to-detect">
+</div>
+\end{DoxyCode}
+ Java\+Script 
+\begin{DoxyCode}
+// trigger when first appear or disappear
+$('#you-want-to-detect').bind('appear', appearHandler);
+$('#you-want-to-detect').bind('disappear', disappearHandler);
+
+// trigger when scrolling and visible in screen
+$('#you-want-to-detect').bind('appearing', appearingHandler);
+\end{DoxyCode}
+
+
+\subsubsection*{Methods}
+
+\paragraph*{\$.appear.\+check()}
+
+Force to trigger detection event.
+
+\paragraph*{\$.appear.\+set\+Interval(inverval)}
+
+Set interval of timer that check container display status.
+
+\subparagraph*{$\ast$inverval\+: {\ttfamily Number} (default\+: {\ttfamily 50})$\ast$}
+
+Interval of timer. Set 0 to disable timer, and you can use {\ttfamily \$.appear.\+check()} to trigger detection manually.
+
+\paragraph*{\$.appear.\+refresh(selector)}
+
+Refresh status of elements bound event. Element will bind scroll event to parent scrollable automatically when binding appear event. If you move element, you should use this method to bind again.
+
+\subparagraph*{$\ast$selector\+: {\ttfamily String} or {\ttfamily Object} (default\+: {\ttfamily undefined})$\ast$}
+
+The elements that you want to refresh. It will refresh all elements bound appear event if you don\textquotesingle{}t pass this parameter.
+
+\paragraph*{\$.appear.\+set\+Event\+Prefix(prefix)}
+
+You can set prefix to avoid event conflict.
+
+\subparagraph*{$\ast$prefix\+: {\ttfamily String}$\ast$}
+
+The prefix that you want to set. It will apply to new event bindings. You should define it at first.
+
+\subsubsection*{Notice}
+
+
+\begin{DoxyItemize}
+\item You should initialize after the element add to page. Or it can\textquotesingle{}t detect whether it\textquotesingle{}s in screen. If you do that, you still can use {\ttfamily \$.appear.\+check()} to force detection.
+\item Detection uses j\+Query `element.is(\textquotesingle{}\+:visible\textquotesingle{})`, it will return false if element\textquotesingle{}s width and height are equal to zero. So you have to make sure the appear element with any width or height.
+\end{DoxyItemize}
+
+\subsection*{Example}
+
+H\+T\+ML 
+\begin{DoxyCode}
+<div id="loading">
+  <img src="loading.gif" />
+</div>
+\end{DoxyCode}
+ Java\+Script 
+\begin{DoxyCode}
+$('#loading').bind('appear', ajaxLoad);
+\end{DoxyCode}
+
+
+\subsection*{License}
+
+The project is released under the \href{http://www.opensource.org/licenses/MIT}{\tt M\+IT license}.
+
+\subsection*{Contact}
+
+The project\textquotesingle{}s website is located at \href{https://github.com/emn178/jquery-appear}{\tt https\+://github.\+com/emn178/jquery-\/appear} Author\+: Yi-\/\+Cyuan Chen (\href{mailto:emn178@gmail.com}{\tt emn178@gmail.\+com}) 

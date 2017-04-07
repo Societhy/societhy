@@ -1,0 +1,136 @@
+\href{https://gitter.im/angular-ui/bootstrap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge}{\tt } \href{http://travis-ci.org/angular-ui/bootstrap}{\tt } \href{https://david-dm.org/angular-ui/bootstrap#info=devDependencies}{\tt }
+
+\subsubsection*{Quick links}
+
+
+\begin{DoxyItemize}
+\item \href{#demo}{\tt Demo}
+\item \href{#installation}{\tt Installation}
+\begin{DoxyItemize}
+\item \href{#install-with-npm}{\tt N\+PM}
+\item \href{#install-with-bower}{\tt Bower}
+\item \href{#install-with-nuget}{\tt Nu\+Get}
+\item \href{#custom-build}{\tt Custom}
+\item \href{#manual-download}{\tt Manual}
+\end{DoxyItemize}
+\item \href{#support}{\tt Support}
+\begin{DoxyItemize}
+\item \href{#faq}{\tt F\+AQ}
+\item \href{#supported-browsers}{\tt Supported browsers}
+\item \href{#need-help}{\tt Need help?}
+\item \href{#found-a-bug}{\tt Found a bug?}
+\end{DoxyItemize}
+\item \href{#contributing-to-the-project}{\tt Contributing to the project}
+\item \href{#development-meeting-minutes-roadmap-and-more}{\tt Development, meeting minutes, roadmap and more.}
+\end{DoxyItemize}
+
+\section*{Demo}
+
+Do you want to see directives in action? Visit \href{http://angular-ui.github.io/bootstrap/!}{\tt http\+://angular-\/ui.\+github.\+io/bootstrap/!}
+
+\section*{Installation}
+
+Installation is easy as UI Bootstrap has minimal dependencies -\/ only the Angular\+JS and Twitter Bootstrap\textquotesingle{}s C\+SS are required. Note\+: Since version 0.\+13.\+0, UI Bootstrap depends on \href{https://docs.angularjs.org/api/ngAnimate}{\tt ng\+Animate} for transitions and animations, such as the accordion, carousel, etc. Include {\ttfamily ng\+Animate} in the module dependencies for your app in order to enable animation.
+
+\paragraph*{Install with N\+PM}
+
+
+\begin{DoxyCode}
+$ npm install angular-ui-bootstrap
+\end{DoxyCode}
+
+
+This will install Angular\+JS and Bootstrap N\+PM packages.
+
+\#\#\#\# Install with Bower 
+\begin{DoxyCode}
+$ bower install angular-bootstrap
+\end{DoxyCode}
+
+
+Note\+: do not install \textquotesingle{}angular-\/ui-\/bootstrap\textquotesingle{}. A separate repository -\/ \href{https://github.com/angular-ui/bootstrap-bower}{\tt bootstrap-\/bower} -\/ hosts the compiled javascript file and bower.\+json.
+
+\paragraph*{Install with Nu\+Get}
+
+To install Angular\+JS UI Bootstrap, run the following command in the Package Manager Console
+
+
+\begin{DoxyCode}
+PM> Install-Package Angular.UI.Bootstrap
+\end{DoxyCode}
+
+
+\paragraph*{Custom build}
+
+Head over to \href{http://angular-ui.github.io/bootstrap/}{\tt http\+://angular-\/ui.\+github.\+io/bootstrap/} and hit the {\itshape Custom build} button to create your own custom UI Bootstrap build, just the way you like it.
+
+\paragraph*{Manual download}
+
+After downloading dependencies (or better yet, referencing them from your favorite C\+DN) you need to download build version of this project. All the files and their purposes are described here\+: \href{https://github.com/angular-ui/bootstrap/tree/gh-pages#build-files}{\tt https\+://github.\+com/angular-\/ui/bootstrap/tree/gh-\/pages\#build-\/files} Don\textquotesingle{}t worry, if you are not sure which file to take, opt for {\ttfamily ui-\/bootstrap-\/tpls-\/\mbox{[}version\mbox{]}.min.\+js}.
+
+\subsubsection*{Adding dependency to your project}
+
+When you are done downloading all the dependencies and project files the only remaining part is to add dependencies on the {\ttfamily ui.\+bootstrap} Angular\+JS module\+:
+
+
+\begin{DoxyCode}
+angular.module('myModule', ['ui.bootstrap']);
+\end{DoxyCode}
+
+
+If you\textquotesingle{}re a Browserify or Webpack user, you can do\+:
+
+
+\begin{DoxyCode}
+var uibs = require('angular-ui-bootstrap');
+
+angular.module('myModule', [uibs]);
+\end{DoxyCode}
+
+
+\section*{Support}
+
+\subsection*{F\+AQ}
+
+\href{https://github.com/angular-ui/bootstrap/wiki/FAQ}{\tt https\+://github.\+com/angular-\/ui/bootstrap/wiki/\+F\+AQ}
+
+\subsection*{Supported browsers}
+
+Directives from this repository are automatically tested with the following browsers\+:
+\begin{DoxyItemize}
+\item Chrome (stable and canary channel)
+\item Firefox
+\item IE 9 and 10
+\item Opera
+\item Safari
+\end{DoxyItemize}
+
+Modern mobile browsers should work without problems.
+
+\subsection*{Need help?}
+
+Need help using UI Bootstrap?
+
+
+\begin{DoxyItemize}
+\item Live help in the I\+RC ({\ttfamily \#angularjs} channel at the {\ttfamily freenode} network). Use this \href{https://webchat.freenode.net/}{\tt webchat} or your own I\+RC client.
+\item Ask a question in \href{http://stackoverflow.com/}{\tt Stack\+Overflow} under the \href{http://stackoverflow.com/questions/tagged/angular-ui-bootstrap}{\tt angular-\/ui-\/bootstrap} tag.
+\end{DoxyItemize}
+
+{\bfseries Please do not create new issues in this repository to ask questions about using UI Bootstrap}
+
+\subsection*{Found a bug?}
+
+Please take a look at \href{CONTRIBUTING.md#you-think-youve-found-a-bug}{\tt C\+O\+N\+T\+R\+I\+B\+U\+T\+I\+N\+G.\+md} and submit your issue \href{https://github.com/angular-ui/bootstrap/issues/new}{\tt here}.
+
+
+
+
+
+\section*{Contributing to the project}
+
+We are always looking for the quality contributions! Please check the C\+O\+N\+T\+R\+I\+B\+U\+T\+I\+NG.md for the contribution guidelines.
+
+\section*{Development, meeting minutes, roadmap and more.}
+
+Head over to the \href{https://github.com/angular-ui/bootstrap/wiki}{\tt Wiki} for notes on development for UI Bootstrap, meeting minutes from the UI Bootstrap team, roadmap plans, project philosophy and more. 

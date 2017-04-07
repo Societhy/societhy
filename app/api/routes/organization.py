@@ -53,6 +53,12 @@ def addOrgaDocuments(user):
 	ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
 	return make_response("ok", 200)
 
+@router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
+@requires_auth
+def getOrgaUploadedDocument(user, doc_id, doc_name):
+	ret = base_orga.getOrgaUploadedDocument(user, doc_id, doc_name)
+	return ret
+
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
 def joinOrga(user):
@@ -62,11 +68,11 @@ def joinOrga(user):
 	else:
 		return make_response("Wrong request format", 400)
 
-@router.route('/getOrgaMemberList/<token>/<orga_id>', methods=['GET'])
+@router.route('/getOrgaMemberList/<orga_id>', methods=['GET'])
 @populate_user
-def getOrgaMemberList(user, token, orga_id):
+def getOrgaMemberList(user, orga_id):
 	if orga_id:
-		ret = base_orga.getOrgaMemberList(token, orga_id)
+		ret = base_orga.getOrgaMemberList(orga_id)
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
@@ -111,3 +117,8 @@ def addProductOrga(user):
 def getOrgaProducts(orga_id):
     products = sales_platform.getProductsByOwner(orga_id)
     return make_response(jsonify(products.get('data')), products.get('status'))
+
+@router.route('/getOrgaHisto', methods=['POST'])
+def getOrgaHisto():
+	ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
+	return make_response(jsonify(ret.get('data')), ret.get('status'))

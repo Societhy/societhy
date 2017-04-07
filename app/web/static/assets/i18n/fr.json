@@ -133,9 +133,9 @@
                 "SAMPLE": "La croix-rouge"
             },
             "projects": {
-                "MAIN" : "Projets",
-                "MYPROJECTS" : "Mes Projets",
-                "SAMPLE" : "Aider les clodos"
+                "MAIN": "Projets",
+                "MYPROJECTS": "Mes Projets",
+                "SAMPLE": "Aider les clodos"
             },
             "3level": {
                 "MAIN": "3 Level Menu",
@@ -253,5 +253,40 @@
         "FIXEDSIDEBAR": "Fixed sidebar",
         "CLOSEDSIDEBAR": "Closed sidebar",
         "FIXEDFOOTER": "Fixed footer"
+    },
+    "notification": {
+	"LOADING": "CHARGEMENT...",
+        "organisation": {
+	    "title": "Historique",
+	    "messages": {
+		"memberLeave": "Un membre à <u>quitté</u> l'organisation.",
+		"newMember": "Un membre à <u>rejoint</u> l'organisation.",
+		"newProposition": "Un membre vient de soumettre une nouvelle proposition.",
+		"newDonation": "Une donation vient d'être faite."
+	    },
+	    "filter": {
+		"title": "Filtre",
+		"categories": {
+		    "title": "Catégorie",
+		    "all": "Tout",
+		    "newMember": "Nouvel utilisateur",
+		    "memberLeave": "Ancien utilisateur",
+		    "newDonation": "Nouveau don"
+		},
+		"years": {
+		    "title": "Période"
+		},
+		"member": {
+		    "title": "Membre",
+		    "placeholder": "Selectionnez ou cherchez un membre en particulier"
+		},
+		"limit": {
+		    "title": "Limite"
+		}
+	    },
+	    "export": {
+		"title": "Exportation de donées"
+	    }
+	}
     }
 }

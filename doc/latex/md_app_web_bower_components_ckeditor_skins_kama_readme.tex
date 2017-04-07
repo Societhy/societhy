@@ -1,0 +1,33 @@
+\char`\"{}\+Kama\char`\"{} is the default skin of C\+K\+Editor 3.\+x. It\textquotesingle{}s been ported to C\+K\+Editor 4 and fully featured.
+
+For more information about skins, please check the \href{http://docs.cksource.com/CKEditor_4.x/Skin_SDK}{\tt C\+K\+Editor Skin S\+DK} documentation.
+
+\subsection*{Directory Structure }
+
+C\+SS parts\+:
+\begin{DoxyItemize}
+\item {\bfseries editor.\+css}\+: the main C\+SS file. It\textquotesingle{}s simply loading several other files, for easier maintenance,
+\item {\bfseries mainui.\+css}\+: the file contains styles of entire editor outline structures,
+\item {\bfseries toolbar.\+css}\+: the file contains styles of the editor toolbar space (top),
+\item {\bfseries richcombo.\+css}\+: the file contains styles of the rich combo ui elements on toolbar,
+\item {\bfseries panel.\+css}\+: the file contains styles of the rich combo drop-\/down, it\textquotesingle{}s not loaded until the first panel open up,
+\item {\bfseries elementspath.\+css}\+: the file contains styles of the editor elements path bar (bottom),
+\item {\bfseries menu.\+css}\+: the file contains styles of all editor menus including context menu and button drop-\/down, it\textquotesingle{}s not loaded until the first menu open up,
+\item {\bfseries dialog.\+css}\+: the C\+SS files for the dialog UI, it\textquotesingle{}s not loaded until the first dialog open,
+\item {\bfseries reset.\+css}\+: the file defines the basis of style resets among all editor UI spaces,
+\item {\bfseries preset.\+css}\+: the file defines the default styles of some UI elements reflecting the skin preference,
+\item {\bfseries editor\+\_\+\+X\+Y\+Z.\+css} and {\bfseries dialog\+\_\+\+X\+Y\+Z.\+css}\+: browser specific C\+SS hacks.
+\end{DoxyItemize}
+
+Other parts\+:
+\begin{DoxyItemize}
+\item {\bfseries skin.\+js}\+: the only Java\+Script part of the skin that registers the skin, its browser specific files and its icons and defines the Chameleon feature,
+\item {\bfseries icons/}\+: contains all skin defined icons,
+\item {\bfseries images/}\+: contains a fill general used images.
+\end{DoxyItemize}
+
+\subsection*{License }
+
+Copyright (c) 2003-\/2016, C\+K\+Source -\/ Frederico Knabben. All rights reserved.
+
+For licensing, see L\+I\+C\+E\+N\+S\+E.\+md or \href{http://ckeditor.com/license}{\tt http\+://ckeditor.\+com/license} 

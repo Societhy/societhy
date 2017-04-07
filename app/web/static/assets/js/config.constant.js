@@ -34,7 +34,7 @@ app.constant('JS_REQUIRES', {
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',
-        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
+//        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
@@ -111,6 +111,6 @@ app.constant('JS_REQUIRES', {
         files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }, {
         name:'qrcode',
-        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
+        files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
     }]
 });

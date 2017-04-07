@@ -1,0 +1,157 @@
+A j\+Query plugin provides appear and disappear events to do infinite scroll or else effect.
+
+\subsection*{Demo}
+
+\href{https://emn178.github.io/angular-appear/samples/infinite-scroll/}{\tt Infinite Scroll}
+
+\subsection*{C\+DN}
+
+Compress\+: \href{https://cdn.rawgit.com/emn178/angular-appear/master/build/angular-appear.min.js}{\tt https\+://cdn.\+rawgit.\+com/emn178/angular-\/appear/master/build/angular-\/appear.\+min.\+js} Uncompress\+: \href{https://cdn.rawgit.com/emn178/angular-appear/master/src/angular-appear.js}{\tt https\+://cdn.\+rawgit.\+com/emn178/angular-\/appear/master/src/angular-\/appear.\+js}
+
+\subsection*{Download}
+
+\href{https://raw.github.com/emn178/angular-appear/master/build/angular-appear.min.js}{\tt Compress} \href{https://raw.github.com/emn178/angular-appear/master/src/angular-appear.js}{\tt Uncompress}
+
+\subsection*{Installation}
+
+You can also install angular-\/appear by using Bower. 
+\begin{DoxyCode}
+bower install angular-appear
+\end{DoxyCode}
+
+
+\subsection*{Requirements}
+
+
+\begin{DoxyItemize}
+\item \href{http://jquery.com/}{\tt j\+Query}
+\item \href{https://github.com/emn178/jquery-appear}{\tt j\+Query-\/appear}
+\item \href{https://angularjs.org/}{\tt Angular\+JS}
+\end{DoxyItemize}
+
+\subsection*{Usage}
+
+Add the ng\+Appear module as a dependency to your application module\+: 
+\begin{DoxyCode}
+var myAppModule = angular.module('MyApp', ['ngAppear'])
+\end{DoxyCode}
+
+
+\subsection*{ng\+Appear}
+
+The ng\+Appear directive allows you to specify custom behavior when an element appears.
+
+\subsubsection*{Directive Info}
+
+This directive executes at priority level 0.
+
+\subsubsection*{Usage}
+
+as attribute\+: H\+T\+ML 
+\begin{DoxyCode}
+<ANY
+  ng-appear="">
+...
+</ANY>
+\end{DoxyCode}
+ \subsubsection*{Arguments}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endhead
+ng\+Appear &expression &Expression to evaluate upon appear. (Event object is available as \$event) \\\cline{1-3}
+\end{longtabu}
+\#\#\# Example 
+\begin{DoxyCode}
+<div ng-appear="show = true" ng-class="\{show: show\}" />
+\end{DoxyCode}
+
+
+\subsection*{ng\+Disappear}
+
+The ng\+Disappear directive allows you to specify custom behavior when an element disappears.
+
+\subsubsection*{Directive Info}
+
+This directive executes at priority level 0.
+
+\subsubsection*{Usage}
+
+as attribute\+: H\+T\+ML 
+\begin{DoxyCode}
+<ANY
+  ng-disappear="">
+...
+</ANY>
+\end{DoxyCode}
+ \subsubsection*{Arguments}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endhead
+ng\+Disappear &expression &Expression to evaluate upon disappear. (Event object is available as \$event) \\\cline{1-3}
+\end{longtabu}
+\#\#\# Example 
+\begin{DoxyCode}
+<div ng-appear="show = true" ng-disappear="show = false" ng-class="\{show: show\}" />
+\end{DoxyCode}
+
+
+\subsection*{ng\+Appearing}
+
+The ng\+Appearing directive allows you to specify custom behavior when scrolling and element is in screen.
+
+\subsubsection*{Directive Info}
+
+This directive executes at priority level 0.
+
+\subsubsection*{Usage}
+
+as attribute\+: H\+T\+ML 
+\begin{DoxyCode}
+<ANY
+  ng-appearing="">
+...
+</ANY>
+\end{DoxyCode}
+ \subsubsection*{Arguments}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Param }&\textbf{ Type }&\textbf{ Details  }\\\cline{1-3}
+\endhead
+ng\+Appearing &expression &Expression to evaluate upon appear. (Event object is available as \$event) \\\cline{1-3}
+\end{longtabu}
+\#\#\# Example 
+\begin{DoxyCode}
+<div ng-appearing="show = true" ng-class="\{show: show\}" />
+\end{DoxyCode}
+
+
+\subsection*{License}
+
+The project is released under the \href{http://www.opensource.org/licenses/MIT}{\tt M\+IT license}.
+
+\subsection*{Contact}
+
+The project\textquotesingle{}s website is located at \href{https://github.com/emn178/angular-appear}{\tt https\+://github.\+com/emn178/angular-\/appear} Author\+: Yi-\/\+Cyuan Chen (\href{mailto:emn178@gmail.com}{\tt emn178@gmail.\+com}) 

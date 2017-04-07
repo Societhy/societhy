@@ -1,0 +1,75 @@
+Change multiple page sections dynamically based on application state. Easily bind url params to your elements. Designed for single page applications -\/\+S\+PA using \href{https://www.polymer-project.org/}{\tt Polymer}.
+
+\subsection*{Why app-\/states}
+
+app-\/states allows you to define application states and updatable page sections independently. With the support of nested states and model inheritance only required sections are updated. This is the best scenario for real single page applications.
+
+Features
+\begin{DoxyItemize}
+\item Declarative application states using web components.
+\item Nested states supporting inheritance.
+\item Custom page sections and dynamic content loading.
+\item Automatic data binding to url params and custom models.
+\end{DoxyItemize}
+
+\subsubsection*{Online demo \href{http://kalitte.github.io/polymer-router-demo/}{\tt http\+://kalitte.\+github.\+io/polymer-\/router-\/demo/}}
+
+\subsection*{Getting stared}
+
+New to app-\/states ? Just have a look at \href{http://kalitte.github.io/polymer-router-demo/#/articles}{\tt Articles} and \href{http://kalitte.github.io/polymer-router-demo/#/account}{\tt Account} demo.
+
+\subsection*{Installation}
+
+\href{https://github.com/Kalitte/app-states}{\tt Download} or run {\ttfamily bower install app-\/states -\/-\/save}.
+
+\subsection*{Configuration}
+
+app-\/states uses the Polymer library. Make sure you have \href{http://webcomponents.org/polyfills/}{\tt webcomponents.\+js} and \href{https://www.polymer-project.org/}{\tt polymer.\+html} included in your page.
+
+
+\begin{DoxyCode}
+<!doctype html>
+<html>
+
+<head>
+    <script src="/bower\_components/webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="/bower\_components/Polymer/Polymer.html">
+    <link rel="import" href="/bower\_components/app-states/app-states.html">
+</head>
+
+<body unresolved>
+
+    <a href="#/">Go home</a>
+    <a href="#/login">Go Login</a>
+
+    
+    <section id="nav" is="states-section"></section>
+    <section id="page" is="states-section"></section>
+
+    
+    <app-states>
+        <app-state id="home">
+            <template target="#nav" is="states-template">
+                
+                Hi from nav!
+            </template>
+
+            <template target="#page" is="states-template">
+                
+                Hi from home!
+            </template>
+
+            <app-state id="login">
+                <template target="#page" is="states-template">
+                    
+                    Hi from login!
+                </template>
+                
+            </app-state>
+        </app-state>
+    </app-states>
+
+</body>
+</html>
+\end{DoxyCode}
+ 

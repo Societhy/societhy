@@ -1,0 +1,163 @@
+Fast\+Click is a simple, easy-\/to-\/use library for eliminating the 300ms delay between a physical tap and the firing of a {\ttfamily click} event on mobile browsers. The aim is to make your application feel less laggy and more responsive while avoiding any interference with your current logic.
+
+Fast\+Click is developed by \href{http://labs.ft.com/}{\tt FT Labs}, part of the Financial Times.
+
+\href{http://maxime.sh/2013/02/supprimer-le-lag-des-clics-sur-mobile-avec-fastclick/}{\tt Explication en français}.
+
+\href{https://developer.mozilla.org/ja/docs/Mozilla/Firefox_OS/Apps/Tips_and_techniques#Make_events_immediate}{\tt 日本語で説明}。
+
+\subsection*{Why does the delay exist?}
+
+According to \href{https://developers.google.com/mobile/articles/fast_buttons}{\tt Google}\+:
+
+\begin{quote}
+...mobile browsers will wait approximately 300ms from the time that you tap the button to fire the click event. The reason for this is that the browser is waiting to see if you are actually performing a double tap. \end{quote}
+
+
+\subsection*{Compatibility}
+
+The library has been deployed as part of the \href{http://app.ft.com/}{\tt FT Web App} and is tried and tested on the following mobile browsers\+:
+
+
+\begin{DoxyItemize}
+\item Mobile Safari on i\+OS 3 and upwards
+\item Chrome on i\+OS 5 and upwards
+\item Chrome on Android (I\+CS)
+\item Opera Mobile 11.\+5 and upwards
+\item Android Browser since Android 2
+\item Play\+Book OS 1 and upwards
+\end{DoxyItemize}
+
+\subsection*{When it isn\textquotesingle{}t needed}
+
+Fast\+Click doesn\textquotesingle{}t attach any listeners on desktop browsers.
+
+Chrome 32+ on Android with {\ttfamily width=device-\/width} in the \href{https://developer.mozilla.org/en-US/docs/Mobile/Viewport_meta_tag}{\tt viewport meta tag} doesn\textquotesingle{}t have a 300ms delay, therefore listeners aren\textquotesingle{}t attached.
+
+
+\begin{DoxyCode}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+\end{DoxyCode}
+
+
+Same goes for Chrome on Android (all versions) with {\ttfamily user-\/scalable=no} in the viewport meta tag. But be aware that {\ttfamily user-\/scalable=no} also disables pinch zooming, which may be an accessibility concern.
+
+For I\+E11+, you can use {\ttfamily touch-\/action\+: manipulation;} to disable double-\/tap-\/to-\/zoom on certain elements (like links and buttons). For I\+E10 use {\ttfamily -\/ms-\/touch-\/action\+: manipulation}.
+
+\subsection*{Usage}
+
+Include fastclick.\+js in your Java\+Script bundle or add it to your H\+T\+ML page like this\+:
+
+
+\begin{DoxyCode}
+<script type='application/javascript' src='/path/to/fastclick.js'></script>
+\end{DoxyCode}
+
+
+The script must be loaded prior to instantiating Fast\+Click on any element of the page.
+
+To instantiate Fast\+Click on the {\ttfamily body}, which is the recommended method of use\+:
+
+
+\begin{DoxyCode}
+if ('addEventListener' in document) \{
+    document.addEventListener('DOMContentLoaded', function() \{
+        FastClick.attach(document.body);
+    \}, false);
+\}
+\end{DoxyCode}
+
+
+Or, if you\textquotesingle{}re using j\+Query\+:
+
+
+\begin{DoxyCode}
+$(function() \{
+    FastClick.attach(document.body);
+\});
+\end{DoxyCode}
+
+
+If you\textquotesingle{}re using Browserify or another Common\+J\+S-\/style module system, the {\ttfamily Fast\+Click.\+attach} function will be returned when you call `require(\textquotesingle{}fastclick\textquotesingle{})`. As a result, the easiest way to use Fast\+Click with these loaders is as follows\+:
+
+
+\begin{DoxyCode}
+var attachFastClick = require('fastclick');
+attachFastClick(document.body);
+\end{DoxyCode}
+
+
+\subsubsection*{Minified}
+
+Run {\ttfamily make} to build a minified version of Fast\+Click using the Closure Compiler R\+E\+ST A\+PI. The minified file is saved to {\ttfamily build/fastclick.\+min.\+js} or you can \href{http://build.origami.ft.com/bundles/js?modules=fastclick}{\tt download a pre-\/minified version}.
+
+Note\+: the pre-\/minified version is built using \href{http://origami.ft.com/docs/developer-guide/build-service/}{\tt our build service} which exposes the {\ttfamily Fast\+Click} object through {\ttfamily Origami.\+fastclick} and will have the Browserify/\+Common\+JS A\+PI (see above).
+
+
+\begin{DoxyCode}
+var attachFastClick = Origami.fastclick;
+attachFastClick(document.body);
+\end{DoxyCode}
+
+
+\subsubsection*{A\+MD}
+
+Fast\+Click has A\+MD (Asynchronous Module Definition) support. This allows it to be lazy-\/loaded with an A\+MD loader, such as \href{http://requirejs.org/}{\tt Require\+JS}. Note that when using the A\+MD style require, the full {\ttfamily Fast\+Click} object will be returned, {\itshape not} {\ttfamily Fast\+Click.\+attach}
+
+
+\begin{DoxyCode}
+var FastClick = require('fastclick');
+FastClick.attach(document.body, options);
+\end{DoxyCode}
+
+
+\subsubsection*{Package managers}
+
+You can install Fast\+Click using \href{https://github.com/component/component}{\tt Component}, \href{https://npmjs.org/package/fastclick}{\tt npm} or \href{http://bower.io/}{\tt Bower}.
+
+For Ruby, there\textquotesingle{}s a third-\/party gem called \href{http://rubygems.org/gems/fastclick-rails}{\tt fastclick-\/rails}. For .N\+ET there\textquotesingle{}s a \href{http://nuget.org/packages/FastClick}{\tt Nu\+Get package}.
+
+\subsection*{Advanced}
+
+\subsubsection*{Ignore certain elements with {\ttfamily needsclick}}
+
+Sometimes you need Fast\+Click to ignore certain elements. You can do this easily by adding the {\ttfamily needsclick} class. 
+\begin{DoxyCode}
+<a class="needsclick">Ignored by FastClick</a>
+\end{DoxyCode}
+
+
+\paragraph*{Use case 1\+: non-\/synthetic click required}
+
+Internally, Fast\+Click uses {\ttfamily document.\+create\+Event} to fire a synthetic {\ttfamily click} event as soon as {\ttfamily touchend} is fired by the browser. It then suppresses the additional {\ttfamily click} event created by the browser after that. In some cases, the non-\/synthetic {\ttfamily click} event created by the browser is required, as described in the \href{http://ftlabs.github.com/fastclick/examples/focus.html}{\tt triggering focus example}.
+
+This is where the {\ttfamily needsclick} class comes in. Add the class to any element that requires a non-\/synthetic click.
+
+\paragraph*{Use case 2\+: Twitter Bootstrap 2.\+2.\+2 dropdowns}
+
+Another example of when to use the {\ttfamily needsclick} class is with dropdowns in Twitter Bootstrap 2.\+2.\+2. Bootstrap add its own {\ttfamily touchstart} listener for dropdowns, so you want to tell Fast\+Click to ignore those. If you don\textquotesingle{}t, touch devices will automatically close the dropdown as soon as it is clicked, because both Fast\+Click and Bootstrap execute the synthetic click, one opens the dropdown, the second closes it immediately after.
+
+
+\begin{DoxyCode}
+<a class="dropdown-toggle needsclick" data-toggle="dropdown">Dropdown</a>
+\end{DoxyCode}
+
+
+\subsection*{Examples}
+
+Fast\+Click is designed to cope with many different browser oddities. Here are some examples to illustrate this\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://ftlabs.github.com/fastclick/examples/layer.html}{\tt basic use} showing the increase in perceived responsiveness
+\item \href{http://ftlabs.github.com/fastclick/examples/focus.html}{\tt triggering focus} on an input element from a {\ttfamily click} handler
+\item \href{http://ftlabs.github.com/fastclick/examples/input.html}{\tt input element} which never receives clicks but gets fast focus
+\end{DoxyItemize}
+
+\subsection*{Tests}
+
+There are no automated tests. The files in {\ttfamily tests/} are manual reduced test cases. We\textquotesingle{}ve had a think about how best to test these cases, but they tend to be very browser/device specific and sometimes subjective which means it\textquotesingle{}s not so trivial to test.
+
+\subsection*{Credits and collaboration}
+
+Fast\+Click is maintained by \href{http://twitter.com/rowanbeentje}{\tt Rowan Beentje}, \href{http://twitter.com/mcaruanagalizia}{\tt Matthew Caruana Galizia} and \href{http://twitter.com/andrewsmatt}{\tt Matthew Andrews} at \href{http://labs.ft.com}{\tt FT Labs}. All open source code released by FT Labs is licenced under the M\+IT licence. We welcome comments, feedback and suggestions. Please feel free to raise an issue or pull request. 

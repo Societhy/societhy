@@ -1,0 +1,196 @@
+
+\begin{DoxyItemize}
+\item Allows for a nested structure
+\item Works with (or without) {\ttfamily ng-\/repeat}
+\item Allows multiple sections to be open at once
+\item Optimized for mobile devices
+\end{DoxyItemize}
+
+\subsection*{Demo}
+
+
+\begin{DoxyItemize}
+\item \href{http://lukaszwatroba.github.io/v-accordion}{\tt Git\+Hub}
+\end{DoxyItemize}
+
+\subsection*{Usage}
+
+
+\begin{DoxyItemize}
+\item If you use \href{http://bower.io/}{\tt bower} or \href{https://www.npmjs.com/}{\tt npm}, just {\ttfamily bower/npm install v-\/accordion}. If not, download files \href{./dist}{\tt from the github repo}.
+\item Include {\ttfamily angular.\+js}, {\ttfamily angular-\/animate.\+js}, {\ttfamily v-\/accordion.\+js}, and {\ttfamily v-\/accordion.\+css}\+: 
+\begin{DoxyCode}
+<link href="v-accordion.css" rel="stylesheet" />
+
+<script src="angular.js"></script>
+<script src="angular-animate.js"></script>
+
+<script src="v-accordion.js"></script>
+\end{DoxyCode}
+
+\item Add {\ttfamily v\+Accordion} as a dependency to your application module\+: 
+\begin{DoxyCode}
+angular.module('myApp', ['vAccordion']);
+\end{DoxyCode}
+
+\item Put the following markup in your template\+: 
+\begin{DoxyCode}
+<v-accordion class="vAccordion--default" multiple>
+
+  
+  <v-pane expanded>
+    <v-pane-header>
+      Pane header #1
+    </v-pane-header>
+
+    <v-pane-content>
+      Pane content #1
+    </v-pane-content>
+  </v-pane>
+
+  <v-pane>
+    <v-pane-header>
+      Pane header #2
+    </v-pane-header>
+
+    <v-pane-content>
+      Pane content #2
+    </v-pane-content>
+  </v-pane>
+
+</v-accordion>
+\end{DoxyCode}
+
+\item You can also use {\ttfamily v-\/accordion} with {\ttfamily ng-\/repeat}\+: 
+\begin{DoxyCode}
+<v-accordion class="vAccordion--default">
+
+  <v-pane ng-repeat="pane in panes" expanded="$first">
+    <v-pane-header>
+      \{\{ pane.header \}\}
+    </v-pane-header>
+
+    <v-pane-content>
+      \{\{ pane.content \}\}
+
+      
+      <v-accordion ng-if="pane.subpanes">
+        <v-pane ng-repeat="subpane in pane.subpanes">
+          <v-pane-header>
+            \{\{ subpane.header \}\}
+          </v-pane-header>
+          <v-pane-content>
+            \{\{ subpane.content \}\}
+          </v-pane-content>
+        </v-pane>
+      </v-accordion>
+    </v-pane-content>
+  </v-pane>
+
+</v-accordion>
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+\subsection*{A\+PI}
+
+Use A\+PI methods to control accordion component\+:
+
+
+\begin{DoxyCode}
+<v-accordion multiple control="accordion">
+
+  <v-pane ng-repeat="pane in panes">
+    <v-pane-header>
+      \{\{ pane.header \}\}
+    </v-pane-header>
+
+    <v-pane-content>
+      \{\{ pane.content \}\}
+    </v-pane-content>
+  </v-pane>
+
+</v-accordion>
+
+<button ng-click="accordion.toggle(0)">Toggle first pane</button>
+<button ng-click="accordion.expandAll()">Expand all</button>
+<button ng-click="accordion.collapseAll()">Collapse all</button>
+\end{DoxyCode}
+
+
+\paragraph*{Methods}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily toggle(pane\+Index)}
+\item {\ttfamily expand(pane\+Index)}
+\item {\ttfamily collapse(pane\+Index)}
+\item {\ttfamily expand\+All()}
+\item {\ttfamily collapse\+All()}
+\end{DoxyItemize}
+
+\paragraph*{Events}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily v\+Accordion\+:on\+Expand}
+\item {\ttfamily v\+Accordion\+:on\+Expand\+Animation\+End}
+\item {\ttfamily v\+Accordion\+:on\+Collapse}
+\item {\ttfamily v\+Accordion\+:on\+Collapse\+Animation\+End}
+\end{DoxyItemize}
+
+\subsection*{Callbacks}
+
+Use these callbacks to get expanded/collapsed pane index\+:
+
+
+\begin{DoxyCode}
+<v-accordion onexpand="expandCallback(index)" oncollapse="collapseCallback(index)">
+
+  <v-pane ng-repeat="pane in panes">
+    <v-pane-header>
+      \{\{ pane.header \}\}
+    </v-pane-header>
+
+    <v-pane-content>
+      \{\{ pane.content \}\}
+    </v-pane-content>
+  </v-pane>
+
+</v-accordion>
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+$scope.expandCallback = function (index) \{
+  console.log('expanded pane index:', index);
+\};
+
+$scope.collapseCallback = function (index) \{
+  console.log('collapsed pane index:', index);
+\};
+\end{DoxyCode}
+
+
+\subsection*{Accessibility}
+
+v\+Accordion manages keyboard focus and adds some common aria-\/$\ast$ attributes. B\+UT you should additionally place the {\ttfamily aria-\/controls} and {\ttfamily aria-\/labelledby} as follows\+:
+
+
+\begin{DoxyCode}
+<v-accordion>
+
+  <v-pane ng-repeat="pane in panes">
+    <v-pane-header id="pane\{\{$index\}\}-header" aria-controls="pane\{\{$index\}\}-content">
+      \{\{ pane.header \}\}
+    </v-pane-header>
+
+    <v-pane-content id="pane\{\{$index\}\}-content" aria-labelledby="pane\{\{$index\}\}-header">
+      \{\{ pane.content \}\}
+    </v-pane-content>
+  </v-pane>
+
+</v-accordion>
+\end{DoxyCode}
+ 

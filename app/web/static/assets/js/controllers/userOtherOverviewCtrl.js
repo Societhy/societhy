@@ -1,3 +1,8 @@
+/**
+ * Other user overview controller.
+ *
+ * @class userOtherOverviewCtrl
+ */
 app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootScope, $location, $state) {
     var ctrl = this;
     $scope.alreadyContact = false;
@@ -5,6 +10,10 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
 //OAuth
     OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
+    /**
+     * Toggle the "add to contact" button wether the user is in contact list or not.
+     * @method toggleContactBtn
+     */
     function toggleContactBtn() {
         $scope.alreadyContact = false;
         console.log("nefore =", $rootScope.profile)
@@ -19,6 +28,10 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
         }
     }
 
+    /**
+     * Find the user's profile page.
+     * @method findUser
+     */
     function findUser() {
         console.log($state.params);
     	$http.post('/findUser', {
@@ -33,6 +46,10 @@ app.controller('userOtherOverviewCtrl', function($scope, $http, $timeout, $rootS
     		});
     }
 
+    /**
+     * Add the user to the contact list.
+     * @method addToContact
+     */
     $scope.addToContact = function(){
         if (ctrl.profile != null) {
             $http.post('/addToContact', {

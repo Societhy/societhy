@@ -1,0 +1,101 @@
+\hypertarget{classapp_1_1models_1_1user_1_1_user_collection}{}\section{app.\+models.\+user.\+User\+Collection Class Reference}
+\label{classapp_1_1models_1_1user_1_1_user_collection}\index{app.\+models.\+user.\+User\+Collection@{app.\+models.\+user.\+User\+Collection}}
+Inheritance diagram for app.\+models.\+user.\+User\+Collection\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classapp_1_1models_1_1user_1_1_user_collection}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1user_1_1_user_collection_ab99eb4a1fa53cb10a543223a89a29aba}\label{classapp_1_1models_1_1user_1_1_user_collection_ab99eb4a1fa53cb10a543223a89a29aba}} 
+def {\bfseries lookup} (self, query)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+list {\bfseries user\+\_\+info}
+\item 
+list {\bfseries public\+\_\+info}
+\item 
+dictionary {\bfseries structure}
+\item 
+\mbox{\Hypertarget{classapp_1_1models_1_1user_1_1_user_collection_a556792b172fb7dae35e0728a998b082d}\label{classapp_1_1models_1_1user_1_1_user_collection_a556792b172fb7dae35e0728a998b082d}} 
+{\bfseries document\+\_\+class} = \hyperlink{classapp_1_1models_1_1user_1_1_user_document}{User\+Document}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classapp_1_1models_1_1user_1_1_user_collection_a47af86f69fc170b8f1a206cfb8e709c5}\label{classapp_1_1models_1_1user_1_1_user_collection_a47af86f69fc170b8f1a206cfb8e709c5}} 
+\index{app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}!public\+\_\+info@{public\+\_\+info}}
+\index{public\+\_\+info@{public\+\_\+info}!app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}}
+\subsubsection{\texorpdfstring{public\+\_\+info}{public\_info}}
+{\footnotesize\ttfamily list app.\+models.\+user.\+User\+Collection.\+public\+\_\+info\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=  [
+        \textcolor{stringliteral}{"\_id"},
+        \textcolor{stringliteral}{"name"},
+        \textcolor{stringliteral}{"account"},
+        \textcolor{stringliteral}{"firstname"},
+        \textcolor{stringliteral}{"lastname"},
+        \textcolor{stringliteral}{"organizations"}
+    ]
+\end{DoxyCode}
+\mbox{\Hypertarget{classapp_1_1models_1_1user_1_1_user_collection_ab9b235255f21f7152c5cbe8722756184}\label{classapp_1_1models_1_1user_1_1_user_collection_ab9b235255f21f7152c5cbe8722756184}} 
+\index{app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}!structure@{structure}}
+\index{structure@{structure}!app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}}
+\subsubsection{\texorpdfstring{structure}{structure}}
+{\footnotesize\ttfamily dictionary app.\+models.\+user.\+User\+Collection.\+structure\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=  \{
+        \textcolor{stringliteral}{"name"}: str,
+        \textcolor{stringliteral}{"address"}: str,
+        \textcolor{stringliteral}{"account"}: str,
+        \textcolor{stringliteral}{"local\_account"}: str,
+        \textcolor{stringliteral}{"password\_type"}: str,
+        \textcolor{stringliteral}{"eth"}: dict,
+        \textcolor{stringliteral}{"email"}: str,
+        \textcolor{stringliteral}{"gender"}: str,
+        \textcolor{stringliteral}{"firstname"}: str,
+        \textcolor{stringliteral}{"lastname"}: str,
+        \textcolor{stringliteral}{"city"}: str,
+        \textcolor{stringliteral}{"contact\_list"}: list,
+        \textcolor{stringliteral}{"organizations"}: list
+    \}
+\end{DoxyCode}
+\mbox{\Hypertarget{classapp_1_1models_1_1user_1_1_user_collection_a173addd961c46fd19ec6cd70bd4a5d3c}\label{classapp_1_1models_1_1user_1_1_user_collection_a173addd961c46fd19ec6cd70bd4a5d3c}} 
+\index{app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}!user\+\_\+info@{user\+\_\+info}}
+\index{user\+\_\+info@{user\+\_\+info}!app\+::models\+::user\+::\+User\+Collection@{app\+::models\+::user\+::\+User\+Collection}}
+\subsubsection{\texorpdfstring{user\+\_\+info}{user\_info}}
+{\footnotesize\ttfamily list app.\+models.\+user.\+User\+Collection.\+user\+\_\+info\hspace{0.3cm}{\ttfamily [static]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=  [
+        \textcolor{stringliteral}{"\_id"},
+        \textcolor{stringliteral}{"name"},
+        \textcolor{stringliteral}{"address"},
+        \textcolor{stringliteral}{"account"},
+        \textcolor{stringliteral}{"local\_account"},
+        \textcolor{stringliteral}{"password\_type"},
+        \textcolor{stringliteral}{"eth"},
+        \textcolor{stringliteral}{"eth.keys"},
+        \textcolor{stringliteral}{"email"},
+        \textcolor{stringliteral}{"gender"},
+        \textcolor{stringliteral}{"firstname"},
+        \textcolor{stringliteral}{"lastname"},
+        \textcolor{stringliteral}{"city"},
+        \textcolor{stringliteral}{"contact\_list"},
+        \textcolor{stringliteral}{"organizations"}
+    ]
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/models/user.\+py\end{DoxyCompactItemize}
