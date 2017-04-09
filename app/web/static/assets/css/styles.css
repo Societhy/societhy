@@ -212,6 +212,7 @@ h5.over-title {
   position: relative;
   width: 100%;
   overflow: hidden;
+  background: #f1f3fa;
 }
 @media (min-width: 992px) {
   .app-boxed-page #app {

@@ -2,12 +2,14 @@ from bson import ObjectId
 
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
+from bson import objectid
 
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
+from models.notification import notifications, NotificationDocument as notification
 
 from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import fromWei, toWei, to20bytes, normalizeAddress
@@ -175,6 +177,7 @@ class OrgaDocument(Document):
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
+		notification.pushNotif({"sender": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "subject": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
 		return resp
 
 	def memberJoined(self, logs):

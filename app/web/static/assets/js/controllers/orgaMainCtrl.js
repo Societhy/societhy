@@ -222,14 +222,18 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 
 
 /*
- ** Histo Handler
- */
+** Histo Handler
+*/
 app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
     ctrl = this;
 
-    $rootScope.filter = {"categories": [{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}], "members": []};
-    $rootScope.filtered = {"categories": [], "members": []};
-
+    $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
+			 members:	[{}],
+			 jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
+			 projects:	[{}],
+			 donations:	[{}]};
+    
+    $rootScope.filtered = {categories: [], members: [], jobs: [], projects: [], donations: []};
 
     $rootScope.getHisto = function (begin, end) {
         $http.post('/getOrgaHisto', {
@@ -237,16 +241,14 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
             "date": {"begin": begin, "end": end}
         }).then(
             function (data) {
-                $(".orgaActivityLoading").addClass("displayNone");
+		$(".orgaActivityLoading").addClass("displayNone");
                 $(".timeline").removeClass("displayNone");
                 if (data.data[0]) {
-                    $rootScope.sliderFilter = [];
-                    if (!$rootScope.sliderFilter.first)
-                        $rootScope.sliderFilter.first = data.data[0]["first"];
-                    $rootScope.sliderFilter.valBegin = begin;
-                    $rootScope.sliderFilter.valEnd = end;
+                    $rootScope.slider.first = data.data[0]["first"];
                     $rootScope.histoFull = $rootScope.histo = data.data;
-                    updateSliderFilter();
+		    $rootScope.slider.begin = begin;
+		    $rootScope.slider.end = end;
+                    $rootScope.updateSliderFilter();
                     $rootScope.updateFilter();
                 }
                 else {
@@ -263,34 +265,22 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
     /*
      ** SLIDER
      */
-    function updateSliderFilter() {
-
-        if (!$rootScope.sliderFilter || $("#sliderFilter.ui-dateRangeSlider").length <= 0)
+    $rootScope.updateSliderFilter = function () {
+        if (!$rootScope.slider || $("#dateSliderFilter.ui-dateRangeSlider").length <= 0)
             return;
-        $("#sliderFilter").dateRangeSlider("bounds", new Date($rootScope.sliderFilter.first), $rootScope.date);
-        $("#sliderFilter").dateRangeSlider("values", new Date($rootScope.sliderFilter.valBegin), new Date($rootScope.sliderFilter.valEnd));
-
+        $("#dateSliderFilter").dateRangeSlider("bounds", new Date($rootScope.slider.first), $rootScope.date);
+        $("#dateSliderFilter").dateRangeSlider("values", new Date($rootScope.slider.begin), new Date($rootScope.slider.end));
     }
 
-    $rootScope.initSliders = function () {
-        $("#sliderFilter").dateRangeSlider();
-        var slider = $('.range-slider');
-        range = $('.range-slider__range');
-        value = $('.range-slider__value');
-        slider.each(function () {
-            value.each(function () {
-                var value = $(this).prev().attr('value');
-                $(this).html(value);
-
-            });
-            range.on('input', function () {
-                $(this).next(value).html(this.value);
-            });
-        });
-        $("#sliderFilter").bind("userValuesChanged", $rootScope.updateHisto);
-        updateSliderFilter();
+    $rootScope.initSlider = function () {
+	if ($rootScope.init)
+	    return;
+        $("#dateSliderFilter").dateRangeSlider();
+        $("#donationSliderFilter").rangeSlider({defaultValues:{min: 0, max: 100}}); // add check donation
+        $("#dateSliderFilter").bind("userValuesChanged", $rootScope.updateHisto)
+	$rootScope.updateSliderFilter()
+	$rootScope.init = true;
     }
-
     /*
      ** FILTERS
      */
@@ -329,27 +319,25 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
                     }
                 });
             }
-
+/*
+** ADD FILTER
+*/
             if (filtered === false)
                 delete $rootScope.histo[id];
         });
-
     }
 
     /*
      ** INIT
      */
     function initHisto() {
-
         angular.forEach($rootScope.currentOrga.members, function(value, key) {
             $rootScope.filter.members.push(value);
         });
-        if ($rootScope.filter.members[0]) {
-            $rootScope.filter.members[1] = $.extend(true, {}, $rootScope.filter.members[0]);
-            $rootScope.filter.members[1].name = "unknown"
-        }
+        angular.forEach($rootScope.currentOrga.projects, function(value, key) {
+            $rootScope.filter.projects.push(value);
+        });
         $rootScope.$watch( 'filtered' , $rootScope.updateFilter, true);
-
         locale = "en-us";
         $rootScope.date = new Date();
         $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 12:00 AM"};

@@ -19,7 +19,7 @@
                 <li ng-repeat="data in histo">
                     <div class="timeline-panel">
                         <div class="tl-heading">
-                            <h4>{{data.sender.name}} -> {{data.subject.name}}</h4>
+                            <h4 ><a href="#/app/{{data.sender.type}}/{{data.sender.name}}/{{data.sender.id}}">{{data.sender.name}}</a> -> <a href="#/app/{{data.subject.type}}/{{data.subject.name}}/{{data.subject.id}}">{{data.subject.name}}</a></h4>
                         </div>
                         <p>
                             <small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{data.date}}</small>
@@ -42,14 +42,20 @@
                     </h3>
                     <hr />
                 </div>
-                <!-- BEGIN: SLIDER -->
+                <!-- BEGIN: DATESLIDER -->
                 <div class="filter">
                     <label>
                         <span translate="notification.organisation.filter.years.title"></span> :
                     </label>
-                    <div id="sliderFilter"></div>
+                    <div id="dateSliderFilter"></div>
                 </div>
-                <!-- END: SLIDER -->
+                <!-- END: DATESLIDER -->
+		<!-- BEGIN: DONATIONSLIDER -->
+                <div class="filte">
+                    <label><span translate="notification.organisation.filter.donation.title"></span> :</label>
+                    <div id="donationSliderFilter"></div>
+                </div>
+		<!-- END: DONATIONSLIDER -->
                 <!-- BEGIN: CATEGORY -->
                 <div class="filter">
                     <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
@@ -59,8 +65,7 @@
                          output-model="filtered.categories"
                          button-label="name"
                          item-label="name"
-                         tick-property="ticked"
-                    >
+                         tick-property="ticked">
                     </div>
                 </div>
                 <!-- END: CATEGORY -->
@@ -73,10 +78,36 @@
                          output-model="filtered.members"
                          button-label="icon name"
                          item-label="name"
-                         tick-property="ticked"
-                    >
+                         tick-property="ticked">
                     </div>
                 </div>
+		<!-- END: MEMBER-->
+                <!-- BEGIN: PROJECT -->
+                <div class="filter">
+                    <label><span translate="notification.organisation.filter.project.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.projects"
+                         output-model="filtered.projects"
+                         button-label="icon name"
+                         item-label="name"
+                         tick-property="ticked">
+                    </div>
+                </div>
+		<!-- END: PROJECT-->
+                <!-- BEGIN: JOB -->
+                <div class="filter">
+                    <label><span translate="notification.organisation.filter.job.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.jobs"
+                         output-model="filtered.jobs"
+                         button-label="icon name"
+                         item-label="name"
+                         tick-property="ticked">
+                    </div>
+                </div>
+		<!-- END: JOB-->
             </div>
             <!-- END: FILTER-->
             <!-- EXPORT CONTAINER -->

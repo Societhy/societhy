@@ -164,7 +164,7 @@ def joinOrga(user, password, orga_id, tag="member"):
 		tx_hash = orga.join(user, tag, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "newMember"})
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "newMember"})
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -268,7 +268,7 @@ def leaveOrga(user, password, orga_id):
 		tx_hash = orga_instance.leave(user, password=password)
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
 
 	return {
 		"data": tx_hash,

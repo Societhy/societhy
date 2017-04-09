@@ -266,6 +266,7 @@
         "organisation": {
 	    "title": "Historic",
 	    "messages": {
+		"orgaCreate": "Creation of the organisation.",
 		"memberLeave": "A member <u>has left</u> the organisation.",
 		"newMember": "A member <u>has join</u> the organisation.",
 		"newProposition": "A member has submit a new proposition",
@@ -286,6 +287,18 @@
 		"member": {
 		    "title": "Member",
 		    "placeholder": "Select or search for a specific member"
+		},
+		"project": {
+		    "title": "Project",
+		    "placeholder": "Select or search for a specific project"
+		},
+		"job": {
+		    "title": "Job",
+		    "placeholder": "Select or search for a specific job"
+		},
+		"donation": {
+		    "title": "Donation",
+		    "placeholder": "Select or search for a specific range of donation"
 		},
 		"limit": {
 		    "title": "Limit"
