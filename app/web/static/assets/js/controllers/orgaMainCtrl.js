@@ -366,20 +366,7 @@ app.controller('ExportActivityController', function($scope, $http, $timeout, $ro
     $rootScope.exportActivityModal = function() {
 	$("#orgaExportData").table2excel({exclude: ".noExl",
 					  name: "Worksheet Name",
-					  filename: "SomeFile"});
-	/*
-	  var modalInstance = $uibModal.open({
-	  templateUrl: "static/assets/views/modals/exportActivity.html",
-	  resolve: {
-	  ctrl : function() {
-	  $("#exportDateSliderFilter").dateRangeSlider();
-	  $("#exportDonationSliderFilter").rangeSlider({defaultValues:{min: 0, max: 100}}); // add check donation
-	  return ctrl;
-	  }
-	  }
-	  });
-	*/
-	
+					  filename: "SomeFile"});	
     };
 
     return ctrl;
