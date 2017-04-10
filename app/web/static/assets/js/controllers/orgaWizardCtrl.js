@@ -5,9 +5,31 @@
 
 
   app.controller('OrgaWizardCtrl', 
-    function ($scope, $http, ngNotify, FileUploader, $sessionStorage, $rootScope, $state) {
+    function ($scope, $http, $timeout, ngNotify, FileUploader, $sessionStorage, $rootScope, $state, ngMaterial) {
         $scope.currentStep = 1;
 
+        $scope.governance_description = {
+            "dao": {
+                "pros": ["test1", "test2", "test3"],
+                "cons": ["test1", "test2", "test3"],
+                "desc": "This is a standard description"
+            },
+            "ngo": {
+                "pros": ["test1", "test2", "test3"],
+                "cons": ["test1", "test2", "test3"],
+                "desc": "This is a standard description"
+            },
+            "public_company": {
+                "pros": ["test1", "test2", "test3"],
+                "cons": ["test1", "test2", "test3"],
+                "desc": "This is a standard description"
+            },
+            "entreprise": {
+                "pros": ["test1", "test2", "test3"],
+                "cons": ["test1", "test2", "test3"],
+                "desc": "This is a standard description"
+            }
+        }
 
     // IMAGE UPLOAD
     var uploaderImages = $scope.uploaderImages = new FileUploader({
@@ -26,14 +48,8 @@
         }
     });
 
-    uploaderImages.onBeforeUploadItem = function (item, resp, status, headers) {
-        console.info('onBeforeUploadItem', item);
-    };
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
         console.info('onErrorItem', fileItem, response, status, headers);
-    };
-    uploaderImages.onCompleteItem = function (fileItem, response, status, headers) {
-        console.info('onCompleteItem', fileItem, response, status, headers);
     };
 
     //DOCUMENT UPLOAD
@@ -51,17 +67,99 @@
         item.formData.push({"type": item.file.type});        
         console.info('onBeforeUploadItem', item);
     };
-    uploaderDocs.onErrorItem = function (fileItem, response, status, headers) {
-        console.info('onErrorItem', fileItem, response, status, headers);
-    };
-    uploaderDocs.onCompleteItem = function (fileItem, response, status, headers) {
-        console.info('onCompleteItem', fileItem, response, status, headers);
-    };
 
 
     // MEMBER MANAGEMENT
+    var self = this;
 
-        $scope.users = [];
+    self.simulateQuery = false;
+    self.isDisabled    = false;
+
+    // list of `state` value/display objects
+    self.states        = loadAll();
+    self.querySearch   = querySearch;
+    self.selectedItemChange = selectedItemChange;
+    self.searchTextChange   = searchTextChange;
+
+    self.newState = newState;
+
+    function newState(state) {
+      alert("Sorry! You'll need to create a Constitution for " + state + " first!");
+    }
+
+    // ******************************
+    // Internal methods
+    // ******************************
+
+    /**
+     * Search for states... use $timeout to simulate
+     * remote dataservice call.
+     */
+    function querySearch (query) {
+      var results = query ? self.states.filter( createFilterFor(query) ) : self.states,
+          deferred;
+      if (self.simulateQuery) {
+        deferred = $q.defer();
+        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        return deferred.promise;
+      } else {
+        return results;
+      }
+    }
+
+    function searchTextChange(text) {
+      $log.info('Text changed to ' + text);
+    }
+
+    function selectedItemChange(item) {
+      $log.info('Item changed to ' + JSON.stringify(item));
+    }
+
+    /**
+     * Build `states` list of key/value pairs
+     */
+    function loadAll() {
+      var allStates = 'Alabama, Alaska, Arizona, Arkansas, California, Colorado, Connecticut, Delaware,\
+              Florida, Georgia, Hawaii, Idaho, Illinois, Indiana, Iowa, Kansas, Kentucky, Louisiana,\
+              Maine, Maryland, Massachusetts, Michigan, Minnesota, Mississippi, Missouri, Montana,\
+              Nebraska, Nevada, New Hampshire, New Jersey, New Mexico, New York, North Carolina,\
+              North Dakota, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina,\
+              South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
+              Wisconsin, Wyoming';
+
+      return allStates.split(/, +/g).map( function (state) {
+        return {
+          value: state.toLowerCase(),
+          display: state
+        };
+      });
+    }
+
+    /**
+     * Create filter function for a query string
+     */
+    function createFilterFor(query) {
+      var lowercaseQuery = angular.lowercase(query);
+
+      return function filterFn(state) {
+        return (state.value.indexOf(lowercaseQuery) === 0);
+      };
+
+    }
+
+    $scope.users = [];
+
+    $scope.$watch('members_query', function(new_, old) {
+        if (new_ != null && old != new_ && new_.length > 0) {
+            $timeout(function() {
+                if (new_ == $scope.members_query) {
+                    $http.get('searchFor/'.concat(new_)).then(function(response) {
+                        console.log(response);
+                    });
+                }
+            }, 500);
+        }
+    })
 
     $scope.addRow = function () {
         $scope.users.push({ 'invited_username': $scope.invited_username,  'invited_role': $scope.invited_role });
@@ -165,34 +263,34 @@
                         uploaderDocs.uploadAll();
                         $state.go("app.organization", data.data);
                     })
-}
-},
+            }
+        },
 
-reset: function () {
+        reset: function () {
 
-}
-};
+        }
+    };
 
 
-var nextStep = function () {
-    $scope.currentStep++;
-};
-var prevStep = function () {
-    $scope.currentStep--;
-};
-var goToStep = function (i) {
-    $scope.currentStep = i;
-};
+    var nextStep = function () {
+        $scope.currentStep++;
+    };
+    var prevStep = function () {
+        $scope.currentStep--;
+    };
+    var goToStep = function (i) {
+        $scope.currentStep = i;
+    };
 
-var errorMessage = function (text) {
+    var errorMessage = function (text) {
 
-    ngNotify.set(text, {
-        theme: 'pure',
-        position: 'top',    
-        type: 'error',
-        button: 'true',
-        sticky: false,
-        duration: 3000
-    });
-};
+        ngNotify.set(text, {
+            theme: 'pure',
+            position: 'top',    
+            type: 'error',
+            button: 'true',
+            sticky: false,
+            duration: 3000
+        });
+    };
 });

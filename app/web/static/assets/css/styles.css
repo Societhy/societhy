@@ -5001,6 +5001,10 @@ h1.text-extra-large {
   font-size: 50px !important;
 }
 
+.text-xxl {
+  font-size: 50px;
+}
+
 .text-primary {
   color: #58748B !important;
 }
