@@ -196,6 +196,7 @@ class OrgaDocument(Document):
 					self["members"][new_member.get('account')] = public_member
 					self.save_partial();
 					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
+
 		return False
 
 	def memberLeft(self, logs):

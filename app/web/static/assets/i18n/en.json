@@ -297,7 +297,7 @@
 		    "placeholder": "Select or search for a specific job"
 		},
 		"donation": {
-		    "title": "Donation",
+		    "title": "Donation amount",
 		    "placeholder": "Select or search for a specific range of donation"
 		},
 		"limit": {
@@ -305,7 +305,14 @@
 		}
 	    },
 	    "export": {
-		"title": "Data export"
+		"title": "Data export",
+		"button": "Export the current selection.",
+		"header": {
+		    "date" : "Date",
+		    "organization": "Name of the sender",
+		    "subject" : "Name of the subject",
+		    "category": "Category"
+		}
 	    }
 	}
     }

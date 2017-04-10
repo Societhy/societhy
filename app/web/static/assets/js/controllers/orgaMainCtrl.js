@@ -224,8 +224,9 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 /*
 ** Histo Handler
 */
-app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller) {
+app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeout, $uibModal, $q, $rootScope, $controller, $state, SweetAlert, ladda, $sessionStorage, $document) {
     ctrl = this;
+
 
     $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
 			 members:	[{}],
@@ -281,6 +282,8 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
 	$rootScope.updateSliderFilter()
 	$rootScope.init = true;
     }
+
+    
     /*
      ** FILTERS
      */
@@ -319,9 +322,9 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
                     }
                 });
             }
-/*
-** ADD FILTER
-*/
+	    /*
+	    ** ADD FILTER
+	    */
             if (filtered === false)
                 delete $rootScope.histo[id];
         });
@@ -349,7 +352,35 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $sessi
             ($rootScope.slider.end));
     };
     initHisto();
-
     return ctrl;
 
+});
+
+/*
+** EXPORT CONTROLLER
+*/
+
+app.controller('ExportActivityController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
+    
+    
+    $rootScope.exportActivityModal = function() {
+	$("#orgaExportData").table2excel({exclude: ".noExl",
+					  name: "Worksheet Name",
+					  filename: "SomeFile"});
+	/*
+	  var modalInstance = $uibModal.open({
+	  templateUrl: "static/assets/views/modals/exportActivity.html",
+	  resolve: {
+	  ctrl : function() {
+	  $("#exportDateSliderFilter").dateRangeSlider();
+	  $("#exportDonationSliderFilter").rangeSlider({defaultValues:{min: 0, max: 100}}); // add check donation
+	  return ctrl;
+	  }
+	  }
+	  });
+	*/
+	
+    };
+
+    return ctrl;
 });

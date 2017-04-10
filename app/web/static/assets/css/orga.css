@@ -65,7 +65,7 @@
     padding:		15px;
 }
 
-#filterContainer .filter:not(:nth-child(2)) {
+#filterContainer .select .filter {
     display:		inline-block;
     width:		49%
 }

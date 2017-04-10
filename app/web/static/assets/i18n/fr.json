@@ -290,7 +290,7 @@
 		    "placeholder": "Selectionnez ou cherchez un role en particulier"
 		},
 		"donation": {
-		    "title": "Don",
+		    "title": "Valeur du don",
 		    "placeholder": "Filtrer la valeur du don"
 		},
 		"limit": {
@@ -298,7 +298,14 @@
 		}
 	    },
 	    "export": {
-		"title": "Exportation de donées"
+		"title": "Exportation de donées",
+		"button": "Exporter la selection actuelle",
+		"header": {
+		    "date" : "Date",
+		    "organization": "Nom de l'envoyeur",
+		    "subject" : "Nom du sujet",
+		    "category": "Action effectuée"
+		}
 	    }
 	}
     }
