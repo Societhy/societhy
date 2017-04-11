@@ -2,7 +2,7 @@ pragma solidity ^0.4.7;
 
 import {basic_project as Project} from "basic_project.sol";
 import {mortal, open_structure} from "library.sol";
-import {BoardRoom} from "Boardroom.sol";
+import {BoardRoom} from "BoardRoom.sol";
 
 contract basic_orga is mortal, open_structure, BoardRoom {
     /* define variable greeting of the type string */
