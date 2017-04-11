@@ -144,7 +144,7 @@
         },
 
         submit: function (form) {
-            console.log(uploaderDocs);
+            console.log("complete ------>", form);
             if ($scope.doVerifications()) {
                 $scope.completeBlockchainAction(
                     function(password) {
@@ -154,7 +154,6 @@
                             "newOrga" : {
                                 "name": form.name.$$rawModelValue,
                                 "description" : form.description.$$rawModelValue,
-                                "type" : form.type.$$rawModelValue,
                                 "fbUrl": form.fbUrl.$$rawModelValue,
                                 "twitterUrl" : form.twitterUrl.$$rawModelValue,
                                 "invited_users" : $scope.users

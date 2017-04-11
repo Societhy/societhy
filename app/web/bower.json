@@ -119,11 +119,12 @@
   },
   "resolutions": {
     "angular-cookies": "~1.5.7",
-    "angular": "~1.5.7",
+    "angular": "~1.5.9",
     "moment": "~2.10.0",
     "slick-carousel": "~1.6.0",
     "bootstrap": "~3.3.2",
     "angular-xeditable": "~0.1.9",
+    "angular-animate": "~1.5.7",
     "sweetalert": "^1.1.3"
   }
 }

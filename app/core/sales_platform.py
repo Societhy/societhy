@@ -19,7 +19,8 @@ def addProduct(newProduct):
     - The product is saved in the database.
     - OK -> 200, error -> 400
     """
-    orga = organizations.find_one({'_id': ObjectId(newProduct['owner'])})
+    newProduct['owner'] = ObjectId(newProduct['owner'])
+    orga = organizations.find_one({'_id': newProduct['owner']})
     if orga is None:
         return {'data': 'Organization does not exist', 'status': 400}
     product = ProductsDocument(newProduct)

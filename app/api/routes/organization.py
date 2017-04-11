@@ -1,6 +1,6 @@
 from flask import Blueprint, Response, render_template, request, jsonify, make_response
 
-from core import base_orga
+from core import base_orga, sales_platform
 
 from models.organization import organizations
 from api import requires_auth, ensure_fields, populate_user
@@ -94,7 +94,7 @@ def createProjectFromOrga(user):
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
-	
+
 @router.route('/leaveOrga', methods=['POST'])
 @requires_auth
 def leaveOrga(user):
@@ -103,7 +103,21 @@ def leaveOrga(user):
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
 		return make_response("Wrong request format", 400)
-        
+
+@router.route('/addNewProduct', methods=['POST'])
+@requires_auth
+def addProductOrga(user):
+    if ensure_fields(['name', 'owner', 'description', 'price', 'paymentMode', 'isDigital', 'shippingMode', 'stock'], request.json):
+        ret = sales_platform.addProduct(request.json)
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response('Something went wrong', 400)
+
+@router.route('/getOrgaProducts/<orga_id>', methods=['GET'])
+def getOrgaProducts(orga_id):
+    products = sales_platform.getProductsByOwner(orga_id)
+    return make_response(jsonify(products.get('data')), products.get('status'))
+
 @router.route('/getOrgaHisto', methods=['POST'])
 def getOrgaHisto():
 	ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
