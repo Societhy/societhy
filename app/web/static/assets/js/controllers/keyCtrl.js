@@ -3,6 +3,7 @@
 *****************/
 
 app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, $rootScope, ctrl) {
+    console.log(33);
 	$scope.ldlocal = {};
 	$scope.ldrequest = {};
 	errorAlertOptions= {

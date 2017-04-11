@@ -114,6 +114,7 @@
               <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                 <h2>Members</h2>
                 <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+
                   <!-- ngInclude: templates.header -->
                   <thead  class="ng-scope">
                     <tr>
@@ -207,7 +208,9 @@
                     </div>
                   </div>
                 </div>
+
               </div>
+
             </div>
           </uib-tab>
 
@@ -265,7 +268,6 @@
 
                  <div ng-show="!listProducts.length">
                    <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
-                   >>>>>>> origin/sales_platform
                  </div>
                </div>
 
@@ -276,6 +278,7 @@
                    {{currentProd.description}}
                  </p>
                  <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.jpg'}}" alt="..." width="30%" class="float-right">
+
                </div>
              </div>
            </uib-tab>

@@ -6,7 +6,7 @@ from bson import json_util
 import json
 from datetime import datetime
 
-from models.organization import organizations, OrgaDocument as organization
+import models.organization
 from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
@@ -39,8 +39,8 @@ class NotificationDocument(Document):
 
 	def getName(data):
 		name = None
-		if data['type'] == 'organization':
-			name = organizations.find_one({"_id" : data['id']}, {"name": 1})
+		if data['type'] == 'orga':
+			name = models.organization.organizations.find_one({"_id" : data['id']}, {"name": 1})
 		elif data['type'] == 'user':
 			name = users.find_one({"_id" : data['id']}, {"name": 1})
 		if name == None:
@@ -51,8 +51,8 @@ class NotificationDocument(Document):
 		data = notifications.find({
                         "$and" : [
                                 {"$or" : [
-                                        {"sender.type" : "organization", "sender.id" : ObjectId(_id)},
-                                        {"subject.type" : "organization", "subject.id" : ObjectId(_id)}
+                                        {"sender.type" : "orga", "sender.id" : ObjectId(_id)},
+                                        {"subject.type" : "orga", "subject.id" : ObjectId(_id)}
                                 ]},
                                 { "createdAt" : {
                                         "$gte" : datetime.strptime(date['begin'], "%b %d, %Y %I:%M %p"),
@@ -68,13 +68,9 @@ class NotificationDocument(Document):
 				res[i] = record
 				res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
 				res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
+				if record["category"] == "orgaCreate":
+					res[0]["first"] = record["date"] 
 				i = i + 1
-			res[0]["first"] = notifications.find({
-                                "$or" : [
-                                        {"sender.type" : "organization", "sender.id" : ObjectId(_id)},
-                                        {"subject.type" : "organization", "subject.id" : ObjectId(_id)}
-                                ]},
-                                {'createdAt': 1, '_id': 0}).sort("createdAt", 1).limit(1)[0]['createdAt'].strftime("%Y-%m-%d %H:%M:%S")
 			return res
 		return []
 

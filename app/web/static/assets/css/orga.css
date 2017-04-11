@@ -61,8 +61,13 @@
 }
 
 #filterContainer .filter{
-    margin-bottom: 10px;
-    padding: 15px;
+    margin-bottom:	10px;
+    padding:		15px;
+}
+
+#filterContainer .select .filter {
+    display:		inline-block;
+    width:		49%
 }
 
 #timelineContainer .orgaActivityLoading i {
@@ -78,6 +83,7 @@
 }
 
 #filterContainer label {
+    display:		block;
     font-size:		16px;
     font-weight:	bold;
     width:		100px;
@@ -415,6 +421,14 @@ img { border: 0; max-width: 100%; }
 .tl-heading h4 {
     margin: 0;
     color: #c25b4e;
+}
+.tl-heading h4 a{
+    margin: 0;
+    color: #c25b4e;
+}
+
+.tl-heading h4 a:hover {
+    text-decoration:	underline !important;
 }
 
 .tl-body p, .tl-body ul {
