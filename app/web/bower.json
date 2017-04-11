@@ -115,10 +115,9 @@
     "angular-socket-io": "latest",
     "bootstrap-select": "latest",
     "angularjs-slider": "latest",
-    "angular-material": "latest"
+    "angucomplete-alt":"latest"
   },
   "resolutions": {
-    "angular-animate": "~1.5.7",
     "angular-cookies": "~1.5.7",
     "angular": "~1.5.7",
     "moment": "~2.10.0",

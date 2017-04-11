@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/orga/new',
         needs_auth: true,
         templateUrl :"static/assets/views/wizard_orga.html",
-        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload', 'touchspin-plugin', 'ngMaterial'),
+        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload', 'touchspin-plugin', 'angucomplete-alt'),
         title: "Create a new organisation",
         ncyBreadcrumb: {
             label: 'Organisation Creation'

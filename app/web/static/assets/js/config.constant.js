@@ -109,8 +109,8 @@ app.constant('JS_REQUIRES', {
         name: 'btford.socket-io',
         files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }, {
-        name:'ngMaterial',
-        files: ['../../bower_components/angular-material/angular-material.min.js']
+        name:'angucomplete-alt',
+        files: ['../../bower_components/angucomplete-alt/angucomplete-alt.js']
     }, {
         name:'qrcode',
         files: ['../../node_modules/angular-qrcode/angular-qrcode.js']

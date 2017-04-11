@@ -314,7 +314,6 @@ class UserCollection(Collection):
 		results = list(super().find({"name": query}, ["_id", "name", "account"]))
 		for doc in results:
 			doc.update({"category": "user"})
-			print('-----------------', doc)
 		return results
 
 
