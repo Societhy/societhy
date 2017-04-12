@@ -114,7 +114,9 @@
     "oauth.io": "latest",
     "angular-socket-io": "latest",
     "bootstrap-select": "latest",
-    "angularjs-slider": "latest"
+    "angularjs-slider": "latest",
+      "isteven-angular-multiselect": "v4.0.0",
+    "jqrangeslider": "latest"
   },
   "resolutions": {
     "angular-animate": "~1.5.7",

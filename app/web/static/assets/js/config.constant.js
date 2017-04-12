@@ -23,6 +23,7 @@ app.constant('JS_REQUIRES', {
         'jquery-appear-plugin': ['../../bower_components/jquery-appear/build/jquery.appear.min.js'],
         'spectrum-plugin': ['../../bower_components/spectrum/spectrum.js', '../../bower_components/spectrum/spectrum.css'],
         'jcrop-plugin': ['../../bower_components/Jcrop/js/jquery.Jcrop.min.js', '../../bower_components/Jcrop/css/jquery.Jcrop.min.css'],
+	'rangeSlider': ['../../bower_components/jqrangeslider/jQDateRangeSlider.js', '../../bower_components/jqrangeslider/jQRangeSlider.js'],
 
         //*** External libraries
 
@@ -43,6 +44,7 @@ app.constant('JS_REQUIRES', {
         'orgaMainCtrl' : 'static/assets/js/controllers/orgaMainCtrl.js',
         'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
+	'orgaActivityCtrl': 'static/assets/js/controllers/orgaActivityCtrl.js',
     },
     //*** angularJS Modules
     modules: [{
@@ -111,5 +113,5 @@ app.constant('JS_REQUIRES', {
     }, {
         name:'qrcode',
         files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
-    }]
+    } ]
 });

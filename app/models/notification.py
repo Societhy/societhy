@@ -25,7 +25,7 @@ class NotificationDocument(Document):
                                       "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
                                       "category": data["category"],
                                       "createdAt": datetime.now(),
-                                      "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                                      "date": datetime.now().strftime("%b %d, %Y %H:%M")
                 })
 
                 
@@ -55,8 +55,8 @@ class NotificationDocument(Document):
                                         {"subject.type" : "orga", "subject.id" : ObjectId(_id)}
                                 ]},
                                 { "createdAt" : {
-                                        "$gte" : datetime.strptime(date['begin'], "%b %d, %Y %I:%M %p"),
-                                        "$lt" : datetime.strptime(date['end'], "%b %d, %Y %I:%M %p")
+                                        "$gte" : datetime.strptime(date['begin'], "%b %d, %Y %H:%M"),
+                                        "$lt" : datetime.strptime(date['end'],    "%b %d, %Y %H:%M")
                                 }}
                         ]},
                         {"_id": 0, "createdAt": 0})
