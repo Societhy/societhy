@@ -8,7 +8,7 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 
     $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
 			 members:	[{}],
-			 jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
+			 jobs:		[{name: "member"}, {name: "partner"}, {name: "admin"}],
 			 projects:	[{}],
 			 donations:	[{}]};
     
@@ -82,6 +82,7 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
         $rootScope.histo = $.extend(true, {}, $rootScope.histoFull);
         $.each($rootScope.histo, function (id, value) {
             filtered = true;
+	    // categories
             if ($rootScope.filtered.categories.length !== 0) {
                 filtered = false;
                 $.each($rootScope.filtered.categories, function () {
@@ -91,6 +92,7 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
                     }
                 });
             }
+	    // members
             if ($rootScope.filtered.members.length !== 0 && filtered === true) {
                 filtered = false;
                 $.each($rootScope.filtered.members, function () {
@@ -101,8 +103,19 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
                     }
                 });
             }
-	    /*
-	    ** ADD FILTER
+	    // Jobs
+            if ($rootScope.filtered.jobs.length !== 0 && filtered === true) {
+                filtered = false;
+                $.each($rootScope.filtered.jobs, function (idJ, job) {
+		    if ((value["sender"]["type"] == "user" && $rootScope.currentOrga.members[value["sender"]['account']]['tag'] == job['name']) ||
+			(value["subject"]["type"] == "user" && $rootScope.currentOrga.members[value["subject"]['account']]['tag'] == job['name'])) {
+			filtered = true;
+			return;
+		    }
+		});
+	    }
+		/*
+		** ADD FILTER
 	    */
             if (filtered === false)
                 delete $rootScope.histo[id];
@@ -124,7 +137,6 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
         $rootScope.date = new Date();
         $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 23:59"};
         lastWeek = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
-	console.log($rootScope.slider);
         $rootScope.slider.first = $rootScope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 00:00";
 
         $rootScope.getHisto(
@@ -142,7 +154,6 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 
 app.controller('ExportActivityController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
     
-    console.log($rootScope);
     $rootScope.exportActivityModal = function() {
 	$("#orgaExportData").table2excel({exclude: ".noExl",
 					  name: "Worksheet Name",

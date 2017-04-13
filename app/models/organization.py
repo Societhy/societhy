@@ -195,6 +195,7 @@ class OrgaDocument(Document):
 					public_member =  Member(new_member.public(), rights=self.rights.get(rights_tag), tag=rights_tag)
 					self["members"][new_member.get('account')] = public_member
 					self.save_partial();
+					notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": new_member.get("_id"), "type": "user"}, "category": "newMember"})
 					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
 
 		return False
@@ -211,6 +212,7 @@ class OrgaDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
+				notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": member.get("_id"), "type": "user"}, "category": "memberLeave"})
 				return { "orga": self.public(public_members=True), "rights": self.rights.get('default')}
 		return False
 
@@ -227,6 +229,7 @@ class OrgaDocument(Document):
 			member = self.getMember(address)
 			if member:
 				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
+				notification.pushNotif({"subject": {"id": self.get("_id"), "type": "orga"}, "sender": {"id": member.get("_id"), "type": "user"}, "category": "newDonation"})
 			self.save_partial()
 			return self["balance"]
 		return False
@@ -241,6 +244,7 @@ class OrgaDocument(Document):
 			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
 			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
+				notification.pushNotif({"subject": {"id": self.get("_id"), "type": "orga"}, "sender": {"id": new_project["name"], "type": "project"}, "category": "newProject"})
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
 				self["projects"][contract_address] = new_project
