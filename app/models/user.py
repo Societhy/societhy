@@ -64,8 +64,6 @@ class UserDocument(Document):
 		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
 		None is returned if everything went fine, False otherwise
 		"""
-		print(logs)
-		print("____________________-")                
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
@@ -250,6 +248,14 @@ class UserDocument(Document):
 			key: self.get(key) for key in self if key in users.public_info
 		}
 
+	def anonymous(self):
+		"""
+		Returns the private information on the user
+		"""
+		return {
+			key: self.get(key) for key in self if key in users.anonymous_info
+		}
+
 	def delete(self):
 		"""
 		Remove this user from the db.
@@ -287,6 +293,11 @@ class UserCollection(Collection):
 		"firstname",
 		"lastname",
 		"organizations"
+	]
+
+	anonymous_info = [
+		"_id",
+		"account"
 	]
 
 	structure = {

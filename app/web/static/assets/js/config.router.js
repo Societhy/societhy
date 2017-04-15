@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'touchspin-plugin', 'angularFileUpload'),
+        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'),
         title: 'Organisation dashboard',
         params: {
             data: null

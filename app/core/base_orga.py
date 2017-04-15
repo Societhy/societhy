@@ -12,7 +12,7 @@ from flask_socketio import emit, send
 
 from core.utils import toWei
 
-from models.organization import organizations, OrgaDocument
+from models.organization import organizations, OrgaDocument, governances
 from models.notification import notifications, NotificationDocument as notification
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
@@ -29,6 +29,7 @@ def getOrgaDocument(user, _id=None, name=None):
 
 	orga = None
 	rights = None
+	
 	if _id:
 		try:
 			_id = objectid.ObjectId(_id)
@@ -37,12 +38,14 @@ def getOrgaDocument(user, _id=None, name=None):
 		orga = organizations.find_one({"_id": _id})
 		if orga is None:
 			return {"data": "Organization does not exist", "status": 400}
+	
 	elif name:
 		orga = list(organizations.find({"name": name}))
 		if len(orga) == 1:
 			orga = orga[0]
 		elif len(orga) < 1:
 			return {"data": "Organization does not exist", "status": 400}
+	
 	if user:
 		if user.get('account') in orga.get('members'):
 			rights = orga.get('members').get(user.get('account')).get('rights')
@@ -60,7 +63,7 @@ def getAllOrganizations():
 	"""
 	Return all the registered organisations.
 	"""
-	orgas = list(organizations.find({}, organizations.public_info))
+	orgas = list(organizations.find({"hidden": False}, organizations.public_info))
 	return {
 		"data": orgas,
 		"status": 200
@@ -81,8 +84,25 @@ def createOrga(user, password, newOrga):
 
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
+	
 	newOrga["members"] = {}
-	instance = OrgaDocument(doc=newOrga, owner=user.public(), contract='basic_orga', rules='OpenRules' , gen_skel=True)
+	
+	rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
+	token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
+	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
+	
+	for feature in ["anonymous", "hidden", "curators", "delegated_voting"]:
+		if feature not in newOrga:
+			newOrga[feature] = False
+
+	instance = OrgaDocument(
+		doc=newOrga,
+		owner=user.public(),
+		board_contract='basic_orga',
+		rules_contract=rules_contract,
+		token_contract=token_contract,
+		registry_contract=registry_contract,
+		gen_skel=True)
 	try:
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:

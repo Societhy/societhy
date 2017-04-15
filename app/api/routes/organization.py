@@ -27,7 +27,7 @@ def getAllOrganizations():
 @router.route('/createOrga', methods=['POST'])
 @requires_auth
 def createOrga(user):
-	if ensure_fields(['password', {'newOrga': ["name"]}], request.json):
+	if ensure_fields(['password', 'socketid', {'newOrga': ["name", "description", "accessibility", "gov_model", "quorum", "majority"]}], request.json):
 		ret = base_orga.createOrga(user, request.json.get('password'), request.json.get('newOrga'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
@@ -62,7 +62,7 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
 def joinOrga(user):
-	if ensure_fields(['password', 'orga_id', 'tag'], request.json):
+	if ensure_fields(['password', 'socketid', 'orga_id', 'tag'], request.json):
 		ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('tag'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
@@ -80,7 +80,7 @@ def getOrgaMemberList(user, orga_id):
 @router.route('/makeDonation', methods=['POST'])
 @requires_auth
 def makeDonation(user):
-	if ensure_fields(['password', 'orga_id', 'donation'], request.json):
+	if ensure_fields(['password', 'socketid', 'orga_id', 'donation'], request.json):
 		ret = base_orga.donateToOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('donation'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
@@ -89,7 +89,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-	if ensure_fields(['password', 'orga_id', 'newProject'], request.json):
+	if ensure_fields(['password', 'socketid', 'orga_id', 'newProject'], request.json):
 		ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:
@@ -98,7 +98,7 @@ def createProjectFromOrga(user):
 @router.route('/leaveOrga', methods=['POST'])
 @requires_auth
 def leaveOrga(user):
-	if ensure_fields(['password', 'orga_id'], request.json):
+	if ensure_fields(['password', 'socketid', 'orga_id'], request.json):
 		ret = base_orga.leaveOrga(user, request.json.get('password'), request.json.get('orga_id'))
 		return make_response(jsonify(ret.get('data')), ret.get('status'))
 	else:

@@ -13,7 +13,7 @@
 			<div class="panel panel-white">
 				<div class="panel-body">
 					<h5 class="over-title margin-bottom-15">Create an <span class="text-bold">organisation</span></h5>
-					<div ng-controller="OrgaWizardCtrl">
+					<div ng-controller="OrgaWizardCtrl as ctrl">
 						<!-- start: WIZARD FORM -->
 						<form name="Form" id="form" novalidate>
 							<div id="wizard" class="swMain">
@@ -237,7 +237,7 @@
 															<div class="row text-extra-large">
 																<div class="col-md-6">
 																	<span><i class="fa fa-users text-xxl padding-10"></i>Nonprofit organization</span>
-																	<input type="radio" id="ngo_model" value="ngo" ng-model="orga_form.gov_model">
+																	<input type="radio" id="ngo_model" value="ngo" ng-model="orga_form.gov_model" ng-init="orga_form.gov_model = 'ngo'">
 																</div>
 																<div class="col-md-6">
 																	<span><i class="fa fa-cubes text-xxl padding-10"></i>DAO</span>
@@ -252,18 +252,18 @@
 													<fieldset class="text-extra-large">
 														<legend>Model description</legend>
 														<div class="col-md-6">
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_description[orga_form.gov_model]["pros"][0]}}</span>
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_description[orga_form.gov_model]["pros"][1]}}</span>
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_description[orga_form.gov_model]["pros"][2]}}</span>
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][0]}}</span>
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][1]}}</span>
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][2]}}</span>
 														</div>
 														<div class="col-md-6">
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_description[orga_form.gov_model]["cons"][0]}}</span>
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_description[orga_form.gov_model]["cons"][1]}}</span>
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_description[orga_form.gov_model]["cons"][2]}}</span>
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][0]}}</span>
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][1]}}</span>
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][2]}}</span>
 														</div>
 														<div class="col-md-12">
 															<br><br>
-															<p>{{governance_description[orga_form.gov_model]["desc"] || "Please chose a governance model to see its characteristics"}}</p>
+															<p>{{governance_types[orga_form.gov_model]["desc"] || "Please chose a governance model to see its characteristics"}}</p>
 														</div>
 													</fieldset>
 												</div>
@@ -275,11 +275,11 @@
 														<div class="form-group">
 															<label class="block"> You may add the following features to your structure:</label>
 															<div class="checkbox vertical-center clip-check check-primary">
-																<input type="checkbox" id="anonymous_type" ng-model="orga_form.anonymous">
-																<label for="anonymous_type"> Delegated voting </label>
+																<input type="checkbox" id="delegated_voting" ng-model="orga_form.delegated_voting">
+																<label for="delegated_voting"> Delegated voting </label>
 
-																<input type="checkbox" id="hidden_type" ng-model="orga_form.hidden">
-																<label for="hidden_type"> Add curators </label>
+																<input type="checkbox" id="add_curators" ng-model="orga_form.add_curators">
+																<label for="add_curators"> Add curators </label>
 															</div>
 														</div>
 														<div class="col-md-4 input-group-sm bootstrap-touchspin">
@@ -309,7 +309,7 @@
 										<!-- start: WIZARD STEP 3 -->
 										<div id="step-3" ng-show="currentStep == 3">
 											<div class="row">
-												<div class="col-md-3">
+												<div class="col-md-2">
 													<div class="padding-30">
 														<h2 class="StepTitle">Members<span class="text-large block">Who's joining the ship ?</span></h2>
 													</div>
@@ -334,257 +334,262 @@
 																	input-class="form-control form-control-small"
 																	match-class="highlight"
 																	input-changed=""/>
-															</div>
-															<button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
-														</form>
-													</div>
-													<div class="col-md-12">
-														<div class="table-responsive">
-															<table class="table">
-																<thead>
-																	<tr>
-																		<th>Name</th>
-																		<th>Id</th>
-																		<th>Rights</th>
-																		<th></th>
-																	</tr>
-																</thead>
-																<tbody>
-																	<tr ng-repeat="user in invited_users">
-																		<td>{{user.name}} </td>
-																		<td>{{user._id}} </td>
-																		<td>
-																			<button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user._id)">
-																				<span>Edit Rightd</span>
-																			</button>
-																		</td>
-																		<td>
-																			<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user.name)">
-																				<span>Remove</span>
-																			</button>
-																		</td>
-																	</tr>
-																</tbody>
-															</table>
+																</div>
+																<button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
+															</form>
 														</div>
+														<div class="col-md-12">
+															<div class="table min-height-300">
+																<table class="table">
+																	<thead>
+																		<tr>
+																			<th>Name</th>
+																			<th>Tag</th>
+																			<th>Rights</th>
+																			<th></th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr ng-repeat="(user_id, user) in orga_form.invited_users">
+																			<td>{{user.name}} </td>
+																			<td>
+																				<div class="form-group">
+																					<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+																					</select>
+																				</div>
+																			</td>
+																			<td>
+																				<button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
+																					<span>Edit Rights</span>
+																				</button>
+																			</td>
+																			<td>
+																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
+																					<span>Remove</span>
+																				</button>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+														</div>
+
+
+													</fieldset>
+													<div class="form-group">
+														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+															<i class="fa fa-circle-arrow-left"></i> Back
+														</button>
+														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+															Next <i class="fa fa-arrow-circle-right"></i>
+														</button>
 													</div>
-
-
-												</fieldset>
-												<div class="form-group">
-													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-														<i class="fa fa-circle-arrow-left"></i> Back
-													</button>
-													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-														Next <i class="fa fa-arrow-circle-right"></i>
-													</button>
 												</div>
 											</div>
 										</div>
-									</div>
-									<!-- end: WIZARD STEP 3 -->
+										<!-- end: WIZARD STEP 3 -->
 
-									<!-- start: WIZARD STEP 4 -->
-									<div id="step-4" ng-show="currentStep == 4">
-										<div class="row">
-											<div class="col-md-5">
-												<div class="padding-30">
-													<h2 class="StepTitle">Tokens<span class="text-large block">How about creating your own asset ?</span></h2>
+										<!-- start: WIZARD STEP 4 -->
+										<div id="step-4" ng-show="currentStep == 4">
+											<div class="row">
+												<div class="col-md-5">
+													<div class="padding-30">
+														<h2 class="StepTitle">Tokens<span class="text-large block">How about creating your own asset ?</span></h2>
+													</div>
 												</div>
-											</div>
-											<div class="col-md-7">
-											</div>
-										</div>
-									</div>
-									<!-- end: WIZARD STEP 4 -->
-
-									<!-- start: WIZARD STEP 5 -->
-									<div id="step-5" ng-show="currentStep == 5">
-										<div class="row">
-											<div class="col-md-5">
-												<div class="padding-30">
-													<h2 class="StepTitle">Let's talk about money<span class="text-large block">Do you want to send funds to this new organization ?</span></h2>
-												</div>
-											</div>
-											<div class="col-md-7">
-												<fieldset>
-													<legend>
-														Adding funds yo your organisation
-													</legend>
-
-
-												</fieldset>
-
-												<fieldset>
-													<legend>
-														Sources of money you want to switch on
-													</legend>
-
-													<div class="checkbox clip-check check-primary checkbox-inline">
-														<input type="checkbox" id="sellingGoods" value="0" checked="">
-														<label for="sellingGoods">
-															Sellings goods
-														</label>
-													</div>
-													<div class="checkbox clip-check check-primary checkbox-inline">
-														<input type="checkbox" id="privateFinancing" value="0" checked="">
-														<label for="privateFinancing">
-															Private financing
-														</label>
-													</div>
-													<div class="checkbox clip-check check-primary checkbox-inline">
-														<input type="checkbox" id="membershipFees" value="0" checked="">
-														<label for="membershipFees">
-															Membership fees
-														</label>
-													</div>
-													<div class="checkbox clip-check check-primary checkbox-inline">
-														<input type="checkbox" id="donations" value="0" checked="">
-														<label for="donations">
-															Donations
-														</label>
-													</div>
-													<div class="checkbox clip-check check-primary checkbox-inline">
-														<input type="checkbox" id="crowdfunding" value="0" checked="">
-														<label for="crowdfunding">
-															Crowdfunding
-														</label>
-													</div>
-
-
-												</fieldset>
-
-												<div class="form-group">
-													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-														<i class="fa fa-circle-arrow-left"></i> Back
-													</button>
-													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-														Next <i class="fa fa-arrow-circle-right"></i>
-													</button>
+												<div class="col-md-7">
 												</div>
 											</div>
 										</div>
-									</div>
-									<!-- end: WIZARD STEP 5 -->
-									<!-- start: WIZARD STEP 6 -->
-									<div id="step-6" ng-show="currentStep == 6">
-										<div class="row">
-											<div class="col-md-5">
-												<div class="padding-30">
-													<h2 class="StepTitle">Do you wish to upload documents ?</h2>
-													<p class="text-large">
-														You can upload all kind of documents you would like to have on Societhy
-													</p>
-													<p class="text-small">
-														.
-													</p>
+										<!-- end: WIZARD STEP 4 -->
+
+										<!-- start: WIZARD STEP 5 -->
+										<div id="step-5" ng-show="currentStep == 5">
+											<div class="row">
+												<div class="col-md-5">
+													<div class="padding-30">
+														<h2 class="StepTitle">Let's talk about money<span class="text-large block">Do you want to send funds to this new organization ?</span></h2>
+													</div>
+												</div>
+												<div class="col-md-7">
+													<fieldset>
+														<legend>
+															Adding funds yo your organisation
+														</legend>
+
+
+													</fieldset>
+
+													<fieldset>
+														<legend>
+															Sources of money you want to switch on
+														</legend>
+
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="sellingGoods" value="0" checked="">
+															<label for="sellingGoods">
+																Sellings goods
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="privateFinancing" value="0" checked="">
+															<label for="privateFinancing">
+																Private financing
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="membershipFees" value="0" checked="">
+															<label for="membershipFees">
+																Membership fees
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="donations" value="0" checked="">
+															<label for="donations">
+																Donations
+															</label>
+														</div>
+														<div class="checkbox clip-check check-primary checkbox-inline">
+															<input type="checkbox" id="crowdfunding" value="0" checked="">
+															<label for="crowdfunding">
+																Crowdfunding
+															</label>
+														</div>
+
+
+													</fieldset>
+
+													<div class="form-group">
+														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+															<i class="fa fa-circle-arrow-left"></i> Back
+														</button>
+														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+															Next <i class="fa fa-arrow-circle-right"></i>
+														</button>
+													</div>
 												</div>
 											</div>
-											<div class="col-md-7">
-												<fieldset>
-													<legend>
-														Documents
-													</legend>
-													<div nv-file-drop="" uploader="uploaderDocs">
-														<div class="row">
-															<div class="col-md-3">
-																<h5>Select files</h5>
-																<div class="panel panel-white">
-																	<div class="panel-body">
-																		<div ng-show="uploaderDocs.isHTML5">
-																			<!-- 3. nv-file-over uploader="link" over-class="className" -->
-																			<div class="well my-drop-zone" nv-file-over="" uploader="uploaderDocs">
-																				Base drop zone
+										</div>
+										<!-- end: WIZARD STEP 5 -->
+										<!-- start: WIZARD STEP 6 -->
+										<div id="step-6" ng-show="currentStep == 6">
+											<div class="row">
+												<div class="col-md-5">
+													<div class="padding-30">
+														<h2 class="StepTitle">Do you wish to upload documents ?</h2>
+														<p class="text-large">
+															You can upload all kind of documents you would like to have on Societhy
+														</p>
+														<p class="text-small">
+															.
+														</p>
+													</div>
+												</div>
+												<div class="col-md-7">
+													<fieldset>
+														<legend>
+															Documents
+														</legend>
+														<div nv-file-drop="" uploader="uploaderDocs">
+															<div class="row">
+																<div class="col-md-3">
+																	<h5>Select files</h5>
+																	<div class="panel panel-white">
+																		<div class="panel-body">
+																			<div ng-show="uploaderDocs.isHTML5">
+																				<!-- 3. nv-file-over uploader="link" over-class="className" -->
+																				<div class="well my-drop-zone" nv-file-over="" uploader="uploaderDocs">
+																					Base drop zone
+																				</div>
 																			</div>
+																			<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+																			<span class="btn btn-primary btn-o btn-file">
+																				Select some files
+																				<input type="file" nv-file-select="" uploader="uploaderDocs" multiple />
+																			</span>
+																			<br />
 																		</div>
-																		<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
-																		<span class="btn btn-primary btn-o btn-file">
-																			Select some files
-																			<input type="file" nv-file-select="" uploader="uploaderDocs" multiple />
-																		</span>
-																		<br />
+																	</div>
+																</div>
+																<div class="col-md-9 file-upload" style="margin-bottom: 40px">
+																	<h4>The queue</h4>
+																	<p>
+																		Queue length: {{ uploaderDocs.queue.length }}
+																	</p>
+																	<div class="table-responsive">
+																		<table class="table">
+																			<thead>
+																				<tr>
+																					<th width="50%">Name</th>
+																					<th ng-show="uploaderDocs.isHTML5">Size</th>
+																					<th>Actions</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr ng-repeat="item in uploaderDocs.queue">
+																					<td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
+																					<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+																					<td ng-show="uploaderDocs.isHTML5">
+
+																					</td>
+																					<td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
+																					<td nowrap>
+																						<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+																							<span class="glyphicon glyphicon-trash"></span> Remove
+																						</button>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																	<div>
+																		<button type="button" class="btn btn-primary btn-o btn-s" ng-click="uploaderDocs.clearQueue()" ng-disabled="!uploaderDocs.queue.length">
+																			<span class="glyphicon glyphicon-trash"></span> Remove all
+																		</button>
 																	</div>
 																</div>
 															</div>
-															<div class="col-md-9 file-upload" style="margin-bottom: 40px">
-																<h4>The queue</h4>
-																<p>
-																	Queue length: {{ uploaderDocs.queue.length }}
-																</p>
-																<div class="table-responsive">
-																	<table class="table">
-																		<thead>
-																			<tr>
-																				<th width="50%">Name</th>
-																				<th ng-show="uploaderDocs.isHTML5">Size</th>
-																				<th>Actions</th>
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr ng-repeat="item in uploaderDocs.queue">
-																				<td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
-																				<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-																				<td ng-show="uploaderDocs.isHTML5">
-
-																				</td>
-																				<td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
-																				<td nowrap>
-																					<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-																						<span class="glyphicon glyphicon-trash"></span> Remove
-																					</button>
-																				</td>
-																			</tr>
-																		</tbody>
-																	</table>
-																</div>
-																<div>
-																	<button type="button" class="btn btn-primary btn-o btn-s" ng-click="uploaderDocs.clearQueue()" ng-disabled="!uploaderDocs.queue.length">
-																		<span class="glyphicon glyphicon-trash"></span> Remove all
-																	</button>
-																</div>
-															</div>
 														</div>
+													</fieldset>
+													<div class="form-group">
+														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+															<i class="fa fa-circle-arrow-left"></i> Back
+														</button>
+														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+															Next <i class="fa fa-arrow-circle-right"></i>
+														</button>
 													</div>
-												</fieldset>
-												<div class="form-group">
-													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-														<i class="fa fa-circle-arrow-left"></i> Back
-													</button>
-													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-														Next <i class="fa fa-arrow-circle-right"></i>
-													</button>
 												</div>
 											</div>
 										</div>
-									</div>
-									<!-- end: WIZARD STEP 6 -->
-									<!-- start: WIZARD STEP 7 -->
-									<div id="step-7" ng-show="currentStep == 7">
-										<div class="row">
-											<div class="col-md-12">
-												<div class="text-center">
-													<h1 class=" ti-check block text-primary"></h1>
-													<h2 class="StepTitle">Congratulations!</h2>
-													<p class="text-large">
-														You've finish the organization creation wizard
-													</p>
-													<p class="text-small">
-														Thank you for your your time. You can now submit your application.
-													</p>
-													<a class="btn btn-primary btn-o"  ng-click="form.submit(Form)"> Submit </a>
+										<!-- end: WIZARD STEP 6 -->
+										<!-- start: WIZARD STEP 7 -->
+										<div id="step-7" ng-show="currentStep == 7">
+											<div class="row">
+												<div class="col-md-12">
+													<div class="text-center">
+														<h1 class=" ti-check block text-primary"></h1>
+														<h2 class="StepTitle">Congratulations!</h2>
+														<p class="text-large">
+															You've finish the organization creation wizard
+														</p>
+														<p class="text-small">
+															Thank you for your your time. You can now submit your application.
+														</p>
+														<a class="btn btn-primary btn-o"  ng-click="form.submit(Form)"> Submit </a>
+													</div>
 												</div>
 											</div>
 										</div>
+										<!-- end: WIZARD STEP 7 -->
 									</div>
-									<!-- end: WIZARD STEP 7 -->
-								</div>
-								<pre class="code margin-top-20">{{ orga_form | json }}</pre>
-							</form>
-							<!-- end: WIZARD FORM -->
+									<pre class="code margin-top-20">{{ orga_form | json }}</pre>
+								</form>
+								<!-- end: WIZARD FORM -->
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<!-- start: WIZARD DEMO -->
+		<!-- start: WIZARD DEMO -->

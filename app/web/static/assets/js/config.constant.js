@@ -30,6 +30,7 @@ app.constant('JS_REQUIRES', {
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
         'OAuth' : '../../bower_components/oauth.io/dist/oauth.js',
+        'blockies' : 'external_deps/blockies.min.js',
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',

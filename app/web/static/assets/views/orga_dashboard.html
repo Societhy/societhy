@@ -1,3 +1,4 @@
+
 <link rel="stylesheet" href="static/assets/css/orga.css">
 <!-- start: ORGA DASHBOARD PROFILE -->
 <div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
@@ -34,8 +35,6 @@
                     <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
                   </ul>
                 </div>
-
-                <button ng-if="!isMember" type="button" class="btn btn-wide btn-success" ng-click="ctrl.joinOrga()">Join</button>
                 <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
                 <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
               </div>
@@ -138,8 +137,8 @@
                     </thead>
                     <tbody><!-- ngRepeat: user in $data -->
                       <tr ng-repeat="(address, member) in currentOrga.members" class="ng-scope">
-                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
-                        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.name}}</td>
+                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
+                        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
                       </tr><!-- end ngRepeat: user in $data -->
                     </tbody>
                   </table>
@@ -149,11 +148,67 @@
               </div>
             </uib-tab>
 
-            <uib-tab heading="Activity" active="editActive" ng-click="initSliders()">
+            <uib-tab heading="Activity" active="editActive" ng-click="initSlider()">
               <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
 
             </uib-tab>
+            <uib-tab heading="Members">
+              <div class="row">
+                <div class="col-md-12 inline-block">
 
+                  <form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
+                    <div class="form-group col-md-12  align-center text-center">
+                      <angucomplete-alt id="ex2" 
+                      placeholder="Search for existing users or invite new ones"
+                      pause="300"
+                      selected-object="selected_user"
+                      title-field="name"
+                      remote-url='/searchFor/'
+                      description-field="_id"
+                      minlength="1"
+                      input-class="form-control"
+                      match-class="highlight"
+                      input-changed=""/>
+                    </div>
+                  </form>
+                  <div class="col-md-12">
+                    <div class="table min-height-300">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Tag</th>
+                            <th>Rights</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr ng-repeat="(address, member) in currentOrga.members">
+                          <td class="text-bold text-large">{{user.name}} </td>
+                            <td>
+                              <select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+                              </select>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
+                                <span>Edit Rights</span>
+                              </button>
+                            </td>
+                            <td>
+                              <button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
+                                <span>Remove</span>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </uib-tab>
             <!-- DOCUMENTS -->
             <uib-tab heading="Docs">
               <div class="container-fluid container-fullw ng-scope">
@@ -215,73 +270,57 @@
           </uib-tab>
 
 
-          <uib-tab heading="Sales" active="editActive">
-           <div class="row" style="margin-right: 10" ng-controller="OrgaMainController as ctrl">
+
+          <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
+           <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
+           <div ng-show="listProducts.length" class="row" style="margin-right: 10">
              <div class="col-md-3">
-               <button class="btn btn-green">Add a new product</button>
-               <div class="dd ng-scope">
-                 <ol class="dd-list">
-                   <li class="dd-handle" ng-repeat="product in listProducts" ng-click="ctrl.setProduct(product)">{{product.name}}</li>
-                 </ol>
-                 <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
-                 <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
-                 <div ng-show="listProducts.length" class="row" style="margin-right: 10">
-                   <div class="col-md-3">
 
-                     <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
-                       <thead></thead>
-                       <tbody>
-                         <tr ng-repeat="product in listProducts" class="ng-scope">
-                           <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
-                         </tr>
-                       </tbody>
-                     </table>
-                   </div>
-
-                   <fieldset class="margin-15">
-                     <legend class="text-large">{{currentProd.name}}</legend>
-
-                     <div class="row">
-                       <div class="col-md-4">
-                         <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.png'}}" alt="..." width="80%" />
-                       </div>
-
-                       <div class="col-md-8">
-                         <fieldset>
-                           <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
-                         </fieldset>
-                         <div class="row">
-                           <div class="col-md-2">
-                             <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
-                           </div>
-                           <div class="col-md-2">
-                             <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
-                               <span>Buy</span>
-                             </button>
-                           </div>
-                         </div>
-                       </div>
-                     </div>
-
-                   </fieldset>
-                 </div>
-
-                 <div ng-show="!listProducts.length">
-                   <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
-                 </div>
-               </div>
-
-               <div class="col-md-9 panel panel-white padding-20" style="min-height: 60%">
-                 <h2 style="text-align: center">{{currentProd.name}}</h2>
-                 <!-- <h4 style="text-align: right">{{currentProd.price}}</h4> -->
-                 <p class="float-left panel panel-white" style="min-height: 200; min-width: 65%; max-width: 65%">
-                   {{currentProd.description}}
-                 </p>
-                 <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.jpg'}}" alt="..." width="30%" class="float-right">
-
-               </div>
+               <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                 <thead></thead>
+                 <tbody>
+                   <tr ng-repeat="product in listProducts" class="ng-scope">
+                     <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
+                   </tr>
+                 </tbody>
+               </table>
              </div>
-           </uib-tab>
+
+             <fieldset class="margin-15">
+               <legend class="text-large">{{currentProd.name}}</legend>
+
+               <div class="row">
+                 <div class="col-md-4">
+                   <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.png'}}" alt="..." width="80%" />
+                 </div>
+
+                 <div class="col-md-8">
+                   <fieldset>
+                     <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
+                   </fieldset>
+                   <div class="row">
+                     <div class="col-md-2">
+                       <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
+                     </div>
+                     <div class="col-md-2">
+                       <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
+                         <span>Buy</span>
+                       </button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+             </fieldset>
+           </div>
+
+           <div ng-show="!listProducts.length">
+             <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
+           </div>
+         </div>
+
+       </div>
+     </uib-tab>
 <!--
      <uib-tab heading="Settings">
        <div class="container-fluid container-fullw ng-scope">
