@@ -34,11 +34,11 @@ governances = {
 		"registryContract": None,
 		"tokenContract": None
 		},
-	"entreprise": {
-		"rulesContract": "ControlledRegistryRules",
-		"registryContract": "ControlledRegistry",
-		"tokenContract": None
-		},
+	# "entreprise": {
+	# 	"rulesContract": "ControlledRegistryRules",
+	# 	"registryContract": "ControlledRegistry",
+	# 	"tokenContract": None
+	# 	},
 	"public_company": {
 		"rulesContract": "LiquidDemocracyRules",
 		"registryContract": None,
@@ -539,7 +539,8 @@ class OrgaCollection(Collection):
 		"uploaded_documents": list,
 		"accessibility": str,
 		"hidden": bool,
-		"anonymous": bool
+		"anonymous": bool,
+		"gov_model": str
 	}
 
 	def lookup(self, query):

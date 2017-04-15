@@ -12,7 +12,7 @@ from flask_socketio import emit, send
 
 from core.utils import toWei
 
-from models.organization import organizations, OrgaDocument, governances
+from models.organization import organizations, OrgaDocument, OrgaCollection, governances
 from models.notification import notifications, NotificationDocument as notification
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
@@ -85,15 +85,17 @@ def createOrga(user, password, newOrga):
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
 	
-	newOrga["members"] = {}
+	for entry in ["name", "description", "accessibility", "gov_model", "quorum", "majority"]:
+		if entry not in newOrga:
+			return {"data": "Required fields not found in organisation document", "status": 400}
+
+	for feature in ["anonymous", "hidden", "curators", "delegated_voting"]:
+		if feature not in newOrga:
+			newOrga[feature] = False
 	
 	rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
 	token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
 	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
-	
-	for feature in ["anonymous", "hidden", "curators", "delegated_voting"]:
-		if feature not in newOrga:
-			newOrga[feature] = False
 
 	instance = OrgaDocument(
 		doc=newOrga,
