@@ -61,7 +61,7 @@ contract BoardRoom is BoardRoomInterface {
   /// @notice The contract fallback function
   function () payable public {}
 
-  function newProposal(string _name, address _proxy, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID) {
+  function newProposal(string _name, address _proxy, uint _debatePeriod, address _destination, uint _value, bytes _calldata) canpropose returns (uint proposalID) {
     proposalID = proposals.length;
     Proposal memory p;
     p.name = _name;

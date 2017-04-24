@@ -7,7 +7,8 @@ from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import *
 
 from models.user import users
-from models.organization import OrgaDocument, organizations, governances
+from models.organization import OrgaDocument, organizations
+from models.orga_models import governances
 from models.clients import eth_cli
 from models.contract import contracts
 from models.user import users
@@ -30,8 +31,12 @@ def test_create_orga(miner):
 			"description" : "test_description", 
 			"accessibility" : "public", 
 			"gov_model" : orga_model,
-			"quorum" : 50,
-			"majority": 50
+			"rules": {
+				"delegated_voting": True,
+				"curators": True,
+				"quorum" : 50,
+				"majority": 50
+			}
 		}
 		ret = base_orga.createOrga(miner, password, test_orga)
 		tx_hash = ret.get('data').get('tx_hash')
@@ -42,8 +47,8 @@ def test_create_orga(miner):
 		bw.waitTx(tx_hash)
 		sleep(0.5)
 		inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
-		assert inserted["contract_id"] != None
 		assert inserted != None
+		assert inserted.get('contracts') != None
 		assert inserted.board != None
 		assert inserted.rules != None
 		if contracts.get('registry'):

@@ -10,8 +10,8 @@
           <!-- start: TAB OVERVIEW -->
           <uib-tab heading="Overview" href="">
             <div class="vertical-center">
-              <h1 class="padding-right-20">{{ currentOrga.address }}</h1>
-              <div class="input-group-sm bootstrap-touchspin align-left">
+              <h1 class="padding-right-20">{{ currentOrga.name }}</h1>
+              <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-10">
                 <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
               </div>
             </div>
@@ -68,7 +68,7 @@
 
             <div class="row margin-top-20" >
               <div class="col-md-6 border-solid border-dark padding-20">
-                <h2>Projects<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+                <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
 
                 <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                   <!-- ngInclude: templates.header -->
@@ -108,7 +108,7 @@
 
             <div class="row margin-top-20" >
               <div class="col-md-6 border-solid border-dark padding-20">              
-                <h2>Proposals<button ng-if="isMember" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
+                <h2>Proposals<button ng-if="currentRights.create_proposal" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>      
               </div>
               <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
                 <h2>Members</h2>
@@ -136,7 +136,7 @@
                       <hr />
                     </thead>
                     <tbody><!-- ngRepeat: user in $data -->
-                      <tr ng-repeat="(address, member) in currentOrga.members" class="ng-scope">
+                      <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user" class="ng-scope">
                         <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
                         <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
                       </tr><!-- end ngRepeat: user in $data -->
@@ -150,8 +150,8 @@
 
             <uib-tab heading="Activity" active="editActive" ng-click="initSlider()">
               <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
-
             </uib-tab>
+
             <uib-tab heading="Members">
               <div class="row">
                 <div class="col-md-12 inline-block">
@@ -184,7 +184,7 @@
                         </thead>
                         <tbody>
                           <tr ng-repeat="(address, member) in currentOrga.members">
-                          <td class="text-bold text-large">{{user.name}} </td>
+                            <td class="text-bold text-large">{{user.name}} </td>
                             <td>
                               <select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
                               </select>
@@ -270,6 +270,9 @@
           </uib-tab>
 
 
+           <uib-tab heading="Proposals" active="editActive">
+              <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
+           </uib-tab>
 
           <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
            <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>

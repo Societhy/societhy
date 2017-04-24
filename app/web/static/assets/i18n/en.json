@@ -262,58 +262,73 @@
         "FIXEDFOOTER": "Fixed footer"
     },
     "notification": {
-	"LOADING": "LOADING...",
-        "organisation": {
-	    "title": "Historic",
-	    "messages": {
-		"orgaCreate": "Creation of the organisation.",
-		"memberLeave": "A member <u>has left</u> the organisation.",
-		"newMember": "A member <u>has join</u> the organisation.",
-		"newProposition": "A member has submit a new proposition",
-		"newDonation": "A member has made a new donation."
-	    },
-	    "filter": {
-		"title": "Filter",
-		"categories": {
-		    "title": "Category",
-		    "all": "All",
-		    "newMember": "New member",
-		    "memberLeave": "Old member",
-		    "newDonation": "New donation"
-		},
-		"years": {
-		    "title": "Period"
-		},
-		"member": {
-		    "title": "Member",
-		    "placeholder": "Select or search for a specific member"
-		},
-		"project": {
-		    "title": "Project",
-		    "placeholder": "Select or search for a specific project"
-		},
-		"job": {
-		    "title": "Job",
-		    "placeholder": "Select or search for a specific job"
-		},
-		"donation": {
-		    "title": "Donation amount",
-		    "placeholder": "Select or search for a specific range of donation"
-		},
-		"limit": {
-		    "title": "Limit"
-		}
-	    },
-	    "export": {
-		"title": "Data export",
-		"button": "Export the current selection.",
-		"header": {
-		    "date" : "Date",
-		    "organization": "Name of the sender",
-		    "subject" : "Name of the subject",
-		    "category": "Category"
-		}
-	    }
-	}
+     "LOADING": "LOADING...",
+     "organisation": {
+         "title": "Historic",
+         "messages": {
+          "orgaCreate": "Creation of the organisation.",
+          "memberLeave": "A member <u>has left</u> the organisation.",
+          "newMember": "A member <u>has join</u> the organisation.",
+          "newProposition": "A member has submit a new proposition",
+          "newDonation": "A member has made a new donation."
+      },
+      "filter": {
+          "title": "Filter",
+          "categories": {
+              "title": "Category",
+              "all": "All",
+              "newMember": "New member",
+              "memberLeave": "Old member",
+              "newDonation": "New donation"
+          },
+          "years": {
+              "title": "Period"
+          },
+          "member": {
+              "title": "Member",
+              "placeholder": "Select or search for a specific member"
+          },
+          "project": {
+              "title": "Project",
+              "placeholder": "Select or search for a specific project"
+          },
+          "job": {
+              "title": "Job",
+              "placeholder": "Select or search for a specific job"
+          },
+          "donation": {
+              "title": "Donation amount",
+              "placeholder": "Select or search for a specific range of donation"
+          },
+          "limit": {
+              "title": "Limit"
+          }
+      },
+      "export": {
+          "title": "Data export",
+          "button": "Export the current selection.",
+          "header": {
+              "date" : "Date",
+              "organization": "Name of the sender",
+              "subject" : "Name of the subject",
+              "category": "Category"
+          }
+      }
+  }
+},
+"organisations": {
+    "MAIN": "Organizations",
+    "MYORGANISATIONS": "My organizations",
+    "CREATE": "Create a new organization",
+    "DISCOVER": "Discover",
+    "SAMPLE": "Red Cross",
+    "TABS": {
+        "OVERVIEW": "Overview",
+        "ACTIVITY": "Activity",
+        "SALES": "Sales",
+        "MEMBERS": "Members",
+        "FILES": "Files",
+        "PROPOSALS": "Proposals"
     }
+}
 }

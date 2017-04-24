@@ -87,11 +87,11 @@
 															<div class="form-group">
 																<label class="block"> Do you want your organization to be :</label>
 																<div class="clip-radio radio-primary radio-lg">
-																	<input type="radio" id="public_type" value="public" ng-model="orga_form.accessibility" ng-init="orga_form.accessibility = 'public'">
+																	<input type="radio" id="public_type" value="public" ng-model="orga_form.rules.accessibility" ng-init="orga_form.rules.accessibility = 'public'">
 																	<label for="public_type"> Public </label>
 																</div>		
 																<div class="clip-radio radio-primary radio-lg">
-																	<input type="radio" id="private_type" value="private" ng-model="orga_form.accessibility">
+																	<input type="radio" id="private_type" value="private" ng-model="orga_form.rules.accessibility">
 																	<label for="private_type"> Private </label>
 																</div>
 															</div>
@@ -102,11 +102,11 @@
 															<div class="form-group">
 																<label class="block"> You can also chose to make it :</label>
 																<div class="checkbox vertical-center clip-check check-primary check-lg">
-																	<input type="checkbox" id="anonymous_type" ng-model="orga_form.anonymous">
+																	<input type="checkbox" id="anonymous_type" ng-model="orga_form.rules.anonymous">
 																	<label for="anonymous_type"> Anonymous </label>
 																</div>
 																<div class="checkbox vertical-center clip-check check-primary check-lg">
-																	<input type="checkbox" id="hidden_type" ng-model="orga_form.hidden">
+																	<input type="checkbox" id="hidden_type" ng-model="orga_form.rules.hidden">
 																	<label for="hidden_type"> Hidden </label>
 																</div>
 															</div>
@@ -275,20 +275,20 @@
 														<div class="form-group">
 															<label class="block"> You may add the following features to your structure:</label>
 															<div class="checkbox vertical-center clip-check check-primary">
-																<input type="checkbox" id="delegated_voting" ng-model="orga_form.delegated_voting">
+																<input type="checkbox" id="delegated_voting" ng-model="orga_form.rules.delegated_voting">
 																<label for="delegated_voting"> Delegated voting </label>
 
-																<input type="checkbox" id="add_curators" ng-model="orga_form.add_curators">
+																<input type="checkbox" id="add_curators" ng-model="orga_form.rules.curators">
 																<label for="add_curators"> Add curators </label>
 															</div>
 														</div>
 														<div class="col-md-4 input-group-sm bootstrap-touchspin">
 															<label for="quorum_value"> Quorum : </label>
-															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.quorum" ng-init="orga_form.quorum = 50">
+															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.quorum" ng-init="orga_form.rules.quorum = 50">
 														</div>
 														<div class="col-md-4 input-group-sm bootstrap-touchspin">
 															<label for="majority_value"> Majority : </label>
-															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.majority" ng-init="orga_form.majority = 50">
+															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.majority" ng-init="orga_form.rules.majority = 50">
 														</div>
 													</fieldset>
 

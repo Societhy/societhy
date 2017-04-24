@@ -146,11 +146,23 @@
 
    }
 
-   ctrl.downloadDoc = function (doc_id, doc_name) {
-    $http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
-     console.log(response);
-   });
-  }
+  /**
+   * Download a document using its id and name
+     * @method downloadDoc
+     */
+     ctrl.downloadDoc = function (doc_id, doc_name) {
+      $http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
+       console.log(response);
+     });
+    }
+
+    ctrl.createOffer = function () {
+
+    };
+
+    ctrl.createProposal = function () {
+
+    };
 
 	/**
 	 * Make a donation to the organization.
