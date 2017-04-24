@@ -58,7 +58,7 @@ def test_create_orga(miner):
 
 
 def test_join(miner, testOrga):
-	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'))
+	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
 	assert ret.get('data') != None
 
