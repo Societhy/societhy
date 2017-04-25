@@ -3,8 +3,6 @@ tasks/
 *pycache*
 *.pyc
 *DS_Store*
-bower_components/
-node_modules/
 ethjsonrpc/
 venv/
 contracts/

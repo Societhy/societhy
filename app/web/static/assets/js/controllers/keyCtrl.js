@@ -3,7 +3,6 @@
 *****************/
 
 app.controller('ModalGenerateController', function($scope, $uibModalInstance, SweetAlert, $rootScope, ctrl) {
-    console.log(33);
 	$scope.ldlocal = {};
 	$scope.ldrequest = {};
 	errorAlertOptions= {
@@ -21,7 +20,7 @@ app.controller('ModalGenerateController', function($scope, $uibModalInstance, Sw
 
 	$scope.local = function(operation, style) {
 		$scope.ldlocal[style.replace('-', '_')] = true;
-		ctrl[operation]().then(
+		ctrl[operation]($scope.localPassword).then(
 			function(key) {
 				$scope.ldlocal[style.replace('-', '_')] = false;
 				SweetAlert.swal(succesAlertOptions, function() {
@@ -185,11 +184,15 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 	ctrl.genLocalKey = function(password) {
 		return $q(function(success, failure) {
 			$timeout(function() {
+				console.log("1");
 				keythereum.create(keythereum.constants, function(dk) {
 					//ask for password
+					console.log("2", password, dk);
 					keythereum.dump(password, dk.privateKey, dk.salt, dk.iv, null, function (keyObject) {
+						console.log("3");
 						$http.get('/keyWasGenerated/'.concat(keyObject.address)).then(
 							function(data) {
+								console.log("4")
 								$rootScope.user.eth.keys['0x'.concat(keyObject.address)] = { "address": '0x'.concat(keyObject.address), "local": true, "balance": 0 };
 								success(keyObject);
 							},

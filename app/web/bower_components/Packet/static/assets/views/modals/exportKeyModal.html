@@ -1,0 +1,51 @@
+<div class="modal-header ng-scope">
+	<h3 class="modal-title">Manage your existing keys key!</h3>
+</div>
+<div class="modal-body">
+	<div class="panel panel-transparent">
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<tr>
+							<th width="50%">Name</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in keys">
+							<td><strong>{{ item.address }}</strong></td>
+							<td ng-show="uploader.isHTML5" nowrap>{{ item }}</td>
+							<td ng-show="uploader.isHTML5">
+								<div class="progress progress-xs margin-bottom-0">
+									<div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+								</div>
+							</td>
+							<td nowrap>
+								<button type="button" class="btn btn-success btn-xs" ng-click="exportKey(item.address)" ng-disabled="">
+									<span class="glyphicon glyphicon-upload"></span> Download
+								</button>
+								<button type="button" class="btn btn-warning btn-xs" ng-click="" ng-disabled="">
+									<span class="glyphicon glyphicon-ban-circle"></span> Cancel
+								</button>
+								<button type="button" class="btn btn-danger btn-xs" ng-click="exportDeleteKey(item.address)">
+									<span class="glyphicon glyphicon-trash"></span> Remove from server
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+<!-- 	<button ladda="ldlocal.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float: left; width:45%" ng-click="local('genLocalKey', 'contract')">
+		<span class="ladda-label"> Export key to file</span>
+		<span class="ladda-spinner"></span>
+	</button>
+	<button ladda="ldrequest.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float: right; width:45%" ng-click="request('genLinkedKey', 'contract')">
+		<span class="ladda-label"> Generate key and delete it on server</span>
+		<span class="ladda-spinner"></span>
+	</button>
+ --></div>
