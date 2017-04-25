@@ -9,23 +9,23 @@ governances = {
 		"rulesContract": "OpenRegistryRules",
 		"registryContract": "OpenRegistry",
 		"tokenContract": None
-		},
-	"dao": {
-		"templateClass": Dao,
-		"rulesContract": "LiquidDemocracyRules", #DAO.sol à terme
-		"registryContract": None,
-		"tokenContract": None
-		},
+		}
+	# "dao": {
+	# 	"templateClass": Dao,
+	# 	"rulesContract": "LiquidDemocracyRules", #DAO.sol à terme
+	# 	"registryContract": None,
+	# 	"tokenContract": None
+	# 	},
 	# "entreprise": {
 		# "templateClass": Entreprise,
 	# 	"rulesContract": "ControlledRegistryRules",
 	# 	"registryContract": "ControlledRegistry",
 	# 	"tokenContract": None
 	# 	},
-	"public_company": {
-		"templateClass": PublicCompany,
-		"rulesContract": "LiquidDemocracyRules",
-		"registryContract": None,
-		"tokenContract": None
-		}
+	# "public_company": {
+	# 	"templateClass": PublicCompany,
+	# 	"rulesContract": "LiquidDemocracyRules",
+	# 	"registryContract": None,
+	# 	"tokenContract": None
+	# 	}
 }

@@ -98,7 +98,7 @@ def createOrga(user, password, newOrga):
 	instance = governances[newOrga["gov_model"]]["templateClass"](
 		doc=newOrga,
 		owner=user.public(),
-		board_contract='basic_orga',
+		board_contract='Societhy',
 		rules_contract=rules_contract,
 		token_contract=token_contract,
 		registry_contract=registry_contract,

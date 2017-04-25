@@ -26,7 +26,6 @@ class ProjectDocument(Document):
 			self.contract.compile()
 			if at:
 				self["address"] = at
-				self.contract
 				self.contract["address"] = at
 		elif self.get("contract_id"):
 			self._loadContracts()

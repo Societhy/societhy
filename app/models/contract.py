@@ -112,7 +112,6 @@ class ContractDocument(Document):
 
 		signature, return_types = computeReturnTypes(function, self["abi"])
 		if local is True:
-			print('---------------', signature, return_types)
 			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')

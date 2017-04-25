@@ -27,7 +27,7 @@ def test_create_orga(miner):
 
 	for orga_model, contracts in governances.items():
 		test_orga = {
-			"name": "basic_orga" + "_" + orga_model, 
+			"name": "Societhy" + "_" + orga_model, 
 			"description" : "test_description", 
 			"accessibility" : "public", 
 			"gov_model" : orga_model,
@@ -55,6 +55,7 @@ def test_create_orga(miner):
 			assert inserted.registry != None
 		if contracts.get('token'):
 			assert inserted.token != None
+		break
 
 
 def test_join(miner, testOrga):
@@ -75,7 +76,7 @@ def test_donate(miner, testOrga):
 	ret = base_orga.donateToOrga(miner, password, testOrga.get('_id'), {"amount":1000})
 	assert ret.get('status') == 200
 	assert ret.get('data') is not None
-	bw.waitEvent("newDonation")
+	bw.waitEvent("DonationMade")
 	assert testOrga.getTotalFunds() == 1000
 	
 def test_createproject(miner, testOrga):
@@ -94,7 +95,10 @@ def test_leave(miner, testOrga):
 	bw.waitEvent("memberLeft")
 
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
-
+	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
+	assert ret.get('status') == 200	
+	assert ret.get('data') != None
+	bw.waitEvent('newMember')
 
 def test_destroyOrga(miner, testOrga):
 	pass

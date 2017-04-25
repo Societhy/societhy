@@ -84,3 +84,6 @@ class Entreprise(Organization):
 
 	def computeStatistics(self, data, params):
 		pass
+
+	def transferOwnership(self, from_, to_):
+		return None

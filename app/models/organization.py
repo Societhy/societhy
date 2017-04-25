@@ -2,6 +2,7 @@ from bson import ObjectId
 
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
+
 from bson import objectid
 
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
@@ -10,9 +11,10 @@ from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
 from models.notification import notifications, NotificationDocument as notification
+from models.offer import Offer
 
 from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import fromWei, toWei, to20bytes, normalizeAddress
+from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
@@ -247,7 +249,7 @@ class OrgaDocument(Document):
 		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self.public())
 			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
 			project_id = new_project.save()
@@ -257,11 +259,40 @@ class OrgaDocument(Document):
 				return self
 		return False
 
-	def offerDeployed(self, logs):
-		pass
+	def offerCreated(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
+			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor)
+			new_offer.contract["is_deployed"] = True
+			new_offer.initFromContract()
+			new_offer["contract_id"] = new_offer.contract.save()
+			if offer_address not in self["offers"]:
+				self["offers"][offer_address] = new_offer
+				self.save_partial()
+				return self
+		return False
 
-	def proposalDeployed(self, logs):
-		pass
+	def proposalCreated(self, logs):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+			if len(logs[0]["decoded_data"]) == 1:
+				new_project["name"] = logs[0]["decoded_data"][0]
+			project_id = new_project.save()
+			if contract_address not in self["projects"]:
+				self["projects"][contract_address] = new_project
+				self.save_partial()
+				return self
+		return False
 
 
 
@@ -396,8 +427,8 @@ class OrgaDocument(Document):
 			return False
 		tx_hash = self.board.call('donate', local=local, from_=user.get('account'), value=amount, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			topics = makeTopics(self.board.getAbi("newDonation").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newDonation", tx_hash, self.board["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
+			topics = makeTopics(self.board.getAbi("DonationMade").get('signature'), user.get('account'))
+			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -419,7 +450,7 @@ class OrgaDocument(Document):
 		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -428,7 +459,7 @@ class OrgaDocument(Document):
 	def killProject(self, project):
 		return None
 
-	def createOffer(self, user, offer):
+	def createOffer(self, user, offer, password=None):
 		"""
 		check if sender can create offer
 		check if offer is valid (client == orga, ...)
@@ -436,16 +467,37 @@ class OrgaDocument(Document):
 		return tx_hash
 		"""
 		if not self.can(user, "create_offer"):
-			return False
-		pass
+			return "unauthorized"
+	
+		try:
+			offer["hashOfTheProposalDocument"] = offer["hashOfTheProposalDocument"].encode('utf-8')[:32]
+			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration']]
+		except KeyError:
+			return "missing param in %s" % arg
+		
+		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
-	def cancelOffer(self, user, offer):
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("OfferCreated", tx_hash, self.board["address"], callbacks=[self.offerCreated], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
+	def cancelOffer(self, user, offer, password=None):
 		"""
 		a user can cancel its own offer
 		"""
-		return None
+		tx_hash = self.board.call('cancelOffer', local=False, from_=user.get('account'), args=[offer.get('name', 'newProject')], password=password)
 
-	def createProposal(self, user, proposal):
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("OfferCanceled", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
+	def createProposal(self, user, proposal, password=None):
 		"""
 		canSenderPropose
 		check proposal (_name, _type, , _description, _proxy, _debatePeriod, _destination, _value, _calldata)
@@ -453,30 +505,53 @@ class OrgaDocument(Document):
 		deploy proposal contract and set callback
 		return tx_hash
 		"""
-		return None
+		try:
+			args = [offer[parameter] for parameter in ['name', 'debatePeriod', 'destination', 'value', 'calldata', 'decription']]
+		except KeyError:
+			return False
+
+		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("ProposalCreated", tx_hash, self.board["address"], callbacks=[self.proposalCreated], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
 
 
-	def voteForProposal(self, user, proposal):
+	def voteForProposal(self, user, proposal, password=None):
 		"""
 		can sender vote
 		send tx and return hash
 		"""
-		return None
+		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
-	def executeProposal(self, user, proposal):
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
+	def executeProposal(self, user, proposal, password=None):
 		"""
 		if proposal is finished and not executed
 		sen tx and return hash
 		"""
-		return None
+		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
 
 	def changeConstitution(self, user, constitution):
 		"""
 		deploy new Rules contract and call changeRules with the address of the new contract
 		"""
-		return None
-
-	def transferOwnership(self, from_, to_):
 		return None
 
 
@@ -507,6 +582,7 @@ class OrgaCollection(Collection):
 		"members": dict,
 		"rights": dict,
 		"rules": dict,
+		"offers": dict,
 		"proposals": dict,
 		"projects": dict,
 		"description": str,
