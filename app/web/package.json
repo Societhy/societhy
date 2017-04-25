@@ -39,7 +39,7 @@
   "gruntfile-gtx": "^0.3.0",
   "http-server": "^0.6.1",
   "require-directory": "^2.0.0",
-  "keythereum": "0.4.3",
+  "keythereum": "0.5.2",
   "file-saver": "latest",
   "angular-qrcode": "latest",
   "socket.io":"latest"
