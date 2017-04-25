@@ -8,8 +8,16 @@ RUN apt-get update &&  \
 	apt-get install software-properties-common -qy
 
 RUN add-apt-repository -y ppa:ethereum/ethereum && \
+
     add-apt-repository -y ppa:ethereum/ethereum-dev && \
     apt-get update -y
+
+RUN apt-get install $DEPENDENCIES -qy
+
+# python packages
+ENV PIP_PACKAGES="$PIP_PACKAGES flask ipfsapi openpyxl pyJWT pillow qrcode requests pytest web3 pysha3 flask-socketio eventlet Flask-Mail"
+
+RUN pip3 install $PIP_PACKAGES
 
 ENV DEPENDENCIES="python3 golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc pkg-config mongodb supervisor ethereum"
 

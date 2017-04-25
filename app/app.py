@@ -5,12 +5,12 @@ from signal import signal, SIGINT
 
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
+from flask_mail import Mail
 
 from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
-from api import MongoSessionInterface as MongoSessionInterface
 
 from core import secret_key
 from core.utils import UserJSONEncoder
@@ -21,7 +21,17 @@ from models import organizations, users, projects
 app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
-app.session_interface = MongoSessionInterface()
+
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'societhycompany@gmail.com'
+app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail()
+mail.init_app(app)
 
 workers_pool = GreenPool(size=3)
 
@@ -59,6 +69,7 @@ def add_header(response):
     response.headers['Cache-Control'] = 'no-cache, no-store'
     response.headers['Pragma'] = 'no-cache'
     return response
+
 
 @app.route('/')
 def helloWorld():

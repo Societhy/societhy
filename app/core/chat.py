@@ -7,6 +7,7 @@ from flask_socketio import SocketIO, send, emit
 from core.utils import UserJSONEncoder
 
 from models import users
+from core.notifications import NotificationPush, Notification
 from models.clients import socketio
 from models.message import messages, MessageDocument
 from .user_management import isInContactList
@@ -35,6 +36,7 @@ def connect():
     if not NC_Clients.get(request.sid) or NC_Clients.get(request.sid).sessionId != request.sid:
         NC_Clients[request.sid] = Client(request.sid)
         emit('sessionId', request.sid, namespace='/', room=request.sid)
+    print("test")
 
 @socketio.on('disconnect', namespace='/')
 def disconnect():
@@ -64,6 +66,19 @@ def handleMessage(data):
         emit('send_message', message, namespace='/', room=Clients[data['idOther']].sessionId)
     db_message = MessageDocument(message)
     db_message.save()
+
+@socketio.on('notify', namespace='/')
+def notify(push, sender, senderType, category, subject, user):
+    if (data['idOther'] in Clients):
+        notification = {
+            'description': push.createDescription(category),
+            'subject_name': subject['name'],
+            'sender_name': sender['name']
+        }
+        emit('send_message', notification, namespace='/', room=Clients[data['idOther']].sessionId)
+    else:
+        push.sendNotif(sender, senderType, category, subject, user)
+
 
 @socketio.on('init', namespace='/')
 def initSocket(data):

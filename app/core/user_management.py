@@ -3,10 +3,13 @@ import jwt
 import scrypt
 import collections
 from base64 import b64decode, b64encode
+
 from bson.objectid import ObjectId
 from flask import session, request, Response
 from rlp.utils import encode_hex
+from flask import session, request, Response, jsonify
 
+from models.notification import notifications
 from models import users, UserDocument
 from models import errors
 
@@ -79,3 +82,7 @@ def findUser(data):
 			"status": 200}
 	else:
 		return {"data": "User's id is required to view its profile", "status":400}
+
+def getUserNotif(data):
+	ret = list(notifications.find({"userId" : ObjectId(data.get("_id"))}, {"date" : 0, "_id" : 0}))
+	return {"data": {"notifications": ret}, "status": 200}
