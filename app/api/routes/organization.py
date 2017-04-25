@@ -118,6 +118,12 @@ def getOrgaProducts(orga_id):
     products = sales_platform.getProductsByOwner(orga_id)
     return make_response(jsonify(products.get('data')), products.get('status'))
 
+@router.route('/addReviewToProduct/<product_id>', methods=['POST'])
+@requires_auth
+def addReview(user, product_id):
+    ret = sales_platform.addReviewToProduct(product_id, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/getOrgaHisto', methods=['POST'])
 def getOrgaHisto():
 	ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))

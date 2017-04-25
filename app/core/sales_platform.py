@@ -54,6 +54,14 @@ def updateProduct(productId, updateFields):
         return {'data': 'Product does not exist', 'status': 400}
     return {'data': result.raw_result, 'status': 200}
 
+def addReviewToProduct(productId, review):
+    """
+    """
+    result = products.update_one({'_id': ObjectId(productId)}, {'$addToSet': {'reviewList': review}})
+    if result.modified_count < 1:
+        return {'data': 'Product does not exist', 'status': 400}
+    return {'data': 'Review added', 'status': 200}
+
 def removeProduct(productId):
     """
     productId : id of the product that will be removed.

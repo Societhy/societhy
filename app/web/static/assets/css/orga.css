@@ -93,7 +93,7 @@
     width:		250px;
 }
 
-/* 
+/*
 ** TIMELINE CSS
 */
 
@@ -225,7 +225,7 @@
 }
 
 /*
-** TIMELINE CSS BOOTSTRAP 
+** TIMELINE CSS BOOTSTRAP
 */
 
 
@@ -260,7 +260,7 @@
     }
 }
 
-/* 
+/*
 ** TIMELINE CSS 4
 */
 
@@ -579,4 +579,12 @@ img { border: 0; max-width: 100%; }
 input::-moz-focus-inner,
 input::-moz-focus-outer {
     border: 0;
+}
+
+/**
+ * Rating stars
+ */
+.glyphicon-star, .glyphicon-star-empty {
+  color:orange;
+  font-size: 1.7em;
 }

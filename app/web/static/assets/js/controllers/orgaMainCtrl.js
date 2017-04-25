@@ -9,11 +9,32 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
 	ctrl.wallet = $controller("WalletController");
 
     $scope.listProducts = [];
-    $scope.currentProd = $scope.listProducts[0];
-
+    $scope.reviewList = [];
 
     ctrl.setProduct = function(product) {
         $scope.currentProd = product;
+        $scope.reviewList = $scope.currentProd.reviewList;
+    }
+
+    ctrl.sendReview = function() {
+        productId = $scope.currentProd._id.$oid;
+        console.log(this.review);
+        console.log(this.rate);
+        reviewPack = {
+            review: this.review,
+            rate: this.rate,
+            date: new Date()
+            user: {
+                name: $rootScope.user.name,
+                id: $rootScope.user._id
+            }
+        };
+
+        $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
+            console.log(response);;
+        }, function(error) {
+            console.log(error);
+        });
     }
 
     /**
@@ -47,6 +68,7 @@ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessio
             if (response.status == 200) {
                 $scope.listProducts = JSON.parse(response.data);
                 $scope.currentProd = $scope.listProducts[0];
+                $scope.reviewList = $scope.currentProd.reviewList;
             }
         });
     }
