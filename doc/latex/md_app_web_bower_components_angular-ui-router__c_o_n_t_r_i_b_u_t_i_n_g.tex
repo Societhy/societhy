@@ -1,0 +1,60 @@
+Help us make U\+I-\/\+Router better! If you think you might have found a bug, or some other weirdness, start by making sure it hasn\textquotesingle{}t already been reported. You can \href{https://github.com/angular-ui/ui-router/search?q=wat%3F&type=Issues}{\tt search through existing issues} to see if someone\textquotesingle{}s reported one similar to yours.
+
+If not, then \href{http://bit.ly/UIR-Plunk}{\tt create a plunkr} that demonstrates the problem (try to use as little code as possible\+: the more minimalist, the faster we can debug it).
+
+Next, \href{https://github.com/angular-ui/ui-router/issues/new}{\tt create a new issue} that briefly explains the problem, and provides a bit of background as to the circumstances that triggered it. Don\textquotesingle{}t forget to include the link to that plunkr you created!
+
+{\bfseries Note}\+: If you\textquotesingle{}re unsure how a feature is used, or are encountering some unexpected behavior that you aren\textquotesingle{}t sure is a bug, it\textquotesingle{}s best to talk it out on \href{http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router}{\tt Stack\+Overflow} before reporting it. This keeps development streamlined, and helps us focus on building great software.
+
+Issues only! $\vert$ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/---$\vert$ Please keep in mind that the issue tracker is for {\itshape issues}. Please do {\itshape not} post an issue if you need help or support. Instead, see one of the above-\/mentioned forums or \href{irc://irc.freenode.net/#angularjs}{\tt I\+RC}. $\vert$
+
+\paragraph*{Purple Labels}
+
+A purple label means that {\bfseries you} need to take some further action.
+\begin{DoxyItemize}
+\item \+: Your issue is not specific enough, or there is no clear action that we can take. Please clarify and refine your issue.
+\item \+: Please \href{http://bit.ly/UIR-Plunk}{\tt create a plunkr}
+\item \+: We suspect your issue is really a help request, or could be answered by the community. Please ask your question on \href{http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router}{\tt Stack\+Overflow}. If you determine that is an actual issue, please explain why.
+\end{DoxyItemize}
+
+If your issue gets labeled with purple label, no further action will be taken until you respond to the label appropriately.
+
+\section*{Contribute}
+
+$\ast$$\ast$(1)$\ast$$\ast$ See the {\bfseries \href{#developing}{\tt Developing}} section below, to get the development version of U\+I-\/\+Router up and running on your local machine.
+
+$\ast$$\ast$(2)$\ast$$\ast$ Check out the \href{https://github.com/angular-ui/ui-router/milestones}{\tt roadmap} to see where the project is headed, and if your feature idea fits with where we\textquotesingle{}re headed.
+
+$\ast$$\ast$(3)$\ast$$\ast$ If you\textquotesingle{}re not sure, \href{https://github.com/angular-ui/ui-router/issues/new?title=RFC:%20My%20idea}{\tt open an R\+FC} to get some feedback on your idea.
+
+$\ast$$\ast$(4)$\ast$$\ast$ Finally, commit some code and open a pull request. Code \& commits should abide by the following rules\+:
+
+
+\begin{DoxyItemize}
+\item {\itshape Always} have test coverage for new features (or regression tests for bug fixes), and {\itshape never} break existing tests
+\item Commits should represent one logical change each; if a feature goes through multiple iterations, squash your commits down to one
+\item Make sure to follow the \href{https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#commit-message-format}{\tt Angular commit message format} so your change will appear in the changelog of the next release.
+\item Changes should always respect the coding style of the project
+\end{DoxyItemize}
+
+\section*{Developing}
+
+U\+I-\/\+Router uses {\ttfamily grunt $>$= 0.\+4.\+x}. Make sure to upgrade your environment and read the \href{http://gruntjs.com/upgrading-from-0.3-to-0.4}{\tt Migration Guide}.
+
+Dependencies for building from source and running tests\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/gruntjs/grunt-cli}{\tt grunt-\/cli} -\/ run\+: {\ttfamily \$ npm install -\/g grunt-\/cli}
+\item Then, install the development dependencies by running {\ttfamily \$ npm install} from the project directory
+\end{DoxyItemize}
+
+There are a number of targets in the gruntfile that are used to generating different builds\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily grunt}\+: Perform a normal build, runs jshint and karma tests
+\item {\ttfamily grunt build}\+: Perform a normal build
+\item {\ttfamily grunt dist}\+: Perform a clean build and generate documentation
+\item {\ttfamily grunt dev}\+: Run dev server (sample app) and watch for changes, builds and runs karma tests on changes. 
+\end{DoxyItemize}

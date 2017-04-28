@@ -1,0 +1,49 @@
+
+
+ title\+: Notes \subsection*{anchor\+: notes }
+
+\subsubsection*{Browser support}
+
+Browser support for the canvas element is available in all modern \& major mobile browsers \href{http://caniuse.com/canvas}{\tt (caniuse.\+com/canvas)}.
+
+For I\+E8 \& below, I would recommend using the polyfill Explorer\+Canvas -\/ available at \href{https://code.google.com/p/explorercanvas/}{\tt https\+://code.\+google.\+com/p/explorercanvas/}. It falls back to Internet explorer\textquotesingle{}s format V\+ML when canvas support is not available. Example use\+:
+
+
+\begin{DoxyCode}
+<head>
+    
+</head>
+\end{DoxyCode}
+
+
+Usually I would recommend feature detection to choose whether or not to load a polyfill, rather than IE conditional comments, however in this case, V\+ML is a Microsoft proprietary format, so it will only work in IE.
+
+Some important points to note in my experience using Explorer\+Canvas as a fallback.
+
+
+\begin{DoxyItemize}
+\item Initialise charts on load rather than D\+O\+M\+Content\+Ready when using the library, as sometimes a race condition will occur, and it will result in an error when trying to get the 2d context of a canvas.
+\item New V\+ML D\+OM elements are being created for each animation frame and there is no hardware acceleration. As a result animation is usually slow and jerky, with flashing text. It is a good idea to dynamically turn off animation based on canvas support. I recommend using the excellent \href{http://modernizr.com/}{\tt Modernizr} to do this.
+\item When declaring fonts, the library explorercanvas requires the font name to be in single quotes inside the string. For example, instead of your scale\+Font\+Family property being simply \char`\"{}\+Arial\char`\"{}, explorercanvas support, use \char`\"{}\textquotesingle{}\+Arial\textquotesingle{}\char`\"{} instead. Chart.\+js does this for default values.
+\end{DoxyItemize}
+
+\subsubsection*{Bugs \& issues}
+
+Please report these on the Git\+Hub page -\/ at \href{https://github.com/nnnick/Chart.js}{\tt github.\+com/nnnick/\+Chart.js}. If you could include a link to a simple \href{http://jsbin.com/}{\tt jsbin} or similar to demonstrate the issue, that\textquotesingle{}d be really helpful.
+
+\subsubsection*{Contributing}
+
+New contributions to the library are welcome, just a couple of guidelines\+:
+
+
+\begin{DoxyItemize}
+\item Tabs for indentation, not spaces please.
+\item Please ensure you\textquotesingle{}re changing the individual files in {\ttfamily /src}, not the concatenated output in the {\ttfamily Chart.\+js} file in the root of the repo.
+\item Please check that your code will pass {\ttfamily jshint} code standards, {\ttfamily gulp jshint} will run this for you.
+\item Please keep pull requests concise, and document new functionality in the relevant {\ttfamily .md} file.
+\item Consider whether your changes are useful for all users, or if creating a Chart.\+js extension would be more appropriate.
+\end{DoxyItemize}
+
+\subsubsection*{License}
+
+Chart.\+js is open source and available under the \href{http://opensource.org/licenses/MIT}{\tt M\+IT license}. 

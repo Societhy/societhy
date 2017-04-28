@@ -1,0 +1,271 @@
+\subsection*{\#\#\#\# The de-\/facto solution to flexible routing with nested views }
+
+{\bfseries \href{https://cdn.rawgit.com/angular-ui/ui-router/0.2.18/release/angular-ui-router.js}{\tt Download 0.\+2.\+18}} (or {\bfseries \href{https://cdn.rawgit.com/angular-ui/ui-router/0.2.18/release/angular-ui-router.min.js}{\tt Minified}}) $\ast$$\ast$$\vert$$\ast$$\ast$ {\bfseries \href{https://github.com/angular-ui/ui-router/wiki}{\tt Guide} $\vert$} {\bfseries \href{http://angular-ui.github.io/ui-router/site}{\tt A\+PI} $\vert$} {\bfseries \href{http://angular-ui.github.com/ui-router/sample/}{\tt Sample} (\href{https://github.com/angular-ui/ui-router/tree/gh-pages/sample}{\tt Src}) $\vert$} {\bfseries \href{https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions}{\tt F\+AQ} $\vert$} {\bfseries \href{#resources}{\tt Resources} $\vert$} {\bfseries \href{https://github.com/angular-ui/ui-router/blob/master/CONTRIBUTING.md#report-an-issue}{\tt Report an Issue} $\vert$} {\bfseries \href{https://github.com/angular-ui/ui-router/blob/master/CONTRIBUTING.md#contribute}{\tt Contribute} $\vert$} {\bfseries \href{http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router}{\tt Help!} $\vert$} {\bfseries \href{https://groups.google.com/forum/#!categories/angular-ui/router}{\tt Discuss}} 
+
+
+
+$\ast$\+\_\+\+Please help us out by testing the 1.\+0 alpha release!\+\_\+$\ast$
+
+\href{https://github.com/angular-ui/ui-router/releases/tag/1.0.0alpha0}{\tt 1.\+0.\+0alpha0 Announcement} (\href{https://github.com/angular-ui/ui-router/tree/master}{\tt Source Code}) $\vert$ \href{http://ui-router.github.io/sample-app/}{\tt Sample App} (\href{https://github.com/ui-router/sample-app}{\tt Source Code}) $\vert$ \href{https://github.com/angular-ui/ui-router/issues?q=is%3Aissue+is%3Aopen+label%3A1.0}{\tt Known Issues}
+
+
+
+
+
+Angular\+UI Router is a routing framework for \href{http://angularjs.org}{\tt Angular\+JS}, which allows you to organize the parts of your interface into a \href{https://en.wikipedia.org/wiki/Finite-state_machine}{\tt {\itshape state machine}}. Unlike the \href{http://docs.angularjs.org/api/ngRoute.$route}{\tt {\ttfamily \$route} service} in the Angular ng\+Route module, which is organized around U\+RL routes, U\+I-\/\+Router is organized around \href{https://github.com/angular-ui/ui-router/wiki}{\tt {\itshape states}}, which may optionally have routes, as well as other behavior, attached.
+
+States are bound to {\itshape named}, {\itshape nested} and {\itshape parallel views}, allowing you to powerfully manage your application\textquotesingle{}s interface.
+
+Check out the sample app\+: \href{http://angular-ui.github.io/ui-router/sample/}{\tt http\+://angular-\/ui.\+github.\+io/ui-\/router/sample/}
+
+
+\begin{DoxyItemize}
+\item {\bfseries Note\+:} {\itshape U\+I-\/\+Router is under active development. As such, while this library is well-\/tested, the A\+PI may change. Consider using it in production applications only if you\textquotesingle{}re comfortable following a changelog and updating your usage accordingly.}
+\end{DoxyItemize}
+
+\subsection*{Get Started}
+
+$\ast$$\ast$(1)$\ast$$\ast$ Get U\+I-\/\+Router in one of the following ways\+:
+\begin{DoxyItemize}
+\item clone \& \href{CONTRIBUTING.md#developing}{\tt build} this repository
+\item \href{http://angular-ui.github.io/ui-router/release/angular-ui-router.js}{\tt download the release} (or \href{http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js}{\tt minified})
+\item \href{http://cdnjs.com/libraries/angular-ui-router}{\tt link to cdn}
+\item via {\bfseries \href{http://jspm.io/}{\tt jspm}}\+: by running {\ttfamily \$ jspm install angular-\/ui-\/router} from your console
+\item or via {\bfseries \href{https://www.npmjs.org/}{\tt npm}}\+: by running {\ttfamily \$ npm install angular-\/ui-\/router} from your console
+\item or via {\bfseries \href{http://bower.io/}{\tt Bower}}\+: by running {\ttfamily \$ bower install angular-\/ui-\/router} from your console
+\item or via {\bfseries \href{https://github.com/component/component}{\tt Component}}\+: by running {\ttfamily \$ component install angular-\/ui/ui-\/router} from your console
+\end{DoxyItemize}
+
+$\ast$$\ast$(2)$\ast$$\ast$ Include {\ttfamily angular-\/ui-\/router.\+js} (or {\ttfamily angular-\/ui-\/router.\+min.\+js}) in your {\ttfamily index.\+html}, after including Angular itself (For Component users\+: ignore this step)
+
+$\ast$$\ast$(3)$\ast$$\ast$ Add {\ttfamily \textquotesingle{}ui.\+router\textquotesingle{}} to your main module\textquotesingle{}s list of dependencies (For Component users\+: replace {\ttfamily \textquotesingle{}ui.\+router\textquotesingle{}} with `require(\textquotesingle{}angular-\/ui-\/router\textquotesingle{})`)
+
+When you\textquotesingle{}re done, your setup should look similar to the following\+:
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<!doctype html>
+<html ng-app="myApp">
+<head>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+    <script src="js/angular-ui-router.min.js"></script>
+    <script>
+        var myApp = angular.module('myApp', ['ui.router']);
+        // For Component users, it should look like this:
+        // var myApp = angular.module('myApp', [require('angular-ui-router')]);
+    </script>
+    ...
+</head>
+<body>
+    ...
+</body>
+</html>
+\end{DoxyCode}
+
+
+\subsubsection*{\href{http://plnkr.co/edit/u18KQc?p=preview}{\tt Nested States \& Views}}
+
+The majority of U\+I-\/\+Router\textquotesingle{}s power is in its ability to nest states \& views.
+
+$\ast$$\ast$(1)$\ast$$\ast$ First, follow the \href{#get-started}{\tt setup} instructions detailed above.
+
+$\ast$$\ast$(2)$\ast$$\ast$ Then, add a \href{https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-view}{\tt {\ttfamily ui-\/view} directive} to the {\ttfamily $<$body /$>$} of your app.
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<body>
+    <div ui-view></div>
+    
+    <a ui-sref="state1">State 1</a>
+    <a ui-sref="state2">State 2</a>
+</body>
+\end{DoxyCode}
+
+
+$\ast$$\ast$(3)$\ast$$\ast$ You\textquotesingle{}ll notice we also added some links with \href{https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-sref}{\tt {\ttfamily ui-\/sref} directives}. In addition to managing state transitions, this directive auto-\/generates the {\ttfamily href} attribute of the {\ttfamily $<$a /$>$} element it\textquotesingle{}s attached to, if the corresponding state has a U\+RL. Next we\textquotesingle{}ll add some templates. These will plug into the {\ttfamily ui-\/view} within {\ttfamily index.\+html}. Notice that they have their own {\ttfamily ui-\/view} as well! That is the key to nesting states and views.
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<h1>State 1</h1>
+<hr/>
+<a ui-sref="state1.list">Show List</a>
+<div ui-view></div>
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+<h1>State 2</h1>
+<hr/>
+<a ui-sref="state2.list">Show List</a>
+<div ui-view></div>
+\end{DoxyCode}
+
+
+$\ast$$\ast$(4)$\ast$$\ast$ Next, we\textquotesingle{}ll add some child templates. {\itshape These} will get plugged into the {\ttfamily ui-\/view} of their parent state templates.
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<h3>List of State 1 Items</h3>
+<ul>
+  <li ng-repeat="item in items">\{\{ item \}\}</li>
+</ul>
+\end{DoxyCode}
+
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<h3>List of State 2 Things</h3>
+<ul>
+  <li ng-repeat="thing in things">\{\{ thing \}\}</li>
+</ul>
+\end{DoxyCode}
+
+
+$\ast$$\ast$(5)$\ast$$\ast$ Finally, we\textquotesingle{}ll wire it all up with {\ttfamily \$state\+Provider}. Set up your states in the module config, as in the following\+:
+
+\begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+myApp.config(function($stateProvider, $urlRouterProvider) \{
+  //
+  // For any unmatched url, redirect to /state1
+  $urlRouterProvider.otherwise("/state1");
+  //
+  // Now set up the states
+  $stateProvider
+    .state('state1', \{
+      url: "/state1",
+      templateUrl: "partials/state1.html"
+    \})
+    .state('state1.list', \{
+      url: "/list",
+      templateUrl: "partials/state1.list.html",
+      controller: function($scope) \{
+        $scope.items = ["A", "List", "Of", "Items"];
+      \}
+    \})
+    .state('state2', \{
+      url: "/state2",
+      templateUrl: "partials/state2.html"
+    \})
+    .state('state2.list', \{
+      url: "/list",
+      templateUrl: "partials/state2.list.html",
+      controller: function($scope) \{
+        $scope.things = ["A", "Set", "Of", "Things"];
+      \}
+    \});
+\});
+\end{DoxyCode}
+
+
+$\ast$$\ast$(6)$\ast$$\ast$ See this quick start example in action. $>$$\ast$$\ast$\href{http://plnkr.co/edit/u18KQc?p=preview}{\tt Go to Quick Start Plunker for Nested States \& Views}$\ast$$\ast$
+
+$\ast$$\ast$(7)$\ast$$\ast$ This only scratches the surface $>$$\ast$$\ast$\href{https://github.com/angular-ui/ui-router/wiki}{\tt Dive Deeper!}$\ast$$\ast$
+
+\subsubsection*{\href{http://plnkr.co/edit/SDOcGS?p=preview}{\tt Multiple \& Named Views}}
+
+Another great feature is the ability to have multiple {\ttfamily ui-\/view}s view per template.
+
+{\bfseries Pro Tip\+:} {\itshape While multiple parallel views are a powerful feature, you\textquotesingle{}ll often be able to manage your interfaces more effectively by nesting your views, and pairing those views with nested states.}
+
+$\ast$$\ast$(1)$\ast$$\ast$ Follow the \href{#get-started}{\tt setup} instructions detailed above.
+
+$\ast$$\ast$(2)$\ast$$\ast$ Add one or more {\ttfamily ui-\/view} to your app, give them names. \begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+<body>
+    <div ui-view="viewA"></div>
+    <div ui-view="viewB"></div>
+    
+    <a ui-sref="route1">Route 1</a>
+    <a ui-sref="route2">Route 2</a>
+</body>
+\end{DoxyCode}
+
+
+$\ast$$\ast$(3)$\ast$$\ast$ Set up your states in the module config\+: \begin{quote}
+
+
+\end{quote}
+
+\begin{DoxyCode}
+myApp.config(function($stateProvider) \{
+  $stateProvider
+    .state('index', \{
+      url: "",
+      views: \{
+        "viewA": \{ template: "index.viewA" \},
+        "viewB": \{ template: "index.viewB" \}
+      \}
+    \})
+    .state('route1', \{
+      url: "/route1",
+      views: \{
+        "viewA": \{ template: "route1.viewA" \},
+        "viewB": \{ template: "route1.viewB" \}
+      \}
+    \})
+    .state('route2', \{
+      url: "/route2",
+      views: \{
+        "viewA": \{ template: "route2.viewA" \},
+        "viewB": \{ template: "route2.viewB" \}
+      \}
+    \})
+\});
+\end{DoxyCode}
+
+
+$\ast$$\ast$(4)$\ast$$\ast$ See this quick start example in action. $>$$\ast$$\ast$\href{http://plnkr.co/edit/SDOcGS?p=preview}{\tt Go to Quick Start Plunker for Multiple \& Named Views}$\ast$$\ast$
+
+\subsection*{Resources}
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/angular-ui/ui-router/wiki}{\tt In-\/\+Depth Guide}
+\item \href{http://angular-ui.github.io/ui-router/site}{\tt A\+PI Reference}
+\item \href{http://angular-ui.github.com/ui-router/sample/}{\tt Sample App} (\href{https://github.com/angular-ui/ui-router/tree/gh-pages/sample}{\tt Source})
+\item \href{https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions}{\tt F\+AQ}
+\item \href{http://slid.es/timkindberg/ui-router#/}{\tt Slides comparing ng\+Route to ui-\/router}
+\item \href{http://christopherthielen.github.io/ui-router-extras/#/home}{\tt U\+I-\/\+Router Extras / Addons} ()
+\end{DoxyItemize}
+
+\subsubsection*{Videos}
+
+
+\begin{DoxyItemize}
+\item \href{https://egghead.io/lessons/angularjs-introduction-ui-router}{\tt Introduction Video} (egghead.\+io)
+\item \href{https://www.youtube.com/watch?v=lBqiZSemrqg}{\tt Tim Kindberg on Angular U\+I-\/\+Router}
+\item \href{https://egghead.io/lessons/angularjs-ui-router-activating-states}{\tt Activating States} (egghead.\+io)
+\item \href{http://youtu.be/QETUuZ27N0w}{\tt Learn Angular.\+js using U\+I-\/\+Router} (Learn\+Code.\+academy)
+\end{DoxyItemize}
+
+\subsection*{Reporting issues and Contributing}
+
+Please read our Contributor guidelines before reporting an issue or creating a pull request. 

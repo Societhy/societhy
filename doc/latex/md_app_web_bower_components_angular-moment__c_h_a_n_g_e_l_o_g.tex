@@ -1,0 +1,310 @@
+\subsection*{1.\+0.\+0 -\/ 2016-\/10-\/06}
+
+
+\begin{DoxyItemize}
+\item Improvments to the U\+MD code
+\end{DoxyItemize}
+
+Breaking change\+: The A\+MD version now exports the module name (\textquotesingle{}angular\+Moment\textquotesingle{}) instead of the actual module object.
+
+\subsection*{1.\+0.\+0-\/beta.\+6 -\/ 2016-\/04-\/24}
+
+
+\begin{DoxyItemize}
+\item Support for setting the units of the full date threshold of {\ttfamily am-\/time-\/ago} (\href{https://github.com/urish/angular-moment/pull/237}{\tt \#237}, contributed by \href{https://github.com/denistrustepain}{\tt denistrustepain})
+\item Add optional arguments {\ttfamily reference\+Time} and {\ttfamily formats} to the {\ttfamily am\+Calendar} filter (\href{https://github.com/urish/angular-moment/pull/241}{\tt \#241}, contributed by \href{https://github.com/Nitro-N}{\tt Nitro-\/N})
+\item Support moment 2.\+13.\+x and above
+\end{DoxyItemize}
+
+\subsection*{1.\+0.\+0-\/beta.\+5 -\/ 2016-\/03-\/18}
+
+
+\begin{DoxyItemize}
+\item Bugfix\+: {\ttfamily am\+Time\+Ago} shouldn\textquotesingle{}t convert the time to local timezone on the element\textquotesingle{}s {\ttfamily title} attribute (\href{https://github.com/urish/angular-moment/pull/226}{\tt \#226}, contributed by \href{https://github.com/stackia}{\tt stackia})
+\item Support moment 2.\+12.\+x
+\end{DoxyItemize}
+
+\subsection*{1.\+0.\+0-\/beta.\+4 -\/ 2016-\/02-\/09}
+
+
+\begin{DoxyItemize}
+\item Add am\+Start\+Of and am\+End\+Of filter (\href{https://github.com/urish/angular-moment/pull/203}{\tt \#203}, contributed by \href{https://github.com/pratik14}{\tt pratik14})
+\item Support Moment 2.\+11.\+x
+\item Happy Year of the Monkey!
+\end{DoxyItemize}
+
+\subsection*{1.\+0.\+0-\/beta.\+3 -\/ 2015-\/11-\/10}
+
+
+\begin{DoxyItemize}
+\item Support Angular\+JS 1.\+5.\+x
+\item Support for nw.\+js (\href{https://github.com/urish/angular-moment/pull/196}{\tt \#196}, contributed by \href{https://github.com/makkesk8}{\tt makkesk8})
+\item Bugfix\+: {\ttfamily title} attribute does update when model changes (\href{https://github.com/urish/angular-moment/pull/201}{\tt \#201}, contributed by \href{https://github.com/stackia}{\tt stackia})
+\end{DoxyItemize}
+
+\subsection*{1.\+0.\+0-\/beta.\+2 -\/ 2015-\/09-\/20}
+
+
+\begin{DoxyItemize}
+\item Bugfix\+: Infinite digest loop when combining {\ttfamily am-\/time-\/ago} and {\ttfamily am\+Timezone} (\href{https://github.com/urish/angular-moment/issues/178}{\tt \#178})
+\item Bugfix\+: Cannot use angular-\/moment under webpack (\href{https://github.com/urish/angular-moment/issues/108}{\tt \#108})
+\item Add {\ttfamily am\+Local} filter (see \href{https://github.com/urish/angular-moment/issues/114}{\tt \#114})
+\end{DoxyItemize}
+
+\subsection*{1.\+0.\+0-\/beta.\+1 -\/ 2015-\/09-\/14}
+
+!!! B\+R\+E\+A\+K\+I\+NG C\+H\+A\+N\+GE !!!
+
+Preprocessors, timezones and input format were removed from am-\/time-\/ago and all filters. Use the new {\ttfamily am\+From\+Unix}, {\ttfamily am\+Utc}, {\ttfamily am\+Utc\+Offset}, {\ttfamily am\+Timezone}, and {\ttfamily am\+Parse} filters instead.
+
+Examples\+:
+\begin{DoxyItemize}
+\item {\ttfamily $<$time am-\/time-\/ago=\char`\"{}my\+Date\char`\"{} am-\/format=\char`\"{}\+Y\+Y\+Y\+Y-\/\+M\+M-\/\+D\+D\char`\"{}$>$} becomes `$<$time am-\/time-\/ago=\char`\"{}my\+Date$\vert$am\+Parse\+:\textquotesingle{}\+Y\+Y\+Y\+Y-\/\+M\+M-\/\+D\+D\textquotesingle{}\char`\"{}$>${\ttfamily  $\ast$}$<$time am-\/time-\/ago=\char`\"{}my\+Date\char`\"{} am-\/preprocess=\char`\"{}unix\char`\"{}$>${\ttfamily becomes}$<$time am-\/time-\/ago=\char`\"{}my\+Date$\vert$am\+From\+Unix\char`\"{}$>${\ttfamily  $\ast$}\{\{my\+Date$\vert$am\+Calendar\+:\textquotesingle{}unix\textquotesingle{}\}\}{\ttfamily becomes}\{\{my\+Date$\vert$am\+From\+Unix$\vert$am\+Calendar\}\}{\ttfamily  $\ast$}\{\{my\+Date$\vert$am\+Calendar\+:null\+:\textquotesingle{}P\+DT\textquotesingle{}\}\}{\ttfamily becomes}\{\{my\+Date$\vert$am\+Timezone\+:\textquotesingle{}P\+DT\textquotesingle{}$\vert$am\+Calendar\}\}`
+\end{DoxyItemize}
+
+The removal of the preprocessors also affects the other positional parameters of the {\ttfamily am\+Time\+Ago}\+:
+
+{\ttfamily \{\{my\+Date$\vert$am\+Time\+Ago\+:null\+:true\+:from\+Date\}\}} becomes {\ttfamily \{\{my\+Date$\vert$am\+Time\+Ago\+:true\+:from\+Date\}\}}.
+
+For more information, please see \href{https://github.com/urish/angular-moment/issues/174}{\tt \#174}.
+
+\subsection*{0.\+10.\+3 -\/ 2015-\/09-\/05}
+
+
+\begin{DoxyItemize}
+\item Allow {\ttfamily am\+Date\+Format} to work with custom formatted input date strings (\href{https://github.com/urish/angular-moment/pull/162}{\tt \#162}, contributed by \href{https://github.com/jblashka}{\tt jblashka})
+\item {\ttfamily am\+Add}, {\ttfamily am\+Subtract} -\/ add/subtract a value from a given date (\href{https://github.com/urish/angular-moment/pull/171}{\tt \#171}, contributed by \href{https://github.com/nicholasruggeri}{\tt nicholasruggeri})
+\item Bugfix\+: Timezones with a \textquotesingle{}Z\textquotesingle{} somewhere in them all become U\+TC (\href{https://github.com/urish/angular-moment/issues/168}{\tt \#168}).
+\end{DoxyItemize}
+
+\subsection*{0.\+10.\+2 -\/ 2015-\/07-\/28}
+
+
+\begin{DoxyItemize}
+\item Look for {\ttfamily moment} on the {\ttfamily global} object (\href{https://github.com/urish/angular-moment/pull/133}{\tt \#133}, contributed by \href{https://github.com/kitbrennan90}{\tt kitbrennan90})
+\item Add support to use U\+TC offset timezones in addition to named timezones (\href{https://github.com/urish/angular-moment/pull/151}{\tt \#151}, contributed by \href{https://github.com/DiegoZoracKy}{\tt Diego\+Zorac\+Ky})
+\item Add timezone parameter for am\+Calendar filter (\href{https://github.com/urish/angular-moment/pull/152}{\tt \#152}, contributed by \href{https://github.com/DiegoZoracKy}{\tt Diego\+Zorac\+Ky})
+\item Add {\ttfamily am-\/from} parameter to the {\ttfamily am\+Time\+Ago} directive (\href{https://github.com/urish/angular-moment/pull/145}{\tt \#145}, contributed by \href{https://github.com/baleato}{\tt baleato})
+\item Add {\ttfamily from} parameter to the {\ttfamily am\+Time\+Ago} filter (\href{https://github.com/urish/angular-moment/pull/146}{\tt \#146}, contributed by \href{https://github.com/pipo02mix}{\tt pipo02mix})
+\end{DoxyItemize}
+
+\subsection*{0.\+10.\+1 -\/ 2015-\/05-\/01}
+
+
+\begin{DoxyItemize}
+\item Fix broken System\+J\+S/\+J\+S\+PM support (see \href{https://github.com/urish/angular-moment/issues/104}{\tt \#104})
+\end{DoxyItemize}
+
+\subsection*{0.\+10.\+0 -\/ 2015-\/04-\/10}
+
+
+\begin{DoxyItemize}
+\item Breaking change\+: removed one-\/time binding for {\ttfamily am-\/time-\/ago} in favor of Angular\+JS 1.\+3\textquotesingle{}s one time binding (\href{https://github.com/urish/angular-moment/issues/122}{\tt \#122})
+\item Remove support for Angular\+JS 1.\+0.\+x and 1.\+1.\+x.
+\item Support moment.\+js v2.\+10.\+x
+\item Support for displaying full dates in {\ttfamily am-\/time-\/ago} (see \href{https://github.com/urish/angular-moment/issues/75}{\tt \#75})
+\item Support Angular Core\textquotesingle{}s style Common\+JS standard (\href{https://github.com/urish/angular-moment/pull/123}{\tt \#123}, contributed by \href{https://github.com/seanhealy}{\tt seanhealy})
+\item Added an optional timezone parameter to am\+Date\+Format (\href{https://github.com/urish/angular-moment/pull/90}{\tt \#90}, contributed by \href{https://github.com/robertbrooker}{\tt robertbrooker})
+\end{DoxyItemize}
+
+\subsection*{0.\+9.\+2 -\/ 2015-\/03-\/17}
+
+
+\begin{DoxyItemize}
+\item Critical fix\+: npm install angular-\/moment fails (\href{https://github.com/urish/angular-moment/issues/121}{\tt \#121})
+\end{DoxyItemize}
+
+\subsection*{0.\+9.\+1 -\/ 2015-\/03-\/17}
+
+
+\begin{DoxyItemize}
+\item Add support for locale strings customization (\href{https://github.com/urish/angular-moment/pull/102}{\tt \#102}, contributed by \href{https://github.com/vosi}{\tt vosi})
+\item Add {\ttfamily am\+Difference} filter (\href{https://github.com/urish/angular-moment/pull/120}{\tt \#120}, contributed by \href{https://github.com/ajhodges}{\tt ajhodges})
+\item Support for changing the timezone via {\ttfamily am\+Moment.\+change\+Timezone()} (\href{https://github.com/urish/angular-moment/issues/92}{\tt \#92})
+\item Support for Angular\+JS 1.\+4.\+x
+\item Remove explicit module name for Require\+JS (\href{https://github.com/urish/angular-moment/pull/112}{\tt \#112}, contributed by \href{https://github.com/WilliamCarter}{\tt William\+Carter})
+\end{DoxyItemize}
+
+\subsection*{0.\+9.\+0 -\/ 2015-\/01-\/11}
+
+
+\begin{DoxyItemize}
+\item Support moment.\+js v2.\+9.\+0. See \href{https://gist.github.com/ichernev/0c9a9b49951111a27ce7}{\tt here} for changelog.
+\item Removed support for older moment.\+js versions. Only 2.\+8.\+0 and newer versions are now supported.
+\item Removed deprecated method\+: {\ttfamily am\+Moment.\+change\+Language()}. Use {\ttfamily am\+Moment.\+change\+Locale()} instead.
+\item Removed deprecated event\+: {\ttfamily am\+Moment\+:language\+Change}. Listen for {\ttfamily am\+Moment\+:locale\+Change} instead.
+\item Filters are now stateful by default (fixes \href{https://github.com/urish/angular-moment/issues/97}{\tt \#97}).
+\item The project is now available on \href{https://www.nuget.org/packages/angular-moment/}{\tt Nu\+Get} (\href{https://github.com/urish/angular-moment/pull/99}{\tt \#99}, contributed by \href{https://github.com/markvp}{\tt markvp}).
+\end{DoxyItemize}
+
+\subsection*{0.\+8.\+3 -\/ 2014-\/12-\/08}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily am\+Time\+Ago} filter (\href{https://github.com/urish/angular-moment/pull/96}{\tt \#96}, contributed by \href{https://github.com/maxklenk}{\tt maxklenk})
+\item Show formatted time as element title (\href{https://github.com/urish/angular-moment/pull/78}{\tt \#78}, contributed by \href{https://github.com/ctesene}{\tt ctesene})
+\item Support commonjs and browserify (\href{https://github.com/urish/angular-moment/pull/95}{\tt \#95}, contributed by \href{https://github.com/Pencroff}{\tt Pencroff})
+\item System\+JS Loader support (\href{https://github.com/urish/angular-moment/pull/85}{\tt \#85}, contributed by \href{https://github.com/capaj}{\tt capaj})
+\end{DoxyItemize}
+
+\subsection*{0.\+8.\+2 -\/ 2014-\/09-\/07}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily am\+Moment.\+change\+Language()} was deprecated in favor of {\ttfamily am\+Moment.\+change\+Locale()} (following \href{http://momentjs.com/docs/#/i18n/changing-locale/}{\tt a change} introduced in moment v2.\+8.\+1)
+\item Bugfix\+: changing the locale emitted a deprecation warning (see \href{https://github.com/urish/angular-moment/issues/76}{\tt \#76} for details).
+\end{DoxyItemize}
+
+\subsection*{0.\+8.\+1 -\/ 2014-\/09-\/01}
+
+
+\begin{DoxyItemize}
+\item Support moment.\+js v2.\+8.\+0. See \href{https://gist.github.com/ichernev/ac3899324a5fa6c8c9b4}{\tt here} for changelog.
+\item Support moment-\/timezone v0.\+2.\+1. See \href{https://github.com/moment/moment-timezone/blob/develop/changelog.md#021-2014-08-02}{\tt here} for changelog.
+\item Bugfix\+: {\ttfamily update\+Time()} is called too often for future dates (\href{https://github.com/urish/angular-moment/issues/73}{\tt \#73})
+\end{DoxyItemize}
+
+\subsection*{0.\+8.\+0 -\/ 2014-\/07-\/26}
+
+
+\begin{DoxyItemize}
+\item Generate source map for the minified version (\href{https://github.com/urish/angular-moment/issues/50}{\tt \#50})
+\item Add support H\+T\+ML {\ttfamily $<$time$>$} element -\/ set the {\ttfamily datetime} attribute (\href{https://github.com/urish/angular-moment/pull/41}{\tt \#41}, contributed by \href{https://github.com/gsklee}{\tt gsklee})
+\item Add default format (angular\+Moment\+Config.\+format config property) (\href{https://github.com/urish/angular-moment/pull/52}{\tt \#52}, contributed by \href{https://github.com/otang}{\tt otang})
+\item Add {\ttfamily server\+Time} configuration option (\href{https://github.com/urish/angular-moment/pull/53}{\tt \#53}, contributed by \href{https://github.com/Facuu7}{\tt Facundo Pedrazzini})
+\item Implement one-\/time binding for {\ttfamily am-\/time-\/ago} (\href{https://github.com/urish/angular-moment/pull/54}{\tt \#54}, contributed by \href{https://github.com/ephigabay}{\tt Ephi Gabay})
+\item Support moment.\+js v2.\+7.\+0. See \href{https://gist.github.com/ichernev/b0a3d456d5a84c9901d7}{\tt here} for changelog.
+\item Support moment-\/timezone v0.\+1.\+0. See \href{https://github.com/moment/moment-timezone/blob/develop/changelog.md#010-2014-06-23}{\tt here} for changelog.
+\end{DoxyItemize}
+
+\subsection*{0.\+7.\+1 -\/ 2014-\/05-\/16}
+
+
+\begin{DoxyItemize}
+\item bugfix\+: Preprocess set in configuration not used by filters (\href{https://github.com/urish/angular-moment/issues/49}{\tt \#49})
+\end{DoxyItemize}
+
+\subsection*{0.\+7.\+0 -\/ 2014-\/04-\/19}
+
+
+\begin{DoxyItemize}
+\item Use {\ttfamily moment} as an injectable constant instead of relying on {\ttfamily \$window.\+moment} (\href{https://github.com/urish/angular-moment/pull/35}{\tt \#35}, contributed by \href{https://github.com/just-boris}{\tt just-\/boris})
+\item Require.\+js support (\href{https://github.com/urish/angular-moment/issues/36}{\tt \#36})
+\item Add am-\/preprocess attribute to support unix and utc timestamps (\href{https://github.com/urish/angular-moment/pull/38}{\tt \#38}, contributed by \href{https://github.com/jspaper}{\tt jspaper})
+\item N\+G\+Doc documentation (\href{https://github.com/urish/angular-moment/issues/40}{\tt \#40})
+\item Enable support for Angular\+JS 1.\+3.\+x in bower.\+json
+\item Support moment.\+js v2.\+6.\+0. See \href{https://gist.github.com/ichernev/10544682}{\tt here} for changelog.
+\end{DoxyItemize}
+
+\subsection*{0.\+6.\+2 -\/ 2014-\/02-\/05}
+
+
+\begin{DoxyItemize}
+\item Add {\ttfamily am\+Moment} service with a {\ttfamily change\+Language()} method (\href{https://github.com/urish/angular-moment/pull/32}{\tt \#32}, contributed by \href{https://github.com/Ornthalas}{\tt Ornthalas})
+\item bower.\+json\+: Move {\ttfamily moment-\/timezone} to dev\+Dependencies (fixes \href{https://github.com/urish/angular-moment/issues/34}{\tt \#34})
+\end{DoxyItemize}
+
+\subsection*{0.\+6.\+1 -\/ 2014-\/01-\/31}
+
+
+\begin{DoxyItemize}
+\item Add optional timezone support to {\ttfamily am\+Calendar} and {\ttfamily am\+Date\+Format} filters (\href{https://github.com/urish/angular-moment/pull/27}{\tt \#27}, contributed by \href{https://github.com/kayhadrin}{\tt kayhadrin})
+\item Happy Year of the Horse!
+\end{DoxyItemize}
+
+\subsection*{0.\+6.\+0 -\/ 2013-\/12-\/24}
+
+
+\begin{DoxyItemize}
+\item Add optional {\ttfamily am-\/without-\/suffix} attribute to {\ttfamily am-\/time-\/ago} (\href{https://github.com/urish/angular-moment/issues/22}{\tt \#22}, contributed by \href{https://github.com/hramaker}{\tt hramaker})
+\item Support moment.\+js v2.\+5.\+0. See \href{https://gist.github.com/ichernev/8104451}{\tt here} for changelog.
+\item Merry Christmas!
+\end{DoxyItemize}
+
+\subsection*{0.\+5.\+2 -\/ 2013-\/11-\/17}
+
+
+\begin{DoxyItemize}
+\item Add {\ttfamily am\+Calendar} filter (\href{https://github.com/urish/angular-moment/issues/24}{\tt \#24}, contributed by \href{https://github.com/OndraM}{\tt OndraM})
+\end{DoxyItemize}
+
+\subsection*{0.\+5.\+1 -\/ 2013-\/11-\/09}
+
+
+\begin{DoxyItemize}
+\item Add {\ttfamily am\+Duration} filter (\href{https://github.com/urish/angular-moment/issues/20}{\tt \#20}, contributed by \href{https://github.com/gabrielstuff}{\tt gabrielstuff})
+\end{DoxyItemize}
+
+\subsection*{0.\+5.\+0 -\/ 2013-\/11-\/02}
+
+
+\begin{DoxyItemize}
+\item Use \$window.\+set\+Timeout instead of \$timeout, fixes protractor synchronization issue (\href{https://github.com/urish/angular-moment/issues/19}{\tt \#19})
+\end{DoxyItemize}
+
+\subsection*{0.\+4.\+2 -\/ 2013-\/10-\/30}
+
+
+\begin{DoxyItemize}
+\item Add settings constant for configuring moment.\+js without\+Suffix-\/option (\href{https://github.com/urish/angular-moment/pull/18}{\tt \#18})
+\end{DoxyItemize}
+
+\subsection*{0.\+4.\+1 -\/ 2013-\/10-\/27}
+
+
+\begin{DoxyItemize}
+\item Support moment.\+js v2.\+4.\+0. See \href{https://github.com/moment/moment/#240}{\tt here} for changelog.
+\end{DoxyItemize}
+
+\subsection*{0.\+4.\+0 -\/ 2013-\/10-\/08}
+
+
+\begin{DoxyItemize}
+\item Support moment.\+js v2.\+3.\+0. See \href{https://gist.github.com/ichernev/6864354}{\tt here} for possibly breaking changes.
+\end{DoxyItemize}
+
+\subsection*{0.\+3.\+0 -\/ 2013-\/10-\/07}
+
+
+\begin{DoxyItemize}
+\item Bugfix\+: {\ttfamily am-\/time-\/ago} support for empty string (\href{https://github.com/urish/angular-moment/issues/15}{\tt \#15})
+\item Behavior change\+: {\ttfamily am-\/time-\/ago} will only change the text once there is date
+\end{DoxyItemize}
+
+\subsection*{0.\+2.\+2 -\/ 2013-\/09-\/29}
+
+
+\begin{DoxyItemize}
+\item Add support for passing unix timestamp as a string to {\ttfamily am\+Date\+Format} filter (\href{https://github.com/urish/angular-moment/issues/14}{\tt \#14})
+\end{DoxyItemize}
+
+\subsection*{0.\+2.\+1 -\/ 2013-\/09-\/13}
+
+
+\begin{DoxyItemize}
+\item Fix an issue with tests failing on a different timezone
+\item Support moment 2.\+2.\+x, Angular\+JS 1.\+2
+\end{DoxyItemize}
+
+\subsection*{0.\+2.\+0 -\/ 2013-\/08-\/22}
+
+
+\begin{DoxyItemize}
+\item Add optional {\ttfamily am-\/format} attribute to {\ttfamily am-\/time-\/ago} (\href{https://github.com/urish/angular-moment/issues/11}{\tt \#11})
+\item Add new {\ttfamily am\+Date\+Format} filter (\href{https://github.com/urish/angular-moment/issues/12}{\tt \#12})
+\item Add changelog file
+\end{DoxyItemize}
+
+\subsection*{0.\+1.\+1 -\/ 2013-\/06-\/08}
+
+
+\begin{DoxyItemize}
+\item Fix to support i\+OS (\href{https://github.com/urish/angular-moment/pull/2}{\tt \#2}, contributed by \href{https://github.com/giuseppeaiello}{\tt giuseppeaiello})
+\end{DoxyItemize}
+
+\subsection*{0.\+1.\+0 -\/ 2013-\/05-\/27}
+
+
+\begin{DoxyItemize}
+\item Initial release 
+\end{DoxyItemize}

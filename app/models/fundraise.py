@@ -1,3 +1,6 @@
+"""
+In developpement.
+"""
 from mongokat import Collection, Document
 from .clients import client
 

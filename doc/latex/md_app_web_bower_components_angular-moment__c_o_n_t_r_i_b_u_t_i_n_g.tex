@@ -1,0 +1,67 @@
+Contributing to {\ttfamily angular-\/moment} is fairly easy. This document shows you how to get the project, run all provided tests and generate a production ready build.
+
+It also covers provided grunt tasks, that help you developing on {\ttfamily angular-\/moment}.
+
+\subsection*{Dependencies}
+
+To make sure, that the following instructions work, please install the following dependencies on you machine\+:
+
+
+\begin{DoxyItemize}
+\item Node.\+js
+\item npm
+\item Git
+\end{DoxyItemize}
+
+\subsection*{Installation}
+
+To get the source of {\ttfamily angular-\/moment} clone the git repository via\+:
+
+{\ttfamily git clone \href{https://github.com/urish/angular-moment}{\tt https\+://github.\+com/urish/angular-\/moment}}
+
+This will clone the complete source to your local machine. Navigate to the project folder and install all needed dependencies via {\bfseries npm}\+:
+
+{\ttfamily npm install}
+
+To complete the installation, install the frontend (bower) dependencies by running the following command\+:
+
+{\ttfamily npm run bower}
+
+Well done! angular-\/moment is now installed and ready to be built.
+
+\subsection*{Building}
+
+{\ttfamily angular-\/moment} comes with a few {\bfseries grunt tasks} which help you to automate the development process. The following grunt tasks are provided\+:
+
+\paragraph*{grunt test}
+
+{\ttfamily npm test} executes (as you might thought) the unit tests, which are located in {\ttfamily tests.\+js}. The task uses the {\bfseries karma} test runner to executes the tests with the {\bfseries jasmine testing framework}. This task also checks the coding using {\bfseries jshint}.
+
+\paragraph*{grunt build}
+
+{\ttfamily npm run build} updates the minified version of the code (angular-\/moment.\+min.\+js). It also checks the code using {\bfseries jshint}.
+
+\subsection*{Contributing/\+Submitting changes}
+
+
+\begin{DoxyItemize}
+\item Checkout a new branch based on {\ttfamily master} and name it to what you intend to do\+:
+\begin{DoxyItemize}
+\item Example\+: ```` \$ git checkout -\/b B\+R\+A\+N\+C\+H\+\_\+\+N\+A\+ME ````
+\item Use one branch per fix/feature
+\end{DoxyItemize}
+\item Make your changes
+\begin{DoxyItemize}
+\item Make sure to provide a spec for unit tests (in {\ttfamily tests.\+js})
+\item Run your tests with {\ttfamily npm test}
+\item When all tests pass, everything\textquotesingle{}s fine
+\end{DoxyItemize}
+\item Commit your changes
+\begin{DoxyItemize}
+\item Please provide a git message which explains what you\textquotesingle{}ve done
+\item Commit to the forked repository
+\end{DoxyItemize}
+\item Make a pull request
+\end{DoxyItemize}
+
+If you follow these instructions, your PR will land pretty safety in the main repo! 

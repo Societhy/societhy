@@ -1,0 +1,243 @@
+Bower Component for using Angular\+JS with \href{http://socket.io/}{\tt Socket.\+IO}, based on \href{http://briantford.com/blog/angular-socket-io.html}{\tt this}.
+
+\subsection*{Install}
+
+
+\begin{DoxyEnumerate}
+\item {\ttfamily bower install angular-\/socket-\/io} or \href{https://github.com/btford/angular-socket-io/archive/master.zip}{\tt download the zip}.
+\item Make sure the Socket.\+IO client lib is loaded. It\textquotesingle{}s often served at {\ttfamily /socket.io/socket.\+io.\+js}.
+\item Include the {\ttfamily socket.\+js} script provided by this component into your app.
+\item Add {\ttfamily btford.\+socket-\/io} as a module dependency to your app.
+\end{DoxyEnumerate}
+
+\subsection*{Usage}
+
+This module exposes a {\ttfamily socket\+Factory}, which is an A\+PI for instantiating sockets that are integrated with Angular\textquotesingle{}s digest cycle.
+
+\subsubsection*{Making a Socket Instance}
+
+
+\begin{DoxyCode}
+// in the top-level module of the app
+angular.module('myApp', [
+  'btford.socket-io',
+  'myApp.MyCtrl'
+]).
+factory('mySocket', function (socketFactory) \{
+  return socketFactory();
+\});
+\end{DoxyCode}
+
+
+With that, you can inject your {\ttfamily my\+Socket} service into controllers and other serivices within your application!
+
+\subsubsection*{Using Your Socket Instance}
+
+Building on the example above\+:
+
+
+\begin{DoxyCode}
+// in the top-level module of the app
+angular.module('myApp', [
+  'btford.socket-io',
+  'myApp.MyCtrl'
+]).
+factory('mySocket', function (socketFactory) \{
+  return socketFactory();
+\}).
+controller('MyCtrl', function (mySocket) \{
+  // ...
+\});
+\end{DoxyCode}
+
+
+\subsection*{A\+PI}
+
+For the most part, this component works exactly like you would expect. The only A\+PI addition is {\ttfamily socket.\+forward}, which makes it easier to add/remove listeners in a way that works with \href{http://docs.angularjs.org/api/ng.$rootScope.Scope}{\tt Angular\+JS\textquotesingle{}s scope}.
+
+\subsubsection*{{\ttfamily socket.\+on} / {\ttfamily socket.\+add\+Listener}}
+
+Takes an event name and callback. Works just like the method of the same name from Socket.\+IO.
+
+\subsubsection*{{\ttfamily socket.\+remove\+Listener}}
+
+Takes an event name and callback. Works just like the method of the same name from Socket.\+IO.
+
+\subsubsection*{{\ttfamily socket.\+remove\+All\+Listeners}}
+
+Takes an event name. Works just like the method of the same name from Socket.\+IO.
+
+\subsubsection*{{\ttfamily socket.\+emit}}
+
+Sends a message to the server. Optionally takes a callback.
+
+Works just like the method of the same name from Socket.\+IO.
+
+\subsubsection*{{\ttfamily socket.\+forward}}
+
+{\ttfamily socket.\+forward} allows you to forward the events received by Socket.\+IO\textquotesingle{}s socket to Angular\+JS\textquotesingle{}s event system. You can then listen to the event with {\ttfamily \$scope.\$on}. By default, socket-\/forwarded events are namespaced with {\ttfamily socket\+:}.
+
+The first argument is a string or array of strings listing the event names to be forwarded. The second argument is optional, and is the scope on which the events are to be broadcast. If an argument is not provided, it defaults to {\ttfamily \$root\+Scope}. As a reminder, broadcasted events are propagated down to descendant scopes.
+
+\paragraph*{Examples}
+
+An easy way to make socket error events available across your app\+:
+
+
+\begin{DoxyCode}
+// in the top-level module of the app
+angular.module('myApp', [
+  'btford.socket-io',
+  'myApp.MyCtrl'
+]).
+factory('mySocket', function (socketFactory) \{
+  var mySocket = socketFactory();
+  mySocket.forward('error');
+  return mySocket;
+\});
+
+// in one of your controllers
+angular.module('myApp.MyCtrl', []).
+  controller('MyCtrl', function ($scope) \{
+    $scope.$on('socket:error', function (ev, data) \{
+
+    \});
+  \});
+\end{DoxyCode}
+
+
+Avoid duplicating event handlers when a user navigates back and forth between routes\+:
+
+
+\begin{DoxyCode}
+angular.module('myMod', ['btford.socket-io']).
+  controller('MyCtrl', function ($scope, socket) \{
+    socket.forward('someEvent', $scope);
+    $scope.$on('socket:someEvent', function (ev, data) \{
+      $scope.theData = data;
+    \});
+  \});
+\end{DoxyCode}
+
+
+\subsubsection*{{\ttfamily socket\+Factory(\{ io\+Socket\+: \}\}}}
+
+This option allows you to provide the {\ttfamily socket} service with a {\ttfamily Socket.\+IO socket} object to be used internally. This is useful if you want to connect on a different path, or need to hold a reference to the {\ttfamily Socket.\+IO socket} object for use elsewhere.
+
+
+\begin{DoxyCode}
+angular.module('myApp', [
+  'btford.socket-io'
+]).
+factory('mySocket', function (socketFactory) \{
+  var myIoSocket = io.connect('/some/path');
+
+  mySocket = socketFactory(\{
+    ioSocket: myIoSocket
+  \});
+
+  return mySocket;
+\});
+\end{DoxyCode}
+
+
+\subsubsection*{{\ttfamily socket\+Factory(\{ scope\+: \})}}
+
+This option allows you to set the scope on which {\ttfamily \$broadcast} is forwarded to when using the {\ttfamily forward} method. It defaults to {\ttfamily \$root\+Scope}.
+
+\subsubsection*{{\ttfamily socket\+Factory(\{ prefix\+: \})}}
+
+The default prefix is {\ttfamily socket\+:}.
+
+\paragraph*{Example}
+
+To remove the prefix\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', [
+  'btford.socket-io'
+]).
+config(function (socketProvider) \{
+  socketProvider.prefix('');
+\});
+\end{DoxyCode}
+
+
+\subsection*{Migrating from 0.\+2 to 0.\+3}
+
+{\ttfamily angular-\/socket-\/io} version {\ttfamily 0.\+3} changes X to make fewer assumptions about the lifecycle of the socket. Previously, the assumption was that your application has a single socket created at config time. While this holds for most apps I\textquotesingle{}ve seen, there\textquotesingle{}s no reason you shouldn\textquotesingle{}t be able to lazily create sockets, or have multiple connections.
+
+In {\ttfamily 0.\+2}, {\ttfamily angular-\/socket-\/io} exposed a {\ttfamily socket} service. In {\ttfamily 0.\+3}, it instead exposes a {\ttfamily socket\+Factory} service which returns socket instances. Thus, getting the old A\+PI is as simple as making your own {\ttfamily socket} service with {\ttfamily socket\+Factory}. The examples below demonstrate how to do this.
+
+\subsubsection*{Simple Example}
+
+In most cases, adding the following to your app should suffice\+:
+
+
+\begin{DoxyCode}
+// ...
+factory('socket', function (socketFactory) \{
+  return socketFactory();
+\});
+// ...
+\end{DoxyCode}
+
+
+\subsubsection*{Example with Configuration}
+
+Before\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', [
+  'btford.socket-io'
+]).
+config(function (socketProvider) \{
+  socketProvider.prefix('foo~');
+  socketProvider.ioSocket(io.connect('/some/path'));
+\}).
+controller('MyCtrl', function (socket) \{
+  socket.on('foo~bar', function () \{
+    $scope.bar = true;
+  \});
+\});
+\end{DoxyCode}
+
+
+After\+:
+
+
+\begin{DoxyCode}
+angular.module('myApp', [
+  'btford.socket-io'
+]).
+factory('socket', function (socketFactory) \{
+  return socketFactory(\{
+    prefix: 'foo~',
+    ioSocket: io.connect('/some/path')
+  \});
+\}).
+controller('MyCtrl', function (socket) \{
+  socket.on('foo~bar', function () \{
+    $scope.bar = true;
+  \});
+\});
+\end{DoxyCode}
+
+
+\subsection*{F\+AQ}
+
+\href{https://github.com/btford/angular-socket-io/issues?labels=faq&page=1&state=closed}{\tt Closed issues labelled {\ttfamily F\+AQ}} might have the answer to your question.
+
+\subsection*{See Also}
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/jeffbcross/ngSocket}{\tt ng\+Socket}
+\item \href{https://github.com/nullivex/angular-socket.io-mock}{\tt angular-\/socket.\+io-\/mock}
+\end{DoxyItemize}
+
+\subsection*{License}
+
+M\+IT 

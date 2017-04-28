@@ -1,0 +1,158 @@
+\hypertarget{namespaceapp_1_1core_1_1base__orga}{}\section{app.\+core.\+base\+\_\+orga Namespace Reference}
+\label{namespaceapp_1_1core_1_1base__orga}\index{app.\+core.\+base\+\_\+orga@{app.\+core.\+base\+\_\+orga}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_aed2475cedbcb473df07a6a37ff8193f3}{get\+Orga\+Document} (user, \+\_\+id=None, name=None)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_ad1d50f9c6e937bf46e72dfa1f6673eaa}{get\+All\+Organizations} ()
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_acd280d85676753be745926d2671511b3}{create\+Orga} (user, password, new\+Orga)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_a389521656081e40b458b98e094339a1a}{add\+Orga\+Profile\+Picture} (user, orga\+\_\+id, pic, pic\+\_\+type)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_aa6e75965aff943ba9256f81c4d18e7bf}{add\+Orga\+Documents} (user, orga\+\_\+id, doc, name, doc\+\_\+type)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_af8f9957c34970929893659a4b5bdb366}{get\+Orga\+Uploaded\+Document} (user, doc\+\_\+id, doc\+\_\+name)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_a3e303f8a7ab093778a9a731691641cf9}{join\+Orga} (user, password, orga\+\_\+id, tag=\char`\"{}member\char`\"{})
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_a164bcc0870cbdc1a3648579c1a69180b}{get\+Orga\+Member\+List} (user, orga\+\_\+id)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_a0b363c7014b086738ef903e369e87afa}{donate\+To\+Orga} (user, password, orga\+\_\+id, donation)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_a57934420089a447f535554b1067fa853}{create\+Project\+From\+Orga} (user, password, orga\+\_\+id, new\+Project)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1base__orga_aaa386431ed6a09fef2fc05fdc56070a3}{leave\+Orga} (user, password, orga\+\_\+id)
+\item 
+\mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_ac0e50a38f97fc18be33d64679f026373}\label{namespaceapp_1_1core_1_1base__orga_ac0e50a38f97fc18be33d64679f026373}} 
+def {\bfseries get\+Histo} (token, orga\+\_\+id, date)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}This module is fot hangling all the basic organisations-related requests.
+Every function is defined by her own.
+\end{DoxyVerb}
+ 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_aa6e75965aff943ba9256f81c4d18e7bf}\label{namespaceapp_1_1core_1_1base__orga_aa6e75965aff943ba9256f81c4d18e7bf}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!add\+Orga\+Documents@{add\+Orga\+Documents}}
+\index{add\+Orga\+Documents@{add\+Orga\+Documents}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{add\+Orga\+Documents()}{addOrgaDocuments()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+add\+Orga\+Documents (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{orga\+\_\+id,  }\item[{}]{doc,  }\item[{}]{name,  }\item[{}]{doc\+\_\+type }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : user model document that represent the user who made the request.
+orga_id : id of the organisation the user want to add documents.
+doc : document bytes
+name : document name
+doc_type : MIME type of the document.
+
+This function insert in the database documents related to a given organisation.
+Thanks to the GridFS sytem, documents can be inserted in a database without performance loss.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_a389521656081e40b458b98e094339a1a}\label{namespaceapp_1_1core_1_1base__orga_a389521656081e40b458b98e094339a1a}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!add\+Orga\+Profile\+Picture@{add\+Orga\+Profile\+Picture}}
+\index{add\+Orga\+Profile\+Picture@{add\+Orga\+Profile\+Picture}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{add\+Orga\+Profile\+Picture()}{addOrgaProfilePicture()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+add\+Orga\+Profile\+Picture (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{orga\+\_\+id,  }\item[{}]{pic,  }\item[{}]{pic\+\_\+type }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : user model document that represent the user who made the request.
+orga_id : id of the organisation the user want to add a profile picture.
+pic : the photo's bytes.
+pic_type : the MIME type of the photo. e.g. : image/jpeg.
+
+This function insert in the database the new photo of a given organisation.
+Thanks to the GridFS sytem, photos can be inserted in a database without performance loss.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_acd280d85676753be745926d2671511b3}\label{namespaceapp_1_1core_1_1base__orga_acd280d85676753be745926d2671511b3}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!create\+Orga@{create\+Orga}}
+\index{create\+Orga@{create\+Orga}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{create\+Orga()}{createOrga()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+create\+Orga (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{password,  }\item[{}]{new\+Orga }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : user model document that represent the user who made the request.
+password : password of the user's ethereum wallet. Needed to trigger the action on the blockchain.
+newOrga : define the organisation the user want to create.
+
+The purpose of this function is to create an new organisation on Sociehty.
+It first unlock the ethereum account of the user who want to create an organisation.
+Then, it instanciate a new organisation model documentation.
+Then, it try to deploy the contract who represent the organisation on the blockchain.
+Status 200 is returned if all is OK, if not 400 is returned.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_a57934420089a447f535554b1067fa853}\label{namespaceapp_1_1core_1_1base__orga_a57934420089a447f535554b1067fa853}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!create\+Project\+From\+Orga@{create\+Project\+From\+Orga}}
+\index{create\+Project\+From\+Orga@{create\+Project\+From\+Orga}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{create\+Project\+From\+Orga()}{createProjectFromOrga()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+create\+Project\+From\+Orga (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{password,  }\item[{}]{orga\+\_\+id,  }\item[{}]{new\+Project }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Ceci est un test de documentation
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_a0b363c7014b086738ef903e369e87afa}\label{namespaceapp_1_1core_1_1base__orga_a0b363c7014b086738ef903e369e87afa}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!donate\+To\+Orga@{donate\+To\+Orga}}
+\index{donate\+To\+Orga@{donate\+To\+Orga}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{donate\+To\+Orga()}{donateToOrga()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+donate\+To\+Orga (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{password,  }\item[{}]{orga\+\_\+id,  }\item[{}]{donation }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Ceci est un test de documentation
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_ad1d50f9c6e937bf46e72dfa1f6673eaa}\label{namespaceapp_1_1core_1_1base__orga_ad1d50f9c6e937bf46e72dfa1f6673eaa}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!get\+All\+Organizations@{get\+All\+Organizations}}
+\index{get\+All\+Organizations@{get\+All\+Organizations}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{get\+All\+Organizations()}{getAllOrganizations()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+get\+All\+Organizations (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Return all the registered organisations.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_aed2475cedbcb473df07a6a37ff8193f3}\label{namespaceapp_1_1core_1_1base__orga_aed2475cedbcb473df07a6a37ff8193f3}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!get\+Orga\+Document@{get\+Orga\+Document}}
+\index{get\+Orga\+Document@{get\+Orga\+Document}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{get\+Orga\+Document()}{getOrgaDocument()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+get\+Orga\+Document (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{\+\_\+id = {\ttfamily None},  }\item[{}]{name = {\ttfamily None} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : user model document that represent the user who made the request.
+id : ObjectId who represent the organisation.
+name : name of the orga
+You must provide id OR name.
+
+The function will return a description of the requested organisation and the associated rights.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_a164bcc0870cbdc1a3648579c1a69180b}\label{namespaceapp_1_1core_1_1base__orga_a164bcc0870cbdc1a3648579c1a69180b}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!get\+Orga\+Member\+List@{get\+Orga\+Member\+List}}
+\index{get\+Orga\+Member\+List@{get\+Orga\+Member\+List}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{get\+Orga\+Member\+List()}{getOrgaMemberList()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+get\+Orga\+Member\+List (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{orga\+\_\+id }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : UserDoc
+orga_id : string for the mongo id
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_af8f9957c34970929893659a4b5bdb366}\label{namespaceapp_1_1core_1_1base__orga_af8f9957c34970929893659a4b5bdb366}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!get\+Orga\+Uploaded\+Document@{get\+Orga\+Uploaded\+Document}}
+\index{get\+Orga\+Uploaded\+Document@{get\+Orga\+Uploaded\+Document}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{get\+Orga\+Uploaded\+Document()}{getOrgaUploadedDocument()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+get\+Orga\+Uploaded\+Document (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{doc\+\_\+id,  }\item[{}]{doc\+\_\+name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user : user model document that represent the user who made the request.
+doc_id : id of the document user want to retrieve.
+do_name : name of the document user want to retrieve.
+
+This fuction allow user to download a document who has been previously uploaded.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_a3e303f8a7ab093778a9a731691641cf9}\label{namespaceapp_1_1core_1_1base__orga_a3e303f8a7ab093778a9a731691641cf9}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!join\+Orga@{join\+Orga}}
+\index{join\+Orga@{join\+Orga}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{join\+Orga()}{joinOrga()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+join\+Orga (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{password,  }\item[{}]{orga\+\_\+id,  }\item[{}]{tag = {\ttfamily \char`\"{}member\char`\"{}} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1base__orga_aaa386431ed6a09fef2fc05fdc56070a3}\label{namespaceapp_1_1core_1_1base__orga_aaa386431ed6a09fef2fc05fdc56070a3}} 
+\index{app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}!leave\+Orga@{leave\+Orga}}
+\index{leave\+Orga@{leave\+Orga}!app\+::core\+::base\+\_\+orga@{app\+::core\+::base\+\_\+orga}}
+\subsubsection{\texorpdfstring{leave\+Orga()}{leaveOrga()}}
+{\footnotesize\ttfamily def app.\+core.\+base\+\_\+orga.\+leave\+Orga (\begin{DoxyParamCaption}\item[{}]{user,  }\item[{}]{password,  }\item[{}]{orga\+\_\+id }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Ceci est un test de documentation
+\end{DoxyVerb}
+ 

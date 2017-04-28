@@ -1,0 +1,316 @@
+This is the Java\+Script S\+DK for \href{https://oauth.io}{\tt O\+Auth.\+io}. O\+Auth.\+io allows you to integrate {\bfseries 100+ providers} really easily in your web app, without worrying about each provider\textquotesingle{}s O\+Auth specific implementation.
+
+\section*{Installation }
+
+\subsection*{Getting the S\+DK }
+
+To get the S\+DK, you can \+:
+
+
+\begin{DoxyItemize}
+\item download the zip file from this repository
+\item get it via Bower or npm (for browserify)
+\end{DoxyItemize}
+
+{\bfseries Zip file}
+
+Just copy the dist/oauth.\+js or dist/oauth.\+min.\+js to your project.
+
+{\bfseries Bower}
+
+
+\begin{DoxyCode}
+$ bower install oauthio-web
+\end{DoxyCode}
+
+
+{\bfseries npm for browserify}
+
+
+\begin{DoxyCode}
+$ npm install oauthio-web
+\end{DoxyCode}
+
+
+\subsection*{Integrating in your project }
+
+In the {\ttfamily $<$head$>$} of your H\+T\+ML, include O\+Auth.\+js
+
+{\ttfamily $<$script src=\char`\"{}/path/to/oauth.\+js\char`\"{}$>$$<$/script$>$}
+
+In your Javascript, add this line to initialize O\+Auth.\+js
+
+`\+O\+Auth.initialize(\textquotesingle{}your\+\_\+app\+\_\+public\+\_\+key\textquotesingle{});`
+
+\section*{Usage }
+
+To connect your user using facebook, 2 methods\+:
+
+\subsection*{Popup mode }
+
+
+\begin{DoxyCode}
+//Using popup (option 1)
+OAuth.popup('facebook')
+.done(function(result) \{
+  //use result.access\_token in your API request 
+  //or use result.get|post|put|del|patch|me methods (see below)
+\})
+.fail(function (err) \{
+  //handle error with err
+\});
+\end{DoxyCode}
+
+
+\subsection*{Redirection mode }
+
+
+\begin{DoxyCode}
+//Using redirection (option 2)
+OAuth.redirect('facebook', "callback/url");
+\end{DoxyCode}
+
+
+In callback url \+:
+
+
+\begin{DoxyCode}
+OAuth.callback('facebook')
+.done(function(result) \{
+    //use result.access\_token in your API request
+    //or use result.get|post|put|del|patch|me methods (see below)
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+\subsection*{Making requests }
+
+You can make requests to the provider\textquotesingle{}s A\+PI manually with the access token you got from the {\ttfamily popup} or {\ttfamily callback} methods, or use the request methods stored in the {\ttfamily result} object.
+
+{\bfseries G\+ET Request}
+
+To make a G\+ET request, you have to call the {\ttfamily result.\+get} method like this \+:
+
+
+\begin{DoxyCode}
+//Let's say the /me endpoint on the provider API returns a JSON object
+//with the field "name" containing the name "John Doe"
+OAuth.popup(provider)
+.done(function(result) \{
+    result.get('/me')
+    .done(function (response) \{
+        //this will display "John Doe" in the console
+        console.log(response.name);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\bfseries P\+O\+ST Request}
+
+To make a P\+O\+ST request, you have to call the {\ttfamily result.\+post} method like this \+:
+
+
+\begin{DoxyCode}
+//Let's say the /message endpoint on the provider waits for
+//a POST request containing the fields "user\_id" and "content"
+//and returns the field "id" containing the id of the sent message 
+OAuth.popup(provider)
+.done(function(result) \{
+    result.post('/message', \{
+        data: \{
+            user\_id: 93,
+            content: 'Hello Mr. 93 !'
+        \}
+    \})
+    .done(function (response) \{
+        //this will display the id of the message in the console
+        console.log(response.id);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\bfseries P\+UT Request}
+
+To make a P\+UT request, you have to call the {\ttfamily result.\+post} method like this \+:
+
+
+\begin{DoxyCode}
+//Let's say the /profile endpoint on the provider waits for
+//a PUT request to update the authenticated user's profile 
+//containing the field "name" and returns the field "name" 
+//containing the new name
+OAuth.popup(provider)
+.done(function(result) \{
+    result.put('/message', \{
+        data: \{
+            name: "John Williams Doe III"
+        \}
+    \})
+    .done(function (response) \{
+        //this will display the new name in the console
+        console.log(response.name);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\bfseries P\+A\+T\+CH Request}
+
+To make a P\+A\+T\+CH request, you have to call the {\ttfamily result.\+patch} method like this \+:
+
+
+\begin{DoxyCode}
+//Let's say the /profile endpoint on the provider waits for
+//a PATCH request to update the authenticated user's profile 
+//containing the field "name" and returns the field "name" 
+//containing the new name
+OAuth.popup(provider)
+.done(function(result) \{
+    result.patch('/message', \{
+        data: \{
+            name: "John Williams Doe III"
+        \}
+    \})
+    .done(function (response) \{
+        //this will display the new name in the console
+        console.log(response.name);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\bfseries D\+E\+L\+E\+TE Request}
+
+To make a D\+E\+L\+E\+TE request, you have to call the {\ttfamily result.\+del} method like this \+:
+
+
+\begin{DoxyCode}
+//Let's say the /picture?id=picture\_id endpoint on the provider waits for
+//a DELETE request to delete a picture with the id "84"
+//and returns true or false depending on the user's rights on the picture
+OAuth.popup(provider)
+.done(function(result) \{
+    result.del('/picture?id=84')
+    .done(function (response) \{
+        //this will display true if the user was authorized to delete
+        //the picture
+        console.log(response);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\bfseries Me() Request}
+
+The {\ttfamily me()} request is an O\+Auth.\+io feature that allows you, when the provider is supported, to retrieve a unified object describing the authenticated user. That can be very useful when you need to login a user via several providers, but don\textquotesingle{}t want to handle a different response each time.
+
+To use the {\ttfamily me()} feature, do like the following (the example works for Facebook, Github, Twitter and many other providers in this case) \+:
+
+
+\begin{DoxyCode}
+//provider can be 'facebook', 'twitter', 'github', or any supported
+//provider that contain the fields 'firstname' and 'lastname' 
+//or an equivalent (e.g. "FirstName" or "first-name")
+var provider = 'facebook';
+
+OAuth.popup(provider)
+.done(function(result) \{
+    result.me()
+    .done(function (response) \{
+        console.log('Firstname: ', response.firstname);
+        console.log('Lastname: ', response.lastname);
+    \})
+    .fail(function (err) \{
+        //handle error with err
+    \});
+\})
+.fail(function (err) \{
+    //handle error with err
+\});
+\end{DoxyCode}
+
+
+{\itshape Filtering the results}
+
+You can filter the results of the {\ttfamily me()} method by passing an array of fields you need \+:
+
+
+\begin{DoxyCode}
+//...
+result.me(['firstname', 'lastname', 'email'/*, ...*/])
+//...
+\end{DoxyCode}
+
+
+\section*{Contributing }
+
+You are welcome to fork and make pull requests. We will be happy to review them and include them in the code if they bring nice improvements \+:)
+
+\section*{Testing the S\+DK }
+
+To test the S\+DK, you first need to install the npm modules {\ttfamily jasmine-\/node} and {\ttfamily istanbul} (to get the tests coverage) \+:
+
+
+\begin{DoxyCode}
+$ sudo npm install -g jasmine-node@2.0.0 istanbul
+\end{DoxyCode}
+
+
+Then you can run the testsuite from the S\+DK root directory \+:
+
+
+\begin{DoxyCode}
+$ jasmine-node --verbose tests/unit/spec
+\end{DoxyCode}
+
+
+Once you\textquotesingle{}ve installed {\ttfamily istanbul}, you can run the following command to get coverage information \+:
+
+
+\begin{DoxyCode}
+$ npm test
+\end{DoxyCode}
+
+
+The coverage report is generated in the {\ttfamily coverage} folder. You can have a nice H\+T\+ML render of the report in {\ttfamily coverage/lcof-\/report/index.\+html}
+
+\section*{License }
+
+This S\+DK is published under the Apache2 License.
+
+More information in \href{http://oauth.io/#/docs}{\tt oauth.\+io documentation} 

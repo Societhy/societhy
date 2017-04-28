@@ -1,0 +1,188 @@
+
+
+ title\+: Radar Chart \subsection*{anchor\+: radar-\/chart }
+
+\subsubsection*{Introduction}
+
+A radar chart is a way of showing multiple data points and the variation between them.
+
+They are often useful for comparing the points of two or more different data sets.
+
+ $<$canvas width=\char`\"{}250\char`\"{} height=\char`\"{}125\char`\"{}$>$$<$/canvas$>$ 
+
+\subsubsection*{Example usage}
+
+
+\begin{DoxyCode}
+var myRadarChart = new Chart(ctx).Radar(data, options);
+\end{DoxyCode}
+
+
+\#\#\#\+Data structure 
+\begin{DoxyCode}
+var data = \{
+    labels: ["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
+    datasets: [
+        \{
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 90, 81, 56, 55, 40]
+        \},
+        \{
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 96, 27, 100]
+        \}
+    ]
+\};
+\end{DoxyCode}
+ For a radar chart, to provide context of what each point means, we include an array of strings that show around each point in the chart. For the radar chart data, we have an array of datasets. Each of these is an object, with a fill colour, a stroke colour, a colour for the fill of each point, and a colour for the stroke of each point. We also have an array of data values.
+
+The label key on each dataset is optional, and can be used when generating a scale for the chart.
+
+\subsubsection*{Chart options}
+
+These are the customisation options specific to Radar charts. These options are merged with the \href{#getting-started-global-chart-configuration}{\tt global chart configuration options}, and form the options of the chart.
+
+
+\begin{DoxyCode}
+\{
+    //Boolean - Whether to show lines for each scale point
+    scaleShowLine : true,
+
+    //Boolean - Whether we show the angle lines out of the radar
+    angleShowLineOut : true,
+
+    //Boolean - Whether to show labels on the scale
+    scaleShowLabels : false,
+
+    // Boolean - Whether the scale should begin at zero
+    scaleBeginAtZero : true,
+
+    //String - Colour of the angle line
+    angleLineColor : "rgba(0,0,0,.1)",
+
+    //Number - Pixel width of the angle line
+    angleLineWidth : 1,
+
+    //String - Point label font declaration
+    pointLabelFontFamily : "'Arial'",
+
+    //String - Point label font weight
+    pointLabelFontStyle : "normal",
+
+    //Number - Point label font size in pixels
+    pointLabelFontSize : 10,
+
+    //String - Point label font colour
+    pointLabelFontColor : "#666",
+
+    //Boolean - Whether to show a dot for each point
+    pointDot : true,
+
+    //Number - Radius of each point dot in pixels
+    pointDotRadius : 3,
+
+    //Number - Pixel width of point dot stroke
+    pointDotStrokeWidth : 1,
+
+    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+    pointHitDetectionRadius : 20,
+
+    //Boolean - Whether to show a stroke for datasets
+    datasetStroke : true,
+
+    //Number - Pixel width of dataset stroke
+    datasetStrokeWidth : 2,
+
+    //Boolean - Whether to fill the dataset with a colour
+    datasetFill : true,
+    \{% raw %\}
+    //String - A legend template
+    legendTemplate : "<ul class=\(\backslash\)"<%=name.toLowerCase()%>-legend\(\backslash\)"><% for (var i=0; i<datasets.length;
+       i++)\{%><li><span
+       style=\(\backslash\)"background-color:<%=datasets[i].strokeColor%>\(\backslash\)"></span><%if(datasets[i].label)\{%><%=datasets[i].label%><%\}%></li><%\}%></ul>"
+    \{% endraw %\}
+\}
+\end{DoxyCode}
+
+
+You can override these for your {\ttfamily Chart} instance by passing a second argument into the {\ttfamily Radar} method as an object with the keys you want to override.
+
+For example, we could have a radar chart without a point for each on piece of data by doing the following\+:
+
+
+\begin{DoxyCode}
+new Chart(ctx).Radar(data, \{
+    pointDot: false
+\});
+// This will create a chart with all of the default options, merged from the global config,
+//  and the Bar chart defaults but this particular instance will have `pointDot` set to false.
+\end{DoxyCode}
+
+
+We can also change these defaults values for each Radar type that is created, this object is available at {\ttfamily Chart.\+defaults.\+Radar}.
+
+\subsubsection*{Prototype methods}
+
+\paragraph*{.get\+Points\+At\+Event( event )}
+
+Calling {\ttfamily get\+Points\+At\+Event(event)} on your Chart instance passing an argument of an event, or j\+Query event, will return the point elements that are at that the same position of that event.
+
+
+\begin{DoxyCode}
+canvas.onclick = function(evt)\{
+    var activePoints = myRadarChart.getPointsAtEvent(evt);
+    // => activePoints is an array of points on the canvas that are at the same position as the click
+       event.
+\};
+\end{DoxyCode}
+
+
+This functionality may be useful for implementing D\+OM based tooltips, or triggering custom behaviour in your application.
+
+\paragraph*{.update( )}
+
+Calling {\ttfamily update()} on your Chart instance will re-\/render the chart with any updated values, allowing you to edit the value of multiple existing points, then render those in one animated render loop.
+
+
+\begin{DoxyCode}
+myRadarChart.datasets[0].points[2].value = 50;
+// Would update the first dataset's value of 'Sleeping' to be 50
+myRadarChart.update();
+// Calling update now animates the position of Sleeping from 90 to 50.
+\end{DoxyCode}
+
+
+\paragraph*{.add\+Data( values\+Array, label )}
+
+Calling {\ttfamily add\+Data(values\+Array, label)} on your Chart instance passing an array of values for each dataset, along with a label for those points.
+
+
+\begin{DoxyCode}
+// The values array passed into addData should be one for each dataset in the chart
+myRadarChart.addData([40, 60], "Dancing");
+// The new data will now animate at the end of the chart.
+\end{DoxyCode}
+
+
+\paragraph*{.remove\+Data( )}
+
+Calling {\ttfamily remove\+Data()} on your Chart instance will remove the first value for all datasets on the chart.
+
+
+\begin{DoxyCode}
+myRadarChart.removeData();
+// Other points will now animate to their correct positions.
+\end{DoxyCode}
+ 

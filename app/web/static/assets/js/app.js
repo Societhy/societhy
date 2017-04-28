@@ -3,6 +3,7 @@
 */
 'use strict';
 angular.module("packet", [
+	'rzModule',
 	'ngAnimate',
 	'ngCookies',
 	'ngStorage',
@@ -29,5 +30,6 @@ angular.module("packet", [
 	'ncy-angular-breadcrumb',
 	'duScroll',
 	'pascalprecht.translate',
-	'FBAngular'
+	'FBAngular',
+    'isteven-multi-select',
 ]);

@@ -1,0 +1,298 @@
+\href{https://saucelabs.com/u/flowjs}{\tt }
+
+Flow.\+js is a Java\+Script library providing multiple simultaneous, stable and resumable uploads via the H\+T\+M\+L5 File A\+PI.
+
+The library is designed to introduce fault-\/tolerance into the upload of large files through H\+T\+TP. This is done by splitting each file into small chunks. Then, whenever the upload of a chunk fails, uploading is retried until the procedure completes. This allows uploads to automatically resume uploading after a network connection is lost either locally or to the server. Additionally, it allows for users to pause, resume and even recover uploads without losing state because only the currently uploading chunks will be aborted, not the entire upload.
+
+Flow.\+js does not have any external dependencies other than the {\ttfamily H\+T\+M\+L5 File A\+PI}. This is relied on for the ability to chunk files into smaller pieces. Currently, this means that support is limited to Firefox 4+, Chrome 11+, Safari 6+ and Internet Explorer 10+.
+
+Samples and examples are available in the {\ttfamily samples/} folder. Please push your own as Markdown to help document the project.
+
+\subsection*{Can I see a demo?}
+
+\href{http://flowjs.github.io/ng-flow/}{\tt Flow.\+js + angular.\+js file upload demo} -\/ ng-\/flow extension page \href{https://github.com/flowjs/ng-flow}{\tt https\+://github.\+com/flowjs/ng-\/flow}
+
+J\+Query and node.\+js backend demo \href{https://github.com/flowjs/flow.js/tree/master/samples/Node.js}{\tt https\+://github.\+com/flowjs/flow.\+js/tree/master/samples/\+Node.\+js}
+
+\subsection*{How can I install it?}
+
+Download a latest build from \href{https://github.com/flowjs/flow.js/releases}{\tt https\+://github.\+com/flowjs/flow.\+js/releases} it contains development and minified production files in {\ttfamily dist/} folder.
+
+or use bower\+: 
+\begin{DoxyCode}
+bower install flow.js#~2
+\end{DoxyCode}
+ or use git clone 
+\begin{DoxyCode}
+git clone https://github.com/flowjs/flow.js
+\end{DoxyCode}
+ \subsection*{How can I use it?}
+
+A new {\ttfamily Flow} object is created with information of what and where to post\+: 
+\begin{DoxyCode}
+var flow = new Flow(\{
+  target:'/api/photo/redeem-upload-token', 
+  query:\{upload\_token:'my\_token'\}
+\});
+// Flow.js isn't supported, fall back on a different method
+if(!flow.support) location.href = '/some-old-crappy-uploader';
+\end{DoxyCode}
+ To allow files to be either selected and drag-\/dropped, you\textquotesingle{}ll assign drop target and a D\+OM item to be clicked for browsing\+: 
+\begin{DoxyCode}
+flow.assignBrowse(document.getElementById('browseButton'));
+flow.assignDrop(document.getElementById('dropTarget'));
+\end{DoxyCode}
+ After this, interaction with Flow.\+js is done by listening to events\+: 
+\begin{DoxyCode}
+flow.on('fileAdded', function(file, event)\{
+    console.log(file, event);
+\});
+flow.on('fileSuccess', function(file,message)\{
+    console.log(file,message);
+\});
+flow.on('fileError', function(file, message)\{
+    console.log(file, message);
+\});
+\end{DoxyCode}
+ \subsection*{How do I set it up with my server?}
+
+Most of the magic for Flow.\+js happens in the user\textquotesingle{}s browser, but files still need to be reassembled from chunks on the server side. This should be a fairly simple task and can be achieved in any web framework or language, which is able to receive file uploads.
+
+To handle the state of upload chunks, a number of extra parameters are sent along with all requests\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily flow\+Chunk\+Number}\+: The index of the chunk in the current upload. First chunk is {\ttfamily 1} (no base-\/0 counting here).
+\item {\ttfamily flow\+Total\+Chunks}\+: The total number of chunks.
+\item {\ttfamily flow\+Chunk\+Size}\+: The general chunk size. Using this value and {\ttfamily flow\+Total\+Size} you can calculate the total number of chunks. Please note that the size of the data received in the H\+T\+TP might be lower than {\ttfamily flow\+Chunk\+Size} of this for the last chunk for a file.
+\item {\ttfamily flow\+Total\+Size}\+: The total file size.
+\item {\ttfamily flow\+Identifier}\+: A unique identifier for the file contained in the request.
+\item {\ttfamily flow\+Filename}\+: The original file name (since a bug in Firefox results in the file name not being transmitted in chunk multipart posts).
+\item {\ttfamily flow\+Relative\+Path}\+: The file\textquotesingle{}s relative path when selecting a directory (defaults to file name in all browsers except Chrome).
+\end{DoxyItemize}
+
+You should allow for the same chunk to be uploaded more than once; this isn\textquotesingle{}t standard behaviour, but on an unstable network environment it could happen, and this case is exactly what Flow.\+js is designed for.
+
+For every request, you can confirm reception in H\+T\+TP status codes (can be change through the {\ttfamily permanent\+Errors} option)\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily 200}, {\ttfamily 201}, {\ttfamily 202}\+: The chunk was accepted and correct. No need to re-\/upload.
+\item {\ttfamily 404}, {\ttfamily 415}. {\ttfamily 500}, {\ttfamily 501}\+: The file for which the chunk was uploaded is not supported, cancel the entire upload.
+\item {\itshape Anything else}\+: Something went wrong, but try reuploading the file.
+\end{DoxyItemize}
+
+\subsection*{Handling G\+ET (or {\ttfamily test()} requests)}
+
+Enabling the {\ttfamily test\+Chunks} option will allow uploads to be resumed after browser restarts and even across browsers (in theory you could even run the same file upload across multiple tabs or different browsers). The {\ttfamily P\+O\+ST} data requests listed are required to use Flow.\+js to receive data, but you can extend support by implementing a corresponding {\ttfamily G\+ET} request with the same parameters\+:
+
+
+\begin{DoxyItemize}
+\item If this request returns a {\ttfamily 200}, {\ttfamily 201} or {\ttfamily 202} H\+T\+TP code, the chunks is assumed to have been completed.
+\item If request returns a permanent error status, upload is stopped.
+\item If request returns anything else, the chunk will be uploaded in the standard fashion.
+\end{DoxyItemize}
+
+After this is done and {\ttfamily test\+Chunks} enabled, an upload can quickly catch up even after a browser restart by simply verifying already uploaded chunks that do not need to be uploaded again.
+
+\subsection*{Full documentation}
+
+\subsubsection*{Flow}
+
+\paragraph*{Configuration}
+
+The object is loaded with a configuration options\+: 
+\begin{DoxyCode}
+var r = new Flow(\{opt1:'val', ...\});
+\end{DoxyCode}
+ Available configuration options are\+:
+
+
+\begin{DoxyItemize}
+\item {\ttfamily target} The target U\+RL for the multipart P\+O\+ST request. This can be a string or a function. If a function, it will be passed a Flow\+File, a Flow\+Chunk and is\+Test boolean (Default\+: {\ttfamily /})
+\item {\ttfamily single\+File} Enable single file upload. Once one file is uploaded, second file will overtake existing one, first one will be canceled. (Default\+: false)
+\item {\ttfamily chunk\+Size} The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see \href{https://github.com/23/resumable.js/issues/51}{\tt Issue \#51} for details and reasons. (Default\+: {\ttfamily 1$\ast$1024$\ast$1024})
+\item {\ttfamily force\+Chunk\+Size} Force all chunks to be less or equal than chunk\+Size. Otherwise, the last chunk will be greater than or equal to {\ttfamily chunk\+Size}. (Default\+: {\ttfamily false})
+\item {\ttfamily simultaneous\+Uploads} Number of simultaneous uploads (Default\+: {\ttfamily 3})
+\item {\ttfamily file\+Parameter\+Name} The name of the multipart P\+O\+ST parameter to use for the file chunk (Default\+: {\ttfamily file})
+\item {\ttfamily query} Extra parameters to include in the multipart P\+O\+ST with data. This can be an object or a function. If a function, it will be passed a Flow\+File, a Flow\+Chunk object and a is\+Test boolean (Default\+: {\ttfamily \{\}})
+\item {\ttfamily headers} Extra headers to include in the multipart P\+O\+ST with data. If a function, it will be passed a Flow\+File, a Flow\+Chunk object and a is\+Test boolean (Default\+: {\ttfamily \{\}})
+\item {\ttfamily with\+Credentials} Standard C\+O\+RS requests do not send or set any cookies by default. In order to include cookies as part of the request, you need to set the {\ttfamily with\+Credentials} property to true. (Default\+: {\ttfamily false})
+\item {\ttfamily method} Method to use when P\+O\+S\+Ting chunks to the server ({\ttfamily multipart} or {\ttfamily octet}) (Default\+: {\ttfamily multipart})
+\item {\ttfamily test\+Method} H\+T\+TP method to use when chunks are being tested. If set to a function, it will be passed a Flow\+File and a Flow\+Chunk arguments. (Default\+: {\ttfamily G\+ET})
+\item {\ttfamily upload\+Method} H\+T\+TP method to use when chunks are being uploaded. If set to a function, it will be passed a Flow\+File and a Flow\+Chunk arguments. (Default\+: {\ttfamily P\+O\+ST})
+\item {\ttfamily allow\+Duplicate\+Uploads} Once a file is uploaded, allow reupload of the same file. By default, if a file is already uploaded, it will be skipped unless the file is removed from the existing Flow object. (Default\+: {\ttfamily false})
+\item {\ttfamily prioritize\+First\+And\+Last\+Chunk} Prioritize first and last chunks of all files. This can be handy if you can determine if a file is valid for your service from only the first or last chunk. For example, photo or video meta data is usually located in the first part of a file, making it easy to test support from only the first chunk. (Default\+: {\ttfamily false})
+\item {\ttfamily test\+Chunks} Make a G\+ET request to the server for each chunks to see if it already exists. If implemented on the server-\/side, this will allow for upload resumes even after a browser crash or even a computer restart. (Default\+: {\ttfamily true})
+\item {\ttfamily preprocess} Optional function to process each chunk before testing \& sending. To the function it will be passed the chunk as parameter, and should call the {\ttfamily preprocess\+Finished} method on the chunk when finished. (Default\+: {\ttfamily null})
+\item {\ttfamily init\+File\+Fn} Optional function to initialize the file\+Object. To the function it will be passed a Flow\+File and a Flow\+Chunk arguments.
+\item {\ttfamily read\+File\+Fn} Optional function wrapping reading operation from the original file. To the function it will be passed the Flow\+File, the start\+Byte and end\+Byte, the file\+Type and the Flow\+Chunk.
+\item {\ttfamily generate\+Unique\+Identifier} Override the function that generates unique identifiers for each file. (Default\+: {\ttfamily null})
+\item {\ttfamily max\+Chunk\+Retries} The maximum number of retries for a chunk before the upload is failed. Valid values are any positive integer and {\ttfamily undefined} for no limit. (Default\+: {\ttfamily 0})
+\item {\ttfamily chunk\+Retry\+Interval} The number of milliseconds to wait before retrying a chunk on a non-\/permanent error. Valid values are any positive integer and {\ttfamily undefined} for immediate retry. (Default\+: {\ttfamily undefined})
+\item {\ttfamily progress\+Callbacks\+Interval} The time interval in milliseconds between progress reports. Set it to 0 to handle each progress callback. (Default\+: {\ttfamily 500})
+\item {\ttfamily speed\+Smoothing\+Factor} Used for calculating average upload speed. Number from 1 to 0. Set to 1 and average upload speed wil be equal to current upload speed. For longer file uploads it is better set this number to 0.\+02, because time remaining estimation will be more accurate. This parameter must be adjusted together with {\ttfamily progress\+Callbacks\+Interval} parameter. (Default 0.\+1)
+\item {\ttfamily success\+Statuses} Response is success if response status is in this list (Default\+: {\ttfamily \mbox{[}200,201, 202\mbox{]}})
+\item {\ttfamily permanent\+Errors} Response fails if response status is in this list (Default\+: {\ttfamily \mbox{[}404, 415, 500, 501\mbox{]}})
+\end{DoxyItemize}
+
+\paragraph*{Properties}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .support} A boolean value indicator whether or not Flow.\+js is supported by the current browser.
+\item {\ttfamily .support\+Directory} A boolean value, which indicates if browser supports directory uploads.
+\item {\ttfamily .opts} A hash object of the configuration of the Flow.\+js instance.
+\item {\ttfamily .files} An array of {\ttfamily Flow\+File} file objects added by the user (see full docs for this object type below).
+\end{DoxyItemize}
+
+\paragraph*{Methods}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .assign\+Browse(dom\+Nodes, is\+Directory, single\+File, attributes)} Assign a browse action to one or more D\+OM nodes.
+\begin{DoxyItemize}
+\item {\ttfamily dom\+Nodes} array of dom nodes or a single node.
+\item {\ttfamily is\+Directory} Pass in {\ttfamily true} to allow directories to be selected (Chrome only, support can be checked with {\ttfamily support\+Directory} property).
+\item {\ttfamily single\+File} To prevent multiple file uploads set this to true. Also look at config parameter {\ttfamily single\+File}.
+\item {\ttfamily attributes} Pass object of keys and values to set custom attributes on input fields. For example, you can set {\ttfamily accept} attribute to {\ttfamily image/$\ast$}. This means that user will be able to select only images. Full list of attributes\+: \href{http://www.w3.org/TR/html-markup/input.file.html#input.file-attributes}{\tt http\+://www.\+w3.\+org/\+T\+R/html-\/markup/input.\+file.\+html\#input.\+file-\/attributes}
+
+Note\+: avoid using {\ttfamily a} and {\ttfamily button} tags as file upload buttons, use span instead.
+\end{DoxyItemize}
+\item {\ttfamily .assign\+Drop(dom\+Nodes)} Assign one or more D\+OM nodes as a drop target.
+\item {\ttfamily .un\+Assign\+Drop(dom\+Nodes)} Unassign one or more D\+OM nodes as a drop target.
+\item {\ttfamily .on(event, callback)} Listen for event from Flow.\+js (see below)
+\item {\ttfamily .off(\mbox{[}event, \mbox{[}callback\mbox{]}\mbox{]})}\+:
+\begin{DoxyItemize}
+\item {\ttfamily .off()} All events are removed.
+\item {\ttfamily .off(event)} Remove all callbacks of specific event.
+\item {\ttfamily .off(event, callback)} Remove specific callback of event. {\ttfamily callback} should be a {\ttfamily Function}.
+\end{DoxyItemize}
+\item {\ttfamily .upload()} Start or resume uploading.
+\item {\ttfamily .pause()} Pause uploading.
+\item {\ttfamily .resume()} Resume uploading.
+\item {\ttfamily .cancel()} Cancel upload of all {\ttfamily Flow\+File} objects and remove them from the list.
+\item {\ttfamily .progress()} Returns a float between 0 and 1 indicating the current upload progress of all files.
+\item {\ttfamily .is\+Uploading()} Returns a boolean indicating whether or not the instance is currently uploading anything.
+\item {\ttfamily .add\+File(file)} Add a H\+T\+M\+L5 File object to the list of files.
+\item {\ttfamily .remove\+File(file)} Cancel upload of a specific {\ttfamily Flow\+File} object on the list from the list.
+\item {\ttfamily .get\+From\+Unique\+Identifier(unique\+Identifier)} Look up a {\ttfamily Flow\+File} object by its unique identifier.
+\item {\ttfamily .get\+Size()} Returns the total size of the upload in bytes.
+\item {\ttfamily .size\+Uploaded()} Returns the total size uploaded of all files in bytes.
+\item {\ttfamily .time\+Remaining()} Returns remaining time to upload all files in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity {\ttfamily Number.\+P\+O\+S\+I\+T\+I\+V\+E\+\_\+\+I\+N\+F\+I\+N\+I\+TY}
+\end{DoxyItemize}
+
+\paragraph*{Events}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .file\+Success(file, message, chunk)} A specific file was completed. First argument {\ttfamily file} is instance of {\ttfamily Flow\+File}, second argument {\ttfamily message} contains server response. Response is always a string. Third argument {\ttfamily chunk} is instance of {\ttfamily Flow\+Chunk}. You can get response status by accessing xhr object {\ttfamily chunk.\+xhr.\+status}.
+\item {\ttfamily .file\+Progress(file, chunk)} Uploading progressed for a specific file.
+\item {\ttfamily .file\+Added(file, event)} This event is used for file validation. To reject this file return false. This event is also called before file is added to upload queue, this means that calling {\ttfamily flow.\+upload()} function will not start current file upload. Optionally, you can use the browser {\ttfamily event} object from when the file was added.
+\item {\ttfamily .files\+Added(array, event)} Same as file\+Added, but used for multiple file validation.
+\item {\ttfamily .files\+Submitted(array, event)} Same as files\+Added, but happens after the file is added to upload queue. Can be used to start upload of currently added files.
+\item {\ttfamily .file\+Removed(file)} The specific file was removed from the upload queue. Combined with files\+Submitted, can be used to notify UI to update its state to match the upload queue.
+\item {\ttfamily .file\+Retry(file, chunk)} Something went wrong during upload of a specific file, uploading is being retried.
+\item {\ttfamily .file\+Error(file, message, chunk)} An error occurred during upload of a specific file.
+\item {\ttfamily .upload\+Start()} Upload has been started on the Flow object.
+\item {\ttfamily .complete()} Uploading completed.
+\item {\ttfamily .progress()} Uploading progress.
+\item {\ttfamily .error(message, file, chunk)} An error, including file\+Error, occurred.
+\item {\ttfamily .catch\+All(event, ...)} Listen to all the events listed above with the same callback function.
+\end{DoxyItemize}
+
+\subsubsection*{Flow\+File}
+
+Flow\+File constructor can be accessed in {\ttfamily Flow.\+Flow\+File}. \paragraph*{Properties}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .flow\+Obj} A back-\/reference to the parent {\ttfamily Flow} object.
+\item {\ttfamily .file} The correlating H\+T\+M\+L5 {\ttfamily File} object.
+\item {\ttfamily .name} The name of the file.
+\item {\ttfamily .relative\+Path} The relative path to the file (defaults to file name if relative path doesn\textquotesingle{}t exist)
+\item {\ttfamily .size} Size in bytes of the file.
+\item {\ttfamily .unique\+Identifier} A unique identifier assigned to this file object. This value is included in uploads to the server for reference, but can also be used in C\+SS classes etc when building your upload UI.
+\item {\ttfamily .average\+Speed} Average upload speed, bytes per second.
+\item {\ttfamily .current\+Speed} Current upload speed, bytes per second.
+\item {\ttfamily .chunks} An array of {\ttfamily Flow\+Chunk} items. You shouldn\textquotesingle{}t need to dig into these.
+\item {\ttfamily .paused} Indicated if file is paused.
+\item {\ttfamily .error} Indicated if file has encountered an error.
+\end{DoxyItemize}
+
+\paragraph*{Methods}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily .progress(relative)} Returns a float between 0 and 1 indicating the current upload progress of the file. If {\ttfamily relative} is {\ttfamily true}, the value is returned relative to all files in the Flow.\+js instance.
+\item {\ttfamily .pause()} Pause uploading the file.
+\item {\ttfamily .resume()} Resume uploading the file.
+\item {\ttfamily .cancel()} Abort uploading the file and delete it from the list of files to upload.
+\item {\ttfamily .retry()} Retry uploading the file.
+\item {\ttfamily .bootstrap()} Rebuild the state of a {\ttfamily Flow\+File} object, including reassigning chunks and X\+M\+L\+Http\+Request instances.
+\item {\ttfamily .is\+Uploading()} Returns a boolean indicating whether file chunks is uploading.
+\item {\ttfamily .is\+Complete()} Returns a boolean indicating whether the file has completed uploading and received a server response.
+\item {\ttfamily .size\+Uploaded()} Returns size uploaded in bytes.
+\item {\ttfamily .time\+Remaining()} Returns remaining time to finish upload file in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity {\ttfamily Number.\+P\+O\+S\+I\+T\+I\+V\+E\+\_\+\+I\+N\+F\+I\+N\+I\+TY}
+\item {\ttfamily .get\+Extension()} Returns file extension in lowercase.
+\item {\ttfamily .get\+Type()} Returns file type.
+\end{DoxyItemize}
+
+\subsection*{Contribution}
+
+To ensure consistency throughout the source code, keep these rules in mind as you are working\+:
+
+
+\begin{DoxyItemize}
+\item All features or bug fixes must be tested by one or more specs.
+\item We follow the rules contained in \href{http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml}{\tt Google\textquotesingle{}s Java\+Script Style Guide} with an exception we wrap all code at 100 characters.
+\end{DoxyItemize}
+
+\subsection*{Installation Dependencies}
+
+
+\begin{DoxyEnumerate}
+\item To clone your Github repository, run\+: 
+\begin{DoxyCode}
+git clone git@github.com:<github username>/flow.js.git
+\end{DoxyCode}
+
+\item To go to the Flow.\+js directory, run\+: 
+\begin{DoxyCode}
+cd flow.js
+\end{DoxyCode}
+
+\item To add node.\+js dependencies 
+\begin{DoxyCode}
+npm install
+\end{DoxyCode}
+ \subsection*{Testing}
+\end{DoxyEnumerate}
+
+Our unit and integration tests are written with Jasmine and executed with Karma. To run all of the tests on Chrome run\+: 
+\begin{DoxyCode}
+grunt karma:watch
+\end{DoxyCode}
+ Or choose other browser 
+\begin{DoxyCode}
+grunt karma:watch --browsers=Firefox,Chrome
+\end{DoxyCode}
+ Browsers should be comma separated and case sensitive.
+
+To re-\/run tests just change any source or test file.
+
+Automated tests is running after every commit at travis-\/ci.
+
+\subsubsection*{Running test on sauce\+Labs}
+
+
+\begin{DoxyEnumerate}
+\item Connect to sauce labs \href{https://saucelabs.com/docs/connect}{\tt https\+://saucelabs.\+com/docs/connect}
+\item {\ttfamily grunt test -\/-\/sauce-\/local=true -\/-\/sauce-\/username=$\ast$$\ast$$\ast$$\ast$ -\/-\/sauce-\/access-\/key=$\ast$$\ast$$\ast$}
+\end{DoxyEnumerate}
+
+other browsers can be used with {\ttfamily -\/-\/browsers} flag, available browsers\+: sl\+\_\+opera,sl\+\_\+iphone,sl\+\_\+safari,sl\+\_\+ie10,sl\+\_\+chrome,sl\+\_\+firefox
+
+\subsection*{Origin}
+
+Flow.\+js was inspired by and evolved from \href{https://github.com/23/resumable.js}{\tt https\+://github.\+com/23/resumable.\+js}. Library has been supplemented with tests and features, such as drag and drop for folders, upload speed, time remaining estimation, separate files pause, resume and more. 

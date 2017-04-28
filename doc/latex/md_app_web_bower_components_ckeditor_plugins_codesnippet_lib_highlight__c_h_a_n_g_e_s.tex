@@ -1,0 +1,566 @@
+This new major release is quite a big overhaul bringing both new features and some backwards incompatible changes. However, chances are that the majority of users won\textquotesingle{}t be affected by the latter\+: the basic scenario described in the R\+E\+A\+D\+ME is left intact.
+
+Here\textquotesingle{}s what did change in an incompatible way\+:
+
+
+\begin{DoxyItemize}
+\item We\textquotesingle{}re now prefixing all classes located in \href{http://highlightjs.readthedocs.org/en/latest/css-classes-reference.html}{\tt C\+SS classes reference} with {\ttfamily hljs-\/}, by default, because some class names would collide with other people\textquotesingle{}s stylesheets. If you were using an older version, you might still want the previous behavior, but still want to upgrade. To suppress this new behavior, you would initialize like so\+:
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+<script type="text/javascript">
+  hljs.configure(\{classPrefix: ''\});
+  hljs.initHighlightingOnLoad();
+</script>
+\end{DoxyCode}
+
+
+
+\begin{DoxyItemize}
+\item {\ttfamily tab\+Replace} and {\ttfamily use\+BR} that were used in different places are also unified into the global options object and are to be set using {\ttfamily configure(options)}. This function is documented in our \href{http://highlightjs.readthedocs.org/en/latest/api.html}{\tt A\+PI docs}. Also note that these parameters are gone from {\ttfamily highlight\+Block} and {\ttfamily fix\+Markup} which are now also rely on {\ttfamily configure}.
+\item We removed public-\/facing (though undocumented) object {\ttfamily hljs.\+L\+A\+N\+G\+U\+A\+G\+ES} which was used to register languages with the library in favor of two new methods\+: {\ttfamily register\+Language} and {\ttfamily get\+Language}. Both are documented in our \href{http://highlightjs.readthedocs.org/en/latest/api.html}{\tt A\+PI docs}.
+\item Result returned from {\ttfamily highlight} and {\ttfamily highlight\+Auto} no longer contains two separate attributes contributing to relevance score, {\ttfamily relevance} and {\ttfamily keyword\+\_\+count}. They are now unified in {\ttfamily relevance}.
+\end{DoxyItemize}
+
+Another technically compatible change that nonetheless might need attention\+:
+
+
+\begin{DoxyItemize}
+\item The structure of the N\+PM package was refactored, so if you had installed it locally, you\textquotesingle{}ll have to update your paths. The usual `require(\textquotesingle{}highlight.\+js\textquotesingle{})` works as before. This is contributed by \href{https://github.com/dimsmol}{\tt Dmitry Smolin}.
+\end{DoxyItemize}
+
+New features\+:
+
+
+\begin{DoxyItemize}
+\item Languages now can be recognized by multiple names like \char`\"{}js\char`\"{} for Java\+Script or \char`\"{}html\char`\"{} for, well, H\+T\+ML (which earlier insisted on calling it \char`\"{}xml\char`\"{}). These aliases can be specified in the class attribute of the code container in your H\+T\+ML as well as in various A\+PI calls. For now there are only a few very common aliases but we\textquotesingle{}ll expand it in the future. All of them are listed in the \mbox{[}class reference\mbox{]}\mbox{[}\mbox{]}.
+\item Language detection can now be restricted to a subset of languages relevant in a given context — a web page or even a single highlighting call. This is especially useful for node.\+js build that includes all the known languages. Another example is a Stack\+Overflow-\/style site where users specify languages as tags rather than in the markdown-\/formatted code snippets. This is documented in the \mbox{[}A\+PI reference\mbox{]}\mbox{[}\mbox{]} (see methods {\ttfamily highlight\+Auto} and {\ttfamily configure}).
+\item Language definition syntax streamlined with \href{https://groups.google.com/d/topic/highlightjs/VoGC9-1p5vk/discussion}{\tt variants} and \href{https://github.com/isagalaev/highlight.js/commit/6c7fdea002eb3949577a85b3f7930137c7c3038d}{\tt begin\+Keywords}.
+\end{DoxyItemize}
+
+New languages and styles\+:
+
+
+\begin{DoxyItemize}
+\item {\itshape Oxygene} by \href{https://github.com/carlokok}{\tt Carlo Kok}
+\item {\itshape Mathematica} by \href{https://github.com/dkvasnicka}{\tt Daniel Kvasnička}
+\item {\itshape Autohotkey} by \href{https://github.com/dlimpid}{\tt Seongwon Lee}
+\item {\itshape Atelier} family of styles in 10 variants by \href{https://github.com/atelierbram}{\tt Bram de Haan}
+\item {\itshape Paraíso} styles by \href{https://github.com/idleberg}{\tt Jan T. Sott}
+\end{DoxyItemize}
+
+Miscelleanous improvements\+:
+
+
+\begin{DoxyItemize}
+\item Highlighting {\ttfamily =$>$} prompts in Clojure.
+\item \href{https://github.com/sourrust}{\tt Jeremy Hull} fixed a lot of styles for consistency.
+\item Finally, highlighting P\+HP and H\+T\+ML \href{https://twitter.com/highlightjs/status/408890903017689088}{\tt mixed in peculiar ways}.
+\item Objective C and C\# now properly highlight titles in method definition.
+\item Big overhaul of relevance counting for a number of languages. Please do report bugs about mis-\/detection of non-\/trivial code snippets!
+\end{DoxyItemize}
+
+\subsection*{Version 7.\+5}
+
+A catch-\/up release dealing with some of the accumulated contributions. This one is probably will be the last before the 8.\+0 which will be slightly backwards incompatible regarding some advanced use-\/cases.
+
+One outstanding change in this version is the addition of 6 languages to the \href{/soft/highlight/en/download/}{\tt hosted script}\+: Markdown, ObjectiveC, Coffee\+Script, Apache, Nginx and Makefile. It now weighs about 6K more but we\textquotesingle{}re going to keep it under 30K.
+
+New languages\+:
+
+
+\begin{DoxyItemize}
+\item O\+Caml by \href{https://github.com/mehdid}{\tt Mehdi Dogguy} and \href{https://github.com/nbraud}{\tt Nicolas Braud-\/\+Santoni}
+\item \href{http://livecode.com/developers/guides/server/}{\tt Live\+Code Server} by \href{https://github.com/revig}{\tt Ralf Bitter}
+\item Scilab by \href{https://github.com/sylvestre}{\tt Sylvestre Ledru}
+\item basic support for Makefile by \href{https://github.com/isagalaev}{\tt Ivan Sagalaev}
+\end{DoxyItemize}
+
+Improvements\+:
+
+
+\begin{DoxyItemize}
+\item Ruby\textquotesingle{}s got support for characters like {\ttfamily ?A}, {\ttfamily ?1}, {\ttfamily ?\textbackslash{}012} etc. and {\ttfamily r\{..\}} regexps.
+\item Clojure now allows a function call in the beginning of s-\/expressions {\ttfamily ((\$filter \char`\"{}my\+Count\char`\"{}) (arr 1 2 3 4 5))}.
+\item Haskell\textquotesingle{}s got new keywords and now recognizes more things like pragmas, preprocessors, modules, containers, F\+F\+Is etc. Thanks to \href{https://github.com/treep}{\tt Zena Treep} for the implementation and to \href{https://github.com/sourrust}{\tt Jeremy Hull} for guiding it.
+\item Miscelleanous fixes in P\+HP, Brainfuck, S\+C\+SS, Asciidoc, C\+Make, Python and F\#.
+\end{DoxyItemize}
+
+\subsection*{New core developers}
+
+The latest long period of almost complete inactivity in the project coincided with growing interest to it led to a decision that now seems completely obvious\+: we need more core developers.
+
+So without further ado let me welcome to the core team two long-\/time contributors\+: \href{https://github.com/sourrust}{\tt Jeremy Hull} and \mbox{[}Oleg Efimov\mbox{]}\mbox{[}\mbox{]}.
+
+Hope now we\textquotesingle{}ll be able to work through stuff faster!
+
+P.\+S. The historical commit is \href{http://roudakov.ru/}{\tt here} for the record.
+
+\subsection*{Version 7.\+4}
+
+This long overdue version is a snapshot of the current source tree with all the changes that happened during the past year. Sorry for taking so long!
+
+Along with the changes in code highlight.\+js has finally got its new home at \href{http://highlightjs.org/}{\tt http\+://highlightjs.\+org/}, moving from its craddle on Software Maniacs which it outgrew a long time ago. Be sure to report any bugs about the site to \href{mailto:info@highlightjs.org}{\tt info@highlightjs.\+org}.
+
+On to what\textquotesingle{}s new…
+
+New languages\+:
+
+
+\begin{DoxyItemize}
+\item Handlebars templates by \href{https://github.com/eviltrout}{\tt Robin Ward}
+\item Oracle Rules Language by \href{https://github.com/jayce7}{\tt Jason Jacobson}
+\item F\# by \href{https://github.com/follesoe}{\tt Joans Follesø}
+\item Ascii\+Doc and Haml by \href{https://github.com/mojavelinux}{\tt Dan Allen}
+\item Lasso by \href{https://github.com/EricFromCanada}{\tt Eric Knibbe}
+\item S\+C\+SS by \href{https://github.com/kemch}{\tt Kurt Emch}
+\item V\+B.\+N\+ET by \href{https://github.com/rschiang}{\tt Poren Chiang}
+\item Mizar by \href{https://github.com/kelleyvanevert}{\tt Kelley van Evert}
+\end{DoxyItemize}
+
+New style themes\+:
+
+
+\begin{DoxyItemize}
+\item Monokai Sublime by \href{http://nn.mit-license.org/}{\tt noformnocontent}
+\item Railscasts by \href{https://github.com/visoft}{\tt Damien White}
+\item Obsidian by \href{https://github.com/ioncreature}{\tt Alexander Marenin}
+\item Docco by \href{https://github.com/thingsinjars}{\tt Simon Madine}
+\item Mono Blue by \href{https://github.com/isagalaev}{\tt Ivan Sagalaev} (uses a single color hue for everything)
+\item Foundation by \href{https://github.com/mojavelinux}{\tt Dan Allen}
+\end{DoxyItemize}
+
+Other notable changes\+:
+
+
+\begin{DoxyItemize}
+\item Corrected many corner cases in C\+SS.
+\item Dropped Python 2 version of the build tool.
+\item Implemented building for the A\+MD format.
+\item Updated Rust keywords (thanks to \href{https://github.com/dmedvinsky}{\tt Dmitry Medvinsky}).
+\item Literal regexes can now be used in language definitions.
+\item Coffee\+Script highlighting is now significantly more robust and rich due to input from \href{https://github.com/abe33}{\tt Cédric Néhémie}.
+\end{DoxyItemize}
+
+\subsection*{Version 7.\+3}
+
+
+\begin{DoxyItemize}
+\item Since this version highlight.\+js no longer works in IE version 8 and older. It\textquotesingle{}s made it possible to reduce the library size and dramatically improve code readability and made it easier to maintain. Time to go forward!
+\item New languages\+: Apple\+Script (by \href{https://github.com/nathan11g}{\tt Nathan Grigg} and \href{https://github.com/drdrang}{\tt Dr. Drang}) and Brainfuck (by \href{https://github.com/bolknote}{\tt Evgeny Stepanischev}).
+\item Improvements to existing languages\+:
+\begin{DoxyItemize}
+\item interpreter prompt in Python ({\ttfamily $>$$>$$>$} and {\ttfamily ...})
+\item -\/properties and classes in Coffee\+Script
+\item E4X in Java\+Script (by \href{https://github.com/Sannis}{\tt Oleg Efimov})
+\item new keywords in Perl (by \href{https://github.com/kimmel}{\tt Kirk Kimmel})
+\item big Ruby syntax update (by \href{https://github.com/vast}{\tt Vasily Polovnyov})
+\item small fixes in Bash
+\end{DoxyItemize}
+\item Also Oleg Efimov did a great job of moving all the docs for language and style developers and contributors from the old wiki under the source code in the \char`\"{}docs\char`\"{} directory. Now these docs are nicely presented at \href{http://highlightjs.readthedocs.org/}{\tt http\+://highlightjs.\+readthedocs.\+org/}.
+\end{DoxyItemize}
+
+\subsection*{Version 7.\+2}
+
+A regular bug-\/fix release without any significant new features. Enjoy!
+
+\subsection*{Version 7.\+1}
+
+A Summer crop\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/mfornos}{\tt Marc Fornos} made the definition for Clojure along with the matching style Rainbow (which, of course, works for other languages too).
+\item Coffee\+Script support continues to improve getting support for regular expressions.
+\item Yoshihide Jimbo ported to highlight.\+js \href{http://jmblog.github.com/color-themes-for-highlightjs/}{\tt five Tomorrow styles} from the \href{https://github.com/ChrisKempson/Tomorrow-Theme}{\tt project by Chris Kempson}.
+\item Thanks to \href{https://github.com/caseman}{\tt Casey Duncun} the library can now be built in the popular \href{http://requirejs.org/docs/whyamd.html}{\tt A\+MD format}.
+\item And last but not least, we\textquotesingle{}ve got a fair number of correctness and consistency fixes, including a pretty significant refactoring of Ruby.
+\end{DoxyItemize}
+
+\subsection*{Version 7.\+0}
+
+The reason for the new major version update is a global change of keyword syntax which resulted in the library getting smaller once again. For example, the hosted build is 2K less than at the previous version while supporting two new languages.
+
+Notable changes\+:
+
+
+\begin{DoxyItemize}
+\item The library now works not only in a browser but also with \href{http://nodejs.org/}{\tt node.\+js}. It is installable with {\ttfamily npm install highlight.\+js}. \href{http://softwaremaniacs.org/wiki/doku.php/highlight.js:api}{\tt A\+PI} docs are available on our wiki.
+\item The new unique feature (apparently) among syntax highlighters is highlighting {\itshape H\+T\+TP} headers and an arbitrary language in the request body. The most useful languages here are {\itshape X\+ML} and {\itshape J\+S\+ON} both of which highlight.\+js does support. Here\textquotesingle{}s \href{http://bazaar.launchpad.net/~isagalaev/+junk/highlight/annotate/342/src/wp_highlight.js.php}{\tt the detailed post} about the feature.
+\item Two new style themes\+: a dark \char`\"{}south\char`\"{} {\itshape \href{http://web-cms-designs.com/ftopict-10-pojoaque-style-for-highlight-js-code-highlighter.html}{\tt Pojoaque}} by Jason Tate and an emulation of$\ast$\+X\+Code$\ast$ I\+DE by \href{https://github.com/angelolloqui}{\tt Angel Olloqui}.
+\item Three new languages\+: {\itshape D} by \href{https://github.com/raleksandar}{\tt Aleksandar Ružičić}, {\itshape R} by \href{https://github.com/seejohnrun}{\tt Joe Cheng} and {\itshape G\+L\+SL} by \href{https://github.com/tikhomirov}{\tt Sergey Tikhomirov}.
+\item {\itshape Nginx} syntax has become a million times smaller and more universal thanks to remaking it in a more generic manner that doesn\textquotesingle{}t require listing all the directives in the known universe.
+\item Function titles are now highlighted in {\itshape P\+HP}.
+\item {\itshape Haskell} and {\itshape V\+H\+DL} were significantly reworked to be more rich and correct by their respective maintainers \href{https://github.com/sourrust}{\tt Jeremy Hull} and \href{http://kalnitsky.org.ua/}{\tt Igor Kalnitsky}.
+\end{DoxyItemize}
+
+And last but not least, many bugs have been fixed around correctness and language detection.
+
+Overall highlight.\+js currently supports 51 languages and 20 style themes.
+
+\subsection*{Version 6.\+2}
+
+A lot of things happened in highlight.\+js since the last version! We\textquotesingle{}ve got nine new contributors, the discussion group came alive, and the main branch on Git\+Hub now counts more than 350 followers. Here are most significant results coming from all this activity\+:
+
+
+\begin{DoxyItemize}
+\item 5 (five!) new languages\+: Rust, Action\+Script, Coffee\+Script, Mat\+Lab and experimental support for markdown. Thanks go to \href{https://github.com/vlasovskikh}{\tt Andrey Vlasovskikh}, \href{https://github.com/myadzel}{\tt Alexander Myadzel}, \href{https://github.com/dnagir}{\tt Dmytrii Nagirniak}, \href{https://github.com/Sannis}{\tt Oleg Efimov}, \href{https://github.com/btd}{\tt Denis Bardadym} and \href{https://github.com/seejohnrun}{\tt John Crepezzi}.
+\item 2 new style themes\+: Monokai by \href{http://grigio.org/}{\tt Luigi Maselli} and stylistic imitation of another well-\/known highlighter Google Code Prettify by \href{http://anton.kovalyov.net/}{\tt Aahan Krish}.
+\item A vast number of \href{https://github.com/isagalaev/highlight.js/commits/}{\tt correctness fixes and code refactorings}, mostly made by \href{https://github.com/Sannis}{\tt Oleg Efimov} and \href{https://github.com/bolknote}{\tt Evgeny Stepanischev}.
+\end{DoxyItemize}
+
+\subsection*{Version 6.\+1 — Solarized}
+
+\href{https://github.com/sourrust}{\tt Jeremy Hull} has implemented my dream feature — a port of \href{http://ethanschoonover.com/solarized}{\tt Solarized} style theme famous for being based on the intricate color theory to achieve correct contrast and color perception. It is now available for highlight.\+js in both variants — light and dark.
+
+This version also adds a new original style Arta. Its author pumbur maintains a \href{https://github.com/pumbur/highlight.js}{\tt heavily modified fork of highlight.\+js} on Git\+Hub.
+
+\subsection*{Version 6.\+0}
+
+New major version of the highlighter has been built on a significantly refactored syntax. Due to this it\textquotesingle{}s even smaller than the previous one while supporting more languages!
+
+New languages are\+:
+
+
+\begin{DoxyItemize}
+\item Haskell by \href{https://github.com/sourrust}{\tt Jeremy Hull}
+\item Erlang in two varieties — module and R\+E\+PL — made collectively by \href{http://desh.su/}{\tt Nikolay Zakharov}, \href{https://github.com/arhibot}{\tt Dmitry Kovega} and \href{https://github.com/ignatov}{\tt Sergey Ignatov}
+\item Objective C by \href{https://github.com/vhbit}{\tt Valerii Hiora}
+\item Vala by \href{https://github.com/antono}{\tt Antono Vasiljev}
+\item Go by \href{https://github.com/steplg}{\tt Stephan Kountso}
+\end{DoxyItemize}
+
+Also this version is marginally faster and fixes a number of small long-\/standing bugs.
+
+Developer overview of the new language syntax is available in a \href{http://softwaremaniacs.org/blog/2011/04/25/highlight-js-60-beta/en/}{\tt blog post about recent beta release}.
+
+P.\+S. New version is not yet available on a Yandex\textquotesingle{} C\+DN, so for now you have to download \href{/soft/highlight/en/download/}{\tt your own copy}.
+
+\subsection*{Version 5.\+14}
+
+Fixed bugs in H\+T\+M\+L/\+X\+ML detection and relevance introduced in previous refactoring.
+
+Also test.\+html now shows the second best result of language detection by relevance.
+
+\subsection*{Version 5.\+13}
+
+Past weekend began with a couple of simple additions for existing languages but ended up in a big code refactoring bringing along nice improvements for language developers.
+
+\subsubsection*{For users}
+
+
+\begin{DoxyItemize}
+\item Description of C++ has got new keywords from the upcoming \href{http://ru.wikipedia.org/wiki/C%2B%2B0x}{\tt C++ 0x} standard.
+\item Description of H\+T\+ML has got new tags from \href{http://en.wikipedia.org/wiki/HTML5}{\tt H\+T\+ML 5}.
+\item C\+S\+S-\/styles have been unified to use consistent padding and also have lost pop-\/outs with names of detected languages.
+\item \href{http://kalnitsky.org.ua/}{\tt Igor Kalnitsky} has sent two new language descriptions\+: C\+Make и V\+H\+DL.
+\end{DoxyItemize}
+
+This makes total number of languages supported by highlight.\+js to reach 35.
+
+Bug fixes\+:
+
+
+\begin{DoxyItemize}
+\item Custom classes on {\ttfamily $<$pre$>$} tags are not being overridden anymore
+\item More correct highlighting of code blocks inside non-\/{\ttfamily $<$pre$>$} containers\+: highlighter now doesn\textquotesingle{}t insist on replacing them with its own container and just replaces the contents.
+\item Small fixes in browser compatibility and heuristics.
+\end{DoxyItemize}
+
+\subsubsection*{For developers}
+
+The most significant change is the ability to include language submodes right under {\ttfamily contains} instead of defining explicit named submodes in the main array\+: \begin{DoxyVerb}contains: [
+  'string',
+  'number',
+  {begin: '\\n', end: hljs.IMMEDIATE_RE}
+]
+\end{DoxyVerb}
+
+
+This is useful for auxiliary modes needed only in one place to define parsing. Note that such modes often don\textquotesingle{}t have {\ttfamily class\+Name} and hence won\textquotesingle{}t generate a separate {\ttfamily $<$span$>$} in the resulting markup. This is similar in effect to {\ttfamily no\+Markup\+: true}. All existing languages have been refactored accordingly.
+
+Test file test.\+html has at last become a real test. Now it not only puts the detected language name under the code snippet but also tests if it matches the expected one. Test summary is displayed right above all language snippets.
+
+\subsection*{C\+DN}
+
+Fine people at \href{http://yandex.com/}{\tt Yandex} agreed to host highlight.\+js on their big fast servers. \href{http://softwaremaniacs.org/soft/highlight/en/download/}{\tt Link up}!
+
+\subsection*{Version 5.\+10 — \char`\"{}\+Paris\char`\"{}.}
+
+Though I\textquotesingle{}m on a vacation in Paris, I decided to release a new version with a couple of small fixes\+:
+
+
+\begin{DoxyItemize}
+\item Tomas Vitvar discovered that T\+AB replacement doesn\textquotesingle{}t always work when used with custom markup in code
+\item S\+QL parsing is even more rigid now and doesn\textquotesingle{}t step over Small\+Talk in tests
+\end{DoxyItemize}
+
+\subsection*{Version 5.\+9}
+
+A long-\/awaited version is finally released.
+
+New languages\+:
+
+
+\begin{DoxyItemize}
+\item Andrew Fedorov made a definition for Lua
+\item a long-\/time highlight.\+js contributor \href{http://kung-fu-tzu.ru/}{\tt Peter Leonov} made a definition for Nginx config
+\item \href{http://fulc.ru/}{\tt Vladimir Moskva} made a definition for TeX
+\end{DoxyItemize}
+
+Fixes for existing languages\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://gnuu.org/}{\tt Loren Segal} reworked the Ruby definition and added highlighting for \href{http://yardoc.org/}{\tt Y\+A\+RD} inline documentation
+\item the definition of S\+QL has become more solid and now it shouldn\textquotesingle{}t be overly greedy when it comes to language detection
+\end{DoxyItemize}
+
+The highlighter has become more usable as a library allowing to do highlighting from initialization code of JS frameworks and in ajax methods (see. readme.\+eng.\+txt).
+
+Also this version drops support for the \href{http://wordpress.org/}{\tt Word\+Press} plugin. Everyone is welcome to \href{http://bazaar.launchpad.net/~isagalaev/+junk/highlight/annotate/342/src/wp_highlight.js.php}{\tt pick up its maintenance} if needed.
+
+\subsection*{Version 5.\+8}
+
+
+\begin{DoxyItemize}
+\item Jan Berkel has contributed a definition for Scala. +1 to hotness!
+\item All C\+S\+S-\/styles are rewritten to work only inside {\ttfamily $<$pre$>$} tags to avoid conflicts with host site styles.
+\end{DoxyItemize}
+
+\subsection*{Version 5.\+7.}
+
+Fixed escaping of quotes in V\+B\+Script strings.
+
+\subsection*{Version 5.\+5}
+
+This version brings a small change\+: now .ini-\/files allow digits, underscores and square brackets in key names.
+
+\subsection*{Version 5.\+4}
+
+Fixed small but upsetting bug in the packer which caused incorrect highlighting of explicitly specified languages. Thanks to Andrew Fedorov for precise diagnostics!
+
+\subsection*{Version 5.\+3}
+
+The version to fulfil old promises.
+
+The most significant change is that highlight.\+js now preserves custom user markup in code along with its own highlighting markup. This means that now it\textquotesingle{}s possible to use, say, links in code. Thanks to \href{http://dolzhenko.blogspot.com/}{\tt Vladimir Dolzhenko} for the \href{http://roudakov.ru/}{\tt initial proposal} and for making a proof-\/of-\/concept patch.
+
+Also in this version\+:
+
+
+\begin{DoxyItemize}
+\item \href{http://vasily.polovnyov.ru/}{\tt Vasily Polovnyov} has sent a Git\+Hub-\/like style and has implemented support for C\+SS -\/rules and Ruby symbols.
+\item Yura Zaripov has sent two styles\+: Brown Paper and School Book.
+\item Oleg Volchkov has sent a definition for \href{http://www.parser.ru/}{\tt Parser 3}.
+\end{DoxyItemize}
+
+\subsection*{Version 5.\+2}
+
+
+\begin{DoxyItemize}
+\item at last it\textquotesingle{}s possible to replace indentation T\+A\+Bs with something sensible (e.\+g. 2 or 4 spaces)
+\item new keywords and built-\/ins for 1C by Sergey Baranov
+\item a couple of small fixes to Apache highlighting
+\end{DoxyItemize}
+
+\subsection*{Version 5.\+1}
+
+This is one of those nice version consisting entirely of new and shiny contributions!
+
+
+\begin{DoxyItemize}
+\item \href{http://vehq.ru/about/}{\tt Vladimir Ermakov} created highlighting for A\+VR Assembler
+\item \href{http://rukeba.com/}{\tt Ruslan Keba} created highlighting for Apache config file. Also his original visual style for it is now available for all highlight.\+js languages under the name \char`\"{}\+Magula\char`\"{}.
+\item \href{http://drakeguan.org/}{\tt Shuen-\/\+Huei Guan} (aka Drake) sent new keywords for Render\+Man languages. Also thanks go to \href{http://k-evdokimenko.moikrug.ru/}{\tt Konstantin Evdokimenko} for his advice on the matter.
+\end{DoxyItemize}
+
+\subsection*{Version 5.\+0}
+
+The main change in the new major version of highlight.\+js is a mechanism for packing several languages along with the library itself into a single compressed file. Now sites using several languages will load considerably faster because the library won\textquotesingle{}t dynamically include additional files while loading.
+
+Also this version fixes a long-\/standing bug with Javascript highlighting that couldn\textquotesingle{}t distinguish between regular expressions and division operations.
+
+And as usually there were a couple of minor correctness fixes.
+
+Great thanks to all contributors! Keep using highlight.\+js.
+
+\subsection*{Version 4.\+3}
+
+This version comes with two contributions from \href{http://jason.diamond.name/weblog/}{\tt Jason Diamond}\+:
+
+
+\begin{DoxyItemize}
+\item language definition for C\# (yes! it was a long-\/missed thing!)
+\item Visual Studio-\/like highlighting style
+\end{DoxyItemize}
+
+Plus there are a couple of minor bug fixes for parsing H\+T\+ML and X\+ML attributes.
+
+\subsection*{Version 4.\+2}
+
+The biggest news is highlighting for Lisp, courtesy of Vasily Polovnyov. It\textquotesingle{}s somewhat experimental meaning that for highlighting \char`\"{}keywords\char`\"{} it doesn\textquotesingle{}t use any pre-\/defined set of a Lisp dialect. Instead it tries to highlight first word in parentheses wherever it makes sense. I\textquotesingle{}d like to ask people programming in Lisp to confirm if it\textquotesingle{}s a good idea and send feedback to \href{http://softwaremaniacs.org/forum/viewforum.php?id=6}{\tt the forum}.
+
+Other changes\+:
+
+
+\begin{DoxyItemize}
+\item Smalltalk was excluded from D\+E\+F\+A\+U\+L\+T\+\_\+\+L\+A\+N\+G\+U\+A\+G\+ES to save traffic
+\item \href{http://voldmar.ya.ru/}{\tt Vladimir Epifanov} has implemented javascript style switcher for test.\+html
+\item comments now allowed inside Ruby function definition
+\item \href{http://en.wikipedia.org/wiki/Maya_Embedded_Language}{\tt M\+EL} language from \href{http://drakeguan.org/}{\tt Shuen-\/\+Huei Guan}
+\item whitespace now allowed between {\ttfamily $<$pre$>$} and {\ttfamily $<$code$>$}
+\item better auto-\/detection of C++ and P\+HP
+\item H\+T\+ML allows embedded V\+B\+Script ({\ttfamily $<$\% .. \%$>$})
+\end{DoxyItemize}
+
+\subsection*{Version 4.\+1}
+
+Languages\+:
+
+
+\begin{DoxyItemize}
+\item Bash from Vah
+\item D\+OS bat-\/files from Alexander Makarov (Sam)
+\item Diff files from Vasily Polovnyov
+\item Ini files from myself though initial idea was from Sam
+\end{DoxyItemize}
+
+Styles\+:
+
+
+\begin{DoxyItemize}
+\item Zenburn from Vladimir Epifanov, this is an imitation of a \href{http://en.wikipedia.org/wiki/Zenburn}{\tt well-\/known theme for Vim}.
+\item Ascetic from myself, as a realization of ideals of non-\/flashy highlighting\+: just one color in only three gradations \+:-\/)
+\end{DoxyItemize}
+
+In other news. \href{http://softwaremaniacs.org/forum/viewtopic.php?id=1823}{\tt One small bug} was fixed, built-\/in keywords were added for Python and C++ which improved auto-\/detection for the latter (it was shame that \href{http://alenacpp.blogspot.com/}{\tt my wife\textquotesingle{}s blog} had issues with it from time to time). And lastly thanks go to Sam for getting rid of my stylistic comments in code that were getting in the way of \href{http://code.google.com/p/jsmin-php/}{\tt J\+S\+Min}.
+
+\subsection*{Version 4.\+0}
+
+New major version is a result of vast refactoring and of many contributions.
+
+Visible new features\+:
+
+
+\begin{DoxyItemize}
+\item Highlighting of embedded languages. Currently is implemented highlighting of Javascript and C\+SS inside H\+T\+ML.
+\item Bundled 5 ready-\/made style themes!
+\end{DoxyItemize}
+
+Invisible new features\+:
+
+
+\begin{DoxyItemize}
+\item Highlight.\+js no longer pollutes global namespace. Only one object and one function for backward compatibility.
+\item Performance is further increased by about 15\%.
+\end{DoxyItemize}
+
+Changing of a major version number caused by a new format of language definition files. If you use some third-\/party language files they should be updated.
+
+\subsection*{Version 3.\+5}
+
+A very nice version in my opinion fixing a number of small bugs and slightly increased speed in a couple of corner cases. Thanks to everybody who reports bugs in he \href{http://softwaremaniacs.org/forum/viewforum.php?id=6}{\tt forum} and by email!
+
+There is also a new language — X\+ML. A custom X\+ML formerly was detected as H\+T\+ML and didn\textquotesingle{}t highlight custom tags. In this version I tried to make custom X\+ML to be detected and highlighted by its own rules. Which by the way include such things as C\+D\+A\+TA sections and processing instructions ({\ttfamily $<$? ... ?$>$}).
+
+\subsection*{Version 3.\+3}
+
+\href{http://xonixx.blogspot.com/}{\tt Vladimir Gubarkov} has provided an interesting and useful addition. File export.\+html contains a little program that shows and allows to copy and paste an H\+T\+ML code generated by the highlighter for any code snippet. This can be useful in situations when one can\textquotesingle{}t use the script itself on a site.
+
+\subsection*{Version 3.\+2 consists completely of contributions\+:}
+
+
+\begin{DoxyItemize}
+\item Vladimir Gubarkov has described Small\+Talk
+\item Yuri Ivanov has described 1C
+\item Peter Leonov has packaged the highlighter as a Firefox extension
+\item Vladimir Ermakov has compiled a mod for php\+BB
+\end{DoxyItemize}
+
+Many thanks to you all!
+
+\subsection*{Version 3.\+1}
+
+Three new languages are available\+: Django templates, S\+QL and Axapta. The latter two are sent by \href{http://roudakov.ru/}{\tt Dmitri Roudakov}. However I\textquotesingle{}ve almost entirely rewrote an S\+QL definition but I\textquotesingle{}d never started it be it from the ground up \+:-\/)
+
+The engine itself has got a long awaited feature of grouping keywords (\char`\"{}keyword\char`\"{}, \char`\"{}built-\/in function\char`\"{}, \char`\"{}literal\char`\"{}). No more hacks!
+
+\subsection*{Version 3.\+0}
+
+It is major mainly because now highlight.\+js has grown large and has become modular. Now when you pass it a list of languages to highlight it will dynamically load into a browser only those languages.
+
+Also\+:
+
+
+\begin{DoxyItemize}
+\item Konstantin Evdokimenko of \href{http://ribkit.sourceforge.net/}{\tt Rib\+Kit} project has created a highlighting for Render\+Man Shading Language and Render\+Man Interface Bytestream. Yay for more languages!
+\item Heuristics for C++ and H\+T\+ML got better.
+\item I\textquotesingle{}ve implemented (at last) a correct handling of backslash escapes in C-\/like languages.
+\end{DoxyItemize}
+
+There is also a small backwards incompatible change in the new version. The function init\+Highlighting that was used to initialize highlighting instead of init\+Highlighting\+On\+Load a long time ago no longer works. If you by chance still use it — replace it with the new one.
+
+\subsection*{Version 2.\+9}
+
+Highlight.\+js is a parser, not just a couple of regular expressions. That said I\textquotesingle{}m glad to announce that in the new version 2.\+9 has support for\+:
+
+
+\begin{DoxyItemize}
+\item in-\/string substitutions for Ruby -- {\ttfamily \#\{...\}}
+\item strings from from numeric symbol codes (like \#\+XX) for Delphi
+\end{DoxyItemize}
+
+\subsection*{Version 2.\+8}
+
+A maintenance release with more tuned heuristics. Fully backwards compatible.
+
+\subsection*{Version 2.\+7}
+
+
+\begin{DoxyItemize}
+\item Nikita Ledyaev presents highlighting for V\+B\+Script, yay!
+\item A couple of bugs with escaping in strings were fixed thanks to Mickle
+\item Ongoing tuning of heuristics
+\end{DoxyItemize}
+
+Fixed bugs were rather unpleasant so I encourage everyone to upgrade!
+
+\subsection*{Version 2.\+4}
+
+
+\begin{DoxyItemize}
+\item Peter Leonov provides another improved highlighting for Perl
+\item Javascript gets a new kind of keywords — \char`\"{}literals\char`\"{}. These are the words \char`\"{}true\char`\"{}, \char`\"{}false\char`\"{} and \char`\"{}null\char`\"{}
+\end{DoxyItemize}
+
+Also highlight.\+js homepage now lists sites that use the library. Feel free to add your site by \href{mailto:Maniac@SoftwareManiacs.Org}{\tt dropping me a message} until I find the time to build a submit form.
+
+\subsection*{Version 2.\+3}
+
+This version fixes IE breakage in previous version. My apologies to all who have already downloaded that one!
+
+\subsection*{Version 2.\+2}
+
+
+\begin{DoxyItemize}
+\item added highlighting for Javascript
+\item at last fixed parsing of Delphi\textquotesingle{}s escaped apostrophes in strings
+\item in Ruby fixed highlighting of keywords \textquotesingle{}def\textquotesingle{} and \textquotesingle{}class\textquotesingle{}, same for \textquotesingle{}sub\textquotesingle{} in Perl
+\end{DoxyItemize}
+
+\subsection*{Version 2.\+0}
+
+
+\begin{DoxyItemize}
+\item Ruby support by \href{http://anton.kovalyov.net/}{\tt Anton Kovalyov}
+\item speed increased by orders of magnitude due to new way of parsing
+\item this same way allows now correct highlighting of keywords in some tricky places (like keyword \char`\"{}\+End\char`\"{} at the end of Delphi classes)
+\end{DoxyItemize}
+
+\subsection*{Version 1.\+0}
+
+Version 1.\+0 of javascript syntax highlighter is released!
+
+It\textquotesingle{}s the first version available with English description. Feel free to post your comments and question to \href{http://softwaremaniacs.org/forum/viewforum.php?id=6}{\tt highlight.\+js forum}. And don\textquotesingle{}t be afraid if you find there some fancy Cyrillic letters -- it\textquotesingle{}s for Russian users too \+:-\/) 

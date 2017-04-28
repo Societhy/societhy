@@ -78,7 +78,7 @@ def delFromContact(user):
 @router.route('/findUser', methods=['POST'])
 def findUser():
 	ret = user_management.findUser(request.json)
-	return jsonify(ret.get('data')), ret.get('status')
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/getUserNotif', methods=['GET'])
 @requires_auth

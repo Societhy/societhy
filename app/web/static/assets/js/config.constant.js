@@ -30,11 +30,12 @@ app.constant('JS_REQUIRES', {
         'CryptoJS': '../../bower_components/crypto-js/crypto-js.js',
         'FileSaver': '../../bower_components/file-saver/FileSaver.min.js',
         'OAuth' : '../../bower_components/oauth.io/dist/oauth.js',
+        'blockies' : 'external_deps/blockies.min.js',
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',
-        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
+//        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
@@ -43,6 +44,7 @@ app.constant('JS_REQUIRES', {
         'orgaMainCtrl' : 'static/assets/js/controllers/orgaMainCtrl.js',
         'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
+        'productModalCtrl': 'static/assets/js/controllers/productModalCtrl.js',
     },
     //*** angularJS Modules
     modules: [{
@@ -109,7 +111,10 @@ app.constant('JS_REQUIRES', {
         name: 'btford.socket-io',
         files: ['../../node_modules/socket.io-client/dist/socket.io.js', '../../bower_components/angular-socket-io/socket.js']
     }, {
+        name:'angucomplete-alt',
+        files: ['../../bower_components/angucomplete-alt/angucomplete-alt.js']
+    }, {
         name:'qrcode',
-        files: ['../../bower_components/qrcode-generator/js/qrcode.js', '../../bower_components/angular-qrcode/angular-qrcode.js']
+        files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
     }]
 });

@@ -1,0 +1,131 @@
+\href{https://gitter.im/RadMie/ng-knob?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge}{\tt } \begin{quote}
+Angular.\+js directive to Knob component powered by d3.\+js (without j\+Query) \end{quote}
+
+
+
+
+\subsection*{Features }
+
+
+\begin{DoxyItemize}
+\item very easy to implement
+\item without j\+Query dependencies
+\item powered by d3.\+js
+\item 2-\/way data binding
+\item configurable minimum, maximum values and step
+\item animated
+\item shows previous value
+\item tiny -\/ 11.\+5kb minified
+\item great ability to configure
+\item configurable scale
+\item touch, click and drag events implemented
+\end{DoxyItemize}
+
+\paragraph*{Dependencies}
+
+
+\begin{DoxyItemize}
+\item Angular\+JS (tested with 1.\+4.\+x although it probably works with older versions)
+\item D3.\+js (tested with 3.\+5.\+x although it probably works with older versions)
+\end{DoxyItemize}
+
+\paragraph*{Browser Support}
+
+
+\begin{DoxyItemize}
+\item Chrome, Firefox, Safari, Opera, I\+E9+
+\end{DoxyItemize}
+
+\subsection*{Get started }
+
+\paragraph*{Installation}
+
+You can also use bower to install the component\+: 
+\begin{DoxyCode}
+$ bower install ng-knob --save
+\end{DoxyCode}
+
+
+\paragraph*{Usage}
+
+\#\#\#\#\#\# H\+T\+ML\+: 
+\begin{DoxyCode}
+<body ng-app="KnobDemoApp">
+  <div ng-controller="knobCtrl">
+    <ui-knob value="value" options="options"></ui-knob>
+  </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.10/d3.min.js"></script>
+<script src="bower\_components/ng-knob/dist/ng-knob.min.js"></script>
+\end{DoxyCode}
+ \subparagraph*{Angular.\+js\+:}
+
+
+\begin{DoxyCode}
+var app = angular.module('KnobDemoApp', ['ui.knob'])
+app.controller('knobCtrl', function ($scope) \{
+  $scope.value = 65;
+  $scope.options = \{
+    size: 300
+    //other options
+  \};
+\});
+\end{DoxyCode}
+
+
+\subsection*{Options }
+
+\subparagraph*{You can pass these options to the initialize function to set a custom look and feel for the plugin.}
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Property }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\rowcolor{\tableheadbgcolor}\textbf{ Property }&\textbf{ Type }&\textbf{ Default }&\textbf{ Description  }\\\cline{1-4}
+\endhead
+skin &object &\{ type\+: \textquotesingle{}simple\textquotesingle{}, width\+: 10, color\+: \textquotesingle{}rgba(255,0,0,.5)\textquotesingle{}, space\+Width\+: 5 \} &Type\+: {\ttfamily simple} or {\ttfamily tron} \\\cline{1-4}
+animate &object &\{ enabled\+: true, duration\+: 1000, ease\+: \textquotesingle{}bounce\textquotesingle{} \} &Duration in milliseconds, Ease\+: {\ttfamily linear}, {\ttfamily bounce}, {\ttfamily sin}, {\ttfamily cubic}, {\ttfamily quad}, {\ttfamily exp}, {\ttfamily circle} \\\cline{1-4}
+size &integer &200 &Size of knob in px. It will always be a square \\\cline{1-4}
+start\+Angle &integer &0 &Start angle in degrees \\\cline{1-4}
+end\+Angle &integer &360 &End angle in degrees \\\cline{1-4}
+unit &string &\textquotesingle{}\textquotesingle{} &Unit values \\\cline{1-4}
+display\+Input &boolean &true &Display input value ({\ttfamily true} or {\ttfamily false}) \\\cline{1-4}
+input\+Formatter &function &function(value)\{ return value; \} &Formats the input value {\bfseries before appending the {\ttfamily unit}} and displaying it to the D\+OM \\\cline{1-4}
+read\+Only &boolean &false &Disabled change value ({\ttfamily true} or {\ttfamily false}) \\\cline{1-4}
+track\+Width &integer &50 &Width track bar in px \\\cline{1-4}
+bar\+Width &integer &50 &Width bar value in px \\\cline{1-4}
+track\+Color &string &\textquotesingle{}rgba(0,0,0,0)\textquotesingle{} &Color track bar \\\cline{1-4}
+bar\+Color &string &\textquotesingle{}rgba(255,0,0,.5)\textquotesingle{} &Color bar value \\\cline{1-4}
+prev\+Bar\+Color &string &\textquotesingle{}rgba(0,0,0,0)\textquotesingle{} &Color bar previous value \\\cline{1-4}
+text\+Color &string &\textquotesingle{}\#222\textquotesingle{} &Text color \\\cline{1-4}
+bar\+Cap &integer &0 &Defines how the ending of the bar line looks like in radius \\\cline{1-4}
+font\+Size &string &\textquotesingle{}auto\textquotesingle{} &Font size in px. {\ttfamily auto}\+: automatic change \\\cline{1-4}
+sub\+Text &object &\{ enabled\+: false, text\+: \textquotesingle{}\textquotesingle{}, color\+: \textquotesingle{}gray\textquotesingle{}, font\+: \textquotesingle{}auto\textquotesingle{} \} &Subtext options \\\cline{1-4}
+bg\+Color &string &\textquotesingle{}\textquotesingle{} &Background color \\\cline{1-4}
+scale &object &\{ enabled\+: false, type\+: \textquotesingle{}lines\textquotesingle{}, color\+: \textquotesingle{}gray\textquotesingle{}, width\+: 4, quantity\+: 20, height\+: 10, space\+Width\+: 15 \} &Scale options, type\+: {\ttfamily lines} or {\ttfamily dots} \\\cline{1-4}
+step &integer &1 &Step change, min {\ttfamily 0.\+1} \\\cline{1-4}
+display\+Previous &boolean &false &Display previous value ({\ttfamily true} or {\ttfamily false}) \\\cline{1-4}
+min &integer &0 &Min value (start value), only integer \\\cline{1-4}
+max &integer &100 &Max value (end value), only integer \\\cline{1-4}
+dynamic\+Options &boolean &false &Dynamic change options ({\ttfamily true} or {\ttfamily false}) \\\cline{1-4}
+\end{longtabu}
+\subsection*{Contributing }
+
+
+\begin{DoxyEnumerate}
+\item Fork the repo
+\item Install dependencies\+: {\ttfamily npm install} and {\ttfamily bower install}
+\item Run\+: {\ttfamily grunt}
+\item Make your changes
+\item Submit pull request
+\end{DoxyEnumerate}
+
+\subsection*{License }
+
+Licensed under the M\+IT license 

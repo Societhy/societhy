@@ -1,3 +1,7 @@
+"""
+Model that represent an organization's project.
+"""
+
 from mongokat import Collection, Document
 from .clients import client
 
@@ -25,42 +29,75 @@ class ProjectDocument(Document):
 				self.contract
 				self.contract["address"] = at
 		elif self.get("contract_id"):
-			self._loadContract()
+			self._loadContracts()
 		if owner:
 			self["owner"] = owner.public() if issubclass(type(owner), Document) else owner
 
-	def _loadContract(self):
+	def _loadContracts(self):
+		"""
+		Load the contract corresponding to the project.
+		"""
 		if self.get('contract_id'):
 			self.contract = contracts.find_one({"_id": self['contract_id']})
 
 	def getMemberList(self):
+		"""
+		Empty
+		"""
 		pass
 
 	def join(self, user):
+		"""
+		Empty
+		"""
 		pass
 
 	def leave(self, member):
+		"""
+		Empty
+		"""
 		pass
 
 	def kill(self, from_):
+		"""
+		Empty
+		"""
 		pass
 
 	def donate(self, from_):
+		"""
+		Empty
+		"""
 		pass
 
 	def createCampaign(self, campaign, from_):
+		"""
+		Empty
+		"""
 		pass
 
 	def endCampaign(self, campaign):
+		"""
+		Empty
+		"""
 		pass
 
 	def createProposal(self, proposal):
+		"""
+		Empty
+		"""
 		pass
 
 	def killProposal(self, proposal):
+		"""
+		Empty
+		"""
 		pass
 
 	def transferOwnership(self, from_, to_):
+		"""
+		Empty
+		"""
 		pass
 
 class ProjectCollection(Collection):

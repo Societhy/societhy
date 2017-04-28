@@ -1,0 +1,144 @@
+\href{https://bootstrap-slack.herokuapp.com}{\tt }  \href{https://www.npmjs.com/package/bootstrap}{\tt } \href{https://travis-ci.org/twbs/bootstrap}{\tt } \href{https://david-dm.org/twbs/bootstrap#info=devDependencies}{\tt } \href{https://www.nuget.org/packages/Bootstrap}{\tt } \href{https://saucelabs.com/u/bootstrap}{\tt }
+
+Bootstrap is a sleek, intuitive, and powerful front-\/end framework for faster and easier web development, created by \href{https://twitter.com/mdo}{\tt Mark Otto} and \href{https://twitter.com/fat}{\tt Jacob Thornton}, and maintained by the \href{https://github.com/orgs/twbs/people}{\tt core team} with the massive support and involvement of the community.
+
+To get started, check out \href{http://getbootstrap.com}{\tt http\+://getbootstrap.\+com}!
+
+\subsection*{Table of contents}
+
+
+\begin{DoxyItemize}
+\item \href{#quick-start}{\tt Quick start}
+\item \href{#bugs-and-feature-requests}{\tt Bugs and feature requests}
+\item \href{#documentation}{\tt Documentation}
+\item \href{#contributing}{\tt Contributing}
+\item \href{#community}{\tt Community}
+\item \href{#versioning}{\tt Versioning}
+\item \href{#creators}{\tt Creators}
+\item \href{#copyright-and-license}{\tt Copyright and license}
+\end{DoxyItemize}
+
+\subsection*{Quick start}
+
+Several quick start options are available\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/twbs/bootstrap/archive/v3.3.7.zip}{\tt Download the latest release}.
+\item Clone the repo\+: {\ttfamily git clone \href{https://github.com/twbs/bootstrap.git}{\tt https\+://github.\+com/twbs/bootstrap.\+git}}.
+\item Install with \href{http://bower.io}{\tt Bower}\+: {\ttfamily bower install bootstrap}.
+\item Install with \href{https://www.npmjs.com}{\tt npm}\+: {\ttfamily npm install bootstrap@3}.
+\item Install with \href{https://www.meteor.com}{\tt Meteor}\+: {\ttfamily meteor add twbs\+:bootstrap}.
+\item Install with \href{https://getcomposer.org}{\tt Composer}\+: {\ttfamily composer require twbs/bootstrap}.
+\end{DoxyItemize}
+
+Read the \href{http://getbootstrap.com/getting-started/}{\tt Getting started page} for information on the framework contents, templates and examples, and more.
+
+\subsubsection*{What\textquotesingle{}s included}
+
+Within the download you\textquotesingle{}ll find the following directories and files, logically grouping common assets and providing both compiled and minified variations. You\textquotesingle{}ll see something like this\+:
+
+
+\begin{DoxyCode}
+bootstrap/
+├── css/
+│   ├── bootstrap.css
+│   ├── bootstrap.css.map
+│   ├── bootstrap.min.css
+│   ├── bootstrap.min.css.map
+│   ├── bootstrap-theme.css
+│   ├── bootstrap-theme.css.map
+│   ├── bootstrap-theme.min.css
+│   └── bootstrap-theme.min.css.map
+├── js/
+│   ├── bootstrap.js
+│   └── bootstrap.min.js
+└── fonts/
+    ├── glyphicons-halflings-regular.eot
+    ├── glyphicons-halflings-regular.svg
+    ├── glyphicons-halflings-regular.ttf
+    ├── glyphicons-halflings-regular.woff
+    └── glyphicons-halflings-regular.woff2
+\end{DoxyCode}
+
+
+We provide compiled C\+SS and JS ({\ttfamily bootstrap.$\ast$}), as well as compiled and minified C\+SS and JS ({\ttfamily bootstrap.\+min.$\ast$}). C\+SS \href{https://developer.chrome.com/devtools/docs/css-preprocessors}{\tt source maps} ({\ttfamily bootstrap.$\ast$.map}) are available for use with certain browsers\textquotesingle{} developer tools. Fonts from Glyphicons are included, as is the optional Bootstrap theme.
+
+\subsection*{Bugs and feature requests}
+
+Have a bug or a feature request? Please first read the \href{https://github.com/twbs/bootstrap/blob/master/CONTRIBUTING.md#using-the-issue-tracker}{\tt issue guidelines} and search for existing and closed issues. If your problem or idea is not addressed yet, \href{https://github.com/twbs/bootstrap/issues/new}{\tt please open a new issue}.
+
+Note that {\bfseries feature requests must target \href{https://github.com/twbs/bootstrap/tree/v4-dev}{\tt Bootstrap v4},} because Bootstrap v3 is now in maintenance mode and is closed off to new features. This is so that we can focus our efforts on Bootstrap v4.
+
+\subsection*{Documentation}
+
+Bootstrap\textquotesingle{}s documentation, included in this repo in the root directory, is built with \href{http://jekyllrb.com}{\tt Jekyll} and publicly hosted on Git\+Hub Pages at \href{http://getbootstrap.com}{\tt http\+://getbootstrap.\+com}. The docs may also be run locally.
+
+\subsubsection*{Running documentation locally}
+
+
+\begin{DoxyEnumerate}
+\item If necessary, \href{http://jekyllrb.com/docs/installation}{\tt install Jekyll} and other Ruby dependencies with {\ttfamily bundle install}. {\bfseries Note for Windows users\+:} Read \href{http://jekyll-windows.juthilo.com/}{\tt this unofficial guide} to get Jekyll up and running without problems.
+\item From the root {\ttfamily /bootstrap} directory, run {\ttfamily bundle exec jekyll serve} in the command line.
+\item Open {\ttfamily \href{http://localhost:9001}{\tt http\+://localhost\+:9001}} in your browser, and voilà.
+\end{DoxyEnumerate}
+
+Learn more about using Jekyll by reading its \href{http://jekyllrb.com/docs/home/}{\tt documentation}.
+
+\subsubsection*{Documentation for previous releases}
+
+Documentation for v2.\+3.\+2 has been made available for the time being at \href{http://getbootstrap.com/2.3.2/}{\tt http\+://getbootstrap.\+com/2.\+3.\+2/} while folks transition to Bootstrap 3.
+
+\href{https://github.com/twbs/bootstrap/releases}{\tt Previous releases} and their documentation are also available for download.
+
+\subsection*{Contributing}
+
+Please read through our https\+://github.com/twbs/bootstrap/blob/master/\+C\+O\+N\+T\+R\+I\+B\+U\+T\+I\+N\+G.\+md \char`\"{}contributing guidelines\char`\"{}. Included are directions for opening issues, coding standards, and notes on development.
+
+Moreover, if your pull request contains Java\+Script patches or features, you must include \href{https://github.com/twbs/bootstrap/tree/master/js/tests}{\tt relevant unit tests}. All H\+T\+ML and C\+SS should conform to the \href{https://github.com/mdo/code-guide}{\tt Code Guide}, maintained by \href{https://github.com/mdo}{\tt Mark Otto}.
+
+{\bfseries Bootstrap v3 is now closed off to new features.} It has gone into maintenance mode so that we can focus our efforts on \href{https://github.com/twbs/bootstrap/tree/v4-dev}{\tt Bootstrap v4}, the future of the framework. Pull requests which add new features (rather than fix bugs) should target \href{https://github.com/twbs/bootstrap/tree/v4-dev}{\tt Bootstrap v4 (the {\ttfamily v4-\/dev} git branch)} instead.
+
+Editor preferences are available in the \href{https://github.com/twbs/bootstrap/blob/master/.editorconfig}{\tt editor config} for easy use in common text editors. Read more and download plugins at \href{http://editorconfig.org}{\tt http\+://editorconfig.\+org}.
+
+\subsection*{Community}
+
+Get updates on Bootstrap\textquotesingle{}s development and chat with the project maintainers and community members.
+
+
+\begin{DoxyItemize}
+\item Follow \href{https://twitter.com/getbootstrap}{\tt on Twitter}.
+\item Read and subscribe to \href{http://blog.getbootstrap.com}{\tt The Official Bootstrap Blog}.
+\item Join \href{https://bootstrap-slack.herokuapp.com}{\tt the official Slack room}.
+\item Chat with fellow Bootstrappers in I\+RC. On the {\ttfamily irc.\+freenode.\+net} server, in the {\ttfamily \#\#bootstrap} channel.
+\item Implementation help may be found at Stack Overflow (tagged \href{https://stackoverflow.com/questions/tagged/twitter-bootstrap-3}{\tt {\ttfamily twitter-\/bootstrap-\/3}}).
+\item Developers should use the keyword {\ttfamily bootstrap} on packages which modify or add to the functionality of Bootstrap when distributing through \href{https://www.npmjs.com/browse/keyword/bootstrap}{\tt npm} or similar delivery mechanisms for maximum discoverability.
+\end{DoxyItemize}
+
+\subsection*{Versioning}
+
+For transparency into our release cycle and in striving to maintain backward compatibility, Bootstrap is maintained under \href{http://semver.org/}{\tt the Semantic Versioning guidelines}. Sometimes we screw up, but we\textquotesingle{}ll adhere to those rules whenever possible.
+
+See \href{https://github.com/twbs/bootstrap/releases}{\tt the Releases section of our Git\+Hub project} for changelogs for each release version of Bootstrap. Release announcement posts on \href{http://blog.getbootstrap.com}{\tt the official Bootstrap blog} contain summaries of the most noteworthy changes made in each release.
+
+\subsection*{Creators}
+
+{\bfseries Mark Otto}
+
+
+\begin{DoxyItemize}
+\item \href{https://twitter.com/mdo}{\tt https\+://twitter.\+com/mdo}
+\item \href{https://github.com/mdo}{\tt https\+://github.\+com/mdo}
+\end{DoxyItemize}
+
+{\bfseries Jacob Thornton}
+
+
+\begin{DoxyItemize}
+\item \href{https://twitter.com/fat}{\tt https\+://twitter.\+com/fat}
+\item \href{https://github.com/fat}{\tt https\+://github.\+com/fat}
+\end{DoxyItemize}
+
+\subsection*{Copyright and license}
+
+Code and documentation copyright 2011-\/2016 Twitter, Inc. Code released under \href{https://github.com/twbs/bootstrap/blob/master/LICENSE}{\tt the M\+IT license}. Docs released under \href{https://github.com/twbs/bootstrap/blob/master/docs/LICENSE}{\tt Creative Commons}. 

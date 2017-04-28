@@ -46,7 +46,7 @@ app.constant('JS_REQUIRES', {
         'wizardCtrl': 'static/assets/js/controllers/wizardCtrl.js',
         'uploadCtrl': 'static/assets/js/controllers/uploadCtrl.js',
         'treeCtrl': 'static/assets/js/controllers/treeCtrl.js',
-        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
+        //'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
         'xeditableCtrl': 'static/assets/js/controllers/xeditableCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'dynamicTableCtrl': 'static/assets/js/controllers/dynamicTableCtrl.js',

@@ -1,0 +1,107 @@
+\hypertarget{namespaceapp_1_1core_1_1auth}{}\section{app.\+core.\+auth Namespace Reference}
+\label{namespaceapp_1_1core_1_1auth}\index{app.\+core.\+auth@{app.\+core.\+auth}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_aa8cecbd33848dc04dbe5de74e5529124}{login} (credentials)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_ae87863230b51e980badace5e2df98f9b}{logout} (user)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_af8454a99dba50fcce1fc955a492871b8}{sign\+Up} (new\+User)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_a218d3eabbf4a3f1be7f409dfd2bd2be4}{set\+Socket\+Id} (socketid, user)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_a3ff0f7317cdc16d6782fab96b4a6311f}{check\+Token\+Validity} (token, user)
+\item 
+def \hyperlink{namespaceapp_1_1core_1_1auth_a06afba77de9ef8e1b6495e833678d1a4}{delete\+User} (user)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyVerb}This module handle all the authentification process.
+The two mains functions are login and register. They contains theirs owns userful functions.
+\end{DoxyVerb}
+ 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_a3ff0f7317cdc16d6782fab96b4a6311f}\label{namespaceapp_1_1core_1_1auth_a3ff0f7317cdc16d6782fab96b4a6311f}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!check\+Token\+Validity@{check\+Token\+Validity}}
+\index{check\+Token\+Validity@{check\+Token\+Validity}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{check\+Token\+Validity()}{checkTokenValidity()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+check\+Token\+Validity (\begin{DoxyParamCaption}\item[{}]{token,  }\item[{}]{user }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}token: the user's session token
+user: model document that modelise the user.
+Return the user corresponding to a token
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_a06afba77de9ef8e1b6495e833678d1a4}\label{namespaceapp_1_1core_1_1auth_a06afba77de9ef8e1b6495e833678d1a4}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!delete\+User@{delete\+User}}
+\index{delete\+User@{delete\+User}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{delete\+User()}{deleteUser()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+delete\+User (\begin{DoxyParamCaption}\item[{}]{user }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}user: model document that modelise the user.
+logout the user, then call the delete() method of the user model document.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_aa8cecbd33848dc04dbe5de74e5529124}\label{namespaceapp_1_1core_1_1auth_aa8cecbd33848dc04dbe5de74e5529124}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!login@{login}}
+\index{login@{login}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{login()}{login()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+login (\begin{DoxyParamCaption}\item[{}]{credentials }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}credentials : data who come from the request.
+This function has as purpose to log in an exsting user.
+The login function first check if the account who tring to log is a social account (Facebook, ..) or a regular.
+The difference is that the social account does not have a password, the auth part is handled by a third party webservice who is OAuth compliant.
+The user is logged in the socketIO session.
+Then it will check if the account exists, and if he is already logged-in. If this is the case, and error will be sent with a 401/403 error code.
+Then, a session token will be generated, used for authentificate the further requests to the api.
+Finally, the full data about users will be returned to him, with a 200 status code.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_ae87863230b51e980badace5e2df98f9b}\label{namespaceapp_1_1core_1_1auth_ae87863230b51e980badace5e2df98f9b}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!logout@{logout}}
+\index{logout@{logout}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{logout()}{logout()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+logout (\begin{DoxyParamCaption}\item[{}]{user }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}To log-out a user, whe juste have to delete his session token frome the actives ones.
+So when he will want to perform a request he will no be find and he will get a "not logged in" error.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_a218d3eabbf4a3f1be7f409dfd2bd2be4}\label{namespaceapp_1_1core_1_1auth_a218d3eabbf4a3f1be7f409dfd2bd2be4}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!set\+Socket\+Id@{set\+Socket\+Id}}
+\index{set\+Socket\+Id@{set\+Socket\+Id}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{set\+Socket\+Id()}{setSocketId()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+set\+Socket\+Id (\begin{DoxyParamCaption}\item[{}]{socketid,  }\item[{}]{user }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}socketId: The id of the socket opened for the logged user.
+user: model document that modelise the user.
+The id is registered to the socketIO IDs list.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespaceapp_1_1core_1_1auth_af8454a99dba50fcce1fc955a492871b8}\label{namespaceapp_1_1core_1_1auth_af8454a99dba50fcce1fc955a492871b8}} 
+\index{app\+::core\+::auth@{app\+::core\+::auth}!sign\+Up@{sign\+Up}}
+\index{sign\+Up@{sign\+Up}!app\+::core\+::auth@{app\+::core\+::auth}}
+\subsubsection{\texorpdfstring{sign\+Up()}{signUp()}}
+{\footnotesize\ttfamily def app.\+core.\+auth.\+sign\+Up (\begin{DoxyParamCaption}\item[{}]{new\+User }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}newUser : the data provided by the request
+This function have as purpose to register to societhy an non-existing user.
+The first job is to check if this is a social connection with OAuth or a regular one.
+If this is a regular connection:
+    - There is a verifcation the check if the request complies to the API specifications, and if the users does not exist.
+    If this is the case, a 403 status code
+    - The password is hashed and salted in order to get inserted in base
+    - a new UserDocument is generated thanks to the data provided in the request.
+    UserDocument represent the user data model, it is defined in the model folder.
+    - The user is inserted in database thanks to the save() method of the user model.
+    - The ethereum key is populated
+    - The login object containing the user data is returned the the client with a 200 status code.
+If this is a social connections:
+    - There is a verifcation the check if the request complies to the API specifications, and if the users does not exist.
+    If this is the case, a 403 status code
+    - a new UserDocument is generated thanks to the data provided in the request.
+    - The user is inserted in database thanks to the save() method of the user model.
+    - The generatePersonalDataFromSocial is used to generate user info in the database from the data provided by the social third party. 
+    - The ethereum key is populated
+    - The login object containing the user data is returned the the client with a 200 status code.
+\end{DoxyVerb}
+ 

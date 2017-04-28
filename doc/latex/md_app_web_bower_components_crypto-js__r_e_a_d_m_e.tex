@@ -1,0 +1,214 @@
+Java\+Script library of crypto standards.
+
+\subsection*{Node.\+js (Install)}
+
+Requirements\+:
+
+
+\begin{DoxyItemize}
+\item Node.\+js
+\item npm (Node.\+js package manager)
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+npm install crypto-js
+\end{DoxyCode}
+
+
+\subsubsection*{Usage}
+
+Modular include\+:
+
+
+\begin{DoxyCode}
+var AES = require("crypto-js/aes");
+var SHA256 = require("crypto-js/sha256");
+...
+console.log(SHA256("Message"));
+\end{DoxyCode}
+
+
+Including all libraries, for access to extra methods\+:
+
+
+\begin{DoxyCode}
+var CryptoJS = require("crypto-js");
+console.log(CryptoJS.HmacSHA1("Message", "Key"));
+\end{DoxyCode}
+
+
+\subsection*{Client (browser)}
+
+Requirements\+:
+
+
+\begin{DoxyItemize}
+\item Node.\+js
+\item Bower (package manager for frontend)
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}
+bower install crypto-js
+\end{DoxyCode}
+
+
+\subsubsection*{Usage}
+
+Modular include\+:
+
+
+\begin{DoxyCode}
+require.config(\{
+    packages: [
+        \{
+            name: 'crypto-js',
+            location: 'path-to/bower\_components/crypto-js',
+            main: 'index'
+        \}
+    ]
+\});
+
+require(["crypto-js/aes", "crypto-js/sha256"], function (AES, SHA256) \{
+    console.log(SHA256("Message"));
+\});
+\end{DoxyCode}
+
+
+Including all libraries, for access to extra methods\+:
+
+
+\begin{DoxyCode}
+// Above-mentioned will work or use this simple form
+require.config(\{
+    paths: \{
+        'crypto-js': 'path-to/bower\_components/crypto-js/crypto-js'
+    \}
+\});
+
+require(["crypto-js"], function (CryptoJS) \{
+    console.log(CryptoJS.HmacSHA1("Message", "Key"));
+\});
+\end{DoxyCode}
+
+
+\subsubsection*{Usage without Require\+JS}
+
+
+\begin{DoxyCode}
+<script type="text/javascript" src="path-to/bower\_components/crypto-js/crypto-js.js"></script>
+<script type="text/javascript">
+    var encrypted = CryptoJS.AES(...);
+    var encrypted = CryptoJS.SHA256(...);
+</script>
+\end{DoxyCode}
+
+
+\subsection*{A\+PI}
+
+See\+: \href{https://code.google.com/p/crypto-js}{\tt https\+://code.\+google.\+com/p/crypto-\/js}
+
+\subsubsection*{A\+ES Encryption}
+
+\paragraph*{Plain text encryption}
+
+
+\begin{DoxyCode}
+var CryptoJS = require("crypto-js");
+
+// Encrypt
+var ciphertext = CryptoJS.AES.encrypt('my message', 'secret key 123');
+
+// Decrypt
+var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
+var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+console.log(plaintext);
+\end{DoxyCode}
+
+
+\paragraph*{Object encryption}
+
+
+\begin{DoxyCode}
+var CryptoJS = require("crypto-js");
+
+var data = [\{id: 1\}, \{id: 2\}]
+
+// Encrypt
+var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'secret key 123');
+
+// Decrypt
+var bytes  = CryptoJS.AES.decrypt(ciphertext.toString(), 'secret key 123');
+var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+console.log(decryptedData);
+\end{DoxyCode}
+
+
+\subsubsection*{List of modules}
+
+
+\begin{DoxyItemize}
+\item {\ttfamily crypto-\/js/core}
+\item {\ttfamily crypto-\/js/x64-\/core}
+\item {\ttfamily crypto-\/js/lib-\/typedarrays} 
+
+
+\item {\ttfamily crypto-\/js/md5}
+\item {\ttfamily crypto-\/js/sha1}
+\item {\ttfamily crypto-\/js/sha256}
+\item {\ttfamily crypto-\/js/sha224}
+\item {\ttfamily crypto-\/js/sha512}
+\item {\ttfamily crypto-\/js/sha384}
+\item {\ttfamily crypto-\/js/sha3}
+\item {\ttfamily crypto-\/js/ripemd160} 
+
+
+\item {\ttfamily crypto-\/js/hmac-\/md5}
+\item {\ttfamily crypto-\/js/hmac-\/sha1}
+\item {\ttfamily crypto-\/js/hmac-\/sha256}
+\item {\ttfamily crypto-\/js/hmac-\/sha224}
+\item {\ttfamily crypto-\/js/hmac-\/sha512}
+\item {\ttfamily crypto-\/js/hmac-\/sha384}
+\item {\ttfamily crypto-\/js/hmac-\/sha3}
+\item {\ttfamily crypto-\/js/hmac-\/ripemd160} 
+
+
+\item {\ttfamily crypto-\/js/pbkdf2} 
+
+
+\item {\ttfamily crypto-\/js/aes}
+\item {\ttfamily crypto-\/js/tripledes}
+\item {\ttfamily crypto-\/js/rc4}
+\item {\ttfamily crypto-\/js/rabbit}
+\item {\ttfamily crypto-\/js/rabbit-\/legacy}
+\item {\ttfamily crypto-\/js/evpkdf} 
+
+
+\item {\ttfamily crypto-\/js/format-\/openssl}
+\item {\ttfamily crypto-\/js/format-\/hex} 
+
+
+\item {\ttfamily crypto-\/js/enc-\/latin1}
+\item {\ttfamily crypto-\/js/enc-\/utf8}
+\item {\ttfamily crypto-\/js/enc-\/hex}
+\item {\ttfamily crypto-\/js/enc-\/utf16}
+\item {\ttfamily crypto-\/js/enc-\/base64} 
+
+
+\item {\ttfamily crypto-\/js/mode-\/cfb}
+\item {\ttfamily crypto-\/js/mode-\/ctr}
+\item {\ttfamily crypto-\/js/mode-\/ctr-\/gladman}
+\item {\ttfamily crypto-\/js/mode-\/ofb}
+\item {\ttfamily crypto-\/js/mode-\/ecb} 
+
+
+\item {\ttfamily crypto-\/js/pad-\/pkcs7}
+\item {\ttfamily crypto-\/js/pad-\/ansix923}
+\item {\ttfamily crypto-\/js/pad-\/iso10126}
+\item {\ttfamily crypto-\/js/pad-\/iso97971}
+\item {\ttfamily crypto-\/js/pad-\/zeropadding}
+\item {\ttfamily crypto-\/js/pad-\/nopadding} 
+\end{DoxyItemize}

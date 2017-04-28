@@ -1,0 +1,345 @@
+
+
+
+
+Options can be passed via data attributes or Java\+Script. For data attributes, append the option name to {\ttfamily data-\/}, as in {\ttfamily data-\/style=\char`\"{}\char`\"{}} or {\ttfamily data-\/selected-\/text-\/format=\char`\"{}count\char`\"{}}.
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{0}{|X[-1]}|}
+\hline
+\end{longtabu}
+
+
+Name 
+
+Type 
+
+Default 
+
+Description  $<$/thead$>$ $<$tbody$>$ 
+
+actions\+Box 
+
+boolean 
+
+{\ttfamily false} 
+
+When set to {\ttfamily true}, adds two buttons to the top of the dropdown menu ({\bfseries Select All} \& {\bfseries Deselect All}).
+
+container 
+
+string $\vert$ false 
+
+{\ttfamily false} 
+
+When set to a string, appends the select to a specific element or selector, e.\+g., {\ttfamily container\+: \textquotesingle{}body\textquotesingle{} $\vert$ \textquotesingle{}.main-\/body\textquotesingle{}}
+
+count\+Selected\+Text 
+
+string $\vert$ function 
+
+{\ttfamily function} 
+
+Sets the format for the text displayed when selected\+Text\+Format is {\ttfamily count} or {\ttfamily count $>$ \#}. \{0\} is the selected amount. \{1\} is total available for selection.
+
+When set to a function, the first parameter is the number of selected options, and the second is the total number of options. The function must return a string.
+
+deselect\+All\+Text 
+
+string 
+
+{\ttfamily \textquotesingle{}Deselect All\textquotesingle{}} 
+
+The text on the button that deselects all options when {\ttfamily actions\+Box} is enabled.
+
+dropdown\+Align\+Right 
+
+boolean $\vert$ {\ttfamily \textquotesingle{}auto\textquotesingle{}} 
+
+{\ttfamily false} 
+
+Align the menu to the right instead of the left. If set to {\ttfamily \textquotesingle{}auto\textquotesingle{}}, the menu will automatically align right if there isn\textquotesingle{}t room for the menu\textquotesingle{}s full width when aligned to the left.
+
+dropup\+Auto 
+
+boolean 
+
+{\ttfamily true} 
+
+checks to see which has more room, above or below. If the dropup has enough room to fully open normally, but there is more room above, the dropup still opens normally. Otherwise, it becomes a dropup. If dropup\+Auto is set to false, dropups must be called manually.
+
+header 
+
+string 
+
+{\ttfamily false} 
+
+adds a header to the top of the menu; includes a close button by default
+
+hide\+Disabled 
+
+boolean 
+
+{\ttfamily false} 
+
+removes disabled options and optgroups from the menu {\ttfamily data-\/hide-\/disabled\+: true}
+
+icon\+Base 
+
+string 
+
+{\ttfamily \textquotesingle{}glyphicon\textquotesingle{}} 
+
+Set the base to use a different icon font instead of Glyphicons. If changing icon\+Base, you might also want to change {\ttfamily tick\+Icon}, in case the new icon font uses a different naming scheme.
+
+live\+Search 
+
+boolean 
+
+{\ttfamily false} 
+
+When set to {\ttfamily true}, adds a search box to the top of the selectpicker dropdown.
+
+live\+Search\+Normalize 
+
+boolean 
+
+{\ttfamily false} 
+
+Setting live\+Search\+Normalize to {\ttfamily true} allows for accent-\/insensitive searching.
+
+live\+Search\+Placeholder 
+
+string 
+
+{\ttfamily null} 
+
+When set to a string, a placeholder attribute equal to the string will be added to the live\+Search input.
+
+live\+Search\+Style 
+
+string 
+
+{\ttfamily \textquotesingle{}contains\textquotesingle{}} 
+
+When set to {\ttfamily \textquotesingle{}contains\textquotesingle{}}, searching will reveal options that contain the searched text. For example, searching for pl with return both Ap{\bfseries pl}e, {\bfseries Pl}um, and {\bfseries Pl}antain. When set to {\ttfamily \textquotesingle{}starts\+With\textquotesingle{}}, searching for pl will return only {\bfseries Pl}um and {\bfseries Pl}antain.
+
+max\+Options 
+
+integer $\vert$ false 
+
+{\ttfamily false} 
+
+When set to an integer and in a multi-\/select, the number of selected options cannot exceed the given value.
+
+This option can also exist as a data-\/attribute for an {\ttfamily $<$optgroup$>$}, in which case it only applies to that {\ttfamily $<$optgroup$>$}.
+
+max\+Options\+Text 
+
+string $\vert$ array $\vert$ function 
+
+{\ttfamily function} 
+
+The text that is displayed when max\+Options is enabled and the maximum number of options for the given scenario have been selected.
+
+If a function is used, it must return an array. array\mbox{[}0\mbox{]} is the text used when max\+Options is applied to the entire select element. array\mbox{[}1\mbox{]} is the text used when max\+Options is used on an optgroup. If a string is used, the same text is used for both the element and the optgroup.
+
+mobile 
+
+boolean 
+
+{\ttfamily false} 
+
+When set to {\ttfamily true}, enables the device\textquotesingle{}s native menu for select menus.
+
+multiple\+Separator 
+
+string 
+
+{\ttfamily \textquotesingle{}, \textquotesingle{}} 
+
+Set the character displayed in the button that separates selected options.
+
+none\+Selected\+Text 
+
+string 
+
+{\ttfamily \textquotesingle{}Nothing selected\textquotesingle{}} 
+
+The text that is displayed when a multiple select has no selected options.
+
+select\+All\+Text 
+
+string 
+
+{\ttfamily \textquotesingle{}Select All\textquotesingle{}} 
+
+The text on the button that selects all options when {\ttfamily actions\+Box} is enabled.
+
+selected\+Text\+Format 
+
+{\ttfamily \textquotesingle{}values\textquotesingle{}} $\vert$ {\ttfamily \textquotesingle{}static\textquotesingle{}} $\vert$ {\ttfamily \textquotesingle{}count\textquotesingle{}} $\vert$ {\ttfamily \textquotesingle{}count $>$ x\textquotesingle{}} (where x is an integer) 
+
+{\ttfamily \textquotesingle{}values\textquotesingle{}} 
+
+Specifies how the selection is displayed with a multiple select.
+
+{\ttfamily \textquotesingle{}values\textquotesingle{}} displays a list of the selected options (separated by {\ttfamily multiple\+Separator}. {\ttfamily \textquotesingle{}static\textquotesingle{}} simply displays the select element\textquotesingle{}s title. {\ttfamily \textquotesingle{}count\textquotesingle{}} displays the total number of selected options. {\ttfamily \textquotesingle{}count $>$ x\textquotesingle{}} behaves like {\ttfamily \textquotesingle{}values\textquotesingle{}} until the number of selected options is greater than x; after that, it behaves like {\ttfamily \textquotesingle{}count\textquotesingle{}}.   
+
+select\+On\+Tab 
+
+boolean 
+
+{\ttfamily false} 
+
+When set to {\ttfamily true}, treats the tab character like the enter or space characters within the selectpicker dropdown.
+
+show\+Content 
+
+boolean 
+
+{\ttfamily true} 
+
+When set to {\ttfamily true}, display custom H\+T\+ML associated with selected option(s) in the button. When set to {\ttfamily false}, the option value will be displayed instead.
+
+show\+Icon 
+
+boolean 
+
+{\ttfamily true} 
+
+When set to {\ttfamily true}, display icon(s) associated with selected option(s) in the button.
+
+show\+Subtext 
+
+boolean 
+
+{\ttfamily false} 
+
+When set to {\ttfamily true}, display subtext associated with a selected option in the button.
+
+show\+Tick 
+
+boolean 
+
+{\ttfamily false} 
+
+Show checkmark on selected option (for items without {\ttfamily multiple} attribute).
+
+size 
+
+{\ttfamily \textquotesingle{}auto\textquotesingle{}} $\vert$ integer $\vert$ false 
+
+{\ttfamily \textquotesingle{}auto\textquotesingle{}} 
+
+When set to {\ttfamily \textquotesingle{}auto\textquotesingle{}}, the menu always opens up to show as many items as the window will allow without being cut off.
+
+When set to an integer, the menu will show the given number of items, even if the dropdown is cut off.
+
+When set to {\ttfamily false}, the menu will always show all items.
+
+style 
+
+string $\vert$ null 
+
+{\ttfamily null} 
+
+When set to a string, add the value to the button\textquotesingle{}s style.
+
+tick\+Icon 
+
+string 
+
+{\ttfamily \textquotesingle{}glyphicon-\/ok\textquotesingle{}} 
+
+Set which icon to use to display as the \char`\"{}tick\char`\"{} next to selected options.
+
+title 
+
+string $\vert$ null 
+
+{\ttfamily null} 
+
+The default title for the selectpicker.
+
+width 
+
+{\ttfamily \textquotesingle{}auto\textquotesingle{}} $\vert$ {\ttfamily \textquotesingle{}fit\textquotesingle{}} $\vert$ css-\/width $\vert$ false (where {\ttfamily css-\/width} is a C\+SS width with units, e.\+g. {\ttfamily 100px}) 
+
+{\ttfamily false} 
+
+When set to {\ttfamily auto}, the width of the selectpicker is automatically adjusted to accommodate the widest option.
+
+When set to a css-\/width, the width of the selectpicker is forced inline to the given value.
+
+When set to {\ttfamily false}, all width information is removed.
+
+window\+Padding 
+
+integer $\vert$ array 
+
+{\ttfamily 0} 
+
+This is useful in cases where the window has areas that the dropdown menu should not cover -\/ for instance a fixed header. When set to an integer, the same padding will be added to all sides. Alternatively, an array of integers can be used in the format {\ttfamily \mbox{[}top, right, bottom, left\mbox{]}}.
+
+$<$/tbody$>$ 
+
+\section*{Events}
+
+
+
+
+
+Bootstrap-\/select exposes a few events for hooking into select functionality.
+
+hide.\+bs.\+select, hidden.\+bs.\+select, show.\+bs.\+select, and shown.\+bs.\+select all have a {\ttfamily related\+Target} property, whose value is the toggling anchor element.
+
+\tabulinesep=1mm
+\begin{longtabu} spread 0pt [c]{*{0}{|X[-1]}|}
+\hline
+\end{longtabu}
+
+
+Event Type 
+
+Description  $<$/thead$>$ $<$tbody$>$ 
+
+show.\+bs.\+select 
+
+This event fires immediately when the show instance method is called.  
+
+shown.\+bs.\+select 
+
+This event is fired when the dropdown has been made visible to the user (will wait for C\+SS transitions, to complete).  
+
+hide.\+bs.\+select 
+
+This event is fired immediately when the hide instance method has been called.  
+
+hidden.\+bs.\+select 
+
+This event is fired when the dropdown has finished being hidden from the user (will wait for C\+SS transitions, to complete).  
+
+loaded.\+bs.\+select 
+
+This event fires after the select has been initialized.  
+
+rendered.\+bs.\+select 
+
+This event fires after the render instance has been called.  
+
+refreshed.\+bs.\+select 
+
+This event fires after the refresh instance has been called.  
+
+changed.\+bs.\+select 
+
+This event fires after the select\textquotesingle{}s value has been changed. It passes through event, clicked\+Index, new\+Value, old\+Value.  $<$/tbody$>$ 
+
+
+\begin{DoxyCode}
+$('#mySelect').on('hidden.bs.select', function (e) \{
+  // do something...
+\});
+\end{DoxyCode}
+ 

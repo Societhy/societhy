@@ -1,3 +1,7 @@
+"""
+In developpement.
+"""
+
 from mongokat import Collection, Document
 from bson.objectid import ObjectId
 from .clients import client

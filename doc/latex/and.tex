@@ -1,0 +1,460 @@
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.5...v2.0.6}{\tt 2.\+0.\+6 / 2014-\/01-\/04} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/198}{\tt \#198} -\/ process comments and {\ttfamily @import}s correctly.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/205}{\tt \#205} -\/ freeze on broken {\ttfamily @import} declaration.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.4...v2.0.5}{\tt 2.\+0.\+5 / 2014-\/01-\/03} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/199}{\tt \#199} -\/ keep line breaks with no advanced optimizations.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/203}{\tt \#203} -\/ Buffer as a first argument to minify method.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.3...v2.0.4}{\tt 2.\+0.\+4 / 2013-\/12-\/19} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/193}{\tt \#193} -\/ H\+SL color space normalization.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.2...v2.0.3}{\tt 2.\+0.\+3 / 2013-\/12-\/18} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/191}{\tt \#191} -\/ leading numbers in {\ttfamily font}/{\ttfamily animation} names.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/192}{\tt \#192} -\/ many {\ttfamily @import}s inside a comment.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.1...v2.0.2}{\tt 2.\+0.\+2 / 2013-\/11-\/18} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/177}{\tt \#177} -\/ process broken content correctly.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v2.0.0...v2.0.1}{\tt 2.\+0.\+1 / 2013-\/11-\/14} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/176}{\tt \#176} -\/ hangs on {\ttfamily undefined} keyword.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.7...v2.0.0}{\tt 2.\+0.\+0 / 2013-\/11-\/04} }
+
+
+\begin{DoxyItemize}
+\item Adds simplified and more advanced text escaping / restoring via {\ttfamily Escape\+Store} class.
+\item Adds simplified and much faster empty elements removal.
+\item Adds missing {\ttfamily @import} processing to our benchmark (run via {\ttfamily npm run bench}).
+\item Adds C\+SS tokenizer which will make it possible to optimize content by reordering and/or merging selectors.
+\item Adds basic optimizer removing duplicate selectors from a list.
+\item Adds merging duplicate properties within a single selector\textquotesingle{}s body.
+\item Adds merging adjacent selectors within a scope (single and multiple ones).
+\item Changes behavior of {\ttfamily -\/-\/keep-\/line-\/breaks}/{\ttfamily keep\+Breaks} option to keep breaks after trailing braces only.
+\item Makes all multiple selectors ordered alphabetically (aids merging).
+\item Adds property overriding so more coarse properties override more granular ones.
+\item Adds reducing non-\/adjacent selectors.
+\item Adds {\ttfamily -\/-\/skip-\/advanced}/{\ttfamily no\+Advanced} switch to disable advanced optimizations.
+\item Adds reducing non-\/adjacent selectors when overridden by more complex selectors.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/138}{\tt \#138} -\/ makes Clean\+C\+SS interface OO.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/138}{\tt \#139} -\/ consistent error \& warning handling.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/145}{\tt \#145} -\/ debug mode in library too.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/157}{\tt \#157} -\/ gets rid of {\ttfamily remove\+Empty} option.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/159}{\tt \#159} -\/ escaped quotes inside content.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/162}{\tt \#162} -\/ strip quotes from Base64 encoded U\+R\+Ls.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/166}{\tt \#166} -\/ {\ttfamily debug} formatting in C\+LI
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/167}{\tt \#167} -\/ {\ttfamily background\+:transparent} minification.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.6...v1.1.7}{\tt 1.\+1.\+7 / 2013-\/10-\/28} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/156}{\tt \#156} -\/ {\ttfamily @import}s inside comments.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.5...v1.1.6}{\tt 1.\+1.\+6 / 2013-\/10-\/26} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/155}{\tt \#155} -\/ broken irregular C\+SS content.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.4...v1.1.5}{\tt 1.\+1.\+5 / 2013-\/10-\/24} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/153}{\tt \#153} -\/ {\ttfamily keep\+Special\+Comments} {\ttfamily 0}/{\ttfamily 1} as a string.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.3...v1.1.4}{\tt 1.\+1.\+4 / 2013-\/10-\/23} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/152}{\tt \#152} -\/ adds an option to disable rebasing.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.2...v1.1.3}{\tt 1.\+1.\+3 / 2013-\/10-\/04} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/150}{\tt \#150} -\/ minifying {\ttfamily background\+:none}.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.1...v1.1.2}{\tt 1.\+1.\+2 / 2013-\/09-\/29} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/149}{\tt \#149} -\/ shorthand {\ttfamily font} property.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.1.0...v1.1.1}{\tt 1.\+1.\+1 / 2013-\/09-\/07} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/144}{\tt \#144} -\/ skip U\+R\+Ls rebasing by default.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.12...v1.1.0}{\tt 1.\+1.\+0 / 2013-\/09-\/06} }
+
+
+\begin{DoxyItemize}
+\item Renamed lib\textquotesingle{}s {\ttfamily debug} option to {\ttfamily benchmark} when doing per-\/minification benchmarking.
+\item Added simplified comments processing \& imports.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/43}{\tt \#43} -\/ {\ttfamily -\/-\/debug} switch for minification stats.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/65}{\tt \#65} -\/ full color name / hex shortening.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/84}{\tt \#84} -\/ support for {\ttfamily @import} with media queries.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/124}{\tt \#124} -\/ raise error on broken imports.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/126}{\tt \#126} -\/ proper C\+SS expressions handling.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/129}{\tt \#129} -\/ rebasing imported U\+R\+Ls.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/130}{\tt \#130} -\/ better code modularity.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/135}{\tt \#135} -\/ require node.\+js 0.\+8+.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.11...v1.0.12}{\tt 1.\+0.\+12 / 2013-\/07-\/19} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/121}{\tt \#121} -\/ ability to skip {\ttfamily @import} processing.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.10...v1.0.11}{\tt 1.\+0.\+11 / 2013-\/07-\/08} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/117}{\tt \#117} -\/ line break escaping in comments.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.9...v1.0.10}{\tt 1.\+0.\+10 / 2013-\/06-\/13} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/114}{\tt \#114} -\/ comments in imported stylesheets.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.8...v1.0.9}{\tt 1.\+0.\+9 / 2013-\/06-\/11} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/113}{\tt \#113} -\/ {\ttfamily @import} in comments.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.7...v1.0.8}{\tt 1.\+0.\+8 / 2013-\/06-\/10} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/112}{\tt \#112} -\/ reducing {\ttfamily box-\/shadow} zeros.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.6...v1.0.7}{\tt 1.\+0.\+7 / 2013-\/06-\/05} }
+
+
+\begin{DoxyItemize}
+\item Support for {\ttfamily @import} U\+R\+Ls starting with {\ttfamily //}. By \href{https://github.com/petetak}{\tt }.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.5...v1.0.6}{\tt 1.\+0.\+6 / 2013-\/06-\/04} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/110}{\tt \#110} -\/ data U\+R\+Is in U\+R\+Ls.
+\end{DoxyItemize}
+
+\section*{\href{https://github.com/jakubpawlowicz/clean-css/compare/v1.0.4...v1.0.5}{\tt 1.\+0.\+5 / 2013-\/05-\/26} }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/107}{\tt \#107} -\/ data U\+R\+Is in imported stylesheets.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+4 / 2013-\/05-\/23 }
+
+
+\begin{DoxyItemize}
+\item Rewrite relative U\+R\+Ls in imported stylesheets. By \href{https://github.com/bluej100}{\tt }.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+3 / 2013-\/05-\/20 }
+
+
+\begin{DoxyItemize}
+\item Support alternative {\ttfamily @import} syntax with file name not wrapped inside {\ttfamily url()} statement. By \href{https://github.com/bluej100}{\tt }.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+2 / 2013-\/04-\/29 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/97}{\tt \#97} -\/ {\ttfamily -\/-\/remove-\/empty} \& Font\+Awesome.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+1 / 2013-\/04-\/08 }
+
+
+\begin{DoxyItemize}
+\item Do not pick up {\ttfamily bench} and {\ttfamily test} while building {\ttfamily npm} package. By \href{https://https://github.com/sindresorhus}{\tt }.
+\end{DoxyItemize}
+
+\section*{1.\+0.\+0 / 2013-\/03-\/30 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/2}{\tt \#2} -\/ resolving {\ttfamily @import} rules.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/44}{\tt \#44} -\/ examples in {\ttfamily -\/-\/help}.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/46}{\tt \#46} -\/ preserving special characters in U\+R\+Ls and attributes.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/80}{\tt \#80} -\/ quotation in multi line strings.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/83}{\tt \#83} -\/ H\+SL to hex color conversions.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/86}{\tt \#86} -\/ broken {\ttfamily @charset} replacing.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/88}{\tt \#88} -\/ removes space in {\ttfamily ! important}.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/92}{\tt \#92} -\/ uppercase hex to short versions.
+\end{DoxyItemize}
+
+\section*{0.\+10.\+2 / 2013-\/03-\/19 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/79}{\tt \#79} -\/ node.\+js 0.\+10.\+x compatibility.
+\end{DoxyItemize}
+
+\section*{0.\+10.\+1 / 2013-\/02-\/14 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/66}{\tt \#66} -\/ line breaks without extra spaces should be handled correctly.
+\end{DoxyItemize}
+
+\section*{0.\+10.\+0 / 2013-\/02-\/09 }
+
+
+\begin{DoxyItemize}
+\item Switched from \href{https://github.com/substack/node-optimist}{\tt optimist} to \href{https://github.com/visionmedia/commander.js}{\tt commander} for C\+LI processing.
+\item Changed long options from {\ttfamily -\/-\/removeempty} to {\ttfamily -\/-\/remove-\/empty} and from {\ttfamily -\/-\/keeplinebreaks} to {\ttfamily -\/-\/keep-\/line-\/breaks}.
+\item Fixed performance issue with replacing multiple {\ttfamily @charset} declarations and issue with line break after {\ttfamily @charset} when using {\ttfamily keep\+Line\+Breaks} option. By \href{https://github.com/rrjamie}{\tt }.
+\item Removed Makefile in favor to {\ttfamily npm run} commands (e.\+g. {\ttfamily make check} -\/$>$ {\ttfamily npm run check}).
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/47}{\tt \#47} -\/ commandline issues on Windows.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/49}{\tt \#49} -\/ remove empty selectors from media query.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/52}{\tt \#52} -\/ strip fraction zeros if not needed.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/58}{\tt \#58} -\/ remove colon where possible.
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/59}{\tt \#59} -\/ content property handling.
+\end{DoxyItemize}
+
+\section*{0.\+9.\+1 / 2012-\/12-\/19 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue \href{https://github.com/jakubpawlowicz/clean-css/issues/37}{\tt \#37} -\/ converting {\ttfamily white} and other colors in class names (reported by \href{https://github.com/malgorithms}{\tt }).
+\end{DoxyItemize}
+
+\section*{0.\+9.\+0 / 2012-\/12-\/15 }
+
+
+\begin{DoxyItemize}
+\item Added stripping quotation from font names (if possible).
+\item Added stripping quotation from {\ttfamily @keyframes} declaration, {\ttfamily animation} and {\ttfamily animation-\/name} property.
+\item Added stripping quotations from attributes\textquotesingle{} value (e.\+g. `\mbox{[}data-\/target=\textquotesingle{}x\textquotesingle{}\mbox{]}`).
+\item Added better hex-\/$>$name and name-\/$>$hex color shortening.
+\item Added {\ttfamily font\+: normal} and {\ttfamily font\+: bold} shortening the same way as {\ttfamily font-\/weight} is.
+\item Refactored shorthand selectors and added {\ttfamily border-\/radius}, {\ttfamily border-\/style} and {\ttfamily border-\/color} shortening.
+\item Added {\ttfamily margin}, {\ttfamily padding} and {\ttfamily border-\/width} shortening.
+\item Added removing line break after commas.
+\item Fixed removing whitespace inside media query definition.
+\item Added removing line breaks after a comma, so all declarations are one-\/liners now.
+\item Speed optimizations ($\sim$10\% despite many new features).
+\item Added \href{https://github.com/jshint/jshint/}{\tt J\+S\+Hint} validation rules via {\ttfamily make check}.
+\end{DoxyItemize}
+
+\section*{0.\+8.\+3 / 2012-\/11-\/29 }
+
+
+\begin{DoxyItemize}
+\item Fixed H\+S\+L/\+H\+S\+LA colors processing.
+\end{DoxyItemize}
+
+\section*{0.\+8.\+2 / 2012-\/10-\/31 }
+
+
+\begin{DoxyItemize}
+\item Fixed shortening hex colors and their relation to hashes in U\+R\+Ls.
+\item Cleanup by \href{https://github.com/XhmikosR}{\tt }.
+\end{DoxyItemize}
+
+\section*{0.\+8.\+1 / 2012-\/10-\/28 }
+
+
+\begin{DoxyItemize}
+\item Added better zeros processing for {\ttfamily rect(...)} syntax (clip property).
+\end{DoxyItemize}
+
+\section*{0.\+8.\+0 / 2012-\/10-\/21 }
+
+
+\begin{DoxyItemize}
+\item Added removing U\+R\+Ls quotation if possible.
+\item Rewrote breaks processing.
+\item Added {\ttfamily keep\+Breaks}/{\ttfamily -\/b} option to keep line breaks in the minimized file.
+\item Reformatted \href{/lib/clean.js}{\tt lib/clean.\+js} so it\textquotesingle{}s easier to follow the rules.
+\item Minimized test data is now minimized with line breaks so it\textquotesingle{}s easier to compare the changes line by line.
+\end{DoxyItemize}
+
+\section*{0.\+7.\+0 / 2012-\/10-\/14 }
+
+
+\begin{DoxyItemize}
+\item Added stripping special comments to C\+LI ({\ttfamily -\/-\/s0} and {\ttfamily -\/-\/s1} options).
+\item Added stripping special comments to programmatic interface ({\ttfamily keep\+Special\+Comments} option).
+\end{DoxyItemize}
+
+\section*{0.\+6.\+0 / 2012-\/08-\/05 }
+
+
+\begin{DoxyItemize}
+\item Full Windows support with tests (./test.bat).
+\end{DoxyItemize}
+
+\section*{0.\+5.\+0 / 2012-\/08-\/02 }
+
+
+\begin{DoxyItemize}
+\item Made path to vows local.
+\item Explicit node.\+js 0.\+6 requirement.
+\end{DoxyItemize}
+
+\section*{0.\+4.\+2 / 2012-\/06-\/28 }
+
+
+\begin{DoxyItemize}
+\item Updated binary {\ttfamily -\/v} option (version).
+\item Updated binary to output help when no options given (but not in piped mode).
+\item Added binary tests.
+\end{DoxyItemize}
+
+\section*{0.\+4.\+1 / 2012-\/06-\/10 }
+
+
+\begin{DoxyItemize}
+\item Fixed stateless mode where calling {\ttfamily Clean\+C\+S\+S\+::process} directly was giving errors (reported by \href{https://github.com/facelessuser}{\tt }).
+\end{DoxyItemize}
+
+\section*{0.\+4.\+0 / 2012-\/06-\/04 }
+
+
+\begin{DoxyItemize}
+\item Speed improvements up to 4x thanks to the rewrite of comments and C\+SS\textquotesingle{} content processing.
+\item Stripping empty C\+SS tags is now optional (see \href{/bin/cleancss}{\tt bin/cleancss} for details).
+\item Improved debugging mode (see \href{/test/bench.js}{\tt test/bench.\+js})
+\item Added {\ttfamily make bench} for a one-\/pass benchmark.
+\end{DoxyItemize}
+
+\section*{0.\+3.\+3 / 2012-\/05-\/27 }
+
+
+\begin{DoxyItemize}
+\item Fixed tests, \href{/package.json}{\tt package.\+json} for development, and regex for removing empty declarations (thanks to \href{https://github.com/vvo}{\tt }).
+\end{DoxyItemize}
+
+\section*{0.\+3.\+2 / 2012-\/01-\/17 }
+
+
+\begin{DoxyItemize}
+\item Fixed output method under node.\+js 0.\+6 which incorrectly tried to close {\ttfamily process.\+stdout}.
+\end{DoxyItemize}
+
+\section*{0.\+3.\+1 / 2011-\/12-\/16 }
+
+
+\begin{DoxyItemize}
+\item Fixed cleaning up {\ttfamily 0 0 0 0} expressions.
+\end{DoxyItemize}
+
+\section*{0.\+3.\+0 / 2011-\/11-\/29 }
+
+
+\begin{DoxyItemize}
+\item Clean-\/css requires node.\+js 0.\+4.\+0+ to run.
+\item Removed node.\+js\textquotesingle{}s 0.\+2.\+x \textquotesingle{}sys\textquotesingle{} package dependency (thanks to \href{https://github.com/jmalonzo}{\tt } for a patch).
+\end{DoxyItemize}
+
+\section*{0.\+2.\+6 / 2011-\/11-\/27 }
+
+
+\begin{DoxyItemize}
+\item Fixed expanding {\ttfamily +} signs in {\ttfamily calc()} when mixed up with adjacent {\ttfamily +} selector.
+\end{DoxyItemize}
+
+\section*{0.\+2.\+5 / 2011-\/11-\/27 }
+
+
+\begin{DoxyItemize}
+\item Fixed issue with cleaning up spaces inside {\ttfamily calc}/{\ttfamily -\/moz-\/calc} declarations (thanks to \href{https://github.com/cvan}{\tt } for reporting it).
+\item Fixed converting {\ttfamily \#f00} to {\ttfamily red} in borders and gradients.
+\end{DoxyItemize}
+
+\section*{0.\+2.\+4 / 2011-\/05-\/25 }
+
+
+\begin{DoxyItemize}
+\item Fixed problem with expanding {\ttfamily none} to {\ttfamily 0} in partial/full background declarations.
+\item Fixed including clean-\/css library from binary (global to local).
+\end{DoxyItemize}
+
+\section*{0.\+2.\+3 / 2011-\/04-\/18 }
+
+
+\begin{DoxyItemize}
+\item Fixed problem with optimizing IE filters.
+\end{DoxyItemize}
+
+\section*{0.\+2.\+2 / 2011-\/04-\/17 }
+
+
+\begin{DoxyItemize}
+\item Fixed problem with space before color in {\ttfamily border} property.
+\end{DoxyItemize}
+
+\section*{0.\+2.\+1 / 2011-\/03-\/19 }
+
+
+\begin{DoxyItemize}
+\item Added stripping space before {\ttfamily !important} keyword.
+\item Updated repository location and author information in \href{/package.json}{\tt package.\+json}.
+\end{DoxyItemize}
+
+\section*{0.\+2.\+0 / 2011-\/03-\/02 }
+
+
+\begin{DoxyItemize}
+\item Added options parsing via optimist.
+\item Changed code inclusion (thus the version bump).
+\end{DoxyItemize}
+
+\section*{0.\+1.\+0 / 2011-\/02-\/27 }
+
+
+\begin{DoxyItemize}
+\item First version of clean-\/css library.
+\item Implemented all basic C\+SS transformations. 
+\end{DoxyItemize}

@@ -1,0 +1,419 @@
+Status\+:  \href{https://www.npmjs.com/package/angularjs-slider}{\tt } \href{http://npm-stat.com/charts.html?package=angularjs-slider&from=2015-01-01}{\tt } \href{https://travis-ci.org/angular-slider/angularjs-slider}{\tt } \href{https://codecov.io/github/angular-slider/angularjs-slider?branch=master}{\tt } 
+
+Links\+: \href{https://gitter.im/rzajac/angularjs-slider?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge}{\tt } \href{http://makeapullrequest.com}{\tt }
+
+\begin{quote}
+I\textquotesingle{}m looking for a maintainer for this project. I have lost my \href{https://medium.com/@kentcdodds/open-source-stamina-dafd063f9932#.sfay5wlzp}{\tt Open Source Stamina} for this project and I will probably not push any code to this project anymore (unless, I find some motivation later). I will try to merge pull requests if some are submitted, but only if they are really clean. \end{quote}
+
+
+Slider directive implementation for Angular\+JS 1.\+X, without any dependencies\+: \href{http://angular-slider.github.io/angularjs-slider/index.html}{\tt http\+://angular-\/slider.\+github.\+io/angularjs-\/slider}.
+
+
+\begin{DoxyItemize}
+\item Mobile friendly
+\item Fast
+\item Well documented
+\item Customizable
+\item Simple to use
+\item Keyboard support
+\item Compatibility with j\+Query Lite, ie. with full j\+Query ( Thanks Jusas! \href{https://github.com/Jusas}{\tt https\+://github.\+com/\+Jusas})
+\item Supports right to left
+\end{DoxyItemize}
+
+{\bfseries Horizontal}
+
+
+
+{\bfseries Vertical}
+
+
+
+{\bfseries Custom style} 
+
+\subsection*{Examples}
+
+
+\begin{DoxyItemize}
+\item {\bfseries Various examples\+:} \href{http://angular-slider.github.io/angularjs-slider/index.html}{\tt http\+://angular-\/slider.\+github.\+io/angularjs-\/slider}
+\item {\bfseries Same examples with live code\+:} \href{https://jsfiddle.net/ValentinH/954eve2L/}{\tt https\+://jsfiddle.\+net/\+Valentin\+H/954eve2\+L/}
+\end{DoxyItemize}
+
+\subsection*{Reporting issues}
+
+Make sure the report is accompanied by a reproducible demo. The ideal demo is created by forking \href{http://jsfiddle.net/cwhgLcjv/}{\tt our standard js\+Fiddle}, adding your own code and stripping it down to an absolute minimum needed to demonstrate the bug.
+
+\subsection*{Common issues}
+
+\subsubsection*{My slider is not rendered correctly on load}
+
+If the slider\textquotesingle{}s parent element is not visible during slider initialization, the slider can\textquotesingle{}t know when its parent becomes visible. For instance, when displaying a slider inside an element which visibility is toggled using ng-\/show, you need to send an event to force it to redraw when you set your ng-\/show to true.
+
+Here\textquotesingle{}s an example of {\ttfamily refresh\+Slider} method that you should call whenever the slider becomes visible. 
+\begin{DoxyCode}
+vm.refreshSlider = function () \{
+    $timeout(function () \{
+        $scope.$broadcast('rzSliderForceRender');
+    \});
+\};
+\end{DoxyCode}
+ if you get some flickering issues, you can try to replace to {\ttfamily \$timeout} call by {\ttfamily \$scope.\$\$post\+Digest} as suggested by  in \href{https://github.com/angular-slider/angularjs-slider/issues/79#issuecomment-219213647}{\tt this issue}.
+
+{\bfseries ng-\/show-\/example}\+: \href{http://jsfiddle.net/3jjye1cL/}{\tt http\+://jsfiddle.\+net/3jjye1c\+L/}
+
+{\bfseries U\+I-\/\+Boostrap tabs example}\+: \href{http://jsfiddle.net/0f7sd7dw/}{\tt http\+://jsfiddle.\+net/0f7sd7dw/}
+
+\subsubsection*{Decimal value can\textquotesingle{}t be typed in an input field linked to the slider}
+
+By default, the slider value is always rounded to the nearest step. A side effect is that when a input field is linked to the slider in order to enable a user to directly type a value, the value is rounded when it doesn\textquotesingle{}t match the step. Even worse, when using decimal values, when a user will type \char`\"{}0.\char`\"{}, the {\ttfamily .} will directly be truncated since the value is rounded.
+
+{\bfseries Solution}\+: To avoid the value to be rounded, you need to use the {\ttfamily enforce\+Step\+: false} option. Thus, the value can be modified externally without taking care of the step. See \href{https://github.com/angular-slider/angularjs-slider/issues/298}{\tt \#298}.
+
+\subsection*{Installation}
+
+\#\#\# N\+PM 
+\begin{DoxyCode}
+npm i angularjs-slider
+\end{DoxyCode}
+ or \#\#\# Bower 
+\begin{DoxyCode}
+$ bower install --save angularjs-slider
+\end{DoxyCode}
+
+
+or \subsubsection*{C\+D\+N\+JS}
+
+Directly use (replace {\ttfamily X.\+X.\+X} by the version you want to use)\+:
+\begin{DoxyItemize}
+\item {\ttfamily \href{https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/X.X.X/rzslider.min.js}{\tt https\+://cdnjs.\+cloudflare.\+com/ajax/libs/angularjs-\/slider/\+X.\+X.\+X/rzslider.\+min.\+js}}
+\item {\ttfamily \href{https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/X.X.X/rzslider.min.css}{\tt https\+://cdnjs.\+cloudflare.\+com/ajax/libs/angularjs-\/slider/\+X.\+X.\+X/rzslider.\+min.\+css}}
+\end{DoxyItemize}
+
+\subsection*{Project integration}
+
+\#\#\# Imports 
+\begin{DoxyCode}
+<link rel="stylesheet" type="text/css" href="/path/to/slider/rzslider.css"/>
+<script src="/path/to/angularjs/angular.min.js"></script>
+<script src="/path/to/slider/rzslider.min.js"></script>
+\end{DoxyCode}
+
+
+\#\#\# Module 
+\begin{DoxyCode}
+angular.module('yourApp', ['rzModule']);
+\end{DoxyCode}
+
+
+\subsubsection*{Single slider}
+
+
+\begin{DoxyCode}
+// In your controller
+$scope.priceSlider = 150;
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+<div>
+    <rzslider rz-slider-model="priceSlider"></rzslider>
+</div>
+\end{DoxyCode}
+
+
+Above example would render a slider from 0 to 150. If you need floor and ceiling values use {\ttfamily rz-\/slider-\/options} attribute and provide an object with {\ttfamily floor}and {\ttfamily ceil}.
+
+
+\begin{DoxyCode}
+<div>
+    <rzslider
+         rz-slider-model="slider.value"
+         rz-slider-options="slider.options"></rzslider>
+</div>
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+$scope.slider = \{
+  value: 150,
+  options: \{
+    floor: 0,
+    ceil: 450
+  \}
+\};
+\end{DoxyCode}
+
+
+If you don\textquotesingle{}t want to bother with an object set in your javascript file, you can pass an anonymous object literal to the slider options\+: 
+\begin{DoxyCode}
+<div>
+    <rzslider
+         rz-slider-model="value"
+         rz-slider-options="\{floor: 0, ceil: 450\}"></rzslider>
+</div>
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+$scope.value = 150;
+\end{DoxyCode}
+
+
+\subsubsection*{Range slider}
+
+
+\begin{DoxyCode}
+// In your controller
+$scope.slider = \{
+  min: 100,
+  max: 180,
+  options: \{
+    floor: 0,
+    ceil: 450
+  \}
+\};
+\end{DoxyCode}
+
+
+
+\begin{DoxyCode}
+<rzslider
+    rz-slider-model="slider.min"
+    rz-slider-high="slider.max"
+    rz-slider-options="slider.options"></rzslider>
+\end{DoxyCode}
+
+
+\subsection*{Directive attributes}
+
+{\bfseries rz-\/slider-\/model}
+
+\begin{quote}
+Model for low value slider. If only {\itshape rz-\/slider-\/model} is provided single slider will be rendered. \end{quote}
+
+
+{\bfseries rz-\/slider-\/high}
+
+\begin{quote}
+Model for high value slider. Providing both {\itshape rz-\/slider-\/model} and {\itshape rz-\/slider-\/high} will render range slider. \end{quote}
+
+
+{\bfseries rz-\/slider-\/tpl-\/url}
+
+\begin{quote}
+If you need to use a custom template, you can do so by providing a template U\+RL to the {\ttfamily rz-\/slider-\/tpl-\/url} attribute. The default template is \href{https://github.com/angular-slider/angularjs-slider/blob/master/src/rzSliderTpl.html}{\tt this one}. \end{quote}
+
+
+The following variables are available in the template as scope variables.
+\begin{DoxyItemize}
+\item {\ttfamily floor\+Label}\+: The value set to {\ttfamily floor} in {\ttfamily rz-\/slider-\/options}
+\item {\ttfamily ceil\+Label}\+: The value set to {\ttfamily ceil} in {\ttfamily rz-\/slider-\/options}
+\item {\ttfamily model\+Label}\+: The value set to {\ttfamily rz-\/slider-\/model}
+\item {\ttfamily high\+Label}\+: The value set to {\ttfamily rz-\/slider-\/high}
+\item {\ttfamily cmb\+Label}\+: The text shown when the two handlers are close to each other. (e.\+g. \char`\"{}30-\/40\char`\"{})
+\end{DoxyItemize}
+
+The library replaces the H\+T\+ML contents of label elements in the template by default, if you want to stop this behaviour and tweak label H\+T\+ML on your own, you need to set {\ttfamily no-\/label-\/injection} class on the elements you\textquotesingle{}re customizing.
+
+See the \href{./demo/directiveInCustomTemplate.html}{\tt Custom template to use angular directive for label} for an example.
+
+{\bfseries rz-\/slider-\/options}
+
+\begin{quote}
+An object with all the other options of the slider. Each option can be updated at runtime and the slider will automatically be re-\/rendered. \end{quote}
+
+
+The default options are\+: ```js \{ floor\+: 0, ceil\+: null, //defaults to rz-\/slider-\/model step\+: 1, precision\+: 0, min\+Limit\+: null, max\+Limit\+: null, min\+Range\+: null, max\+Range\+: null, push\+Range\+: false, id\+: null, translate\+: null, get\+Legend\+: null, steps\+Array\+: null, bind\+Index\+For\+Steps\+Array\+: false, draggable\+Range\+: false, draggable\+Range\+Only\+: false, show\+Selection\+Bar\+: false, show\+Selection\+Bar\+End\+: false, show\+Selection\+Bar\+From\+Value\+: null, hide\+Pointer\+Labels\+: false, hide\+Limit\+Labels\+: false, auto\+Hide\+Limit\+Labels\+: true, read\+Only\+: false, disabled\+: false, interval\+: 350, show\+Ticks\+: false, show\+Ticks\+Values\+: false, ticks\+Array\+: null, ticks\+Tooltip\+: null, ticks\+Values\+Tooltip\+: null, vertical\+: false, get\+Selection\+Bar\+Color\+: null, get\+Tick\+Color\+: null, get\+Pointer\+Color\+: null, keyboard\+Support\+: true, scale\+: 1, enforce\+Step\+: true, enforce\+Range\+: false, no\+Switching\+: false, only\+Bind\+Handles\+: false, on\+Start\+: null, on\+Change\+: null, on\+End\+: null, right\+To\+Left\+: false, bound\+Pointer\+Labels\+: true, merge\+Range\+Labels\+If\+Same\+: false, custom\+Template\+Scope\+: null, log\+Scale\+: false, custom\+Value\+To\+Position\+: null, custom\+Position\+To\+Value\+: null, selection\+Bar\+Gradient\+: null \} 
+\begin{DoxyCode}
+**floor** - \_Number (defaults to 0)\_: Minimum value for a slider.
+
+**ceil** - \_Number (defaults to `rz-slider-model`value)\_: Maximum value for a slider.
+
+**step** - \_Number (defaults to 1)\_: Step between each value.
+
+**precision** - \_Number (defaults to 0)\_: The precision to display values with. The `toFixed()` is used
+       internally for this.
+
+**minLimit** - \_Number (defaults to null)\_: The minimum value authorized on the slider.
+
+**maxLimit** - \_Number (defaults to null)\_: The maximum value authorized on the slider.
+
+**minRange** - \_Number (defaults to null)\_: The minimum range authorized on the slider. *Applies to range
+       slider only.*
+
+**maxRange** - \_Number (defaults to null)\_: The maximum range authorized on the slider. *Applies to range
+       slider only.*
+
+**pushRange** - \_Boolean (defaults to false)\_: Set to true to have a push behavior. When the min handle
+       goes above the max, the max is moved as well (and vice-versa). The range between min and max is defined by the
+       `step` option (defaults to 1) and can also be override by the `minRange` option. *Applies to range slider
+       only.*
+
+**translate** - \_Function(value, sliderId, label)\_: Custom translate function. Use this if you want to
+       translate values displayed on the slider.
+`sliderId` can be used to determine the slider for which we are translating the value. `label` is a string
+       that can take the following values:
+  - *'model'*: the model label
+  - *'high'*: the high label
+  - *'floor'*: the floor label
+  - *'ceil'*: the ceil label
+  - *'tick-value'*: the ticks labels
+
+For example if you want to display dollar amounts instead of just numbers:
+@code\{html\}
+<div>
+    <rzslider
+         rz-slider-model="slider.value"
+         rz-slider-options="slider.options"></rzslider>
+</div>
+\end{DoxyCode}
+ 
+\begin{DoxyCode}
+$scope.slider = \{
+  value: 0,
+  options: \{
+    floor: 0,
+    ceil: 100,
+    translate: function(value) \{
+      return '$' + value;
+    \}
+  \}
+\};
+\end{DoxyCode}
+
+
+{\bfseries get\+Legend} -\/ {\itshape Function(value, slider\+Id)}\+: Use to display legend under ticks (thus, it needs to be used along with {\ttfamily show\+Ticks} or {\ttfamily show\+Ticks\+Values}). The function will be called with each tick value and returned content will be displayed under the tick as a legend. If the returned value is null, then no legend is displayed under the corresponding tick.\+You can also directly provide the legend values in the {\ttfamily steps\+Array} option. \begin{quote}
+In order to get enough space to display legends under the slider, you need to add the {\ttfamily with-\/legend} class to the slider component. The default margin-\/bottom is then 40px which is enough for legends that are displayed on 2 lines. If you need more, simply override the style for the class. \end{quote}
+
+
+{\bfseries id} -\/ {\itshape Any (defaults to null)}\+: If you want to use the same {\ttfamily translate} function for several sliders, just set the {\ttfamily id} to anything you want, and it will be passed to the {\ttfamily translate(value, slider\+Id)} function as a second argument.
+
+{\bfseries steps\+Array} -\/ {\itshape Array}\+: If you want to display a slider with non linear/number steps. Just pass an array with each slider value and that\textquotesingle{}s it; the floor, ceil and step settings of the slider will be computed automatically. By default, the {\ttfamily rz-\/slider-\/model} and {\ttfamily rz-\/slider-\/high} values will be the value of the selected item in the steps\+Array. They can also be bound to the index of the selected item by setting the {\ttfamily bind\+Index\+For\+Steps\+Array} option to {\ttfamily true}.
+
+{\ttfamily steps\+Array} can also be an array of objects or Dates like\+:
+
+```js \mbox{[} \{value\+: \textquotesingle{}A\textquotesingle{}\}, // the display value will be {\itshape A} \{value\+: 10, legend\+: \textquotesingle{}Legend for 10\textquotesingle{}\}, // the display value will be 10 and a legend will be displayed under the corresponding tick. new Date(2016, 7, 12), // the display value will be the default format of Date. To customize it, use the {\ttfamily translate} option \{value\+: new Date(2016, 7, 12), legend\+: \textquotesingle{}Legend for 10\textquotesingle{}\} // same as above but with a legend \mbox{]} 
+
+{\bfseries bind\+Index\+For\+Steps\+Array} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to bind the index of the selected item to {\ttfamily rz-\/slider-\/model} and {\ttfamily rz-\/slider-\/high}. (This was the default behavior prior to 4.\+0).
+
+{\bfseries draggable\+Range} -\/ {\itshape Boolean (defaults to false)}\+: When set to true and using a range slider, the range can be dragged by the selection bar. {\itshape Applies to range slider only.}
+
+{\bfseries draggable\+Range\+Only} -\/ {\itshape Boolean (defaults to false)}\+: Same as draggable\+Range but the slider range can\textquotesingle{}t be changed. {\itshape Applies to range slider only.}
+
+{\bfseries show\+Selection\+Bar} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to always show the selection bar before the slider handle.
+
+{\bfseries show\+Selection\+Bar\+End} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to always show the selection bar after the slider handle.
+
+{\bfseries show\+Selection\+Bar\+From\+Value} -\/ {\itshape Number (defaults to null)}\+: Set a number to draw the selection bar between this value and the slider handle.
+
+{\bfseries get\+Selection\+Bar\+Color} -\/ {\itshape Function(value) or Function(min\+Val, max\+Val) (defaults to null)}\+: Function that returns the current color of the selection bar. {\itshape If your color won\textquotesingle{}t changed, don\textquotesingle{}t use this option but set it through C\+SS.} If the returned color depends on a model value (either {\ttfamily rz\+Scope\+Model}or {\ttfamily \textquotesingle{}rz\+Slider\+High}), you should use the argument passed to the function. Indeed, when the function is called, there is no certainty that the model has already been updated.
+
+{\bfseries get\+Tick\+Color} -\/ {\itshape Function(value) (defaults to null)}\+: Function that returns the color of a tick. show\+Ticks must be enabled.
+
+{\bfseries get\+Pointer\+Color} -\/ {\itshape Function(value, pointer\+Type) (defaults to null)}\+: Function that returns the current color of a pointer. {\itshape If your color won\textquotesingle{}t changed, don\textquotesingle{}t use this option but set it through C\+SS.} If the returned color depends on a model value (either {\ttfamily rz\+Scope\+Model}or {\ttfamily \textquotesingle{}rz\+Slider\+High}), you should use the argument passed to the function. Indeed, when the function is called, there is no certainty that the model has already been updated. To handle range slider pointers independently, you should evaluate pointer\+Type within the given function where \char`\"{}min\char`\"{} stands for {\ttfamily rz\+Scope\+Model} and \char`\"{}max\char`\"{} for {\ttfamily rz\+Scope\+High} values.
+
+{\bfseries hide\+Pointer\+Labels} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to hide pointer labels
+
+{\bfseries hide\+Limit\+Labels} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to hide min / max labels
+
+{\bfseries auto\+Hide\+Limit\+Labels} -\/ {\itshape Boolean (defaults to true)}\+: Set to false to disable the auto-\/hiding behavior of the limit labels.
+
+{\bfseries read\+Only} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to make the slider read-\/only.
+
+{\bfseries disabled} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to disable the slider.
+
+{\bfseries interval} -\/ {\itshape Number in ms (defaults to 350)}\+: Internally, a {\ttfamily throttle} function (See \href{http://underscorejs.org/#throttle}{\tt http\+://underscorejs.\+org/\#throttle}) is used when the model or high values of the slider are changed from outside the slider. This is to prevent from re-\/rendering the slider too many times in a row. {\ttfamily interval} is the number of milliseconds to wait between two updates of the slider.
+
+{\bfseries show\+Ticks} -\/ {\itshape Boolean or Number (defaults to false)}\+: Set to true to display a tick for each step of the slider. Set a number to display ticks at intermediate positions. This number corresponds to the step between each tick.
+
+{\bfseries show\+Ticks\+Values} -\/ {\itshape Boolean or Number (defaults to false)}\+: Set to true to display a tick and the step value for each step of the slider. Set a number to display ticks and the step value at intermediate positions. This number corresponds to the step between each tick.
+
+{\bfseries ticks\+Array} -\/ {\itshape Array (defaults to null)}\+: Use to display ticks at specific positions. The array contains the index of the ticks that should be displayed. For example, \mbox{[}0, 1, 5\mbox{]} will display a tick for the first, second and sixth values.
+
+{\bfseries ticks\+Tooltip} -\/ {\itshape Function(value) (defaults to null)}\+: (requires angular-\/ui bootstrap) Used to display a tooltip when a tick is hovered. Set to a function that returns the tooltip content for a given value.
+
+{\bfseries ticks\+Values\+Tooltip} -\/ {\itshape Function(value) (defaults to null)}\+: Same as {\ttfamily ticks\+Tooltip} but for ticks values.
+
+{\bfseries scale} -\/ {\itshape Number (defaults to 1)}\+: If you display the slider in an element that uses {\ttfamily transform\+: scale(0.\+5)}, set the {\ttfamily scale} value to 2 so that the slider is rendered properly and the events are handled correctly.
+
+{\bfseries enforce\+Step} -\/ {\itshape Boolean (defaults to true)}\+: Set to true to force the value to be rounded to the step, even when modified from the outside.. When set to false, if the model values are modified from outside the slider, they are not rounded and can be between two steps.
+
+{\bfseries enforce\+Range} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to round the {\ttfamily rz\+Slider\+Model} and {\ttfamily rz\+Slider\+High} to the slider range even when modified from outside the slider. When set to false, if the model values are modified from outside the slider, they are not rounded but they are still rendered properly on the slider.
+
+{\bfseries no\+Switching} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to prevent to user from switching the min and max handles. {\itshape Applies to range slider only.}
+
+{\bfseries only\+Bind\+Handles} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to only bind events on slider handles.
+
+{\bfseries bound\+Pointer\+Labels} -\/ {\itshape Boolean (defaults to true)}\+: Set to true to keep the slider labels inside the slider bounds.
+
+{\bfseries merge\+Range\+Labels\+If\+Same} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to merge the range labels if they are the same. For instance, if min and max are 50, the label will be \char`\"{}50 -\/ 50\char`\"{} if {\ttfamily merge\+Range\+Labels\+If\+Same\+: false}, else \char`\"{}50\char`\"{}.
+
+{\bfseries on\+Start} -\/ {\itshape Function(slider\+Id, model\+Value, high\+Value, pointer\+Type)}\+: Function to be called when a slider update is started. If an id was set in the options, then it\textquotesingle{}s passed to this callback. This callback is called before any update on the model. {\ttfamily pointer\+Type} is either \textquotesingle{}min\textquotesingle{} or \textquotesingle{}max\textquotesingle{} depending on which handle is used.
+
+{\bfseries on\+Change} -\/ {\itshape Function(slider\+Id, model\+Value, high\+Value, pointer\+Type)}\+: Function to be called when rz-\/slider-\/model or rz-\/slider-\/high change. If an id was set in the options, then it\textquotesingle{}s passed to this callback. {\ttfamily pointer\+Type} is either \textquotesingle{}min\textquotesingle{} or \textquotesingle{}max\textquotesingle{} depending on which handle is used.
+
+{\bfseries on\+End} -\/ {\itshape Function(slider\+Id, model\+Value, high\+Value, pointer\+Type)}\+: Function to be called when a slider update is ended. If an id was set in the options, then it\textquotesingle{}s passed to this callback. {\ttfamily pointer\+Type} is either \textquotesingle{}min\textquotesingle{} or \textquotesingle{}max\textquotesingle{} depending on which handle is used.
+
+{\bfseries right\+To\+Left} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to show graphs right to left. If {\bfseries vertical} is true it will be from top to bottom and left / right arrow functions reversed.
+
+{\bfseries vertical} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to display the slider vertically. The slider will take the full height of its parent. {\itshape Changing this value at runtime is not currently supported.}
+
+{\bfseries keyboard\+Support} -\/ {\itshape Boolean (defaults to true)}\+: Handles are focusable (on click or with tab) and can be modified using the following keyboard controls\+:
+\begin{DoxyItemize}
+\item Left/bottom arrows\+: -\/1
+\item Right/top arrows\+: +1
+\item Page-\/down\+: -\/10\%
+\item Page-\/up\+: +10\%
+\item Home\+: minimum value
+\item End\+: maximum value
+\end{DoxyItemize}
+
+{\bfseries custom\+Template\+Scope} -\/ {\itshape Object (default to null)}\+: The properties defined in this object will be exposed in the slider template under {\ttfamily custom.\+X}.
+
+{\bfseries log\+Scale} -\/ {\itshape Boolean (defaults to false)}\+: Set to true to use a logarithmic scale to display the slider.
+
+For custom scales\+:
+
+{\bfseries custom\+Value\+To\+Position} -\/ {\itshape Function(val, min\+Val, max\+Val)\+: percent}\+: Function that returns the position on the slider for a given value. The position must be a percentage between 0 and 1.
+
+{\bfseries custom\+Position\+To\+Value} -\/ {\itshape Function(percent, min\+Val, max\+Val)\+: value}\+: Function that returns the value for a given position on the slider. The position is a percentage between 0 and 1.
+
+{\bfseries selection\+Bar\+Gradient} -\/ {\itshape Object (default to null)}\+: Use to display the selection bar as a gradient. The given object must contain {\ttfamily from} and {\ttfamily to} properties which are colors.
+
+\subsection*{Change default options}
+
+If you want the change the default options for all the sliders displayed in your application, you can set them using the {\ttfamily Rz\+Slider\+Options.\+options()} method\+: 
+\begin{DoxyCode}
+angular.module('App', ['rzModule'])
+    .run(function( RzSliderOptions ) \{
+        // show ticks for all sliders
+        RzSliderOptions.options( \{ showTicks: true \} );
+    \});
+\end{DoxyCode}
+
+
+\subsection*{Slider events}
+
+To force slider to recalculate dimensions, broadcast {\bfseries re\+Calc\+View\+Dimensions} event from parent scope. This is useful for example when you use slider inside a widget where the content is hidden at start -\/ see the \char`\"{}\+Sliders into modal\char`\"{} example \href{http://angular-slider.github.io/angularjs-slider}{\tt on the demo site}.
+
+You can also force redraw with {\bfseries rz\+Slider\+Force\+Render} event.
+
+At the end of each \char`\"{}slide\char`\"{} slider emits {\ttfamily slide\+Ended} event.
+
+
+\begin{DoxyCode}
+$scope.$on("slideEnded", function() \{
+     // user finished sliding a handle
+\});
+\end{DoxyCode}
+
+
+\subsection*{Browser support}
+
+I use Slider on couple of my projects and it\textquotesingle{}s being tested on desktop versions of Chrome, Firefox, Safari, IE 9/10 (Ticks are displayed using flex display so they don\textquotesingle{}t work on I\+E9). Slider is also tested on Android and i\+Phone using all browsers available on those platforms.
+
+\subsection*{Disclaimer}
+
+This project is based on \href{https://github.com/prajwalkman/angular-slider}{\tt https\+://github.\+com/prajwalkman/angular-\/slider}. It has been rewritten from scratch in Java\+Script (the original source was written in Coffee\+Script).
+
+\subsection*{License}
+
+Licensed under the M\+IT license 

@@ -1,0 +1,70 @@
+I am very glad to see this project living with PR from contributors who trust in it. Here is some guidelines to keep the contributions useful and efficient.
+
+\subsection*{Development hints}
+
+\subsubsection*{Installation}
+
+
+\begin{DoxyItemize}
+\item Checkout the repository
+\item Run {\ttfamily npm install}
+\item Run {\ttfamily bower install}
+\end{DoxyItemize}
+
+\subsubsection*{Test running}
+
+This module uses the classic Angular\+JS stack with\+:
+
+
+\begin{DoxyItemize}
+\item Karma (test runner)
+\item Jasmine (assertion framework)
+\item angular-\/mocks (Angular\+JS module for testing)
+\end{DoxyItemize}
+
+Run the test with the grunt task {\ttfamily grunt test}. It runs the tests with different versions of Angular\+JS.
+
+\subsubsection*{Test developing}
+
+Tests are build around modules with a specific {\ttfamily \$state\+Provider} configuration\+:
+
+
+\begin{DoxyItemize}
+\item \href{https://github.com/ncuillery/angular-breadcrumb/blob/master/test/mock/test-modules.js#L6}{\tt Basic configuration}\+: Basic definitions (no template, no controller)
+\item \href{https://github.com/ncuillery/angular-breadcrumb/blob/master/test/mock/test-modules.js#L21}{\tt Interpolation configuration}\+: States with bindings in {\ttfamily ncy\+Breadcrumb\+Label}
+\item \href{https://github.com/ncuillery/angular-breadcrumb/blob/master/test/mock/test-modules.js#L36}{\tt H\+T\+ML configuration}\+: States with H\+T\+ML in {\ttfamily ncy\+Breadcrumb\+Label}
+\item \href{https://github.com/ncuillery/angular-breadcrumb/blob/master/test/mock/test-modules.js#L41}{\tt Sample configuration}\+: Bridge towards the sample app configuration for using in tests
+\item \href{https://github.com/ncuillery/angular-breadcrumb/blob/master/test/mock/test-ui-router-sample.js#L9}{\tt U\+I-\/router\textquotesingle{}s configuration}\+: Clone of the U\+I-\/router sample app (complemented with breadcrumb configuration)
+\end{DoxyItemize}
+
+Theses modules are loaded by Karma and they are available in test specifications.
+
+Specifications are generally related to the directive {\ttfamily ncy\+Breadcrumb} or the service {\ttfamily \$breadcrumb}.
+
+\subsubsection*{Sample}
+
+If you are not familiar with JS testing. You can run the \href{http://ncuillery.github.io/angular-breadcrumb/#/sample}{\tt sample} locally for testing purposes by using {\ttfamily grunt sample}. Sources are live-\/reloaded after each changes.
+
+\subsection*{Submitting a Pull Request}
+
+
+\begin{DoxyItemize}
+\item Fork the \href{https://github.com/ncuillery/angular-breadcrumb/}{\tt repository}
+\item Make your changes in a new git branch following the coding rules below.
+\item Run the grunt default task (by typing {\ttfamily grunt} or {\ttfamily grunt default})\+: it will run the tests and build the module in {\ttfamily dist} directory)
+\item Commit the changes (including the {\ttfamily dist} directory) by using the commit conventions explained below.
+\item Push and make the PR
+\end{DoxyItemize}
+
+\subsection*{Coding rules}
+
+
+\begin{DoxyItemize}
+\item When making changes on the source file, please check that your changes are covered by the tests. If not, create a new test case.
+\end{DoxyItemize}
+
+\subsection*{Commit conventions}
+
+angular-\/breadcrumb uses the same strict conventions as Angular\+JS and U\+I-\/router. These conventions are explained \href{https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md#-git-commit-guidelines}{\tt here}.
+
+It is very important to fit these conventions especially for types {\ttfamily fix} and {\ttfamily feature} which are used by the C\+H\+A\+N\+G\+E\+L\+O\+G.\+md generation (it uses the \href{https://github.com/btford/grunt-conventional-changelog}{\tt grunt-\/conventional-\/changelog}). 

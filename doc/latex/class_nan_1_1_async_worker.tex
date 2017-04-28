@@ -1,0 +1,76 @@
+\hypertarget{class_nan_1_1_async_worker}{}\section{Nan\+:\+:Async\+Worker Class Reference}
+\label{class_nan_1_1_async_worker}\index{Nan\+::\+Async\+Worker@{Nan\+::\+Async\+Worker}}
+Inheritance diagram for Nan\+:\+:Async\+Worker\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_nan_1_1_async_worker}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a20d35fd00d6599645fe788b07aae8eb8}\label{class_nan_1_1_async_worker_a20d35fd00d6599645fe788b07aae8eb8}} 
+{\bfseries Async\+Worker} (\hyperlink{class_nan_1_1_callback}{Callback} $\ast$callback\+\_\+)
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a3e3c6ee57e067096db8386325f8a4f48}\label{class_nan_1_1_async_worker_a3e3c6ee57e067096db8386325f8a4f48}} 
+virtual void {\bfseries Work\+Complete} ()
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a8aa2cba350525776a66919238f54a721}\label{class_nan_1_1_async_worker_a8aa2cba350525776a66919238f54a721}} 
+void {\bfseries Save\+To\+Persistent} (const char $\ast$key, const v8\+::\+Local$<$ v8\+::\+Value $>$ \&value)
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a36b2e507211efd49813c050567ee308f}\label{class_nan_1_1_async_worker_a36b2e507211efd49813c050567ee308f}} 
+void {\bfseries Save\+To\+Persistent} (const v8\+::\+Local$<$ v8\+::\+String $>$ \&key, const v8\+::\+Local$<$ v8\+::\+Value $>$ \&value)
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a5ba4238ad96004554accf34e28568fbc}\label{class_nan_1_1_async_worker_a5ba4238ad96004554accf34e28568fbc}} 
+void {\bfseries Save\+To\+Persistent} (uint32\+\_\+t index, const v8\+::\+Local$<$ v8\+::\+Value $>$ \&value)
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a781abb55452a0abb903e7d7fa10eaa87}\label{class_nan_1_1_async_worker_a781abb55452a0abb903e7d7fa10eaa87}} 
+v8\+::\+Local$<$ v8\+::\+Value $>$ {\bfseries Get\+From\+Persistent} (const char $\ast$key) const
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a25057f22f6f515b0c5611135d0d3852d}\label{class_nan_1_1_async_worker_a25057f22f6f515b0c5611135d0d3852d}} 
+v8\+::\+Local$<$ v8\+::\+Value $>$ {\bfseries Get\+From\+Persistent} (const v8\+::\+Local$<$ v8\+::\+String $>$ \&key) const
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a8a3dc33e5e7f5542162f80ef4cf320d9}\label{class_nan_1_1_async_worker_a8a3dc33e5e7f5542162f80ef4cf320d9}} 
+v8\+::\+Local$<$ v8\+::\+Value $>$ {\bfseries Get\+From\+Persistent} (uint32\+\_\+t index) const
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a0dec1b584bbadd43ac3124b26349135c}\label{class_nan_1_1_async_worker_a0dec1b584bbadd43ac3124b26349135c}} 
+virtual void {\bfseries Execute} ()=0
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a8ebec87c9c7d993b0afc7641fcb40380}\label{class_nan_1_1_async_worker_a8ebec87c9c7d993b0afc7641fcb40380}} 
+virtual void {\bfseries Destroy} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_ad93fc2e68413cea89fb529c4bd5f04b1}\label{class_nan_1_1_async_worker_ad93fc2e68413cea89fb529c4bd5f04b1}} 
+uv\+\_\+work\+\_\+t {\bfseries request}
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a9946ddbe2ca5929329858b9cec36f68a}\label{class_nan_1_1_async_worker_a9946ddbe2ca5929329858b9cec36f68a}} 
+virtual void {\bfseries Handle\+O\+K\+Callback} ()
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a148febef6c47422fb0b3202e64cf3a51}\label{class_nan_1_1_async_worker_a148febef6c47422fb0b3202e64cf3a51}} 
+virtual void {\bfseries Handle\+Error\+Callback} ()
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_ad5fc83346a5870b091c12f82547e1cf1}\label{class_nan_1_1_async_worker_ad5fc83346a5870b091c12f82547e1cf1}} 
+void {\bfseries Set\+Error\+Message} (const char $\ast$msg)
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_af17ed4e1f1d0f847de94dee9a8c043b5}\label{class_nan_1_1_async_worker_af17ed4e1f1d0f847de94dee9a8c043b5}} 
+const char $\ast$ {\bfseries Error\+Message} () const
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_a8f9cf33aa27e45f76f707fcf42511ae1}\label{class_nan_1_1_async_worker_a8f9cf33aa27e45f76f707fcf42511ae1}} 
+\hyperlink{class_nan_1_1_persistent}{Persistent}$<$ v8\+::\+Object $>$ {\bfseries persistent\+Handle}
+\item 
+\mbox{\Hypertarget{class_nan_1_1_async_worker_ab04d3ed0b17e39fe2a989bcc92996e9c}\label{class_nan_1_1_async_worker_ab04d3ed0b17e39fe2a989bcc92996e9c}} 
+\hyperlink{class_nan_1_1_callback}{Callback} $\ast$ {\bfseries callback}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+app/web/node\+\_\+modules/nan/nan.\+h\end{DoxyCompactItemize}

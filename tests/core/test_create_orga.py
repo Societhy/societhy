@@ -8,6 +8,7 @@ from core.utils import *
 
 from models.user import users
 from models.organization import OrgaDocument, organizations
+from models.orga_models import governances
 from models.clients import eth_cli
 from models.contract import contracts
 from models.user import users
@@ -24,23 +25,40 @@ def test_create_orga(miner):
 	while miner.refreshBalance() < 1:
 		bw.waitBlock()
 
-	test_orga = {"name": "basic_orga"}
-	ret = base_orga.createOrga(miner, password, test_orga)
-	tx_hash = ret.get('data').get('tx_hash')
-	new_orga = ret.get('data').get('orga')
-	
-	assert ret.get('status') == 200
-	assert tx_hash != None
-	bw.waitTx(tx_hash)
-	sleep(0.5)
-	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
-	assert inserted["contract_id"] != None
-	assert inserted != None
-	assert inserted.contract != None
+	for orga_model, contracts in governances.items():
+		test_orga = {
+			"name": "basic_orga" + "_" + orga_model, 
+			"description" : "test_description", 
+			"accessibility" : "public", 
+			"gov_model" : orga_model,
+			"rules": {
+				"delegated_voting": True,
+				"curators": True,
+				"quorum" : 50,
+				"majority": 50
+			}
+		}
+		ret = base_orga.createOrga(miner, password, test_orga)
+		tx_hash = ret.get('data').get('tx_hash')
+		new_orga = ret.get('data').get('orga')
+		
+		assert ret.get('status') == 200
+		assert tx_hash != None
+		bw.waitTx(tx_hash)
+		sleep(0.5)
+		inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
+		assert inserted != None
+		assert inserted.get('contracts') != None
+		assert inserted.board != None
+		assert inserted.rules != None
+		if contracts.get('registry'):
+			assert inserted.registry != None
+		if contracts.get('token'):
+			assert inserted.token != None
 
 
 def test_join(miner, testOrga):
-	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'))
+	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
 	assert ret.get('data') != None
 
