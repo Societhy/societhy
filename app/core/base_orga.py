@@ -181,9 +181,7 @@ def joinOrga(user, password, orga_id, tag="member"):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	print("pute")
-	notifyToOne(orga, user, 'newMember', user)
-	print("salope")
+	# notifyToOne(orga, user, 'newMember', user)
 	try:
 		tx_hash = orga.join(user, tag, password=password)
 		if tx_hash is False:
