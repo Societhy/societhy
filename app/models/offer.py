@@ -57,4 +57,3 @@ class Offer(dict):
 			self["payoutFreezePeriod"] = self.contract.call('getPayoutFreezePeriod', local=True)
 			self["isRecurrent"] = self.contract.call('getIsRecurrent', local=True)
 			self["duration"] = self.contract.call('getDuration', local=True)
-			print("-------------------", self)
