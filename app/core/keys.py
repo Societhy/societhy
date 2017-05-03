@@ -34,7 +34,7 @@ def genBaseKey(password):
 	password is hashed and a new ethereum account is created from it
 	key file is returned alongside the address of the newly created account
 	"""
-	hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
+	hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD))
 	dirContent = listdir(keyDirectory)
 	key = eth_cli.personal_newAccount(hashPassword)
 	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
@@ -49,7 +49,7 @@ def genLinkedKey(user, password):
 	"""
 
 	def genKeyRemote(password):
-		hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
+		hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD))
 		dirContent = listdir(keyDirectory)
 		key = eth_cli.personal_newAccount(hashPassword)
 		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]

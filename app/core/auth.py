@@ -44,7 +44,7 @@ def login(credentials):
 		if credentials:
 			credentials = str(b64decode(credentials), 'utf-8').split(':')
 			if len(credentials) == 2:
-				name, passw = credentials[0], encode_hex(scrypt.hash(credentials[1], SALT_LOGIN_PASSWORD)).decode('utf-8')
+				name, passw = credentials[0], encode_hex(scrypt.hash(credentials[1], SALT_LOGIN_PASSWORD))
 				if (name is not None) and (passw is not None):
 					user = users.find_one({"name": name, "password": passw}, users.user_info)
 					return user
@@ -159,7 +159,7 @@ def signUp(newUser):
 			return failure
 
 		unencryptedPassword = newUser.get('password')
-		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), SALT_LOGIN_PASSWORD)).decode('utf-8')
+		newUser["password"] = encode_hex(scrypt.hash(newUser.get('password'), SALT_LOGIN_PASSWORD))
 		user = UserDocument(newUser, gen_skel=True)
 		user.save()
 		if user.get('eth'):
@@ -177,7 +177,7 @@ def signUp(newUser):
 		if social_infos is None:
 			return {"data": "user already exists", "status": 403}
 
-		newUser["password"] = encode_hex(scrypt.hash("password", SALT_LOGIN_PASSWORD)).decode('utf-8')
+		newUser["password"] = encode_hex(scrypt.hash("password", SALT_LOGIN_PASSWORD))
 		user = UserDocument(newUser, gen_skel=True)
 		user.save()
 		if user.get('eth'):

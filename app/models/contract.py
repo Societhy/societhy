@@ -72,7 +72,7 @@ class ContractDocument(Document):
 			constructor_abi = self.getAbi("constructor")
 			types = [_input.get('type') for _input in constructor_abi.get('inputs')]
 			encoded_params = encode_abi(types, args)
-			encoded_params_hex = encode_hex(encoded_params).decode("utf-8")
+			encoded_params_hex = encode_hex(encoded_params)
 			evm_code += encoded_params_hex
 		estimated_gas_cost = eth_cli.eth_estimateGas(from_address=from_, data=evm_code)
 		self["creation_tx_hash"] = eth_cli.eth_sendTransaction(from_address=from_, gas=estimated_gas_cost, data=evm_code)
