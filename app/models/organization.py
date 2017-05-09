@@ -182,8 +182,17 @@ class OrgaDocument(Document):
 					"address": contract_instance["address"],
 					"_id": contract_instance.save()
 				}
-			
+
 		self.save()
+
+		for item in self.get('invited_users'):
+			print("ITERATE ON INVITED USERS")
+			users.update({'_id': ObjectId(item)}, {"$addToSet": {
+				"pending_invitation": {
+					"orga_id": str(self.get("_id")), "category": self.get("invited_users")[item]["category"], "name":self.get("name")
+				}
+			}})
+
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
@@ -597,7 +606,8 @@ class OrgaCollection(Collection):
 		"social_accounts": dict,
 		"balance": int,
 		"uploaded_documents": list,
-		"gov_model": str
+		"gov_model": str,
+		"invited_users": list
 	}
 
 	def lookup(self, query):
