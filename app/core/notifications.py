@@ -18,8 +18,8 @@ class Notification():
 	"""
 	This class modelise the standard notifications
 	"""
-	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated')
-	descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request')
+	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated', 'newInviteJoinOrga')
+	descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', ' invited you to join the organisation')
 	senderList = ('organization', 'project', 'user')
 
 	def createDescription(self, category):
