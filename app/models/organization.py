@@ -187,11 +187,11 @@ class OrgaDocument(Document):
 
 		for item in self.get('invited_users'):
 			print("ITERATE ON INVITED USERS")
-			users.update({'_id': ObjectId(item)}, {"$addToSet": {
-				"pending_invitation": {
-					"orga_id": str(self.get("_id")), "category": self.get("invited_users")[item]["category"], "name":self.get("name")
-				}
-			}})
+			notification.pushNotif({
+				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
+				"subject": {"id": objectid.ObjectId(item), "type":"user"},
+				"category": "newInviteJoinOrga"
+			})
 
 
 

@@ -11,7 +11,7 @@ from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
 
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated")
+categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated", 'newInviteJoinOrga')
 senderList = ('organization', 'project', 'user')
 
 
@@ -21,11 +21,13 @@ class NotificationDocument(Document):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 
 	def pushNotif(data):
+		print(data["subject"]["type"])
 		notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
-                                      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
-                                      "category": data["category"],
-                                      "createdAt": datetime.now(),
-                                      "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                                      	"sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      	"category": data["category"],
+                                      	"createdAt": datetime.now(),
+                                      	"date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+										"seen": False
                 })
 
                 

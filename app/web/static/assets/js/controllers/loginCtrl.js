@@ -20,6 +20,13 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
      * Ask for login to the server.
      * @method login
      */
+
+    ctrl.login_done = function () {
+	$http.get("/getUserUnreadNotification").then(function (response) {
+		console.log(response);
+    });
+	};
+
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 			$http.post('/login', {
@@ -33,6 +40,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 				$rootScope.user = ctrl.user = response.data.user;
 				ctrl.wallet.refreshAllBalances();
                 $rootScope.$emit("loggedIn", '');
+                ctrl.login_done();
 			}, function(error) {
 				$rootScope.toogleError(error.data);
 			});
@@ -289,6 +297,7 @@ ctrl.coinbase_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -318,6 +327,7 @@ ctrl.fb_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -348,6 +358,7 @@ ctrl.twitter_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -377,6 +388,7 @@ OAuth.popup('linkedin').done(function(result) {
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -406,6 +418,7 @@ OAuth.popup('github').done(function(result) {
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -437,6 +450,7 @@ ctrl.google_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);

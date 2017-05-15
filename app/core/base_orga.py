@@ -112,7 +112,6 @@ def createOrga(user, password, newOrga):
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 
-
 	return {
 			"data": {"orga": instance, "tx_hash": tx_hash},
 			"status": 200
