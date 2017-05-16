@@ -2,6 +2,7 @@ from os import environ
 
 from flask import json as flask_json
 from flask_socketio import SocketIO
+from flask_mail import Mail
 from pymongo import MongoClient
 import gridfs
 from ethjsonrpc import ParityEthJsonRpc
@@ -19,3 +20,4 @@ eth_port = environ.get('ETHPORT')
 eth_cli = ParityEthJsonRpc(eth_ip or '163.5.84.117', eth_port or 8080)
 
 socketio = SocketIO(async_mode='eventlet', json=flask_json)
+mail = Mail()

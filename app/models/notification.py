@@ -11,7 +11,7 @@ from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
 
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated")
+categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated", 'newInviteJoinOrga')
 senderList = ('organization', 'project', 'user')
 
 
@@ -21,11 +21,13 @@ class NotificationDocument(Document):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 
 	def pushNotif(data):
+		print(data["subject"]["type"])
 		notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
-                                      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
-                                      "category": data["category"],
-                                      "createdAt": datetime.now(),
-                                      "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                                      	"sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      	"category": data["category"],
+                                      	"createdAt": datetime.now(),
+                                      	"date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+										"seen": False
                 })
 
                 
@@ -36,6 +38,7 @@ class NotificationDocument(Document):
 			return projects.find_one({"_id": self['sender']['senderId']})
 		elif self['sender']['senderType'] == 'user':
 			return users.find_one({"_id": self['sender']['senderId']})
+		return None
 
 	def getName(data):
 		name = None
@@ -66,8 +69,8 @@ class NotificationDocument(Document):
 			for record in data:
 				name = ""
 				res[i] = record
-				res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
-				res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
+				#res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
+				#res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
 				if record["category"] == "orgaCreate":
 					res[0]["first"] = record["date"] 
 				i = i + 1

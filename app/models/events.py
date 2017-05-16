@@ -7,6 +7,7 @@ from rlp.utils import decode_hex
 
 from .clients import eth_cli, socketio
 from core.utils import to32bytes
+from core.notifications import notifyToOne
 
 """
 this module defines classes that represent event fired by the smart contracts. They are registred as requests are made by users that requires a transaction on the blockchain.
@@ -44,10 +45,11 @@ class Event:
 	tx_hash = None
 	users = None
 	callback = None
+	mail = None
 	name = "defaultEvent"
 	notified = list()
 
-	def __init__(self, tx_hash=None, users=[], callbacks=None):
+	def __init__(self, tx_hash=None, users=[], callbacks=None, mail=None):
 		self.tx_hash = tx_hash
 
 		if isinstance(users, list):
@@ -57,6 +59,8 @@ class Event:
 		else:
 			self.users = [users.get('socketid')] if users.get('socketid') is not None else None
 
+		if mail:
+			self.mail = mail
 		if isinstance(callbacks, list):
 			self.callbacks = callbacks
 		elif callable(callbacks):
@@ -110,8 +114,8 @@ class LogEvent(Event):
 	"""
 	Event specific to log events (see further documentation) contained in the state of the blockchain.
 	"""
-	def __init__(self, name, tx_hash, contract_address, topics=None, users=[], callbacks=None, event_abi=None):
-		super().__init__(users=users, tx_hash=tx_hash, callbacks=callbacks)
+	def __init__(self, name, tx_hash, contract_address, topics=None, users=[], callbacks=None, event_abi=None, mail=None):
+		super().__init__(users=users, tx_hash=tx_hash, callbacks=callbacks, mail=mail)
 		self.logs = None
 		self.topics = topics
 		self.name = name
@@ -134,6 +138,9 @@ class LogEvent(Event):
 				decoded_data.append(decode_hex(raw_data[i-32:i]).decode("ascii"))
 				i += 32
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
+		if (self.mail != None):
+			for user in self.mail['users']:
+				notifyToOne(self.mail['sender'], user, 'newMember', self.mail['subject'])
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.logs))
 		return self
