@@ -8,7 +8,7 @@ from flask_mail import Message
 from models.notification import notifications
 from bson.json_util import dumps
 
-from core.chat import notify
+# from core.chat import notify
 
 from datetime import datetime
 
