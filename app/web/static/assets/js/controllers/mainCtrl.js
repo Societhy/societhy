@@ -38,12 +38,12 @@
             $body.removeClass("app-boxed-page");
         }
         if(typeof CKEDITOR !== 'undefined'){
-           for(name in CKEDITOR.instances)
-           {
-             CKEDITOR.instances[name].destroy();
-         }
-     }
- });
+         for(name in CKEDITOR.instances)
+         {
+           CKEDITOR.instances[name].destroy();
+       }
+   }
+});
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
       $scope.horizontalNavbarCollapsed = true;
         //stop loading bar on stateChangeSuccess
@@ -227,7 +227,7 @@
         args[0] = password;
         requestCallback.apply(null, args);
         tmpCallback = updateCallback;
-        });
+    });
     };
 
     $rootScope.$on('socket:txResult', function (event, data) {
@@ -243,6 +243,10 @@
             $rootScope.toogleError(data.event);
         }
     });
+
+    $scope.capitalizeFirstLetter = function(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     $scope.searchForAnything = function(query) {
         $rootScope.query = query;

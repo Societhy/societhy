@@ -248,6 +248,9 @@ th {
   .label {
     border: 1px solid #000;
   }
+  .big-label {
+    border: 1px solid #000;
+  }
   .table {
     border-collapse: collapse !important;
   }
@@ -4841,6 +4844,18 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   color: #777;
   cursor: not-allowed;
   background-color: #fff;
+}
+.big-label {
+  display: inline;
+  padding: .2em .6em .3em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25em;
 }
 .label {
   display: inline;

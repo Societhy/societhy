@@ -17,7 +17,7 @@ from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
-class Offer(dict):
+class Offer(Contract):
 
 	address = None
 	contract_id = None
@@ -33,27 +33,20 @@ class Offer(dict):
 	duration = None
 
 	def __init__(self, at=None, contract=None, owner=None, doc={}):
-		super().__init__(doc)
-		if contract:
-			self.contract = Contract(contract, owner)
-			self.contract.compile()
-			if at:
-				self["address"] = at
-				self.contract["address"] = at
-				
-		elif self.get("contract_id"):
-			self._loadContracts()
-		if owner:
-			self["owner"] = owner.public() if issubclass(type(owner), Document) else owner
+		super().__init__(doc=doc, contract=contract, owner=owner)
+		if at:
+			self["address"] = at
+			self.compile()
 
 	def initFromContract(self):
-		if self.get("address") and self.contract.get("is_deployed"):
-			self["client"] = self.contract.call('getClient', local=True)
-			self["creationDate"] = self.contract.call('getCreationDate', local=True)
-			self["hashOfTheProposalDocument"] = self.contract.call('getHashOfTheProposalDocument', local=True)
-			self["totalCost"] = self.contract.call('getTotalCost', local=True)
-			self["initialWithdrawal"] = self.contract.call('getInitialWithdrawal', local=True)
-			self["minDailyWithdrawalLimit"] = self.contract.call('getMinDailyWithdrawalLimit', local=True)
-			self["payoutFreezePeriod"] = self.contract.call('getPayoutFreezePeriod', local=True)
-			self["isRecurrent"] = self.contract.call('getIsRecurrent', local=True)
-			self["duration"] = self.contract.call('getDuration', local=True)
+		if self.get("address") and self.get("is_deployed"):
+			self["contractor"] = '0x' + self.call('getContractor', local=True)
+			self["client"] = '0x' + self.call('getClient', local=True)
+			self["creationDate"] = self.call('getCreationDate', local=True)
+			self["hashOfTheProposalDocument"] = self.call('getHashOfTheProposalDocument', local=True)
+			self["totalCost"] = self.call('getTotalCost', local=True)
+			self["initialWithdrawal"] = self.call('getInitialWithdrawal', local=True)
+			self["minDailyWithdrawalLimit"] = self.call('getMinDailyWithdrawalLimit', local=True)
+			self["payoutFreezePeriod"] = self.call('getPayoutFreezePeriod', local=True)
+			self["isRecurrent"] = self.call('getIsRecurrent', local=True)
+			self["duration"] = self.call('getDuration', local=True)

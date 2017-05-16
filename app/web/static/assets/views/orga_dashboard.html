@@ -8,7 +8,7 @@
         <!-- start: USER TABSET -->
         <uib-tabset class="tabbable">
           <!-- start: TAB OVERVIEW -->
-          <uib-tab heading="Overview" href="">
+          <uib-tab heading="Overview" href="#">
             <div class="vertical-center">
               <h1 class="padding-right-20">{{ currentOrga.name }}</h1>
               <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-10">
@@ -148,7 +148,7 @@
               </div>
             </uib-tab>
 
-            <uib-tab heading="Activity" active="editActive" ng-click="initSlider()">
+            <uib-tab heading="Activity" ng-click="initSlider()">
               <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
             </uib-tab>
 
