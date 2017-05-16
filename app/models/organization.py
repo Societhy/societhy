@@ -13,6 +13,8 @@ from models.member import Member
 from models.notification import notifications, NotificationDocument as notification
 from models.offer import Offer
 
+
+from core.notifications import notifyToOne
 from core.blockchain_watcher import blockchain_watcher as bw
 from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
 
@@ -26,7 +28,6 @@ class OrganisationInitializationError(Exception):
 	pass
 
 class OrgaDocument(Document):
-
 	"""
 	Overrides a mongokat.Document and add custom methods
 	This class is used everytime a controller needs to manipulate an organisation
@@ -386,7 +387,9 @@ class OrgaDocument(Document):
 		tx_hash = self.board.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.board.getAbi("newMember").get('signature'), user.get('account'))
-			bw.pushEvent(LogEvent("newMember", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.board["abi"]))
+			
+			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'newMember'}
+			bw.pushEvent(LogEvent("newMember", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -626,3 +629,4 @@ class OrgaCollection(Collection):
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)
+

@@ -102,18 +102,6 @@ def handleMessage(data):
     db_message = MessageDocument(message)
     db_message.save()
 
-@socketio.on('notify', namespace='/')
-def notify(push, sender, senderType, category, subject, user):
-    if (data['idOther'] in Clients):
-        notification = {
-            'description': push.createDescription(category),
-            'subject_name': subject['name'],
-            'sender_name': sender['name']
-        }
-        emit('send_message', notification, namespace='/', room=Clients[data['idOther']].sessionId)
-    else:
-        push.sendNotif(sender, senderType, category, subject, user)
-
 
 @socketio.on('init', namespace='/')
 def initSocket(data):

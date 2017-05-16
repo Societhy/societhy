@@ -2,15 +2,12 @@
 This module is used to implement Notification functionalities.
 There is 3 classes who will modelise the differents kind of notifications, and a few tool functions.
 """
+from flask import current_app
 from flask_mail import Message
-from models.user import users, UserDocument as User
-from models.project import projects, ProjectDocument as Project
-from models.organization import organizations, OrgaDocument as Orga
-from models.notification import notifications, NotificationDocument as Notification
-
-from core.chat import notify
 from datetime import datetime
 
+from models.notification import notifications, NotificationDocument as Notification
+from models.clients import mail
 
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
@@ -41,24 +38,33 @@ class NotificationPush(Notification):
 	def sendNotif(self, sender, senderType, category, subject, user):
 		"""
 		Insert the notification in the database in order to be sent.
-		"""
-		print("notif push")
-		if self.createDescription(category) == False:
-			return "unsent"
-		print("insert")
-		if subject:
-			subjectType = findType(subject)
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderName" : sender.get("name"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
+		"""	
+		from core.chat import Clients
+		if (user['_id'] in Clients):
+			notification = {
+					'description': push.createDescription(category),
+					'subject_name': subject['name'],
+					'sender_name': sender['name']
+				}
+			emit('send_message', notification, namespace='/', room=Clients[user['_id']].sessionId)
 		else:
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category,  "createdAt": datetime.now(),
-                                              "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
-                        })
+			if self.createDescription(category) == False:
+				return "unsent"
+			print("insert")
+			if subject:
+				subjectType = findType(subject)
+				notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderName" : sender.get("name"), "senderType": senderType},
+				"subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.now().strftime("%b %d, %Y %I:%M %p"), "description":self.description})
+			else:
+				notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, 
+					"category":category,  "createdAt": datetime.now(),"date": datetime.now().strftime("%b %d, %Y %I:%M %p")})
 
 class NotificationEmail(Notification):
 	"""
 	This class modelise the email notifications.
 	"""
 	def sendNotif(self, sender, senderType, category, subject, user):
+		from app import app
 		"""
 		Insert the notification in the database in order to be sent.
 		"""
@@ -71,10 +77,8 @@ class NotificationEmail(Notification):
 		else:
 			msg.body = sender.get("name") + self.description
 		print("sent")
-		module = __import__("app")
-		my_class = getattr(module, "Mail")
-		mail = my_class()
-		mail.send(msg)
+		with app.app_context():
+			mail.send(msg)
 		return "sent"
 
 def notifyToOne(sender, user, category, subject=None):
@@ -90,7 +94,7 @@ def notifyToOne(sender, user, category, subject=None):
 	#if user.get("notification_accept") == 0:
 	#	return
 	#elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
-	#push = NotificationPush()
+	push = NotificationPush()
 	notify(push, sender, senderType, category, subject, user)
 	#if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
 	print("weeeeeeeee")

@@ -36,6 +36,7 @@ class NotificationDocument(Document):
 			return projects.find_one({"_id": self['sender']['senderId']})
 		elif self['sender']['senderType'] == 'user':
 			return users.find_one({"_id": self['sender']['senderId']})
+		return None
 
 	def getName(data):
 		name = None
@@ -66,8 +67,8 @@ class NotificationDocument(Document):
 			for record in data:
 				name = ""
 				res[i] = record
-				res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
-				res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
+				#res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
+				#res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
 				if record["category"] == "orgaCreate":
 					res[0]["first"] = record["date"] 
 				i = i + 1

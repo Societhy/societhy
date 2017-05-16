@@ -11,7 +11,6 @@ from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 
 from core.utils import toWei
-from core.notifications import notifyToOne
 
 from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
@@ -181,7 +180,6 @@ def joinOrga(user, password, orga_id, tag="member"):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	# notifyToOne(orga, user, 'newMember', user)
 	try:
 		tx_hash = orga.join(user, tag, password=password)
 		if tx_hash is False:
