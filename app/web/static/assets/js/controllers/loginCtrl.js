@@ -23,7 +23,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 
     ctrl.login_done = function () {
 	$http.get("/getUserUnreadNotification").then(function (response) {
-		console.log(response);
+		$scope.unread_notification = JSON.parse(response.data);
     });
 	};
 
@@ -45,7 +45,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 				$rootScope.toogleError(error.data);
 			});
 		}
-	}
+	};
 
     /**
      * Logout from the server.

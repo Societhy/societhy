@@ -6,7 +6,7 @@ from flask_mail import Message
 from models.user import users, UserDocument as User
 from models.project import projects, ProjectDocument as Project
 from models.organization import organizations, OrgaDocument as Orga
-from models.notification import notifications, NotificationDocument as Notification
+from models.notification import notifications
 from bson.json_util import dumps
 
 from core.chat import notify
@@ -113,6 +113,7 @@ def findType(doc):
 
 def getUserUnreadNotification(user):
 	val = notifications.find({"subject.id":user.get("_id"), "seen":False })
+	val["message"] = ""
 	return {
 		"data" : dumps(val),
 		"status" : 200
