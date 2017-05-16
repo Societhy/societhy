@@ -12,6 +12,9 @@ from flask_socketio import emit, send
 
 from core.utils import toWei
 
+from models import users, UserDocument
+from bson.objectid import ObjectId
+
 from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
 
@@ -95,7 +98,6 @@ def createOrga(user, password, newOrga):
 	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
 
 
-
 	instance = governances[newOrga["gov_model"]]["templateClass"](
 		doc=newOrga,
 		owner=user.public(),
@@ -108,6 +110,7 @@ def createOrga(user, password, newOrga):
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
+
 	return {
 			"data": {"orga": instance, "tx_hash": tx_hash},
 			"status": 200

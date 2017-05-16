@@ -313,7 +313,8 @@ class UserCollection(Collection):
 		"lastname": str,
 		"city": str,
         "contact_list": list,
-        "organizations": list
+        "organizations": list,
+		"pending_invitation": list
 	}
 
 	document_class = UserDocument

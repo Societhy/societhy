@@ -4,6 +4,12 @@ There is 3 classes who will modelise the differents kind of notifications, and a
 """
 from flask import current_app
 from flask_mail import Message
+
+from models.notification import notifications
+from bson.json_util import dumps
+
+from core.chat import notify
+
 from datetime import datetime
 
 from models.notification import notifications, NotificationDocument as Notification
@@ -15,8 +21,8 @@ class Notification():
 	"""
 	This class modelise the standard notifications
 	"""
-	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated')
-	descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request')
+	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated', 'newInviteJoinOrga')
+	descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', ' invited you to join the organisation')
 	senderList = ('organization', 'project', 'user')
 
 	def createDescription(self, category):
@@ -106,6 +112,9 @@ def findType(doc):
 	"""
 	Tool function to determine the type of model document.
 	"""
+	from models.user import users, UserDocument as User
+	from models.project import projects, ProjectDocument as Project
+	from models.organization import organizations, OrgaDocument as Orga
 	if isinstance(doc, User):
 		return "user"
 	elif isinstance(doc, Orga):
@@ -113,3 +122,11 @@ def findType(doc):
 	elif isinstance(doc, Project):
 		return "project"
 	return None
+
+def getUserUnreadNotification(user):
+	val = notifications.find({"subject.id":user.get("_id"), "seen":False })
+	val["message"] = ""
+	return {
+		"data" : dumps(val),
+		"status" : 200
+	}

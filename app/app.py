@@ -13,6 +13,7 @@ from api.routes.user import router as user_routes
 from api.routes.organization import router as orga_routes
 from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
+from api.routes.notifications import router as notif_routes
 
 from core import secret_key
 from core.utils import UserJSONEncoder
@@ -49,7 +50,7 @@ jinja_options.update(dict(
 ))
 app.jinja_options = jinja_options
 
-
+app.register_blueprint(notif_routes)
 app.register_blueprint(user_routes)
 app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)

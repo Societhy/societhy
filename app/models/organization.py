@@ -183,8 +183,18 @@ class OrgaDocument(Document):
 					"address": contract_instance["address"],
 					"_id": contract_instance.save()
 				}
-			
+
 		self.save()
+
+		for item in self.get('invited_users'):
+			print("ITERATE ON INVITED USERS")
+			notification.pushNotif({
+				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
+				"subject": {"id": objectid.ObjectId(item), "type":"user"},
+				"category": "newInviteJoinOrga"
+			})
+
+
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
@@ -600,7 +610,8 @@ class OrgaCollection(Collection):
 		"social_accounts": dict,
 		"balance": int,
 		"uploaded_documents": list,
-		"gov_model": str
+		"gov_model": str,
+		"invited_users": list
 	}
 
 	def lookup(self, query):
