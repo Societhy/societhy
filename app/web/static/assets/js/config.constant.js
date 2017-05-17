@@ -116,5 +116,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name:'qrcode',
         files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
+    }, {
+        name:'perfect_scrollbar',
+        files: ['../../bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js', '../../bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js']
     }]
 });

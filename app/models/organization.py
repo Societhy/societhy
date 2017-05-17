@@ -279,9 +279,9 @@ class OrgaDocument(Document):
 			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
 			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor)
-			new_offer.contract["is_deployed"] = True
+			new_offer["is_deployed"] = True
 			new_offer.initFromContract()
-			new_offer["contract_id"] = new_offer.contract.save()
+			new_offer["contract_id"] = new_offer.save()
 			if offer_address not in self["offers"]:
 				self["offers"][offer_address] = new_offer
 				self.save_partial()
@@ -293,9 +293,12 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
-			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+			proposal_id = int(logs[0].get('topics')[1])
+			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
+			value = int(logs[0].get('topics')[3])
+			new_proposal = Proposal(self.get('address'))
+
 			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
 			project_id = new_project.save()
@@ -480,7 +483,7 @@ class OrgaDocument(Document):
 		return tx_hash
 		"""
 		if not self.can(user, "create_offer"):
-			return "unauthorized"
+			return False
 	
 		try:
 			offer["hashOfTheProposalDocument"] = offer["hashOfTheProposalDocument"].encode('utf-8')[:32]
@@ -635,7 +638,8 @@ class OrgaCollection(Collection):
 		from .orga_models import governances
 		
 		doc = super().find_one(*args, **kwargs)
-		doc = governances[doc["gov_model"]]["templateClass"](doc)
+		if doc.get("gov_model"):
+			doc = governances[doc["gov_model"]]["templateClass"](doc)
 		doc.__init__()
 		return doc
 

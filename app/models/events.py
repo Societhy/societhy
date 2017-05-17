@@ -138,7 +138,7 @@ class LogEvent(Event):
 				decoded_data.append(decode_hex(raw_data[i-32:i]).decode("ascii"))
 				i += 32
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
-		if (self.mail != None):
+		if self.mail:
 			for user in self.mail['users']:
 				notifyToOne(self.mail['sender'], user, 'newMember', self.mail['subject'])
 		for cb in self.callbacks:
