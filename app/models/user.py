@@ -132,7 +132,7 @@ class UserDocument(Document):
 		password : string to hash
 		Returns a hash of the string passed as parameter, using the scrypt algorithm and a fixed salt
 		"""
-		return encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD)).decode('utf-8')
+		return encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD))
 
 	def populateKey(self):
 		"""
@@ -248,6 +248,14 @@ class UserDocument(Document):
 			key: self.get(key) for key in self if key in users.public_info
 		}
 
+	def anonymous(self):
+		"""
+		Returns the private information on the user
+		"""
+		return {
+			key: self.get(key) for key in self if key in users.anonymous_info
+		}
+
 	def delete(self):
 		"""
 		Remove this user from the db.
@@ -285,6 +293,11 @@ class UserCollection(Collection):
 		"firstname",
 		"lastname",
 		"organizations"
+	]
+
+	anonymous_info = [
+		"_id",
+		"account"
 	]
 
 	structure = {

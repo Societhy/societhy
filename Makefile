@@ -13,7 +13,11 @@ pow:
 	@make pow_test
 
 build_dependencies:
+ifeq ($(OS), Windows_NT)
+	npm --python="C:\Python27" --prefix ./app/web install ./app/web
+else
 	npm --prefix ./app/web install ./app/web
+endif
 	bower install --allow-root ./app/web
 
 build:
@@ -59,7 +63,7 @@ shell:
 	@make stop
 
 stop:
-	sh -c 'docker stop `docker ps -a -q`'	
+	sh -c 'docker stop `docker ps -a -q`'
 
 rmall:
 	@make stop

@@ -1,22 +1,23 @@
 <!-- start: BREADCRUMB -->
-<div class="breadcrumb-wrapper">
-	<h4 class="mainTitle no-margin" translate="sidebar.nav.forms.WIZARD">ORGANISATION WIZARD</h4>
-
-	<div ncy-breadcrumb class="pull-right"></div>
-</div>
+<!-- <div class="breadcrumb-wrapper"> -->
+<!-- <h4 class="mainTitle no-margin" translate="sidebar.nav.forms.WIZARD">ORGANISATION WIZARD</h4> -->
+<!--  -->
+<!-- <div ncy-breadcrumb class="pull-right"></div> -->
+<!-- </div> -->
 <!-- end: BREADCRUMB -->
 <!-- start: WIZARD DEMO -->
+
 <div class="container-fluid container-fullw">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-white">
 				<div class="panel-body">
 					<h5 class="over-title margin-bottom-15">Create an <span class="text-bold">organisation</span></h5>
-					<div ng-controller="OrgaWizardCtrl">
+					<div ng-controller="OrgaWizardCtrl as ctrl">
 						<!-- start: WIZARD FORM -->
 						<form name="Form" id="form" novalidate>
 							<div id="wizard" class="swMain">
-								<!-- start: WIZARD SEPS -->
+								<!-- start: WIZARD STEPS -->
 								<ul>
 									<li ng-click="form.goTo(Form, 1)">
 										<a href ng-class="{'selected' : currentStep >= 1, 'done' : currentStep > 1}">
@@ -29,7 +30,7 @@
 										<a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}">
 											<div class="stepNumber">
 												2
-											</div> <span class="stepDesc text-small">Members</span>
+											</div> <span class="stepDesc text-small">Governance</span>
 										</a>
 									</li>
 
@@ -37,20 +38,34 @@
 										<a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
 											<div class="stepNumber">
 												3
-											</div> <span class="stepDesc text-small">Financing</span>
+											</div> <span class="stepDesc text-small">Members</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 4)">
 										<a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}">
 											<div class="stepNumber">
 												4
-											</div> <span class="stepDesc text-small"> Document Upload </span>
+											</div> <span class="stepDesc text-small">Tokens</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 5)">
 										<a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}">
 											<div class="stepNumber">
 												5
+											</div> <span class="stepDesc text-small">Funding</span>
+										</a>
+									</li>
+									<li ng-click="form.goTo(Form, 6)">
+										<a href ng-class="{'selected' : currentStep >= 6, 'done' : currentStep > 6}">
+											<div class="stepNumber">
+												6
+											</div> <span class="stepDesc text-small"> Document Upload </span>
+										</a>
+									</li>
+									<li ng-click="form.goTo(Form, 7)">
+										<a href ng-class="{'selected' : currentStep >= 7, 'done' : currentStep > 7}">
+											<div class="stepNumber">
+												7
 											</div> <span class="stepDesc text-small"> Complete </span>
 										</a>
 									</li>
@@ -63,6 +78,41 @@
 											<div class="padding-30">
 												<h2 class="StepTitle"><i class="ti-face-smile fa-2x text-primary block margin-bottom-10"></i> Enter your basic information</h2 >
 												</div>
+												<fieldset>
+													<legend>
+														Openness & Privacy
+													</legend>
+													<div class="row">
+														<div class="col-md-6">
+															<div class="form-group">
+																<label class="block"> Do you want your organization to be :</label>
+																<div class="clip-radio radio-primary radio-lg">
+																	<input type="radio" id="public_type" value="public" ng-model="orga_form.rules.accessibility" ng-init="orga_form.rules.accessibility = 'public'">
+																	<label for="public_type"> Public </label>
+																</div>		
+																<div class="clip-radio radio-primary radio-lg">
+																	<input type="radio" id="private_type" value="private" ng-model="orga_form.rules.accessibility">
+																	<label for="private_type"> Private </label>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<div class="form-group">
+																<label class="block"> You can also chose to make it :</label>
+																<div class="checkbox vertical-center clip-check check-primary check-lg">
+																	<input type="checkbox" id="anonymous_type" ng-model="orga_form.rules.anonymous">
+																	<label for="anonymous_type"> Anonymous </label>
+																</div>
+																<div class="checkbox vertical-center clip-check check-primary check-lg">
+																	<input type="checkbox" id="hidden_type" ng-model="orga_form.rules.hidden">
+																	<label for="hidden_type"> Hidden </label>
+																</div>
+															</div>
+														</div>
+													</div>
+												</fieldset>
 											</div>
 											<div class="col-md-7">
 												<fieldset>
@@ -73,7 +123,7 @@
 														<div class="col-md-6">
 															<div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
 																<label class="control-label">Organisation Name <span class="symbol required"></span> </label>
-																<input type="text" placeholder="Enter your organisation Name" class="form-control" name="name" ng-model="myModel.name" ng-required="currentStep == 1" />
+																<input type="text" placeholder="Enter your organisation Name" class="form-control" name="name" ng-model="orga_form.name" ng-required="currentStep == 1" />
 																<span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$invalid">Name is mandatory</span>
 																<span class="success text-small block" ng-if="Form.name.$valid">Cool !</span>
 															</div>
@@ -81,7 +131,7 @@
 														<div class="col-md-6">
 															<div class="form-group" ng-class="{'has-error':Form.description.$dirty && Form.description.$invalid, 'has-success':Form.description.$valid}">
 																<label class="control-label"> Description <span class="symbol required"></span> </label>
-																<textarea  placeholder="Enter the description" class="form-control autosize area-animated msd-elastic: \n;" name="description" ng-model="myModel.description" ng-required="currentStep == 1"></textarea>
+																<textarea  placeholder="Enter the description" class="form-control autosize area-animated msd-elastic: \n;" name="description" ng-model="orga_form.description" ng-required="currentStep == 1"></textarea>
 																<span class="error text-small block" ng-if="Form.description.$dirty && Form.description.$invalid">Description is mandatory</span>
 																<span class="success text-small" ng-if="Form.description.$valid">Wonderful!</span>
 															</div>
@@ -89,24 +139,13 @@
 													</div>
 													<div class="row">
 														<div class="col-md-6">
-															<div class="form-group">
-																<label class="block"> Organisation type </label>
-																<div class="clip-radio radio-primary">
-																	<input type="radio" id="type1" name="type" value="type 1" ng-model="myModel.type">
-																	<label for="type1"> Type 1 </label>
-																	<input type="radio" id="type2" name="type" value="type 2" ng-model="myModel.type">
-																	<label for="type2"> Type 2 </label>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-6">
 															<h5>Your Networks (optional)</h5>
 															<div class="row">
 																<div class="col-md-1">
 																	<span class="fa fa-facebook"></span>
 																</div>
 																<div class="col-md-11">
-																	<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="myModel.fbUrl" />
+																	<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="orga_form.fbUrl" />
 																</div>
 															</div>
 
@@ -115,7 +154,7 @@
 																	<span class="fa fa-twitter"></span>
 																</div>
 																<div class="col-md-11">
-																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="myModel.twitterUrl"/>
+																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="orga_form.twitterUrl"/>
 																</div>
 															</div>
 
@@ -172,62 +211,160 @@
 											</div>
 										</div>
 										<!-- end: WIZARD STEP 1 -->
+
 										<!-- start: WIZARD STEP 2 -->
 										<div id="step-2" ng-show="currentStep == 2">
 											<div class="row">
-												<div class="col-md-3">
+												<div class="col-md-6">
 													<div class="padding-30">
-														<h2 class="StepTitle">Members<span class="text-large block">Do you want to add members to your organisation ?</span></h2>
+														<h2 class="StepTitle">Governance models<span class="text-large block">How will you manage to take decisions ?</span></h2>
+													</div>
+													<fieldset>
+														<legend>
+															Choose a governance model
+														</legend>
+														<div cass="clip-radio radio-primary radio-lg">
+															<div class="row text-extra-large inline">
+																<div class="col-md-6 ">
+																	<span><i class="fa fa-industry text-xxl padding-10"></i>Entreprise</span>
+																	<input type="radio" id="entreprise_model" value="entreprise" ng-model="orga_form.gov_model">
+																</div>
+																<div class="col-md-6">
+																	<span><i class="fa fa-bank text-xxl padding-10"></i>Public company</span>
+																	<input type="radio" id="public_company_model" value="public_company" ng-model="orga_form.gov_model">
+																</div>
+															</div>
+															<div class="row text-extra-large">
+																<div class="col-md-6">
+																	<span><i class="fa fa-users text-xxl padding-10"></i>Nonprofit organization</span>
+																	<input type="radio" id="ngo_model" value="ngo" ng-model="orga_form.gov_model" ng-init="orga_form.gov_model = 'ngo'">
+																</div>
+																<div class="col-md-6">
+																	<span><i class="fa fa-cubes text-xxl padding-10"></i>DAO</span>
+																	<input type="radio" id="dao_model" value="dao" ng-model="orga_form.gov_model">
+																</div>
+															</div>
+															
+														</div>
+													</fieldset>
+												</div>
+												<div class="col-md-6">
+													<fieldset class="text-extra-large">
+														<legend>Model description</legend>
+														<div class="col-md-6">
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][0]}}</span>
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][1]}}</span>
+															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][2]}}</span>
+														</div>
+														<div class="col-md-6">
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][0]}}</span>
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][1]}}</span>
+															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][2]}}</span>
+														</div>
+														<div class="col-md-12">
+															<br><br>
+															<p>{{governance_types[orga_form.gov_model]["desc"] || "Please chose a governance model to see its characteristics"}}</p>
+														</div>
+													</fieldset>
+												</div>
+												<div class="col-md-6">
+													<fieldset class="text-extra-large">
+														<legend>
+															Advanced Settings
+														</legend>
+														<div class="form-group">
+															<label class="block"> You may add the following features to your structure:</label>
+															<div class="checkbox vertical-center clip-check check-primary">
+																<input type="checkbox" id="delegated_voting" ng-model="orga_form.rules.delegated_voting">
+																<label for="delegated_voting"> Delegated voting </label>
+
+																<input type="checkbox" id="add_curators" ng-model="orga_form.rules.curators">
+																<label for="add_curators"> Add curators </label>
+															</div>
+														</div>
+														<div class="col-md-4 input-group-sm bootstrap-touchspin">
+															<label for="quorum_value"> Quorum : </label>
+															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.quorum" ng-init="orga_form.rules.quorum = 50">
+														</div>
+														<div class="col-md-4 input-group-sm bootstrap-touchspin">
+															<label for="majority_value"> Majority : </label>
+															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.majority" ng-init="orga_form.rules.majority = 50">
+														</div>
+													</fieldset>
+
+													<div class="form-group">
+														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+															<i class="fa fa-circle-arrow-left"></i> Back
+														</button>
+														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+															Next <i class="fa fa-arrow-circle-right"></i>
+														</button>
+													</div>
+
+												</div>
+											</div>
+										</div>
+										<!-- end: WIZARD STEP 2 -->
+
+										<!-- start: WIZARD STEP 3 -->
+										<div id="step-3" ng-show="currentStep == 3">
+											<div class="row">
+												<div class="col-md-2">
+													<div class="padding-30">
+														<h2 class="StepTitle">Members<span class="text-large block">Who's joining the ship ?</span></h2>
 													</div>
 												</div>
 												<div class="col-md-9">
 													<fieldset>
 														<legend>
-															Adding Members
+															Invite members
 														</legend>
 
-														<div class="col-md-6">
-															<div class="row">
-																<div class="padding-bottom-20">
-																	<h3>Invite Users</h3>
+														<div class="col-md-12 inline-block">
+															<form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
+																<div class="form-group col-md-8">
+																	<angucomplete-alt id="ex2"
+																	placeholder="Search for existing users or invite new ones"
+																	pause="300"
+																	selected-object="selected_user"
+																	title-field="name"
+																	remote-url='/searchFor/'
+																	description-field="_id"
+																	minlength="1"
+																	input-class="form-control form-control-small"
+																	match-class="highlight"
+																	input-changed=""/>
 																</div>
-																<form class="form-horizontal padding-bottom-20" role="form" ng-submit="addRow()">
-																	<div class="form-group">
-																		<label class="col-md-2 control-label">Username</label>
-																		<div class="col-md-4">
-																			<input type="text" class="form-control" name="invited_username" ng-model="invited_username" />
-																		</div>
-																	</div>
-																	<div style="vertical-align:top" class="form-group">
-																		<label class="col-md-2 control-label">Roles</label>
-																		<div class="col-md-4">
-																			<input type="text" class="form-control" name="invited_role" ng-model="invited_role" />
-																		</div>
-																	</div>
-																	<div class="form-group">
-																		<div class="col-md-2">
-																			<input type="submit" ng-click='addRow()' value="Submit" class="btn btn-primary btn-wide pull-right"/>
-																		</div>
-																	</div>
-																</form>
-															</div>
+																<button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
+															</form>
 														</div>
-														<div class="col-md-6">
-															<div class="table-responsive">
+														<div class="col-md-12">
+															<div class="table min-height-300">
 																<table class="table">
 																	<thead>
 																		<tr>
-																			<th>Username</th>
-																			<th>Role</th>
-																			<th>Action </th>
+																			<th>Name</th>
+																			<th>Tag</th>
+																			<th>Rights</th>
+																			<th></th>
 																		</tr>
 																	</thead>
 																	<tbody>
-																		<tr ng-repeat="user in users">
-																			<td>{{user.invited_username}} </td>
-																			<td>{{user.invited_role}} </td>
+																		<tr ng-repeat="(user_id, user) in orga_form.invited_users">
+																			<td>{{user.name}} </td>
 																			<td>
-																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user.name)">
+																				<div class="form-group">
+																					<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+																					</select>
+																				</div>
+																			</td>
+																			<td>
+																				<button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
+																					<span>Edit Rights</span>
+																				</button>
+																			</td>
+																			<td>
+																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
 																					<span>Remove</span>
 																				</button>
 																			</td>
@@ -250,13 +387,28 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 2 -->
-										<!-- start: WIZARD STEP 3 -->
-										<div id="step-3" ng-show="currentStep == 3">
+										<!-- end: WIZARD STEP 3 -->
+
+										<!-- start: WIZARD STEP 4 -->
+										<div id="step-4" ng-show="currentStep == 4">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
-														<h2 class="StepTitle">Let's talk about money<span class="text-large block">How do you want to back your organisation ?</span></h2>
+														<h2 class="StepTitle">Tokens<span class="text-large block">How about creating your own asset ?</span></h2>
+													</div>
+												</div>
+												<div class="col-md-7">
+												</div>
+											</div>
+										</div>
+										<!-- end: WIZARD STEP 4 -->
+
+										<!-- start: WIZARD STEP 5 -->
+										<div id="step-5" ng-show="currentStep == 5">
+											<div class="row">
+												<div class="col-md-5">
+													<div class="padding-30">
+														<h2 class="StepTitle">Let's talk about money<span class="text-large block">Do you want to send funds to this new organization ?</span></h2>
 													</div>
 												</div>
 												<div class="col-md-7">
@@ -318,9 +470,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 3 -->
-										<!-- start: WIZARD STEP 4 -->
-										<div id="step-4" ng-show="currentStep == 4">
+										<!-- end: WIZARD STEP 5 -->
+										<!-- start: WIZARD STEP 6 -->
+										<div id="step-6" ng-show="currentStep == 6">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
@@ -378,7 +530,7 @@
 																					<td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
 																					<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
 																					<td ng-show="uploaderDocs.isHTML5">
-																						
+
 																					</td>
 																					<td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
 																					<td nowrap>
@@ -410,9 +562,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 4 -->
-										<!-- start: WIZARD STEP 5 -->
-										<div id="step-5" ng-show="currentStep == 5">
+										<!-- end: WIZARD STEP 6 -->
+										<!-- start: WIZARD STEP 7 -->
+										<div id="step-7" ng-show="currentStep == 7">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="text-center">
@@ -429,9 +581,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 5 -->
+										<!-- end: WIZARD STEP 7 -->
 									</div>
-									<pre class="code margin-top-20">{{ myModel | json }}</pre>
+									<pre class="code margin-top-20">{{ orga_form | json }}</pre>
 								</form>
 								<!-- end: WIZARD FORM -->
 							</div>

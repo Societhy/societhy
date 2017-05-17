@@ -1,0 +1,13 @@
+<div class="modal-header ng-scope">
+	<h3 class="modal-title">Chose a way to generate key!</h3>
+</div>
+<div class="modal-body">
+	<button ladda="ldlocal.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="width:45%" ng-click="local('genLocalKey', 'contract')">
+		<span class="ladda-label"> Generate key locally</span>
+		<span class="ladda-spinner"></span>
+	</button>
+	<button ladda="ldrequest.contract" class="btn btn-o btn-primary ladda-button" data-style="contract" style="float: right; width:45%" ng-click="request('genLinkedKey', 'contract')">
+		<span class="ladda-label"> Generate key on server</span>
+		<span class="ladda-spinner"></span>
+	</button>
+</div>

@@ -11,11 +11,14 @@ from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 
 from core.utils import toWei
+from core.notifications import notifyToOne
 
-from models.organization import organizations, OrgaDocument
+from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
+
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
+from models.orga_models import *
 
 def getOrgaDocument(user, _id=None, name=None):
 	"""
@@ -29,6 +32,7 @@ def getOrgaDocument(user, _id=None, name=None):
 
 	orga = None
 	rights = None
+	
 	if _id:
 		try:
 			_id = objectid.ObjectId(_id)
@@ -37,17 +41,19 @@ def getOrgaDocument(user, _id=None, name=None):
 		orga = organizations.find_one({"_id": _id})
 		if orga is None:
 			return {"data": "Organization does not exist", "status": 400}
+	
 	elif name:
 		orga = list(organizations.find({"name": name}))
 		if len(orga) == 1:
 			orga = orga[0]
 		elif len(orga) < 1:
 			return {"data": "Organization does not exist", "status": 400}
+	
 	if user:
 		if user.get('account') in orga.get('members'):
 			rights = orga.get('members').get(user.get('account')).get('rights')
 		else:
-			rights = orga.rights.get('default')
+			rights = orga.default_rights.get('default')
 
 	if orga.get('profil_picture'):
 		orga["picture"] = ("data:"+ orga["profile_picture"]["profile_picture_type"]+";base64," + json.loads(json_util.dumps(db_filesystem.get(orga["profile_picture"]["profile_picture_id"]).read()))["$binary"])
@@ -60,7 +66,7 @@ def getAllOrganizations():
 	"""
 	Return all the registered organisations.
 	"""
-	orgas = list(organizations.find({}, organizations.public_info))
+	orgas = list(organizations.find({"rules.hidden": False}, organizations.public_info))
 	return {
 		"data": orgas,
 		"status": 200
@@ -81,8 +87,24 @@ def createOrga(user, password, newOrga):
 
 	if not user.unlockAccount(password=password):
 		return {"data": "Invalid password!", "status": 400}
-	newOrga["members"] = {}
-	instance = OrgaDocument(doc=newOrga, owner=user.public(), contract='basic_orga', gen_skel=True)
+	for entry in ["name", "description", "gov_model", "rules"]:
+		if entry not in newOrga:
+			return {"data": "Required field %s not found in organisation document" % entry, "status": 400}
+	
+	rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
+	token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
+	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
+
+
+
+	instance = governances[newOrga["gov_model"]]["templateClass"](
+		doc=newOrga,
+		owner=user.public(),
+		board_contract='Societhy',
+		rules_contract=rules_contract,
+		token_contract=token_contract,
+		registry_contract=registry_contract,
+		gen_skel=True)
 	try:
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:
@@ -159,12 +181,13 @@ def joinOrga(user, password, orga_id, tag="member"):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-
+	# notifyToOne(orga, user, 'newMember', user)
 	try:
 		tx_hash = orga.join(user, tag, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to join", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "newMember"})
 	return {
 		"data": tx_hash,
 		"status": 200
@@ -209,6 +232,8 @@ def donateToOrga(user, password, orga_id, donation):
 	donation_amount = float(donation.get('amount'))
 	if user.refreshBalance() > donation_amount:
 		tx_hash = orga.donate(user, toWei(donation_amount), password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to donate", "status": 400}	
 	else:
 		return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 	return {
@@ -240,6 +265,9 @@ def createProjectFromOrga(user, password, orga_id, newProject):
 		return {"data": "Organization does not exists", "status": 400}
 	try:
 		tx_hash = orga.createProject(user, newProject, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create a project", "status": 400}	
+
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 	return {
@@ -266,9 +294,11 @@ def leaveOrga(user, password, orga_id):
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	try:
 		tx_hash = orga_instance.leave(user, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to leave", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "organization"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
 
 	return {
 		"data": tx_hash,
@@ -282,3 +312,82 @@ def getHisto(token, orga_id, date):
 		"status": 200
 	}
 
+def createOffer(user, password, orga_id, offer):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.createOffer(user, offer, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}	
+	
+def cancelOffer(user, password, orga_id, offer_id):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.cancelOffer(user, offer_id, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}
+
+def createProposal(user, password, orga_id, proposal):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.createProposal(user, proposal, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}
+
+def voteForProposal(user, password, orga_id, proposal_id, vote):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.voteForProposal(user, proposal_id, vote, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}
+
+def executeProposal(user, password, orga_id, proposal_id):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.executeProposal(user, proposal_id, vote, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}

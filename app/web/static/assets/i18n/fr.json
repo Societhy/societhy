@@ -255,38 +255,73 @@
         "FIXEDFOOTER": "Fixed footer"
     },
     "notification": {
-	"LOADING": "CHARGEMENT...",
-        "organisation": {
-	    "title": "Historique",
-	    "messages": {
-		"memberLeave": "Un membre à <u>quitté</u> l'organisation.",
-		"newMember": "Un membre à <u>rejoint</u> l'organisation.",
-		"newProposition": "Un membre vient de soumettre une nouvelle proposition.",
-		"newDonation": "Une donation vient d'être faite."
-	    },
-	    "filter": {
-		"title": "Filtre",
-		"categories": {
-		    "title": "Catégorie",
-		    "all": "Tout",
-		    "newMember": "Nouvel utilisateur",
-		    "memberLeave": "Ancien utilisateur",
-		    "newDonation": "Nouveau don"
-		},
-		"years": {
-		    "title": "Période"
-		},
-		"member": {
-		    "title": "Membre",
-		    "placeholder": "Selectionnez ou cherchez un membre en particulier"
-		},
-		"limit": {
-		    "title": "Limite"
-		}
-	    },
-	    "export": {
-		"title": "Exportation de donées"
-	    }
-	}
+       "LOADING": "CHARGEMENT...",
+       "organisation": {
+           "title": "Historique",
+           "messages": {
+              "orgaCreate": "Création de l'organisation.",
+              "memberLeave": "Un membre à <u>quitté</u> l'organisation.",
+              "newMember": "Un membre à <u>rejoint</u> l'organisation.",
+              "newProposition": "Un membre vient de soumettre une nouvelle proposition.",
+              "newDonation": "Une donation vient d'être faite."
+          },
+          "filter": {
+              "title": "Filtre",
+              "categories": {
+                  "title": "Catégorie",
+                  "all": "Tout",
+                  "newMember": "Nouvel utilisateur",
+                  "memberLeave": "Ancien utilisateur",
+                  "newDonation": "Nouveau don"
+              },
+              "years": {
+                  "title": "Période"
+              },
+              "member": {
+                  "title": "Membre",
+                  "placeholder": "Selectionnez ou cherchez un membre en particulier"
+              },
+              "project": {
+                  "title": "Projet",
+                  "placeholder": "Selectionnez ou cherchez un projet en particulier"
+              },
+              "job": {
+                  "title": "Role",
+                  "placeholder": "Selectionnez ou cherchez un role en particulier"
+              },
+              "donation": {
+                  "title": "Valeur du don",
+                  "placeholder": "Filtrer la valeur du don"
+              },
+              "limit": {
+                  "title": "Limite"
+              }
+          },
+          "export": {
+              "title": "Exportation de donées",
+              "button": "Exporter la selection actuelle",
+              "header": {
+                  "date" : "Date",
+                  "organization": "Nom de l'envoyeur",
+                  "subject" : "Nom du sujet",
+                  "category": "Action effectuée"
+              }
+          }
+      }
+  },
+  "organisations": {
+    "MAIN": "Organizations",
+    "MYORGANISATIONS": "My organizations",
+    "CREATE": "Create a new organization",
+    "DISCOVER": "Discover",
+    "SAMPLE": "Red Cross",
+    "TABS": {
+        "OVERVIEW": "Général",
+        "ACTIVITY": "Activité",
+        "SALES": "Vente",
+        "MEMBERS": "Membres",
+        "FILES": "Fichiers",
+        "PROPOSALS": "Propositions"
     }
+}
 }

@@ -11,3 +11,4 @@ pysha3
 flask-socketio
 eventlet
 ethereum
+flask_mail

@@ -69,8 +69,7 @@ def miner():
 
 @pytest.fixture(scope='module')
 def testOrga(miner):
-	return organizations.find_one({"name": "basic_orga"}
-)
+	return organizations.find_one({"name" :'Societhy_ngo'})
 
 def mockTx(nb=5):
 	for i in range(nb):

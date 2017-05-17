@@ -26,14 +26,13 @@ class ProjectDocument(Document):
 			self.contract.compile()
 			if at:
 				self["address"] = at
-				self.contract
 				self.contract["address"] = at
 		elif self.get("contract_id"):
-			self._loadContract()
+			self._loadContracts()
 		if owner:
 			self["owner"] = owner.public() if issubclass(type(owner), Document) else owner
 
-	def _loadContract(self):
+	def _loadContracts(self):
 		"""
 		Load the contract corresponding to the project.
 		"""

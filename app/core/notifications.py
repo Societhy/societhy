@@ -2,13 +2,13 @@
 This module is used to implement Notification functionalities.
 There is 3 classes who will modelise the differents kind of notifications, and a few tool functions.
 """
-from app import *
-
 from flask_mail import Message
 from models.user import users, UserDocument as User
 from models.project import projects, ProjectDocument as Project
 from models.organization import organizations, OrgaDocument as Orga
 from models.notification import notifications, NotificationDocument as Notification
+
+from core.chat import notify
 from datetime import datetime
 
 
@@ -48,7 +48,7 @@ class NotificationPush(Notification):
 		print("insert")
 		if subject:
 			subjectType = findType(subject)
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now()})
+			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderName" : sender.get("name"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
 		else:
 			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category,  "createdAt": datetime.now(),
                                               "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
@@ -71,6 +71,9 @@ class NotificationEmail(Notification):
 		else:
 			msg.body = sender.get("name") + self.description
 		print("sent")
+		module = __import__("app")
+		my_class = getattr(module, "Mail")
+		mail = my_class()
 		mail.send(msg)
 		return "sent"
 
@@ -78,19 +81,22 @@ def notifyToOne(sender, user, category, subject=None):
 	"""
 	Used to send a notification depending of the type.
 	"""
-	print("notifToOne")
 	senderType = findType(sender)
+	print("OEEE")
 	if senderType == None:
 		return
-	print(user.get("notification_accept"))
-	if user.get("notification_accept") == 0:
-		return
-	elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
-		push = NotificationPush()
-		push.sendNotif(sender, senderType, category, subject, user)
-	if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
-		email = NotificationEmail()
-		email.sendNotif(sender, senderType, category, subject, user)
+	#	return
+	#print(user.get("notification_accept"))
+	#if user.get("notification_accept") == 0:
+	#	return
+	#elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
+	#push = NotificationPush()
+	notify(push, sender, senderType, category, subject, user)
+	#if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
+	print("weeeeeeeee")
+	email = NotificationEmail()
+	print("louheee")
+	email.sendNotif(sender, senderType, category, subject, user)
 
 def findType(doc):
 	"""

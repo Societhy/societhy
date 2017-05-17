@@ -1,4 +1,4 @@
-app.controller('ProductModalController', function($scope, $http, $sessionStorage, $rootScope, FileUploader, ctrl) {
+app.controller('ProductModalController', function($scope, $http, $sessionStorage, $rootScope, $uibModalInstance, FileUploader, ctrl) {
 
     $scope.product = {
         isDigital: false,
@@ -24,7 +24,7 @@ app.controller('ProductModalController', function($scope, $http, $sessionStorage
     });
 
     $scope.cancel = function() {
-        $rootScope.productModal.dismiss('canceled');
+        $uibModalInstance.dismiss('canceled');
     }
 
     $scope.form = {
@@ -35,7 +35,7 @@ app.controller('ProductModalController', function($scope, $http, $sessionStorage
                 $http.post('/addNewProduct', sendProduct).then(function(response) {
                     sendProduct.id = response.data._id;
                     //ENVOYER L'IMAGE
-                    $rootScope.productModal.dismiss('finished');
+                    $uibModalInstance.dismiss('finished');
                 }, function(error) {
                     console.log(error);
                 });

@@ -206,6 +206,7 @@
     };
 
     var tmpCallback = null;
+    
     $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({

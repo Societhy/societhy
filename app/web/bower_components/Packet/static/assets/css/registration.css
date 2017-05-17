@@ -1,0 +1,84 @@
+div#app  div#registrationContainer
+{
+    display:		flex
+}
+
+div#app  div#registrationContent
+{
+    margin:		auto;
+    max-width:		600px;
+    width:		50%;
+}
+
+form h5
+{
+    text-decoration:	underline;
+}
+
+div#app  div#registrationContent div#mandatoryInfo input,
+div#app  div#registrationContent div#personalInfo input
+{
+    text-indent:	5px;
+    border-radius:	8px;
+}
+
+
+button#btn-prev
+{
+    float:		left;
+}
+
+button#btn-next
+{
+    float:		right;
+}
+
+button#btn-prev,
+button#btn-next
+{
+    display:		inline-block;
+    width:		48%;
+    margin:		8px 0;
+}
+
+div#beforeSubmit, div.formChecker
+{
+    color:		red;
+    margin:		auto;
+    max-width:		75%;
+}
+
+/*
+** MANDATORY INFO
+*/
+
+div#app  div#registrationContent div#mandatoryInfo input
+{
+    display:		inline-block;
+    width:		97%;
+}
+
+
+div#app  div#registrationContent div#mandatoryInfo div.reminder
+{
+    color:		red;
+    display:		inline-block;
+    vertical-align:	top;
+    width:		1%;
+}
+
+/*
+** PERSONAL INFO
+*/
+
+div#app  div#registrationContent div#personalInfo select
+{
+    border-radius:	8px;
+    cursor:		pointer;
+    width:		100%;
+}
+
+div#app  div#registrationContent div#personalInfo
+{
+    display:none;
+}

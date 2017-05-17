@@ -5,6 +5,8 @@ from signal import signal, SIGINT
 
 from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
+from flask_mail import Mail
+
 
 from api import MongoSessionInterface as MongoSessionInterface
 from api.routes.user import router as user_routes
@@ -31,6 +33,8 @@ app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+mail = Mail()
+mail.init_app(app)
 
 workers_pool = GreenPool(size=3)
 

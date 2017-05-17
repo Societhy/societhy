@@ -19,7 +19,7 @@
                 <li ng-repeat="data in histo">
                     <div class="timeline-panel">
                         <div class="tl-heading">
-                            <h4>{{data.sender.name}} -> {{data.subject.name}}</h4>
+                            <h4 ><a href="#/app/{{data.sender.type}}/{{data.sender.name}}/{{data.sender.id}}">{{data.sender.name}}</a> -> <a href="#/app/{{data.subject.type}}/{{data.subject.name}}/{{data.subject.id}}">{{data.subject.name}}</a></h4>
                         </div>
                         <p>
                             <small class="text-muted"><i class="glyphicon glyphicon-time"></i>{{data.date}}</small>
@@ -32,7 +32,7 @@
             </ul>
         </div>
         <!-- END: TIMELINE-->
-        <!-- BEGIN: CMD-->
+        <!-- BEGIN: OPTION-->
         <div id="cmdContainer" class="col-md-6">
             <!-- BEGIN: FILTER-->
             <div id="filterContainer" class="col-md-12">
@@ -42,16 +42,23 @@
                     </h3>
                     <hr />
                 </div>
-                <!-- BEGIN: SLIDER -->
+                <!-- BEGIN: DATESLIDER -->
                 <div class="filter">
                     <label>
                         <span translate="notification.organisation.filter.years.title"></span> :
                     </label>
-                    <div id="sliderFilter"></div>
+                    <div id="dateSliderFilter"></div>
                 </div>
-                <!-- END: SLIDER -->
-                <!-- BEGIN: CATEGORY -->
+                <!-- END: DATESLIDER -->
+		<!-- BEGIN: DONATIONSLIDER -->
                 <div class="filter">
+                    <label><span translate="notification.organisation.filter.donation.title"></span> :</label>
+                    <div id="donationSliderFilter"></div>
+                </div>
+		<!-- END: DONATIONSLIDER -->
+		<span class="select">
+                  <!-- BEGIN: CATEGORY -->
+                  <div class="filter">
                     <label><span translate="notification.organisation.filter.categories.title"></span> :</label>
                     <div style="display: inline; width: 100%;"
                          isteven-multi-select
@@ -59,13 +66,12 @@
                          output-model="filtered.categories"
                          button-label="name"
                          item-label="name"
-                         tick-property="ticked"
-                    >
+                         tick-property="ticked">
                     </div>
-                </div>
-                <!-- END: CATEGORY -->
-                <!-- BEGIN: MEMBER -->
-                <div class="filter">
+                  </div>
+                  <!-- END: CATEGORY -->
+                  <!-- BEGIN: MEMBER -->
+                  <div class="filter">
                     <label><span translate="notification.organisation.filter.member.title"></span> :</label>
                     <div style="display: inline; width: 100%;"
                          isteven-multi-select
@@ -73,35 +79,73 @@
                          output-model="filtered.members"
                          button-label="icon name"
                          item-label="name"
-                         tick-property="ticked"
-                    >
+                         tick-property="ticked">
                     </div>
-                </div>
+                  </div>
+		  <!-- END: MEMBER-->
+                  <!-- BEGIN: PROJECT -->
+                  <div class="filter">
+                    <label><span translate="notification.organisation.filter.project.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.projects"
+                         output-model="filtered.projects"
+                         button-label="icon name"
+                         item-label="name"
+                         tick-property="ticked">
+                    </div>
+                  </div>
+		  <!-- END: PROJECT-->
+                  <!-- BEGIN: JOB -->
+                  <div class="filter">
+                    <label><span translate="notification.organisation.filter.job.title"></span> :</label>
+                    <div style="display: inline; width: 100%;"
+                         isteven-multi-select
+                         input-model="filter.jobs"
+                         output-model="filtered.jobs"
+                         button-label="icon name"
+                         item-label="name"
+                         tick-property="ticked">
+                    </div>
+                  </div>
+		  <!-- END: JOB-->
+		</span>
             </div>
             <!-- END: FILTER-->
             <!-- EXPORT CONTAINER -->
-            <div id="ExportContainer" class="col-md-12">
+            <div id="ExportContainer" ng-controller="ExportActivityController" style="text-align: center;" class="col-md-12">
                 <div class="filter">
                     <h3>
                         <span translate="notification.organisation.export.title"></span>
                     </h3>
                     <hr />
+                    <button width="50%" type="button" class="btn btn-success btn-xl" ng-click="exportActivityModal()">
+                      <span translate="notification.organisation.export.button"></span> 
+                    </button>
                 </div>
-                <div>
-                    <!--<div-->
-                    <!--isteven-multi-select-->
-                    <!--input-model="filter.members"-->
-                    <!--output-model="filtered.members"-->
-                    <!--button-label="icon name"-->
-                    <!--item-label="name"-->
-                    <!--tick-property="ticked"-->
-                    <!--&gt;-->
-                    <!--</div>-->
-                </div>
-                <!-- END: EXPORT CONTAINER-->
+		<div style="display: none;">
+		  <table id="orgaExportData">
+		    <thead>
+		      <tr>
+			<td translate="notification.organisation.export.header.date"></td>
+			<td translate="notification.organisation.export.header.organization"></td>
+			<td translate="notification.organisation.export.header.subject"></td>
+			<td translate="notification.organisation.export.header.category"></td>
+		      </tr>
+		    </thead>
+		    <tbody ng-repeat="data in histo">
+		      <tr>
+			<td>{{data.date}}</td>
+			<td>{{data.sender.name}}</td>
+			<td>{{data.subject.name}}</td>
+			<td>{{data.category}}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+		</div>
             </div>
-            <!-- END: CMD-->
+            <!-- END: EXPORT CONTAINER-->
         </div>
-
+        <!-- END: OPTION-->
     </div>
 </div>
