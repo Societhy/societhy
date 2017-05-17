@@ -386,6 +386,10 @@ app.controller('OfferController', function($scope, $http, $timeout, $rootScope, 
   }
   $scope.offer_number = Object.keys($rootScope.currentOrga.offers).length;
   $scope.offer_list = Object.values($rootScope.currentOrga.offers);
+  for (let i = 0; i != $scope.offer_number; i++) {
+    $scope.offer_list[i].expand = false;
+  }
+
   console.log($scope.offer_list);
   for (let i = 0; i < $scope.offer_list.length; i++)
     $scope.offer_list[i].creationDateStr = Date($scope.offer_list[i].creationDate*1000).toString()
@@ -399,5 +403,11 @@ app.controller('OfferController', function($scope, $http, $timeout, $rootScope, 
    }
  }
 
+$scope.expandOffer = function(offer) {
+  for (let i = 0; i != $scope.offer_number; i++) {
+    if (offer.address == $scope.offer_list[i].address)
+      $scope.offer_list[i].expand = (offer.expand == false ? true : false);
+  }
+}
 return ctrl;
 });

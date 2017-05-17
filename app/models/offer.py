@@ -22,6 +22,7 @@ class Offer(Contract):
 	address = None
 	contract_id = None
 	creation_date = None
+	description = None
 	client = None
 	contractor = None
 	hashOfTheProposalDocument = None
@@ -31,6 +32,7 @@ class Offer(Contract):
 	payoutFreezePeriod = None
 	isRecurrent = None
 	duration = None
+	_type = None
 
 	def __init__(self, at=None, contract=None, owner=None, doc={}):
 		super().__init__(doc=doc, contract=contract, owner=owner)

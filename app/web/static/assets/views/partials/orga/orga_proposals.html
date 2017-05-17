@@ -10,7 +10,7 @@
 <button>Submit new offer</button>
 <button>Submit new proposal</button>
 </div>
-<!-- <div ng-controller="ProposalController as ctrl">
+<div ng-controller="ProposalController as ctrl">
 	<div class="container-fluid row no-margin">
 		<div class="col-md-10 col-lg-10 no-padding">
 			<div class="panel panel-white no-radius no-margin">
@@ -80,8 +80,50 @@
 				<table class="table no-margin">
 					<tbody>
 						<tr ng-repeat="proposal in proposal_list | filter:proposalLookupName">
-							<td class="col-md-1">
-								<div class="icons-effect">
+							<td class="col-md-4">
+								<div style="font-size: 34px; text-align: center;">
+									<strong class="padding-bottom-10" >{{ offer.name }}</strong>
+								</div>
+								<br>
+								<div class="icons-effect col-md-4">
+									<img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+									<div class="mask mask-rounded">
+										<div class="icons-wrapper">
+											<div class="icons">
+												<a href="#" class="icon">
+													<span class="fa-stack fa-2x">
+														<i class="fa fa-circle fa-stack-2x text-white"></i>
+														<i class="fa fa-search fa-stack-1x text-extra-large text-light"></i>
+													</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="icons-effect col-md-4">
+									<i ng-if="offer.client == currentOrga.address" class="fa fa-arrow-circle-right text-blue" style="font-size:80px"></i>
+									<i ng-if="offer.client != currentOrga.address" class="fa fa-arrow-circle-left text-green" style="font-size:80px"></i>
+								</div>
+								<div class="icons-effect col-md-4">
+									<img ng-src="{{currentOrga.picture || 'static/assets/images/default-user-xl.png'}}" class="img-responsive img-circle" alt="">
+									<div class="mask mask-rounded">
+										<div class="icons-wrapper">
+											<div class="icons">
+												<a href="#" class="icon">
+													<span class="fa-stack fa-2x">
+														<i class="fa fa-circle fa-stack-2x text-white"></i>
+														<i class="fa fa-search fa-stack-1x text-extra-large text-light"></i>
+													</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<br>
+								<div class="block">
+									<span class="text-azure">{{ offer.contractor }} </span><span class="text-small text-muted"> published this offer on {{ offer.creationDateStr }}</span>
+								</div>
+<!-- 								<div class="icons-effect">
 									<img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" class="img-responsive img-rounded" alt="">
 									<div class="mask mask-rounded">
 										<div class="icons-wrapper">
@@ -96,8 +138,8 @@
 										</div>
 									</div>
 								</div>
-							</td>
-							<td class="col-md-5">
+							-->							</td>
+							<td class="col-md-4">
 								<div class="padding-10">
 									<div class="block">
 										<strong>{{ proposal.name }}</strong><span class="text-muted"> {{proposal_status[proposal.status]}}</span>
@@ -110,7 +152,7 @@
 									</div>
 								</div>
 							</td>
-							<td class="col-md-2">
+<!-- 							<td class="col-md-2">
 								<div class="block">
 									<div class="min-height-80 padding-10 text-center">
 										<span class="text-muted">Quorum</span>
@@ -120,95 +162,95 @@
 									</div>
 								</div>
 							</td>
-							<td class="col-md-1">
-								<div class="text-center block">
-									<div class="border-left border-right border-dark padding-5">
-										<small class="text-muted">Votes
-											<br>
-											<strong> {{ proposal.votes_count }}</strong>
-										</small>
-									</div>
-								</div>
-							</td>
-							<td class="col-md-3">
-								<div class="block vertical-align padding-left-30">
-									<div class="icons">
-										<span>
-											<i class="fa fa-info text-orange padding-5" style="font-size:45px"></i>
-											<i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i>
-											<i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i>
-											<i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i>
-										</span>
+						-->							<td class="col-md-1">
+						<div class="text-center block">
+							<div class="border-left border-right border-dark padding-5">
+								<small class="text-muted">Votes
+									<br>
+									<strong> {{ proposal.votes_count }}</strong>
+								</small>
+							</div>
+						</div>
+					</td>
+					<td class="col-md-3">
+						<div class="block vertical-align padding-left-30">
+							<div class="icons">
+								<span>
+									<i class="fa fa-info text-orange padding-5" style="font-size:45px"></i>
+									<i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i>
+									<i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i>
+									<i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i>
+								</span>
 
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="panel-footer no-border">
-				<p class="no-margin">
-					<a href="#"><i class="fa fa-arrow-circle-o-down text-green"></i></a>
-					<span class="text-light margin-left-10">Show more details </span>
-				</p>
-			</div>
-		</div>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
-	<div class="col-md-2 col-lg-2 no-padding">
-		<div class="panel panel-azure no-border no-radius no-margin">
-			<div class="panel-body">
-				<ct-paneltool class="panel-tools" tool-expand="tool-expand"></ct-paneltool>
-				<h3 class="text-white padding-top-10">In Review</h3>
-				<table class="table margin-bottom-5">
-					<tbody>
-						<tr>
-							<td><span class="text-white">Employments</span>
-							</td>
-							<td>
-								<div class="pull-right margin-top-5">
-									<switch ng-model="filter_employments" ng-init="filter_employments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><span class="text-white">Services</span>
-							</td>
-							<td>
-								<div class="pull-right margin-top-5">
-									<switch ng-model="filter_services" ng-init="filter_services = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><span class="text-white">Investments</span></td>
-							<td>
-								<div class="pull-right margin-top-5">
-									<switch ng-model="filter_investments" ng-init="filter_investments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td><span class="text-white">Taxes</span></td>
-							<td>
-								<div class="pull-right margin-top-5">
-									<switch ng-model="filter_taxes" ng-init="filter_taxes = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-				<div class="block text-dark text-center">
-					<span class="counter text-bold text-white" count-to="{{proposal_number}}" value="{{proposal_number}}" duration="0.4" filter="number">{{proposal_number}}</span>
-					<h4 class="text-uppercase text-white no-margin">Proposal</h4>
-					<span class="line-separator line-sm text-white"></span>
-				</div>
+	<div class="panel-footer no-border">
+		<p class="no-margin">
+			<a href="#"><i class="fa fa-arrow-circle-o-down text-green"></i></a>
+			<span class="text-light margin-left-10">Show more details </span>
+		</p>
+	</div>
+</div>
+</div>
+<div class="col-md-2 col-lg-2 no-padding">
+	<div class="panel panel-azure no-border no-radius no-margin">
+		<div class="panel-body">
+			<ct-paneltool class="panel-tools" tool-expand="tool-expand"></ct-paneltool>
+			<h3 class="text-white padding-top-10">In Review</h3>
+			<table class="table margin-bottom-5">
+				<tbody>
+					<tr>
+						<td><span class="text-white">Employments</span>
+						</td>
+						<td>
+							<div class="pull-right margin-top-5">
+								<switch ng-model="filter_employments" ng-init="filter_employments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span class="text-white">Services</span>
+						</td>
+						<td>
+							<div class="pull-right margin-top-5">
+								<switch ng-model="filter_services" ng-init="filter_services = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span class="text-white">Investments</span></td>
+						<td>
+							<div class="pull-right margin-top-5">
+								<switch ng-model="filter_investments" ng-init="filter_investments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td><span class="text-white">Taxes</span></td>
+						<td>
+							<div class="pull-right margin-top-5">
+								<switch ng-model="filter_taxes" ng-init="filter_taxes = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="block text-dark text-center">
+				<span class="counter text-bold text-white" count-to="{{proposal_number}}" value="{{proposal_number}}" duration="0.4" filter="number">{{proposal_number}}</span>
+				<h4 class="text-uppercase text-white no-margin">Proposal</h4>
+				<span class="line-separator line-sm text-white"></span>
 			</div>
 		</div>
 	</div>
 </div>
+</div>
 
--->
+
 <div class="container-fluid container-fullw row no-margin" ng-controller="OfferController as ctrl">
 	<div class="col-md-10 col-lg-10 no-padding">
 		<div class="panel panel-white no-radius no-margin">
@@ -274,11 +316,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="panel-body" style="overflow: scroll; height: 362px">
+		<div class="panel-body" style="overflow: scroll; height: 900px">
 			<table class="table no-margin">
 				<tbody>
-					<tr ng-repeat="offer in offer_list | filter:offerLookupName">
-						<td class="col-md-4">
+					<tr ng-repeat-start="offer in offer_list | filter:offerLookupName">
+						<td class="col-md-2">
 							<div style="font-size: 34px; text-align: center;">
 								<strong class="padding-bottom-10" >{{ offer.name }}</strong>
 							</div>
@@ -304,32 +346,43 @@
 							</div>
 							<div class="padding-10 text-center">
 								<i class="fa fa-file-text padding-10" style="font-size:30px"></i>
-								<span class="" style="font-size:30px;">Employment</span>
+								<span class="" style="font-size:30px;">{{offer._type}}</span>
 							</div>
 						</td>
-						<td class="col-md-3">
+						<td class="col-md-5">
 							<div class="padding-10 text-center">
 								<i class="fa fa-clock-o padding-10" style="font-size:30px"></i>
-								<span class="" style="font-size:30px;">6 months</span>
+								<span class="" style="font-size:30px;">{{offer.duration.toString() + " days"}}</span>
 							</div>
 							<div class="padding-10 text-center">
 								<i class="fa fa-euro padding-10" style="font-size:30px"></i>
-								<span class="" style="font-size:30px;">570 / mois</span>
+								<div class="inline-block">
+									<span class="" style="font-size:30px;">{{ offer.initialWithdrawal.toString() + " (+" + (offer.minDailyWithdrawalLimit * 30).toString() + " /mo)" }}</span>
+								</div>
 							</div>
 						</td>
 						<td class="col-md-2">
 							<div class="padding-10 text-center">
-								<a href="#offerTr" data-toggle="collapse">
+								<a href="#hidden_offer_description" ng-click="expandOffer(offer)">
 									<i class="fa fa-hand-o-down padding-10" style="font-size:30px"></i>
 								</a>
 							</div>
 						</td>
-						<div  class="collapse col-md-12" id="offerTr">
+					</tr>
+					<tr ng-if="offer.expand" ng-repeat-end="">
+						<td class="cld-md-1"></td>
+						<td class="cld-md-1"></td>
+						<td class="col-md-8" >
 							<p>
-								Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
+								{{offer.description}}
 							</p>
-
-						</div>
+						</td>
+						<td class="col-md-2">
+							<div class="block padding-10 block text-right">
+								<button class="btn btn-success text-right">Submit proposal</button>
+								<button class="btn btn-danger text-right">Delete offer</button>
+							</div>
+						</td>
 					</tr>
 				</tbody>
 			</table>

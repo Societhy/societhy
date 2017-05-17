@@ -2,9 +2,11 @@
 
 An awesome replacement for JavaScript's alert.
 
+![A success modal](https://raw.github.com/t4t5/sweetalert/master/sweetalert.gif)
+
 [See it in action!](http://tristanedwards.me/sweetalert)
 
-![A success modal](https://raw.github.com/t4t5/sweetalert/master/sweetalert.gif)
+[Learn how to use it!](https://www.ludu.co/lesson/how-to-use-sweetalert)
 
 #Usage
 
@@ -14,12 +16,22 @@ You can install SweetAlert through bower:
 bower install sweetalert
 ```
 
+Or through npm:
+
+```bash
+npm install sweetalert
+```
+
 Alternatively, download the package and reference the JavaScript and CSS files manually:
 
 ```html
 <script src="lib/sweet-alert.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/sweet-alert.css">
 ```
+
+#Tutorial
+
+The easiest way to get started is follow the [SweetAlert tutorial on Ludu](https://www.ludu.co/lesson/how-to-use-sweetalert)!
 
 #Examples
 
@@ -35,7 +47,7 @@ A message signaling an error:
 sweetAlert("Oops...", "Something went wrong!", "error");
 ```
 
-A warning message, with a function attached to the "Confirm"-button..
+A warning message, with a function attached to the "Confirm"-button:
 
 ```javascript
 sweetAlert({
@@ -51,6 +63,21 @@ sweetAlert({
   swal("Deleted!",
   "Your imaginary file has been deleted.",
   "success");
+});
+```
+
+A prompt modal where the user's input is logged:
+
+```javascript
+sweerAlert({
+  title: "An input!",
+  text: 'Write something interesting:',
+  type: 'input',
+  showCancelButton: true,
+  closeOnConfirm: false,
+  animation: "slide-from-top"
+}, function(inputValue){
+  console.log("You wrote", inputValue);   
 });
 ```
 
@@ -80,7 +107,7 @@ If you want to contribute:
 ```
 npm install
 ```
-to install the dependencies and make Gulp automatically minify the SCSS and JS-files.
+to install the dependencies. Then run ```gulp``` while working to automatically minify the SCSS and JS-files.
 
 - After you're done, make a pull request and wait for approval! :)
 

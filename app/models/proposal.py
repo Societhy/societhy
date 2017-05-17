@@ -47,7 +47,6 @@ tmp = {
 proposal_status = []
 
 class Proposal(dict):
-
 	
 	name = str()
 	debatePeriod = 0
