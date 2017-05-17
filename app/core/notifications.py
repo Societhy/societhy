@@ -6,13 +6,7 @@ from flask import current_app
 from flask_mail import Message
 
 from bson.json_util import dumps
-<<<<<<< HEAD
-#from core.chat import notify, Clients
-=======
 
-# from core.chat import notify
-
->>>>>>> 70ca07afc51989b045ff301efb9c99fc02ad1765
 from datetime import datetime
 
 from models.notification import notifications, NotificationDocument as Notification
@@ -41,7 +35,9 @@ def createDescription(self, category):
 def sendNotifPush(self, sender, senderType, category, subject, user):
 	"""
 	Insert the notification in the database in order to be sent.
-	"""	
+	"""
+	imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
+	Clients = imp.Clients
 	if (user['_id'] in Clients):
 		notification = {
 				'description': push.createDescription(category),
@@ -100,9 +96,10 @@ def notifyToOne(sender, user, category, subject=None):
 
 
 def getUserUnreadNotification(user):
-	val = notifications.find({"subject.id":user.get("_id"), "seen":False })
-	val["message"] = ""
+	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
+	for notif in unread_notifs:
+		notif["message"] = ""
 	return {
-		"data" : dumps(val),
+		"data" : dumps(unread_notifs),
 		"status" : 200
 	}
