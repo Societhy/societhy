@@ -19,59 +19,69 @@ descriptionList = (' is the new member of ', ' leave ', 'did a new proposition',
 senderList = ('organization', 'project', 'user')
 
 
-def createDescription(self, category):
+def createDescription(category):
 	"""
 	Depending of the category, this function will fill the description.
 	"""
 	i = 0
-	for tmp in self.categoryList:
+	for tmp in categoryList:
 		if tmp in category:
-			self.description = self.descriptionList[i]
-			return True
+			description = descriptionList[i]
+			return description
 		i = i + 1
-	return False
+	return None
 
 
-def sendNotifPush(self, sender, senderType, category, subject, user):
+def sendNotifPush(sender, senderType, category, subject, user):
 	"""
 	Insert the notification in the database in order to be sent.
 	"""
 	imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
 	Clients = imp.Clients
 	if (user['_id'] in Clients):
-		notification = {
+		notif = {
 				'description': push.createDescription(category),
 				'subject_name': subject['name'],
 				'sender_name': sender['name']
 			}
-		emit('send_message', notification, namespace='/', room=Clients[user['_id']].sessionId)
+		emit('send_message', notif, namespace='/', room=Clients[user['_id']].sessionId)
 	else:
-		notification = NotificationDocument
-		if self.createDescription(category) == False:
-			return "unsent"
+		notification = Notification()
+		description = createDescription(category)
+		if not description:
+			return
 		print("insert")
 		if subject:
-			subjectType = findType(subject)
-			notification.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderName" : sender.get("name"), "senderType": senderType},
-			"subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.now().strftime("%b %d, %Y %I:%M %p"), "description":self.description})
+			subjectType = type(sender).__name__
+			if not subjectType:
+				return
+			data = {"userId" : user.get("_id"), 
+			"sender": { "id": sender.get("_id"), "name" : sender.get("name"), "type": senderType},
+			"subject" : { "id" : subject.get("_id"), "type" : subjectType}, 
+			"category":category, 
+			"description":description}
+			notification.push(data)
 		else:
-			notification.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, 
-				"category":category,  "createdAt": datetime.now(),"date": datetime.now().strftime("%b %d, %Y %I:%M %p")})
-			notification.save()
+			data = {"userId" : user.get("_id"), 
+			"sender": { "id": sender.get("_id"), "type": senderType}, 
+			"category":category,
+			"description":description}
+			notification.push(data)
 
-def sendNotifEmail(self, sender, senderType, category, subject, user):
+def sendNotifEmail(sender, senderType, category, subject, user):
 	from app import app
 	"""
 	Insert the notification in the database in order to be sent.
 	"""
 	print("notif email")
-	if self.createDescription(category) == False:
+	description = createDescription(category)
+	if not description:
 		return None
 	msg = Message(category, sender = 'societhycompany@gmail.com', recipients = [user.get("email")])
 	if subject:
-		msg.body = subject.get("name") + self.description + sender.get("name")
+		msg.body = subject.get("name") + description + sender.get("name")
 	else:
-		msg.body = sender.get("name") + self.description
+		msg.body = sender.get("name") + description
 	print("sent")
 	with app.app_context():
 		mail.send(msg)
@@ -81,7 +91,7 @@ def notifyToOne(sender, user, category, subject=None):
 	"""
 	Used to send a notification depending of the type.
 	"""
-	senderType = type(sender)
+	senderType = type(sender).__name__
 	print("OEEE")
 	if not senderType:
 		return
@@ -89,7 +99,7 @@ def notifyToOne(sender, user, category, subject=None):
 	#if user.get("notification_accept") == 0:
 	#	return
 	#elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
-	notify(push, sender, senderType, category, subject, user)
+	sendNotifPush(sender, senderType, category, subject, user)
 	#if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
 	sendNotifEmail(sender, senderType, category, subject, user)
 
