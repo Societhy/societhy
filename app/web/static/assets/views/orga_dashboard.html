@@ -294,7 +294,13 @@
 
                <div class="row">
                  <div class="col-md-4">
-                   <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.png'}}" alt="..." width="80%" />
+                   <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
+                     <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                       <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin:auto;">
+                     </div>
+                   </div>
+
+                   <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." width="80%" />
                  </div>
 
                  <div class="col-md-8">

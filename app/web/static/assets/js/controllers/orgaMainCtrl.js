@@ -10,34 +10,47 @@
 
     $scope.listProducts = [];
     $scope.reviewList = [];
+   var slides = $scope.slides = [];
+   var currIndex = 0;
 
-    ctrl.setProduct = function(product) {
-        $scope.currentProd = product;
-        if ($scope.currentProd) {
-          $scope.reviewList = $scope.currentProd.reviewList;
-        }
-    }
+   ctrl.setProduct = function(product) {
+     $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
+       images = response.data;
+       currIndex = 0;
+       slides = $scope.slides = [];
 
-    ctrl.sendReview = function() {
-        productId = $scope.currentProd._id.$oid;
-        console.log(this.review);
-        console.log(this.rate);
-        reviewPack = {
-            review: this.review,
-            rate: this.rate,
-            date: new Date(),
-            user: {
-                name: $rootScope.user.name,
-                id: $rootScope.user._id
-            }
-        };
+       if (images.length > 0) {
+         for (var i = 0; i != images.length; i++) {
+           slides.push({image: images[i], id: currIndex++});
+         }
+       }
+     })
+     $scope.currentProd = product;
+     if ($scope.currentProd) {
+       $scope.reviewList = $scope.currentProd.reviewList;
+     }
+  }
 
-        $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
-            console.log(response);;
-        }, function(error) {
-            console.log(error);
-        });
-    }
+  ctrl.sendReview = function() {
+      productId = $scope.currentProd._id.$oid;
+      console.log(this.review);
+      console.log(this.rate);
+      reviewPack = {
+          review: this.review,
+          rate: this.rate,
+          date: new Date(),
+          user: {
+              name: $rootScope.user.name,
+              id: $rootScope.user._id
+          }
+      };
+
+      $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
+          console.log(response);;
+      }, function(error) {
+          console.log(error);
+      });
+  }
 
     /**
      * Opens the new product modal.
@@ -66,13 +79,9 @@
      */
     ctrl.loadProducts = function() {
         $http.get('/getOrgaProducts/'.concat($rootScope.currentOrga._id)).then(function(response) {
-            console.log(response);
             if (response.status == 200) {
                 $scope.listProducts = JSON.parse(response.data);
-                $scope.currentProd = $scope.listProducts[0];
-                if ($scope.currentProd) {
-                  $scope.reviewList = $scope.currentProd.reviewList;
-                }
+                ctrl.setProduct($scope.listProducts[0]);
             }
         });
     }
