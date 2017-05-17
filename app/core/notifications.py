@@ -6,13 +6,6 @@ from flask import current_app
 from flask_mail import Message
 
 from bson.json_util import dumps
-<<<<<<< HEAD
-#from core.chat import notify, Clients
-=======
-
-# from core.chat import notify
-
->>>>>>> 70ca07afc51989b045ff301efb9c99fc02ad1765
 from datetime import datetime
 
 from models.notification import notifications, NotificationDocument as Notification
@@ -93,9 +86,9 @@ def notifyToOne(sender, user, category, subject=None):
 	#if user.get("notification_accept") == 0:
 	#	return
 	#elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
-	notify(push, sender, senderType, category, subject, user)
+	# notify(push, sender, senderType, category, subject, user)
 	#if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
-	sendNotifEmail(sender, senderType, category, subject, user)
+	# sendNotifEmail(sender, senderType, category, subject, user)
 
 
 

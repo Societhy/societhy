@@ -57,7 +57,8 @@ contract Societhy is mortal, open_structure, BoardRoom {
         uint128 _minDailyWithdrawalLimit,
         uint _payoutFreezePeriod,
         bool _isRecurrent,
-        uint _duration) {
+        uint _duration,
+        string _type) {
         Offer newOfferAddress = new Offer(_contractor,
             _client,
             _hashOfTheProposalDocument,
@@ -66,7 +67,8 @@ contract Societhy is mortal, open_structure, BoardRoom {
             _minDailyWithdrawalLimit,
             _payoutFreezePeriod,
             _isRecurrent,
-            _duration);
+            _duration,
+            _type);
         uint id;
         
         offerId[newOfferAddress] = offers.length;

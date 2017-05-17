@@ -12,6 +12,7 @@ from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
 from models.notification import notifications, NotificationDocument as notification
 from models.offer import Offer
+from models.proposal import Proposal
 
 
 from core.notifications import notifyToOne
@@ -282,8 +283,8 @@ class OrgaDocument(Document):
 			new_offer["is_deployed"] = True
 			new_offer.initFromContract()
 			new_offer["contract_id"] = new_offer.save()
-			if offer_address not in self["offers"]:
-				self["offers"][offer_address] = new_offer
+			if offer_address not in self["proposals"]:
+				self["proposals"][offer_address] = Proposal(board=self.board, offer=new_offer)
 				self.save_partial()
 				return self
 		return False
@@ -299,10 +300,7 @@ class OrgaDocument(Document):
 			value = int(logs[0].get('topics')[3])
 			new_proposal = Proposal(self.get('address'))
 
-			if len(logs[0]["decoded_data"]) == 1:
-				new_project["name"] = logs[0]["decoded_data"][0]
-			project_id = new_project.save()
-			if contract_address not in self["projects"]:
+			if new_proposal not in self["projects"]:
 				self["projects"][contract_address] = new_project
 				self.save_partial()
 				return self
@@ -487,7 +485,7 @@ class OrgaDocument(Document):
 	
 		try:
 			offer["hashOfTheProposalDocument"] = offer["hashOfTheProposalDocument"].encode('utf-8')[:32]
-			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration']]
+			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
 		except KeyError:
 			return "missing param in %s" % arg
 		
@@ -638,9 +636,9 @@ class OrgaCollection(Collection):
 		from .orga_models import governances
 		
 		doc = super().find_one(*args, **kwargs)
-		if doc.get("gov_model"):
+		if doc and doc.get("gov_model"):
 			doc = governances[doc["gov_model"]]["templateClass"](doc)
-		doc.__init__()
+			doc.__init__()
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)
