@@ -22,7 +22,7 @@ class Offer(Contract):
 	address = None
 	contract_id = None
 	creation_date = None
-	description = Nonewx
+	description = None
 	client = None
 	contractor = None
 	hashOfTheProposalDocument = None
