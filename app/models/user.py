@@ -17,15 +17,15 @@ This module implements the UserDoc class alongside with all its methods
 class UserDocument(Document):
 
 	default_notifications = {
-	'newMember': True,
-	'memberLeave': False,
-	'newProposition': False,
-	'newDonation': False,
+	'NewMember': True,
+	'MemberLeft': False,
+	'ProposalCreated': False,
+	'DonationMade': False,
 	'newSpending': False,
 	'newMessage': False,
 	'newFriendAdd': False,
 	'orgaCreated': False,
-	'projectCreated': False,
+	'ProjectCreated': False,
 	'newInviteJoinOrga': False
 	}
 
@@ -74,7 +74,7 @@ class UserDocument(Document):
 
 	# CALLBACKS FOR UPDATE
 
-	def joinedOrga(self, logs):
+	def joinedOrga(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
@@ -90,7 +90,7 @@ class UserDocument(Document):
 				return False
 		return None
 
-	def leftOrga(self, logs):
+	def leftOrga(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded and that the orga is in the member's orga, the orga is removed
@@ -106,7 +106,7 @@ class UserDocument(Document):
 				return False
 		return None
 
-	def madeDonation(self, logs):
+	def madeDonation(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, the total amount of donation is incremented by the value of the new one

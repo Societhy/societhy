@@ -25,7 +25,8 @@ def test_create_offer(miner, testOrga):
 	'payoutFreezePeriod': 0,
 	'isRecurrent': False,
 	'duration': 0,
-	"type": "investment"
+	"type": "investment",
+	'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
 	}
 	ret = base_orga.createOffer(miner, password, testOrga.get('_id'), test_offer)
 	assert ret.get('status') == 200	

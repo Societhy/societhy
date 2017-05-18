@@ -63,7 +63,7 @@ def test_join(miner, testOrga):
 	assert ret.get('status') == 200	
 	assert ret.get('data') != None
 
-	bw.waitEvent('newMember')
+	bw.waitEvent('NewMember')
 	assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
 
 def test_memberlist(testOrga):
@@ -92,13 +92,13 @@ def test_leave(miner, testOrga):
 	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))
 	assert ret.get('status') == 200
 	assert ret.get('data').startswith('0x')
-	bw.waitEvent("memberLeft")
+	bw.waitEvent("MemberLeft")
 
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
 	assert ret.get('data') != None
-	bw.waitEvent('newMember')
+	bw.waitEvent('NewMember')
 
 def test_destroyOrga(miner, testOrga):
 	pass

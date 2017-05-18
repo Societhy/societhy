@@ -6,7 +6,7 @@ contract basic_project is mortal, open_structure {
     /* define variable greeting of the type string */
     string name;
 
-    event newDonation(address indexed member, uint indexed value, bool success);
+    event DonationMade(address indexed member, uint indexed value, bool success);
 
     /* this runs when the contract is executed */
     function basic_project(string _name) public {
@@ -20,7 +20,7 @@ contract basic_project is mortal, open_structure {
             if (memberId[msg.sender] != 0) {
                 members[memberId[msg.sender]].donation += msg.value;
             }
-            newDonation(msg.sender, msg.value, true);
+            DonationMade(msg.sender, msg.value, true);
        }
     }
 }

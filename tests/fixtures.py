@@ -35,15 +35,15 @@ test_user = {
 		"keys": {}
 	},
 	"notifications": {
-		'newMember': False,
-		'memberLeave': False,
-		'newProposition': False,
-		'newDonation': False,
+		'NewMember': False,
+		'MemberLeft': False,
+		'ProposalCreated': False,
+		'DonationMade': False,
 		'newSpending': False,
 		'newMessage': False,
 		'newFriendAdd': False,
 		'orgaCreated': False,
-		'projectCreated': False,
+		'ProjectCreated': False,
 		'newInviteJoinOrga': False
 	}
 }
@@ -55,15 +55,15 @@ test_miner = {
 		"keys": {}
 	},
 	"notifications": {
-		'newMember': False,
-		'memberLeave': False,
-		'newProposition': False,
-		'newDonation': False,
+		'NewMember': False,
+		'MemberLeft': False,
+		'ProposalCreated': False,
+		'DonationMade': False,
 		'newSpending': False,
 		'newMessage': False,
 		'newFriendAdd': False,
 		'orgaCreated': False,
-		'projectCreated': False,
+		'ProjectCreated': False,
 		'newInviteJoinOrga': False
 	}
 }

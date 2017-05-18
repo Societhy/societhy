@@ -13,8 +13,8 @@ from models.clients import mail
 
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated', 'newInviteJoinOrga')
-descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', ' invited you to join the organisation')
+categoryList = ('NewMember', 'MemberLeft', 'ProposalCreated', 'DonationMade', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'ProjectCreated', 'newInviteJoinOrga', 'OfferCreated')
+descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', ' invited you to join the organisation', 'created a new offer')
 senderList = ('organization', 'project', 'user')
 
 

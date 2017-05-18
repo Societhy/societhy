@@ -70,7 +70,7 @@ contract OpenRegistryBoardRoomTest is Test {
     assertEq(destinationAccount.balance, 500); */
   }
 
-  function test_complexNewProposalAndVoting() {
+  function test_complexProposalCreatedAndVoting() {
     board = new BoardRoom(address(rules));
     proxy = new OwnedProxy(address(board));
 

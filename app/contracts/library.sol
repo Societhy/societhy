@@ -21,8 +21,8 @@ contract open_structure {
     mapping (address => uint) public memberId;
     Member[] public members;
 
-    event newMember(address indexed member, string tag);
-    event memberLeft(address indexed member);
+    event NewMember(address indexed member, string tag);
+    event MemberLeft(address indexed member);
 
     struct Member {
         address member;
@@ -42,7 +42,7 @@ contract open_structure {
             memberId[msg.sender] = members.length;
             id = members.length++;
             members[id] = Member({member: msg.sender, donation: 0, name: _name, memberSince: now});
-            newMember(msg.sender, tag);
+            NewMember(msg.sender, tag);
         }
         else throw;
     }
@@ -54,7 +54,7 @@ contract open_structure {
         delete members[members.length-1];
         memberId[msg.sender] = 0;
         members.length--;
-        memberLeft(msg.sender);
+        MemberLeft(msg.sender);
     }
 
     function getMemberList() returns (address[]) {

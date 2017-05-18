@@ -114,13 +114,14 @@ class LogEvent(Event):
 	"""
 	Event specific to log events (see further documentation) contained in the state of the blockchain.
 	"""
-	def __init__(self, name, tx_hash, contract_address, topics=None, users=[], callbacks=None, event_abi=None, mail=None):
+	def __init__(self, name, tx_hash, contract_address, topics=None, users=[], callbacks=None, callback_data=None, event_abi=None, mail=None):
 		super().__init__(users=users, tx_hash=tx_hash, callbacks=callbacks, mail=mail)
 		self.logs = None
 		self.topics = topics
 		self.name = name
 		self.contract_address = contract_address
 		self.event_abi = event_abi
+		self.callback_data = callback_data
 
 	def process(self):
 		"""
@@ -140,9 +141,9 @@ class LogEvent(Event):
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
 		if self.mail:
 			for user in self.mail['users']:
-				notifyToOne(self.mail['sender'], user, 'newMember', self.mail['subject'])
+				notifyToOne(self.mail['sender'], user, 'NewMember', self.mail['subject'])
 		for cb in self.callbacks:
-			self.notifyUsers(cb(self.logs))
+			self.notifyUsers(cb(self.logs, self.callback_data))
 		return self
 
 # SAFE QUEUE FOR EVENTS

@@ -209,7 +209,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
   ctrl = this;
 
 
-  $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
+  $rootScope.filter = {categories:	[{name: 'NewMember'}, {name:'MemberLeft'}, {name: 'ProposalCreated'}, {name: 'DonationMade'}, {name: 'newSpending'}],
   members:	[{}],
   jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
   projects:	[{}],
@@ -386,42 +386,10 @@ $scope.expandProposal = function(proposal) {
   }
 }
 
+$scope.submitProposal = function(proposal) {
+  console.log(proposal);
+}
 
  return ctrl;
 });
 
-
-app.controller('OfferController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
-  var ctrl = this;
-  $scope.offer_status = {
-    "pending": "is currently submitted to the votes.",
-    "approved": "has been approved.",
-    "denied": "has been denied."
-  }
-  $scope.offer_number = Object.keys($rootScope.currentOrga.offers).length;
-  $scope.offer_list = Object.values($rootScope.currentOrga.offers);
-  for (let i = 0; i != $scope.offer_number; i++) {
-    $scope.offer_list[i].expand = false;
-  }
-
-  console.log("offers", $scope.offer_list);
-  for (let i = 0; i < $scope.offer_list.length; i++)
-    $scope.offer_list[i].creationDateStr = Date($scope.offer_list[i].creationDate*1000).toString()
-  ctrl.offerLookup = function(item) {
-    console.log(item);
-    if (item) {
-      $scope.offerLookupName = item.title;
-    }
-    else {
-     $scope.offerLookupName = "";
-   }
- }
-
-$scope.expandOffer = function(offer) {
-  for (let i = 0; i != $scope.offer_number; i++) {
-    if (offer.address == $scope.offer_list[i].address)
-      $scope.offer_list[i].expand = (offer.expand == false ? true : false);
-  }
-}
-return ctrl;
-});

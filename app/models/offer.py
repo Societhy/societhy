@@ -40,6 +40,7 @@ class Offer(Contract):
 	payoutFreezePeriod = None
 	isRecurrent = None
 	duration = None
+	actors = None
 	type = None
 
 	def __init__(self, at=None, contract=None, owner=None, doc={}):

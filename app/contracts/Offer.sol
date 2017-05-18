@@ -100,6 +100,8 @@ contract Offer {
     // type of offer, can be 'investment', 'employment', 'tax', 'service'
     string offerType;
 
+    mapping(address => bool) actors;
+
 
     modifier onlyClient {
         if (msg.sender != address(client))
