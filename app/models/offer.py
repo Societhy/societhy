@@ -17,9 +17,17 @@ from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
+offer_types = [
+"employment",
+"investment",
+"service",
+"tax",
+]
+
 class Offer(Contract):
 
 	address = None
+	contract = None
 	contract_id = None
 	creation_date = None
 	description = None
@@ -32,7 +40,7 @@ class Offer(Contract):
 	payoutFreezePeriod = None
 	isRecurrent = None
 	duration = None
-	_type = None
+	type = None
 
 	def __init__(self, at=None, contract=None, owner=None, doc={}):
 		super().__init__(doc=doc, contract=contract, owner=owner)
@@ -52,3 +60,4 @@ class Offer(Contract):
 			self["payoutFreezePeriod"] = self.call('getPayoutFreezePeriod', local=True)
 			self["isRecurrent"] = self.call('getIsRecurrent', local=True)
 			self["duration"] = self.call('getDuration', local=True)
+			self["type"] = self.call('getOfferType', local=True)

@@ -356,12 +356,17 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
   var ctrl = this;
 
   $scope.proposal_status = {
-    "pending": "is currently submitted to the votes.",
+    "pending": "is waiting for approval.",
+    "debating": "is currently submitted to the votes.",
     "approved": "has been approved.",
     "denied": "has been denied."
   }
   $scope.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
   $scope.proposal_list = Object.values($rootScope.currentOrga.proposals);
+  console.log("proposals", $scope.proposal_list)
+  for (let i = 0; i != $scope.proposal_list.length; i++) {
+    $scope.proposal_list[i].expand = false;
+  }
 
   ctrl.proposalLookup = function(item) {
     console.log(item);
@@ -372,6 +377,15 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
      $scope.proposalLookupName = "";
    }
  }
+
+$scope.expandProposal = function(proposal) {
+  for (let i = 0; i != $scope.proposal_number; i++) {
+    console.log("----", $scope.proposal_list[i])
+    if (proposal.from == $scope.proposal_list[i].from)
+      $scope.proposal_list[i].expand = (proposal.expand == false ? true : false);
+  }
+}
+
 
  return ctrl;
 });
@@ -390,7 +404,7 @@ app.controller('OfferController', function($scope, $http, $timeout, $rootScope, 
     $scope.offer_list[i].expand = false;
   }
 
-  console.log($scope.offer_list);
+  console.log("offers", $scope.offer_list);
   for (let i = 0; i < $scope.offer_list.length; i++)
     $scope.offer_list[i].creationDateStr = Date($scope.offer_list[i].creationDate*1000).toString()
   ctrl.offerLookup = function(item) {

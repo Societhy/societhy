@@ -97,6 +97,9 @@ contract Offer {
 
     uint creationDate;
 
+    // type of offer, can be 'investment', 'employment', 'tax', 'service'
+    string offerType;
+
 
     modifier onlyClient {
         if (msg.sender != address(client))
@@ -116,7 +119,8 @@ contract Offer {
         uint128 _minDailyWithdrawalLimit,
         uint _payoutFreezePeriod,
         bool _isRecurrent,
-        uint _duration) {
+        uint _duration,
+        string _type) {
         contractor = _contractor;
         originalClient = Societhy(_client);
         client = Societhy(_client);
@@ -129,6 +133,7 @@ contract Offer {
         isRecurrent = _isRecurrent;
         duration = _duration;
         creationDate = now;
+        offerType = _type;
     }
 
     // non-value-transfer getters
@@ -198,6 +203,10 @@ contract Offer {
 
     function getVotingDeadline() noEther constant returns (uint) {
         return votingDeadline;
+    }
+
+    function getOfferType() noEther constant returns (string) {
+        return offerType;
     }
 
     function sign() payable {

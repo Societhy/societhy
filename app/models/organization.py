@@ -12,6 +12,7 @@ from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
 from models.notification import NotificationDocument as Notification, notifications as notification
 from models.offer import Offer
+from models.proposal import Proposal
 
 
 from core.notifications import notifyToOne
@@ -283,8 +284,8 @@ class OrgaDocument(Document):
 			new_offer["is_deployed"] = True
 			new_offer.initFromContract()
 			new_offer["contract_id"] = new_offer.save()
-			if offer_address not in self["offers"]:
-				self["offers"][offer_address] = new_offer
+			if offer_address not in self["proposals"]:
+				self["proposals"][offer_address] = Proposal(board=self.board, offer=new_offer)
 				self.save_partial()
 				return self
 		return False
@@ -300,10 +301,7 @@ class OrgaDocument(Document):
 			value = int(logs[0].get('topics')[3])
 			new_proposal = Proposal(self.get('address'))
 
-			if len(logs[0]["decoded_data"]) == 1:
-				new_project["name"] = logs[0]["decoded_data"][0]
-			project_id = new_project.save()
-			if contract_address not in self["projects"]:
+			if new_proposal not in self["projects"]:
 				self["projects"][contract_address] = new_project
 				self.save_partial()
 				return self
@@ -401,8 +399,8 @@ class OrgaDocument(Document):
 		tx_hash = self.board.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.board.getAbi("newMember").get('signature'), user.get('account'))
-			
-			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'newMember'}
+
+			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'newMember'} if user.get('notifications').get('newMember') else None
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
@@ -488,7 +486,7 @@ class OrgaDocument(Document):
 	
 		try:
 			offer["hashOfTheProposalDocument"] = offer["hashOfTheProposalDocument"].encode('utf-8')[:32]
-			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration']]
+			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
 		except KeyError:
 			return "missing param in %s" % arg
 		
@@ -639,9 +637,9 @@ class OrgaCollection(Collection):
 		from .orga_models import governances
 		
 		doc = super().find_one(*args, **kwargs)
-		if doc.get("gov_model"):
+		if doc and doc.get("gov_model"):
 			doc = governances[doc["gov_model"]]["templateClass"](doc)
-		doc.__init__()
+			doc.__init__()
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)

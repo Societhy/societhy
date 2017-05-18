@@ -33,13 +33,38 @@ test_user = {
 	"account": None,
 	"eth": {
 		"keys": {}
+	},
+	"notifications": {
+		'newMember': False,
+		'memberLeave': False,
+		'newProposition': False,
+		'newDonation': False,
+		'newSpending': False,
+		'newMessage': False,
+		'newFriendAdd': False,
+		'orgaCreated': False,
+		'projectCreated': False,
+		'newInviteJoinOrga': False
 	}
 }
+
 test_miner = {
 	"name": "miner",
 	"account": None,
 	"eth": {
 		"keys": {}
+	},
+	"notifications": {
+		'newMember': False,
+		'memberLeave': False,
+		'newProposition': False,
+		'newDonation': False,
+		'newSpending': False,
+		'newMessage': False,
+		'newFriendAdd': False,
+		'orgaCreated': False,
+		'projectCreated': False,
+		'newInviteJoinOrga': False
 	}
 }
 

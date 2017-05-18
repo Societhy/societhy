@@ -16,6 +16,19 @@ This module implements the UserDoc class alongside with all its methods
 
 class UserDocument(Document):
 
+	default_notifications = {
+	'newMember': True,
+	'memberLeave': False,
+	'newProposition': False,
+	'newDonation': False,
+	'newSpending': False,
+	'newMessage': False,
+	'newFriendAdd': False,
+	'orgaCreated': False,
+	'projectCreated': False,
+	'newInviteJoinOrga': False
+	}
+
 	"""
 	Overrides a mongokat.Document and add custom methods
 	This class is used everytime a controller needs to manipulate a user (and everytime a used sends a request with an authentification token)
@@ -30,6 +43,9 @@ class UserDocument(Document):
 		session : token associated with the user's session
 		"""
 		super().__init__(doc, users, fetched_fields, gen_skel)
+		if gen_skel:
+			if not self.get('notifications'):
+				self["notifications"] = self.default_notifications
 		self.session_token = session
 
 	def needsReloading(self):

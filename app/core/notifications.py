@@ -6,7 +6,6 @@ from flask import current_app
 from flask_mail import Message
 
 from bson.json_util import dumps
-
 from datetime import datetime
 
 from models.notification import notifications, NotificationDocument as Notification

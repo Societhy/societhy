@@ -17,23 +17,14 @@ from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
 
 from .clients import client, eth_cli
 
-proposal_types = [
-"employment",
-"investment",
-"service",
-"tax",
+proposal_status = [
+"pending",
+"debating",
+"success",
+"approved"
 ]
 
 tmp = {
-"0xdeadbeefdeadbeef": {
-	"name": "first",
-	"participation": 50,
-	"beneficiary": "Joseph Martin",
-	"from": "0xab1393Njdjdndn8820dlnjncmc",
-	"status": "denied",
-	"votes_count": 176,
-	"created_on": "May 03, 2017 11:42 AM"
-	},
 "0xdeadbeefdeadofff": {
 	"name": "second",
 	"participation": 90,
@@ -49,6 +40,7 @@ proposal_status = []
 class Proposal(dict):
 	
 	name = str()
+	offer = None
 	debatePeriod = 0
 	destination = None
 	beneficiary = None
@@ -56,6 +48,12 @@ class Proposal(dict):
 	_calldata = None
 	status = None
 
-	def __init__(self, board, proposal_id):
+	def __init__(self, board, offer):
+		self.board = board
+		if offer.get('abi'):
+			del offer['abi']
+		self["offer"] = offer
+		self["status"] = "pending"
 
+	def initFromContract(self):
 		self[""] = self.board.call("", args=[proposal_id], local=True)
