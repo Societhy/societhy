@@ -398,8 +398,8 @@ class OrgaDocument(Document):
 		tx_hash = self.board.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.board.getAbi("newMember").get('signature'), user.get('account'))
-			
-			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'newMember'}
+
+			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'newMember'} if user.get('notifications').get('newMember') else None
 			bw.pushEvent(LogEvent("newMember", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash

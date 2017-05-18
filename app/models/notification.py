@@ -10,11 +10,6 @@ import models.organization
 from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
-
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated", 'newInviteJoinOrga')
-senderList = ('organization', 'project', 'user')
-
-
 class NotificationDocument(Document):
 
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
@@ -29,6 +24,26 @@ class NotificationDocument(Document):
                                       	"date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
 										"seen": False
                 })
+
+
+	def push(self, data):
+		self["user"] = {"id":None}
+		self["user"]["id"] = data["userId"]
+		self["category"] = data["category"]
+		self["sender"] = {"id":None, "name":None, "type":None}
+		self["sender"]["id"] = data["sender"]["id"]
+		self["sender"]["name"] = data["sender"]["name"]
+		self["sender"]["type"] = data["sender"]["type"]
+		self["date"] = datetime.now().strftime("%b %d, %Y %I:%M %p")
+		self["createdAt"] = datetime.now()
+		self["seen"] = False
+		if data["subject"]["id"]:
+			self["subject"] = {"id":None,  "type":None}
+			self["subject"]["id"] = data["subject"]["id"]
+			self["subject"]["type"] = data["subject"]["type"]
+		print(self)
+		self.save()
+
 
                 
 	def getSender(self):
