@@ -15,7 +15,7 @@ from models.clients import mail
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
 categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated', 'newInviteJoinOrga')
-descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', ' invited you to join the organisation')
+descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request', " created ", ' created ', ' invited you to join the organisation')
 senderList = ('organization', 'project', 'user')
 
 
@@ -26,6 +26,8 @@ def createDescription(category):
 	i = 0
 	for tmp in categoryList:
 		if tmp in category:
+			print(tmp)
+			print(descriptionList[i])
 			description = descriptionList[i]
 			return description
 		i = i + 1
@@ -108,7 +110,7 @@ def notifyToOne(sender, user, category, subject=None):
 def getUserUnreadNotification(user):
 	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
 	for notif in unread_notifs:
-		notif["message"] = ""
+		notif["description"] = createDescription(notif["category"])
 	return {
 		"data" : dumps(unread_notifs),
 		"status" : 200
