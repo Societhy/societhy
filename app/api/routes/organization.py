@@ -126,7 +126,7 @@ def getOrgaHisto():
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
 def createOffer(user):
-    if ensure_fields(['password', 'orga_id', {'offer': ['client', 'contractor', 'totalCost', 'initialWithdrawal', 'minDailyWithdrawalLimit', 'isRecurrent', 'duration']}], request.json):
+    if ensure_fields(['password', 'orga_id', {'offer': ['client', 'contractor', 'totalCost', 'initialWithdrawal', 'minDailyWithdrawalLimit', 'isRecurrent', 'duration', 'description']}], request.json):
         ret = base_orga.createOffer(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -144,7 +144,7 @@ def cancelOffer(user, orga_id, offer_id):
 @router.route('/createProposal', methods=["POST"])
 @requires_auth
 def createProposal(user):
-    if ensure_fields(['password', 'orga_id', {'proposal': ['name', 'debatePeriod', 'destination', 'value', 'calldata', 'decription']}], request.json):
+    if ensure_fields(['password', 'orga_id', {'proposal': ['name', 'destination', 'value']}], request.json):
         ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:

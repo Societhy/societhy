@@ -92,37 +92,35 @@ class ContractDocument(Document):
 		"""
 		return eth_cli.eth_getBalance(self["address"])
 
+	def computeReturnTypes(self, function_name, abi):
+		"""
+		"""
+		return_types = list()
+		signature = None
+		for function in abi:
+			if function.get('type') == 'function' and function.get('name') == function_name:
+				for _output in function.get('outputs'):
+					return_types.append(_output.get('type'))
+				signature = function.get('signature')
+				break
+		return signature, return_types
+
+	def getCallData(self, sig, args):
+		data = eth_cli._encode_function(sig, args)
+		return '0x' + encode_hex(data)
+
 	def call(self, function, local=True, **kwargs):
 		"""
 		Used to call a specified function of a deployed contract
 		"""
 
-		def computeReturnTypes(function_name, abi):
-			"""
-			"""
-			return_types = list()
-			signature = None
-			for function in abi:
-				if function.get('type') == 'function' and function.get('name') == function_name:
-					for _output in function.get('outputs'):
-						return_types.append(_output.get('type'))
-					signature = function.get('signature')
-					break
-			return signature, return_types
-
-		signature, return_types = computeReturnTypes(function, self["abi"])
+		signature, return_types = self.computeReturnTypes(function, self["abi"])
 		if local is True:
 			result = eth_cli.call(self["address"], signature, kwargs.get('args'), return_types)
 		else:
 			from_ = kwargs.get('from_')
 			result = eth_cli.call_with_transaction(from_, self["address"], signature, kwargs.get('args'), value=kwargs.get('value'), gas=kwargs.get('gas'))
 		return result[0] if len(result) == 1 else result
-
-	def send_tx(self, function, *args):
-		"""
-		In developpement.
-		"""
-		pass
 
 
 class ContractCollection(Collection):

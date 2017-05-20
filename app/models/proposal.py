@@ -39,21 +39,27 @@ proposal_status = []
 
 class Proposal(dict):
 	
-	name = str()
-	offer = None
-	debatePeriod = 0
-	destination = None
-	beneficiary = None
-	value = 0
-	_calldata = None
-	status = None
-
-	def __init__(self, board, offer):
-		self.board = board
-		if offer.get('abi'):
-			del offer['abi']
-		self["offer"] = offer
-		self["status"] = "pending"
-
-	def initFromContract(self):
-		self[""] = self.board.call("", args=[proposal_id], local=True)
+	structure = {
+	"name": str,
+	"participation": int,
+	"offer": dict,
+	"debate_period": int,
+	"destination": str,
+	"value": int,
+	"_calldata": bytes,
+	"status": str,
+	"votes_count": int,
+	"created_on": str,
+	"from": str,
+	"id": int
+}
+	def __init__(self, doc={}, board=None, init_from_contract=False):
+		self.update(doc)
+		proposal_id = self.get('proposal_id')
+		if init_from_contract and board and proposal_id is not None: 
+			self["destination"] = '0x' + board.call("destinationOf", args=[proposal_id], local=True)
+			self["value"] = board.call("valueOf", args=[proposal_id], local=True)
+			self["hashed_calldata"] = '0x' + board.call("hashOf", args=[proposal_id], local=True)
+			self["debate_period"] = board.call("debatePeriodOf", args=[proposal_id], local=True)
+			self["created_on"] = board.call("createdOn", args=[proposal_id], local=True)
+			self["from"] = '0x' + board.call("createdBy", args=[proposal_id], local=True)

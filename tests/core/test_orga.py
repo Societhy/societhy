@@ -93,7 +93,7 @@ def test_leave(miner, testOrga):
 	assert ret.get('status') == 200
 	assert ret.get('data').startswith('0x')
 	bw.waitEvent("MemberLeft")
-
+	
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	

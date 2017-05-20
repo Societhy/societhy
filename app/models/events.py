@@ -136,7 +136,10 @@ class LogEvent(Event):
 			i = 32
 			decoded_data = list()
 			while i <= len(raw_data):
-				decoded_data.append(decode_hex(raw_data[i-32:i]).decode("ascii"))
+				try:
+					decoded_data.append(decode_hex(raw_data[i-32:i]).decode("ascii"))
+				except:
+					decoded_data.append(decode_hex(raw_data[i-32:i]))
 				i += 32
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
 		if self.mail:

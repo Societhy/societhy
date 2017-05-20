@@ -1,4 +1,4 @@
-pragma solidity ^0.4.3;
+pragma solidity ^0.4.7;
 
 import "Rules.sol";
 import "examples/StandardTokenFreezer.sol";

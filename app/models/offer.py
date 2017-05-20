@@ -43,14 +43,12 @@ class Offer(Contract):
 	actors = None
 	type = None
 
-	def __init__(self, at=None, contract=None, owner=None, doc={}):
+	def __init__(self, at=None, contract=None, owner=None, doc={}, init_from_contract=False):
 		super().__init__(doc=doc, contract=contract, owner=owner)
 		if at:
 			self["address"] = at
 			self.compile()
-
-	def initFromContract(self):
-		if self.get("address") and self.get("is_deployed"):
+		if init_from_contract and self.get("address"):
 			self["contractor"] = '0x' + self.call('getContractor', local=True)
 			self["client"] = '0x' + self.call('getClient', local=True)
 			self["creationDate"] = self.call('getCreationDate', local=True)

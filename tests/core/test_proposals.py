@@ -13,12 +13,26 @@ from ethjsonrpc import wei_to_ether
 
 password = "simon"
 
+test_proposal_doc = {
+	"0xdeadbeefdeadbeef": {
+	"name": "first",
+	"participation": 50,
+	"beneficiary": "Joseph Martin",
+	"from": "0xab1393Njdjdndn8820dlnjncmc",
+	"status": "denied",
+	"votes_count": 176,
+	"created_on": "May 03, 2017 11:42 AM"
+	}
+}
+
+inserted = None
+
 def test_create_offer(miner, testOrga):
 	test_offer = {
 	'client': testOrga.get('address'),
 	'contractor': miner.get('account'),
 	"description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
-	'hashOfTheProposalDocument': "0xc9770dac2bf785ed180884898b10c7f245ef231dba0711e92b681bb31752b389",
+	'hashOfTheProposalDocument': "0xc9770dac2bf785ed180884898b10c7",
 	'totalCost': 100,
 	'initialWithdrawal': 50,
 	'minDailyWithdrawalLimit': 1,
@@ -33,16 +47,23 @@ def test_create_offer(miner, testOrga):
 	assert ret.get('data') != None
 
 	bw.waitEvent('OfferCreated')
+	testOrga.reload()
+	proposals = testOrga.get('proposals')
+	assert len(proposals) == 1
+	global inserted
+	inserted = next(iter(proposals.values()))
 
 def test_create_proposal(miner, testOrga):
+	global inserted
 	test_proposal = {
-		"0xdeadbeefdeadbeef": {
-		"name": "first",
-		"participation": 50,
-		"beneficiary": "Joseph Martin",
-		"from": "0xab1393Njdjdndn8820dlnjncmc",
-		"status": "denied",
-		"votes_count": 176,
-		"created_on": "May 03, 2017 11:42 AM"
-		}
+		"name": "NEW KILLER PROPOSAL",
+		"destination": inserted.get('offer').get('address'),
+		"value": inserted.get('offer').get('totalCost'),
 	}
+	ret = base_orga.createProposal(miner, password, testOrga.get('_id'), test_proposal)
+	bw.waitEvent('ProposalCreated')
+	testOrga.reload()
+	proposals = testOrga.get('proposals')
+	assert len(proposals) == 1
+	new_proposal = next(iter(proposals.values()))
+	assert new_proposal.get('from') == miner.get('account')

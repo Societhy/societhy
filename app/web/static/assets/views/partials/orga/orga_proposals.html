@@ -24,9 +24,9 @@
 								pause="300"
 								selected-object="ctrl.proposalLookup"
 								local-data="proposal_list"
-								search-fields="name"
-								title-field="name"
-								description-field="beneficiary"
+								search-fields="offer.name"
+								title-field="offer.name"
+								description-field="offer.contractor"
 								minlength="1"
 								input-class="form-control"
 								match-class="highlight"
@@ -158,7 +158,7 @@
 							</td>
 							<td class="col-md-3">
 								<div class="block vertical-align padding-left-30">
-									<div class="icons">
+									<div class="icons text-center">
 										<span>
 											<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="expandProposal(proposal)"></i></a>
 											<a href=""><i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i></a>
@@ -177,7 +177,7 @@
 									<span class="" style="font-size:30px;">{{capitalizeFirstLetter(proposal.offer.type)}}</span>
 								</div>
 							</td>
-							<td class="col-md-4">
+							<td class="col-md-5">
 								<div class="padding-10">
 									<i class="fa fa-clock-o padding-10" style="font-size:30px"></i>
 									<span ng-if="proposal.offer.duration > 0" style="font-size:30px;">{{proposal.offer.duration.toString() + " days"}}</span>
@@ -186,32 +186,24 @@
 								<div class="padding-10">
 									<i class="fa fa-euro padding-10" style="font-size:30px"></i>
 									<div class="inline-block">
-										<span class="" style="font-size:30px;">{{ proposal.offer.initialWithdrawal.toString() + " (+" + (proposal.offer.minDailyWithdrawalLimit * 30).toString() + " /mo)" }}</span>
+										<span class="" style="font-size:30px;">{{ proposal.offer.initialWithdrawal.toString() + " (+" + (proposal.offer.minDailyWithdrawalLimit * 30).toString() + " /month)" }}</span>
 									</div>
 								</div>
 							</td>
 							<td class="col-md-2">
 								<div class="padding-10 text-center">
-									<a href="#" ng-click="reportOffer(proposal)">
+									<a href="#" ng-if="proposal.status == 'pending' || proposal.status == 'pending'" ng-click="reportOffer(proposal)">
 										<i class="fa fa-hand-paper-o padding-10 text-red" style="font-size:30px"></i>
 										<span class="label label-danger block" style="font-size:15px;">Report this offer</span>
 									</a>
 								</div>
 							</td>
 							<td class="col-md-2">
-								<div class="col-md-10 padding-10 text-center">
-									<a href="#" ng-click="submitProposal(proposal)">
+								<div class="col-md-12 padding-10 text-center">
+									<a href="#" ng-if="proposal.status == 'pending' && currentRights.create_proposal" ng-click="submitProposal(proposal)">
 										<i class="fa fa-hand-o-up padding-10" style="font-size:30px"></i>
-										<span class="label label-info block" style="font-size:15px;">Begin debating period</span>
+										<span  class="label label-info block" style="font-size:15px;">Begin debating period</span>
 									</a>
-								</div>
-								<div class="col-md-2">
-									<div class="text-center">
-										<a href="#" ng-click="proposal.expand = !proposal.expand">
-											<i class="fa fa-caret-up" style="font-size:60px"></i>
-											<span class=" block" style="font-size:12px;">Dismiss</span>
-										</a>
-									</div>
 								</div>
 							</td>
 						</tr>
@@ -223,8 +215,18 @@
 									</span>
 								</div>
 							</td>
-							<td>
+							<td class="col-md-7">
 								{{proposal.offer.description}}
+							</td>
+							<td  class="col-md-2">
+								<div class="col-md-12">
+									<div class="text-center">
+										<a href="#" ng-click="proposal.expand = !proposal.expand">
+											<i class="fa fa-caret-up" style="font-size:60px"></i>
+											<span class=" block" style="font-size:12px;">Dismiss</span>
+										</a>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</tbody>

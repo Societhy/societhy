@@ -4,6 +4,8 @@ from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
 from bson import objectid
+from hashlib import sha3_256
+from rlp.utils import encode_hex
 
 from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
 from models.user import users, UserDocument as User
@@ -152,12 +154,13 @@ class OrgaDocument(Document):
 		except AttributeError:
 			pass
 
-		tx_hash = self.rules.deploy(from_.get('account'), args=[])
+		tx_hash = self.rules.deploy(from_.get('account'), args=[self.registry["address"]])
 		bw.waitTx(tx_hash)
 		print("Rules are mined !", eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress'))
 		self.rules["address"] = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
 		self.rules["is_deployed"] = True
 		args.append(self.rules["address"])
+		args.append(self.registry["address"])
 		tx_hash = self.board.deploy(from_.get('account'), args=args)
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
 		return tx_hash
@@ -279,13 +282,12 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor)
+			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor, init_from_contract=True)
 			new_offer["is_deployed"] = True
-			new_offer.initFromContract()
 			new_offer.update(callback_data)
 			new_offer["contract_id"] = new_offer.save()
 			if offer_address not in self["proposals"]:
-				self["proposals"][offer_address] = Proposal(board=self.board, offer=new_offer)
+				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
 				self.save_partial()
 				return self
 		return False
@@ -296,17 +298,16 @@ class OrgaDocument(Document):
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
-			proposal_id = int(logs[0].get('topics')[1])
+			proposal_id = int(logs[0].get('topics')[1], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			value = int(logs[0].get('topics')[3])
-			new_proposal = Proposal(self.get('address'))
-
-			if new_proposal not in self["projects"]:
-				self["projects"][contract_address] = new_project
-				self.save_partial()
-				return self
+			value = int(logs[0].get('topics')[3], base=16)
+			new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
+			if destination not in self["proposals"]:
+				return False
+			self["proposals"][destination].update(new_proposal)
+			self.save_partial()
+			return self
 		return False
-
 
 
 	####
@@ -380,7 +381,7 @@ class OrgaDocument(Document):
 		"""
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
-		memberAddressList = ["0x" + member.decode('utf-8') for member in self.board.call("getMemberList")]
+		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberList")]
 		memberList = users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info)
 		return list(memberList)
 
@@ -396,12 +397,12 @@ class OrgaDocument(Document):
 		if not self.can(user, "join"):
 			return False
 
-		tx_hash = self.board.call('join', local=local, from_=user.get('account'), args=[user.get('name'), tag], password=password)
+		tx_hash = self.registry.call('register', local=local, from_=user.get('account'), args=[user.get('account'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			topics = makeTopics(self.board.getAbi("NewMember").get('signature'), user.get('account'))
+			topics = makeTopics(self.registry.getAbi("NewMember").get('signature'), user.get('account'))
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'NewMember'} if user.get('notifications').get('NewMember') else None
-			bw.pushEvent(LogEvent("NewMember", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("NewMember", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.registry["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -418,12 +419,12 @@ class OrgaDocument(Document):
 		if not self.can(user, "leave"):
 			return False
 
-		tx_hash = self.board.call('leave', local=local, from_=user.get('account'), password=password)
+		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			topics = makeTopics(self.board.getAbi("MemberLeft").get('signature'), user.get('account'))
+			topics = makeTopics(self.registry.getAbi("MemberLeft").get('signature'), user.get('account'))
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'MemberLeft'} if user.get('notifications').get('MemberLeft') else None
-			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.board["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user, event_abi=self.registry["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -525,18 +526,20 @@ class OrgaDocument(Document):
 	def createProposal(self, user, proposal, password=None):
 		"""
 		canSenderPropose
-		check proposal (_name, _type, , _description, _proxy, _debatePeriod, _destination, _value, _calldata)
+		check proposal (_name, _type, , _description, _debatePeriod, _destination, _value, _calldata)
 		destination is a valid offer from orga
 		deploy proposal contract and set callback
 		return tx_hash
 		"""
 		try:
-			args = [offer[parameter] for parameter in ['name', 'debatePeriod', 'destination', 'value', 'calldata', 'decription']]
+			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], proposal['value']]
+			calldata = '0x' + encode_hex(eth_cli._encode_function('sign()', []))
+			callvalue = (proposal['destination'] + str(proposal['value']) + calldata).encode()
+			hashed_callvalue = sha3_256(callvalue)
+			args.append(callvalue)
 		except KeyError:
 			return False
-
-		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'ProposalCreated')], password=password)
-
+		tx_hash = self.board.call('newProposal', local=False, from_=user.get('account'), args=args, password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'ProposalCreated'} if user.get('notifications').get('ProposalCreated') else None
 			bw.pushEvent(LogEvent("ProposalCreated", tx_hash, self.board["address"], callbacks=[self.proposalCreated], users=user, event_abi=self.board["abi"], mail=mail))

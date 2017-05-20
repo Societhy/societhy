@@ -380,7 +380,6 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
 
 $scope.expandProposal = function(proposal) {
   for (let i = 0; i != $scope.proposal_number; i++) {
-    console.log("----", $scope.proposal_list[i])
     if (proposal.from == $scope.proposal_list[i].from)
       $scope.proposal_list[i].expand = (proposal.expand == false ? true : false);
   }
