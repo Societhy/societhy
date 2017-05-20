@@ -25,6 +25,8 @@ def createDescription(category):
 	i = 0
 	for tmp in categoryList:
 		if tmp in category:
+			print(tmp)
+			print(descriptionList[i])
 			description = descriptionList[i]
 			return description
 		i = i + 1
@@ -107,7 +109,7 @@ def notifyToOne(sender, user, category, subject=None):
 def getUserUnreadNotification(user):
 	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
 	for notif in unread_notifs:
-		notif["message"] = ""
+		notif["description"] = createDescription(notif["category"])
 	return {
 		"data" : dumps(unread_notifs),
 		"status" : 200

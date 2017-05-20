@@ -128,9 +128,9 @@
 					<li>
 						<div class="drop-down-wrapper ps-container">
 							<div class="list-group no-margin">
-								<div ng-repeat="value in user.pending_invitation">
+								<div ng-repeat="value in unread_notification">
 									<a class="media list-group-item" href="">
-										<span class="media-body block no-margin"> value.category
+										<span class="media-body block no-margin"> {{value.description}}
 										<small class="block text-grey">10 minutes ago</small>
 										</span>
 									</a>

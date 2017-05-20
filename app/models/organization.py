@@ -12,7 +12,7 @@ from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
-from models.notification import notifications, NotificationDocument as notification
+from models.notification import NotificationDocument as Notification, notifications as notification
 from models.offer import Offer
 from models.proposal import Proposal
 
@@ -192,17 +192,18 @@ class OrgaDocument(Document):
 
 		for item in self.get('invited_users'):
 			print("ITERATE ON INVITED USERS")
-			notification.pushNotif({
+			notif = Notification({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
 				"category": "newInviteJoinOrga"
 			})
+			notif.save()
 
 
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
-		notification.pushNotif({"sender": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "subject": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
+		Notification.pushNotif({"sender": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "subject": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
 		return resp
 
 	def memberJoined(self, logs, callback_data=None):
