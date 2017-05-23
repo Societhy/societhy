@@ -45,6 +45,7 @@ app.constant('JS_REQUIRES', {
         'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
         'productModalCtrl': 'static/assets/js/controllers/productModalCtrl.js',
+        'offerModalCtrl': 'static/assets/js/controllers/offerModalCtrl.js',
     },
     //*** angularJS Modules
     modules: [{

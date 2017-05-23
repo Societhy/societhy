@@ -321,7 +321,8 @@ def createOffer(user, password, orga_id, offer):
 		tx_hash = orga_instance.createOffer(user, offer, password=password)
 		if tx_hash is False:
 			return {"data": "User does not have permission to create an offer", "status": 400}	
-
+		elif tx_hash == "missing param":
+			return {"data": "Missing required field in the offer creation request", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 	return {

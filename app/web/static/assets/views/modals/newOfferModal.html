@@ -1,0 +1,132 @@
+<div class="modal-header ng-scope">
+    <h3 class="modal-title">Add a new offer</h3>
+</div>
+<form name="offerForm" id="form" class="margin-15" novalidate>
+    <fieldset>
+        <legend>Offer informations</legend>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error':offerForm.name.$dirty && offerForm.name.$invalid, 'has-success':offerForm.name.$valid}">
+                    <label class="control-label">Offer Name <span class="symbol required"/></label>
+                    <input type="text" placeholder="Enter your offer name" class="form-control" ng-model="offer.name" name="name" required>
+                    <span class="error text-small block" ng-if="offerForm.name.$dirty && offerForm.name.$invalid">Name is mandatory</span>
+                    <span class="success text-small block" ng-if="offerForm.name.$valid"></span>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error':offerForm.description.$dirty && offerForm.description.$invalid, 'has-success':offerForm.description.$valid}">
+                    <label class="control-label">Offer Description <span class="symbol required"/></label>
+                    <textarea placeholder="Enter your offer description" class="form-control" ng-model="offer.description" name="description" rows="7" cols="73" wrap="hard" required/>
+                    <span class="error text-small block" ng-if="offerForm.description.$dirty && offerForm.description.$invalid">Description is mandatory</span>
+                    <span class="success text-small block" ng-if="offerForm.description.$valid"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Select the type of your offer : </label>
+                    <select ng-model="offer.type" ng-init="offer.type = 'service'" class="form-control">
+                        <option value="employment">Employment</option>
+                        <option value="investment">Investment</option>
+                        <option value="service">Service</option>
+                        <option value="tax">Tax</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error':offerForm.client.$dirty && offerForm.client.$invalid, 'has-success':offerForm.client.$valid}">
+                    <label class="control-label">Client<span class="symbol required"/></label>
+                    <input ng-disabled="true" type="text" placeholder="Enter your offer client" class="form-control" ng-model="offer.client" ng-init="offer.client = currentOrga.address" name="client" required>
+                </div>
+
+                <div class="form-group" ng-class="{'has-error':offerForm.contractor.$dirty && offerForm.contractor.$invalid, 'has-success':offerForm.contractor.$valid}">
+                    <label class="control-label">Contractor <span class="symbol required"/></label>
+                    <input type="text" placeholder="Enter your offer contractor" class="form-control" ng-model="offer.contractor" ng-init="offer.contractor = user.account" name="contractor" required>
+                    <span class="error text-small block" ng-if="offerForm.contractor.$dirty && offerForm.contractor.$invalid">Contractor is mandatory</span>
+                    <span class="success text-small block" ng-if="offerForm.contractor.$valid"></span>
+                </div>
+
+                <div class="col-md-6" ng-show="offerImageUploader.isHTML5">
+                    <div class="row form-group">
+                        <label class="control-label">Picture of your offer</br></label>
+                        <span class="btn btn-primary btn-o btn-file" ng-show="!offerImageUploader.queue.length">
+                            <input type="file" nv-file-select="" uploader="offerImageUploader">
+                            Browse files ...
+                        </span>
+                    </div>
+                    <div class="row">
+                        <table class="table">
+                            <tr ng-repeat="pic in offerImageUploader.queue">
+                                <td>
+                                    <strong>{{ pic.file.name }}</strong>
+                                    <div ng-show="offerImageUploader.isHTML5" ng-thumb="{ file: pic.file, height: 100 }" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Payment Informations</legend>
+
+            <div class="row">
+                <div ng-if="offer.isRecurrent">
+                    <div class="col-md-6">
+                        <label>Amount of the initial withdrawal :</label>
+                        <div class="input-group bootstrap-touchspin">
+                            <input type="number" ng-model="offer.initialWithdrawal" name="initialWithdrawal" touchspin="" data-min="0" data-max="99999" data-step="1" data-boostat="5" data-maxboostedstep="10" data-postfix="eth" class="form-control" style="text-align:right;">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label>Amount of the recurrent withdrawal :</label>
+                        <div class="input-group bootstrap-touchspin">
+                            <input type="" ng-model="offer.recurrentWithdrawal" name="recurrentWithdrawal" touchspin="" data-min="0" data-max="99999" data-step="1" data-boostat="5" data-maxboostedstep="10" data-postfix="eth" class="form-control" style="text-align:right;">
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="!offer.isRecurrent">
+                    <div class="col-md-6">
+                        <label>Amount of the contract :</label>
+                        <div class="input-group bootstrap-touchspin">
+                            <input type="" ng-model="offer.initialWithdrawal" name="initialWithdrawal" touchspin="" data-min="0" data-max="99999" data-step="1" data-boostat="5" data-maxboostedstep="10" data-postfix="eth" class="form-control" style="text-align:right;">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="checkbox clip-check check-primary">
+                        <input type="checkbox" id="recurrentCheckBox" ng-model="offer.isRecurrent" ng-init="offer.isRecurrent = false" name="isRecurrent" />
+                        <label for="recurrentCheckBox">Is the payment recurrent ?</label>
+                    </div>
+                    <div class="form-group" ng-if="offer.isRecurrent">
+                        <div ng-if="!offer.isPermanent">
+                            <label for="recurrenceDuration">Contract Duration :</label>
+                            <input type="range" id="recurrenceDuration" ng-model="offer.duration" min="1" max="90" ng-init="offer.duration = 12" class="form-control" s>
+                        </div>
+                        <label for="isUndeterminatedDuration">This contract will be valid until one of the party ends it :</label>
+                        <input type="checkbox" id="isUndeterminatedDuration" ng-model="offer.isPermanent" ng-init="offer.isPermanent = false" name="isPermanent" />
+                    </div>
+                    <span class="block text-large">The contractor will receive
+                        <span class="text-bold">{{offer.initialWithdrawal}} ethers</span>
+                        at the beginning of the contract and
+                        <span class="text-bold">{{offer.isRecurrent ? offer.recurrentWithdrawal.toString() + " ethers ": "no more ether after this"}}</span>
+                        {{offer.isRecurrent ? " every " : ""}}
+                        <span class="text-bold">{{offer.isRecurrent ? "month" : ""}}</span>
+                        <span ng-if="offer.isRecurrent">. This contract will last for {{ offer.isPermanent ? "an indefinite period" : offer.duration.toString() + " months"}}</span>
+                        <span ng-if="!offer.isRecurrent">. This contract is a one-time payment</span>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="btn-group btn-group-justified btn-block">
+            <a ng-click="cancel()" class="btn btn-dark-red">Cancel</a>
+            <a type="submit" ng-click="form.submit(offerForm)" class="btn btn-green">Submit</a>
+        </div>
+    </form>
