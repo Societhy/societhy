@@ -44,7 +44,7 @@ def requires_auth(f):
 		else:
 			return Response({"error": "unauthorized"}, 401)
 
-		if request.json and request.json.get('socketid') != user.get('socketid') != None:
+		if request.json and request.json.get('socketid') != None:
 			user['socketid'] = request.json.get('socketid')
 		kwargs['user'] = user
 		session[token] = user

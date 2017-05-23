@@ -102,7 +102,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-   ctrl.leaveOrga = function() {
+  ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(
@@ -352,7 +352,7 @@ app.controller('ExportActivityController', function($scope, $http, $timeout, $ro
  return ctrl;
 });
 
-app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
+app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal) {
   var ctrl = this;
 
   $scope.proposal_status = {
@@ -378,17 +378,31 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
    }
  }
 
-$scope.expandProposal = function(proposal) {
+ ctrl.expandProposal = function(proposal) {
   for (let i = 0; i != $scope.proposal_number; i++) {
     if (proposal.from == $scope.proposal_list[i].from)
       $scope.proposal_list[i].expand = (proposal.expand == false ? true : false);
   }
 }
 
-$scope.submitProposal = function(proposal) {
+ctrl.submitProposal = function(proposal) {
   console.log(proposal);
 }
 
- return ctrl;
+ctrl.submitOffer = function() {
+  var modalInstance = $uibModal.open({
+   templateUrl: "static/assets/views/modals/newOfferModal.html",
+   controller: 'OfferModalController',
+   size: 'lg',
+   scope: $scope,
+   resolve: {
+    ctrl : function() {
+     return ctrl;
+   }
+ }
+});
+}
+
+return ctrl;
 });
 
