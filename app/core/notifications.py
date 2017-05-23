@@ -24,7 +24,7 @@ descriptionDict = {
 	"orgaCreated": "invited you to join the organisation ",
 	"ProjectCreated": "created a new project ",
 	"newInviteJoinOrga": " invited you to join the orga",
-	"OfferCreated": " created a new offer",
+	"OfferCreated": " created a new offer"
 }
 
 senderList = ('organization', 'project', 'user')
