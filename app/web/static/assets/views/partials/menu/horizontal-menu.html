@@ -41,6 +41,33 @@
 
 		</ul>
 
+		<ul class="nav navbar-nav navbar-right" ng-controller="NotificationController as ctrl">
+			<li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-show="user">
+				<a href class="dropdown-toggle" uib-dropdown-toggle><i class="fa fa-bell"></i></a>
+				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
+					<li>
+						<span class="dropdown-header" translate="topbar.activities.HEADER"> You have new notifications</span>
+					</li>
+					<li>
+						<div class="drop-down-wrapper ps-container">
+							<div class="list-group no-margin">
+								<div ng-repeat="value in unread_notification">
+									<a ng-click="ctrl.click_notif(value)" class="media list-group-item" href="">
+										<span class="media-body block no-margin"> {{value.description}}
+										<small class="block text-grey">10 minutes ago</small>
+										</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="view-all">
+						<a href="javascript:void(0)" translate="topbar.activities.SEEALL"> See All </a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
 		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
 			<li  uib-dropdown ng-show="!user" auto-close="outsideClick">
 				<a href="#" class="nav-user-wrapper padding-15" uib-dropdown-toggle>
@@ -119,30 +146,6 @@
 				</a>
 			</li>
 
-			<li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-show="user">
-				<a href class="dropdown-toggle" uib-dropdown-toggle><i class="fa fa-bell"></i></a>
-				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
-					<li>
-						<span class="dropdown-header" translate="topbar.activities.HEADER"> You have new notifications</span>
-					</li>
-					<li>
-						<div class="drop-down-wrapper ps-container">
-							<div class="list-group no-margin">
-								<div ng-repeat="value in unread_notification">
-									<a class="media list-group-item" href="">
-										<span class="media-body block no-margin"> {{value.description}}
-										<small class="block text-grey">10 minutes ago</small>
-										</span>
-									</a>
-								</div>
-							</div>
-						</div>
-					</li>
-					<li class="view-all">
-						<a href="javascript:void(0)" translate="topbar.activities.SEEALL"> See All </a>
-					</li>
-				</ul>
-			</li>
 
 			<li class="dropdown" uib-dropdown ng-show="user">
 				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>

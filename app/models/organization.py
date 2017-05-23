@@ -195,7 +195,14 @@ class OrgaDocument(Document):
 			notif = Notification({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
-				"category": "newInviteJoinOrga"
+				"category": "newInviteJoinOrga",
+				"angularState": {
+					"route":"app.organization",
+					"params":{
+						"_id":str(self.get("_id")),
+						"name":self.get("name")
+					}
+				}
 			})
 			notif.save()
 
