@@ -9,7 +9,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
     var ctrl = this;
-    ctrl.user = $rootScope.user
+    ctrl.user = $rootScope.user;
 	ctrl.wallet = $controller("WalletController");
 
        if (ctrl.user) {
@@ -23,8 +23,9 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 
     ctrl.login_done = function () {
 	$http.get("/getUserUnreadNotification").then(function (response) {
-		$scope.unread_notification = JSON.parse(response.data);
-		console.log($scope.unread_notification);
+		$rootScope.unread_notification = JSON.parse(response.data);
+		console.log("coucou")
+		console.log($rootScope.unread_notification);
 		//$scope.$apply();
     });
 	};
