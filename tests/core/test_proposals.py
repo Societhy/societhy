@@ -30,6 +30,7 @@ inserted = None
 def test_create_offer(miner, testOrga):
 	global inserted
 	test_offer_1 = {
+	'name': 'test_offer_1',
 	'client': testOrga.get('address'),
 	'contractor': miner.get('account'),
 	"description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
@@ -40,6 +41,7 @@ def test_create_offer(miner, testOrga):
 	'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
 	}
 	test_offer_2 = {
+	'name': 'test_offer_2',
 	'client': testOrga.get('address'),
 	'contractor': miner.get('account'),
 	"description": "Raw denim you probably haven't heard of them jean shorts Levis. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
@@ -72,6 +74,7 @@ def test_create_offer(miner, testOrga):
 
 def test_create_proposal(miner, testOrga):
 	global inserted
+	print('---------------', inserted.get('offer').get('initialWithdrawal'), inserted.get('offer').get('dailyWithdrawalLimit'))
 	test_proposal = {
 		"name": "NEW KILLER PROPOSAL",
 		"destination": inserted.get('offer').get('address'),

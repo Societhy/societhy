@@ -41,10 +41,14 @@ app.controller('OfferModalController', function($scope, $http, $sessionStorage, 
                         password: password,
                         offer: sendOffer,
                     })
-                       .then(function(response) { sendOffer.id = response.data._id; $uibModalInstance.dismiss('finished');}
+                       .then(function(response) { sendOffer.id = response.data._id}
                         ,function(error) { console.log(error); });
                    },  function(data) {
-                     console.log('---------------', data)
+                     console.log('---------------', data, ctrl);
+                     $rootScope.currentOrga = data.data;
+                     ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+                     ctrl.proposal_number += 1;
+                     $uibModalInstance.dismiss('finished');
                  });
                 }
             }

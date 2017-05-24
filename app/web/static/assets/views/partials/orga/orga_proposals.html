@@ -17,7 +17,7 @@
 								placeholder="Search proposal..."
 								pause="300"
 								selected-object="ctrl.proposalLookup"
-								local-data="proposal_list"
+								local-data="ctrl.proposal_list"
 								search-fields="offer.name"
 								title-field="offer.name"
 								description-field="offer.contractor"
@@ -73,7 +73,7 @@
 			<div class="panel-body" style="overflow: scroll;">
 				<table class="table no-margin">
 					<tbody>
-						<tr ng-repeat-start="proposal in proposal_list | filter:proposalLookupName">
+						<tr ng-repeat-start="proposal in ctrl.proposal_list | filter:proposalLookupName">
 							<td class="col-md-3">
 								<div style="font-size: 34px; text-align: center;">
 									<strong class="padding-bottom-10" >{{ proposal.name }}</strong>
@@ -180,7 +180,7 @@
 								<div class="padding-10">
 									<i class="fa fa-euro padding-10" style="font-size:30px"></i>
 									<div class="inline-block">
-										<span class="" style="font-size:30px;">{{ proposal.offer.initialWithdrawal.toString() + " (+" + (proposal.offer.minDailyWithdrawalLimit * 30).toString() + " /month)" }}</span>
+										<span class="" style="font-size:30px;">{{ fromWei(proposal.offer.initialWithdrawal).toString() + " (+" + (fromWei(proposal.offer.dailyWithdrawalLimit) * 30).toString() + " /month)" }}</span>
 									</div>
 								</div>
 							</td>
@@ -272,7 +272,7 @@
 					</tbody>
 				</table>
 				<div class="block text-dark text-center">
-					<span class="counter text-bold text-white" count-to="{{proposal_number}}" value="{{proposal_number}}" duration="0.4" filter="number">{{proposal_number}}</span>
+					<span class="counter text-bold text-white" count-to="{{ctrl.proposal_number}}" value="{{ctrl.proposal_number}}" duration="0.4" filter="number">{{ctrl.proposal_number}}</span>
 					<h4 class="text-uppercase text-white no-margin">Proposal</h4>
 					<span class="line-separator line-sm text-white"></span>
 				</div>

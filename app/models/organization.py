@@ -496,16 +496,18 @@ class OrgaDocument(Document):
 		try:
 			offer["hashOfTheProposalDocument"] = sha3_256(offer["description"].encode()).hexdigest().encode('utf-8')[:32]
 			offer["minDailyWithdrawalLimit"] = int(toWei(offer.get('recurrentWithdrawal')) / 30) if offer.get('isRecurrent') else 0
+			offer['initialWithdrawal'] = int(toWei(offer['initialWithdrawal']))
 			offer['payoutFreezePeriod'] = self.get('rules').get('payout_freeze_period', 0)
 			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
 		except KeyError as e:
 			return "missing param"
 		
+		print("---------", args)
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'OfferCreated'} if user.get('notifications').get('OfferCreated') else None
-			callback_data = {"description": offer.get('description'), "actors": offer.get('actors')}
+			callback_data = {"description": offer.get('description'), "actors": offer.get('actors'), "name": offer.get('name')}
 			bw.pushEvent(LogEvent("OfferCreated", tx_hash, self.board["address"], callbacks=[self.offerCreated], callback_data=callback_data, users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
