@@ -14,7 +14,21 @@
 
    ctrl.setProduct = function(product) {
     $scope.currentProd = product;
-  }
+  };
+
+   ctrl.isCurrentUserInvitedToOrga = function () {
+        for(var i = 0; i < $rootScope.user.pending_invitation.lenght; i++)
+        {
+            if ($rootScope.user.pending_invitation[i].type === "organisation")
+            {
+                if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga["_id"])
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+   };
 
     /**
      * Opens the new product modal.

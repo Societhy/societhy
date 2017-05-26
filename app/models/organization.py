@@ -205,6 +205,9 @@ class OrgaDocument(Document):
 				}
 			})
 			notif.save()
+			user = users.find_one({"_id":objectid.ObjectId(item)})
+			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
+			user.save()
 
 
 
