@@ -11,7 +11,7 @@
           <uib-tab heading="Overview" href="#">
             <div class="vertical-center">
               <h1 class="padding-right-20">{{ currentOrga.name }}</h1>
-              <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-10">
+              <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-8">
                 <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
               </div>
             </div>

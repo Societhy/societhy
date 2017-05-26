@@ -244,6 +244,14 @@
         }
     });
 
+    $scope.fromWei = function(value) {
+        return value / Math.pow(10, 18)
+    }
+
+    $scope.toWei = function(value) {
+        return value * Math.pow(10, 18)
+    }
+
     $scope.capitalizeFirstLetter = function(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }

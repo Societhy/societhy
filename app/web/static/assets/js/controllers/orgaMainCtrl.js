@@ -375,11 +375,11 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "approved": "has been approved.",
     "denied": "has been denied."
   }
-  $scope.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
-  $scope.proposal_list = Object.values($rootScope.currentOrga.proposals);
-  console.log("proposals", $scope.proposal_list)
-  for (let i = 0; i != $scope.proposal_list.length; i++) {
-    $scope.proposal_list[i].expand = false;
+  ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+  ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+  console.log("proposals", ctrl.proposal_list)
+  for (let i = 0; i != ctrl.proposal_list.length; i++) {
+    ctrl.proposal_list[i].expand = false;
   }
 
   ctrl.proposalLookup = function(item) {
@@ -393,9 +393,9 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
  }
 
  ctrl.expandProposal = function(proposal) {
-  for (let i = 0; i != $scope.proposal_number; i++) {
-    if (proposal.from == $scope.proposal_list[i].from)
-      $scope.proposal_list[i].expand = (proposal.expand == false ? true : false);
+  for (let i = 0; i != ctrl.proposal_number; i++) {
+    if (proposal.from == ctrl.proposal_list[i].from)
+      ctrl.proposal_list[i].expand = (proposal.expand == false ? true : false);
   }
 }
 
