@@ -301,7 +301,8 @@ class UserCollection(Collection):
 		"city",
         "contact_list",
         "organizations",
-        "notifications"
+        "notifications",
+		"pending_invitation"
 	]
 
 	public_info = [

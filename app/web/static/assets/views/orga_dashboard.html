@@ -23,27 +23,32 @@
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
 
-                <div ng-switch on="ctrl.isCurrentUserInvitedToOrga()">
+                <h1>{{ctrl.isCurrentUserInvitedToOrga()}}</h1>
+                <div ng-if="isInvitedToOrga == true">
 
-                  <div ng-switch-when="true"><h1>NIK TA MER</h1></h></div>
+                  <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
+                      Accept Invitation
+                    </button>
 
-                  <div ng-switch-default>
-                    <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
-                      <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
-                        Join
-                      </button>
-                      <button type="button" class="btn btn-success btn-primary dropdown-toggle" uib-dropdown-toggle>as a
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" role="menu">
-                        <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
-                        <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
-                        <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
-                      </ul>
-                    </div>
+                </div>
+                <div ng-if="isInvitedToOrga == false">
+                  <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
+                    <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
+                      Join
+                    </button>
+                    <button type="button" class="btn btn-success btn-primary dropdown-toggle" uib-dropdown-toggle>as a
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
+                      <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
+                      <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
+                    </ul>
                   </div>
 
                 </div>
+
+
 
                 <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
                 <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>

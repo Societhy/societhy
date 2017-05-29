@@ -16,18 +16,31 @@
     $scope.currentProd = product;
   };
 
+   ctrl.acceptInvit = function () {
+       $http.post('/acceptInvitation',
+           {
+
+           }).then(function(response)
+       {
+
+       });
+   };
+
    ctrl.isCurrentUserInvitedToOrga = function () {
-        for(var i = 0; i < $rootScope.user.pending_invitation.lenght; i++)
+        for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
         {
             if ($rootScope.user.pending_invitation[i].type === "organisation")
             {
-                if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga["_id"])
+                if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga._id)
                 {
-                    return true;
+                    $scope.isInvitedToOrga = true;
+                    return;
                 }
             }
         }
-        return false;
+
+        $scope.isInvitedToOrga = false;
+        $scope.apply();
    };
 
     /**
@@ -74,15 +87,16 @@
         "id": $state.params._id
       }).then(function(response) {
         $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
-        $scope.currentRights = $rootScope.currentRights = response.data.rights
-        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights)
+        $scope.currentRights = $rootScope.currentRights = response.data.rights;
+        isCurrentUserInvitedToOrga();
+        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
         if ($rootScope.user) {
           $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
         }
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");
-      })
+      });
     };
 
     /**

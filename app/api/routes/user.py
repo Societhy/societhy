@@ -161,3 +161,12 @@ def getTxHistory(user, address):
 @requires_auth
 def user_profile(user):
 	return Response({"data":"ok"}, 200)
+
+####################
+##     INVITATION ##
+####################
+
+@router.route('/acceptInvitation')
+@requires_auth
+def accept_invit(user, methods=['POST']):
+	pass
