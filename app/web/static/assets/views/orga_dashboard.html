@@ -23,7 +23,6 @@
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
 
-                <h1>{{ctrl.isCurrentUserInvitedToOrga()}}</h1>
                 <div ng-if="isInvitedToOrga == true">
 
                   <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">

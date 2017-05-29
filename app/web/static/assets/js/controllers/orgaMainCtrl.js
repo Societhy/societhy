@@ -19,7 +19,7 @@
    ctrl.acceptInvit = function () {
        $http.post('/acceptInvitation',
            {
-
+                "orga_id":$rootScope.currentOrga._id
            }).then(function(response)
        {
 
@@ -88,7 +88,7 @@
       }).then(function(response) {
         $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
-        isCurrentUserInvitedToOrga();
+        ctrl.isCurrentUserInvitedToOrga();
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
         if ($rootScope.user) {
           $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;

@@ -146,3 +146,6 @@ def getUserNotif(data):
 	ret = list(notifications.find({"userId" : ObjectId(data.get("_id"))}, {"date" : 0, "_id" : 0}))
 	return {"data": {"notifications": ret}, "status": 200}
 
+def acceptInvitation(user, data):
+	for item in data:
+		print(item)

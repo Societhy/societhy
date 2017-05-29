@@ -166,7 +166,8 @@ def user_profile(user):
 ##     INVITATION ##
 ####################
 
-@router.route('/acceptInvitation')
+@router.route('/acceptInvitation', methods=['POST'])
 @requires_auth
-def accept_invit(user, methods=['POST']):
-	pass
+def accept_invit(user):
+	user_management.acceptInvitation(user, request.json)
+	return make_response(jsonify({"status":"ok"}), 200)
