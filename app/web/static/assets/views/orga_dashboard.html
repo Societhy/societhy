@@ -288,6 +288,10 @@
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
           </uib-tab>
 
+          <uib-tab heading="Projects">
+            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_projects.html' "></div>
+          </uib-tab>
+
           <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
             <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
             <div ng-show="listProducts.length" class="row" style="margin-right: 10">
