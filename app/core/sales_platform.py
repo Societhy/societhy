@@ -3,8 +3,11 @@ This module is used to handle request relative to the sales platform functionali
 Each function correspond to a route.
 """
 
+import json
+
 from bson.objectid import ObjectId
 from bson.json_util import dumps
+from models.clients import db_filesystem
 from models.product import products, ProductsDocument
 from models.organization import organizations
 
@@ -39,6 +42,23 @@ def getProductsByOwner(ownerId):
     productsFound = products.find({'owner': ObjectId(ownerId)})
     return {'data': dumps(productsFound), 'status': 200}
 
+def addProductImage(prod_id, pic, type):
+    _id = db_filesystem.put(pic)
+    ret = products.update_one({'_id': ObjectId(prod_id)}, {'$addToSet': {'pictures' : {'id': _id, 'type': type}}})
+    if ret.modified_count < 1:
+        print('Image upload failed')
+        return {'data': 'Image upload failed ' + str(_id), 'status': 400}
+    return {'data': 'Image uploaded', 'status': 200}
+
+def getProductImages(prod_id):
+    images = []
+    prod = products.find_one({'_id': ObjectId(prod_id)})
+    if prod.get('pictures'):
+        for img in prod.get('pictures'):
+            images.append("data:"+ img["type"]+";base64," + json.loads(dumps(db_filesystem.get(img["id"]).read()))["$binary"])
+    return {'data': images, 'status': 200}
+
+
 def updateProduct(productId, updateFields):
     """
     productId : The id of the product that will be updated.
@@ -53,6 +73,14 @@ def updateProduct(productId, updateFields):
     if result.modified_count < 1:
         return {'data': 'Product does not exist', 'status': 400}
     return {'data': result.raw_result, 'status': 200}
+
+def addReviewToProduct(productId, review):
+    """
+    """
+    result = products.update_one({'_id': ObjectId(productId)}, {'$addToSet': {'reviewList': review}})
+    if result.modified_count < 1:
+        return {'data': 'Product does not exist', 'status': 400}
+    return {'data': 'Review added', 'status': 200}
 
 def removeProduct(productId):
     """

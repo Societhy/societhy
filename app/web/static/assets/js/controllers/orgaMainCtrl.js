@@ -8,13 +8,49 @@
    $scope.isMember = false;
    ctrl.wallet = $controller("WalletController");
 
-   $scope.listProducts = [];
-   $scope.currentProd = $scope.listProducts[0];
-
+    $scope.listProducts = [];
+    $scope.reviewList = [];
+   var slides = $scope.slides = [];
+   var currIndex = 0;
 
    ctrl.setProduct = function(product) {
-    $scope.currentProd = product;
-  };
+     $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
+       images = response.data;
+       currIndex = 0;
+       slides = $scope.slides = [];
+
+       if (images.length > 0) {
+         for (var i = 0; i != images.length; i++) {
+           slides.push({image: images[i], id: currIndex++});
+         }
+       }
+     })
+     $scope.currentProd = product;
+     if ($scope.currentProd) {
+       $scope.reviewList = $scope.currentProd.reviewList;
+     }
+  }
+
+  ctrl.sendReview = function() {
+      productId = $scope.currentProd._id.$oid;
+      console.log(this.review);
+      console.log(this.rate);
+      reviewPack = {
+          review: this.review,
+          rate: this.rate,
+          date: new Date(),
+          user: {
+              name: $rootScope.user.name,
+              id: $rootScope.user._id
+          }
+      };
+
+      $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
+          console.log(response);;
+      }, function(error) {
+          console.log(error);
+      });
+  }
 
    ctrl.acceptInvit = function () {
        $http.post('/acceptInvitation',
@@ -68,14 +104,13 @@
      * Get the product list for the current organizations.
      * @method loadProducts
      */
-     ctrl.loadProducts = function() {
-      $http.get('/getOrgaProducts/'.concat($rootScope.currentOrga._id)).then(function(response) {
-        console.log(response);
-        if (response.status == 200) {
-          $scope.listProducts = JSON.parse(response.data);
-          $scope.currentProd = $scope.listProducts[0];
-        }
-      });
+    ctrl.loadProducts = function() {
+        $http.get('/getOrgaProducts/'.concat($rootScope.currentOrga._id)).then(function(response) {
+            if (response.status == 200) {
+                $scope.listProducts = JSON.parse(response.data);
+                ctrl.setProduct($scope.listProducts[0]);
+            }
+        });
     }
 
     /**
@@ -242,7 +277,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
   jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
   projects:	[{}],
   donations:	[{}]};
-  
+
   $rootScope.filtered = {categories: [], members: [], jobs: [], projects: [], donations: []};
 
   $rootScope.getHisto = function (begin, end) {
@@ -374,7 +409,7 @@ app.controller('ExportActivityController', function($scope, $http, $timeout, $ro
   $rootScope.exportActivityModal = function() {
    $("#orgaExportData").table2excel({exclude: ".noExl",
      name: "Worksheet Name",
-     filename: "SomeFile"});	
+     filename: "SomeFile"});
  };
 
  return ctrl;
@@ -433,4 +468,3 @@ ctrl.submitOffer = function() {
 
 return ctrl;
 });
-
