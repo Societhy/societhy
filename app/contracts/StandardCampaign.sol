@@ -1,7 +1,7 @@
 pragma solidity ^0.4.7;
 
-import "examples/BalanceClaim.sol";
-import "examples/Campaign.sol";
+import "BalanceClaim.sol";
+import "Campaign.sol";
 
 contract StandardCampaign is Campaign {
   enum Stages {

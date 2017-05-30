@@ -40,6 +40,7 @@ class OrgaDocument(Document):
 	rules = None
 	registry = None
 	token = None
+	token_freezer = None
 	members = dict()
 	files = dict()
 	projects = dict()
@@ -55,6 +56,7 @@ class OrgaDocument(Document):
 				board_contract=None,
 				rules_contract=None,
 				token_contract=None,
+				token_freezer_contract=None,
 				registry_contract=None,
 				owner=None):
 		"""
@@ -75,6 +77,9 @@ class OrgaDocument(Document):
 			if token_contract:
 				self.token = Contract(token_contract, owner.get('account'))
 				self.token.compile()
+				if token_freezer_contract:
+					self.token_freezer = Contract(token_freezer_contract, owner.get('account'))
+					self.token_freezer.compile()					
 			if registry_contract:
 				self.registry = Contract(registry_contract, owner.get('account'))
 				self.registry.compile()
@@ -122,6 +127,9 @@ class OrgaDocument(Document):
 		try: self.token = contracts.find_one({"_id": self.get('contracts').get('token').get('_id')})
 		except: pass
 
+		try: self.token_freezer = contracts.find_one({"_id": self.get('contracts').get('token_freezer').get('_id')})
+		except: pass
+
 	def deployContract(self, from_=None, password=None, args=[]):
 		"""
 		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
@@ -136,6 +144,7 @@ class OrgaDocument(Document):
 			return "Failed to unlock account"
 
 		try:
+			from_.unlockAccount(password=password)
 			tx_hash = self.token.deploy(from_.get('account'), args=[])
 			bw.waitTx(tx_hash)
 			token_contract_address = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
@@ -144,7 +153,20 @@ class OrgaDocument(Document):
 			print("Token is mined !", token_contract_address)
 		except AttributeError:
 			pass
+
 		try:
+			from_.unlockAccount(password=password)
+			tx_hash = self.token_freezer.deploy(from_.get('account'), args=[self.token["address"]])
+			bw.waitTx(tx_hash)
+			token_freezer_contract_address = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
+			self.token_freezer["address"] = token_freezer_contract_address
+			self.token_freezer["is_deployed"] = True
+			print("Token Freezer is mined !", token_freezer_contract_address)
+		except AttributeError:
+			pass
+
+		try:
+			from_.unlockAccount(password=password)
 			tx_hash = self.registry.deploy(from_.get('account'), args=[])
 			bw.waitTx(tx_hash)
 			registry_contract_address = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
@@ -153,7 +175,7 @@ class OrgaDocument(Document):
 			print("Registry is mined !", registry_contract_address)
 		except AttributeError:
 			pass
-
+		from_.unlockAccount(password=password)
 		tx_hash = self.rules.deploy(from_.get('account'), args=[self.registry["address"]])
 		bw.waitTx(tx_hash)
 		print("Rules are mined !", eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress'))
@@ -161,6 +183,7 @@ class OrgaDocument(Document):
 		self.rules["is_deployed"] = True
 		args.append(self.rules["address"])
 		args.append(self.registry["address"])
+		from_.unlockAccount(password=password)
 		tx_hash = self.board.deploy(from_.get('account'), args=args)
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
 		return tx_hash
@@ -182,12 +205,11 @@ class OrgaDocument(Document):
 		self["balance"] = self.getTotalFunds()
 
 		self["contracts"] = dict()
-		for contract_type, contract_instance in zip(["board", "rules", "registry", "token"], filter(lambda x: x != None, [self.board, self.rules, self.registry, self.token])):
+		for contract_type, contract_instance in {k:v for k,v in {"board": self.board, "rules": self.rules, "registry": self.registry, "token": self.token, 'token_freezer': self.token_freezer}.items() if v is not None}.items():
 			self["contracts"][contract_type] = {
 					"address": contract_instance["address"],
 					"_id": contract_instance.save()
 				}
-
 		self.save()
 
 		for item in self.get('invited_users'):
@@ -626,7 +648,6 @@ class OrgaCollection(Collection):
 		"members": dict,
 		"rights": dict,
 		"rules": dict,
-		"offers": dict,
 		"proposals": dict,
 		"projects": dict,
 		"description": str,

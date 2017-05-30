@@ -15,9 +15,9 @@
         // GOVERNANCE TAB
         $scope.governance_types = {
             "dao": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
-                "desc": "This is a standard description",
+                "pros": ["Trustless AND secure", "Withdraw your funds at all time", "No membership required"],
+                "cons": ["Less reactive than a centralized structure", "Permissions are non-customisable", "Tokens are frozen while a proposal you voted for is still debating"],
+                "desc": "DAO stands for 'decentralized autonomous organisation'. It is a kind of organisation that is controlled entirely by all of its members, and in which every member has the same rights. One does not need to become a member of the organisation to participate in its operations, and the weight of one's vote depends on the amount he invested in the structure",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
                     "owner": {
@@ -55,8 +55,8 @@
                 }
             },
             "ngo": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
+                "pros": ["Efficient decision making", "Collaborative fund management", "Membership system"],
+                "cons": ["The perfect fit for public organisations", "Transparency in every way", "Highly customizable"],
                 "desc": "This is a standard description",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
@@ -95,8 +95,8 @@
                 }
             },
             "public_company": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
+                "pros": ["Trustless AND secure", "Withdraw your funds at all time", "No membership required"],
+                "cons": ["Perfect for small and large businnesses wanting to go public", "Buy and sell your company shares", "Highly secured with the use of curators"],
                 "desc": "This is a standard description",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
@@ -135,8 +135,8 @@
                 }
             },
             "entreprise": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
+                "pros": ["Centralized structure", "Permissions are highly customizable", "Very easy to manage"],
+                "cons": ["Perfect fit for individuals wanting full control over the structure", "Members need to trust the administrators"],
                 "desc": "This is a standard description",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 

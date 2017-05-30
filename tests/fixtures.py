@@ -14,6 +14,8 @@ from models.clients import eth_cli
 
 from pymongo import MongoClient
 from ethjsonrpc import ParityEthJsonRpc
+import scrypt
+from rlp.utils import encode_hex
 
 print("INITIALIZING TESTS")
 keyDirectory = environ.get('KEYS_DIRECTORY')
@@ -27,6 +29,7 @@ organizations.delete_many({})
 projects.delete_many({})
 contracts.delete_many({})
 
+SALT_LOGIN_PASSWORD = "du gros sel s'il vous plait"
 
 test_user = {
 	"name": "basic",
@@ -50,7 +53,8 @@ test_user = {
 }
 
 test_miner = {
-	"name": "miner",
+	"name": "simon",
+	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
@@ -75,7 +79,7 @@ test_miner_doc = UserDocument(doc=test_miner, gen_skel=True)
 test_user_doc.save()
 test_miner_doc.save()
 
-test_miner = users.find_one({"name": "miner"})
+test_miner = users.find_one({"name": "simon"})
 with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 	keys.importNewKey(test_miner, f)
 
@@ -92,7 +96,7 @@ def user():
 
 @pytest.fixture(scope='module')
 def miner():
-	return users.find_one({"name": "miner"})
+	return users.find_one({"name": "simon"})
 
 @pytest.fixture(scope='module')
 def testOrga(miner):

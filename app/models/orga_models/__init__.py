@@ -8,24 +8,28 @@ governances = {
 		"templateClass": Ngo,
 		"rulesContract": "OpenRegistryRules",
 		"registryContract": "OpenRegistry",
-		"tokenContract": None
+		"tokenContract": None,
+		"tokenFreezerContract": None
+		},
+	"dao": {
+		"templateClass": Dao,
+		"rulesContract": "TokenFreezerRules",
+		"registryContract": None,
+		"tokenContract": "StandardToken",
+		"tokenFreezerContract": "StandardTokenFreezer"
+		},
+	"entreprise": {
+		"templateClass": Entreprise,
+		"rulesContract": "ControlledRegistryRules",
+		"registryContract": "ControlledRegistry",
+		"tokenContract": None,
+		"tokenFreezerContract": None
+		},
+	"public_company": {
+		"templateClass": PublicCompany,
+		"rulesContract": "LiquidDemocracyRules",
+		"registryContract": None,
+		"tokenContract": "StandardToken",
+		"tokenFreezerContract": "StandardTokenFreezer"
 		}
-	# "dao": {
-	# 	"templateClass": Dao,
-	# 	"rulesContract": "LiquidDemocracyRules", #DAO.sol à terme
-	# 	"registryContract": None,
-	# 	"tokenContract": None
-	# 	},
-	# "entreprise": {
-		# "templateClass": Entreprise,
-	# 	"rulesContract": "ControlledRegistryRules",
-	# 	"registryContract": "ControlledRegistry",
-	# 	"tokenContract": None
-	# 	},
-	# "public_company": {
-	# 	"templateClass": PublicCompany,
-	# 	"rulesContract": "LiquidDemocracyRules",
-	# 	"registryContract": None,
-	# 	"tokenContract": None
-	# 	}
 }
