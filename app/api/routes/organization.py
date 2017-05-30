@@ -113,10 +113,30 @@ def addProductOrga(user):
     else:
         return make_response('Wrong request format', 400)
 
+@router.route('/productImageUpload', methods=['POST'])
+@requires_auth
+def addProductImage(user):
+	prod_id = request.form.get("prod_id")
+	type = request.form.get("type")
+	pic = request.files.get("prodImg")
+	ret = sales_platform.addProductImage(prod_id, pic, type)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getProductImages/<prod_id>', methods=['GET'])
+def getProductImages(prod_id):
+    images = sales_platform.getProductImages(prod_id)
+    return make_response(jsonify(images.get('data')), images.get('status'))
+
 @router.route('/getOrgaProducts/<orga_id>', methods=['GET'])
 def getOrgaProducts(orga_id):
     products = sales_platform.getProductsByOwner(orga_id)
     return make_response(jsonify(products.get('data')), products.get('status'))
+
+@router.route('/addReviewToProduct/<product_id>', methods=['POST'])
+@requires_auth
+def addReview(user, product_id):
+    ret = sales_platform.addReviewToProduct(product_id, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/getOrgaHisto', methods=['POST'])
 def getOrgaHisto():
