@@ -17,6 +17,7 @@ from bson.objectid import ObjectId
 
 from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
+from models.transaction import transactions, TransactionDocument as transaction
 
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
@@ -206,6 +207,18 @@ def getOrgaMemberList(user, orga_id):
 	member_list = orga.getMemberList()
 	return {
 		"data": member_list,
+		"status": 200
+	}
+
+def getOrgaTransaction(user):
+	"""
+	user : UserDoc
+	orga_id : string for the mongo id
+	"""
+
+	trans = transactions.find_all({},{"_id": 0});
+	return {
+		"data": trans,
 		"status": 200
 	}
 

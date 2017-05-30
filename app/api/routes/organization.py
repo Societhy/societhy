@@ -167,3 +167,12 @@ def executeProposal(user):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+@router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
+@requires_auth
+def getOrgaTransaction(user, orga_id):
+    if orga_id:
+        ret = base_orga.getOrgaTransaction(user)
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)

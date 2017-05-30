@@ -251,24 +251,30 @@
                                         <a href="#"> Download </a>
                                       </li>
                                       <a href="#"> Remove </a>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-
-                        </tbody>
-                      </table>
+                                    </ul>
+                                  </div>
+				</div>
+                              </td>
+                            </tr>
+			    
+                          </tbody>
+			</table>
+                      </div>
                     </div>
                   </div>
-                </div>
 
+		</div>
+		
               </div>
-
-            </div>
-          </uib-tab>
-
+            </uib-tab>
+	    <uib-tab ng-if="!isAdmin" heading="Administration">
+	      <div class="panel panel-white">
+		<div class="panel-body">
+		  <div data-ng-include="'static/assets/views/partials/orga/administration.html'">
+		  </div>
+		</div>
+	      </div>
+	    </uib-tab>
 
            <uib-tab heading="Proposals" active="editActive">
               <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
