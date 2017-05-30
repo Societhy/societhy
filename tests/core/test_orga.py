@@ -66,40 +66,40 @@ def test_join(miner, testOrga):
 	bw.waitEvent('NewMember')
 	assert miner.get('name') in [member.get('name') for member in testOrga.getMemberList()]
 
-def test_memberlist(testOrga):
-	ret = base_orga.getOrgaMemberList(None, testOrga.get('_id'))
-	assert ret.get('status') == 200
-	assert len(ret.get('data')) == 1
-	assert ret.get('data')[0].get('name') == 'miner'
+# def test_memberlist(testOrga):
+# 	ret = base_orga.getOrgaMemberList(None, testOrga.get('_id'))
+# 	assert ret.get('status') == 200
+# 	assert len(ret.get('data')) == 1
+# 	assert ret.get('data')[0].get('name') == 'miner'
 
-def test_donate(miner, testOrga):
-	ret = base_orga.donateToOrga(miner, password, testOrga.get('_id'), {"amount":1000})
-	assert ret.get('status') == 200
-	assert ret.get('data') is not None
-	bw.waitEvent("DonationMade")
-	assert testOrga.getTotalFunds() == 1000
+# def test_donate(miner, testOrga):
+# 	ret = base_orga.donateToOrga(miner, password, testOrga.get('_id'), {"amount":1000})
+# 	assert ret.get('status') == 200
+# 	assert ret.get('data') is not None
+# 	bw.waitEvent("DonationMade")
+# 	assert testOrga.getTotalFunds() == 1000
 	
-def test_createproject(miner, testOrga):
-	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {})
-	assert ret.get('status') == 200
-	assert ret.get('data').startswith('0x')
-	bw.waitTx(ret.get('data'))
-	sleep(0.5)
-	testOrga.reload()
-	assert len(testOrga["projects"]) == 1
+# def test_createproject(miner, testOrga):
+# 	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {})
+# 	assert ret.get('status') == 200
+# 	assert ret.get('data').startswith('0x')
+# 	bw.waitTx(ret.get('data'))
+# 	sleep(0.5)
+# 	testOrga.reload()
+# 	assert len(testOrga["projects"]) == 1
 
-def test_leave(miner, testOrga):
-	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))
-	assert ret.get('status') == 200
-	assert ret.get('data').startswith('0x')
-	bw.waitEvent("MemberLeft")
+# def test_leave(miner, testOrga):
+# 	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))
+# 	assert ret.get('status') == 200
+# 	assert ret.get('data').startswith('0x')
+# 	bw.waitEvent("MemberLeft")
 	
-	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
-	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
-	assert ret.get('status') == 200	
-	assert ret.get('data') != None
-	bw.waitEvent('NewMember')
+# 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
+# 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
+# 	assert ret.get('status') == 200	
+# 	assert ret.get('data') != None
+# 	bw.waitEvent('NewMember')
 
-def test_destroyOrga(miner, testOrga):
-	pass
+# def test_destroyOrga(miner, testOrga):
+# 	pass
 

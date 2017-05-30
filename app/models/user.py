@@ -17,7 +17,7 @@ This module implements the UserDoc class alongside with all its methods
 class UserDocument(Document):
 
 	default_notifications = {
-	'NewMember': True,
+	'NewMember': False,
 	'MemberLeft': False,
 	'ProposalCreated': False,
 	'DonationMade': False,
@@ -26,7 +26,8 @@ class UserDocument(Document):
 	'newFriendAdd': False,
 	'orgaCreated': False,
 	'ProjectCreated': False,
-	'newInviteJoinOrga': False
+	'newInviteJoinOrga': False,
+	'OfferCreated': False
 	}
 
 	"""
@@ -299,7 +300,9 @@ class UserCollection(Collection):
 		"lastname",
 		"city",
         "contact_list",
-        "organizations"
+        "organizations",
+        "notifications",
+		"pending_invitation"
 	]
 
 	public_info = [

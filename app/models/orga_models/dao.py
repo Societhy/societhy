@@ -8,6 +8,7 @@ class Dao(Organization):
 	default_rules = {
 		"default_proposal_duration": 2,
 		"delegated_voting": False,
+		"payout_freeze_period": 0,
 		"quorum": 20,
 		"majority": 50,
 		"accessibility": "open",

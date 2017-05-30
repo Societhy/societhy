@@ -2,15 +2,9 @@
 	<h1>
 		<span translate="organisations.TABS.PROPOSALS"></span>
 	</h1>
-<!-- 	<h2>Submitted proposals</h2>
-	<span ng-repeat="proposal in currentOrga.proposals"></span>
-	<h2>Current offers</h2>
-	<span ng-repeat="offer in currentOrga.offers"></span>
--->	
-<button>Submit new offer</button>
-<button>Submit new proposal</button>
 </div>
 <div ng-controller="ProposalController as ctrl">
+<button ng-if="currentRights.create_offer" ng-click="ctrl.submitOffer()">Submit new proposal</button>
 	<div class="container-fluid row no-margin">
 		<div class="col-md-10 col-lg-10 no-padding">
 			<div class="panel panel-white no-radius no-margin">
@@ -23,7 +17,7 @@
 								placeholder="Search proposal..."
 								pause="300"
 								selected-object="ctrl.proposalLookup"
-								local-data="proposal_list"
+								local-data="ctrl.proposal_list"
 								search-fields="offer.name"
 								title-field="offer.name"
 								description-field="offer.contractor"
@@ -79,7 +73,7 @@
 			<div class="panel-body" style="overflow: scroll;">
 				<table class="table no-margin">
 					<tbody>
-						<tr ng-repeat-start="proposal in proposal_list | filter:proposalLookupName">
+						<tr ng-repeat-start="proposal in ctrl.proposal_list | filter:proposalLookupName">
 							<td class="col-md-3">
 								<div style="font-size: 34px; text-align: center;">
 									<strong class="padding-bottom-10" >{{ proposal.name }}</strong>
@@ -160,7 +154,7 @@
 								<div class="block vertical-align padding-left-30">
 									<div class="icons text-center">
 										<span>
-											<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="expandProposal(proposal)"></i></a>
+											<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="ctrl.expandProposal(proposal)"></i></a>
 											<a href=""><i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i></a>
 											<a href=""><i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i></a>
 											<a href=""><i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i></a>
@@ -186,13 +180,13 @@
 								<div class="padding-10">
 									<i class="fa fa-euro padding-10" style="font-size:30px"></i>
 									<div class="inline-block">
-										<span class="" style="font-size:30px;">{{ proposal.offer.initialWithdrawal.toString() + " (+" + (proposal.offer.minDailyWithdrawalLimit * 30).toString() + " /month)" }}</span>
+										<span class="" style="font-size:30px;">{{ fromWei(proposal.offer.initialWithdrawal).toString() + " (+" + (fromWei(proposal.offer.dailyWithdrawalLimit) * 30).toString() + " /month)" }}</span>
 									</div>
 								</div>
 							</td>
 							<td class="col-md-2">
 								<div class="padding-10 text-center">
-									<a href="#" ng-if="proposal.status == 'pending' || proposal.status == 'pending'" ng-click="reportOffer(proposal)">
+									<a href="#" ng-if="proposal.status == 'pending' || proposal.status == 'pending'" ng-click="ctrl.reportOffer(proposal)">
 										<i class="fa fa-hand-paper-o padding-10 text-red" style="font-size:30px"></i>
 										<span class="label label-danger block" style="font-size:15px;">Report this offer</span>
 									</a>
@@ -200,7 +194,7 @@
 							</td>
 							<td class="col-md-2">
 								<div class="col-md-12 padding-10 text-center">
-									<a href="#" ng-if="proposal.status == 'pending' && currentRights.create_proposal" ng-click="submitProposal(proposal)">
+									<a href="#" ng-if="proposal.status == 'pending' && currentRights.create_proposal" ng-click="ctrl.submitProposal(proposal)">
 										<i class="fa fa-hand-o-up padding-10" style="font-size:30px"></i>
 										<span  class="label label-info block" style="font-size:15px;">Begin debating period</span>
 									</a>
@@ -231,12 +225,6 @@
 						</tr>
 					</tbody>
 				</table>
-			</div>
-			<div class="panel-footer no-border">
-				<p class="no-margin">
-					<a href="#"><i class="fa fa-arrow-circle-o-down text-green"></i></a>
-					<span class="text-light margin-left-10">Show more details </span>
-				</p>
 			</div>
 		</div>
 	</div>
@@ -284,7 +272,7 @@
 					</tbody>
 				</table>
 				<div class="block text-dark text-center">
-					<span class="counter text-bold text-white" count-to="{{proposal_number}}" value="{{proposal_number}}" duration="0.4" filter="number">{{proposal_number}}</span>
+					<span class="counter text-bold text-white" count-to="{{ctrl.proposal_number}}" value="{{ctrl.proposal_number}}" duration="0.4" filter="number">{{ctrl.proposal_number}}</span>
 					<h4 class="text-uppercase text-white no-margin">Proposal</h4>
 					<span class="line-separator line-sm text-white"></span>
 				</div>

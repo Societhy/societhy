@@ -195,9 +195,19 @@ class OrgaDocument(Document):
 			notif = Notification({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
-				"category": "newInviteJoinOrga"
+				"category": "newInviteJoinOrga",
+				"angularState": {
+					"route":"app.organization",
+					"params":{
+						"_id":str(self.get("_id")),
+						"name":self.get("name")
+					}
+				}
 			})
 			notif.save()
+			user = users.find_one({"_id":objectid.ObjectId(item)})
+			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
+			user.save()
 
 
 
@@ -306,6 +316,7 @@ class OrgaDocument(Document):
 			if destination not in self["proposals"]:
 				return False
 			self["proposals"][destination].update(new_proposal)
+			self["proposals"][destination]["offer"]["status"] = "debating"
 			self.save_partial()
 			return self
 		return False
@@ -493,17 +504,20 @@ class OrgaDocument(Document):
 			return False
 	
 		try:
-			offer["hashOfTheProposalDocument"] = offer["hashOfTheProposalDocument"].encode('utf-8')[:32]
-			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['totalCost'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
-		except KeyError:
-			return "missing param in %s" % arg
+			offer["hashOfTheProposalDocument"] = sha3_256(offer["description"].encode()).hexdigest().encode('utf-8')[:32]
+			offer["minDailyWithdrawalLimit"] = int(toWei(offer.get('recurrentWithdrawal')) / 30) if offer.get('isRecurrent') else 0
+			offer['initialWithdrawal'] = int(toWei(offer['initialWithdrawal']))
+			offer['payoutFreezePeriod'] = self.get('rules').get('payout_freeze_period', 0)
+			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
+		except KeyError as e:
+			return "missing param"
 		
+		print("---------", args)
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'OfferCreated'} if user.get('notifications').get('OfferCreated') else None
-			callback_data = {"description": offer.get('description'), "actors": offer.get('actors')}
+			callback_data = {"description": offer.get('description'), "actors": offer.get('actors'), "name": offer.get('name')}
 			bw.pushEvent(LogEvent("OfferCreated", tx_hash, self.board["address"], callbacks=[self.offerCreated], callback_data=callback_data, users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
@@ -536,8 +550,8 @@ class OrgaDocument(Document):
 			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], proposal['value']]
 			calldata = '0x' + encode_hex(eth_cli._encode_function('sign()', []))
 			callvalue = (proposal['destination'] + str(proposal['value']) + calldata).encode()
-			hashed_callvalue = sha3_256(callvalue)
-			args.append(callvalue)
+			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
+			args.append(hashed_callvalue)
 		except KeyError:
 			return False
 		tx_hash = self.board.call('newProposal', local=False, from_=user.get('account'), args=args, password=password)

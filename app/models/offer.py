@@ -1,4 +1,4 @@
-from bson import ObjectId
+from bson import ObjectId, Int64
 
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
@@ -34,7 +34,6 @@ class Offer(Contract):
 	client = None
 	contractor = None
 	hashOfTheProposalDocument = None
-	totalCost = None
 	initialWithdrawal = None
 	minDailyWithdrawalLimit = None
 	payoutFreezePeriod = None
@@ -53,9 +52,8 @@ class Offer(Contract):
 			self["client"] = '0x' + self.call('getClient', local=True)
 			self["creationDate"] = self.call('getCreationDate', local=True)
 			self["hashOfTheProposalDocument"] = self.call('getHashOfTheProposalDocument', local=True)
-			self["totalCost"] = self.call('getTotalCost', local=True)
-			self["initialWithdrawal"] = self.call('getInitialWithdrawal', local=True)
-			self["minDailyWithdrawalLimit"] = self.call('getMinDailyWithdrawalLimit', local=True)
+			self["initialWithdrawal"] = str(self.call('getInitialWithdrawal', local=True))
+			self["dailyWithdrawalLimit"] = str(self.call('getDailyWithdrawalLimit', local=True))
 			self["payoutFreezePeriod"] = self.call('getPayoutFreezePeriod', local=True)
 			self["isRecurrent"] = self.call('getIsRecurrent', local=True)
 			self["duration"] = self.call('getDuration', local=True)
