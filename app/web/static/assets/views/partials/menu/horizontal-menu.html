@@ -43,7 +43,7 @@
 
 		<ul class="nav navbar-nav navbar-right" ng-controller="NotificationController as ctrl">
 			<li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-show="user">
-				<a href class="dropdown-toggle" uib-dropdown-toggle><i class="fa fa-bell"></i></a>
+				<a href class="dropdown-toggle" uib-dropdown-toggle><span class="badge"> {{unread_notification.length || 0}} </span><i class="fa fa-bell"></i></a>
 				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
 					<li>
 						<span class="dropdown-header" translate="topbar.activities.HEADER"> You have new notifications</span>
