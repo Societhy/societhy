@@ -146,7 +146,7 @@ def getOrgaHisto():
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
 def createOffer(user):
-    if ensure_fields(['password', 'orga_id', {'offer': ['client', 'contractor', 'totalCost', 'initialWithdrawal', 'minDailyWithdrawalLimit', 'isRecurrent', 'duration']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'offer': ['name', 'client', 'contractor', 'initialWithdrawal', 'isPermanent', 'isRecurrent', 'duration', 'type', 'description']}], request.json):
         ret = base_orga.createOffer(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -155,7 +155,7 @@ def createOffer(user):
 @router.route('/cancelOffer', methods=["POST"])
 @requires_auth
 def cancelOffer(user, orga_id, offer_id):
-    if ensure_fields(['password', 'orga_id', 'offer_id'], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', 'offer_id'], request.json):
         ret = base_orga.cancelOffer(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer_id'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -164,7 +164,7 @@ def cancelOffer(user, orga_id, offer_id):
 @router.route('/createProposal', methods=["POST"])
 @requires_auth
 def createProposal(user):
-    if ensure_fields(['password', 'orga_id', {'proposal': ['name', 'debatePeriod', 'destination', 'value', 'calldata', 'decription']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'proposal': ['name', 'destination', 'value']}], request.json):
         ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -173,7 +173,7 @@ def createProposal(user):
 @router.route('/voteForProposal', methods=["POST"])
 @requires_auth
 def voteForProposal(user):
-    if ensure_fields(['password', 'orga_id', 'proposal_id', 'vote'], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', 'proposal_id', 'vote'], request.json):
         ret = base_orga.voteForProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal_id'), request.json.get('vote'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -182,7 +182,7 @@ def voteForProposal(user):
 @router.route('/executeProposal', methods=["POST"])
 @requires_auth
 def executeProposal(user):
-    if ensure_fields(['password', 'orga_id', 'proposal_id'], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', 'proposal_id'], request.json):
         ret = base_orga.executeProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal_id'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:

@@ -41,6 +41,33 @@
 
 		</ul>
 
+		<ul class="nav navbar-nav navbar-right" ng-controller="NotificationController as ctrl">
+			<li class="dropdown" uib-dropdown on-toggle="toggled(open)" ng-show="user">
+				<a href class="dropdown-toggle" uib-dropdown-toggle><i class="fa fa-bell"></i></a>
+				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
+					<li>
+						<span class="dropdown-header" translate="topbar.activities.HEADER"> You have new notifications</span>
+					</li>
+					<li>
+						<div class="drop-down-wrapper ps-container">
+							<div class="list-group no-margin">
+								<div ng-repeat="value in unread_notification">
+									<a ng-click="ctrl.click_notif(value)" class="media list-group-item" href="">
+										<span class="media-body block no-margin"> {{value.description}}
+										<small class="block text-grey">10 minutes ago</small>
+										</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="view-all">
+						<a href="javascript:void(0)" translate="topbar.activities.SEEALL"> See All </a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+
 		<ul class="nav navbar-nav navbar-right" ng-controller="LoginController as ctrl">
 			<li  uib-dropdown ng-show="!user" auto-close="outsideClick">
 				<a href="#" class="nav-user-wrapper padding-15" uib-dropdown-toggle>
@@ -118,6 +145,8 @@
 					<span>Register</span>
 				</a>
 			</li>
+
+
 			<li class="dropdown" uib-dropdown ng-show="user">
 				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
 					<img alt="" src="static/assets/images/default-user.png">
@@ -130,28 +159,28 @@
 					<li>
 						<a ui-sref="app.me" translate="topbar.user.PROFILE"> My Profile </a>
 					</li>
-		<!-- 			<li>
-						<a ui-sref="" translate="topbar.user.CALENDAR"> My Calendar </a>
-					</li>
+					<!-- 			<li>
+                                    <a ui-sref="" translate="topbar.user.CALENDAR"> My Calendar </a>
+                                </li>
+                                <li>
+                                    <a ui-sref="" translate="topbar.user.MESSAGES"> My Messages (3) </a>
+                                </li>
+                                <li>
+                                    <a ui-sref="" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
+                                </li>
+                            -->			<li class="divider"></li>
 					<li>
-						<a ui-sref="" translate="topbar.user.MESSAGES"> My Messages (3) </a>
+						<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
 					</li>
-					<li>
-						<a ui-sref="" translate="topbar.user.LOCKSCREEN"> Lock Screen </a>
-					</li>
-				-->			<li class="divider"></li>
-				<li>
-					<a ng-click="ctrl.logout()" translate="topbar.user.LOGOUT"> Log Out </a>
-				</li>
-			</ul>
-		</li>
+				</ul>
+			</li>
 		</ul>
 	</div>
-<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
-<div class="close-handle visible-xs-block visible-sm-block menu-toggler" ng-click="menuInit(true)" ng-swipe-up="menuInit(true)">
-	<div class="arrow-left"></div>
-	<div class="arrow-right"></div>
-</div>
-<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+	<!-- start: MENU TOGGLER FOR MOBILE DEVICES -->
+	<div class="close-handle visible-xs-block visible-sm-block menu-toggler" ng-click="menuInit(true)" ng-swipe-up="menuInit(true)">
+		<div class="arrow-left"></div>
+		<div class="arrow-right"></div>
+	</div>
+	<!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
 </div>
 <!-- end: HORIZONTAL MENU

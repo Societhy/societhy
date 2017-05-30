@@ -11,7 +11,9 @@ from ethjsonrpc.exceptions import BadResponseError
 from flask_socketio import emit, send
 
 from core.utils import toWei
-from core.notifications import notifyToOne
+
+from models import users, UserDocument
+from bson.objectid import ObjectId
 
 from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
@@ -96,7 +98,6 @@ def createOrga(user, password, newOrga):
 	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
 
 
-
 	instance = governances[newOrga["gov_model"]]["templateClass"](
 		doc=newOrga,
 		owner=user.public(),
@@ -109,6 +110,7 @@ def createOrga(user, password, newOrga):
 		tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
+
 	return {
 			"data": {"orga": instance, "tx_hash": tx_hash},
 			"status": 200
@@ -181,7 +183,6 @@ def joinOrga(user, password, orga_id, tag="member"):
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga:
 		return {"data": "Organization does not exists", "status": 400}
-	# notifyToOne(orga, user, 'newMember', user)
 	try:
 		tx_hash = orga.join(user, tag, password=password)
 		if tx_hash is False:
@@ -298,7 +299,7 @@ def leaveOrga(user, password, orga_id):
 			return {"data": "User does not have permission to leave", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "memberLeave"})
+	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "MemberLeft"})
 
 	return {
 		"data": tx_hash,
@@ -320,7 +321,8 @@ def createOffer(user, password, orga_id, offer):
 		tx_hash = orga_instance.createOffer(user, offer, password=password)
 		if tx_hash is False:
 			return {"data": "User does not have permission to create an offer", "status": 400}	
-
+		elif tx_hash == "missing param":
+			return {"data": "Missing required field in the offer creation request", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
 	return {

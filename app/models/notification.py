@@ -10,23 +10,41 @@ import models.organization
 from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
 
-
-categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', "orgaCreated", "projectCreated")
-senderList = ('organization', 'project', 'user')
-
-
 class NotificationDocument(Document):
 
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
+		self["seen"] = False
 
 	def pushNotif(data):
+		print(data["subject"]["type"])
 		notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
-                                      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
-                                      "category": data["category"],
-                                      "createdAt": datetime.now(),
-                                      "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
+                                      	"sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      	"category": data["category"],
+                                      	"createdAt": datetime.now(),
+                                      	"date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+										"seen": False
                 })
+
+
+	def push(self, data):
+		self["user"] = {"id":None}
+		self["user"]["id"] = data["userId"]
+		self["category"] = data["category"]
+		self["sender"] = {"id":None, "name":None, "type":None}
+		self["sender"]["id"] = data["sender"]["id"]
+		self["sender"]["name"] = data["sender"]["name"]
+		self["sender"]["type"] = data["sender"]["type"]
+		self["date"] = datetime.now().strftime("%b %d, %Y %I:%M %p")
+		self["createdAt"] = datetime.now()
+		self["seen"] = False
+		if data["subject"]["id"]:
+			self["subject"] = {"id":None,  "type":None}
+			self["subject"]["id"] = data["subject"]["id"]
+			self["subject"]["type"] = data["subject"]["type"]
+		print(self)
+		self.save()
+
 
                 
 	def getSender(self):
@@ -36,6 +54,7 @@ class NotificationDocument(Document):
 			return projects.find_one({"_id": self['sender']['senderId']})
 		elif self['sender']['senderType'] == 'user':
 			return users.find_one({"_id": self['sender']['senderId']})
+		return None
 
 	def getName(data):
 		name = None
@@ -66,8 +85,8 @@ class NotificationDocument(Document):
 			for record in data:
 				name = ""
 				res[i] = record
-				res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
-				res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
+				#res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
+				#res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
 				if record["category"] == "orgaCreate":
 					res[0]["first"] = record["date"] 
 				i = i + 1

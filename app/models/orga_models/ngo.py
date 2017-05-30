@@ -6,7 +6,8 @@ from ..organization import OrgaDocument as Organization
 class Ngo(Organization):
 
 	default_rules = {
-		"default_proposal_duration": 48,
+		"default_proposal_duration": 2,
+		"payout_freeze_period": 0,
 		"delegated_voting": False,
 		"quorum": 20,
 		"majority": 50,

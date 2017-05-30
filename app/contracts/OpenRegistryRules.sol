@@ -1,6 +1,6 @@
-pragma solidity ^0.4.3;
+pragma solidity ^0.4.7;
 
-import "examples/OpenRegistry.sol";
+import "OpenRegistry.sol";
 import "Rules.sol";
 import "BoardRoom.sol";
 
@@ -27,7 +27,7 @@ contract OpenRegistryRules is Rules {
     uint created = board.createdOn(_proposalID);
     uint debatePeriod = board.debatePeriodOf(_proposalID);
 
-    if(registry.isMember(_sender)
+    if(registry.memberId(_sender) > 0
       && now < created + debatePeriod
       && !board.hasVoted(_proposalID, _sender)) {
       return true;
@@ -35,7 +35,7 @@ contract OpenRegistryRules is Rules {
   }
 
   function canPropose(address _sender) public constant returns (bool) {
-    if(registry.isMember(_sender)) {
+    if (registry.memberId(_sender) > 0) {
       return true;
     }
   }

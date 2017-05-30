@@ -1,4 +1,4 @@
-pragma solidity ^0.4.3;
+pragma solidity ^0.4.7;
 
 import "examples/BalanceClaim.sol";
 import "examples/Campaign.sol";

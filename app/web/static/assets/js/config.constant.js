@@ -45,6 +45,8 @@ app.constant('JS_REQUIRES', {
         'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
         'productModalCtrl': 'static/assets/js/controllers/productModalCtrl.js',
+        'notificationCtrl': 'static/assets/js/controllers/notificationCtrl.js',
+        'offerModalCtrl': 'static/assets/js/controllers/offerModalCtrl.js',
     },
     //*** angularJS Modules
     modules: [{
@@ -116,5 +118,8 @@ app.constant('JS_REQUIRES', {
     }, {
         name:'qrcode',
         files: ['../../node_modules/angular-qrcode/angular-qrcode.js']
+    }, {
+        name:'perfect_scrollbar',
+        files: ['../../bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js', '../../bower_components/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js']
     }]
 });

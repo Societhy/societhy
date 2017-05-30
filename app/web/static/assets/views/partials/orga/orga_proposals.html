@@ -2,10 +2,283 @@
 	<h1>
 		<span translate="organisations.TABS.PROPOSALS"></span>
 	</h1>
-<h2>Submitted proposals</h2>
-<span ng-repeat="proposal in currentOrga.proposals"></span>
-<h2>Current offers</h2>
-<span ng-repeat="offer in currentOrga.offers"></span>
-<button>Submit new offer</button>
-<button>Submit new proposal</button>
+</div>
+<div ng-controller="ProposalController as ctrl">
+<button ng-if="currentRights.create_offer" ng-click="ctrl.submitOffer()">Submit new proposal</button>
+	<div class="container-fluid row no-margin">
+		<div class="col-md-10 col-lg-10 no-padding">
+			<div class="panel panel-white no-radius no-margin">
+				<div class="panel-heading border-light padding-10">
+					<div class="row">
+						<div class="col-lg-4 col-xs-5">
+							<span class="input-icon">
+								<angucomplete-alt id="ex2"
+								class="radius-10"
+								placeholder="Search proposal..."
+								pause="300"
+								selected-object="ctrl.proposalLookup"
+								local-data="ctrl.proposal_list"
+								search-fields="offer.name"
+								title-field="offer.name"
+								description-field="offer.contractor"
+								minlength="1"
+								input-class="form-control"
+								match-class="highlight"
+								input-changed=""/>
+								<i class="ti-search"></i>
+							</span>
+						</div>
+						<div class="col-lg-8 col-xs-7 text-right">
+							<div class="btn-group margin-top-5" uib-dropdown ng-init="selected='Newest'">
+								<button id="split-button" type="button" class="btn btn-azure btn-sm">
+									Sort by: <span class="text-bold">{{selected}}
+								</span>
+							</button>
+							<button type="button" class="btn btn-azure btn-sm" uib-dropdown-toggle>
+								<span class="caret"></span>
+								<span class="sr-only">Split button!</span>
+							</button>
+							<ul uib-dropdown-menu role="menu" aria-labelledby="split-button">
+								<li role="menuitem">
+									<a href="#" ng-click="selected='Newest'">
+										Newest
+									</a>
+								</li>
+								<li role="menuitem">
+									<a href="#" ng-click="selected='Oldest'">
+										Oldest
+									</a>
+								</li>
+								<li role="menuitem">
+									<a href="#" ng-click="selected='Approved'">
+										Approved
+									</a>
+								</li>
+								<li role="menuitem">
+									<a href="#" ng-click="selected='In Review'">
+										Pending
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li role="menuitem">
+									<a href="#" ng-click="selected='Declined'">
+										Denied
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body" style="overflow: scroll;">
+				<table class="table no-margin">
+					<tbody>
+						<tr ng-repeat-start="proposal in ctrl.proposal_list | filter:proposalLookupName">
+							<td class="col-md-3">
+								<div style="font-size: 34px; text-align: center;">
+									<strong class="padding-bottom-10" >{{ proposal.name }}</strong>
+								</div>
+								<br>
+								<div class="icons-effect col-md-4">
+									<img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+									<div class="mask mask-rounded">
+										<div class="icons-wrapper">
+											<div class="icons">
+												<a href="#" class="icon">
+													<span class="fa-stack fa-2x">
+														<i class="fa fa-circle fa-stack-2x text-white"></i>
+														<i class="fa fa-search fa-stack-1x text-extra-large text-light"></i>
+													</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="icons-effect col-md-4">
+									<i ng-if="proposal.offer.client == currentOrga.address" class="fa fa-arrow-circle-right text-blue" style="font-size:60px"></i>
+									<i ng-if="proposal.offer.client != currentOrga.address" class="fa fa-arrow-circle-left text-green" style="font-size:60px"></i>
+								</div>
+								<div class="icons-effect col-md-4">
+									<img ng-src="{{currentOrga.picture || 'static/assets/images/default-user-xl.png'}}" class="img-responsive img-circle" alt="">
+									<div class="mask mask-rounded">
+										<div class="icons-wrapper">
+											<div class="icons">
+												<a href="#" class="icon">
+													<span class="fa-stack fa-2x">
+														<i class="fa fa-circle fa-stack-2x text-white"></i>
+														<i class="fa fa-search fa-stack-1x text-extra-large text-light"></i>
+													</span>
+												</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
+							<td class="col-md-4">
+								<div class="padding-10">
+									<div class="block">
+										<strong>{{ proposal.offer.name }}</strong><span class="text-muted"> {{proposal_status[proposal.status]}}</span>
+									</div>
+									<span ng-if="proposal.from">
+										<span class="text-azure">{{ proposal.from }} </span><span class="text-small text-muted"> published this proposal on {{proposal.created_on}}</span>
+									</span>
+									<span ng-if="!proposal.from">
+										<span class="text-azure">{{ proposal.offer.owner }} </span><span class="text-small text-muted"> created this offer on {{proposal.offer.creationDate}} </span>
+									</span>
+									<br>
+									<span class="text-azure">{{ proposal.offer.contractor }} </span><span class="text-small text-muted"> is the beneficiary</span>
+									<div class="block margin-top-10">
+										<span class="label" ng-class="{'pending': 'label-warning', 'debating':'label-info', 'denied': 'label-danger', 'approved': 'label-success'}[proposal.status]">{{capitalizeFirstLetter(proposal.status)}}</span>
+									</div>
+								</div>
+							</td>													
+							<td class="col-md-2">
+								<div class="text-center block">
+									<div class="border-left border-right border-dark padding-5">
+										<small class="text-muted">Votes
+											<br>
+											<strong> {{ proposal.votes_count || 0 }}</strong>
+										</small>
+									</div>
+								</div>
+								<div class="block" ng-if="proposal.status == 'debating'">
+									<div class="min-height-80 padding-10 text-center">
+										<span class="text-muted">Quorum</span>
+										<uib-progressbar value="proposal.participation" class="progress-xs no-radius background-dark no-margin" type="{{proposal.participation >= currentOrga.rules.quorum ? 'success' : 'warning'}}" ></uib-progressbar>
+										<span class="text-muted">Time left</span>
+										<uib-progressbar value="proposal.participation" class="progress-xs no-radius background-dark no-margin" type="{{proposal.participation >= currentOrga.rules.quorum ? 'success' : 'warning'}}" ></uib-progressbar>
+									</div>
+								</div>
+							</td>
+							<td class="col-md-3">
+								<div class="block vertical-align padding-left-30">
+									<div class="icons text-center">
+										<span>
+											<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="ctrl.expandProposal(proposal)"></i></a>
+											<a href=""><i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i></a>
+											<a href=""><i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i></a>
+											<a href=""><i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i></a>
+										</span>
+
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr ng-if="proposal.expand">
+							<td class="col-md-3">
+								<div class="padding-10">
+									<i class="fa fa-file-text padding-10" style="font-size:30px"></i>
+									<span class="" style="font-size:30px;">{{capitalizeFirstLetter(proposal.offer.type)}}</span>
+								</div>
+							</td>
+							<td class="col-md-5">
+								<div class="padding-10">
+									<i class="fa fa-clock-o padding-10" style="font-size:30px"></i>
+									<span ng-if="proposal.offer.duration > 0" style="font-size:30px;">{{proposal.offer.duration.toString() + " days"}}</span>
+									<span ng-if="proposal.offer.duration == 0" style="font-size:30px;">One shot</span>
+								</div>
+								<div class="padding-10">
+									<i class="fa fa-euro padding-10" style="font-size:30px"></i>
+									<div class="inline-block">
+										<span class="" style="font-size:30px;">{{ fromWei(proposal.offer.initialWithdrawal).toString() + " (+" + (fromWei(proposal.offer.dailyWithdrawalLimit) * 30).toString() + " /month)" }}</span>
+									</div>
+								</div>
+							</td>
+							<td class="col-md-2">
+								<div class="padding-10 text-center">
+									<a href="#" ng-if="proposal.status == 'pending' || proposal.status == 'pending'" ng-click="ctrl.reportOffer(proposal)">
+										<i class="fa fa-hand-paper-o padding-10 text-red" style="font-size:30px"></i>
+										<span class="label label-danger block" style="font-size:15px;">Report this offer</span>
+									</a>
+								</div>
+							</td>
+							<td class="col-md-2">
+								<div class="col-md-12 padding-10 text-center">
+									<a href="#" ng-if="proposal.status == 'pending' && currentRights.create_proposal" ng-click="ctrl.submitProposal(proposal)">
+										<i class="fa fa-hand-o-up padding-10" style="font-size:30px"></i>
+										<span  class="label label-info block" style="font-size:15px;">Begin debating period</span>
+									</a>
+								</div>
+							</td>
+						</tr>
+						<tr ng-if="proposal.expand"	ng-repeat-end="">
+							<td class="col-md-3" class='inline'>
+								<div class="icons">
+									<span ng-repeat="admin in proposal.offer.actors" class="padding-5">
+										<img ng-src="{{'static/assets/images/default-user.png'}}" class="img-circle" alt="">
+									</span>
+								</div>
+							</td>
+							<td class="col-md-7">
+								{{proposal.offer.description}}
+							</td>
+							<td  class="col-md-2">
+								<div class="col-md-12">
+									<div class="text-center">
+										<a href="#" ng-click="proposal.expand = !proposal.expand">
+											<i class="fa fa-caret-up" style="font-size:60px"></i>
+											<span class=" block" style="font-size:12px;">Dismiss</span>
+										</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-2 col-lg-2 no-padding">
+		<div class="panel panel-azure no-border no-radius no-margin">
+			<div class="panel-body">
+				<ct-paneltool class="panel-tools" tool-expand="tool-expand"></ct-paneltool>
+				<h3 class="text-white padding-top-10">In Review</h3>
+				<table class="table margin-bottom-5">
+					<tbody>
+						<tr>
+							<td><span class="text-white">Employments</span>
+							</td>
+							<td>
+								<div class="pull-right margin-top-5">
+									<switch ng-model="filter_employments" ng-init="filter_employments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><span class="text-white">Services</span>
+							</td>
+							<td>
+								<div class="pull-right margin-top-5">
+									<switch ng-model="filter_services" ng-init="filter_services = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><span class="text-white">Investments</span></td>
+							<td>
+								<div class="pull-right margin-top-5">
+									<switch ng-model="filter_investments" ng-init="filter_investments = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><span class="text-white">Taxes</span></td>
+							<td>
+								<div class="pull-right margin-top-5">
+									<switch ng-model="filter_taxes" ng-init="filter_taxes = true" tooltip-placement="top" uib-tooltip="Approve" class="light"></switch>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="block text-dark text-center">
+					<span class="counter text-bold text-white" count-to="{{ctrl.proposal_number}}" value="{{ctrl.proposal_number}}" duration="0.4" filter="number">{{ctrl.proposal_number}}</span>
+					<h4 class="text-uppercase text-white no-margin">Proposal</h4>
+					<span class="line-separator line-sm text-white"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 </div>

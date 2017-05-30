@@ -1,11 +1,11 @@
 pragma solidity ^0.4.7;
 
 import {basic_project as Project} from "basic_project.sol";
-import {mortal, open_structure} from "library.sol";
+import {mortal} from "library.sol";
 import {BoardRoom} from "BoardRoom.sol";
 import {Offer} from "Offer.sol";
 
-contract Societhy is mortal, open_structure, BoardRoom {
+contract Societhy is mortal, BoardRoom {
     /* define variable greeting of the type string */
     string name;
 
@@ -30,11 +30,9 @@ contract Societhy is mortal, open_structure, BoardRoom {
     }
 
     /* this runs when the contract is executed */
-    function Societhy(string _name, address _rules) BoardRoom(_rules) public {
+    function Societhy(string _name, address _rules, address _registry) BoardRoom(_rules, _registry) public {
         name = _name;
-        members.push(Member({member: 0, donation: 0, name: '', memberSince: now}));
         projects.push(ProjectData({projectAddress: new Project(''), name: ''}));
-        // offers.push(ProjectData({offerAddress: new Offer(''), contractor: 0}));
     }
 
     function createProject(string _name) {
@@ -52,21 +50,21 @@ contract Societhy is mortal, open_structure, BoardRoom {
         address _contractor,
         address _client,
         bytes32 _hashOfTheProposalDocument,
-        uint _totalCost,
         uint _initialWithdrawal,
         uint128 _minDailyWithdrawalLimit,
         uint _payoutFreezePeriod,
         bool _isRecurrent,
-        uint _duration) {
+        uint _duration,
+        string _type) {
         Offer newOfferAddress = new Offer(_contractor,
             _client,
             _hashOfTheProposalDocument,
-            _totalCost,
             _initialWithdrawal,
             _minDailyWithdrawalLimit,
             _payoutFreezePeriod,
             _isRecurrent,
-            _duration);
+            _duration,
+            _type);
         uint id;
         
         offerId[newOfferAddress] = offers.length;
@@ -81,8 +79,8 @@ contract Societhy is mortal, open_structure, BoardRoom {
     }
 
     function donate() payable {
-        if (memberId[msg.sender] != 0 && msg.value > 0) {
-            members[memberId[msg.sender]].donation += msg.value;
+        if (registry.memberId(msg.sender) != 0 && msg.value > 0) {
+            registry.madeDonation(msg.sender, msg.value);
         }
         DonationMade(msg.sender, msg.value, true);
     }

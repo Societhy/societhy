@@ -16,6 +16,20 @@ This module implements the UserDoc class alongside with all its methods
 
 class UserDocument(Document):
 
+	default_notifications = {
+	'NewMember': False,
+	'MemberLeft': False,
+	'ProposalCreated': False,
+	'DonationMade': False,
+	'newSpending': False,
+	'newMessage': False,
+	'newFriendAdd': False,
+	'orgaCreated': False,
+	'ProjectCreated': False,
+	'newInviteJoinOrga': False,
+	'OfferCreated': False
+	}
+
 	"""
 	Overrides a mongokat.Document and add custom methods
 	This class is used everytime a controller needs to manipulate a user (and everytime a used sends a request with an authentification token)
@@ -30,6 +44,9 @@ class UserDocument(Document):
 		session : token associated with the user's session
 		"""
 		super().__init__(doc, users, fetched_fields, gen_skel)
+		if gen_skel:
+			if not self.get('notifications'):
+				self["notifications"] = self.default_notifications
 		self.session_token = session
 
 	def needsReloading(self):
@@ -58,7 +75,7 @@ class UserDocument(Document):
 
 	# CALLBACKS FOR UPDATE
 
-	def joinedOrga(self, logs):
+	def joinedOrga(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
@@ -74,7 +91,7 @@ class UserDocument(Document):
 				return False
 		return None
 
-	def leftOrga(self, logs):
+	def leftOrga(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded and that the orga is in the member's orga, the orga is removed
@@ -90,7 +107,7 @@ class UserDocument(Document):
 				return False
 		return None
 
-	def madeDonation(self, logs):
+	def madeDonation(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, the total amount of donation is incremented by the value of the new one
@@ -283,7 +300,9 @@ class UserCollection(Collection):
 		"lastname",
 		"city",
         "contact_list",
-        "organizations"
+        "organizations",
+        "notifications",
+		"pending_invitation"
 	]
 
 	public_info = [
@@ -313,7 +332,8 @@ class UserCollection(Collection):
 		"lastname": str,
 		"city": str,
         "contact_list": list,
-        "organizations": list
+        "organizations": list,
+		"pending_invitation": list
 	}
 
 	document_class = UserDocument

@@ -1,10 +1,10 @@
-pragma solidity ^0.4.3;
+pragma solidity ^0.4.7;
 
-import "Rules.sol";
-import "Proxy.sol";
+import "OpenRegistryRules.sol";
+import "OpenRegistry.sol";
 
 contract BoardRoomInterface {
-  function newProposal(string _name, address _proxy, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID) {}
+  function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID) {}
   function vote(uint _proposalID, uint _position) returns (uint voteWeight) {}
   function execute(uint _proposalID, bytes _calldata) {}
   function changeRules(address _rules) {}
@@ -16,22 +16,22 @@ contract BoardRoomInterface {
   function hasVoted(uint _proposalID, address _voter) constant returns (bool) {}
 
   function destinationOf(uint _proposalId) public constant returns (address) {}
-  function proxyOf(uint _proposalId) public constant returns (address) {}
   function valueOf(uint _proposalId) public constant returns (uint) {}
   function hashOf(uint _proposalId) public constant returns (bytes32) {}
   function debatePeriodOf(uint _proposalId) public constant returns (uint) {}
   function createdOn(uint _proposalId) public constant returns (uint) {}
   function createdBy(uint _proposalId) public constant returns (address) {}
 
-  event ProposalCreated(uint _proposalID, address _destination, uint _value);
-  event VoteCounted(uint _proposalID, uint _position, address _voter);
-  event ProposalExecuted(uint _proposalID, address _sender);
+  event ProposalCreated(uint indexed _proposalID, address indexed _destination, uint _value, bytes32 indexed hash);
+  event VoteCounted(uint indexed _proposalID, uint indexed _position, address indexed _voter);
+  event ProposalExecuted(uint indexed _proposalID, address indexed _sender);
 }
 
 contract BoardRoom is BoardRoomInterface {
 
-  function BoardRoom(address _rules) {
+  function BoardRoom(address _rules, address _registry) {
     rules = Rules(_rules);
+    registry = Registry(_registry);
   }
 
   modifier canpropose {
@@ -61,19 +61,19 @@ contract BoardRoom is BoardRoomInterface {
   /// @notice The contract fallback function
   function () payable public {}
 
-  function newProposal(string _name, address _proxy, uint _debatePeriod, address _destination, uint _value, bytes _calldata) canpropose returns (uint proposalID) {
+  function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) canpropose returns (uint proposalID) {
     proposalID = proposals.length;
     Proposal memory p;
     p.name = _name;
     p.destination = _destination;
     p.value = _value;
-    p.proxy = _proxy;
     p.hash = sha3(_destination, _value, _calldata);
     p.debatePeriod = _debatePeriod * 1 days;
     p.created = now;
     p.from = msg.sender;
     proposals.push(p);
-    ProposalCreated(proposalID, _destination, _value);
+    ProposalCreated(proposalID, _destination, _value, p.hash);
+    return proposalID;
   }
 
   function vote(uint _proposalID, uint _position) canvote(_proposalID) returns (uint voterWeight) {
@@ -92,14 +92,9 @@ contract BoardRoom is BoardRoomInterface {
     Proposal p = proposals[_proposalID];
     if(!p.executed && sha3(p.destination, p.value, _calldata) == p.hash) {
       p.executed = true;
-      if(p.proxy != address(0)) {
-        Proxy(p.proxy).forward_transaction(p.destination, p.value, _calldata);
-      } else {
-        if(!p.destination.call.value(p.value)(_calldata)){
+      if(!p.destination.call.value(p.value)(_calldata)){
           throw;
         }
-      }
-
       ProposalExecuted(_proposalID, msg.sender);
     }
   }
@@ -146,10 +141,6 @@ contract BoardRoom is BoardRoomInterface {
     return proposals[_proposalId].destination;
   }
 
-  function proxyOf(uint _proposalId) public constant returns (address) {
-    return proposals[_proposalId].proxy;
-  }
-
   function valueOf(uint _proposalId) public constant returns (uint) {
     return proposals[_proposalId].value;
   }
@@ -173,7 +164,6 @@ contract BoardRoom is BoardRoomInterface {
   struct Proposal {
     string name;
     address destination;
-    address proxy;
     uint value;
     bytes32 hash;
     bool executed;
@@ -193,4 +183,5 @@ contract BoardRoom is BoardRoomInterface {
 
   Proposal[] public proposals;
   Rules public rules;
+  Registry public registry;
 }

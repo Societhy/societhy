@@ -267,19 +267,19 @@
          "title": "Historic",
          "messages": {
           "orgaCreate": "Creation of the organisation.",
-          "memberLeave": "A member <u>has left</u> the organisation.",
-          "newMember": "A member <u>has join</u> the organisation.",
-          "newProposition": "A member has submit a new proposition",
-          "newDonation": "A member has made a new donation."
+          "MemberLeft": "A member <u>has left</u> the organisation.",
+          "NewMember": "A member <u>has join</u> the organisation.",
+          "ProposalCreated": "A member has submit a new proposition",
+          "DonationMade": "A member has made a new donation."
       },
       "filter": {
           "title": "Filter",
           "categories": {
               "title": "Category",
               "all": "All",
-              "newMember": "New member",
-              "memberLeave": "Old member",
-              "newDonation": "New donation"
+              "NewMember": "New member",
+              "MemberLeft": "Old member",
+              "DonationMade": "New donation"
           },
           "years": {
               "title": "Period"

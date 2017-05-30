@@ -2,110 +2,111 @@
 This module is used to implement Notification functionalities.
 There is 3 classes who will modelise the differents kind of notifications, and a few tool functions.
 """
+from flask import current_app
 from flask_mail import Message
-from models.user import users, UserDocument as User
-from models.project import projects, ProjectDocument as Project
-from models.organization import organizations, OrgaDocument as Orga
-from models.notification import notifications, NotificationDocument as Notification
 
-from core.chat import notify
+from bson.json_util import dumps
 from datetime import datetime
 
+from models.notification import notifications, NotificationDocument as Notification
+from models.clients import mail
 
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
-class Notification():
-	"""
-	This class modelise the standard notifications
-	"""
-	categoryList = ('newMember', 'memberLeave', 'newProposition', 'newDonation', 'newSpending', 'newMessage', 'newFriendAdd', 'orgaCreated', 'projectCreated')
-	descriptionList = (' is the new member of ', ' leave ', 'did a new proposition', ' give to ', ' spend ', ' send you a message', ' send you a friend request')
-	senderList = ('organization', 'project', 'user')
+descriptionDict = {
+	"NewMember":" is the new member of ",
+	"MemberLeft": " leave ",
+	"ProposalCreated": "did a new proposition",
+	"DonationMade": " give to ",
+	"newSpending": " spend ",
+	"newMessage": " send you a message",
+	"newFriendAdd": " send you a friend request",
+	"orgaCreated": "invited you to join the organisation ",
+	"ProjectCreated": "created a new project ",
+	"newInviteJoinOrga": " invited you to join the orga",
+	"OfferCreated": " created a new offer"
+}
 
-	def createDescription(self, category):
-		"""
-		Depending of the category, this function will fill the description.
-		"""
-		i = 0
-		for tmp in self.categoryList:
-			if tmp in category:
-				self.description = self.descriptionList[i]
-				return True
-			i = i + 1
-		return False
+senderList = ('organization', 'project', 'user')
 
-class NotificationPush(Notification):
+def sendNotifPush(sender, senderType, category, subject, user):
 	"""
-	This class modelise the push notifications, a OS notification on a mobile device.
+	Insert the notification in the database in order to be sent.
 	"""
-	def sendNotif(self, sender, senderType, category, subject, user):
-		"""
-		Insert the notification in the database in order to be sent.
-		"""
-		print("notif push")
-		if self.createDescription(category) == False:
-			return "unsent"
+	imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
+	Clients = imp.Clients
+	if (user['_id'] in Clients):
+		notif = {
+				'description': push.createDescription(category),
+				'subject_name': subject['name'],
+				'sender_name': sender['name']
+			}
+		emit('send_message', notif, namespace='/', room=Clients[user['_id']].sessionId)
+	else:
+		notification = Notification()
+		description = descriptionDict[category]
+		if not description:
+			return
 		print("insert")
 		if subject:
-			subjectType = findType(subject)
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderName" : sender.get("name"), "senderType": senderType}, "subject" : {"subjectId" : subject.get("_id"), "subjectType" : subjectType}, "category":category, "date": datetime.datetime.now(), "description":self.description})
+			subjectType = type(sender).__name__
+			if not subjectType:
+				return
+			data = {"userId" : user.get("_id"), 
+			"sender": { "id": sender.get("_id"), "name" : sender.get("name"), "type": senderType},
+			"subject" : { "id" : subject.get("_id"), "type" : subjectType}, 
+			"category":category, 
+			"description":description}
+			notification.push(data)
 		else:
-			notifications.insert({"userId" : user.get("_id"), "sender": { "senderId": sender.get("_id"), "senderType": senderType}, "category":category,  "createdAt": datetime.now(),
-                                              "date": datetime.now().strftime("%b %d, %Y %I:%M %p")
-                        })
+			data = {"userId" : user.get("_id"), 
+			"sender": { "id": sender.get("_id"), "type": senderType}, 
+			"category":category,
+			"description":description}
+			notification.push(data)
 
-class NotificationEmail(Notification):
+def sendNotifEmail(sender, senderType, category, subject, user):
+	from app import app
 	"""
-	This class modelise the email notifications.
+	Insert the notification in the database in order to be sent.
 	"""
-	def sendNotif(self, sender, senderType, category, subject, user):
-		"""
-		Insert the notification in the database in order to be sent.
-		"""
-		print("notif email")
-		if self.createDescription(category) == False:
-			return "unsent"
-		msg = Message(category, sender = 'societhycompany@gmail.com', recipients = [user.get("email")])
-		if subject:
-			msg.body = subject.get("name") + self.description + sender.get("name")
-		else:
-			msg.body = sender.get("name") + self.description
-		print("sent")
-		module = __import__("app")
-		my_class = getattr(module, "Mail")
-		mail = my_class()
+	print("notif email")
+	description = descriptionDict[category]
+	if not description:
+		return None
+	msg = Message(category, sender = 'societhycompany@gmail.com', recipients = [user.get("email")])
+	if subject:
+		msg.body = subject.get("name") + description + sender.get("name")
+	else:
+		msg.body = sender.get("name") + description
+	print("sent")
+	with app.app_context():
 		mail.send(msg)
-		return "sent"
+	return msg
 
 def notifyToOne(sender, user, category, subject=None):
 	"""
 	Used to send a notification depending of the type.
 	"""
-	senderType = findType(sender)
+	senderType = type(sender).__name__
 	print("OEEE")
-	if senderType == None:
+	if not senderType:
 		return
-	#	return
 	#print(user.get("notification_accept"))
 	#if user.get("notification_accept") == 0:
 	#	return
 	#elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
-	#push = NotificationPush()
-	notify(push, sender, senderType, category, subject, user)
+	sendNotifPush(sender, senderType, category, subject, user)
 	#if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
-	print("weeeeeeeee")
-	email = NotificationEmail()
-	print("louheee")
-	email.sendNotif(sender, senderType, category, subject, user)
+	sendNotifEmail(sender, senderType, category, subject, user)
 
-def findType(doc):
-	"""
-	Tool function to determine the type of model document.
-	"""
-	if isinstance(doc, User):
-		return "user"
-	elif isinstance(doc, Orga):
-		return "organization"
-	elif isinstance(doc, Project):
-		return "project"
-	return None
+
+
+def getUserUnreadNotification(user):
+	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
+	for notif in unread_notifs:
+		notif["description"] = descriptionDict[notif["category"]]
+	return {
+		"data" : dumps(unread_notifs),
+		"status" : 200
+	}

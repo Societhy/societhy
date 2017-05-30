@@ -92,6 +92,7 @@
     "components-modernizr": "~2.8.3",
     "moment": "~2.8.4",
     "perfect-scrollbar": "~0.6.1",
+    "angular-perfect-scrollbar": "~0.1.0",
     "ladda": "~0.9.8",
     "sweetalert": "~0.5",
     "chartjs": "~1.0.2",

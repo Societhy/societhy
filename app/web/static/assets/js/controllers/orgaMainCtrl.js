@@ -52,6 +52,33 @@
       });
   }
 
+   ctrl.acceptInvit = function () {
+       $http.post('/acceptInvitation',
+           {
+                "orga_id":$rootScope.currentOrga._id
+           }).then(function(response)
+       {
+
+       });
+   };
+
+   ctrl.isCurrentUserInvitedToOrga = function () {
+        for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
+        {
+            if ($rootScope.user.pending_invitation[i].type === "organisation")
+            {
+                if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga._id)
+                {
+                    $scope.isInvitedToOrga = true;
+                    return;
+                }
+            }
+        }
+
+        $scope.isInvitedToOrga = false;
+        $scope.apply();
+   };
+
     /**
      * Opens the new product modal.
      * @method addNewProduct
@@ -95,15 +122,16 @@
         "id": $state.params._id
       }).then(function(response) {
         $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
-        $scope.currentRights = $rootScope.currentRights = response.data.rights
-        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights)
+        $scope.currentRights = $rootScope.currentRights = response.data.rights;
+        ctrl.isCurrentUserInvitedToOrga();
+        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
         if ($rootScope.user) {
           $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
         }
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");
-      })
+      });
     };
 
     /**
@@ -137,7 +165,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-   ctrl.leaveOrga = function() {
+  ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(
@@ -195,7 +223,7 @@
 
     };
 
-    ctrl.createProposal = function () {
+    ctrl.create  = function () {
 
     };
 
@@ -244,7 +272,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
   ctrl = this;
 
 
-  $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
+  $rootScope.filter = {categories:	[{name: 'NewMember'}, {name:'MemberLeft'}, {name: 'ProposalCreated'}, {name: 'DonationMade'}, {name: 'newSpending'}],
   members:	[{}],
   jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
   projects:	[{}],
@@ -385,4 +413,58 @@ app.controller('ExportActivityController', function($scope, $http, $timeout, $ro
  };
 
  return ctrl;
+});
+
+app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal) {
+  var ctrl = this;
+
+  $scope.proposal_status = {
+    "pending": "is waiting for approval.",
+    "debating": "is currently submitted to the votes.",
+    "approved": "has been approved.",
+    "denied": "has been denied."
+  }
+  ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+  ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+  console.log("proposals", ctrl.proposal_list)
+  for (let i = 0; i != ctrl.proposal_list.length; i++) {
+    ctrl.proposal_list[i].expand = false;
+  }
+
+  ctrl.proposalLookup = function(item) {
+    console.log(item);
+    if (item) {
+      $scope.proposalLookupName = item.title;
+    }
+    else {
+     $scope.proposalLookupName = "";
+   }
+ }
+
+ ctrl.expandProposal = function(proposal) {
+  for (let i = 0; i != ctrl.proposal_number; i++) {
+    if (proposal.from == ctrl.proposal_list[i].from)
+      ctrl.proposal_list[i].expand = (proposal.expand == false ? true : false);
+  }
+}
+
+ctrl.submitProposal = function(proposal) {
+  console.log(proposal);
+}
+
+ctrl.submitOffer = function() {
+  var modalInstance = $uibModal.open({
+   templateUrl: "static/assets/views/modals/newOfferModal.html",
+   controller: 'OfferModalController',
+   size: 'lg',
+   scope: $scope,
+   resolve: {
+    ctrl : function() {
+     return ctrl;
+   }
+ }
+});
+}
+
+return ctrl;
 });

@@ -9,7 +9,7 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
     var ctrl = this;
-    ctrl.user = $rootScope.user
+    ctrl.user = $rootScope.user;
 	ctrl.wallet = $controller("WalletController");
 
        if (ctrl.user) {
@@ -20,6 +20,16 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
      * Ask for login to the server.
      * @method login
      */
+
+    ctrl.login_done = function () {
+	$http.get("/getUserUnreadNotification").then(function (response) {
+		$rootScope.unread_notification = JSON.parse(response.data);
+		console.log("coucou")
+		console.log($rootScope.unread_notification);
+		//$scope.$apply();
+    });
+	};
+
     ctrl.login = function() {
 		if (ctrl.username && ctrl.password) {
 			$http.post('/login', {
@@ -33,11 +43,12 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
 				$rootScope.user = ctrl.user = response.data.user;
 				ctrl.wallet.refreshAllBalances();
                 $rootScope.$emit("loggedIn", '');
+                ctrl.login_done();
 			}, function(error) {
 				$rootScope.toogleError(error.data);
 			});
 		}
-	}
+	};
 
     /**
      * Logout from the server.
@@ -289,6 +300,7 @@ ctrl.coinbase_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -318,6 +330,7 @@ ctrl.fb_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -348,6 +361,7 @@ ctrl.twitter_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -377,6 +391,7 @@ OAuth.popup('linkedin').done(function(result) {
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -406,6 +421,7 @@ OAuth.popup('github').done(function(result) {
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);
@@ -437,6 +453,7 @@ ctrl.google_connect = function ()
 					$rootScope.user = ctrl.user = response.data.user;
 					ctrl.wallet.refreshAllBalances();
                     $rootScope.$emit("loggedIn", '');
+                	login_done();
 				}, function(error) {
 					$rootScope.toogleError(error.data);
 					console.log(error);

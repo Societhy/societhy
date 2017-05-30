@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify', 'notificationCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'),
+        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'),
         title: 'Organisation dashboard',
         params: {
             data: null

@@ -8,38 +8,52 @@
         <!-- start: USER TABSET -->
         <uib-tabset class="tabbable">
           <!-- start: TAB OVERVIEW -->
-          <uib-tab heading="Overview" href="">
+          <uib-tab heading="Overview" href="#">
             <div class="vertical-center">
               <h1 class="padding-right-20">{{ currentOrga.name }}</h1>
-              <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-10">
+              <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-8">
                 <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="donate!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
               </div>
             </div>
 
-            <div class="row border-solid vertical-center">
+            <div class="row  vertical-center">
 
-              <div class="col-md-6 inline-block border-solid">
+              <div class="col-md-6 inline-block ">
                 <div class="user-left user-image">
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
-                <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
-                  <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
-                    Join
-                  </button>
-                  <button type="button" class="btn btn-success btn-primary dropdown-toggle" uib-dropdown-toggle>as a
-                    <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
-                    <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
-                    <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
-                  </ul>
+
+                <div ng-if="isInvitedToOrga == true">
+
+                  <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
+                      Accept Invitation
+                    </button>
+
                 </div>
+                <div ng-if="isInvitedToOrga == false">
+                  <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
+                    <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
+                      Join
+                    </button>
+                    <button type="button" class="btn btn-success btn-primary dropdown-toggle" uib-dropdown-toggle>as a
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
+                      <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
+                      <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
+                    </ul>
+                  </div>
+
+                </div>
+
+
+
                 <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
                 <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
               </div>
 
-              <div class="col-md-6 inline-block border-solid vertical-center">
+              <div class="col-md-6 inline-block  vertical-center">
                 <div class="float-left" style="line-height: 40px">
                   Balance:
                   <span ng-bind="currentOrga.balance"></span>
@@ -67,196 +81,196 @@
             </div>
 
             <div class="row margin-top-20" >
-              <div class="col-md-6 border-solid border-dark padding-20">
+              <div class="col-md-6   padding-20">
                 <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
 
                 <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                   <!-- ngInclude: templates.header -->
                   <thead  class="ng-scope">
-                    <tr>
-                      <td>
-                        <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
-                          Project address
-                          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
-                          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
-                        </a>
-                      </td>
-                      <td>
-                        <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
-                          <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
-                          <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
-                          Name
-                        </a>
-                      </td>
-                    </tr>
-                    <hr />
+                  <tr>
+                    <td>
+                      <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                        Project address
+                        <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                      </a>
+                    </td>
+                    <td>
+                      <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                        <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                        Name
+                      </a>
+                    </td>
+                  </tr>
+                  <hr />
                   </thead>
                   <tbody><!-- ngRepeat: user in $data -->
-                    <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
-                      <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
-                      <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
-                    </tr><!-- end ngRepeat: user in $data -->
+                  <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
+                    <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                    <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
+                  </tr><!-- end ngRepeat: user in $data -->
                   </tbody>
                 </table>
 
               </div>
-              <div class="col-md-6 inline-block border-solid border-dark padding-20">
+              <div class="col-md-6 inline-block   padding-20">
                 <h2>News</h2>
 
               </div>
             </div>
 
             <div class="row margin-top-20" >
-              <div class="col-md-6 border-solid border-dark padding-20">
+              <div class="col-md-6   padding-20">
                 <h2>Proposals<button ng-if="currentRights.create_proposal" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>
               </div>
-              <div class="col-md-6 inline-block border-solid border-dark" style="padding: 20px">
+              <div class="col-md-6 inline-block" style="padding: 20px">
                 <h2>Members</h2>
                 <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
 
                   <!-- ngInclude: templates.header -->
                   <thead  class="ng-scope">
-                    <tr>
-                      <td>
-                        <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
-                          Member
-                          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
-                          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
-                        </a>
-                      </td>
+                  <tr>
+                    <td>
+                      <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                        Member
+                        <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                      </a>
+                    </td>
 
-                      <td>
-                        <a href="#" ng-click="sortType = 'tag'; sortReverse = !sortReverse">
-                          <span ng-show="sortType == 'tag' && !sortReverse" class="fa fa-caret-down"></span>
-                          <span ng-show="sortType == 'tag' && sortReverse" class="fa fa-caret-up"></span>
-                          Tag
-                        </a>
-                      </td>
+                    <td>
+                      <a href="#" ng-click="sortType = 'tag'; sortReverse = !sortReverse">
+                        <span ng-show="sortType == 'tag' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'tag' && sortReverse" class="fa fa-caret-up"></span>
+                        Tag
+                      </a>
+                    </td>
 
-                      <hr />
-                    </thead>
-                    <tbody><!-- ngRepeat: user in $data -->
-                      <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user" class="ng-scope">
-                        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
-                        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
-                      </tr><!-- end ngRepeat: user in $data -->
-                    </tbody>
-                  </table>
-
-                </div>
+                    <hr />
+                  </thead>
+                  <tbody><!-- ngRepeat: user in $data -->
+                  <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user" class="ng-scope">
+                    <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
+                    <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
+                  </tr><!-- end ngRepeat: user in $data -->
+                  </tbody>
+                </table>
 
               </div>
-            </uib-tab>
 
-            <uib-tab heading="Activity" active="editActive" ng-click="initSlider()">
-              <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
-            </uib-tab>
+            </div>
+          </uib-tab>
 
-            <uib-tab heading="Members">
+          <uib-tab heading="Activity" ng-click="initSlider()">
+            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
+          </uib-tab>
+
+          <uib-tab heading="Members">
+            <div class="row">
+              <div class="col-md-12 inline-block">
+
+                <form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
+                  <div class="form-group col-md-12  align-center text-center">
+                    <angucomplete-alt id="ex2"
+                                      placeholder="Search for existing users or invite new ones"
+                                      pause="300"
+                                      selected-object="selected_user"
+                                      title-field="name"
+                                      remote-url='/searchFor/'
+                                      description-field="_id"
+                                      minlength="1"
+                                      input-class="form-control"
+                                      match-class="highlight"
+                                      input-changed=""/>
+                  </div>
+                </form>
+                <div class="col-md-12">
+                  <div class="table min-height-300">
+                    <table class="table">
+                      <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Tag</th>
+                        <th>Rights</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr ng-repeat="(address, member) in currentOrga.members">
+                        <td class="text-bold text-large">{{user.name}} </td>
+                        <td>
+                          <select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+                          </select>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
+                            <span>Edit Rights</span>
+                          </button>
+                        </td>
+                        <td>
+                          <button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
+                            <span>Remove</span>
+                          </button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </uib-tab>
+          <!-- DOCUMENTS -->
+          <uib-tab heading="Docs">
+            <div class="container-fluid container-fullw ng-scope">
               <div class="row">
-                <div class="col-md-12 inline-block">
-
-                  <form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
-                    <div class="form-group col-md-12  align-center text-center">
-                      <angucomplete-alt id="ex2"
-                      placeholder="Search for existing users or invite new ones"
-                      pause="300"
-                      selected-object="selected_user"
-                      title-field="name"
-                      remote-url='/searchFor/'
-                      description-field="_id"
-                      minlength="1"
-                      input-class="form-control"
-                      match-class="highlight"
-                      input-changed=""/>
-                    </div>
-                  </form>
-                  <div class="col-md-12">
-                    <div class="table min-height-300">
-                      <table class="table">
+                <div class="col-md-12">
+                  <div class="panel panel-white">
+                    <div class="panel-body">
+                      <h5 class="over-title margin-bottom-15">Your uploaded <span class="text-bold">Documents</span></h5>
+                      <table class="table table-stylish" id="sample-table-2">
                         <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Tag</th>
-                            <th>Rights</th>
-                            <th></th>
-                          </tr>
+                        <tr>
+                          <th class="center no-border">#</th>
+                          <th class="no-border">Name</th>
+                          <th class="hidden-xs no-border">Creator</th>
+                          <th class="no-border">Size</th>
+                          <th class="hidden-xs no-border">Type</th>
+                          <th class="no-border">Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                          <tr ng-repeat="(address, member) in currentOrga.members">
-                            <td class="text-bold text-large">{{user.name}} </td>
-                            <td>
-                              <select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
-                              </select>
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
-                                <span>Edit Rights</span>
-                              </button>
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
-                                <span>Remove</span>
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
 
-
-                </div>
-              </div>
-            </uib-tab>
-            <!-- DOCUMENTS -->
-            <uib-tab heading="Docs">
-              <div class="container-fluid container-fullw ng-scope">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="panel panel-white">
-                      <div class="panel-body">
-                        <h5 class="over-title margin-bottom-15">Your uploaded <span class="text-bold">Documents</span></h5>
-                        <table class="table table-stylish" id="sample-table-2">
-                          <thead>
-                            <tr>
-                              <th class="center no-border">#</th>
-                              <th class="no-border">Name</th>
-                              <th class="hidden-xs no-border">Creator</th>
-                              <th class="no-border">Size</th>
-                              <th class="hidden-xs no-border">Type</th>
-                              <th class="no-border">Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-
-                            <tr ng-repeat="doc in currentOrga.uploaded_documents">
-                              <td class="center">1</td>
-                              <td class="hidden-xs">{{ doc.doc_name }}</td>
-                              <td>{{ currentOrga.name }}</td>
-                              <td>    42 octets </td>
-                              <td class="hidden-xs">{{ doc.doc_type }}</td>
-                              <td class="center">
-                                <div class="visible-md visible-lg hidden-sm hidden-xs">
-                                  <a href="#" ng-click="ctrl.downloadDoc(doc.doc_id, doc.doc_name)" class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a>
-                                  <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
-                                </div>
-                                <div class="visible-xs visible-sm hidden-md hidden-lg">
-                                  <div class="btn-group" uib-dropdown>
-                                    <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" uib-dropdown-toggle>
-                                      <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right dropdown-light" role="menu">
-                                      <li>
-                                        <a href="#"> Download </a>
-                                      </li>
-                                      <a href="#"> Remove </a>
-                                    </li>
-                                  </ul>
-                                </div>
+                        <tr ng-repeat="doc in currentOrga.uploaded_documents">
+                          <td class="center">1</td>
+                          <td class="hidden-xs">{{ doc.doc_name }}</td>
+                          <td>{{ currentOrga.name }}</td>
+                          <td>    42 octets </td>
+                          <td class="hidden-xs">{{ doc.doc_type }}</td>
+                          <td class="center">
+                            <div class="visible-md visible-lg hidden-sm hidden-xs">
+                              <a href="#" ng-click="ctrl.downloadDoc(doc.doc_id, doc.doc_name)" class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a>
+                              <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                            </div>
+                            <div class="visible-xs visible-sm hidden-md hidden-lg">
+                              <div class="btn-group" uib-dropdown>
+                                <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" uib-dropdown-toggle>
+                                  <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right dropdown-light" role="menu">
+                                  <li>
+                                    <a href="#"> Download </a>
+                                  </li>
+                                  <a href="#"> Remove </a>
+                                  </li>
+                                </ul>
                               </div>
-                            </td>
-                          </tr>
+                            </div>
+                          </td>
+                        </tr>
 
                         </tbody>
                       </table>
@@ -270,113 +284,111 @@
           </uib-tab>
 
 
-           <uib-tab heading="Proposals" active="editActive">
-              <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
-           </uib-tab>
+          <uib-tab heading="Proposals" active="editActive">
+            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
+          </uib-tab>
 
           <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
-           <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
-           <div ng-show="listProducts.length" class="row" style="margin-right: 10">
-             <div class="col-md-3">
+            <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
+            <div ng-show="listProducts.length" class="row" style="margin-right: 10">
+              <div class="col-md-3">
 
-               <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
-                 <thead></thead>
-                 <tbody>
-                   <tr ng-repeat="product in listProducts" class="ng-scope">
-                     <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
-                   </tr>
-                 </tbody>
-               </table>
-             </div>
+                <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                  <thead></thead>
+                  <tbody>
+                    <tr ng-repeat="product in listProducts" class="ng-scope">
+                      <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-             <fieldset class="margin-15">
-               <legend class="text-large">{{currentProd.name}}</legend>
+              <fieldset class="margin-15">
+                <legend class="text-large">{{currentProd.name}}</legend>
 
-               <div class="row">
-                 <div class="col-md-4">
-                   <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
-                     <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
-                       <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin:auto;">
-                     </div>
-                   </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
+                      <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                        <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
+                      </div>
+                    </div>
 
-                   <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." width="80%" />
-                 </div>
+                    <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." style="margin: auto; height: 300px; width: auto;"/>
+                  </div>
 
-                 <div class="col-md-8">
-                   <fieldset>
-                     <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
-                   </fieldset>
-                   <div class="row">
-                     <div class="col-md-2">
-                       <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
-                     </div>
-                     <div class="col-md-2">
-                       <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
-                         <span>Buy</span>
-                       </button>
-                     </div>
-                   </div>
-                 </div>
+                  <div class="col-md-8">
+                    <fieldset>
+                      <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
+                    </fieldset>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
+                      </div>
+                      <div class="col-md-2">
+                        <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
+                                   <span>Buy</span>
+                                 </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <h3>Review this product</h3>
+                  <div class="col-md-6">
+                    <textarea placeholder="Enter your review..." ng-model="ctrl.review" ng-init='ctrl.review = ""' rows="7" cols="73" wrap="hard"></textarea>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="row">
+                      <span uib-rating ng-model="ctrl.rate" ng-init='ctrl.rate = 3' read-only="false"></span>
+                    </div>
+
+                    <div class="row">
+                      <button class="btn btn-success" ng-click="ctrl.sendReview()">Send</button>
+                    </div>
+                  </div>
+                </div>
+
+                <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                  <thead></thead>
+                  <tbody>
+                    <tr ng-repeat="review in reviewList" class="ng-scope">
+                      <td>
+                        <h4 class="text-capitalize">{{review.user.name}}</h4>
+                        <span uib-rating ng-model="review.rate" read-only="true"></span>
+                        <p style="width: 100%; height: 100%">{{review.review}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </fieldset>
+            </div>
+
+            <div ng-show="!listProducts.length">
+              <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
+            </div>
+          </uib-tab>
+
+    <!--
+         <uib-tab heading="Settings">
+           <div class="container-fluid container-fullw ng-scope">
+             <div class="panel panel-white">
+              <div class="panel-body">
+                <div ng-controller="" class="ng-scope ng-binding">
+                 <div data-ng-include=""></div>
                </div>
-
-                   <div class="row">
-                       <h3>Review this product</h3>
-                       <div class="col-md-6">
-                           <textarea placeholder="Enter your review..." ng-model="ctrl.review" ng-init='ctrl.review = ""' rows="7" cols="73" wrap="hard"></textarea>
-                       </div>
-
-                       <div class="col-md-6">
-                           <div class="row">
-                               <span uib-rating ng-model="ctrl.rate" ng-init='ctrl.rate = 3' read-only="false"></span>
-                           </div>
-
-                           <div class="row">
-                               <button class="btn btn-success" ng-click="ctrl.sendReview()">Send</button>
-                           </div>
-                       </div>
-                   </div>
-
-                   <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
-                       <thead></thead>
-                       <tbody>
-                           <tr ng-repeat="review in reviewList" class="ng-scope">
-                               <td>
-                                   <h4 class="text-capitalize">{{review.user.name}}</h4>
-                                   <span uib-rating ng-model="review.rate" read-only="true"></span>
-                                   <p style="width: 100%; height: 100%">{{review.review}}</p>
-                               </td>
-                           </tr>
-                       </tbody>
-                   </table>
-
-               </fieldset>
-           </div>
-
-           <div ng-show="!listProducts.length">
-             <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
+             </div>
            </div>
          </div>
-
-       </div>
-     </uib-tab>
-<!--
-     <uib-tab heading="Settings">
-       <div class="container-fluid container-fullw ng-scope">
-         <div class="panel panel-white">
-          <div class="panel-body">
-            <div ng-controller="" class="ng-scope ng-binding">
-             <div data-ng-include=""></div>
-           </div>
-         </div>
-       </div>
-     </div>
-   </uib-tab>
- -->
- <!-- end: TAB ORGANISATIONS -->
-</uib-tabset>
-<!-- end: USER TABSET -->
-</div>
+       </uib-tab>
+     -->
+    <!-- end: TAB ORGANISATIONS -->
+    </uib-tabset>
+    <!-- end: USER TABSET -->
+  </div>
 </div>
 </div>
 </div>

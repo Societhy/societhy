@@ -42,11 +42,6 @@ contract Offer {
     // who may want to split off the Societhy to do so.
     uint constant splitGracePeriod = 8 days;
 
-    // The total cost of the Offer for the Client. Exactly this amount is
-    // transfered from the Client to the Offer contract when the Offer is
-    // accepted by the Client. Set once by the Offerer.
-    uint totalCost;
-
     // Initial withdrawal to the Contractor. It is done the moment the
     // Offer is accepted. Set once by the Offerer.
     uint initialWithdrawal;
@@ -97,6 +92,11 @@ contract Offer {
 
     uint creationDate;
 
+    // type of offer, can be 'investment', 'employment', 'tax', 'service'
+    string offerType;
+
+    mapping(address => bool) actors;
+
 
     modifier onlyClient {
         if (msg.sender != address(client))
@@ -111,17 +111,16 @@ contract Offer {
         address _contractor,
         address _client,
         bytes32 _hashOfTheProposalDocument,
-        uint _totalCost,
         uint _initialWithdrawal,
         uint128 _minDailyWithdrawalLimit,
         uint _payoutFreezePeriod,
         bool _isRecurrent,
-        uint _duration) {
+        uint _duration,
+        string _type) {
         contractor = _contractor;
         originalClient = Societhy(_client);
         client = Societhy(_client);
         hashOfTheProposalDocument = _hashOfTheProposalDocument;
-        totalCost = _totalCost;
         initialWithdrawal = _initialWithdrawal;
         minDailyWithdrawalLimit = _minDailyWithdrawalLimit;
         dailyWithdrawalLimit = _minDailyWithdrawalLimit;
@@ -129,12 +128,10 @@ contract Offer {
         isRecurrent = _isRecurrent;
         duration = _duration;
         creationDate = now;
+        offerType = _type;
     }
 
     // non-value-transfer getters
-    function getTotalCost() noEther constant returns (uint) {
-        return totalCost;
-    }
 
     function getInitialWithdrawal() noEther constant returns (uint) {
         return initialWithdrawal;
@@ -200,9 +197,13 @@ contract Offer {
         return votingDeadline;
     }
 
+    function getOfferType() noEther constant returns (string) {
+        return offerType;
+    }
+
     function sign() payable {
         if (msg.sender != address(originalClient) // no good samaritans give us ether
-            || msg.value != totalCost    // no under/over payment
+            || msg.value < initialWithdrawal    // no under/over payment
             || dateOfSignature != 0      // don't accept twice
             || votingDeadline == 0       // votingDeadline needs to be set
             || now < votingDeadline + splitGracePeriod) // give people time to split
