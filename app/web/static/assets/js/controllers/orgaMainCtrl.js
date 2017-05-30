@@ -17,16 +17,25 @@
   };
 
    ctrl.acceptInvit = function () {
-       $http.post('/acceptInvitation',
-           {
-                "orga_id":$rootScope.currentOrga._id
-           }).then(function(response)
-       {
-
-       });
+        if ($scope.doVerifications()) {
+             $scope.completeBlockchainAction(function(password) {
+                 $http.post('/acceptInvitation',
+                     {
+                         "orga_id": $rootScope.currentOrga._id,
+                         "password": password,
+                         "socketid": $rootScope.sessionId
+                     }).then(function (response) {
+                        console.log(response);
+                 });
+             });
+        }
    };
 
    ctrl.isCurrentUserInvitedToOrga = function () {
+        if (typeof $rootScope.user !== 'undefined') {
+            $scope.isInvitedToOrga = false;
+            return;
+        }
         for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
         {
             if ($rootScope.user.pending_invitation[i].type === "organisation")
