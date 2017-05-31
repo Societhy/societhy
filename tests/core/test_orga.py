@@ -25,12 +25,14 @@ def test_create_orga(miner):
 	while miner.refreshBalance() < 1:
 		bw.waitBlock()
 
+	initial_funds = 99
 	for orga_model, contracts in governances.items():
 		test_orga = {
 			"name": "Societhy" + "_" + orga_model, 
 			"description" : "test_description", 
 			"accessibility" : "public",
 			"gov_model" : orga_model,
+			"initial_funds": initial_funds,
 			"rules": {
 				"delegated_voting": True,
 				"curators": True,
@@ -45,12 +47,14 @@ def test_create_orga(miner):
 		assert ret.get('status') == 200
 		assert tx_hash != None
 		bw.waitTx(tx_hash)
+		bw.waitBlock()
 		sleep(0.5)
 		inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 		assert inserted != None
 		assert inserted.get('contracts') != None
 		assert inserted.board != None
 		assert inserted.rules != None
+		assert inserted.getTotalFunds() == initial_funds
 		if contracts.get('registryContract'):
 			assert inserted.registry != None
 		if contracts.get('tokenContract'):
@@ -58,7 +62,6 @@ def test_create_orga(miner):
 		if contracts.get('tokenFreezerContract'):
 			assert inserted.token_freezer != None
 		# break
-
 
 def test_join(miner, testOrga):
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
@@ -75,12 +78,74 @@ def test_memberlist(testOrga):
 	assert ret.get('data')[0].get('name') == 'simon'
 
 def test_donate(miner, testOrga):
+	initial_balance = testOrga.getTotalFunds()
 	ret = base_orga.donateToOrga(miner, password, testOrga.get('_id'), {"amount":1000})
 	assert ret.get('status') == 200
 	assert ret.get('data') is not None
 	bw.waitEvent("DonationMade")
-	assert testOrga.getTotalFunds() == 1000
+	assert testOrga.getTotalFunds() - initial_balance == 1000
 	
+
+def test_hidden_orga(miner):
+	test_orga = {
+		"name": "Societhy_hidden_orga",
+		"description" : "test_description", 
+		"accessibility" : "public",
+		"gov_model" : "ngo",
+		"rules": {
+			"delegated_voting": True,
+			"curators": True,
+			"quorum" : 50,
+			"majority": 50,
+			"hidden": True
+		}
+	}
+	ret = base_orga.createOrga(miner, password, test_orga)
+	tx_hash = ret.get('data').get('tx_hash')
+	new_orga = ret.get('data').get('orga')
+	
+	assert ret.get('status') == 200
+	assert tx_hash != None
+	bw.waitTx(tx_hash)
+	sleep(0.5)
+	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
+	assert inserted != None
+	all_orgas = base_orga.getAllOrganizations()
+	assert inserted.get('_id') not in [x['_id'] for x in all_orgas.get('data')]
+
+def test_anonymous_orga(miner):
+	test_orga = {
+		"name": "Societhy_anonymous_orga",
+		"description" : "test_description", 
+		"accessibility" : "public",
+		"gov_model" : "ngo",
+		"rules": {
+			"delegated_voting": True,
+			"curators": True,
+			"quorum" : 50,
+			"majority": 50,
+			"anonymous": True
+		}
+	}
+	ret = base_orga.createOrga(miner, password, test_orga)
+	tx_hash = ret.get('data').get('tx_hash')
+	new_orga = ret.get('data').get('orga')
+	
+	assert ret.get('status') == 200
+	assert tx_hash != None
+	bw.waitTx(tx_hash)
+	sleep(0.5)
+	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
+	assert inserted != None
+	
+	ret = base_orga.joinOrga(miner, password, inserted.get('_id'), tag='member')
+	assert ret.get('status') == 200	
+	assert ret.get('data') != None
+
+	bw.waitEvent('NewMember')
+	assert len([x.get('name') for x in inserted.getMemberList() if x.get('name') is not None]) == 0
+	assert len([x.get('account') for x in inserted.getMemberList()]) == 1
+
 def test_createproject(miner, testOrga):
 	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {})
 	assert ret.get('status') == 200

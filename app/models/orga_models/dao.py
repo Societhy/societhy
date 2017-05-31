@@ -113,9 +113,18 @@ class Dao(Organization):
 		self.rules["address"] = eth_cli.eth_getTransactionReceipt(tx_hash).get('contractAddress')
 		self.rules["is_deployed"] = True
 		args.append(self.rules["address"])
+		args.append(0)
 		from_.unlockAccount(password=password)
 		tx_hash = self.board.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
+
+		action = {
+			"action": "donate",
+			"from": from_,
+			"password": password,
+			"initial_funds": self.get('initial_funds')
+			} if self.get('initial_funds', 0) > 0 else None
+
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
 		return tx_hash
 
 	def launchCrowdfunding(self, params):
