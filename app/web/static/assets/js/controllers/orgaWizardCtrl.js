@@ -215,6 +215,19 @@
 
 
     // MEMBER MANAGEMENT
+        $scope.addCurrentUserToInvited = function () {
+            if (!$scope.orga_form.invited_users)
+                $scope.orga_form.invited_users = {};
+            $scope.orga_form.invited_users[$rootScope.user._id] =
+                {
+                    "_id" : $rootScope.user._id,
+                    "account": $rootScope.user.account,
+                    "category": "owner",
+                    "name": $rootScope.user.name,
+                    "tag" : "owner"
+                };
+            $scope.tagChangedForUser($rootScope.user._id);
+        };
 
     $scope.addInvitedUser = function () {
         if (!$scope.orga_form.invited_users)
@@ -317,6 +330,7 @@
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
+                        $scope.addCurrentUserToInvited();
                         $http.post('/createOrga', {
                             "socketid": $rootScope.sessionId,
                             "password": password,
