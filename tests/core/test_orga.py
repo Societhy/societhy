@@ -59,7 +59,6 @@ def test_create_orga(miner):
 			assert inserted.token_freezer != None
 		# break
 
-
 def test_join(miner, testOrga):
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
@@ -81,6 +80,13 @@ def test_donate(miner, testOrga):
 	bw.waitEvent("DonationMade")
 	assert testOrga.getTotalFunds() == 1000
 	
+
+def test_hidden_orga(miner):
+	pass
+
+def test_anonymous_orga(miner):
+	pass
+
 def test_createproject(miner, testOrga):
 	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {})
 	assert ret.get('status') == 200
