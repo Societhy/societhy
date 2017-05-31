@@ -84,6 +84,8 @@ class UserDocument(Document):
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
+			if not orga :
+				orga = organizations.find_one({"contracts.registry.address": address})
 			if orga and orga.public() not in self["organizations"]:
 				self["organizations"].append(orga.public())
 				self.save_partial();
@@ -100,6 +102,8 @@ class UserDocument(Document):
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
 			orga = organizations.find_one({"address": address})
+			if not orga :
+				orga = organizations.find_one({"contracts.registry.address": address})
 			if orga and orga.public() in self["organizations"]:
 				self["organizations"].remove(orga.public())
 				self.save_partial()
