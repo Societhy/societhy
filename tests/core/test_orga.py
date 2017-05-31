@@ -47,6 +47,7 @@ def test_create_orga(miner):
 		assert ret.get('status') == 200
 		assert tx_hash != None
 		bw.waitTx(tx_hash)
+		bw.waitBlock()
 		sleep(0.5)
 		inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 		assert inserted != None
