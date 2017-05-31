@@ -2,17 +2,20 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 
     var ctrl = this;
 
-    $rootScope.admin = {};
-
-    $rootScope.admin.menu = [ {url: "static/assets/views/partials/orga/administration/transaction.html"},
-			      {url: "static/assets/views/partials/orga/administration/members.html"},
-			      {url: "static/assets/views/partials/orga/administration/transaction.html"},
-			      {url: "static/assets/views/partials/orga/administration/transaction.html"}, 
-			      {url: "static/assets/views/partials/orga/administration/transaction.html"},
-			      {url: "static/assets/views/partials/orga/administration/transaction.html"}];
+    $rootScope.admin = {menu: [{url: "static/assets/views/partials/orga/administration/transaction.html"},
+			       {url: "static/assets/views/partials/orga/administration/members.html"},
+			       {url: "static/assets/views/partials/orga/administration/transaction.html"},
+			       {url: "static/assets/views/partials/orga/administration/transaction.html"}, 
+			       {url: "static/assets/views/partials/orga/administration/transaction.html"},
+			       {url: "static/assets/views/partials/orga/administration/manageRights.html"}],
+			current: "static/assets/views/partials/orga/administration/transaction.html",
+			rights: {current: "none",
+				 size: Object.keys($rootScope.currentOrga.rights["default"]).length}}
+    // ADD DEFAULT RIGHT
+    // DEplacer le suser d'un un job dans un autre
     
-    $rootScope.admin.current = "static/assets/views/partials/orga/administration/transaction.html";
-
+    console.log($rootScope.admin.rights);
+    console.log($rootScope.currentOrga.rights["default"]);
 	// animate menu Icon
 	var theToggle = document.getElementById('toggle');
 	theToggle.onclick = function() {
@@ -23,8 +26,41 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    return false;
 	}
 
+    
+    $rootScope.admin.rights.updateSelected = function (id, index) {
+	$rootScope.admin.rights.current = id;
+	$(".currentRight").removeClass("currentRight");
+	$(".orgaRightsMenuField[val='"+index+"'").addClass("currentRight");
+	
+    }
 
-	// Menu Handler
+    $rootScope.admin.rights.newRight = function () {
+	$rootScope.currentOrga.rights[$("#newOrgaRight").val()] = $rootScope.currentOrga.rights["default"];
+    }
+
+    $rootScope.admin.rights.removeRight = function (id) {
+	delete $rootScope.currentOrga.rights[id];
+    }
+/*    $rootScope.admin.rights.newRight = function (id, index) {
+	    $http.post('/addRightToOrga', {
+	    "orga_id": $rootScope.currentOrga._id,
+	    "name": $("newOrgaRight").val().
+	    "rights": $rootScope.currentOrga.rights["default"]
+	}).then(function(response) {	
+	    console.log(response)
+	});
+    }
+*/
+    $rootScope.admin.updateRights = function () {
+	$http.post('/updateOrgaRights', {
+	    "orga_id": $rootScope.currentOrga._id,
+	    "rights": $rootScope.currentOrga.rights
+	}).then(function(response) {	
+	    console.log(response)
+	});
+    }
+
+    // Menu Handler
 	$rootScope.admin.displayTransactions = function () {
 	    $rootScope.admin.current = $rootScope.admin.menu[0]["url"];
 	    $("#adminTable").DataTable({data: [
@@ -87,9 +123,6 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 		
 	$rootScope.admin.addTransaction = function () {
 	    $rootScope.admin.current = $rootScope.admin.menu[3]["name"];
-	    $http.get('/getOrgaTransaction/'.concat($rootScope.currentOrga._id)).then(function(response) {
-		
-	    });
 	}
 
 	$rootScope.admin.extractAdminData = function () {
@@ -99,8 +132,8 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    });
 	}
 
-    $rootScope.admin.extractAdminData = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[5]["name"];
+    $rootScope.admin.manageRights = function () {
+	    $rootScope.admin.current = $rootScope.admin.menu[5]["url"];
 	}
     
     $(document).ready(function() {

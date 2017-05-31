@@ -123,6 +123,12 @@ def getOrgaHisto():
     ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateOrgaRights', methods=['POST'])
+def updateOrgaRights():
+    ret = base_orga.updateOrgaRights(request.json.get('orga_id'), request.json.get('rights'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
 def createOffer(user):

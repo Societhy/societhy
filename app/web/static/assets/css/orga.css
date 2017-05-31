@@ -608,7 +608,7 @@ input::-moz-focus-outer {
     background: rgb(230, 232, 232);
     display: block;
     padding: 8px;
-    border-radius: 8px;
+    border-radius: 25%;
     width: 30px;
 }
 
@@ -658,7 +658,8 @@ input::-moz-focus-outer {
 }
 
 #administrationMenu.on{
-    width: 8%;
+    width: 200px;
+    text-align: center;
 }
 
 
@@ -685,7 +686,7 @@ table.dataTable thead th {
 }
 
 #administrationContent.off{
-    width: 90%;
+    width: 80%;
 }
 
 /*
@@ -742,9 +743,70 @@ table.dataTable thead th {
 }
 
 /*
-** ADMINISTRATION
+** Manage Rights 
+*/
 
+#orgaRightsMenu {
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px solid lightgray;
+    padding: 0 8px;
+    text-align: center;
+    width: 20%;
+    margin-right: 15px;
+}
 
+#orgaRightsMenu div {
+    border-bottom: 1px solid lightgray;
+    padding: 6px;
+    text-align: center;
+    display: block;
+}
+
+#orgaRightsMenu div:hover {
+    cursor: pointer;
+    background-color: lightgray
+}
+
+#orgaRightsMenu .currentRight {
+    background-color: lightgray
+
+}
+
+#orgaRightsMenu div:last-child {
+    border: none;
+}
+
+#orgaRightsMenu div:last-child:hover {
+    background-color: none;
+}
+
+#orgaRightsMenu .orgaRightsMenuField span {
+    font-size: 16px;
+}
+
+#orgaRightsMenu .orgaRightsMenuField button{
+    float: right;
+    display: none;
+}
+
+#orgaRightsMenu .orgaRightsMenuField.currentRight button{
+    float: right;
+    display: inline-block;
+}
+
+#orgaRightsMenu input {
+    width: 80%;
+}
+#orgaRightsSelector {
+    display : inline-block;
+    float:    right;
+}
+
+#orgaRightsSelector div {
+    padding: 8px;
+}
+/*
 #administration {
     margin: -15px 0 0 -15px;
 }

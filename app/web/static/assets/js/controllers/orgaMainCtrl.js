@@ -27,7 +27,7 @@
    };
 
    ctrl.isCurrentUserInvitedToOrga = function () {
-        for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
+/*        for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
         {
             if ($rootScope.user.pending_invitation[i].type === "organisation")
             {
@@ -40,7 +40,7 @@
         }
 
         $scope.isInvitedToOrga = false;
-        $scope.apply();
+        $scope.apply();*/
    };
 
     /**

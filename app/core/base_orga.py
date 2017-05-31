@@ -222,6 +222,21 @@ def getOrgaTransaction(user):
 		"status": 200
 	}
 
+def updateOrgaRights(orga_id, rights):
+	"""
+	user : UserDoc
+	orga_id : string for the mongo id
+	"""
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	print(orga["rights"])
+	orga["rights"] = rights;
+	print(orga["rights"])
+	orga.save_partial()
+	return {
+		"data": "allgood",
+		"status": 200
+	}
+
 def donateToOrga(user, password, orga_id, donation):
 	"""
 	user : user who want to give funds to an organisation.
