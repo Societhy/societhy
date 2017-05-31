@@ -694,9 +694,12 @@ table.dataTable thead th {
 }
 
 #administrationContent.off{
-    width: 80%;
+    width: 87%;
 }
 
+#administrationContent .form-group {
+    margin-left: 35px;
+}
 /*
 ** Menu Toggle Icon
 */
@@ -755,13 +758,16 @@ table.dataTable thead th {
 */
 
 #orgaRightsMenu {
-    display: inline-block;
     border-radius: 4px;
     border: 1px solid lightgray;
     padding: 0 8px;
     text-align: center;
-    width: 20%;
     margin-right: 15px;
+}
+
+
+.d-block {
+    display: block;
 }
 
 #orgaRightsMenu div {
@@ -806,13 +812,32 @@ table.dataTable thead th {
 #orgaRightsMenu input {
     width: 80%;
 }
+
 #orgaRightsSelector {
     display : inline-block;
-    float:    right;
+    width: 75%;
+    margin: 20px
 }
 
-#orgaRightsSelector div {
+#orgaRightsManagment table #updateRight {
+    text-align: center;
+}
+
+#orgaRightsManagment table th {
+    text-align: center;
+    padding: 15px;
+}
+
+#orgaRightsManagment table td {
     padding: 8px;
+}
+
+
+
+#orgaRightsSelector div {
+    display: inline-block;
+    margin: 0 40px 20px 0;
+    width: 15%;
 }
 /**
  * Rating stars

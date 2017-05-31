@@ -51,7 +51,8 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
     }
 
     $rootScope.admin.rights.newRight = function () {
-	$rootScope.currentOrga.rights[$("#newOrgaRight").val()] = $rootScope.currentOrga.rights["default"];
+	if ($("#newOrgaRight").val().trim())
+	    $rootScope.currentOrga.rights[$("#newOrgaRight").val()] = $rootScope.currentOrga.rights["default"];
     }
 
     $rootScope.admin.rights.removeRight = function (id) {
