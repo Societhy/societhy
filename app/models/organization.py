@@ -185,7 +185,15 @@ class OrgaDocument(Document):
 		args.append(self.registry["address"])
 		from_.unlockAccount(password=password)
 		tx_hash = self.board.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
+
+		action = {
+			"action": "donate",
+			"from": from_,
+			"password": password,
+			"initial_funds": self.get('initial_funds')
+			} if self.get('initial_funds', 0) > 0 else None
+
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
 		return tx_hash
 
 
@@ -193,7 +201,7 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt):
+	def register(self, tx_receipt, callback_data=None):
 		"""
 		tx_receipt : dict containing the receipt of the contract creation transaction
 		Callback called after a ContractCreationEvent happened : the address, balance, rules and id of the newly created contract are saved in mongo
@@ -202,6 +210,21 @@ class OrgaDocument(Document):
 		self.board["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.board["is_deployed"] = True
+
+		#SEND FUNDS TO ORGA AFTER IT IS CREATED
+		if callback_data and callback_data.get('action') == "donate":
+			from_ = callback_data.get('from')
+			amount = float(callback_data.get('initial_funds'))
+			if from_.refreshBalance() > amount:
+				from_.session_token = None
+				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
+				if not tx_hash:
+					return {"data": "User does not have permission to donate", "status": 400}	
+				print(" ---- INITIAL DONATION IS MADE ----", tx_hash)
+			else:
+				return {"data": "Not enough funds in your wallet to process donation", "status": 400}
+
+	
 		self["balance"] = self.getTotalFunds()
 
 		self["contracts"] = dict()

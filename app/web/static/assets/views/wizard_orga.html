@@ -280,11 +280,11 @@
 														</div>
 														<div class="col-md-4 input-group-sm bootstrap-touchspin">
 															<label for="quorum_value"> Quorum : </label>
-															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.quorum" ng-init="orga_form.rules.quorum = 50">
+															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.rules.quorum" ng-init="orga_form.rules.quorum = 50">
 														</div>
 														<div class="col-md-4 input-group-sm bootstrap-touchspin">
 															<label for="majority_value"> Majority : </label>
-															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.majority" ng-init="orga_form.rules.majority = 50">
+															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.rules.majority" ng-init="orga_form.rules.majority = 50">
 														</div>
 													</fieldset>
 
@@ -412,6 +412,10 @@
 														<legend>
 															Adding funds yo your organisation
 														</legend>
+														<div class="input-group-sm bootstrap-touchspin">
+															<label for="initial_funds"> Amount to be sent as initial funds (will use your own funds) : </label>
+															<input id="initial_funds" type="number" value="0" touchspin data-min="0" data-max="999999999" data-step="1" data-decimals="0"  data-postfix="eth" ng-model="orga_form.initial_funds" ng-init="orga_form.initial_funds = 0">
+														</div>
 
 
 													</fieldset>
