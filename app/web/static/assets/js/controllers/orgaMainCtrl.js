@@ -68,10 +68,11 @@
    };
 
    ctrl.isCurrentUserInvitedToOrga = function () {
-        if (typeof $rootScope.user !== 'undefined') {
-            $scope.isInvitedToOrga = false;
-            return;
-        }
+        // if (typeof $rootScope.user !== 'undefined') {
+        //     console.log("hello");
+        //     $scope.isInvitedToOrga = false;
+        //     return;
+        // }
         for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
         {
             if ($rootScope.user.pending_invitation[i].type === "organisation")
@@ -85,7 +86,6 @@
         }
 
         $scope.isInvitedToOrga = false;
-        $scope.apply();
    };
 
     /**

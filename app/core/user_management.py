@@ -154,11 +154,11 @@ def acceptInvitation(user, data):
 		ret = base_orga.joinOrga(user, data["password"], str(orga["_id"]), item["tag"])
 		if (ret["status"] == 200):
 			del orga["invited_users"][str(user["_id"])]
-			orga.save()
+			orga.save_partial()
 			for item in user["pending_invitation"]:
 				if item["id"] == str(orga["_id"]):
 					user["pending_invitation"].remove(item)
-			user.save()
+			user.save_partial()
 			return({"data":"invitation accepted", "status":200})
 		else:
 			return ret

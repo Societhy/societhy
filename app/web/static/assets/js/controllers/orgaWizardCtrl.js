@@ -236,7 +236,7 @@
            controller: function($uibModalInstance, $scope, user_id, rights, orga_form) {
             $scope.selected_tag = "member";
             $scope.rights = rights;
-            $scope.user_id = user_id
+            $scope.user_id = user_id;
             $scope.orga_form = orga_form;
         },
         size: 'lg',
