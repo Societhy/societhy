@@ -79,9 +79,10 @@ contract Societhy is mortal, BoardRoom {
     }
 
     function donate() payable {
-        if (registry.memberId(msg.sender) != 0 && msg.value > 0) {
-            registry.madeDonation(msg.sender, msg.value);
-        }
+        // if (address(registry) != 0
+        //      && registry.memberId(msg.sender) != 0 && msg.value > 0) {
+        //     registry.madeDonation(msg.sender, msg.value);
+        // }
         DonationMade(msg.sender, msg.value, true);
     }
 }

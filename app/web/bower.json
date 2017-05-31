@@ -116,7 +116,8 @@
     "angular-socket-io": "latest",
     "bootstrap-select": "latest",
     "angularjs-slider": "latest",
-    "angucomplete-alt":"latest"
+    "angucomplete-alt":"latest",
+    "datatable": "latest"
   },
   "resolutions": {
     "angular-cookies": "~1.5.7",

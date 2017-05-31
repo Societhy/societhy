@@ -1,0 +1,19 @@
+<div id="administration" ng-controller="orgaAdministrationController">
+  <div id="administrationMenuButton">
+    <a href="#" id="toggle"><span></span></a>
+  </div>
+  <div id="administrationMenu">
+    <ul>
+      <li ng-click="admin.displayTransactions()">Display Transactions</li>
+      <li ng-click="admin.displayMembers()">Display Members</li>
+      <li ng-click="admin.displayProject()">Display Project</li>
+      <li ng-click="admin.addTransaction()">Add a new Transaction</li>
+      <li ng-click="admin.extractAdminData()">Extract Admin Data</li>
+      <li ng-click="admin.manageRights()">Manage Rights</li>
+    </ul>
+  </div>
+  <div id="administrationContent">
+    <div data-ng-include="admin.current"></div>
+  </div>
+</div>
+  

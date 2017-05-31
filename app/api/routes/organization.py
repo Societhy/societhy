@@ -143,6 +143,17 @@ def getOrgaHisto():
     ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateOrgaRights', methods=['POST'])
+def updateOrgaRights():
+    ret = base_orga.updateOrgaRights(request.json.get('orga_id'), request.json.get('rights'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/updateMemberTag', methods=['POST'])
+def updateMembertag():
+    ret = base_orga.updateMemberTag(request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
 def createOffer(user):
@@ -184,6 +195,15 @@ def voteForProposal(user):
 def executeProposal(user):
     if ensure_fields(['password', 'socketid', 'orga_id', 'proposal_id'], request.json):
         ret = base_orga.executeProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal_id'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
+@router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
+@requires_auth
+def getOrgaTransaction(user, orga_id):
+    if orga_id:
+        ret = base_orga.getOrgaTransaction(user)
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
