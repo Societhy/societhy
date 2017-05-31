@@ -1,7 +1,7 @@
 pragma solidity ^0.4.7;
 
 import "Rules.sol";
-import "examples/StandardTokenFreezer.sol";
+import "StandardTokenFreezer.sol";
 import "BoardRoom.sol";
 
 contract LiquidDemocracyRules is Rules {

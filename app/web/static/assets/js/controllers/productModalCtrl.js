@@ -8,8 +8,8 @@ app.controller('ProductModalController', function($scope, $http, $sessionStorage
     };
 
     var productImageUploader = $scope.productImageUploader = new FileUploader({
-        url: '/productImageUploader',
-        alias: 'product',
+        url: '/productImageUpload',
+        alias: 'prodImg',
         headers: {
             Authentification: $sessionStorage.SociethyToken
         }
@@ -23,9 +23,17 @@ app.controller('ProductModalController', function($scope, $http, $sessionStorage
         }
     });
 
+	productImageUploader.onCompleteAll = function() {
+		$uibModalInstance.dismiss('finished');
+	}
+
     $scope.cancel = function() {
         $uibModalInstance.dismiss('canceled');
     }
+
+	$scope.removeImage = function(index) {
+		// productImageUploader.removeFromQueue(index);
+	}
 
     $scope.form = {
         submit: function(form) {
@@ -34,8 +42,14 @@ app.controller('ProductModalController', function($scope, $http, $sessionStorage
                 if (sendProduct.isDigital) {sendProduct.shippingMode = ""};
                 $http.post('/addNewProduct', sendProduct).then(function(response) {
                     sendProduct.id = response.data._id;
-                    //ENVOYER L'IMAGE
-                    $uibModalInstance.dismiss('finished');
+					for (var i = 0; i != productImageUploader.queue.length; i++) {
+						productImageUploader.queue[i].formData.push({"prod_id":sendProduct.id, "type":productImageUploader.queue[i].file.type});
+					}
+          if (productImageUploader.queue.length != 0) {
+            productImageUploader.uploadAll();
+          } else {
+            $uibModalInstance.dismiss('finished');
+          }
                 }, function(error) {
                     console.log(error);
                 });

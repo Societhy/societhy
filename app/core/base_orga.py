@@ -96,8 +96,8 @@ def createOrga(user, password, newOrga):
 	
 	rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
 	token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
+	token_freezer_contract = governances.get(newOrga["gov_model"]).get('tokenFreezerContract')
 	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
-
 
 	instance = governances[newOrga["gov_model"]]["templateClass"](
 		doc=newOrga,
@@ -105,6 +105,7 @@ def createOrga(user, password, newOrga):
 		board_contract='Societhy',
 		rules_contract=rules_contract,
 		token_contract=token_contract,
+		token_freezer_contract=token_freezer_contract,
 		registry_contract=registry_contract,
 		gen_skel=True)
 	try:

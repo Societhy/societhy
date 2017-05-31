@@ -1,6 +1,6 @@
 pragma solidity ^0.4.7;
 
-import "examples/StandardToken.sol";
+import "StandardToken.sol";
 
 contract StandardTokenFreezerInterface {
   function freezeAllowance(uint _daysToThaw) returns (uint amountFrozen) {}

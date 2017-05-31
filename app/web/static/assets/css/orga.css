@@ -99,7 +99,7 @@
     width:		250px;
 }
 
-/* 
+/*
 ** TIMELINE CSS
 */
 
@@ -231,7 +231,7 @@
 }
 
 /*
-** TIMELINE CSS BOOTSTRAP 
+** TIMELINE CSS BOOTSTRAP
 */
 
 
@@ -266,7 +266,7 @@
     }
 }
 
-/* 
+/*
 ** TIMELINE CSS 4
 */
 
@@ -806,69 +806,10 @@ table.dataTable thead th {
 #orgaRightsSelector div {
     padding: 8px;
 }
-/*
-#administration {
-    margin: -15px 0 0 -15px;
+/**
+ * Rating stars
+ */
+.glyphicon-star, .glyphicon-star-empty {
+  color:orange;
+  font-size: 1.7em;
 }
-
-#administration #adminMenu #adminMenuHeader {
-    text-align: center;
-    font-size: 24px;
-    font-style: italic;
-    text-decoration: underline;
-    background-color: #15232d;
-    color: white;
-    padding: 20px 8px;
-}
-
-#administration #adminMenu ul .dropdownArrow {
-    display: block;
-    font-size: 20px;
-    position:relative
-}
-
-#administration #adminMenu ul.active .dropdownArrow {
-    top: 8px;
-}
-
-#administration #adminMenu ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: center;
-}
-
-#administration #adminMenu > ul > li {    
-    background-color: #1c2b36;
-    border-bottom: 1px solid #373b4a;
-    padding: 20px 0 0 0;
-}
-
-#administration #adminMenu > ul > li > ul > li {
-    background-color: #101b23;
-    padding: 12px 8px;
-    color: #a7b1c2;
-}
-
-#administration #adminMenu > ul > li > ul > li::hover {
-    color: #d7e4f8;
-}
-
-#administration #adminMenu ul li i {
-    color: #3e5b71;
-    font-size: 24px;
-}
-
-#administration #adminMenu ul li span {
-    color: white;
-    font-size: 18px;
-}
-
-#administration #adminMenu {
-    margin: 0 !important;
-    padding: 0;
-}
-
-#administration #administrationContent {
-    padding: 15px;
-}
-*/

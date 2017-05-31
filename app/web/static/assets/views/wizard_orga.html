@@ -252,14 +252,10 @@
 													<fieldset class="text-extra-large">
 														<legend>Model description</legend>
 														<div class="col-md-6">
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][0]}}</span>
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][1]}}</span>
-															<span class="block"><i class="fa fa-check-circle padding-10"></i>{{governance_types[orga_form.gov_model]["pros"][2]}}</span>
+															<span ng-repeat="model in governance_types[orga_form.gov_model]['pros']" class="block"><i class="fa fa-check-circle padding-10"></i>{{model}}</span>
 														</div>
 														<div class="col-md-6">
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][0]}}</span>
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][1]}}</span>
-															<span class="block"><i class="fa fa-times-circle padding-10"></i>{{governance_types[orga_form.gov_model]["cons"][2]}}</span>
+															<span ng-repeat="model in governance_types[orga_form.gov_model]['cons']" class="block"><i class="fa fa-times-circle padding-10"></i>{{model}}</span>
 														</div>
 														<div class="col-md-12">
 															<br><br>

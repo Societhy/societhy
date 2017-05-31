@@ -1,9 +1,9 @@
 pragma solidity ^0.4.7;
 
-import "examples/OpenRegistry.sol";
+import "OpenRegistry.sol";
 import "Rules.sol";
 import "BoardRoom.sol";
-import "examples/StandardCampaign.sol";
+import "StandardCampaign.sol";
 
 contract CampaignRules is Rules {
 
