@@ -9,14 +9,16 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 			       {url: "static/assets/views/partials/orga/administration/transaction.html"},
 			       {url: "static/assets/views/partials/orga/administration/manageRights.html"}],
 			current: "static/assets/views/partials/orga/administration/transaction.html",
-			rights: {current: "none",
-				 size: Object.keys($rootScope.currentOrga.rights["default"]).length}}
+			rights: {current: "none"},
+			members: {}};
     // ADD DEFAULT RIGHT
-    // DEplacer le suser d'un un job dans un autre
+    // Deplacer le suser d'un un job dans un autre
+    // LA SECU !!!!
     
-    console.log($rootScope.admin.rights);
-    console.log($rootScope.currentOrga.rights["default"]);
-	// animate menu Icon
+    
+
+
+    // animate menu Icon
 	var theToggle = document.getElementById('toggle');
 	theToggle.onclick = function() {
 	    $(this).toggleClass("on");
@@ -26,7 +28,21 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    return false;
 	}
 
-    
+    $rootScope.admin.members.tagChanged = function(addr) {
+	$("button[val='"+addr+"']").prop("disabled", false);
+    }
+
+    $rootScope.admin.members.saveChangedTag = function(addr) {
+	console.log(addr);
+	$http.post('/updateMemberTag', {
+	    "orga_id": $rootScope.currentOrga._id,
+	    "addr": addr,
+	    "tag": $rootScope.currentOrga.members[addr].tag
+	}).then(function(response) {	
+	    $("button[val='"+addr+"']").prop("disabled", true);
+	    console.log(response)
+	});
+    }
     $rootScope.admin.rights.updateSelected = function (id, index) {
 	$rootScope.admin.rights.current = id;
 	$(".currentRight").removeClass("currentRight");
@@ -41,7 +57,10 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
     $rootScope.admin.rights.removeRight = function (id) {
 	delete $rootScope.currentOrga.rights[id];
     }
-/*    $rootScope.admin.rights.newRight = function (id, index) {
+
+
+
+    /*    $rootScope.admin.rights.newRight = function (id, index) {
 	    $http.post('/addRightToOrga', {
 	    "orga_id": $rootScope.currentOrga._id,
 	    "name": $("newOrgaRight").val().
@@ -95,23 +114,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 
 	$rootScope.admin.displayMembers = function () {
 	    $rootScope.admin.current = $rootScope.admin.menu[1]["url"];
-	    $("#adminTable").DataTable({data: [
-					    [
-						"Tiger Nixon",
-						"Member",
-						'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#editMmber">Edit</button>',
-						"active",
-						'<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#ediMember">SendTransaction</button>',
-					    ],
-					    [
-						"Garrett Winters",
-						"Member",
-						'<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#editMembr">Edit</button>',
-						"Inactive",
-						'<button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#editember">SendTransaction</button>',
-					    ]
-					    ]
-				       });
+	    $("#adminTable").DataTable({});
 	    
 	}
     

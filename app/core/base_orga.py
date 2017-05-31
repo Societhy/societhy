@@ -229,9 +229,20 @@ def updateOrgaRights(orga_id, rights):
 	orga_id : string for the mongo id
 	"""
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
-	print(orga["rights"])
 	orga["rights"] = rights;
-	print(orga["rights"])
+	orga.save_partial()
+	return {
+		"data": "allgood",
+		"status": 200
+	}
+
+def updateMemberTag(orga_id, addr, tag):
+	"""
+	user : UserDoc
+	orga_id : string for the mongo id
+	"""
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	orga["members"][addr]["tag"] = tag;
 	orga.save_partial()
 	return {
 		"data": "allgood",

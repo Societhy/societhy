@@ -85,7 +85,7 @@
         }
 
         $scope.isInvitedToOrga = false;
-        $scope.apply();*/
+        $scope.apply();
    };
 
     /**

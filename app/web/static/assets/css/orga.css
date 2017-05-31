@@ -681,6 +681,14 @@ table.dataTable thead th {
     width: 100%;
 }
 
+#administrationContent table {
+    text-transform: capitalize;
+}
+
+#administrationContent > div > div {
+    margin: 15px 8px;
+}
+
 #administrationContent h2 {
     text-align: center;
 }

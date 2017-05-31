@@ -148,6 +148,11 @@ def updateOrgaRights():
     ret = base_orga.updateOrgaRights(request.json.get('orga_id'), request.json.get('rights'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/updateMemberTag', methods=['POST'])
+def updateMembertag():
+    ret = base_orga.updateMemberTag(request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
