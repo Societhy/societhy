@@ -17,8 +17,10 @@ def test_genBaseKey():
 def test_genLinkedKey(user):
 	ret = keys.genLinkedKey(user, "test")
 	user.update()
-	assert ret.get('data') in user.get('eth').get('keys')
-	assert eth_cli.eth_getBalance(ret.get('data')) == 0
+	address = ret.get('data')
+	assert address in user.get('eth').get('keys')
+	assert eth_cli.eth_getBalance(address) == 0
+	user.setDefaultKey(address)
 	assert user.unlockAccount(password="test") == True
 
 def test_keyWasGenerated(user):

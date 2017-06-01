@@ -220,7 +220,6 @@ class OrgaDocument(Document):
 				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
 				if not tx_hash:
 					return {"data": "User does not have permission to donate", "status": 400}	
-				print(" ---- INITIAL DONATION IS MADE ----", tx_hash)
 			else:
 				return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 
@@ -236,7 +235,6 @@ class OrgaDocument(Document):
 		self.save()
 
 		for item in self.get('invited_users'):
-			print("ITERATE ON INVITED USERS")
 			notif = Notification({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
@@ -278,6 +276,18 @@ class OrgaDocument(Document):
 					self["members"][new_member.get('account')] = public_member
 					self.save_partial();
 					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
+
+		return False
+
+	def permissionChanged(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
+		The organisation is returned alongside the rights of the new member
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_member = users.find_one({"account": address})
 
 		return False
 
@@ -454,6 +464,12 @@ class OrgaDocument(Document):
 		if not self.can(user, "join"):
 			return False
 
+		## WE SHOULD CHECK RIGHT BEFORE BUT ITS NOT WORKING
+		if self.get('rules').get('accessibility') == 'private':
+			isAllowed = self.registry.call('isAllowed', local=True, args=[user.get('account')])
+			if not isAllowed:
+				return False
+
 		tx_hash = self.registry.call('register', local=local, from_=user.get('account'), args=[user.get('account'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.registry.getAbi("NewMember").get('signature'), user.get('account'))
@@ -464,6 +480,28 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def allow(self, user, allowed_user, action, password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
+
+		# if not self.can(user, "edit_rights"):
+		# 	return False
+
+		print('_________________________-', user.get('account'), allowed_user)
+		tx_hash = self.registry.call('allow', local=local, from_=user.get('account'), args=[allowed_user], password=password)
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("PermissionChanged", tx_hash, self.registry["address"], callbacks=[self.permissionChanged], users=user, event_abi=self.registry["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
 
 	def leave(self, user, password=None, local=False):
 		"""
@@ -476,7 +514,7 @@ class OrgaDocument(Document):
 		if not self.can(user, "leave"):
 			return False
 
-		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), password=password)
+		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), args=[user.get('account')], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.registry.getAbi("MemberLeft").get('signature'), user.get('account'))
 
@@ -557,7 +595,6 @@ class OrgaDocument(Document):
 		except KeyError as e:
 			return "missing param"
 		
-		print("---------", args)
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
@@ -663,7 +700,8 @@ class OrgaCollection(Collection):
 		"contract_id",
 		"description",
 		"balance",
-		"social_accounts"
+		"social_accounts",
+		"contracts"
 	]
 
 	structure = {

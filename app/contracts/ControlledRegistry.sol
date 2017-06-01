@@ -4,10 +4,7 @@ import "Registry.sol";
 
 contract ControlledRegistry is Registry {
 
-	address owner;
-
-	// mapping(address => mapping(bytes4 => bool)) rights;
-	mapping(address => bool) public rights;
+	event PermissionChanged(address indexed member, bool right);
 
 	modifier onlyAllowed {
 		if (rights[msg.sender] != true) throw;
@@ -20,13 +17,14 @@ contract ControlledRegistry is Registry {
 		rights[msg.sender] = true;
 	}
 
-	function register(address _someMember, string _tag) public onlyAllowed {
+	function register(address _someMember, string _tag) public returns (bool) {
 		uint id;
 		if (memberId[_someMember] == 0) {
 			memberId[_someMember] = members.length;
 			id = members.length++;
 			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now});
 			NewMember(_someMember, _tag);
+			return true;
 		}
 		else throw;
 	}
@@ -49,6 +47,15 @@ contract ControlledRegistry is Registry {
 			list[i] = members[i].member;
 		}
 		return list;
+	}
+
+	function allow(address _someMember) public onlyAllowed {
+		rights[_someMember] = true;
+		PermissionChanged(_someMember, true);
+	}
+
+	function isAllowed(address _someMember) public constant returns (bool) {
+		return rights[_someMember];
 	}
 
 	function madeDonation(address _from, uint _value) {

@@ -14,6 +14,9 @@ from rlp.utils import encode_hex
 from ethereum._solidity import compile_file, get_solidity
 from ethereum.abi import encode_abi
 
+class SolidityCompileError(Exception):
+	pass
+
 class ContractDocument(Document):
 	"""
 	Variables represents the fields in the database.
@@ -49,6 +52,8 @@ class ContractDocument(Document):
 		"""
 		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
 		compiled = compile_file(self["contract_file"]).get(solc_key)
+		if len(compiled) == 0:
+			raise SolidityCompileError
 		self["evm_code"] = '0x' + compiled.get('bin_hex')
 		self["abi"] = compiled.get('abi')
 		for abi_item in self["abi"]:
