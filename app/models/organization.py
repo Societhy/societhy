@@ -363,11 +363,13 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
+		print("LOGS: ", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
 			proposal_id = int(logs[0].get('topics')[1], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
 			value = int(logs[0].get('topics')[3], base=16)
 			new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
+			print("---> ", new_proposal)
 			if destination not in self["proposals"]:
 				return False
 			self["proposals"][destination].update(new_proposal)
@@ -493,7 +495,6 @@ class OrgaDocument(Document):
 		# if not self.can(user, "edit_rights"):
 		# 	return False
 
-		print('_________________________-', user.get('account'), allowed_user)
 		tx_hash = self.registry.call('allow', local=local, from_=user.get('account'), args=[allowed_user], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("PermissionChanged", tx_hash, self.registry["address"], callbacks=[self.permissionChanged], users=user, event_abi=self.registry["abi"]))
@@ -628,10 +629,12 @@ class OrgaDocument(Document):
 		deploy proposal contract and set callback
 		return tx_hash
 		"""
+		offer = self['proposals'][proposal.get('destination')]["offer"]
 		try:
-			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], proposal['value']]
+			value = str(int(offer.get('initialWithdrawal')) + int(offer.get('dailyWithdrawalLimit')) * 30 * int(offer.get('duration')))
+			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], value]
 			calldata = '0x' + encode_hex(eth_cli._encode_function('sign()', []))
-			callvalue = (proposal['destination'] + str(proposal['value']) + calldata).encode()
+			callvalue = (proposal['destination'] + str(value) + calldata).encode()
 			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
 			args.append(hashed_callvalue)
 		except KeyError:
@@ -651,7 +654,7 @@ class OrgaDocument(Document):
 		can sender vote
 		send tx and return hash
 		"""
-		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+		tx_hash = self.board.call('vote', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[], users=user, event_abi=self.board["abi"]))
