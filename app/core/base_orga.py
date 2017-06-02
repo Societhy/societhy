@@ -449,6 +449,16 @@ def voteForProposal(user, password, orga_id, proposal_id, vote):
 		"status": 200
 	}
 
+def refreshProposals(orga_id):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	ret = orga_instance.refreshProposals()
+	return {
+		"data": ret,
+		"status": 200
+	}
+
 def executeProposal(user, password, orga_id, proposal_id):
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:

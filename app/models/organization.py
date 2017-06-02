@@ -1,5 +1,5 @@
 from bson import ObjectId
-
+import datetime
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
@@ -363,19 +363,41 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		print("LOGS: ", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
 			proposal_id = int(logs[0].get('topics')[1], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
 			value = int(logs[0].get('topics')[3], base=16)
-			new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
-			print("---> ", new_proposal)
-			if destination not in self["proposals"]:
-				return False
-			self["proposals"][destination].update(new_proposal)
-			self["proposals"][destination]["offer"]["status"] = "debating"
-			self.save_partial()
-			return self
+			if destination in self["proposals"]:
+				new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
+				self["proposals"][destination].update(new_proposal)
+				self["proposals"][destination]["status"] = "debating"
+				self["proposals"][destination]["votes_count"] = 0
+				self["proposals"][destination]["participation"] = 0
+				self["proposals"][destination]["time_left"] = 100
+				self.save_partial()
+				return self
+		return False
+
+	def voteCounted(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		print("LOGS: ", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			position = int(logs[0].get('topics')[2], base=16)
+			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
+			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
+			if destination in self["proposals"]:
+				self["proposals"][destination]["votes_count"] += 1
+				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
+
+				time_since_creation = datetime.datetime.utcnow().timestamp() - self["proposals"][destination]["created_on"]
+				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
+
+				self.save_partial()
+				return self
 		return False
 
 
@@ -621,7 +643,7 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-	def createProposal(self, user, proposal, password=None):
+	def createProposal(self, user, offer_addr, password=None):
 		"""
 		canSenderPropose
 		check proposal (_name, _type, , _description, _debatePeriod, _destination, _value, _calldata)
@@ -629,12 +651,12 @@ class OrgaDocument(Document):
 		deploy proposal contract and set callback
 		return tx_hash
 		"""
-		offer = self['proposals'][proposal.get('destination')]["offer"]
+		offer = self['proposals'][offer_addr]["offer"]
 		try:
 			value = str(int(offer.get('initialWithdrawal')) + int(offer.get('dailyWithdrawalLimit')) * 30 * int(offer.get('duration')))
-			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], value]
+			args = [offer['name'], self["rules"]["default_proposal_duration"], offer_addr, value]
 			calldata = '0x' + encode_hex(eth_cli._encode_function('sign()', []))
-			callvalue = (proposal['destination'] + str(value) + calldata).encode()
+			callvalue = (offer_addr + str(value) + calldata).encode()
 			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
 			args.append(hashed_callvalue)
 		except KeyError:
@@ -649,19 +671,43 @@ class OrgaDocument(Document):
 			return False
 
 
-	def voteForProposal(self, user, proposal, password=None):
+	def voteForProposal(self, user, proposal_id, vote, password=None):
 		"""
 		can sender vote
 		send tx and return hash
 		"""
-		tx_hash = self.board.call('vote', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+		tx_hash = self.board.call('vote', local=False, from_=user.get('account'), args=[proposal_id, vote], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("VoteCounted", tx_hash, self.board["address"], callbacks=[self.voteCounted], users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
 			return False
+
+	def refreshProposals(self):
+		"""
+		compute quorum and time left for a proposal and return the new list
+		"""
+		for proposal in self["proposals"].values():
+			if proposal["status"] == "debating":
+				time_since_creation = datetime.datetime.utcnow().timestamp() - proposal["created_on"]
+				proposal["time_left"] = 100 - int((time_since_creation / proposal["debate_period"]) * 100)
+				if proposal["time_left"] < 0:
+					self.endProposal(proposal)
+		self.save_partial()
+		return self
+
+	def endProposal(self, proposal):
+		if proposal["participation"] < self["rules"]["quorum"]:
+			proposal["status"] = "denied"
+			return
+		proposal["nay"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 0])
+		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
+		if proposal["yea"] > proposal["nay"]:
+			proposal["status"] = "approved"
+		else:
+			proposal["status"] = "denied"
 
 	def executeProposal(self, user, proposal, password=None):
 		"""

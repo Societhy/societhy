@@ -51,13 +51,7 @@ def test_create_offer(miner, testOrga):
 from pprint import pprint
 def test_create_proposal(miner, testOrga):
 	for index, proposal in enumerate(testOrga.get('proposals').values()):
-		test_proposal = {
-			"name": "NEW KILLER PROPOSAL",
-			"destination": proposal.get('offer').get('address'),
-			# "value": int(proposal.get('offer').get('initialWithdrawal')) + int((proposal.get('offer').get('dailyWithdrawalLimit')) * 30 * int(proposal.get('offer').get('duration'))),
-		}
-		# print("------------------",  proposal.get('offer').get('initialWithdrawal'), (proposal.get('offer').get('dailyWithdrawalLimit') * 30 * proposal.get('offer').get('duration')))
-		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), test_proposal)
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
 		assert ret.get('status') == 200	
 		assert ret.get('data') != None
 		bw.waitEvent('ProposalCreated')

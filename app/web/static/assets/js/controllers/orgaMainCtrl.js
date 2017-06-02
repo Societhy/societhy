@@ -8,8 +8,8 @@
    $scope.isMember = false;
    ctrl.wallet = $controller("WalletController");
 
-    $scope.listProducts = [];
-    $scope.reviewList = [];
+   $scope.listProducts = [];
+   $scope.reviewList = [];
    var slides = $scope.slides = [];
    var currIndex = 0;
 
@@ -29,45 +29,45 @@
      if ($scope.currentProd) {
        $scope.reviewList = $scope.currentProd.reviewList;
      }
+   }
+
+   ctrl.sendReview = function() {
+    productId = $scope.currentProd._id.$oid;
+    console.log(this.review);
+    console.log(this.rate);
+    reviewPack = {
+      review: this.review,
+      rate: this.rate,
+      date: new Date(),
+      user: {
+        name: $rootScope.user.name,
+        id: $rootScope.user._id
+      }
+    };
+
+    $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
+      console.log(response);;
+    }, function(error) {
+      console.log(error);
+    });
   }
 
-  ctrl.sendReview = function() {
-      productId = $scope.currentProd._id.$oid;
-      console.log(this.review);
-      console.log(this.rate);
-      reviewPack = {
-          review: this.review,
-          rate: this.rate,
-          date: new Date(),
-          user: {
-              name: $rootScope.user.name,
-              id: $rootScope.user._id
-          }
-      };
-
-      $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
-          console.log(response);;
-      }, function(error) {
-          console.log(error);
+  ctrl.acceptInvit = function () {
+    if ($scope.doVerifications()) {
+     $scope.completeBlockchainAction(function(password) {
+       $http.post('/acceptInvitation',
+       {
+         "orga_id": $rootScope.currentOrga._id,
+         "password": password,
+         "socketid": $rootScope.sessionId
+       }).then(function (response) {
+        console.log(response);
       });
-  }
+     });
+   }
+ };
 
-   ctrl.acceptInvit = function () {
-        if ($scope.doVerifications()) {
-             $scope.completeBlockchainAction(function(password) {
-                 $http.post('/acceptInvitation',
-                     {
-                         "orga_id": $rootScope.currentOrga._id,
-                         "password": password,
-                         "socketid": $rootScope.sessionId
-                     }).then(function (response) {
-                        console.log(response);
-                 });
-             });
-        }
-   };
-
-   ctrl.isCurrentUserInvitedToOrga = function () {
+ ctrl.isCurrentUserInvitedToOrga = function () {
         // if (typeof $rootScope.user !== 'undefined') {
         //     console.log("hello");
         //     $scope.isInvitedToOrga = false;
@@ -75,18 +75,18 @@
         // }
         for(var i = 0; i < $rootScope.user.pending_invitation.length; i++)
         {
-            if ($rootScope.user.pending_invitation[i].type === "organisation")
+          if ($rootScope.user.pending_invitation[i].type === "organisation")
+          {
+            if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga._id)
             {
-                if ($rootScope.user.pending_invitation[i].id === $rootScope.currentOrga._id)
-                {
-                    $scope.isInvitedToOrga = true;
-                    return;
-                }
+              $scope.isInvitedToOrga = true;
+              return;
             }
+          }
         }
 
         $scope.isInvitedToOrga = false;
-   };
+      };
 
     /**
      * Opens the new product modal.
@@ -113,13 +113,13 @@
      * Get the product list for the current organizations.
      * @method loadProducts
      */
-    ctrl.loadProducts = function() {
-        $http.get('/getOrgaProducts/'.concat($rootScope.currentOrga._id)).then(function(response) {
-            if (response.status == 200) {
-                $scope.listProducts = JSON.parse(response.data);
-                ctrl.setProduct($scope.listProducts[0]);
-            }
-        });
+     ctrl.loadProducts = function() {
+      $http.get('/getOrgaProducts/'.concat($rootScope.currentOrga._id)).then(function(response) {
+        if (response.status == 200) {
+          $scope.listProducts = JSON.parse(response.data);
+          ctrl.setProduct($scope.listProducts[0]);
+        }
+      });
     }
 
     /**
@@ -130,12 +130,14 @@
       $http.post('/getOrganization', {
         "id": $state.params._id
       }).then(function(response) {
-        $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+        if (response.data.orga) {
+          $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+        }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
-        ctrl.isCurrentUserInvitedToOrga();
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
         if ($rootScope.user) {
           $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
+          ctrl.isCurrentUserInvitedToOrga();
         }
       }, function(error) {
         $state.go('app.dashboard');
@@ -174,7 +176,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-  ctrl.leaveOrga = function() {
+   ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(
@@ -227,14 +229,6 @@
        console.log(response);
      });
     }
-
-    ctrl.createOffer = function () {
-
-    };
-
-    ctrl.create  = function () {
-
-    };
 
 	/**
 	 * Make a donation to the organization.
@@ -403,7 +397,8 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
         ($rootScope.slider.begin),
         ($rootScope.slider.end));
     };
-    initHisto();
+    if ($rootScope.currentOrga)
+      initHisto(); 
     return ctrl;
 
   });
@@ -433,11 +428,15 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "approved": "has been approved.",
     "denied": "has been denied."
   }
-  ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
-  ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
-  console.log("proposals", ctrl.proposal_list)
-  for (let i = 0; i != ctrl.proposal_list.length; i++) {
-    ctrl.proposal_list[i].expand = false;
+
+  if ($rootScope.currentOrga) {
+    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+
+    console.log("proposals", ctrl.proposal_list)
+    for (let i = 0; i != ctrl.proposal_list.length; i++) {
+      ctrl.proposal_list[i].expand = false;
+    }
   }
 
   ctrl.proposalLookup = function(item) {
@@ -459,6 +458,26 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
 
 ctrl.submitProposal = function(proposal) {
   console.log(proposal);
+  if ($rootScope.currentRights.create_proposal == true) {
+   $scope.completeBlockchainAction(
+    function(password) {
+     $rootScope.toogleWait("Creating proposal...")
+     $http.post('/createProposal', {
+      "password": password,
+      "socketid": $rootScope.sessionId,
+      "orga_id": $rootScope.currentOrga._id,
+      "offer": proposal.offer.address
+    }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+   }, function(data) {
+    $rootScope.currentOrga = data.data;
+    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+
+    console.log($rootScope.currentOrga.proposals, ctrl.proposal_list)
+  })
+ } else {
+   $rootScope.toogleError("You don't have the right to turn this offer into a proposal")
+ }
 }
 
 ctrl.submitOffer = function() {
@@ -475,5 +494,40 @@ ctrl.submitOffer = function() {
 });
 }
 
+ctrl.voteForProposal = function(proposal, vote) {
+  if ($rootScope.currentRights.vote_proposal == true) {
+   $scope.completeBlockchainAction(
+    function(password) {
+     $rootScope.toogleWait("Voting...")
+     $http.post('/voteForProposal', {
+      "password": password,
+      "socketid": $rootScope.sessionId,
+      "orga_id": $rootScope.currentOrga._id,
+      "proposal_id": proposal.proposal_id,
+      "vote": vote
+    }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+   }, function(data) {
+    $rootScope.currentOrga = data.data;
+    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+
+    console.log($rootScope.currentOrga.proposals, ctrl.proposal_list)
+  })
+ } else {
+   $rootScope.toogleError("You don't have the right to vote for this proposal...")
+ }
+}
+
+ctrl.refreshProposals = function() {
+  if ($rootScope.currentOrga) {
+    $http.get('/refreshProposals/'.concat($rootScope.currentOrga._id))
+    .then(function(data) {
+     $rootScope.currentOrga = data.data;
+     ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+     ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+     console.log(ctrl.proposal_list);
+   });
+  }
+}
 return ctrl;
 });
