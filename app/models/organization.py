@@ -643,6 +643,21 @@ class OrgaCollection(Collection):
 		"social_accounts"
 	]
 
+	default_rights = {
+		"join": False,
+		"leave": False,
+		"donate": False,
+		"edit_right": False,
+		"create_project": False,
+		"create_offer": False,
+		"create_proposal": False,
+		"vote_proposal": False,
+		"recruit": False,
+		"remove_members": False,
+		"sell_token": False,
+		"buy_token": False
+        }
+        
 	structure = {
 		"name": str,
 		"members": dict,

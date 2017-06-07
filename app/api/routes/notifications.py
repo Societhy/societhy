@@ -5,7 +5,6 @@ from core import user_management, notifications
 from api import requires_auth
 router = Blueprint('notifications', __name__)
 
-
 @router.route('/getUserUnreadNotification', methods=['GET'])
 @requires_auth
 def updateSingleUserField(user):

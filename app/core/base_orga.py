@@ -217,7 +217,7 @@ def getOrgaTransaction(user):
 	orga_id : string for the mongo id
 	"""
 
-	trans = transactions.find_all({},{"_id": 0});
+	trans = transactions.find_one({},{"_id": 0});
 	return {
 		"data": trans,
 		"status": 200
@@ -225,27 +225,37 @@ def getOrgaTransaction(user):
 
 def updateOrgaRights(orga_id, rights):
 	"""
-	user : UserDoc
 	orga_id : string for the mongo id
+        rights : data to be push in the database
 	"""
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	orga["rights"] = rights;
 	orga.save_partial()
 	return {
-		"data": "allgood",
+		"data": orga["rights"],
+		"status": 200
+	}
+
+def getOrgaDefaultRights():
+	"""
+	"""
+
+	rights = organizations.default_rights
+	return {
+		"data": rights,
 		"status": 200
 	}
 
 def updateMemberTag(orga_id, addr, tag):
 	"""
-	user : UserDoc
 	orga_id : string for the mongo id
+        rights : data to be push in the database
 	"""
 	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	orga["members"][addr]["tag"] = tag;
 	orga.save_partial()
 	return {
-		"data": "allgood",
+		"data": tag,
 		"status": 200
 	}
 

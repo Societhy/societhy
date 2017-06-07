@@ -207,3 +207,9 @@ def getOrgaTransaction(user, orga_id):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+@router.route('/getOrgaDefaultRights/', methods=['GET'])
+@requires_auth
+def getOrgaDefaultRights(user):
+    ret = base_orga.getOrgaDefaultRights()
+    return make_response(jsonify(ret.get('data')), ret.get('status'))

@@ -24,7 +24,7 @@
 	<tr>
 	  <td>
 	    <div id="orgaRightsMenu">
-	      <div ng-repeat="(id, data) in currentOrga.rights" ng-init="outerIndex = $index" ng-click="admin.rights.updateSelected(id, $index)"
+	      <div ng-repeat="(id, data) in admin.rights.tmp" ng-init="outerIndex = $index" ng-click="admin.rights.updateSelected(id, $index)"
 		   class="orgaRightsMenuField" val="{{$index}}">
 		<span>{{id}}</span>
 		<button class="btn-xs btn-danger" ng-click="admin.rights.removeRight(id)">X</button>
@@ -33,9 +33,9 @@
 	  </td>
 	  <td>
 	    <div id="orgaRightsSelector">
-	      <div ng-repeat="(id, data) in currentOrga.rights[admin.rights.current]" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+	      <div ng-repeat="(id, data) in admin.rights.tmp[admin.rights.current]" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
 		<input type="checkbox" name="{{id}}" value="{{data}}" id="checkboxManageRights{{$index}}"
-		       ng-model="currentOrga.rights[admin.rights.current][id]"
+		       ng-model="admin.rights.tmp[admin.rights.current][id]"
 		       ng-checked="data" ng-true-value="true" ng-false-value="false">
 		<label for="checkboxManageRights{{$index}}">{{id}} </label>
 	      </div>
@@ -44,11 +44,5 @@
 	</tr>
       </tbody>
     </table>
-    <!--
-	<div ng-repeat="(right, bool) in rights[selected_tag]" class="checkbox vertical-center clip-check check-primary check-lg">
-	  <input type="checkbox" id="{{right}}" ng-model="orga_form.invited_users[user_id]['rights'][right]">
-	  <label for="{{right}}">{{right}}</label>
-	</div>
-	-->
   </div>
 </div>
