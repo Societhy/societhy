@@ -383,7 +383,6 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		print("LOGS: ", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
 			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			position = int(logs[0].get('topics')[2], base=16)
@@ -473,8 +472,8 @@ class OrgaDocument(Document):
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberList")]
-		memberList = users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info)
-		return list(memberList)
+		memberList = list(users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
+		return memberList
 
 	def join(self, user, tag="member", password=None, local=False):
 		"""
@@ -699,12 +698,15 @@ class OrgaDocument(Document):
 		return self
 
 	def endProposal(self, proposal):
-		if proposal["participation"] < self["rules"]["quorum"]:
-			proposal["status"] = "denied"
-			return
+
 		proposal["nay"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 0])
 		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
-		if proposal["yea"] > proposal["nay"]:
+
+		proposal["score"] = (float(proposal["yea"] / (proposal["yea"] + proposal["nay"])) * 100) if proposal["participation"] > 0 else 0
+		
+		if proposal["yea"] > proposal["nay"]\
+		   and proposal["participation"] > self["rules"]["quorum"]\
+		   and proposal["score"] > self["rules"]["majority"]:
 			proposal["status"] = "approved"
 		else:
 			proposal["status"] = "denied"

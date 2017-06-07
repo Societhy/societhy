@@ -48,8 +48,8 @@ class Offer(Contract):
 			self["address"] = at
 			self.compile()
 		if init_from_contract and self.get("address"):
-			self["contractor"] = '0x' + self.call('getContractor', local=True)
-			self["client"] = '0x' + self.call('getClient', local=True)
+			self["contractor"] = '0x' + self.call('getContractor', local=True).decode()
+			self["client"] = '0x' + self.call('getClient', local=True).decode()
 			self["creationDate"] = self.call('getCreationDate', local=True)
 			self["hashOfTheProposalDocument"] = self.call('getHashOfTheProposalDocument', local=True)
 			self["initialWithdrawal"] = str(self.call('getInitialWithdrawal', local=True))

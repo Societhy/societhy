@@ -12,9 +12,9 @@ from tests.fixtures import *
 
 from ethjsonrpc import wei_to_ether
 
+bw.run()
 
 def test_transfer(user):
-	bw.resume()
 	keyDirectory = '/societhy/tests/fixtures'
 	to_ = keys.genBaseKey("test").get('address')
 	with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
@@ -33,4 +33,3 @@ def test_refreshBalance(user):
 
 	balance_4 = wallet.refreshBalance(user, "0xdeadbeefdeadbeef")
 	assert balance_4.get('status') == 400
-	bw.stop()
