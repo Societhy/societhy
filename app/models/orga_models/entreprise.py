@@ -65,9 +65,6 @@ class Entreprise(Organization):
 	def launchCrowdfunding(self, params):
 		pass
 
-	def voteForProposal(self, proposal, vote):
-		pass
-
 	def addLegalDocument(self, document):
 		pass
 

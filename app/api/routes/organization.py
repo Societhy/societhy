@@ -175,8 +175,8 @@ def cancelOffer(user, orga_id, offer_id):
 @router.route('/createProposal', methods=["POST"])
 @requires_auth
 def createProposal(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'proposal': ['name', 'destination', 'value']}], request.json):
-        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal'))
+    if ensure_fields(['password', 'socketid', 'orga_id', 'offer'], request.json):
+        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
@@ -189,6 +189,11 @@ def voteForProposal(user):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+@router.route('/refreshProposals/<orga_id>')
+def refreshProposals(orga_id):
+    ret = base_orga.refreshProposals(orga_id)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/executeProposal', methods=["POST"])
 @requires_auth

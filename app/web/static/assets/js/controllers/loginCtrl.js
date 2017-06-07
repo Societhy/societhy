@@ -24,9 +24,6 @@ app.controller('LoginController', function($scope, $rootScope, $http, $sessionSt
     ctrl.login_done = function () {
 	$http.get("/getUserUnreadNotification").then(function (response) {
 		$rootScope.unread_notification = JSON.parse(response.data);
-		console.log("coucou")
-		console.log($rootScope.unread_notification);
-		//$scope.$apply();
     });
 	};
 

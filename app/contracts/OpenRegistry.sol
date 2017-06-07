@@ -13,25 +13,26 @@ contract OpenRegistry is Registry {
 		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now}));
 	}
 
-	function register(address _someMember, string _tag) public {
+	function register(address _someMember, string _tag) public returns (bool){
 		uint id;
 		if (memberId[_someMember] == 0) {
 			memberId[_someMember] = members.length;
 			id = members.length++;
 			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now});
 			NewMember(_someMember, _tag);
+			return true;
 		}
 		else throw;
 	}
 
-	function leave() onlyMembers /* modifier */{
-		for (uint i = memberId[msg.sender]; i<members.length-1; i++){
+	function leave(address _someMember) onlyMembers /* modifier */{
+		for (uint i = memberId[_someMember]; i<members.length-1; i++){
 			members[i] = members[i+1];
 		}
 		delete members[members.length-1];
-		memberId[msg.sender] = 0;
+		memberId[_someMember] = 0;
 		members.length--;
-		MemberLeft(msg.sender);
+		MemberLeft(_someMember);
 	}
 
 	function getMemberList() returns (address[]) {

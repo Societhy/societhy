@@ -97,7 +97,7 @@ def createOrga(user, password, newOrga):
 	rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
 	token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
 	token_freezer_contract = governances.get(newOrga["gov_model"]).get('tokenFreezerContract')
-	registry_contract = governances.get(newOrga["gov_model"]).get('registryContract')
+	registry_contract = 'ControlledRegistry' if newOrga.get('rules').get('accessibility') == "private" else governances.get(newOrga["gov_model"]).get('registryContract')
 
 	instance = governances[newOrga["gov_model"]]["templateClass"](
 		doc=newOrga,
@@ -187,6 +187,37 @@ def joinOrga(user, password, orga_id, tag="member"):
 		return {"data": "Organization does not exists", "status": 400}
 	try:
 		tx_hash = orga.join(user, tag, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to join", "status": 400}	
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}
+
+def allowUserTo(user, password, orga_id, allowed_user, action="join"):
+	"""
+	user : user model document that represent the user who made the request
+	password : password used to unlock the ethereum account of the user.
+	orga_id : id of the orga the user want to join-in.
+	rtag : role attribued to the user. Default is regular member.
+
+	This function is called to add an user to an organisation.
+
+	First, the eth. account is unlocked.
+	The organisation in retrieved from database.
+	The join() method of the orga model document is called to insert this new user in database.
+	A notification is pushed.
+	On an error, 400 is returned, on an OK 200 is returned.
+	"""
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga:
+		return {"data": "Organization does not exists", "status": 400}
+	try:
+		tx_hash = orga.allow(user, allowed_user, action, password=password)
 		if tx_hash is False:
 			return {"data": "User does not have permission to join", "status": 400}	
 	except BadResponseError as e:
@@ -425,6 +456,16 @@ def voteForProposal(user, password, orga_id, proposal_id, vote):
 		return {"data": str(e), "status": 400}
 	return {
 		"data": tx_hash,
+		"status": 200
+	}
+
+def refreshProposals(orga_id):
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+	if not orga_instance:
+		return {"data": "Organization does not exists", "status": 400}
+	ret = orga_instance.refreshProposals()
+	return {
+		"data": ret,
 		"status": 200
 	}
 

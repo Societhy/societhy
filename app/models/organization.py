@@ -1,5 +1,5 @@
 from bson import ObjectId
-
+import datetime
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
@@ -185,7 +185,15 @@ class OrgaDocument(Document):
 		args.append(self.registry["address"])
 		from_.unlockAccount(password=password)
 		tx_hash = self.board.deploy(from_.get('account'), args=args)
-		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, users=from_))
+
+		action = {
+			"action": "donate",
+			"from": from_,
+			"password": password,
+			"initial_funds": self.get('initial_funds')
+			} if self.get('initial_funds', 0) > 0 else None
+
+		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
 		return tx_hash
 
 
@@ -193,7 +201,7 @@ class OrgaDocument(Document):
 	# CALLBACKS FOR UPDATE
 	####
 
-	def register(self, tx_receipt):
+	def register(self, tx_receipt, callback_data=None):
 		"""
 		tx_receipt : dict containing the receipt of the contract creation transaction
 		Callback called after a ContractCreationEvent happened : the address, balance, rules and id of the newly created contract are saved in mongo
@@ -202,6 +210,20 @@ class OrgaDocument(Document):
 		self.board["address"] = tx_receipt.get('contractAddress')
 		self["address"] = tx_receipt.get('contractAddress')
 		self.board["is_deployed"] = True
+
+		#SEND FUNDS TO ORGA AFTER IT IS CREATED
+		if callback_data and callback_data.get('action') == "donate":
+			from_ = callback_data.get('from')
+			amount = float(callback_data.get('initial_funds'))
+			if from_.refreshBalance() > amount:
+				from_.session_token = None
+				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
+				if not tx_hash:
+					return {"data": "User does not have permission to donate", "status": 400}	
+			else:
+				return {"data": "Not enough funds in your wallet to process donation", "status": 400}
+
+	
 		self["balance"] = self.getTotalFunds()
 
 		self["contracts"] = dict()
@@ -213,7 +235,6 @@ class OrgaDocument(Document):
 		self.save()
 
 		for item in self.get('invited_users'):
-			print("ITERATE ON INVITED USERS")
 			notif = Notification({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
@@ -255,6 +276,18 @@ class OrgaDocument(Document):
 					self["members"][new_member.get('account')] = public_member
 					self.save_partial();
 					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
+
+		return False
+
+	def permissionChanged(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
+		The organisation is returned alongside the rights of the new member
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_member = users.find_one({"account": address})
 
 		return False
 
@@ -334,13 +367,37 @@ class OrgaDocument(Document):
 			proposal_id = int(logs[0].get('topics')[1], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
 			value = int(logs[0].get('topics')[3], base=16)
-			new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
-			if destination not in self["proposals"]:
-				return False
-			self["proposals"][destination].update(new_proposal)
-			self["proposals"][destination]["offer"]["status"] = "debating"
-			self.save_partial()
-			return self
+			if destination in self["proposals"]:
+				new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
+				self["proposals"][destination].update(new_proposal)
+				self["proposals"][destination]["status"] = "debating"
+				self["proposals"][destination]["votes_count"] = 0
+				self["proposals"][destination]["participation"] = 0
+				self["proposals"][destination]["time_left"] = 100
+				self.save_partial()
+				return self
+		return False
+
+	def voteCounted(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		print("LOGS: ", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			position = int(logs[0].get('topics')[2], base=16)
+			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
+			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
+			if destination in self["proposals"]:
+				self["proposals"][destination]["votes_count"] += 1
+				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
+
+				time_since_creation = datetime.datetime.utcnow().timestamp() - self["proposals"][destination]["created_on"]
+				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
+
+				self.save_partial()
+				return self
 		return False
 
 
@@ -431,6 +488,12 @@ class OrgaDocument(Document):
 		if not self.can(user, "join"):
 			return False
 
+		## WE SHOULD CHECK RIGHT BEFORE BUT ITS NOT WORKING
+		if self.get('rules').get('accessibility') == 'private':
+			isAllowed = self.registry.call('isAllowed', local=True, args=[user.get('account')])
+			if not isAllowed:
+				return False
+
 		tx_hash = self.registry.call('register', local=local, from_=user.get('account'), args=[user.get('account'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.registry.getAbi("NewMember").get('signature'), user.get('account'))
@@ -441,6 +504,27 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def allow(self, user, allowed_user, action, password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
+
+		# if not self.can(user, "edit_rights"):
+		# 	return False
+
+		tx_hash = self.registry.call('allow', local=local, from_=user.get('account'), args=[allowed_user], password=password)
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("PermissionChanged", tx_hash, self.registry["address"], callbacks=[self.permissionChanged], users=user, event_abi=self.registry["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
 
 	def leave(self, user, password=None, local=False):
 		"""
@@ -453,7 +537,7 @@ class OrgaDocument(Document):
 		if not self.can(user, "leave"):
 			return False
 
-		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), password=password)
+		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), args=[user.get('account')], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.registry.getAbi("MemberLeft").get('signature'), user.get('account'))
 
@@ -534,7 +618,6 @@ class OrgaDocument(Document):
 		except KeyError as e:
 			return "missing param"
 		
-		print("---------", args)
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
@@ -560,7 +643,7 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-	def createProposal(self, user, proposal, password=None):
+	def createProposal(self, user, offer_addr, password=None):
 		"""
 		canSenderPropose
 		check proposal (_name, _type, , _description, _debatePeriod, _destination, _value, _calldata)
@@ -568,10 +651,12 @@ class OrgaDocument(Document):
 		deploy proposal contract and set callback
 		return tx_hash
 		"""
+		offer = self['proposals'][offer_addr]["offer"]
 		try:
-			args = [proposal['name'], self["rules"]["default_proposal_duration"], proposal['destination'], proposal['value']]
+			value = str(int(offer.get('initialWithdrawal')) + int(offer.get('dailyWithdrawalLimit')) * 30 * int(offer.get('duration')))
+			args = [offer['name'], self["rules"]["default_proposal_duration"], offer_addr, value]
 			calldata = '0x' + encode_hex(eth_cli._encode_function('sign()', []))
-			callvalue = (proposal['destination'] + str(proposal['value']) + calldata).encode()
+			callvalue = (offer_addr + str(value) + calldata).encode()
 			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
 			args.append(hashed_callvalue)
 		except KeyError:
@@ -586,19 +671,43 @@ class OrgaDocument(Document):
 			return False
 
 
-	def voteForProposal(self, user, proposal, password=None):
+	def voteForProposal(self, user, proposal_id, vote, password=None):
 		"""
 		can sender vote
 		send tx and return hash
 		"""
-		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+		tx_hash = self.board.call('vote', local=False, from_=user.get('account'), args=[proposal_id, vote], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("newProject", tx_hash, self.board["address"], callbacks=[], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("VoteCounted", tx_hash, self.board["address"], callbacks=[self.voteCounted], users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
 			return False
+
+	def refreshProposals(self):
+		"""
+		compute quorum and time left for a proposal and return the new list
+		"""
+		for proposal in self["proposals"].values():
+			if proposal["status"] == "debating":
+				time_since_creation = datetime.datetime.utcnow().timestamp() - proposal["created_on"]
+				proposal["time_left"] = 100 - int((time_since_creation / proposal["debate_period"]) * 100)
+				if proposal["time_left"] < 0:
+					self.endProposal(proposal)
+		self.save_partial()
+		return self
+
+	def endProposal(self, proposal):
+		if proposal["participation"] < self["rules"]["quorum"]:
+			proposal["status"] = "denied"
+			return
+		proposal["nay"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 0])
+		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
+		if proposal["yea"] > proposal["nay"]:
+			proposal["status"] = "approved"
+		else:
+			proposal["status"] = "denied"
 
 	def executeProposal(self, user, proposal, password=None):
 		"""
@@ -640,7 +749,8 @@ class OrgaCollection(Collection):
 		"contract_id",
 		"description",
 		"balance",
-		"social_accounts"
+		"social_accounts",
+		"contracts"
 	]
 
 	default_rights = {

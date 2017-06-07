@@ -154,6 +154,39 @@ app.controller('ModalExportController', function($scope, $uibModalInstance, $ses
 
 });
 
+
+/****************
+*** HISTORY KEY MODAL CONTROLLER ***
+*****************/
+
+app.controller('ModalHistoryController', function($scope, $uibModalInstance, $sessionStorage, $rootScope, $filter, $http, ngTableParams, key) {
+	$scope.address = key;
+	$http.get('/getTxHistory/'.concat(key.address)).then(function(response) {
+		var data = response.data;
+		$scope.pow = Math.pow;
+		$scope.round = Math.round;
+	    $scope.tableParams = new ngTableParams({
+	        page: 1,
+	        count: 5,
+	        sorting: {
+	            date: 'desc'
+	        },
+	     	filter: {
+            	recipient: '' // initial filter
+        	}
+        }, {
+	        total: data.length,
+	        getData: function ($defer, params) {
+	            // use build-in angular filter
+
+	            var orderedData = params.sorting() ? $filter('orderBy')(data, params.orderBy()) : data;
+	            orderedData = params.filter() ? $filter('filter')(orderedData, params.filter()) : orderedData;
+	            $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+	        }
+	    });
+	});
+});
+
 /****************
 *** KEYCONTROLLER FUNCTIONS ***
 *****************/
@@ -372,6 +405,23 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 					failure(error.data);
 				});
 			}, 2000);
+		});
+	};
+
+	/***
+	HISTORY
+	***/
+
+	ctrl.loadHistory = function(key) {
+		var modalInstance = $uibModal.open({
+			templateUrl: "static/assets/views/modals/transactionHistoryModal.html",
+			controller: 'ModalHistoryController',
+			size: 'lg',
+			resolve: {
+				key : function() {
+					return key;
+				}
+			}
 		});
 	};
 

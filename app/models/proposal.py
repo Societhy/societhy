@@ -1,5 +1,5 @@
 from bson import ObjectId
-
+from datetime import datetime
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
@@ -20,22 +20,9 @@ from .clients import client, eth_cli
 proposal_status = [
 "pending",
 "debating",
-"success",
+"denied",
 "approved"
 ]
-
-tmp = {
-"0xdeadbeefdeadofff": {
-	"name": "second",
-	"participation": 90,
-	"beneficiary": "Mireille Schultz",
-	"from": "0xb8ml9jgv5chj5",
-	"status": "approved",
-	"votes_count": 801,
-	"created_on": "May 04, 2014 11:52 AM"
-	}
-}
-proposal_status = []
 
 class Proposal(dict):
 	
@@ -43,6 +30,7 @@ class Proposal(dict):
 	"name": str,
 	"participation": int,
 	"offer": dict,
+	"time_left": int,
 	"debate_period": int,
 	"destination": str,
 	"value": int,

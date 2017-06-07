@@ -13,22 +13,7 @@ from ethjsonrpc import wei_to_ether
 
 password = "simon"
 
-test_proposal_doc = {
-	"0xdeadbeefdeadbeef": {
-	"name": "first",
-	"participation": 50,
-	"beneficiary": "Joseph Martin",
-	"from": "0xab1393Njdjdndn8820dlnjncmc",
-	"status": "denied",
-	"votes_count": 176,
-	"created_on": "May 03, 2017 11:42 AM"
-	}
-}
-
-inserted = None
-
 def test_create_offer(miner, testOrga):
-	global inserted
 	test_offer_1 = {
 	'name': 'test_offer_1',
 	'client': testOrga.get('address'),
@@ -53,37 +38,25 @@ def test_create_offer(miner, testOrga):
 	'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
 	}
 
-	ret = base_orga.createOffer(miner, password, testOrga.get('_id'), test_offer_1)
-	assert ret.get('status') == 200	
-	assert ret.get('data') != None
+	for index, offer in enumerate([test_offer_1, test_offer_2]):
 
-	bw.waitEvent('OfferCreated')
-	testOrga.reload()
-	proposals = testOrga.get('proposals')
-	assert len(proposals) == 1
-	inserted = next(iter(proposals.values()))
+		ret = base_orga.createOffer(miner, password, testOrga.get('_id'), offer)
+		assert ret.get('status') == 200	
+		assert ret.get('data') != None
 
-	ret = base_orga.createOffer(miner, password, testOrga.get('_id'), test_offer_2)
-	assert ret.get('status') == 200	
-	assert ret.get('data') != None
+		bw.waitEvent('OfferCreated')
+		testOrga.reload()
+		assert len(testOrga.get('proposals')) == index + 1
 
-	bw.waitEvent('OfferCreated')
-	testOrga.reload()
-	proposals = testOrga.get('proposals')
-	assert len(proposals) == 2
-
+from pprint import pprint
 def test_create_proposal(miner, testOrga):
-	global inserted
-	print('---------------', inserted.get('offer').get('initialWithdrawal'), inserted.get('offer').get('dailyWithdrawalLimit'))
-	test_proposal = {
-		"name": "NEW KILLER PROPOSAL",
-		"destination": inserted.get('offer').get('address'),
-		"value": inserted.get('offer').get('initialWithdrawal') + (inserted.get('offer').get('dailyWithdrawalLimit') * 30 * inserted.get('offer').get('duration')),
-	}
-	ret = base_orga.createProposal(miner, password, testOrga.get('_id'), test_proposal)
-	bw.waitEvent('ProposalCreated')
-	testOrga.reload()
-	proposals = testOrga.get('proposals')
-	assert len(proposals) == 2
-	new_proposal = next(iter(proposals.values()))
-	assert new_proposal.get('from') == miner.get('account')
+	for index, proposal in enumerate(testOrga.get('proposals').values()):
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
+		assert ret.get('status') == 200	
+		assert ret.get('data') != None
+		bw.waitEvent('ProposalCreated')
+		testOrga.reload()
+		new_proposal = testOrga.get('proposals').get(proposal.get('offer').get('address'))
+		# print(new_proposal)
+		assert len(testOrga.get('proposals')) == 2
+		assert new_proposal.get('from') == miner.get('account')
