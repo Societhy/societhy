@@ -76,7 +76,7 @@ class Event:
 			if data is not None:
 				for user in list(self.users):
 					payload = {"event": self.name, "data": data}
-					print("EMITTING", payload, "to", user)
+					print("EMITTING", "payload", "to", user)
 					socketio.emit('txResult', payload, room=user)
 					self.users.remove(user)
 

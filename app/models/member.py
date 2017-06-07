@@ -1,4 +1,4 @@
-from .user import UserDocument as User
+from .user import users, UserDocument as User
 from ethjsonrpc import wei_to_ether
 
 class Tag:
@@ -14,7 +14,14 @@ class Member(User):
 			user.update({"rights": rights})
 		if tag:
 			user["tag"] = tag
+		self["votes"] = list()
 		super().__init__(doc=user, gen_skel=False)
+
+	def saveVotes(self, destination, vote):
+		user = users.find_one({"_id": self["_id"]})
+		user["votes"].append({"offer": destination, "vote": vote})
+		user.save_partial()
+		self["votes"].append({"offer": destination, "vote": vote})
 
 	def canDo(self, action):
 		pass

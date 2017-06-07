@@ -385,6 +385,8 @@ def getHisto(token, orga_id, date):
 	}
 
 def createOffer(user, password, orga_id, offer):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
@@ -402,6 +404,8 @@ def createOffer(user, password, orga_id, offer):
 	}	
 	
 def cancelOffer(user, password, orga_id, offer_id):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
@@ -418,6 +422,8 @@ def cancelOffer(user, password, orga_id, offer_id):
 	}
 
 def createProposal(user, password, orga_id, proposal):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
@@ -434,6 +440,8 @@ def createProposal(user, password, orga_id, proposal):
 	}
 
 def voteForProposal(user, password, orga_id, proposal_id, vote):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
@@ -460,6 +468,8 @@ def refreshProposals(orga_id):
 	}
 
 def executeProposal(user, password, orga_id, proposal_id):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
 	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}

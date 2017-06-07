@@ -388,6 +388,10 @@ class OrgaDocument(Document):
 			position = int(logs[0].get('topics')[2], base=16)
 			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
 			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
+
+			member = self.getMember(voter)
+			if member:
+				member.saveVotes(destination, vote)
 			if destination in self["proposals"]:
 				self["proposals"][destination]["votes_count"] += 1
 				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
@@ -396,7 +400,7 @@ class OrgaDocument(Document):
 				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
 
 				self.save_partial()
-				return self
+				return {'orga': self, 'user': member}
 		return False
 
 
@@ -452,13 +456,13 @@ class OrgaDocument(Document):
 		if isinstance(user, User):
 			account = user.get('account')
 			if account in self["members"]:
-				return self["members"][account]
+				return Member(self["members"][account])
 			else:
 				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
-						return member
+						return Member(member)
 		elif type(user) is str and user in self["members"]:
-				return self["members"][user]
+				return Member(self["members"][user])
 		return None
 
 	def getTotalFunds(self):
@@ -705,8 +709,8 @@ class OrgaDocument(Document):
 		proposal["score"] = (float(proposal["yea"] / (proposal["yea"] + proposal["nay"])) * 100) if proposal["participation"] > 0 else 0
 		
 		if proposal["yea"] > proposal["nay"]\
-		   and proposal["participation"] > self["rules"]["quorum"]\
-		   and proposal["score"] > self["rules"]["majority"]:
+		   and proposal["participation"] >= self["rules"]["quorum"]\
+		   and proposal["score"] >= self["rules"]["majority"]:
 			proposal["status"] = "approved"
 		else:
 			proposal["status"] = "denied"
