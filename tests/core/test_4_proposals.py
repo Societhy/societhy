@@ -48,83 +48,83 @@ def test_create_offer(miner, testOrga):
 		testOrga.reload()
 		assert len(testOrga.get('proposals')) == len_prev_proposals + index + 1
 
-# def test_create_proposal(miner, testOrga):
-# 	for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']):
-# 		assert proposal.get('status') == "pending"
-# 		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
-# 		assert ret.get('status') == 200	
-# 		assert ret.get('data') != None
-# 		bw.waitTx(ret.get('data'))
-# 		testOrga.reload()
-# 		new_proposal = testOrga.get('proposals').get(proposal.get('offer').get('address'))
-# 		assert len(testOrga.get('proposals')) == 2
-# 		assert new_proposal.get('from') == miner.get('account')
-# 		assert new_proposal.get('status') == "debating"
+def test_create_proposal(miner, testOrga):
+	for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']):
+		assert proposal.get('status') == "pending"
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
+		assert ret.get('status') == 200	
+		assert ret.get('data') != None
+		bw.waitTx(ret.get('data'))
+		testOrga.reload()
+		new_proposal = testOrga.get('proposals').get(proposal.get('offer').get('address'))
+		assert len(testOrga.get('proposals')) == 2
+		assert new_proposal.get('from') == miner.get('account')
+		assert new_proposal.get('status') == "debating"
 
-# def test_vote_proposal_win(miner, user, testOrga):
-# 	NAY = 0
-# 	YEA = 1
-# 	for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']):
-# 		ret = base_orga.voteForProposal(miner, password, testOrga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
-# 		assert ret.get('status') == 200	
-# 		assert ret.get('data') != None
-# 		bw.waitEvent('VoteCounted')
-# 		testOrga.reload()
-# 		new_proposal = testOrga.get('proposals').get(proposal.get('offer').get('address'))
-# 		assert new_proposal.get('votes_count') == 1
-# 		assert new_proposal.get('participation') == (1 / len(testOrga.get('members'))) * 100
-# 		assert new_proposal.get('time_left') <= 100
+def test_vote_proposal_win(miner, user, testOrga):
+	NAY = 0
+	YEA = 1
+	for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']):
+		ret = base_orga.voteForProposal(miner, password, testOrga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
+		assert ret.get('status') == 200	
+		assert ret.get('data') != None
+		bw.waitEvent('VoteCounted')
+		testOrga.reload()
+		new_proposal = testOrga.get('proposals').get(proposal.get('offer').get('address'))
+		assert new_proposal.get('votes_count') == 1
+		assert new_proposal.get('participation') == (1 / len(testOrga.get('members'))) * 100
+		assert new_proposal.get('time_left') <= 100
 
-# 	last_timeleft = 100
-# 	while len([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']) > 0:
-# 		testOrga.refreshProposals()
-# 		testOrga.reload()
+	last_timeleft = 100
+	while len([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']) > 0:
+		testOrga.refreshProposals()
+		testOrga.reload()
 
-# 		for index, proposal in enumerate(testOrga.get('proposals').values()):
-# 			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
-# 				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
-# 				last_timeleft = proposal.get('time_left')
-# 			if proposal.get('time_left') < 0:
-# 				assert proposal.get('status') == 'approved' if index % 2 == 0 else 'denied'
-# 				assert proposal.get('participation') >= testOrga.get('rules').get('quorum')
+		for index, proposal in enumerate(testOrga.get('proposals').values()):
+			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
+				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
+				last_timeleft = proposal.get('time_left')
+			if proposal.get('time_left') < 0:
+				assert proposal.get('status') == 'approved' if index % 2 == 0 else 'denied'
+				assert proposal.get('participation') >= testOrga.get('rules').get('quorum')
 
-# def test_vote_proposal_no_quorum(miner, user, testOrga):
-# 	test_offer_3 = {
-# 	'name': 'test_offer_3',
-# 	'client': testOrga.get('address'),
-# 	'contractor': miner.get('account'),
-# 	"description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
-# 	'initialWithdrawal': 9000,
-# 	'recurrentWithdrawal': 200,
-# 	'isRecurrent': True,
-# 	'duration': 89,
-# 	"type": "investment",
-# 	'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
-# 	}
-# 	ret = base_orga.createOffer(miner, password, testOrga.get('_id'), test_offer_3)
-# 	assert ret.get('status') == 200	
-# 	assert ret.get('data') != None
-# 	bw.waitTx(ret.get('data'))
+def test_vote_proposal_no_quorum(miner, user, testOrga):
+	test_offer_3 = {
+	'name': 'test_offer_3',
+	'client': testOrga.get('address'),
+	'contractor': miner.get('account'),
+	"description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
+	'initialWithdrawal': 9000,
+	'recurrentWithdrawal': 200,
+	'isRecurrent': True,
+	'duration': 89,
+	"type": "investment",
+	'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
+	}
+	ret = base_orga.createOffer(miner, password, testOrga.get('_id'), test_offer_3)
+	assert ret.get('status') == 200	
+	assert ret.get('data') != None
+	bw.waitTx(ret.get('data'))
 
-# 	testOrga.reload()
-# 	assert len(testOrga.get('proposals')) == 3
+	testOrga.reload()
+	assert len(testOrga.get('proposals')) == 3
 
-# 	for proposal in [x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']:
-# 		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
-# 		assert ret.get('status') == 200	
-# 		assert ret.get('data') != None
-# 		bw.waitTx(ret.get('data'))
-# 		testOrga.reload()
+	for proposal in [x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']:
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
+		assert ret.get('status') == 200	
+		assert ret.get('data') != None
+		bw.waitTx(ret.get('data'))
+		testOrga.reload()
 	
-# 	last_timeleft = 100
-# 	while len([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']) > 0:
-# 		testOrga.refreshProposals()
-# 		testOrga.reload()
-# 		for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']):
-# 			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
-# 				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
-# 				last_timeleft = proposal.get('time_left')
-# 			if proposal.get('time_left') < 0:
-# 				assert proposal.get('status') == 'denied'
-# 				assert proposal.get('participation') <= testOrga.get('rules').get('quorum')
-# 	bw.stop()
+	last_timeleft = 100
+	while len([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']) > 0:
+		testOrga.refreshProposals()
+		testOrga.reload()
+		for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'debating']):
+			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
+				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
+				last_timeleft = proposal.get('time_left')
+			if proposal.get('time_left') < 0:
+				assert proposal.get('status') == 'denied'
+				assert proposal.get('participation') <= testOrga.get('rules').get('quorum')
+	bw.stop()

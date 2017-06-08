@@ -19,7 +19,30 @@ from core.chat import socketio
 
 from core.notifications import notifyToOne, mail
 from models import organizations, users, projects
-from models.clients import app
+
+app = Flask(__name__, template_folder='../web/static/', static_url_path='', static_folder='../web')
+app.secret_key = secret_key
+app.json_encoder = UserJSONEncoder
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'societhycompany@gmail.com'
+app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+
+jinja_options = app.jinja_options.copy()
+
+jinja_options.update(dict(
+	block_start_string='<%',
+	block_end_string='%>',
+	variable_start_string='%%',
+	variable_end_string='%%',
+	comment_start_string='<#',
+	comment_end_string='#>'
+))
+app.jinja_options = jinja_options
 
 app.session_interface = MongoSessionInterface()
 app.register_blueprint(notif_routes)
@@ -27,6 +50,9 @@ app.register_blueprint(user_routes)
 app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
+
+mail.init_app(app)
+socketio.init_app(app)
 
 workers_pool = GreenPool(size=3)
 

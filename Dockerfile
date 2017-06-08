@@ -12,7 +12,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
     add-apt-repository -y ppa:jonathonf/python-3.6 && \
     apt-get update -y
 
-ENV DEPENDENCIES="python3.6 python3.6-dev autoconf autogen intltool libtool libffi-dev golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc pkg-config mongodb supervisor ethereum wget"
+ENV DEPENDENCIES="python3.6 python3.6-dev autoconf autogen intltool libtool libffi-dev golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc pkg-config mongodb supervisor ethereum wget redis-server"
 
 RUN apt-get install $DEPENDENCIES -qy
 
@@ -31,12 +31,6 @@ RUN pip3.6 install -r /societhy/requirements.txt --upgrade
 RUN pip3.6 install -e git+https://github.com/simonvadee/ethjsonrpc#egg=ethjsonrpc
 
 RUN pip3.6 install -e git+https://github.com/simonvadee/mongokat#egg=mongokat
-
-RUN wget http://download.redis.io/redis-stable.tar.gz
-RUN tar xvzf redis-stable.tar.gz
-RUN cd redis-stable
-RUN make
-RUN cp ./src/redis-server ./src/redis-cli /usr/local/bin
 
 ENV HOME="/societhy"
 
