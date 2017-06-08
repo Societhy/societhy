@@ -345,6 +345,7 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
+		print("LOGS ----", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
@@ -352,9 +353,11 @@ class OrgaDocument(Document):
 			new_offer["is_deployed"] = True
 			new_offer.update(callback_data)
 			new_offer["contract_id"] = new_offer.save()
+			print("11111111111111")
 			if offer_address not in self["proposals"]:
 				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
 				self.save_partial()
+				print("HEEEEEEEEERE----------------------")
 				return self
 		return False
 

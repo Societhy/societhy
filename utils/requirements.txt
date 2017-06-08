@@ -16,3 +16,4 @@ flask-socketio
 eventlet
 ethereum
 flask_mail
+redis
