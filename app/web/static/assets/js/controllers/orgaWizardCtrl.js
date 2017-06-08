@@ -15,9 +15,9 @@
         // GOVERNANCE TAB
         $scope.governance_types = {
             "dao": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
-                "desc": "This is a standard description",
+                "pros": ["Trustless AND secure", "Withdraw your funds at all time", "No membership required"],
+                "cons": ["Less reactive than a centralized structure", "Permissions are non-customisable", "Tokens are frozen while a proposal you voted for is still debating"],
+                "desc": "DAO stands for 'decentralized autonomous organisation'. It is a kind of organisation that is controlled entirely by all of its members, and in which every member has the same rights. One does not need to become a member of the organisation to participate in its operations, and the weight of one's vote depends on the amount he invested in the structure",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
                     "owner": {
@@ -55,9 +55,9 @@
                 }
             },
             "ngo": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
-                "desc": "This is a standard description",
+                "pros": ["Efficient decision making", "Collaborative fund management", "Membership system"],
+                "cons": ["The perfect fit for public organisations", "Transparency in every way", "Highly customizable"],
+                "desc": "This type of organisation is the right choice for public structures and those who want complete transparency over their processes, hence preventing fraud.",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
                     "owner": {
@@ -95,9 +95,9 @@
                 }
             },
             "public_company": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
-                "desc": "This is a standard description",
+                "pros": ["Trustless AND secure", "Withdraw your funds at all time", "No membership required", "Delegated voting"],
+                "cons": ["Perfect for small and large businnesses wanting to go public", "Buy and sell your company shares", "Highly secured with the use of curators"],
+                "desc": "This type of structure is the right fit for organisations wanting to involve external investors and/or their customers in their funding and decision making.",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
                     "owner": {
@@ -135,9 +135,9 @@
                 }
             },
             "entreprise": {
-                "pros": ["test1", "test2", "test3"],
-                "cons": ["test1", "test2", "test3"],
-                "desc": "This is a standard description",
+                "pros": ["Centralized structure", "Permissions are highly customizable", "Very easy to manage"],
+                "cons": ["Perfect fit for individuals wanting full control over the structure", "Members need to trust the administrators"],
+                "desc": "This type of structure is made for people that want a strong leadership in their organization, allowing quick and efficient decision making, it is the right structure for a regular business needing privacy over its accounts.",
                 "tags": ["owner", "admin", "member", "guest"],
                 "rights": { 
                     "owner": {
@@ -215,6 +215,19 @@
 
 
     // MEMBER MANAGEMENT
+        $scope.addCurrentUserToInvited = function () {
+            if (!$scope.orga_form.invited_users)
+                $scope.orga_form.invited_users = {};
+            $scope.orga_form.invited_users[$rootScope.user._id] =
+                {
+                    "_id" : $rootScope.user._id,
+                    "account": $rootScope.user.account,
+                    "category": "owner",
+                    "name": $rootScope.user.name,
+                    "tag" : "owner"
+                };
+            $scope.tagChangedForUser($rootScope.user._id);
+        };
 
     $scope.addInvitedUser = function () {
         if (!$scope.orga_form.invited_users)
@@ -236,7 +249,7 @@
            controller: function($uibModalInstance, $scope, user_id, rights, orga_form) {
             $scope.selected_tag = "member";
             $scope.rights = rights;
-            $scope.user_id = user_id
+            $scope.user_id = user_id;
             $scope.orga_form = orga_form;
         },
         size: 'lg',
@@ -317,6 +330,7 @@
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
+                        $scope.addCurrentUserToInvited();
                         $http.post('/createOrga', {
                             "socketid": $rootScope.sessionId,
                             "password": password,

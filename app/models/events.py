@@ -45,12 +45,14 @@ class Event:
 	tx_hash = None
 	users = None
 	callback = None
+	callback_data = None
 	mail = None
 	name = "defaultEvent"
 	notified = list()
 
-	def __init__(self, tx_hash=None, users=[], callbacks=None, mail=None):
+	def __init__(self, tx_hash=None, users=[], callbacks=None, callback_data=None, mail=None):
 		self.tx_hash = tx_hash
+		self.callback_data = callback_data
 
 		if isinstance(users, list):
 			self.users = [user if isinstance(user, str) else user.get('socketid') for user in users]
@@ -74,7 +76,7 @@ class Event:
 			if data is not None:
 				for user in list(self.users):
 					payload = {"event": self.name, "data": data}
-					print("EMITTING", payload, "to", user)
+					print("EMITTING", "payload", "to", user)
 					socketio.emit('txResult', payload, room=user)
 					self.users.remove(user)
 
@@ -106,7 +108,7 @@ class ContractCreationEvent(Event):
 		print("PROCESSING EVENT", self.tx_hash)
 		self.tx_receipt = eth_cli.eth_getTransactionReceipt(self.tx_hash)
 		for cb in self.callbacks:
-			self.notifyUsers(cb(self.tx_receipt))
+			self.notifyUsers(cb(self.tx_receipt, self.callback_data))
 		return self
 
 class LogEvent(Event):

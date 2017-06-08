@@ -99,7 +99,7 @@
     width:		250px;
 }
 
-/* 
+/*
 ** TIMELINE CSS
 */
 
@@ -231,7 +231,7 @@
 }
 
 /*
-** TIMELINE CSS BOOTSTRAP 
+** TIMELINE CSS BOOTSTRAP
 */
 
 
@@ -266,7 +266,7 @@
     }
 }
 
-/* 
+/*
 ** TIMELINE CSS 4
 */
 
@@ -593,4 +593,231 @@ img { border: 0; max-width: 100%; }
 input::-moz-focus-inner,
 input::-moz-focus-outer {
     border: 0;
+}
+
+
+/*
+** ADMINISTRATION
+*/
+
+/*
+ ** Menu
+ */
+
+#administrationMenuButton {
+    background: rgb(230, 232, 232);
+    display: block;
+    padding: 8px;
+    border-radius: 25%;
+    width: 30px;
+}
+
+#administrationMenu ul {
+    list-style-type: none;
+    padding: 0px;
+}
+
+#administrationMenu ul li {
+    border-bottom: 1px solid lightgrey;
+    padding: 0 0 0 8px;
+    cursor: pointer;
+}
+
+#administrationMenu ul li:hover {
+    background-color: lightgrey;
+}
+
+#administrationMenu ul li:last-child {
+    border-bottom: none;
+}
+
+#administrationMenuContent {
+    display: none;
+    float: left;
+    transition-duration: 1s;
+}
+
+#administrationMenu{
+    -webkit-transition: width 1s ease;
+    -moz-transition: width 1s ease;
+    -o-transition: width 1s ease;
+    transition: width 1s ease;
+
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    background: rgb(230, 232, 232);
+    vertical-align: middle;
+    line-height: 30px;
+    border-radius: 0 8px 8px 8px;
+    width: 0;
+}
+
+#administrationMenuButton.on {
+    border-radius: 8px 8px 0 0;
+}
+
+#administrationMenu.on{
+    width: 200px;
+    text-align: center;
+}
+
+
+/*
+ ** MainContent
+ */
+table.dataTable {
+    width: 100% !important;
+}
+
+table.dataTable thead th {
+    position: relative;
+    background-image: none !important;
+}
+
+#administrationContent {
+    float: right;
+    transition-duration: 1s;
+    width: 100%;
+}
+
+#administrationContent table {
+    text-transform: capitalize;
+}
+
+#administrationContent > div > div {
+    margin: 15px 8px;
+}
+
+#administrationContent h2 {
+    text-align: center;
+}
+
+#administrationContent.off{
+    width: 80%;
+}
+
+/*
+** Menu Toggle Icon
+*/
+
+/* Important styles */
+#toggle {
+    display: block;
+    width: 15px;
+    height: 10px;
+    margin: 5px auto 0px;
+}
+
+#toggle span:after,
+#toggle span:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -9px;
+}
+#toggle span:after{
+    top: 9px;
+}
+#toggle span {
+    position: relative;
+    display: block;
+}
+
+#toggle span,
+#toggle span:after,
+#toggle span:before {
+    width: 15px;
+    height: 4px;
+    background-color: #888;
+    transition: all 0.3s;
+    backface-visibility: hidden;
+    border-radius: 2px;
+}
+
+/* on activation */
+#toggle.on span {
+    background-color: transparent;
+}
+#toggle.on span:before {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+#toggle.on span:after {
+    transform: rotate(-45deg) translate(7px, -8px);
+}
+#toggle.on + #menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+/*
+** Manage Rights 
+*/
+
+#orgaRightsMenu {
+    display: inline-block;
+    border-radius: 4px;
+    border: 1px solid lightgray;
+    padding: 0 8px;
+    text-align: center;
+    width: 20%;
+    margin-right: 15px;
+}
+
+#orgaRightsMenu div {
+    border-bottom: 1px solid lightgray;
+    padding: 6px;
+    text-align: center;
+    display: block;
+}
+
+#orgaRightsMenu div:hover {
+    cursor: pointer;
+    background-color: lightgray
+}
+
+#orgaRightsMenu .currentRight {
+    background-color: lightgray
+
+}
+
+#orgaRightsMenu div:last-child {
+    border: none;
+}
+
+#orgaRightsMenu div:last-child:hover {
+    background-color: none;
+}
+
+#orgaRightsMenu .orgaRightsMenuField span {
+    font-size: 16px;
+}
+
+#orgaRightsMenu .orgaRightsMenuField button{
+    float: right;
+    display: none;
+}
+
+#orgaRightsMenu .orgaRightsMenuField.currentRight button{
+    float: right;
+    display: inline-block;
+}
+
+#orgaRightsMenu input {
+    width: 80%;
+}
+#orgaRightsSelector {
+    display : inline-block;
+    float:    right;
+}
+
+#orgaRightsSelector div {
+    padding: 8px;
+}
+/**
+ * Rating stars
+ */
+.glyphicon-star, .glyphicon-star-empty {
+  color:orange;
+  font-size: 1.7em;
 }

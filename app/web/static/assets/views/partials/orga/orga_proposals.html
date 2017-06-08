@@ -4,14 +4,14 @@
 	</h1>
 </div>
 <div ng-controller="ProposalController as ctrl">
-<button ng-if="currentRights.create_offer" ng-click="ctrl.submitOffer()">Submit new proposal</button>
+	<button ng-if="currentRights.create_offer" ng-click="ctrl.submitOffer()">Submit new proposal</button>
 	<div class="container-fluid row no-margin">
 		<div class="col-md-10 col-lg-10 no-padding">
 			<div class="panel panel-white no-radius no-margin">
 				<div class="panel-heading border-light padding-10">
 					<div class="row">
-						<div class="col-lg-4 col-xs-5">
-							<span class="input-icon">
+						<div class="col-md-6">
+							<span class="input-icon col-md-8">
 								<angucomplete-alt id="ex2"
 								class="radius-10"
 								placeholder="Search proposal..."
@@ -26,6 +26,9 @@
 								match-class="highlight"
 								input-changed=""/>
 								<i class="ti-search"></i>
+							</span>
+							<span class="col-md-4 icon fa-2x">
+								<i class="fa fa-refresh" ng-click="ctrl.refreshProposals()"></i>
 							</span>
 						</div>
 						<div class="col-lg-8 col-xs-7 text-right">
@@ -120,7 +123,7 @@
 										<strong>{{ proposal.offer.name }}</strong><span class="text-muted"> {{proposal_status[proposal.status]}}</span>
 									</div>
 									<span ng-if="proposal.from">
-										<span class="text-azure">{{ proposal.from }} </span><span class="text-small text-muted"> published this proposal on {{proposal.created_on}}</span>
+										<span class="text-azure">{{ proposal.from }} </span><span class="text-small text-muted"> published this proposal on {{proposal.created_on * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</span>
 									</span>
 									<span ng-if="!proposal.from">
 										<span class="text-azure">{{ proposal.offer.owner }} </span><span class="text-small text-muted"> created this offer on {{proposal.offer.creationDate}} </span>
@@ -140,26 +143,26 @@
 											<strong> {{ proposal.votes_count || 0 }}</strong>
 										</small>
 									</div>
+									<span ng-if="proposal.voted == 0 || proposal.voted == 1" class="label text-large" ng-class="{0: 'label-danger', 1: 'label-success'}[proposal.voted]">{{ "You voted ".concat({0: "nay", 1:"yea"}[proposal.voted]) }}</span>
+
 								</div>
 								<div class="block" ng-if="proposal.status == 'debating'">
 									<div class="min-height-80 padding-10 text-center">
 										<span class="text-muted">Quorum</span>
 										<uib-progressbar value="proposal.participation" class="progress-xs no-radius background-dark no-margin" type="{{proposal.participation >= currentOrga.rules.quorum ? 'success' : 'warning'}}" ></uib-progressbar>
 										<span class="text-muted">Time left</span>
-										<uib-progressbar value="proposal.participation" class="progress-xs no-radius background-dark no-margin" type="{{proposal.participation >= currentOrga.rules.quorum ? 'success' : 'warning'}}" ></uib-progressbar>
+										<uib-progressbar value="proposal.time_left" class="progress-xs no-radius background-dark no-margin" type="{{proposal.time_left >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
 									</div>
 								</div>
 							</td>
 							<td class="col-md-3">
 								<div class="block vertical-align padding-left-30">
 									<div class="icons text-center">
-										<span>
-											<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="ctrl.expandProposal(proposal)"></i></a>
-											<a href=""><i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i></a>
-											<a href=""><i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i></a>
-											<a href=""><i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i></a>
-										</span>
-
+										<a href=""><i class="fa fa-info text-orange padding-5" style="font-size:45px" ng-click="ctrl.expandProposal(proposal)"></i></a>
+										<a href=""><i class="fa fa-comments text-blue padding-5" style="font-size:45px"></i></a>
+										<a href="#" ng-if="proposal.status == 'pending'" ng-click="ctrl.submitProposal(proposal)"><i class="fa fa-hand-o-up padding-10" style="font-size:45px"></i></a>
+										<a ng-if="proposal.status == 'debating' && proposal.voted == undefined" ng-click="ctrl.voteForProposal(proposal, true)"><i class="fa fa-thumbs-up text-green padding-5" style="font-size:45px"></i></a>
+										<a ng-if="proposal.status == 'debating' && proposal.voted == undefined" ng-click="ctrl.voteForProposal(proposal, false)" href=""><i class="fa fa-thumbs-down text-red padding-5" style="font-size:45px"></i></a>
 									</div>
 								</div>
 							</td>
@@ -184,24 +187,40 @@
 									</div>
 								</div>
 							</td>
-							<td class="col-md-2">
+							<td class="col-md-2" ng-if="proposal.status == 'pending'">
 								<div class="padding-10 text-center">
-									<a href="#" ng-if="proposal.status == 'pending' || proposal.status == 'pending'" ng-click="ctrl.reportOffer(proposal)">
+									<a href="#" ng-click="ctrl.reportOffer(proposal)">
 										<i class="fa fa-hand-paper-o padding-10 text-red" style="font-size:30px"></i>
 										<span class="label label-danger block" style="font-size:15px;">Report this offer</span>
 									</a>
 								</div>
 							</td>
-							<td class="col-md-2">
+							<td class="col-md-2" ng-if="proposal.status == 'pending' && currentRights.create_proposal">
 								<div class="col-md-12 padding-10 text-center">
-									<a href="#" ng-if="proposal.status == 'pending' && currentRights.create_proposal" ng-click="ctrl.submitProposal(proposal)">
+									<a href="#" ng-click="ctrl.submitProposal(proposal)">
 										<i class="fa fa-hand-o-up padding-10" style="font-size:30px"></i>
 										<span  class="label label-info block" style="font-size:15px;">Begin debating period</span>
 									</a>
 								</div>
 							</td>
+							<td class="col-md-2" ng-if="proposal.status == 'approved'">
+								<div class="padding-10 text-center">
+									<a href="#" ng-click="ctrl.executeOffer(proposal)">
+										<i class="fa fa-check padding-10 text-green" style="font-size:30px"></i>
+										<span class="label label-success block" style="font-size:15px;">Execute proposal</span>
+									</a>
+								</div>
+							</td>
+							<td class="col-md-2" ng-if="proposal.status == 'denied'">
+								<div class="col-md-12 padding-10 text-center">
+									<a href="#" ng-click="ctrl.removeProposalFromList(proposal)">
+										<i class="fa fa-times padding-10 text-red" style="font-size:30px"></i>
+										<span  class="label label-danger block" style="font-size:15px;">Remove from list</span>
+									</a>
+								</div>
+							</td>
 						</tr>
-						<tr ng-if="proposal.expand"	ng-repeat-end="">
+						<tr ng-if="proposal.expand"	ng-repeat-end="" class="border-thick">
 							<td class="col-md-3" class='inline'>
 								<div class="icons">
 									<span ng-repeat="admin in proposal.offer.actors" class="padding-5">

@@ -14,11 +14,11 @@ from flask import session, request, Response, jsonify
 
 
 from models.notification import notifications
-from models import users, UserDocument
+from models import users, UserDocument, organizations
 from models.notification import notifications
 from models import errors
 
-from core import keys
+from core import keys, base_orga
 from . import secret_key
 
 
@@ -147,5 +147,20 @@ def getUserNotif(data):
 	return {"data": {"notifications": ret}, "status": 200}
 
 def acceptInvitation(user, data):
-	for item in data:
-		print(item)
+	orga = organizations.find_one({"_id":ObjectId(data["orga_id"])})
+	if str(user["_id"]) in orga["invited_users"]:
+		item = orga["invited_users"][str(user["_id"])]
+		print(user)
+		ret = base_orga.joinOrga(user, data["password"], str(orga["_id"]), item["tag"])
+		if (ret["status"] == 200):
+			del orga["invited_users"][str(user["_id"])]
+			orga.save_partial()
+			for item in user["pending_invitation"]:
+				if item["id"] == str(orga["_id"]):
+					user["pending_invitation"].remove(item)
+			user.save_partial()
+			return({"data":"invitation accepted", "status":200})
+		else:
+			return ret
+	else:
+		return ({"data":"User not invited", "status":400})

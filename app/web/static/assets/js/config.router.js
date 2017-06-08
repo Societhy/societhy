@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'),
+        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'orgaAdministrationCtrl', 'datatable', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'), //datepicker
         title: 'Organisation dashboard',
         params: {
             data: null

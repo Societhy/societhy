@@ -37,21 +37,21 @@
             <div class="col-md-6" ng-show="productImageUploader.isHTML5">
                 <div class="row form-group">
                     <label class="control-label">Picture of your product</br></label>
-                    <span class="btn btn-primary btn-o btn-file" ng-show="!productImageUploader.queue.length">
+                    <span class="btn btn-primary btn-o btn-file">
                         <input type="file" nv-file-select="" uploader="productImageUploader">
                         Browse files ...
                     </span>
                 </div>
-                <div class="row">
-                    <table class="table">
-                        <tr ng-repeat="pic in productImageUploader.queue">
-                            <td>
-                                <strong>{{ pic.file.name }}</strong>
-                                <div ng-show="productImageUploader.isHTML5" ng-thumb="{ file: pic.file, height: 100 }" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+				<div class="row" ng-repeat="pic in productImageUploader.queue track by $index" ng-if="$index % 3 == 0">
+					<div class="col-md-3" 
+						ng-repeat="i in [$index, $index + 1, $index + 2]" 
+						ng-if="productImageUploader.queue[i] != null">
+						<div>
+							<div ng-show="productImageUploader.isHTML5" ng-thumb="{ file: productImageUploader.queue[i]._file, width: 100 }"></div>
+							<!-- <button class="btn btn-danger text-center" ng-click="removeImage($index)">Delete</button> -->
+                        </div>
+					</div>
+				</div>
             </div>
         </div>
     </fieldset>

@@ -1,5 +1,5 @@
 from bson import ObjectId
-
+from datetime import datetime
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
 
@@ -20,22 +20,9 @@ from .clients import client, eth_cli
 proposal_status = [
 "pending",
 "debating",
-"success",
+"denied",
 "approved"
 ]
-
-tmp = {
-"0xdeadbeefdeadofff": {
-	"name": "second",
-	"participation": 90,
-	"beneficiary": "Mireille Schultz",
-	"from": "0xb8ml9jgv5chj5",
-	"status": "approved",
-	"votes_count": 801,
-	"created_on": "May 04, 2014 11:52 AM"
-	}
-}
-proposal_status = []
 
 class Proposal(dict):
 	
@@ -43,6 +30,7 @@ class Proposal(dict):
 	"name": str,
 	"participation": int,
 	"offer": dict,
+	"time_left": int,
 	"debate_period": int,
 	"destination": str,
 	"value": int,
@@ -59,7 +47,7 @@ class Proposal(dict):
 		if init_from_contract and board and proposal_id is not None: 
 			self["destination"] = '0x' + board.call("destinationOf", args=[proposal_id], local=True)
 			self["value"] = str(board.call("valueOf", args=[proposal_id], local=True))
-			self["hashed_calldata"] = '0x' + board.call("hashOf", args=[proposal_id], local=True)
+			self["hashed_calldata"] = board.call("hashOf", args=[proposal_id], local=True)
 			self["debate_period"] = board.call("debatePeriodOf", args=[proposal_id], local=True)
 			self["created_on"] = board.call("createdOn", args=[proposal_id], local=True)
 			self["from"] = '0x' + board.call("createdBy", args=[proposal_id], local=True)

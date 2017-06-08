@@ -6,7 +6,7 @@ from ..organization import OrgaDocument as Organization
 class Ngo(Organization):
 
 	default_rules = {
-		"default_proposal_duration": 2,
+		"default_proposal_duration": 1,
 		"payout_freeze_period": 0,
 		"delegated_voting": False,
 		"quorum": 20,
@@ -63,9 +63,6 @@ class Ngo(Organization):
 		}
 	}
 	def launchCrowdfunding(self, params):
-		pass
-
-	def voteForProposal(self, proposal, vote):
 		pass
 
 	def addLegalDocument(self, document):

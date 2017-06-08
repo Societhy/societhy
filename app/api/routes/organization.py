@@ -113,15 +113,46 @@ def addProductOrga(user):
     else:
         return make_response('Wrong request format', 400)
 
+@router.route('/productImageUpload', methods=['POST'])
+@requires_auth
+def addProductImage(user):
+	prod_id = request.form.get("prod_id")
+	type = request.form.get("type")
+	pic = request.files.get("prodImg")
+	ret = sales_platform.addProductImage(prod_id, pic, type)
+	return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/getProductImages/<prod_id>', methods=['GET'])
+def getProductImages(prod_id):
+    images = sales_platform.getProductImages(prod_id)
+    return make_response(jsonify(images.get('data')), images.get('status'))
+
 @router.route('/getOrgaProducts/<orga_id>', methods=['GET'])
 def getOrgaProducts(orga_id):
     products = sales_platform.getProductsByOwner(orga_id)
     return make_response(jsonify(products.get('data')), products.get('status'))
 
+@router.route('/addReviewToProduct/<product_id>', methods=['POST'])
+@requires_auth
+def addReview(user, product_id):
+    ret = sales_platform.addReviewToProduct(product_id, request.json)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/getOrgaHisto', methods=['POST'])
 def getOrgaHisto():
     ret = base_orga.getHisto(request.json.get('password'), request.json.get('orga_id'), request.json.get('date'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/updateOrgaRights', methods=['POST'])
+def updateOrgaRights():
+    ret = base_orga.updateOrgaRights(request.json.get('orga_id'), request.json.get('rights'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+@router.route('/updateMemberTag', methods=['POST'])
+def updateMembertag():
+    ret = base_orga.updateMemberTag(request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
@@ -144,8 +175,8 @@ def cancelOffer(user, orga_id, offer_id):
 @router.route('/createProposal', methods=["POST"])
 @requires_auth
 def createProposal(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'proposal': ['name', 'destination', 'value']}], request.json):
-        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal'))
+    if ensure_fields(['password', 'socketid', 'orga_id', 'offer'], request.json):
+        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
@@ -159,11 +190,25 @@ def voteForProposal(user):
     else:
         return make_response("Wrong request format", 400)
 
+@router.route('/refreshProposals/<orga_id>')
+def refreshProposals(orga_id):
+    ret = base_orga.refreshProposals(orga_id)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
 @router.route('/executeProposal', methods=["POST"])
 @requires_auth
 def executeProposal(user):
     if ensure_fields(['password', 'socketid', 'orga_id', 'proposal_id'], request.json):
         ret = base_orga.executeProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('proposal_id'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
+@router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
+@requires_auth
+def getOrgaTransaction(user, orga_id):
+    if orga_id:
+        ret = base_orga.getOrgaTransaction(user)
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)

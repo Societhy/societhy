@@ -23,7 +23,7 @@ contract BoardRoomInterface {
   function createdBy(uint _proposalId) public constant returns (address) {}
 
   event ProposalCreated(uint indexed _proposalID, address indexed _destination, uint _value, bytes32 indexed hash);
-  event VoteCounted(uint indexed _proposalID, uint indexed _position, address indexed _voter);
+  event VoteCounted(address indexed _destination, uint indexed _position, address indexed _voter);
   event ProposalExecuted(uint indexed _proposalID, address indexed _sender);
 }
 
@@ -68,7 +68,7 @@ contract BoardRoom is BoardRoomInterface {
     p.destination = _destination;
     p.value = _value;
     p.hash = sha3(_destination, _value, _calldata);
-    p.debatePeriod = _debatePeriod * 1 days;
+    p.debatePeriod = _debatePeriod * 1 minutes;
     p.created = now;
     p.from = msg.sender;
     proposals.push(p);
@@ -85,7 +85,8 @@ contract BoardRoom is BoardRoomInterface {
     });
     proposals[_proposalID].voters.push(msg.sender);
     proposals[_proposalID].positions[_position] += voterWeight;
-    VoteCounted(_proposalID, _position, msg.sender);
+    VoteCounted(proposals[_proposalID].destination, _position, msg.sender);
+    return voterWeight;
   }
 
   function execute(uint _proposalID, bytes _calldata) haswon(_proposalID) {

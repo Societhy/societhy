@@ -1,0 +1,31 @@
+<div class="modal-header ng-scope">
+  <h3 class="modal-title">Manages Rights</h3>
+</div>
+<div class="form-group">
+  <div id="orgaRightsMenu">
+    <div ng-repeat="(id, data) in currentOrga.rights" ng-init="outerIndex = $index" ng-click="admin.rights.updateSelected(id, $index)"
+	 class="orgaRightsMenuField" val="{{$index}}">
+      <span>{{id}}<span>
+      <button class="btn-xs btn-danger" ng-click="admin.rights.removeRight(id)">X</button>
+    </div>
+    <div>
+      <input type="text" id="newOrgaRight">
+      <button class="btn-sm btn-primary" ng-click="admin.rights.newRight()">+</button>
+    </div>
+  </div>
+  <div id="orgaRightsSelector">
+    <div ng-repeat="(id, data) in currentOrga.rights[admin.rights.current]" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+      <input type="checkbox" name="{{id}}" value="{{data}}" id="checkbox{{$index}}"
+	     ng-model="currentOrga.rights[admin.rights.current][id]"
+	     ng-checked="data" ng-true-value="true" ng-false-value="false">
+      <label for="checkbox{{$index}}">{{id}}</label>
+    </div>
+    <input type="submit" value="Save Changes" class="btn btn-green" ng-click="admin.updateRights()">
+  </div>
+  <!--
+    <div ng-repeat="(right, bool) in rights[selected_tag]" class="checkbox vertical-center clip-check check-primary check-lg">
+      <input type="checkbox" id="{{right}}" ng-model="orga_form.invited_users[user_id]['rights'][right]">
+      <label for="{{right}}">{{right}}</label>
+    </div>
+    -->
+</div>

@@ -2,7 +2,7 @@ pragma solidity ^0.4.7;
 
 import "BoardRoom.sol";
 import "Rules.sol";
-import "examples/ProposalTypeRegistry.sol";
+import "ProposalTypeRegistry.sol";
 
 // This allows a BoardRoom member to type a propoal
 // Once a proposal is typed, the type will access a specific rule set

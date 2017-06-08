@@ -41,6 +41,7 @@ class BlockchainWatcher:
         self.newLogEvent = g_event.Event()
         self.lastEvent = None
         self.lastTx = None
+        self.waiting = False
         self.running = False
         self.eventQueue = EventQueue()
 

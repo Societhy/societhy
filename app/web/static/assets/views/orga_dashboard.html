@@ -1,5 +1,3 @@
-
-<link rel="stylesheet" href="static/assets/css/orga.css">
 <!-- start: ORGA DASHBOARD PROFILE -->
 <div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
   <div class="row">
@@ -166,7 +164,7 @@
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
           </uib-tab>
 
-          <uib-tab heading="Members">
+<!--          <uib-tab heading="Members">
             <div class="row">
               <div class="col-md-12 inline-block">
 
@@ -222,7 +220,7 @@
 
               </div>
             </div>
-          </uib-tab>
+          </uib-tab> -->
           <!-- DOCUMENTS -->
           <uib-tab heading="Docs">
             <div class="container-fluid container-fullw ng-scope">
@@ -244,7 +242,7 @@
                         </thead>
                         <tbody>
 
-                        <tr ng-repeat="doc in currentOrga.uploaded_documents">
+                          <tr ng-repeat="doc in currentOrga.uploaded_documents">
                           <td class="center">1</td>
                           <td class="hidden-xs">{{ doc.doc_name }}</td>
                           <td>{{ currentOrga.name }}</td>
@@ -264,26 +262,33 @@
                                   <li>
                                     <a href="#"> Download </a>
                                   </li>
-                                  <a href="#"> Remove </a>
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
+                                  <li><a href="#"> Remove </a>
+				  </li>
+				</ul>
+			      </div>
+			    </div>
+			  </td>
+			  </tr>
+			  
+			</tbody>
+		      </table>
+		    </div>
+		  </div>
+		  
+		</div>
+		
+	      </div>
+	    </div>
           </uib-tab>
-
-
+	  <uib-tab  heading="Administration">
+	    <div class="panel panel-white">
+	      <div class="panel-body">
+		<div data-ng-include="'static/assets/views/partials/orga/administration.html'">
+		</div>
+	      </div>
+	    </div>
+	  </uib-tab>
+	  
           <uib-tab heading="Proposals" active="editActive">
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
           </uib-tab>
@@ -304,9 +309,9 @@
                 <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
                   <thead></thead>
                   <tbody>
-                  <tr ng-repeat="product in listProducts" class="ng-scope">
-                    <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
-                  </tr>
+                    <tr ng-repeat="product in listProducts" class="ng-scope">
+                      <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -316,7 +321,13 @@
 
                 <div class="row">
                   <div class="col-md-4">
-                    <img ng-src="{{currentProd.picture || 'static/assets/images/product_default.png'}}" alt="..." width="80%" />
+                    <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
+                      <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                        <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
+                      </div>
+                    </div>
+
+                    <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." style="margin: auto; height: 300px; width: auto;"/>
                   </div>
 
                   <div class="col-md-8">
@@ -329,12 +340,42 @@
                       </div>
                       <div class="col-md-2">
                         <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
-                          <span>Buy</span>
-                        </button>
+                                   <span>Buy</span>
+                                 </button>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <div class="row">
+                  <h3>Review this product</h3>
+                  <div class="col-md-6">
+                    <textarea placeholder="Enter your review..." ng-model="ctrl.review" ng-init='ctrl.review = ""' rows="7" cols="73" wrap="hard"></textarea>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="row">
+                      <span uib-rating ng-model="ctrl.rate" ng-init='ctrl.rate = 3' read-only="false"></span>
+                    </div>
+
+                    <div class="row">
+                      <button class="btn btn-success" ng-click="ctrl.sendReview()">Send</button>
+                    </div>
+                  </div>
+                </div>
+
+                <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                  <thead></thead>
+                  <tbody>
+                    <tr ng-repeat="review in reviewList" class="ng-scope">
+                      <td>
+                        <h4 class="text-capitalize">{{review.user.name}}</h4>
+                        <span uib-rating ng-model="review.rate" read-only="true"></span>
+                        <p style="width: 100%; height: 100%">{{review.review}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
               </fieldset>
             </div>
@@ -342,10 +383,8 @@
             <div ng-show="!listProducts.length">
               <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
             </div>
-      </div>
+          </uib-tab>
 
-    </div>
-    </uib-tab>
     <!--
          <uib-tab heading="Settings">
            <div class="container-fluid container-fullw ng-scope">
