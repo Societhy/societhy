@@ -8,7 +8,7 @@
     // -----------------------------------
     var $win = $($window), $body = $('body');
     $scope.horizontalNavbarCollapsed = true;
-    
+
     $scope.menuInit = function (value) {
         $scope.horizontalNavbarCollapsed = value;
     };
@@ -206,7 +206,7 @@
     };
 
     var tmpCallback = null;
-    
+
     $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({
@@ -261,11 +261,11 @@
         $http.get('/searchFor/'.concat(query)).then(function(response) {
             console.log(response.data);
             if (response.data.length == 1) {
-                $state.go("app.".concat(response.data[0].category), response.data[0]);                
+                $state.go("app.".concat(response.data[0].category), response.data[0]);
             }
         });
     }
-    
+
     $scope.doVerifications = function() {
         if (!$rootScope.user) {
             $rootScope.toogleError("Please sign-in first")
