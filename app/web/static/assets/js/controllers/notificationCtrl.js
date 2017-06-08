@@ -1,7 +1,7 @@
 /**
  * Controller for notification
  */
-app.controller('NotificationController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
+app.controller('NotificationController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location, socketIO) {
     var ctrl = this;
     ctrl.user = $rootScope.user;
 
@@ -12,5 +12,8 @@ app.controller('NotificationController', function($scope, $rootScope, $http, $se
         $state.go(notif["angularState"]["route"], notif["angularState"]["params"]);
     };
 
+    socketIO.on('update_notif', function (data) {
+       console.log(data)
+    })
     return ctrl;
 });

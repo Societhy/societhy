@@ -9,12 +9,21 @@ from datetime import datetime
 import models.organization
 from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
+from flask_socketio import SocketIO, send, emit
 
 class NotificationDocument(Document):
 
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 		self["seen"] = False
+
+	def save(self, force=False, uuid=False, **kwargs):
+		super().save(force=force, uuid=uuid, **kwargs)
+		imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
+		Clients = imp.Clients
+		if self["subject"]["type"] == "user":
+			emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+
 
 	def pushNotif(data):
 		print(data["subject"]["type"])
