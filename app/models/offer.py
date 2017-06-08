@@ -48,10 +48,14 @@ class Offer(Contract):
 			self["address"] = at
 			self.compile()
 		if init_from_contract and self.get("address"):
-			self["contractor"] = '0x' + self.call('getContractor', local=True)
+			self["contractor"] = owner or '0x' + self.call('getContractor', local=True)
+			print("=", self["contractor"])
 			self["client"] = '0x' + self.call('getClient', local=True)
+			print("=", self["client"])
 			self["creationDate"] = self.call('getCreationDate', local=True)
+			print("=", self["creationDate"])
 			self["hashOfTheProposalDocument"] = self.call('getHashOfTheProposalDocument', local=True)
+			print("=", self["hashOfTheProposalDocument"])
 			self["initialWithdrawal"] = str(self.call('getInitialWithdrawal', local=True))
 			self["dailyWithdrawalLimit"] = str(self.call('getDailyWithdrawalLimit', local=True))
 			self["payoutFreezePeriod"] = self.call('getPayoutFreezePeriod', local=True)

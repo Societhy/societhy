@@ -191,6 +191,7 @@ def test_join(miner, testOrga):
 	assert ret.get('data') != None
 
 	bw.waitEvent('NewMember')
+	sleep(1)
 	miner.reload()
 	member_list = testOrga.getMemberList()
 	assert len(miner.get('organizations')) == before + 1
