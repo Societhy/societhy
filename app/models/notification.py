@@ -22,7 +22,8 @@ class NotificationDocument(Document):
 		imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
 		Clients = imp.Clients
 		if self["subject"]["type"] == "user":
-			emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+			if str(self["subject"]['id']) in Clients:
+				emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
 
 
 	def pushNotif(data):
