@@ -7,15 +7,31 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
     // LA SECU !!!!
     
 
-    $rootScope.admin = {menu: [{url: "static/assets/views/partials/orga/administration/transaction.html"},
-			       {url: "static/assets/views/partials/orga/administration/members.html"},
-			       {url: "static/assets/views/partials/orga/administration/transaction.html"},
-			       {url: "static/assets/views/partials/orga/administration/transaction.html"}, 
-			       {url: "static/assets/views/partials/orga/administration/transaction.html"},
-			       {url: "static/assets/views/partials/orga/administration/manageRights.html"}],
-			current: "static/assets/views/partials/orga/administration/transaction.html",
-			rights: {current: "none", "new": null, tmp: $.extend({}, $rootScope.currentOrga.rights)},
-			members: {tmp: {}}};
+	$rootScope.admin = {menu: [{url: "static/assets/views/partials/orga/administration/transaction.html"},
+		{url: "static/assets/views/partials/orga/administration/members.html"},
+		{url: "static/assets/views/partials/orga/administration/transaction.html"},
+		{url: "static/assets/views/partials/orga/administration/transaction.html"},
+		{url: "static/assets/views/partials/orga/administration/transaction.html"},
+		{url: "static/assets/views/partials/orga/administration/manageRights.html"}],
+		current: "static/assets/views/partials/orga/administration/transaction.html",
+		rights: {current: null, "new": null, tmp: $.extend({}, $rootScope.currentOrga.rights),
+			availableRights: {
+				"join": false,
+				"leave": false,
+				"donate": false,
+				"edit_rights": false,
+				"edit_jobs": false,
+				"create_project": false,
+				"create_offer": false,
+				"create_proposal": false,
+				"vote_proposal": false,
+				"recruit": false,
+				"remove_members": false,
+				"sell_token": false,
+				"buy_token": false
+			}
+		},
+		members: {tmp: {}}};
 
 
     function init () {
@@ -78,14 +94,12 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	$rootScope.admin.rights.current = id;
 	$(".currentRight").removeClass("currentRight");
 	$(".orgaRightsMenuField[val='"+index+"'").addClass("currentRight");
-	
     }
 
     /* Add a new right to the list */
     $rootScope.admin.rights.newRight = function () {
 	if ($("#newOrgaRight").val().trim() && !$rootScope.admin.rights.tmp[$("#newOrgaRight").val()])
-	    $rootScope.admin.rights.tmp[$("#newOrgaRight").val()] = $rootScope.admin.rights["new"];
-	console.log($rootScope.admin.rights.tmp)
+	    $rootScope.admin.rights.tmp[$("#newOrgaRight").val()] = $.extend({}, $rootScope.admin.rights["new"]);
     }
 
     /* Remove  a right from the list */

@@ -19,7 +19,7 @@
                 "cons": ["Less reactive than a centralized structure", "Permissions are non-customisable", "Tokens are frozen while a proposal you voted for is still debating"],
                 "desc": "DAO stands for 'decentralized autonomous organisation'. It is a kind of organisation that is controlled entirely by all of its members, and in which every member has the same rights. One does not need to become a member of the organisation to participate in its operations, and the weight of one's vote depends on the amount he invested in the structure",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -59,7 +59,7 @@
                 "cons": ["The perfect fit for public organisations", "Transparency in every way", "Highly customizable"],
                 "desc": "This type of organisation is the right choice for public structures and those who want complete transparency over their processes, hence preventing fraud.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -99,7 +99,7 @@
                 "cons": ["Perfect for small and large businnesses wanting to go public", "Buy and sell your company shares", "Highly secured with the use of curators"],
                 "desc": "This type of structure is the right fit for organisations wanting to involve external investors and/or their customers in their funding and decision making.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -139,7 +139,7 @@
                 "cons": ["Perfect fit for individuals wanting full control over the structure", "Members need to trust the administrators"],
                 "desc": "This type of structure is made for people that want a strong leadership in their organization, allowing quick and efficient decision making, it is the right structure for a regular business needing privacy over its accounts.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -174,6 +174,22 @@
                     }
                 }
             }
+        };
+
+        $scope.availableRights = {
+            "join": false,
+            "leave": false,
+            "donate": false,
+            "edit_rights": false,
+            "edit_jobs": false,
+            "create_project": false,
+            "create_offer": false,
+            "create_proposal": false,
+            "vote_proposal": false,
+            "recruit": false,
+            "remove_members": false,
+            "sell_token": false,
+            "buy_token": false
         }
 
     // IMAGE UPLOAD
@@ -213,6 +229,24 @@
         console.info('onBeforeUploadItem', item);
     };
 
+    // RIGHTS MANAGEMENT
+        $scope.$watch('orga_form.gov_model', function() {
+            $scope.orga_form.rights = $scope.governance_types[$scope.orga_form.gov_model]["rights"];
+        });
+
+        /* Select a right and display is allowed actions among the list */
+        $scope.displaySelectedRight = function (id, index) {
+            $scope.currentRight = id;
+            $(".currentRight").removeClass("currentRight");
+            $(".orgaRightsMenuField[val='"+index+"'").addClass("currentRight");
+        }
+
+        /* Add a newright to the list */
+        $rootScope.addRight = function () {
+            console.log($scope);
+            if ($("#newOrgaRight").val().trim() && !$scope.orga_form.rights[$("#newOrgaRight").val()])
+                $scope.orga_form.rights[$("#newOrgaRight").val()] = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model].rights["default"]);
+        }
 
     // MEMBER MANAGEMENT
         $scope.addCurrentUserToInvited = function () {
