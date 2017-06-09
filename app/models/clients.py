@@ -9,6 +9,8 @@ import eventlet
 import redis
 from ethjsonrpc import ParityEthJsonRpc
 
+app = Flask(__name__, template_folder='../web/static/', static_url_path='', static_folder='../web')
+
 mongo_ip = environ.get('MONGOIP')
 client = MongoClient(host=mongo_ip or '127.0.0.1')
 db_filesystem = gridfs.GridFS(client.main)
