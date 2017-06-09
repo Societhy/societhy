@@ -9,6 +9,7 @@ from datetime import datetime
 import models.organization
 from models.user import users, UserDocument as user
 from models.project import projects,  ProjectDocument as project
+from models.clients import app
 from flask_socketio import SocketIO, send, emit
 
 class NotificationDocument(Document):
@@ -23,7 +24,8 @@ class NotificationDocument(Document):
 		Clients = imp.Clients
 		if self["subject"]["type"] == "user":
 			if str(self["subject"]['id']) in Clients:
-				emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+				with app.app_context():
+					emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
 
 
 	def pushNotif(data):

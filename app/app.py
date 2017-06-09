@@ -21,9 +21,8 @@ from core.chat import socketio
 
 from core.notifications import notifyToOne, mail
 from models import organizations, users, projects
+from models.clients import app
 
-
-app = Flask(__name__, template_folder='web/static/', static_url_path='', static_folder='web')
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
 app.session_interface = MongoSessionInterface()
