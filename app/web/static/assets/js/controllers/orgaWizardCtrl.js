@@ -231,7 +231,8 @@
 
     // RIGHTS MANAGEMENT
         $scope.$watch('orga_form.gov_model', function() {
-            $scope.orga_form.rights = $scope.governance_types[$scope.orga_form.gov_model]["rights"];
+            delete $scope.orga_form.rights;
+            $scope.orga_form.rights = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model]["rights"]);
         });
 
         /* Select a right and display is allowed actions among the list */
@@ -241,11 +242,17 @@
             $(".orgaRightsMenuField[val='"+index+"'").addClass("currentRight");
         }
 
+        /* Remove  a right from the list */
+        $scope.removeRight = function (id, index) {
+            $scope.currentRights.push($("#newOrgaRight").val());
+            delete $scope.orga_form.rights[id];
+        }
+
         /* Add a newright to the list */
         $rootScope.addRight = function () {
-            console.log($scope);
-            if ($("#newOrgaRight").val().trim() && !$scope.orga_form.rights[$("#newOrgaRight").val()])
+            if ($("#newOrgaRight").val().trim() && !$scope.orga_form.rights[$("#newOrgaRight").val()]) {
                 $scope.orga_form.rights[$("#newOrgaRight").val()] = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model].rights["default"]);
+            }
         }
 
     // MEMBER MANAGEMENT

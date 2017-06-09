@@ -351,7 +351,7 @@
 																		<div ng-repeat="(id, data) in orga_form.rights" ng-init="outerIndex = $index" ng-click="displaySelectedRight(id, $index)"
 																			 class="orgaRightsMenuField" val="{{$index}}">
 																			<span>{{id}}</span>
-																			<button class="btn-xs btn-danger" ng-click="admin.rights.removeRight(id)">X</button>
+																			<button class="btn-xs btn-danger" ng-click="removeRight(id, $index)">X</button>
 																		</div>
 																	</div>
 																</td>
@@ -432,7 +432,7 @@
 																<td>{{user.name}} </td>
 																<td>
 																	<div class="form-group">
-																		<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+																		<select class="cs-select cs-skin-elastic" ng-options="name for (name, val) in orga_form.rights" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
 																		</select>
 																	</div>
 																</td>
