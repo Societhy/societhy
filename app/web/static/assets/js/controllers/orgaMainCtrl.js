@@ -176,7 +176,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-   ctrl.leaveOrga = function() {
+  ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(
@@ -429,14 +429,23 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "denied": "has been denied."
   }
 
-  if ($rootScope.currentOrga) {
-    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
-    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+  ctrl.reload = function() {
+    if ($rootScope.currentOrga) {
+      ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+      ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
 
+      for (let i = 0; i != ctrl.proposal_list.length; i++) {
+        ctrl.proposal_list[i].expand = false;
+        if ($rootScope.user != null) {
+          for (let j = 0; j != $rootScope.user.votes.length; j++) {
+            console.log($rootScope.user.votes[j].offer, ctrl.proposal_list[i].destination, $rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
+            if ($rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
+              ctrl.proposal_list[i].voted = $rootScope.user.votes[j].vote[0];
+          }
+        }
+      }
+    }    
     console.log("proposals", ctrl.proposal_list)
-    for (let i = 0; i != ctrl.proposal_list.length; i++) {
-      ctrl.proposal_list[i].expand = false;
-    }
   }
 
   ctrl.proposalLookup = function(item) {
@@ -451,7 +460,7 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
 
  ctrl.expandProposal = function(proposal) {
   for (let i = 0; i != ctrl.proposal_number; i++) {
-    if (proposal.from == ctrl.proposal_list[i].from)
+    if (proposal.destination == ctrl.proposal_list[i].destination)
       ctrl.proposal_list[i].expand = (proposal.expand == false ? true : false);
   }
 }
@@ -472,8 +481,6 @@ ctrl.submitProposal = function(proposal) {
     $rootScope.currentOrga = data.data;
     ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
     ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
-
-    console.log($rootScope.currentOrga.proposals, ctrl.proposal_list)
   })
  } else {
    $rootScope.toogleError("You don't have the right to turn this offer into a proposal")
@@ -507,11 +514,9 @@ ctrl.voteForProposal = function(proposal, vote) {
       "vote": vote
     }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
    }, function(data) {
-    $rootScope.currentOrga = data.data;
-    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
-    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
-
-    console.log($rootScope.currentOrga.proposals, ctrl.proposal_list)
+    $rootScope.currentOrga = data.data.orga;
+    $rootScope.user = data.data.user;
+    ctrl.reload();
   })
  } else {
    $rootScope.toogleError("You don't have the right to vote for this proposal...")
@@ -523,11 +528,10 @@ ctrl.refreshProposals = function() {
     $http.get('/refreshProposals/'.concat($rootScope.currentOrga._id))
     .then(function(data) {
      $rootScope.currentOrga = data.data;
-     ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
-     ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
-     console.log(ctrl.proposal_list);
+     ctrl.reload();
    });
   }
 }
+ctrl.reload();
 return ctrl;
 });

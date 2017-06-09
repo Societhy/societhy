@@ -4085,6 +4085,16 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   border-color: rgba(0, 0, 0, 0.3) !important;
 }
 
+.border-thick {
+  border-color: rgba(0, 0, 0, 0.2);
+  border-bottom-style: solid !important;
+  border-bottom-width: 4px !important;
+  border-right-style: solid !important;
+  border-right-width: 4px !important;
+  border-left-style: solid !important;
+  border-left-width: 4px !important;
+}
+
 .vertical-center {
   display:flex;
   align-items:center;

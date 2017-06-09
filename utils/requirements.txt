@@ -9,9 +9,11 @@ pillow
 qrcode
 requests
 pytest
+pytest-ordering
 web3
 pysha3
 flask-socketio
 eventlet
 ethereum
 flask_mail
+redis

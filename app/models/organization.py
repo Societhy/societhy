@@ -383,12 +383,15 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		print("LOGS: ", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
 			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			position = int(logs[0].get('topics')[2], base=16)
 			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
 			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
+
+			member = self.getMember(voter)
+			if member:
+				member.saveVotes(destination, vote)
 			if destination in self["proposals"]:
 				self["proposals"][destination]["votes_count"] += 1
 				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
@@ -397,7 +400,7 @@ class OrgaDocument(Document):
 				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
 
 				self.save_partial()
-				return self
+				return {'orga': self, 'user': member}
 		return False
 
 
@@ -453,13 +456,13 @@ class OrgaDocument(Document):
 		if isinstance(user, User):
 			account = user.get('account')
 			if account in self["members"]:
-				return self["members"][account]
+				return Member(self["members"][account])
 			else:
 				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
-						return member
+						return Member(member)
 		elif type(user) is str and user in self["members"]:
-				return self["members"][user]
+				return Member(self["members"][user])
 		return None
 
 	def getTotalFunds(self):
@@ -473,8 +476,8 @@ class OrgaDocument(Document):
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
 		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberList")]
-		memberList = users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info)
-		return list(memberList)
+		memberList = list(users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
+		return memberList
 
 	def join(self, user, tag="member", password=None, local=False):
 		"""
@@ -699,12 +702,15 @@ class OrgaDocument(Document):
 		return self
 
 	def endProposal(self, proposal):
-		if proposal["participation"] < self["rules"]["quorum"]:
-			proposal["status"] = "denied"
-			return
+
 		proposal["nay"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 0])
 		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
-		if proposal["yea"] > proposal["nay"]:
+
+		proposal["score"] = (float(proposal["yea"] / (proposal["yea"] + proposal["nay"])) * 100) if proposal["participation"] > 0 else 0
+		
+		if proposal["yea"] > proposal["nay"]\
+		   and proposal["participation"] >= self["rules"]["quorum"]\
+		   and proposal["score"] >= self["rules"]["majority"]:
 			proposal["status"] = "approved"
 		else:
 			proposal["status"] = "denied"
