@@ -63,6 +63,7 @@ def test_create_orga(miner, user):
 			assert inserted.token != None
 		if contracts.get('tokenFreezerContract'):
 			assert inserted.token_freezer != None
+		break
 
 def test_hidden_orga(miner):
 	test_orga = {

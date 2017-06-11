@@ -474,7 +474,7 @@ def executeProposal(user, password, orga_id, proposal_id):
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
 	try:
-		tx_hash = orga_instance.executeProposal(user, proposal_id, vote, password=password)
+		tx_hash = orga_instance.executeProposal(user, proposal_id, password=password)
 		if tx_hash is False:
 			return {"data": "User does not have permission to create an offer", "status": 400}	
 
