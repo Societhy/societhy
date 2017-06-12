@@ -2,6 +2,7 @@ from bson import ObjectId
 import datetime
 from mongokat import Collection, Document, find_method
 from ethjsonrpc import wei_to_ether
+from ethereum import utils, abi
 
 from bson import objectid
 from hashlib import sha3_256
@@ -375,6 +376,9 @@ class OrgaDocument(Document):
 				self["proposals"][destination]["votes_count"] = 0
 				self["proposals"][destination]["participation"] = 0
 				self["proposals"][destination]["time_left"] = 100
+
+				offer_contract = contracts.find_one({"_id": self["proposals"][destination]["offer"].get('_id')})
+				self["proposals"][destination]["offer"]["votingDeadline"] = offer_contract.call('getVotingDeadline', local=True)
 				self.save_partial()
 				return self
 		return False
@@ -409,18 +413,28 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		print('-----------------------', logs)
-		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			proposal_id = int(logs[0].get('topics')[1], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			executer = logs[0].get('topics')[3]
+			# call_data = logs[0].get('topics')[3]
 
-			# member = self.getMember(voter)
 			if destination in self["proposals"]:
+				self["proposals"][destination]["executed"] = True
 				self.save_partial()
 				return self
-				return {'orga': self, 'user': member}
 		return False
+
+	def fundsWithdrawnFromOffer(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		print("LOGS", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
+			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
+		return False
+
 
 	####
 	# RIGHTS MANAGEMENT
@@ -675,8 +689,9 @@ class OrgaDocument(Document):
 		offer = self['proposals'][offer_addr]["offer"]
 		try:
 			# value = str(int(offer.get('initialWithdrawal')) + int(offer.get('dailyWithdrawalLimit')) * 30 * int(offer.get('duration')))
-			value = int(offer.get('initialWithdrawal'))
+			value = int(offer.get('initialWithdrawal')) + int(offer.get('dailyWithdrawalLimit')) * 30
 			calldata = "sign()".encode('utf-8')#encode_hex(eth_cli._encode_function('sign()', [])).encode('utf-8')
+			# calldata = (encode_hex(eth_cli._encode_function('sign()', []))).encode('utf-8')
 			callvalue = (offer_addr + str(value) + calldata.decode()).encode()
 			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
 			args = [offer['name'], self["rules"]["default_proposal_duration"], offer_addr, value, calldata]
@@ -745,10 +760,21 @@ class OrgaDocument(Document):
 		sen tx and return hash
 		"""
 		p = self.getProposal(proposal_id)
-		from pprint import pprint
-		tx_hash = self.board.call('execute', local=False, from_=user.get('account'), args=[proposal_id, p.get('calldata')], password=password, gas=932078)
+		tx_hash = self.board.call('execute', local=False, from_=user.get('account'), args=[proposal_id, p.get('calldata').encode()], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("ProposalExecuted", tx_hash, self.board["address"], callbacks=[self.proposalExecuted], users=user, event_abi=self.board["abi"]))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
+	def withdrawFundsFromOffer(self, user, offer, password=None):
+		"""
+		"""
+
+		tx_hash = offer.call('withdraw', local=False, from_=user.get('account'), password=password)
+		if tx_hash and tx_hash.startswith('0x'):
+			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:

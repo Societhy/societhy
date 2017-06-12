@@ -11,7 +11,7 @@ test_local_env:
     - "27017:27017" # geth json-rpc api
     - "4242:4242" # web port
     - "8080" # geth json-rpc api
-    - "8545" # geth json-rpc api
+    - "8545:8545" # geth json-rpc api
     - "30303:30303"  # geth p2p protocol
     - "6379:6379"  # redis message_queue
   environment:
@@ -19,7 +19,7 @@ test_local_env:
     - TESTING=1
     - IP=172.17.0.2
     - MONGOIP=127.0.0.1
-    - ETHIP=127.0.0.1
+    - ETHIP=172.17.0.2
     - ETHPORT=8545
     - KEYS_DIRECTORY=/societhy/.parity/keys/SociethyPoA/
     - TERM=xterm-256color
@@ -29,6 +29,7 @@ test_local_env:
     - ../app/contracts:/societhy/contracts:rw
     - ../tests:/societhy/tests:rw
     - ../ethjsonrpc/:/societhy/ethjsonrpc:rw
+    - ../utils/:/societhy/utils:rw
     - ./ssh:/root/.ssh/:rw
     - ${HOME}/.ethash:/societhy/.ethash/:rw
   extra_hosts:

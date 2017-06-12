@@ -6,11 +6,12 @@ import "OpenRegistry.sol";
 contract BoardRoomInterface {
   function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID) {}
   function vote(uint _proposalID, uint _position) returns (uint voteWeight) {}
-  function execute(uint _proposalID, string _calldata) {}
+  function execute(uint _proposalID, bytes _calldata) {}
   function changeRules(address _rules) {}
 
   function voterAddressOf(uint _proposalID, uint _voteID) constant returns (address) {}
   function numVoters(uint _proposalID) constant returns (uint) {}
+  function isExecuted(uint _proposalID) constant returns (bool) {}
   function positionWeightOf(uint _proposalID, uint _position) constant returns (uint) {}
   function voteOf(uint _proposalID, address _voter) constant returns (uint, uint, uint) {}
   function hasVoted(uint _proposalID, address _voter) constant returns (bool) {}
@@ -24,8 +25,7 @@ contract BoardRoomInterface {
 
   event ProposalCreated(uint indexed _proposalID, address indexed _destination, uint indexed _value);
   event VoteCounted(address indexed _destination, uint indexed _position, address indexed _voter);
-  // event ProposalExecuted(uint indexed _proposalID, address indexed _destination,address indexed _sender, bytes4 sig);
-  event ProposalExecuted(uint indexed _proposalID, address indexed _destination, bytes4 indexed sig);
+  event ProposalExecuted(uint indexed _proposalID, address indexed _destination, bytes sig);
 }
 
 contract BoardRoom is BoardRoomInterface {
@@ -62,49 +62,6 @@ contract BoardRoom is BoardRoomInterface {
   /// @notice The contract fallback function
   function () payable public {}
 
-  function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) canpropose returns (uint proposalID) {
-    proposalID = proposals.length;
-    Proposal memory p;
-    p.name = _name;
-    p.destination = _destination;
-    p.value = _value;
-    p.hash = sha3(_destination, _value, _calldata);
-    p.debatePeriod = _debatePeriod * 1 seconds;
-    p.created = now;
-    p.from = msg.sender;
-    p.executed = false;
-    proposals.push(p);
-    ProposalCreated(proposalID, _destination, _value);
-    return proposalID;
-  }
-
-  function vote(uint _proposalID, uint _position) canvote(_proposalID) returns (uint voterWeight) {
-    voterWeight = rules.votingWeightOf(msg.sender, _proposalID);
-    proposals[_proposalID].votes[msg.sender] = Vote({
-      position: _position,
-      weight: voterWeight,
-      created: now
-      });
-    proposals[_proposalID].voters.push(msg.sender);
-    proposals[_proposalID].positions[_position] += voterWeight;
-    VoteCounted(proposals[_proposalID].destination, _position, msg.sender);
-    return voterWeight;
-  }
-
-  function execute(uint _proposalID, string _calldata) haswon(_proposalID) {
-    Proposal p = proposals[_proposalID];
-
-    if(!p.executed
-      && sha3(p.destination, p.value, _calldata) == p.hash) {
-      p.executed = true;
-
-      if(!p.destination.call.value(p.value)(bytes4(keccak256(_calldata)))){
-          throw;
-        }
-        ProposalExecuted(_proposalID, p.destination, bytes4(keccak256(_calldata)));
-      }
-    }
-
     function changeRules(address _rules) onlyself {
       rules = Rules(_rules);
     }
@@ -131,6 +88,10 @@ contract BoardRoom is BoardRoomInterface {
 
     function numVoters(uint _proposalID) constant returns (uint) {
       return proposals[_proposalID].voters.length;
+    }
+
+    function isExecuted(uint _proposalID) constant returns (bool) {
+      return proposals[_proposalID].executed;
     }
 
     function numProposals() constant returns (uint) {
