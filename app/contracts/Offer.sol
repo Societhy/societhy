@@ -201,22 +201,23 @@ contract Offer {
         return offerType;
     }
 
-    function sign() payable {
-        if (msg.sender != address(originalClient) // no good samaritans give us ether
-            || msg.value < initialWithdrawal    // no under/over payment
-            || dateOfSignature != 0      // don't accept twice
-            || votingDeadline == 0       // votingDeadline needs to be set
-            || now < votingDeadline + splitGracePeriod) // give people time to split
-            throw;
+    function sign() public payable returns (bool) {
+        // if (msg.sender != address(originalClient) // no good samaritans give us ether
+        //     || msg.value < initialWithdrawal    // no under/over payment
+        //     || dateOfSignature != 0      // don't accept twice
+        //     || votingDeadline == 0       // votingDeadline needs to be set
+        //     || now < votingDeadline + splitGracePeriod) // give people time to split
+        //     throw;
 
-        lastWithdrawal = votingDeadline + payoutFreezePeriod;
-        if (payoutFreezePeriod == 0) {
-            if (!contractor.send(initialWithdrawal))
-                throw;
-            initialWithdrawalDone = true;
-        }
-        dateOfSignature = now;
-        isContractValid = true;
+        // lastWithdrawal = votingDeadline + payoutFreezePeriod;
+        // if (payoutFreezePeriod == 0) {
+        //     if (!contractor.send(initialWithdrawal))
+        //         throw;
+        //     initialWithdrawalDone = true;
+        // }
+        // dateOfSignature = now;
+        // isContractValid = true;
+        return true;
     }
 
     // Once a proposal is submitted, the client (=Societhy orga) should call this

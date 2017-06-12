@@ -19,7 +19,7 @@ def test_create_offer(miner, testOrga):
 	'client': testOrga.get('address'),
 	'contractor': miner.get('account'),
 	"description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
-	'initialWithdrawal': 50,
+	'initialWithdrawal': 5,
 	'isRecurrent': False,
 	'duration': 0,
 	"type": "investment",
@@ -30,7 +30,7 @@ def test_create_offer(miner, testOrga):
 	'client': testOrga.get('address'),
 	'contractor': miner.get('account'),
 	"description": "Raw denim you probably haven't heard of them jean shorts Levis. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
-	'initialWithdrawal': 0,
+	'initialWithdrawal': 10,
 	'recurrentWithdrawal': 200,
 	'isRecurrent': True,
 	'duration': 12,
@@ -127,4 +127,15 @@ def test_vote_proposal_no_quorum(miner, user, testOrga):
 			if proposal.get('time_left') < 0:
 				assert proposal.get('status') == 'denied'
 				assert proposal.get('participation') <= testOrga.get('rules').get('quorum')
+
+def test_execute_proposal(miner, testOrga):
+	for p in testOrga.get('proposals').values():
+		if p.get('status') == 'approved':
+			ret = base_orga.executeProposal(miner, password, testOrga.get('_id'), p.get('proposal_id'))
+			assert ret.get('status') == 200	
+			assert ret.get('data') != None
+			bw.waitTx(ret.get('data'))
+			assert eth_cli.eth_getBalance(p.get('destination')) == int(p.get('value'))
+
+
 	bw.stop()

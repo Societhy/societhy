@@ -532,6 +532,23 @@ ctrl.refreshProposals = function() {
    });
   }
 }
+
+ctrl.executeProposal = function(proposal) {
+ $scope.completeBlockchainAction(
+  function(password) {
+   $rootScope.toogleWait("Proposal is being executed...")
+   $http.post('/executeProposal', {
+    "password": password,
+    "socketid": $rootScope.sessionId,
+    "orga_id": $rootScope.currentOrga._id,
+    "proposal_id": proposal.proposal_id,
+  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+ }, function(data) {
+  $rootScope.currentOrga = data.data.orga;
+  ctrl.reload();
+});  
+}
+
 ctrl.reload();
 return ctrl;
 });
