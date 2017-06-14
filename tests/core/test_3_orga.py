@@ -20,10 +20,6 @@ from ethjsonrpc import wei_to_ether
 password = "simon"
 
 def test_create_orga(miner, user):
-	mockTx(nb=1)
-	while miner.refreshBalance() < 1:
-		bw.waitBlock()
-
 	with open(path.join(environ.get('KEYS_DIRECTORY'), 'test_key2.key'), 'rb') as f:
 		keys.importNewKey(user, f)
 	user.setDefaultKey("0x4030c937f52b45959447c5fa695bcc462695c2fa")
@@ -63,6 +59,7 @@ def test_create_orga(miner, user):
 			assert inserted.token != None
 		if contracts.get('tokenFreezerContract'):
 			assert inserted.token_freezer != None
+		break
 
 def test_hidden_orga(miner):
 	test_orga = {

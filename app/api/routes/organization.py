@@ -204,6 +204,15 @@ def executeProposal(user):
     else:
         return make_response("Wrong request format", 400)
 
+@router.route('/withdrawFundsFromOffer', methods=["POST"])
+@requires_auth
+def withdrawFundsFromOffer(user):
+    if ensure_fields(['password', 'socketid', 'orga_id', 'offer_id'], request.json):
+        ret = base_orga.withdrawFundsFromOffer(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer_id'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
 @router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
 @requires_auth
 def getOrgaTransaction(user, orga_id):
