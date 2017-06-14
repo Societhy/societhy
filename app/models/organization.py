@@ -12,7 +12,8 @@ from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
-from models.notification import NotificationDocument as Notification, notifications as notification
+from models.notification import notifications, NotificationDocument as notification
+
 from models.offer import Offer
 from models.proposal import Proposal
 
@@ -303,6 +304,7 @@ class OrgaDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
+				notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": member.get("_id"), "type": "user"}, "category": "MemberLeft"})
 				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
 		return False
 

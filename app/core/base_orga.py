@@ -380,7 +380,6 @@ def leaveOrga(user, password, orga_id):
 			return {"data": "User does not have permission to leave", "status": 400}	
 	except BadResponseError as e:
 		return {"data": str(e), "status": 400}
-	notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"}, "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"}, "category": "MemberLeft"})
 
 	return {
 		"data": tx_hash,
