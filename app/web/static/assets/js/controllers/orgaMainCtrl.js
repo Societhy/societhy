@@ -132,6 +132,8 @@
       }).then(function(response) {
         if (response.data.orga) {
           $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+          ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
+          ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
         }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
@@ -198,6 +200,14 @@
    }
  }
 
+  ctrl.expandProject = function(proj) {
+    for (var i = 0; i != ctrl.projects_number; i++) {
+      if (proj.address == ctrl.projects_list[i].address) {
+        ctrl.projects_list[i].expand = (proj.expand == false ? true : false);
+      }
+    }
+  }
+
 	/**
 	 * Create a project from the organization.
      * @method createProject
@@ -215,6 +225,9 @@
         }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
        }, function(data) {
          $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+         for (var i = 0; i != $scope.currentOrga.projects; i++) {
+           $scope.currentOrga.projects.expand = false;
+         }
        })
      }
 
@@ -398,7 +411,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
         ($rootScope.slider.end));
     };
     if ($rootScope.currentOrga)
-      initHisto(); 
+      initHisto();
     return ctrl;
 
   });
@@ -444,7 +457,7 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
           }
         }
       }
-    }    
+    }
     console.log("proposals", ctrl.proposal_list)
   }
 

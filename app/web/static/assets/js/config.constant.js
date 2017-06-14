@@ -52,6 +52,7 @@ app.constant('JS_REQUIRES', {
 	'notificationCtrl': 'static/assets/js/controllers/notificationCtrl.js',
 	'orgaAdministrationCtrl': 'static/assets/js/controllers/orgaAdministrationCtrl.js',
         'offerModalCtrl': 'static/assets/js/controllers/offerModalCtrl.js',
+        'projectWizardCtrl' : 'static/assets/js/controllers/projectWizardCtrl.js',
     },
     //*** angularJS Modules
     modules: [{

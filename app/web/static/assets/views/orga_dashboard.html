@@ -269,14 +269,14 @@
 			    </div>
 			  </td>
 			  </tr>
-			  
+
 			</tbody>
 		      </table>
 		    </div>
 		  </div>
-		  
+
 		</div>
-		
+
 	      </div>
 	    </div>
           </uib-tab>
@@ -288,15 +288,30 @@
 	      </div>
 	    </div>
 	  </uib-tab>
-	  
+
           <uib-tab heading="Proposals" active="editActive">
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
           </uib-tab>
 
           <uib-tab heading="Projects">
+            <button class="btn btn-green margin-15" ui-sref="app.newproject">Add a new project</button>
             <div>
+              <table class="table no-margin">
+                <tr ng-repeat="project in currentOrga.projects" class="ng-scope" ng-click="ctrl.expandProject(project)">
+                  <td>
+                    <div class="icons-effect col-md-3">
+                      <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+                    </div>
+                  </td>
+                  <td class="col-md-9">
+                    <div class="padding-10">
+                      <strong>{{project.name}}</strong>
+                    </div>
+                  </td>
+                </tr>
+              </table>
               <pre>
-                {{currentOrga.projects}}
+                {{currentOrga.projects | json}}
               </pre>
             </div>
           </uib-tab>

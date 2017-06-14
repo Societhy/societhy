@@ -94,6 +94,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Project'
         }
+    }).state('app.newproject', {
+        url: '/project/new',
+        templateUrl: "static/assets/views/project_wizard.html",
+        resolve: loadSequence('projectWizardCtrl'),
+        title: 'Create a new project',
+        ncyBreadcrumb: {
+            label: 'Project Creation'
+        }
     }).state('app.registration', {
         url: '/registration',
         resolve: loadSequence('CryptoJS'),
