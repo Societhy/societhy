@@ -205,10 +205,22 @@
 							</td>
 							<td class="col-md-2" ng-if="proposal.status == 'approved'">
 								<div class="padding-10 text-center">
-									<a href="#" ng-click="ctrl.executeOffer(proposal)">
+									<span ng-if="proposal.executed == false">
+										<a href="#" ng-click="ctrl.executeProposal(proposal)">
+											<i class="fa fa-exchange padding-10 text-green" style="font-size:30px"></i>
+											<span class="label label-success block" style="font-size:15px;">Execute proposal</span>
+										</a>
+									</span>
+									<span ng-if="proposal.executed == true">
 										<i class="fa fa-check padding-10 text-green" style="font-size:30px"></i>
-										<span class="label label-success block" style="font-size:15px;">Execute proposal</span>
-									</a>
+										<span class="label label-success block" style="font-size:15px;">Proposal has been executed</span>
+									</span>
+									<span ng-if="proposal.executed == true && proposal.offer.contractor == user.account">
+										<a href="#" ng-click="ctrl.withdrawFundsFromOffer(proposal)">
+											<i class="fa fa-money padding-10 text-green" style="font-size:30px"></i>
+											<span class="label label-success block" style="font-size:15px;">Withdraw ether from contract</span>
+										</a>
+									</span>
 								</div>
 							</td>
 							<td class="col-md-2" ng-if="proposal.status == 'denied'">

@@ -178,7 +178,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-  ctrl.leaveOrga = function() {
+   ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(
@@ -432,7 +432,7 @@ app.controller('ExportActivityController', function($scope, $http, $timeout, $ro
  return ctrl;
 });
 
-app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal) {
+app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal, ngNotify) {
   var ctrl = this;
 
   $scope.proposal_status = {
@@ -545,6 +545,47 @@ ctrl.refreshProposals = function() {
    });
   }
 }
+
+ctrl.executeProposal = function(proposal) {
+ $scope.completeBlockchainAction(
+  function(password) {
+   $rootScope.toogleWait("Proposal is being executed...")
+   $http.post('/executeProposal', {
+    "password": password,
+    "socketid": $rootScope.sessionId,
+    "orga_id": $rootScope.currentOrga._id,
+    "proposal_id": proposal.proposal_id,
+  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+ }, function(data) {
+  $rootScope.currentOrga = data.data;
+  ctrl.reload();
+});  
+}
+
+ctrl.withdrawFundsFromOffer = function(proposal) {
+ $scope.completeBlockchainAction(
+  function(password) {
+   $rootScope.toogleWait("Proposal is being executed...")
+   $http.post('/withdrawFundsFromOffer', {
+    "password": password,
+    "socketid": $rootScope.sessionId,
+    "orga_id": $rootScope.currentOrga._id,
+    "offer_id": proposal.offer.contract_id,
+  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+ }, function(data) {
+  console.log(data);
+  ctrl.reload();
+  ngNotify.set(data.withdrawal, {
+    theme: 'pure',
+    position: 'top',    
+    type: 'success',
+    button: 'true',
+    sticky: false,
+    duration: 3000
+  });
+});
+}
+
 ctrl.reload();
 return ctrl;
 });

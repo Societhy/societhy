@@ -12,7 +12,7 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
     add-apt-repository -y ppa:jonathonf/python-3.6 && \
     apt-get update -y
 
-ENV DEPENDENCIES="python3.6 python3.6-dev autoconf autogen intltool libtool libffi-dev golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc pkg-config mongodb supervisor ethereum"
+ENV DEPENDENCIES="python3.6 python3.6-dev autoconf autogen intltool libtool libffi-dev golang python3-pip python-virtualenv libssl-dev curl file binutils make git tmux colord zsh ethminer npm nodejs inetutils-ping solc pkg-config mongodb supervisor ethereum wget redis-server"
 
 RUN apt-get install $DEPENDENCIES -qy
 

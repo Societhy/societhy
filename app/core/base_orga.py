@@ -18,6 +18,7 @@ from bson.objectid import ObjectId
 from models.organization import organizations, OrgaDocument, OrgaCollection
 from models.notification import notifications, NotificationDocument as notification
 from models.transaction import transactions, TransactionDocument as transaction
+from models.contract import contracts
 
 from models.errors import NotEnoughFunds
 from models.clients import db_filesystem
@@ -474,7 +475,28 @@ def executeProposal(user, password, orga_id, proposal_id):
 	if not orga_instance:
 		return {"data": "Organization does not exists", "status": 400}
 	try:
-		tx_hash = orga_instance.executeProposal(user, proposal_id, vote, password=password)
+		tx_hash = orga_instance.executeProposal(user, proposal_id, password=password)
+		if tx_hash is False:
+			return {"data": "User does not have permission to create an offer", "status": 400}	
+
+	except BadResponseError as e:
+		return {"data": str(e), "status": 400}
+	return {
+		"data": tx_hash,
+		"status": 200
+	}
+
+def withdrawFundsFromOffer(user, password, orga_id, offer_id):
+	if not user.unlockAccount(password=password):
+		return {"data": "Invalid password!", "status": 400}
+	
+	offer_instance = contracts.find_one({"_id": objectid.ObjectId(offer_id)})
+	orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+
+	if not offer_instance:
+		return {"data": "Offer does not exists", "status": 400}
+	try:
+		tx_hash = orga_instance.withdrawFundsFromOffer(user, offer_instance, password=password)
 		if tx_hash is False:
 			return {"data": "User does not have permission to create an offer", "status": 400}	
 
