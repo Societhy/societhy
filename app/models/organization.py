@@ -13,7 +13,7 @@ from models.user import users, UserDocument as User
 from models.contract import contracts, ContractDocument as Contract
 from models.project import ProjectDocument, ProjectCollection
 from models.member import Member
-from models.notification import notifications, NotificationDocument as notification
+from models.notification import notifications, NotificationDocument as Notification
 
 from models.offer import Offer
 from models.proposal import Proposal
@@ -258,7 +258,7 @@ class OrgaDocument(Document):
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
-		Notification.pushNotif({"sender": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "subject": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
+		Notification.pushNotif({"subject": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "sender": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
 		return resp
 
 	def memberJoined(self, logs, callback_data=None):
@@ -274,8 +274,9 @@ class OrgaDocument(Document):
 				rights_tag = logs[0]["decoded_data"][0]
 				if rights_tag in self.get('rights').keys():
 					member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
-					public_member =  Member(member_data, rights=self.get('rights').get(rights_tag), tag=rights_tag)
+					public_member = Member(member_data, tag=rights_tag)
 					self["members"][new_member.get('account')] = public_member
+					Notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": new_member.get("_id"), "type": "user"}, "category": "newMember"})
 					self.save_partial();
 					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
 
@@ -305,7 +306,7 @@ class OrgaDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
-				notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": member.get("_id"), "type": "user"}, "category": "MemberLeft"})
+				Notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": member.get("_id"), "type": "user"}, "category": "memberLeft"})
 				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
 		return False
 
@@ -322,7 +323,10 @@ class OrgaDocument(Document):
 			member = self.getMember(address)
 			if member:
 				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
-			self.save_partial()
+				Notification.pushNotif({"subject": {"id": objectid.ObjectId(member.get("_id")), "type": "user"},
+                                                        "sender": {"id": objectid.ObjectId(self["_id"]), "type": "orga"},
+                                                        "category": "newDonation", "amount": donation_amount})
+				self.save_partial()
 			return self["balance"]
 		return False
 

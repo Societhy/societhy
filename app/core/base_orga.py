@@ -55,7 +55,7 @@ def getOrgaDocument(user, _id=None, name=None):
 	
 	if user:
 		if user.get('account') in orga.get('members'):
-			rights = orga.get('members').get(user.get('account')).get('rights')
+			rights = orga.get('rights').get(orga.get("members").get(user.get("account")).get("tag"))
 		else:
 			rights = orga.default_rights.get('default')
 

@@ -17,13 +17,21 @@ class NotificationDocument(Document):
 		self["seen"] = False
 
 	def pushNotif(data):
-		notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
-                                      	"sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
-                                      	"category": data["category"],
-                                      	"createdAt": datetime.now(),
-                                      	"date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
-										"seen": False
-                })
+		if data["category"] == "newDonation":
+			notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
+                                      	      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      	      "category": data["category"],
+                                              "amount": data["amount"],
+                                      	      "createdAt": datetime.now(),
+                                      	      "date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+										"seen": False})
+		else:
+			notifications.insert({"subject" : { "id" : data["subject"]["id"], "type": data["subject"]["type"]},
+                                      	      "sender" : { "id" : data["sender"]["id"], "type": data["sender"]["type"]},
+                                      	      "category": data["category"],
+                                      	      "createdAt": datetime.now(),
+                                      	      "date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+					      "seen": False})
 
 
 	def push(self, data):
@@ -56,14 +64,20 @@ class NotificationDocument(Document):
 		return None
 
 	def getName(data):
-		name = None
+		data["name"] = "Unknown";
+		data["addr"] = "Unknown";
 		if data['type'] == 'orga':
-			name = models.organization.organizations.find_one({"_id" : data['id']}, {"name": 1})
+			res = models.organization.organizations.find_one({"_id" : data['id']}, {"name": 1, "address": 1})
+			data["name"] = res["name"]
+			data["addr"] = res["address"]
 		elif data['type'] == 'user':
-			name = users.find_one({"_id" : data['id']}, {"name": 1})
-		if name == None:
-			return "Unknown"
-		return  name['name']
+			res = users.find_one({"_id" : data['id']}, {"name": 1, "account": 1 })
+			data["name"] = res["name"]
+			data["addr"] = res["account"]
+		else:
+			data["name"] = "Unknown"
+			data["addr"] = "Unknown"
+		return data
                 
 	def getHisto(_id, date):
 		data = notifications.find({
@@ -84,8 +98,8 @@ class NotificationDocument(Document):
 			for record in data:
 				name = ""
 				res[i] = record
-				#res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
-				#res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
+				res[i]['sender'] = NotificationDocument.getName(record['sender'])
+				res[i]['subject'] = NotificationDocument.getName(record['subject'])
 				if record["category"] == "orgaCreate":
 					res[0]["first"] = record["date"] 
 				i = i + 1

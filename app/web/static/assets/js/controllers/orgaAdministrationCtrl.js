@@ -15,20 +15,22 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 		{url: "static/assets/views/partials/orga/administration/manageRights.html"}],
 		current: "static/assets/views/partials/orga/administration/transaction.html",
 		rights: {current: null, "new": null, tmp: $.extend({}, $rootScope.currentOrga.rights),
-			availableRights: {
-				"join": false,
-				"leave": false,
-				"donate": false,
-				"edit_rights": false,
-				"edit_jobs": false,
-				"create_project": false,
-				"create_offer": false,
-				"create_proposal": false,
-				"vote_proposal": false,
-				"recruit": false,
-				"remove_members": false,
-				"sell_token": false,
-				"buy_token": false
+			 availableRights: {
+			     "join": false,
+			     "leave": false,
+			     "donate": false,
+			     "edit_rights": false,
+			     "edit_jobs": false,
+			     "create_project": false,
+			     "create_offer": false,
+			     "create_proposal": false,
+			     "vote_proposal": false,
+			     "recruit": false,
+			     "remove_members": false,
+			     "sell_token": false,
+			     "buy_token": false,
+			     "access_administration": false
+			    
 			}
 		},
 		members: {tmp: {}}};
@@ -55,7 +57,6 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	$("#administrationContent").toggleClass("off");
 	return false;
     }
-
 
     /*
     ** MEMBERS **

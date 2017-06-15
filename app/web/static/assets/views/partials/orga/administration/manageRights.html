@@ -32,17 +32,17 @@
 	    </div>
 	  </td>
 	  <td>
-		  <div id="orgaRightsSelector">
-			  <div ng-if="admin.rights.current" ng-repeat="(id, data) in admin.rights.availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
-				  <input type="checkbox" name="{{id}}" value="{{data}}" id="checkboxManageRights{{$index}}"
-						 ng-model="admin.rights.tmp[admin.rights.current][id]"
-						 ng-checked="admin.rights.tmp[admin.rights.current][id]" ng-true-value="true" ng-false-value="false">
-				  <label for="checkboxManageRights{{$index}}">{{id}}</label>
-			</div>
-		  </div>
+	    <div id="orgaRightsSelector">
+	      <div ng-if="admin.rights.current" ng-repeat="(id, data) in admin.rights.availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+		<input type="checkbox" name="{{id}}" value="{{data}}" id="checkboxManageRights{{$index}}"
+		       ng-model="admin.rights.tmp[admin.rights.current][id]"
+		       ng-checked="admin.rights.tmp[admin.rights.current][id]" ng-true-value="true" ng-false-value="false">
+		<label for="checkboxManageRights{{$index}}">{{id}}</label>
+	      </div>
+	    </div>
 	  </td>
 	</tr>
-	  </tbody>
-	</table>
+      </tbody>
+    </table>
   </div>
 </div>

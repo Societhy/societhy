@@ -1,8 +1,8 @@
 <!-- start: ORGA DASHBOARD PROFILE -->
-<div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
+<div class="container-fluid container-fullw bg-white" ng-controller="OrgaMainController as ctrl">
   <div class="row">
     <div class="col-md-12">
-      <div ng-controller="OrgaMainController as ctrl" class="ng-scope ng-binding">
+      <div class="ng-scope ng-binding">
         <!-- start: USER TABSET -->
         <uib-tabset class="tabbable">
           <!-- start: TAB OVERVIEW -->
@@ -15,7 +15,6 @@
             </div>
 
             <div class="row  vertical-center">
-
               <div class="col-md-6 inline-block ">
                 <div class="user-left user-image">
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
@@ -161,7 +160,7 @@
           </uib-tab>
 
           <uib-tab heading="Activity" ng-click="initSlider()">
-            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
+            <div data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
           </uib-tab>
 
 <!--          <uib-tab heading="Members">
@@ -280,7 +279,7 @@
 	      </div>
 	    </div>
           </uib-tab>
-	  <uib-tab  heading="Administration">
+	  <uib-tab ng-show="currentRights.access_administration" heading="Administration">
 	    <div class="panel panel-white">
 	      <div class="panel-body">
 		<div data-ng-include="'static/assets/views/partials/orga/administration.html'">

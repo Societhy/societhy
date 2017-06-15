@@ -23,7 +23,6 @@ app.constant('JS_REQUIRES', {
         'jquery-appear-plugin': ['../../bower_components/jquery-appear/build/jquery.appear.min.js'],
         'spectrum-plugin': ['../../bower_components/spectrum/spectrum.js', '../../bower_components/spectrum/spectrum.css'],
         'jcrop-plugin': ['../../bower_components/Jcrop/js/jquery.Jcrop.min.js', '../../bower_components/Jcrop/css/jquery.Jcrop.min.css'],
-	'rangeSlider': ['../../bower_components/jqrangeslider/jQDateRangeSlider.js', '../../bower_components/jqrangeslider/jQRangeSlider.js'],
 	'datePicker': ['../../bower_components/bootstrap-daterangepicker/daterangepicker.js', "bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"],
 	'datatable': ['../../bower_components/datatable/media/js/jquery.dataTables.js', '../../bower_components/datatable/media/css/jquery.dataTables.css'],
 

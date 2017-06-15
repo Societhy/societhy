@@ -189,7 +189,8 @@
             "recruit": false,
             "remove_members": false,
             "sell_token": false,
-            "buy_token": false
+            "buy_token": false,
+	    "access_administration": false
         }
 
     // IMAGE UPLOAD

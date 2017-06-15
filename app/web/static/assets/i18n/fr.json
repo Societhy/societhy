@@ -260,10 +260,10 @@
            "title": "Historique",
            "messages": {
               "orgaCreate": "Création de l'organisation.",
-              "MemberLeft": "Un membre à <u>quitté</u> l'organisation.",
-              "NewMember": "Un membre à <u>rejoint</u> l'organisation.",
-              "ProposalCreated": "Un membre vient de soumettre une nouvelle proposition.",
-              "DonationMade": "Une donation vient d'être faite."
+              "memberLeft": "Un membre à <u>quitté</u> l'organisation.",
+              "newMember": "Un membre à <u>rejoint</u> l'organisation.",
+              "proposalCreated": "Un membre vient de soumettre une nouvelle proposition.",
+              "newDonation": "Une donation vient d'être faite."
           },
           "filter": {
               "title": "Filtre",
@@ -302,8 +302,11 @@
               "button": "Exporter la selection actuelle",
               "header": {
                   "date" : "Date",
-                  "organization": "Nom de l'envoyeur",
-                  "subject" : "Nom du sujet",
+                  "senderAddr" : "Nom de l'organisation",
+                  "senderName" : "Adresse ethereum de l'organisation",
+                  "subjectType": "Type du receveur",
+                  "subjectAddr" : "Adresse ethereum du receveur",
+                  "subjectName" : "Nom du receveur",
                   "category": "Action effectuée"
               }
           }
