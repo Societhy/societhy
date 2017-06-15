@@ -3,8 +3,9 @@ chain = "utils/genesis_authority.json"
 base-path = "/societhy/.parity"
 
 [rpc]
-interface = "127.0.0.1"
+interface = "172.17.0.2"
 hosts = ["all"]
+cors= "http://ethereum.github.io"
 apis = ["web3","eth","net","parity","traces","rpc","personal","signer"]
 
 [account]

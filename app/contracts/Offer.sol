@@ -97,6 +97,7 @@ contract Offer {
 
     mapping(address => bool) actors;
 
+    event FundsWithdrawn(address indexed contractor, uint indexed withdrawalAmount);
 
     modifier onlyClient {
         if (msg.sender != address(client))
@@ -126,7 +127,7 @@ contract Offer {
         dailyWithdrawalLimit = _minDailyWithdrawalLimit;
         payoutFreezePeriod = _payoutFreezePeriod;
         isRecurrent = _isRecurrent;
-        duration = _duration;
+        duration = _duration * 1 minutes;
         creationDate = now;
         offerType = _type;
     }
@@ -202,21 +203,21 @@ contract Offer {
     }
 
     function sign() public payable returns (bool) {
-        // if (msg.sender != address(originalClient) // no good samaritans give us ether
-        //     || msg.value < initialWithdrawal    // no under/over payment
-        //     || dateOfSignature != 0      // don't accept twice
-        //     || votingDeadline == 0       // votingDeadline needs to be set
-        //     || now < votingDeadline + splitGracePeriod) // give people time to split
-        //     throw;
+        if (msg.sender != address(originalClient) // no good samaritans give us ether
+            || msg.value < initialWithdrawal    // no under/over payment
+            || dateOfSignature != 0      // don't accept twice
+            || votingDeadline == 0 )      // votingDeadline needs to be set
+            //|| now < votingDeadline + splitGracePeriod) // give people time to split
+            throw;
 
-        // lastWithdrawal = votingDeadline + payoutFreezePeriod;
-        // if (payoutFreezePeriod == 0) {
-        //     if (!contractor.send(initialWithdrawal))
-        //         throw;
-        //     initialWithdrawalDone = true;
-        // }
-        // dateOfSignature = now;
-        // isContractValid = true;
+        lastWithdrawal = votingDeadline + payoutFreezePeriod;
+        if (payoutFreezePeriod == 0) {
+            if (!contractor.send(initialWithdrawal))
+                throw;
+            initialWithdrawalDone = true;
+        }
+        dateOfSignature = now;
+        isContractValid = true;
         return true;
     }
 
@@ -254,15 +255,17 @@ contract Offer {
         if (msg.sender != contractor || now < votingDeadline + payoutFreezePeriod)
             throw;
         uint timeSincelastWithdrawal = now - lastWithdrawal;
-        // Calculate the amount using 1 second precision.
+        // // Calculate the amount using 1 second precision.
         uint amount = (timeSincelastWithdrawal * dailyWithdrawalLimit) / (1 days);
         if (amount > this.balance) {
             amount = this.balance;
         }
         var lastWithdrawalReset = lastWithdrawal;
         lastWithdrawal = now;
-        if (!contractor.send(amount))
+        if (!contractor.send(amount)) {
             lastWithdrawal = lastWithdrawalReset;
+        }
+        FundsWithdrawn(contractor, amount);
     }
 
     // Perform the withdrawal of the initial sum of money to the contractor

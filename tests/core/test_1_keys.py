@@ -9,7 +9,10 @@ from models.clients import eth_cli
 
 from tests.fixtures import *
 
-def test_genBaseKey():
+def test_genBaseKey(miner):
+	mockTx(nb=1)
+	while miner.refreshBalance() < 1:
+		bw.waitBlock()
 	key = keys.genBaseKey("test")
 	assert len(key.get('address')) == 42
 	assert key.get('file') is not None
