@@ -10,6 +10,7 @@ app/web/nodes_modules/.bin/
 app/web/nodes_modules/prebuild_install/
 app/web/nodes_modules/semver-truncate/
 app/web/nodes_modules/tar-fs
+app/web/node_modules/
 
 
 
