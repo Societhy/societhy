@@ -13,7 +13,12 @@ app.controller('NotificationController', function($scope, $rootScope, $http, $se
     };
 
     socketIO.on('update_notif', function (data) {
-       console.log(data)
-    })
+        $http.get("/getUserUnreadNotification").then(function (response) {
+            console.log(response);
+            $rootScope.unread_notification = JSON.parse(response.data);
+            $rootScope.toogleWait("notif");
+        });
+    });
     return ctrl;
+
 });

@@ -25,7 +25,7 @@ class NotificationDocument(Document):
 		if self["subject"]["type"] == "user":
 			if str(self["subject"]['id']) in Clients:
 				with app.app_context():
-					emit("update_notif", "copy me ?",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+					emit("update_notif", "",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
 
 
 	def pushNotif(data):
