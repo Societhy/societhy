@@ -458,7 +458,7 @@ class OrgaDocument(Document):
 		"""
 		member = self.getMember(user)
 		if member:
-			return member.get('rights', {}).get(action)
+			return self.get("rights").get(member.get("tag")).get(action)
 		else:
 			return self.get('rights').get('default').get(action)
 
