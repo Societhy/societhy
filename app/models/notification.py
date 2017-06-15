@@ -17,6 +17,8 @@ class NotificationDocument(Document):
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 		self["seen"] = False
+		if "createdAt" not in self:
+			self["createdAt"] = datetime.now()
 
 	def save(self, force=False, uuid=False, **kwargs):
 		super().save(force=force, uuid=uuid, **kwargs)

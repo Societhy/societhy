@@ -46,7 +46,12 @@
 				<a href class="dropdown-toggle" uib-dropdown-toggle><span class="badge"> {{unread_notification.length || 0}} </span><i class="fa fa-bell"></i></a>
 				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
 					<li>
-						<span class="dropdown-header" translate="topbar.activities.HEADER"> You have new notifications</span>
+						<div ng-if="unread_notification.length">
+							<span class="dropdown-header text-large" style="text-align: center" > You have new notifications </span>
+						</div>
+						<div ng-if="!unread_notification.length">
+							<span class="dropdown-header text-large" style="text-align: center"> You have no new notification</span>
+						</div>
 					</li>
 					<li>
 						<div class="drop-down-wrapper ps-container">
@@ -54,15 +59,17 @@
 								<div ng-repeat="value in unread_notification">
 									<a ng-click="ctrl.click_notif(value)" class="media list-group-item" href="">
 										<span class="media-body block no-margin"> {{value.description}}
-										<small class="block text-grey">10 minutes ago</small>
+										<small class="block text-grey">{{value.createdAt["$date"] | date:'medium'}}</small>
 										</span>
 									</a>
 								</div>
 							</div>
 						</div>
 					</li>
-					<li class="view-all">
-						<a href="javascript:void(0)" translate="topbar.activities.SEEALL"> See All </a>
+					<li>
+						<div ng-if="unread_notification.length">
+							<span class="dropdown-header text-large" style="text-align: center" ng-click="ctrl.mark_all_as_read()" > <a> Mark all as read </a> </span>
+						</div>
 					</li>
 				</ul>
 			</li>

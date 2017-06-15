@@ -3,12 +3,12 @@
  * Clip-Two Main Controller
  */
 
- app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, $http, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
+app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translate, $localStorage, $window, $document, $timeout, $http, cfpLoadingBar, Fullscreen, toaster, SweetAlert) {
     // Loading bar transition
     // -----------------------------------
     var $win = $($window), $body = $('body');
     $scope.horizontalNavbarCollapsed = true;
-    
+
     $scope.menuInit = function (value) {
         $scope.horizontalNavbarCollapsed = value;
     };
@@ -38,14 +38,14 @@
             $body.removeClass("app-boxed-page");
         }
         if(typeof CKEDITOR !== 'undefined'){
-         for(name in CKEDITOR.instances)
-         {
-           CKEDITOR.instances[name].destroy();
-       }
-   }
-});
+            for(name in CKEDITOR.instances)
+            {
+                CKEDITOR.instances[name].destroy();
+            }
+        }
+    });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-      $scope.horizontalNavbarCollapsed = true;
+        $scope.horizontalNavbarCollapsed = true;
         //stop loading bar on stateChangeSuccess
         event.targetScope.$watch("$viewContentLoaded", function () {
 
@@ -196,6 +196,14 @@
         }, 0);
     };
 
+    $rootScope.toogleInfo = function(text) {
+        if (waitToast) {
+            $rootScope.toogleInfo();
+        }
+        $timeout(function () {
+            toaster.pop({type: "info", title: "Information", body: text});
+        }, 0);
+    };
     $rootScope.toogleError = function(text) {
         if (waitToast) {
             $rootScope.toogleWait();
@@ -206,28 +214,28 @@
     };
 
     var tmpCallback = null;
-    
+
     $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({
-          title: "Unlock your wallet",
-          type: "input",
-          inputType: "password",
-          showCancelButton: false,
-          closeOnConfirm: true,
-          inputPlaceholder: "Password"
-      },
-      function(inputValue) {
-        if (inputValue === false) return false;
-        else if (inputValue === "") {
-            SweetAlert.swal.showInputError("You need to write something!");
-            return false
-        }
-        var password = inputValue;
-        args[0] = password;
-        requestCallback.apply(null, args);
-        tmpCallback = updateCallback;
-    });
+                title: "Unlock your wallet",
+                type: "input",
+                inputType: "password",
+                showCancelButton: false,
+                closeOnConfirm: true,
+                inputPlaceholder: "Password"
+            },
+            function(inputValue) {
+                if (inputValue === false) return false;
+                else if (inputValue === "") {
+                    SweetAlert.swal.showInputError("You need to write something!");
+                    return false
+                }
+                var password = inputValue;
+                args[0] = password;
+                requestCallback.apply(null, args);
+                tmpCallback = updateCallback;
+            });
     };
 
     $rootScope.$on('socket:txResult', function (event, data) {
@@ -261,11 +269,11 @@
         $http.get('/searchFor/'.concat(query)).then(function(response) {
             console.log(response.data);
             if (response.data.length == 1) {
-                $state.go("app.".concat(response.data[0].category), response.data[0]);                
+                $state.go("app.".concat(response.data[0].category), response.data[0]);
             }
         });
     }
-    
+
     $scope.doVerifications = function() {
         if (!$rootScope.user) {
             $rootScope.toogleError("Please sign-in first")
