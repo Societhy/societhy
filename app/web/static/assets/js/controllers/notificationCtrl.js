@@ -10,28 +10,52 @@ app.controller('NotificationController', function($scope, $rootScope, $http, $se
         console.log(notif);
         $state.go(notif.angularState.route, notif.angularState.params);
         $state.go(notif["angularState"]["route"], notif["angularState"]["params"]);
+        $http.post("/markNotificationsAsRead", {"data" : [notif]}).then(function (response) {
+          console.log(response);
+          if (response.status = 200)
+          {
+              ctrl.updateNotif();
+          }
+      })
+
     };
-    
+
+    ctrl.updateNotif = function ()
+    {
+        $http.get("/getUserUnreadNotification").then(function (response) {
+            console.log(response);
+                $rootScope.unread_notification = JSON.parse(response.data);
+        });
+    };
+
     ctrl.mark_all_as_read = function ()
     {
-      $http.post("/markNotificationsAsRead", $scope.unread_notification).then(function (response) {
+      $http.post("/markNotificationsAsRead", {"data" : $scope.unread_notification}).then(function (response) {
           console.log(response);
+          if (response.status = 200)
+          {
+              ctrl.updateNotif();
+          }
       })  
     };
 
     socketIO.on('update_notif', function (data) {
-        $http.get("/getUserUnreadNotification").then(function (response) {
-            console.log(response);
-            $rootScope.unread_notification = JSON.parse(response.data);
-            $rootScope.unread_notification.sort(function(a, b)
+        ctrl.updateNotif();
+        if ($rootScope.unread_notification.length != 0)
             {
-                return a["date"] - b["date"]
-            });
-            console.log("aaaaaaaaaaaa");
-            last_one = $rootScope.unread_notification[$rootScope.unread_notification.length -1];
-            $rootScope.toogleInfo(last_one["description"]);
-        });
+                $rootScope.unread_notification.sort(function (a, b) {
+                    return a["date"] - b["date"]
+                });
+                last_one = $rootScope.unread_notification[$rootScope.unread_notification.length - 1];
+                $rootScope.toogleInfo(last_one["description"]);
+            }
     });
-    return ctrl;
 
+    if ($rootScope.user)
+    {
+            this.updateNotif();
+
+    }
+
+    return ctrl;
 });

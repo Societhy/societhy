@@ -197,13 +197,11 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
     };
 
     $rootScope.toogleInfo = function(text) {
-        if (waitToast) {
-            $rootScope.toogleInfo();
-        }
         $timeout(function () {
             toaster.pop({type: "info", title: "Information", body: text});
         }, 0);
     };
+    
     $rootScope.toogleError = function(text) {
         if (waitToast) {
             $rootScope.toogleWait();

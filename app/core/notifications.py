@@ -107,7 +107,8 @@ def notifyToOne(sender, user, category, subject=None):
 def getUserUnreadNotification(user):
 	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
 	for notif in unread_notifs:
-		notif["description"] = descriptionDict[notif["category"]]
+		if ("description" not in notif):
+			notif["description"] = descriptionDict[notif["category"]]
 	return {
 		"data" : dumps(unread_notifs),
 		"status" : 200
@@ -115,7 +116,7 @@ def getUserUnreadNotification(user):
 
 def markNotificationsAsRead(user, notifs):
 	for item in notifs:
-		current = notifications.find_one({"_id":ObjectId(item._id)})
+		current = notifications.find_one({"_id":ObjectId(item["_id"]["$oid"])})
 		current["seen"] = True
 		current.save_partial()
 	return {

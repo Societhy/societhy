@@ -192,7 +192,7 @@ class OrgaDocument(Document):
 			"from": from_,
 			"password": password,
 			"initial_funds": self.get('initial_funds')
-			} if self.get('initial_funds', 0) > 0 else None
+			}
 
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
 		return tx_hash
@@ -213,7 +213,7 @@ class OrgaDocument(Document):
 		self.board["is_deployed"] = True
 
 		#SEND FUNDS TO ORGA AFTER IT IS CREATED
-		if callback_data and callback_data.get('action') == "donate":
+		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds") > 0:
 			from_ = callback_data.get('from')
 			amount = float(callback_data.get('initial_funds'))
 			if from_.refreshBalance() > amount:
@@ -246,14 +246,13 @@ class OrgaDocument(Document):
 						"_id":str(self.get("_id")),
 						"name":self.get("name")
 					}
-				}
+				},
+				"description": "You have been invited in the organisation " + self["name"] + " by " + callback_data.get('from')["name"]  + " as a " + self.get("invited_users").get(item)["tag"]
 			})
 			notif.save()
 			user = users.find_one({"_id":objectid.ObjectId(item)})
 			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
 			user.save()
-
-
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})

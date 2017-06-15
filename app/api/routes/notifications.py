@@ -1,4 +1,4 @@
-from flask import Blueprint, make_response, jsonify
+from flask import Blueprint, make_response, jsonify, request
 
 from core import user_management, notifications
 
@@ -15,5 +15,5 @@ def getUserUnreadNotification(user):
 @router.route('/markNotificationsAsRead', methods=['POST'])
 @requires_auth
 def markNotificationsAsRead(user):
-	ret = notifications.markNotificationsAsRead(user, request.json.get["unread_notification"])
+	ret = notifications.markNotificationsAsRead(user, request.json.get("data"))
 	return make_response(jsonify(ret.get('data')), ret.get('status'))
