@@ -331,7 +331,7 @@ class OrgaDocument(Document):
 		"""
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self.public())
+			new_project = ProjectDocument(at=contract_address, contract='BaseProject', owner=self.public())
 			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
 			if callback_data:
@@ -433,9 +433,11 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		print("LOGS", logs)
+		# print("LOGS", logs)
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
+			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			print("balance == ", fromWei(eth_cli.eth_getBalance(destination)), " and withdrawal amount ", fromWei(withdrawal_amount))
 			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
 		return False
 

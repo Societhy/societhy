@@ -255,15 +255,16 @@ contract Offer {
         if (msg.sender != contractor || now < votingDeadline + payoutFreezePeriod)
             throw;
         uint timeSincelastWithdrawal = now - lastWithdrawal;
-        // // Calculate the amount using 1 second precision.
+        // // // Calculate the amount using 1 second precision.
         uint amount = (timeSincelastWithdrawal * dailyWithdrawalLimit) / (1 days);
         if (amount > this.balance) {
             amount = this.balance;
         }
         var lastWithdrawalReset = lastWithdrawal;
         lastWithdrawal = now;
-        if (!contractor.send(amount)) {
+        if (amount < 0.0001 ether || !contractor.send(amount)) {
             lastWithdrawal = lastWithdrawalReset;
+            FundsWithdrawn(contractor, 0);
         }
         FundsWithdrawn(contractor, amount);
     }

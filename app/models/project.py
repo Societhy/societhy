@@ -69,28 +69,8 @@ class ProjectDocument(Document):
 		"""
 		pass
 
-	def createCampaign(self, campaign, from_):
-		"""
-		Empty
-		"""
-		pass
 
-	def endCampaign(self, campaign):
-		"""
-		Empty
-		"""
-		pass
-
-	def createProposal(self, proposal):
-		"""
-		Empty
-		"""
-		pass
-
-	def killProposal(self, proposal):
-		"""
-		Empty
-		"""
+	def createPoll(self, from_, poll):
 		pass
 
 	def transferOwnership(self, from_, to_):

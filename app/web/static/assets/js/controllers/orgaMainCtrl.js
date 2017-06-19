@@ -137,6 +137,7 @@
           $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
           ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
           ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
+          ctrl.member_list = Object.values($rootScope.currentOrga.members);
         }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
@@ -147,6 +148,8 @@
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");
+        $rootScope.currentOrga = null;
+        $rootScope.currentRights = null;
       });
     };
 
@@ -445,6 +448,11 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "denied": "has been denied."
   }
 
+  $rootScope.$watch("currentOrga", function(_new, _old) {
+    if (_new != _old)
+      ctrl.reload();
+  })
+
   ctrl.reload = function() {
     if ($rootScope.currentOrga) {
       ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
@@ -454,14 +462,12 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
         ctrl.proposal_list[i].expand = false;
         if ($rootScope.user != null) {
           for (let j = 0; j != $rootScope.user.votes.length; j++) {
-            console.log($rootScope.user.votes[j].offer, ctrl.proposal_list[i].destination, $rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
             if ($rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
               ctrl.proposal_list[i].voted = $rootScope.user.votes[j].vote[0];
           }
         }
       }
     }
-    console.log("proposals", ctrl.proposal_list)
   }
 
   ctrl.proposalLookup = function(item) {
@@ -574,21 +580,13 @@ ctrl.withdrawFundsFromOffer = function(proposal) {
     "socketid": $rootScope.sessionId,
     "orga_id": $rootScope.currentOrga._id,
     "offer_id": proposal.offer.contract_id,
-  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+  }).then(function(data) {}, function(error) { $rootScope.toogleError("You cannot withdraw less than 0.0001 ether");});
  }, function(data) {
   console.log(data);
-  ctrl.reload();
-  ngNotify.set(data.withdrawal, {
-    theme: 'pure',
-    position: 'top',
-    type: 'success',
-    button: 'true',
-    sticky: false,
-    duration: 3000
-  });
+  $rootScope.toogleInfo(data.data.withdrawal);
 });
 }
-
 ctrl.reload();
+
 return ctrl;
 });

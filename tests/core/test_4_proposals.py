@@ -146,19 +146,16 @@ def test_execute_proposal(miner, testOrga):
 
 
 def test_withdraw_funds_from_offer(miner, user, testOrga):
-	sleep(3)
 	for p in testOrga.get('proposals').values():
 		initial_balance = eth_cli.eth_getBalance(p.get('offer').get('contractor'))
 		if p.get('status') == 'approved' and p.get('executed') is True:
-			for _ in range(10):
+			for _ in range(5):
 				ret = base_orga.withdrawFundsFromOffer(user, password, testOrga.get('_id'), p.get('offer').get('contract_id'))
 				initial_balance -= 2303750000000000 # remove gas cost
-				print('------------', ret.get('status'), ret.get('data'))
-				# assert ret.get('status') == 200
-				# assert ret.get('data') != None
+				assert ret.get('status') == 200
+				assert ret.get('data') != None
 				if ret.get('status') == 200:
 					bw.waitTx(ret.get('data'))
 				assert initial_balance <= eth_cli.eth_getBalance(p.get('offer').get('contractor')) <= initial_balance + int(p.get('offer').get('dailyWithdrawalLimit'))
-
 	bw.stop()
 

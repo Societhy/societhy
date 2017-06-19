@@ -205,6 +205,15 @@
         }, 0);
     };
 
+    $rootScope.toogleInfo = function(text) {
+        if (waitToast) {
+            $rootScope.toogleWait();
+        }
+        $timeout(function () {
+            toaster.pop({type: "info", title: "Info", body: text});
+        }, 0);
+    };
+
     var tmpCallback = null;
 
     $scope.completeBlockchainAction = function(requestCallback, updateCallback) {

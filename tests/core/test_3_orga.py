@@ -24,7 +24,7 @@ def test_create_orga(miner, user):
 		keys.importNewKey(user, f)
 	user.setDefaultKey("0x4030c937f52b45959447c5fa695bcc462695c2fa")
 
-	initial_funds = 99
+	initial_funds = 1000
 	for orga_model, contracts in governances.items():
 		test_orga = {
 			"name": "Societhy" + "_" + orga_model, 

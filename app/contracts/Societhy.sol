@@ -1,6 +1,6 @@
 pragma solidity ^0.4.7;
 
-import {basic_project as Project} from "basic_project.sol";
+import {BaseProject as Project} from "BaseProject.sol";
 import {mortal} from "library.sol";
 import {BoardRoom} from "BoardRoom.sol";
 import {Offer} from "Offer.sol";
@@ -32,16 +32,17 @@ contract Societhy is mortal, BoardRoom {
     /* this runs when the contract is executed */
     function Societhy(string _name, address _rules, address _registry) BoardRoom(_rules, _registry) public {
         name = _name;
-        projects.push(ProjectData({projectAddress: new Project(''), name: ''}));
+        projects.push(ProjectData({projectAddress: new Project('', address(rules)), name: ''}));
     }
 
     function createProject(string _name) {
-        Project newProjectAddress = new Project(_name);
+        Project newProjectAddress = new Project(_name, address(rules));
         uint id;
 
         projectId[newProjectAddress] = projects.length;
         id = projects.length++;
         projects[id] = ProjectData({projectAddress: newProjectAddress, name: _name});
+        registry.createProject(newProjectAddress);
 
         ProjectCreated(newProjectAddress, _name);
     }
@@ -86,7 +87,7 @@ contract Societhy is mortal, BoardRoom {
           p.executed = true;
 
           if(!p.destination.call.value(p.value)(bytes4(keccak256(_calldata)))){
-             // if(!p.destination.call.value(p.value)(_calldata)){
+           // if(!p.destination.call.value(p.value)(_calldata)){
               throw;
           }
           ProposalExecuted(_proposalID, p.destination, _calldata);
@@ -126,10 +127,9 @@ function cancelOffer() {
 }
 
 function donate() payable {
-    // if (address(registry) != 0
-    //      && registry.memberId(msg.sender) != 0 && msg.value > 0) {
-        //     registry.madeDonation(msg.sender, msg.value);
-        // }
-        DonationMade(msg.sender, msg.value, true);
+    if (address(registry) != 0 && msg.value > 0) {
+        registry.madeDonation(msg.sender, msg.value);
     }
+    DonationMade(msg.sender, msg.value, true);
+}
 }
