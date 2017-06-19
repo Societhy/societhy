@@ -80,7 +80,7 @@ class OrgaDocument(Document):
 				self.token.compile()
 				if token_freezer_contract:
 					self.token_freezer = Contract(token_freezer_contract, owner.get('account'))
-					self.token_freezer.compile()					
+					self.token_freezer.compile()
 			if registry_contract:
 				self.registry = Contract(registry_contract, owner.get('account'))
 				self.registry.compile()
@@ -133,7 +133,7 @@ class OrgaDocument(Document):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		"""
-		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+		from_ : address of the account used to deploy the contract (self["owner"] is used by default)
 		password : password to unlock the account
 		args : list of arguments to be passed upon the contract creation
 		Deploy the contract on the blockchain
@@ -220,11 +220,11 @@ class OrgaDocument(Document):
 				from_.session_token = None
 				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
 				if not tx_hash:
-					return {"data": "User does not have permission to donate", "status": 400}	
+					return {"data": "User does not have permission to donate", "status": 400}
 			else:
 				return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 
-	
+
 		self["balance"] = self.getTotalFunds()
 
 		self["contracts"] = dict()
@@ -334,6 +334,10 @@ class OrgaDocument(Document):
 			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self.public())
 			if len(logs[0]["decoded_data"]) == 1:
 				new_project["name"] = logs[0]["decoded_data"][0]
+			if callback_data:
+				new_project['description'] = callback_data['description']
+				new_project['amount'] = callback_data['amount']
+				new_project['invited_users'] = callback_data['invited_users']
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
 				self["projects"][contract_address] = new_project
@@ -625,7 +629,7 @@ class OrgaDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'ProjectCreated'} if user.get('notifications').get('ProjectCreated') else None
-			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"], mail=mail, callback_data=project))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -643,7 +647,7 @@ class OrgaDocument(Document):
 		"""
 		if not self.can(user, "create_offer"):
 			return False
-	
+
 		try:
 			offer["hashOfTheProposalDocument"] = sha3_256(offer["description"].encode()).hexdigest().encode('utf-8')[:32]
 			offer["minDailyWithdrawalLimit"] = int(toWei(offer.get('recurrentWithdrawal')) / 30) if offer.get('isRecurrent') else 0
@@ -652,7 +656,7 @@ class OrgaDocument(Document):
 			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
 		except KeyError as e:
 			return "missing param"
-		
+
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
@@ -741,7 +745,7 @@ class OrgaDocument(Document):
 		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
 
 		proposal["score"] = (float(proposal["yea"] / (proposal["yea"] + proposal["nay"])) * 100) if proposal["participation"] > 0 else 0
-		
+
 		if proposal["yea"] > proposal["nay"]\
 		   and proposal["participation"] >= self["rules"]["quorum"]\
 		   and proposal["score"] >= self["rules"]["majority"]:
@@ -852,7 +856,7 @@ class OrgaCollection(Collection):
 		Overload the parent find_one function to initialize the Contract object which has its _id contained in the orga document
 		"""
 		from .orga_models import governances
-		
+
 		doc = super().find_one(*args, **kwargs)
 		if doc and doc.get("gov_model"):
 			doc = governances[doc["gov_model"]]["templateClass"](doc)
@@ -860,4 +864,3 @@ class OrgaCollection(Collection):
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)
-

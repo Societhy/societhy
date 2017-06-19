@@ -1,8 +1,16 @@
 app.controller('ProjectWizardCtrl',
-  function($scope, ngNotify) {
+  function($scope, ngNotify, $rootScope, $http, $state) {
 
     $scope.currentStep = 1;
-    $scope.proj = {};
+    $scope.proj = {invited_users: {}};
+
+    $scope.addInvitedUser = function() {
+      if (!$scope.proj.invited_users)
+          $scope.proj.invited_users = {};
+
+      $scope.proj.invited_users[$scope.selected_user.originalObject._id] = $scope.selected_user.originalObject;
+      console.log($scope.proj.invited_users);
+    }
 
     $scope.form = {
         next: function (form) {
@@ -52,6 +60,22 @@ app.controller('ProjectWizardCtrl',
         },
 
         submit: function (form) {
+          if ($scope.doVerifications()) {
+           $scope.completeBlockchainAction(
+            function(password) {
+             $rootScope.toogleWait("Creating project")
+             $http.post('/createProjectFromOrga', {
+              "socketid": $rootScope.sessionId,
+              "orga_id": $rootScope.currentOrga._id,
+              "newProject": $scope.proj,
+              "password": password
+            }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+           }, function(data) {
+             $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+             var orga = {'_id': $rootScope.currentOrga._id, 'name': $rootScope.currentOrga.name};
+             $state.go("app.organization", orga);
+           })
+         }
         },
 
         reset: function () {

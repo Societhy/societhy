@@ -1,10 +1,10 @@
 'use strict';
-/** 
+/**
   * controller for Wizard Form example
   */
 
 
-  app.controller('OrgaWizardCtrl', 
+  app.controller('OrgaWizardCtrl',
     function ($scope, $http, $timeout, $uibModal, ngNotify, FileUploader, $sessionStorage, $rootScope, $state) {
 
         $scope.currentStep = 1;
@@ -19,7 +19,7 @@
                 "cons": ["Less reactive than a centralized structure", "Permissions are non-customisable", "Tokens are frozen while a proposal you voted for is still debating"],
                 "desc": "DAO stands for 'decentralized autonomous organisation'. It is a kind of organisation that is controlled entirely by all of its members, and in which every member has the same rights. One does not need to become a member of the organisation to participate in its operations, and the weight of one's vote depends on the amount he invested in the structure",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -59,7 +59,7 @@
                 "cons": ["The perfect fit for public organisations", "Transparency in every way", "Highly customizable"],
                 "desc": "This type of organisation is the right choice for public structures and those who want complete transparency over their processes, hence preventing fraud.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -99,7 +99,7 @@
                 "cons": ["Perfect for small and large businnesses wanting to go public", "Buy and sell your company shares", "Highly secured with the use of curators"],
                 "desc": "This type of structure is the right fit for organisations wanting to involve external investors and/or their customers in their funding and decision making.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -139,7 +139,7 @@
                 "cons": ["Perfect fit for individuals wanting full control over the structure", "Members need to trust the administrators"],
                 "desc": "This type of structure is made for people that want a strong leadership in their organization, allowing quick and efficient decision making, it is the right structure for a regular business needing privacy over its accounts.",
                 "tags": ["owner", "admin", "member", "guest"],
-                "rights": { 
+                "rights": {
                     "owner": {
                         "join": false,
                         "leave": true,
@@ -209,7 +209,7 @@
     uploaderDocs.onBeforeUploadItem = function (item) {
         console.log(uploaderDocs.queue.length);
         item.formData.push({"name": item.file.name});
-        item.formData.push({"type": item.file.type});        
+        item.formData.push({"type": item.file.type});
         console.info('onBeforeUploadItem', item);
     };
 
@@ -267,7 +267,7 @@
     });
         rightsModalInstance.result.then(function() {}, function () {
         });
-    }        
+    }
 
 
 
@@ -346,7 +346,7 @@
                         for (var i = 0; i != uploaderDocs.queue.length; i++)
                         {
                             uploaderDocs.queue[i].formData.push({"orga_id" : data.data._id})
-                        } 
+                        }
                         uploaderDocs.uploadAll();
                         $state.go("app.organization", data.data);
                     })
@@ -373,7 +373,7 @@
 
         ngNotify.set(text, {
             theme: 'pure',
-            position: 'top',    
+            position: 'top',
             type: 'error',
             button: 'true',
             sticky: false,

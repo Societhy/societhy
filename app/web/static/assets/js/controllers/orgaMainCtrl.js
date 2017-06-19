@@ -14,17 +14,19 @@
    var currIndex = 0;
 
    ctrl.setProduct = function(product) {
-     $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
-       images = response.data;
-       currIndex = 0;
-       slides = $scope.slides = [];
+     if (product) {
+       $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
+         images = response.data;
+         currIndex = 0;
+         slides = $scope.slides = [];
 
-       if (images.length > 0) {
-         for (var i = 0; i != images.length; i++) {
-           slides.push({image: images[i], id: currIndex++});
+         if (images.length > 0) {
+           for (var i = 0; i != images.length; i++) {
+             slides.push({image: images[i], id: currIndex++});
+           }
          }
-       }
-     })
+       })
+     }
      $scope.currentProd = product;
      if ($scope.currentProd) {
        $scope.reviewList = $scope.currentProd.reviewList;
@@ -46,7 +48,8 @@
     };
 
     $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
-      console.log(response);;
+      console.log(response);
+      $scope.reviewList.push(reviewPack);
     }, function(error) {
       console.log(error);
     });
@@ -559,7 +562,7 @@ ctrl.executeProposal = function(proposal) {
  }, function(data) {
   $rootScope.currentOrga = data.data;
   ctrl.reload();
-});  
+});
 }
 
 ctrl.withdrawFundsFromOffer = function(proposal) {
@@ -577,7 +580,7 @@ ctrl.withdrawFundsFromOffer = function(proposal) {
   ctrl.reload();
   ngNotify.set(data.withdrawal, {
     theme: 'pure',
-    position: 'top',    
+    position: 'top',
     type: 'success',
     button: 'true',
     sticky: false,

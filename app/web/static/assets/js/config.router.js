@@ -86,14 +86,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Organisation'
         }
-    }).state('app.project', {
-        url: '/orga/:name/:_id',
-        templateUrl: "static/assets/views/project_dashboard.html",
-        resolve: loadSequence('projectMainCtrl'),
-        title: 'Project dashboard',
-        ncyBreadcrumb: {
-            label: 'Project'
-        }
+    // }).state('app.project', {
+    //     url: '/orga/:name/:_id',
+    //     templateUrl: "static/assets/views/project_dashboard.html",
+    //     resolve: loadSequence('projectMainCtrl'),
+    //     title: 'Project dashboard',
+    //     ncyBreadcrumb: {
+    //         label: 'Project'
+    //     }
     }).state('app.newproject', {
         url: '/project/new',
         templateUrl: "static/assets/views/project_wizard.html",
