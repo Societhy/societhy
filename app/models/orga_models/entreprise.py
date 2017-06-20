@@ -1,6 +1,3 @@
-from mongokat import Collection, Document
-
-from ..clients import client
 from ..organization import OrgaDocument as Organization
 
 class Entreprise(Organization):

@@ -9,6 +9,14 @@ contract OpenRegistry is Registry {
 		_;
 	}
 
+	modifier projectExists(address _someProject) {
+		for (uint i = 0; i<projects.length; i++) {
+			if (projects[i] == _someProject) {
+				_;
+			}
+		}
+	}
+
 	function OpenRegistry() public {
 		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now, project: address(0)}));
 	}
@@ -49,7 +57,7 @@ contract OpenRegistry is Registry {
 		return true;
 	}
 
-	function registerToProject(address _project, address _someMember, string _tag) public returns (bool) {
+	function registerToProject(address _project, address _someMember, string _tag) projectExists(_project) public returns (bool) {
 		uint id;
 		if (projectMemberId[_project][_someMember] == 0) {
 			projectMemberId[_project][_someMember] = members.length;

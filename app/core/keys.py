@@ -2,22 +2,16 @@
 module that controls all the keys related features
 """
 
-import time
 import json
-import scrypt
 from os import environ, listdir, path, remove
-from base64 import b64decode, b64encode
 from time import strftime, clock
 
-from flask import session, request, Response
-
-from models import users
-from models.clients import eth_cli
+import models.clients as clients
+import scrypt
+from core.utils import normalizeAddress, fromWei
+from rlp.utils import encode_hex
 
 from . import SALT_WALLET_PASSWORD
-from core.utils import normalizeAddress, fromWei
-
-from rlp.utils import encode_hex
 
 keyDirectory = environ.get('KEYS_DIRECTORY')
 
@@ -36,7 +30,7 @@ def genBaseKey(password):
 	"""
 	hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD))
 	dirContent = listdir(keyDirectory)
-	key = eth_cli.personal_newAccount(hashPassword)
+	key = clients.eth_cli.personal_newAccount(hashPassword)
 	keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
 	return {"address": key, "file": keyFile}
 
@@ -51,7 +45,7 @@ def genLinkedKey(user, password):
 	def genKeyRemote(password):
 		hashPassword = encode_hex(scrypt.hash(password, SALT_WALLET_PASSWORD))
 		dirContent = listdir(keyDirectory)
-		key = eth_cli.personal_newAccount(hashPassword)
+		key = clients.eth_cli.personal_newAccount(hashPassword)
 		keyFile = list(set(listdir(keyDirectory)) - set(dirContent))[0]
 		return {"address": key, "file": keyFile}
 	
@@ -69,7 +63,7 @@ def keyWasGenerated(user, address):
 	assignes an address, without the key file associated with it, to a user
 	"""
 	address = normalizeAddress(address, hexa=True)
-	user.addKey(address, local_account=True, password_type="local", balance=fromWei(eth_cli.eth_getBalance(address)))
+	user.addKey(address, local_account=True, password_type="local", balance=fromWei(clients.eth_cli.eth_getBalance(address)))
 	return {
 		"data": "OK",
 		"status": 200
@@ -107,7 +101,7 @@ def importNewKey(user, sourceKey):
 		keyAlreadyExists(key.get('address'), user.get('eth').get('keys', {}))
 		keyFilename = importKeyRemote(key.get('id'), sourceKey)
 		key["address"] = normalizeAddress(key.get('address'), hexa=True)
-		balance = fromWei(eth_cli.eth_getBalance(key.get('address')))
+		balance = fromWei(clients.eth_cli.eth_getBalance(key.get('address')))
 		data = { "address": key.get('address'), "balance": balance}
 		user.addKey(key.get('address'), local_account=False, password_type="local", balance=balance, keyfile=keyFilename)
 	except (json.JSONDecodeError, KeyFormatError):

@@ -1,13 +1,13 @@
 from os import environ
 
-from flask import json as flask_json, Flask
-from flask_socketio import SocketIO
-from flask_mail import Mail
-from pymongo import MongoClient
-import gridfs
 import eventlet
+import gridfs
 import redis
 from ethjsonrpc import ParityEthJsonRpc
+from flask import json as flask_json, Flask
+from flask_mail import Mail
+from flask_socketio import SocketIO
+from pymongo import MongoClient
 
 app = Flask(__name__, template_folder='../web/static/', static_url_path='', static_folder='../web')
 
@@ -27,3 +27,6 @@ eventlet.monkey_patch(thread=True)
 redis_cli = redis.StrictRedis(host='172.17.0.2', port=6379, db=0)
 socketio = SocketIO(async_mode='eventlet', json=flask_json, messge_queue="redis://172.17.0.2:6379")
 mail = Mail()
+
+from core.blockchain_watcher import BlockchainWatcher
+blockchain_watcher = BlockchainWatcher()

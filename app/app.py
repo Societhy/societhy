@@ -1,23 +1,21 @@
-from os import environ
-from sys import exit
 import re
+from os import environ
 from signal import signal, SIGINT
+from sys import exit
 
-from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
+from flask import render_template, request, make_response, jsonify
 
 from api import MongoSessionInterface as MongoSessionInterface
-from api.routes.user import router as user_routes
-from api.routes.organization import router as orga_routes
-from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
 from api.routes.notifications import router as notif_routes
-
+from api.routes.organization import router as orga_routes
+from api.routes.project import router as project_routes
+from api.routes.user import router as user_routes
 from core import secret_key
-from core.utils import UserJSONEncoder
 from core.chat import socketio
-
-from core.notifications import notifyToOne, mail
+from core.notifications import mail
+from core.utils import UserJSONEncoder
 from models import organizations, users, projects
 from models.clients import app
 

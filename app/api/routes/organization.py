@@ -1,9 +1,6 @@
-from flask import Blueprint, Response, render_template, request, jsonify, make_response
-
-from core import base_orga, sales_platform
-
-from models.organization import organizations
 from api import requires_auth, ensure_fields, populate_user
+from core import base_orga, sales_platform
+from flask import Blueprint, request, jsonify, make_response
 
 router = Blueprint('orga', __name__)
 

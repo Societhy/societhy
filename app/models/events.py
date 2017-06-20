@@ -1,13 +1,10 @@
-from os import environ as env
-from sha3 import keccak_256
 from collections import deque
 
-from ethereum.abi import decode_abi
+from core.utils import to32bytes
 from rlp.utils import decode_hex
+from sha3 import keccak_256
 
 from .clients import eth_cli, socketio
-from core.utils import to32bytes
-from core.notifications import notifyToOne
 
 """
 this module defines classes that represent event fired by the smart contracts. They are registred as requests are made by users that requires a transaction on the blockchain.
@@ -146,6 +143,7 @@ class LogEvent(Event):
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
 		if self.mail:
 			for user in self.mail['users']:
+				from models.notifications import notifyToOne
 				notifyToOne(self.mail['sender'], user, 'NewMember', self.mail['subject'])
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.logs, self.callback_data))
@@ -169,3 +167,5 @@ class EventQueue(deque):
 					event.tx = tx
 					yield event
 					self.remove(event)
+
+

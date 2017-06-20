@@ -2,7 +2,9 @@
 In developpement.
 """
 from mongokat import Collection, Document
+
 from .clients import client
+
 
 class FundraiseDocument(Document):
 	pass

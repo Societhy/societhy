@@ -113,6 +113,10 @@ function hasVoted(uint _pollID, address _voter) constant returns (bool) {
     }
 }
 
+function join() {
+   Registry(address(rules.registry)).registerToProject(address(this), msg.sender, "member");
+}
+
 function donate() payable {
     if (address(rules.registry) != 0 && msg.value > 0) {
         Registry(address(rules.registry)).madeDonation(msg.sender, msg.value);

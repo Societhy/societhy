@@ -3,7 +3,7 @@ from time import sleep
 from bson import objectid, errors, json_util
 
 from core import wallet, keys, base_orga
-from core.blockchain_watcher import blockchain_watcher as bw
+from models.clients import blockchain_watcher as bw
 from core.utils import *
 
 from models.user import users
@@ -207,15 +207,6 @@ def test_donate(miner, testOrga):
 	assert ret.get('data') is not None
 	bw.waitEvent("DonationMade")
 	assert testOrga.getTotalFunds() - initial_balance == 1000
-	
-def test_createproject(miner, testOrga):
-	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {})
-	assert ret.get('status') == 200
-	assert ret.get('data').startswith('0x')
-	bw.waitTx(ret.get('data'))
-	sleep(0.5)
-	testOrga.reload()
-	assert len(testOrga["projects"]) == 1
 
 def test_leave(miner, testOrga):
 	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))

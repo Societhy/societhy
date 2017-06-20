@@ -2,13 +2,10 @@
 module that controls all the wallet related features
 """
 
-import time
-import json
 import requests
 
 from ethjsonrpc import wei_to_ether
 
-from models import users
 from models.clients import eth_cli
 
 

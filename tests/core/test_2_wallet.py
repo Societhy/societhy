@@ -2,7 +2,7 @@ import pytest
 from time import sleep
 
 from core import wallet, keys
-from core.blockchain_watcher import blockchain_watcher as bw
+from models.clients import blockchain_watcher as bw
 from core.utils import *
 
 from models.user import users

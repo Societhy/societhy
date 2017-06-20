@@ -3,26 +3,19 @@ This module is fot hangling all the basic organisations-related requests.
 Every function is defined by her own.
 """
 
-from flask import session, request, Response
-from bson import objectid, errors, json_util
 import json
 
-from ethjsonrpc.exceptions import BadResponseError
-from flask_socketio import emit, send
-
+from bson import objectid, errors, json_util
 from core.utils import toWei
-
-from models import users, UserDocument
-from bson.objectid import ObjectId
-
-from models.organization import organizations, OrgaDocument, OrgaCollection
-from models.notification import notifications, NotificationDocument as notification
-from models.transaction import transactions, TransactionDocument as transaction
-from models.contract import contracts
-
-from models.errors import NotEnoughFunds
+from ethjsonrpc.exceptions import BadResponseError
+from flask import Response
 from models.clients import db_filesystem
+from models.contract import contracts
+from models.notification import NotificationDocument as notification
 from models.orga_models import *
+from models.organization import organizations
+from models.transaction import transactions
+
 
 def getOrgaDocument(user, _id=None, name=None):
 	"""
