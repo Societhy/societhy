@@ -157,5 +157,4 @@ def test_withdraw_funds_from_offer(miner, user, testOrga):
 				if ret.get('status') == 200:
 					bw.waitTx(ret.get('data'))
 				assert initial_balance <= eth_cli.eth_getBalance(p.get('offer').get('contractor')) <= initial_balance + int(p.get('offer').get('dailyWithdrawalLimit'))
-	bw.stop()
 

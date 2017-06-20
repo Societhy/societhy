@@ -34,4 +34,6 @@ def test_join_project(miner, testProject):
 	assert len(miner["projects"]) == 1
 
 def test_create_poll(miner, testOrga):
+	bw.stop()
 	pass
+	
