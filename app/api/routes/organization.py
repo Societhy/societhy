@@ -1,9 +1,6 @@
-from flask import Blueprint, Response, render_template, request, jsonify, make_response
-
-from core import base_orga, sales_platform
-
-from models.organization import organizations
 from api import requires_auth, ensure_fields, populate_user
+from core import base_orga, sales_platform
+from flask import Blueprint, request, jsonify, make_response
 
 router = Blueprint('orga', __name__)
 
@@ -89,7 +86,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', 'newProject'], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:

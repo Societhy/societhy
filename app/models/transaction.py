@@ -1,14 +1,7 @@
 from mongokat import Collection, Document
+
 from .clients import client
 
-from bson.objectid import ObjectId
-from bson import json_util
-import json
-from datetime import datetime
-
-import models.organization
-from models.user import users, UserDocument as user
-from models.project import projects,  ProjectDocument as project
 
 class TransactionDocument(Document):
 

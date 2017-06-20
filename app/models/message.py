@@ -1,10 +1,11 @@
 """
 Model class that represent a message for the chat functionality.
 """
-from bson.objectid import ObjectId
 
 from mongokat import Collection, Document
+
 from .clients import client
+
 
 class MessageDocument(Document):
 

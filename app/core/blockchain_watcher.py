@@ -4,14 +4,9 @@ Every second, the function watch() is ran, new events are retrieved from the blo
 Some functions allow to control the process of the transactions and wait for events.
 """
 
-from eventlet import event as g_event, greenthread, sleep as g_sleep
-
-from signal import signal, SIGINT
-from time import sleep
-from sys import exit
-
+import models.events
+from eventlet import event as g_event, greenthread
 from models.clients import eth_cli
-from models.events import Event, EventQueue, LogEvent
 
 class BlockchainWatcher:
 
@@ -43,7 +38,7 @@ class BlockchainWatcher:
         self.lastTx = None
         self.waiting = False
         self.running = False
-        self.eventQueue = EventQueue()
+        self.eventQueue = models.events.EventQueue()
 
     def run(self):
 
@@ -75,7 +70,7 @@ class BlockchainWatcher:
                 print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.lastTx)
           
                 for event in self.eventQueue.yieldEvents(block.get('transactions')):
-                    if isinstance(event, LogEvent):
+                    if isinstance(event, models.events.LogEvent):
                         self.lastEvent = event
                         if self.newLogEvent.ready():
                             self.newLogEvent = g_event.Event()
@@ -167,4 +162,4 @@ class BlockchainWatcher:
         self.running = False
 
 
-blockchain_watcher = BlockchainWatcher()
+# blockchain_watcher = BlockchainWatcher()

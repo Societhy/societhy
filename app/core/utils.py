@@ -1,9 +1,11 @@
 """
 This modules contains tools function that might me used by the models or the controllers.
 """
-from copy import copy
-from bson.objectid import ObjectId
 import json
+from copy import copy
+
+from bson.objectid import ObjectId
+
 
 class UserJSONEncoder(json.JSONEncoder):
 	"""

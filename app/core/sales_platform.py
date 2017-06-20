@@ -5,11 +5,11 @@ Each function correspond to a route.
 
 import json
 
-from bson.objectid import ObjectId
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 from models.clients import db_filesystem
-from models.product import products, ProductsDocument
 from models.organization import organizations
+from models.product import products, ProductsDocument
 
 def addProduct(newProduct):
     """

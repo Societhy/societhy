@@ -9,8 +9,16 @@ contract OpenRegistry is Registry {
 		_;
 	}
 
+	modifier projectExists(address _someProject) {
+		for (uint i = 0; i<projects.length; i++) {
+			if (projects[i] == _someProject) {
+				_;
+			}
+		}
+	}
+
 	function OpenRegistry() public {
-		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now}));
+		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now, project: address(0)}));
 	}
 
 	function register(address _someMember, string _tag) public returns (bool){
@@ -18,7 +26,7 @@ contract OpenRegistry is Registry {
 		if (memberId[_someMember] == 0) {
 			memberId[_someMember] = members.length;
 			id = members.length++;
-			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now});
+			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(0)});
 			NewMember(_someMember, _tag);
 			return true;
 		}
@@ -42,6 +50,27 @@ contract OpenRegistry is Registry {
 			list[i] = members[i].member;
 		}
 		return list;
+	}
+	
+	function createProject(address _project) public returns (bool) {
+		projects.push(_project);
+		return true;
+	}
+
+	function registerToProject(address _project, address _someMember, string _tag) projectExists(_project) public returns (bool) {
+		uint id;
+		if (projectMemberId[_project][_someMember] == 0) {
+			projectMemberId[_project][_someMember] = members.length;
+			id = members.length++;
+			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(this)});
+			NewMember(_someMember, _tag);
+			return true;
+		}
+		else throw;
+	}
+
+	function memberIdForProject(address _someProject, address _someMember) public returns (uint) {
+		return projectMemberId[_someProject][_someMember];
 	}
 
 	function madeDonation(address _from, uint _value) {

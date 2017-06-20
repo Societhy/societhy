@@ -3,6 +3,8 @@ from flask import Blueprint, make_response, jsonify, request
 from core import user_management, notifications
 
 from api import requires_auth
+from core import notifications
+from flask import Blueprint, make_response, jsonify
 router = Blueprint('notifications', __name__)
 
 

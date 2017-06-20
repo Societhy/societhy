@@ -14,17 +14,19 @@
    var currIndex = 0;
 
    ctrl.setProduct = function(product) {
-     $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
-       images = response.data;
-       currIndex = 0;
-       slides = $scope.slides = [];
+     if (product) {
+       $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
+         images = response.data;
+         currIndex = 0;
+         slides = $scope.slides = [];
 
-       if (images.length > 0) {
-         for (var i = 0; i != images.length; i++) {
-           slides.push({image: images[i], id: currIndex++});
+         if (images.length > 0) {
+           for (var i = 0; i != images.length; i++) {
+             slides.push({image: images[i], id: currIndex++});
+           }
          }
-       }
-     })
+       })
+     }
      $scope.currentProd = product;
      if ($scope.currentProd) {
        $scope.reviewList = $scope.currentProd.reviewList;
@@ -46,7 +48,8 @@
     };
 
     $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
-      console.log(response);;
+      console.log(response);
+      $scope.reviewList.push(reviewPack);
     }, function(error) {
       console.log(error);
     });
@@ -132,6 +135,9 @@
       }).then(function(response) {
         if (response.data.orga) {
           $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+          ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
+          ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
+          ctrl.member_list = Object.values($rootScope.currentOrga.members);
         }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
@@ -142,6 +148,8 @@
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");
+        $rootScope.currentOrga = null;
+        $rootScope.currentRights = null;
       });
     };
 
@@ -198,6 +206,14 @@
    }
  }
 
+  ctrl.expandProject = function(proj) {
+    for (var i = 0; i != ctrl.projects_number; i++) {
+      if (proj.address == ctrl.projects_list[i].address) {
+        ctrl.projects_list[i].expand = (proj.expand == false ? true : false);
+      }
+    }
+  }
+
 	/**
 	 * Create a project from the organization.
      * @method createProject
@@ -215,6 +231,9 @@
         }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
        }, function(data) {
          $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+         for (var i = 0; i != $scope.currentOrga.projects; i++) {
+           $scope.currentOrga.projects.expand = false;
+         }
        })
      }
 
@@ -398,7 +417,7 @@ app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeo
         ($rootScope.slider.end));
     };
     if ($rootScope.currentOrga)
-      initHisto(); 
+      initHisto();
     return ctrl;
 
   });
@@ -429,6 +448,11 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "denied": "has been denied."
   }
 
+  $rootScope.$watch("currentOrga", function(_new, _old) {
+    if (_new != _old)
+      ctrl.reload();
+  })
+
   ctrl.reload = function() {
     if ($rootScope.currentOrga) {
       ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
@@ -438,14 +462,12 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
         ctrl.proposal_list[i].expand = false;
         if ($rootScope.user != null) {
           for (let j = 0; j != $rootScope.user.votes.length; j++) {
-            console.log($rootScope.user.votes[j].offer, ctrl.proposal_list[i].destination, $rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
             if ($rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
               ctrl.proposal_list[i].voted = $rootScope.user.votes[j].vote[0];
           }
         }
       }
-    }    
-    console.log("proposals", ctrl.proposal_list)
+    }
   }
 
   ctrl.proposalLookup = function(item) {
@@ -546,7 +568,7 @@ ctrl.executeProposal = function(proposal) {
  }, function(data) {
   $rootScope.currentOrga = data.data;
   ctrl.reload();
-});  
+});
 }
 
 ctrl.withdrawFundsFromOffer = function(proposal) {
@@ -558,21 +580,13 @@ ctrl.withdrawFundsFromOffer = function(proposal) {
     "socketid": $rootScope.sessionId,
     "orga_id": $rootScope.currentOrga._id,
     "offer_id": proposal.offer.contract_id,
-  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+  }).then(function(data) {}, function(error) { $rootScope.toogleError("You cannot withdraw less than 0.0001 ether");});
  }, function(data) {
   console.log(data);
-  ctrl.reload();
-  ngNotify.set(data.withdrawal, {
-    theme: 'pure',
-    position: 'top',    
-    type: 'success',
-    button: 'true',
-    sticky: false,
-    duration: 3000
-  });
+  $rootScope.toogleInfo(data.data.withdrawal);
 });
 }
-
 ctrl.reload();
+
 return ctrl;
 });

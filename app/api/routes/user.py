@@ -1,8 +1,6 @@
-from flask import Blueprint, Response, render_template, request, jsonify, make_response
-
-from core import auth, keys, user_management, wallet
-
 from api import requires_auth, populate_user
+from core import auth, keys, user_management, wallet
+from flask import Blueprint, Response, request, jsonify, make_response
 
 router = Blueprint('user', __name__)
 

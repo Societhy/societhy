@@ -3,13 +3,13 @@
 /**
  * Config constant
  */
-app.constant('APP_MEDIAQUERY', {
+ app.constant('APP_MEDIAQUERY', {
     'desktopXL': 1200,
     'desktop': 992,
     'tablet': 768,
     'mobile': 480
 });
-app.constant('JS_REQUIRES', {
+ app.constant('JS_REQUIRES', {
     //*** Scripts
     scripts: {
         //*** Javascript Plugins
@@ -23,9 +23,9 @@ app.constant('JS_REQUIRES', {
         'jquery-appear-plugin': ['../../bower_components/jquery-appear/build/jquery.appear.min.js'],
         'spectrum-plugin': ['../../bower_components/spectrum/spectrum.js', '../../bower_components/spectrum/spectrum.css'],
         'jcrop-plugin': ['../../bower_components/Jcrop/js/jquery.Jcrop.min.js', '../../bower_components/Jcrop/css/jquery.Jcrop.min.css'],
-	'rangeSlider': ['../../bower_components/jqrangeslider/jQDateRangeSlider.js', '../../bower_components/jqrangeslider/jQRangeSlider.js'],
-	'datePicker': ['../../bower_components/bootstrap-daterangepicker/daterangepicker.js', "bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"],
-	'datatable': ['../../bower_components/datatable/media/js/jquery.dataTables.js', '../../bower_components/datatable/media/css/jquery.dataTables.css'],
+        'rangeSlider': ['../../bower_components/jqrangeslider/jQDateRangeSlider.js', '../../bower_components/jqrangeslider/jQRangeSlider.js'],
+        'datePicker': ['../../bower_components/bootstrap-daterangepicker/daterangepicker.js', "bower_components/bootstrap-daterangepicker/daterangepicker-bs3.css"],
+        'datatable': ['../../bower_components/datatable/media/js/jquery.dataTables.js', '../../bower_components/datatable/media/css/jquery.dataTables.css'],
 
         //*** External libraries
 
@@ -38,7 +38,6 @@ app.constant('JS_REQUIRES', {
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',
-//        'inboxCtrl': 'static/assets/js/controllers/inboxCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',
         'userOverviewCtrl' : 'static/assets/js/controllers/userOverviewCtrl.js',
@@ -48,11 +47,12 @@ app.constant('JS_REQUIRES', {
         'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
         'productModalCtrl': 'static/assets/js/controllers/productModalCtrl.js',
-	'orgaActivityCtrl': 'static/assets/js/controllers/orgaActivityCtrl.js',
-	'notificationCtrl': 'static/assets/js/controllers/notificationCtrl.js',
-	'orgaAdministrationCtrl': 'static/assets/js/controllers/orgaAdministrationCtrl.js',
+        'orgaActivityCtrl': 'static/assets/js/controllers/orgaActivityCtrl.js',
+        'notificationCtrl': 'static/assets/js/controllers/notificationCtrl.js',
+        'orgaAdministrationCtrl': 'static/assets/js/controllers/orgaAdministrationCtrl.js',
         'offerModalCtrl': 'static/assets/js/controllers/offerModalCtrl.js',
-        'newsCtrl':'static/assets/js/controllers/newsCtrl.js'
+        'newsCtrl':'static/assets/js/controllers/newsCtrl.js',
+        'projectWizardCtrl' : 'static/assets/js/controllers/projectWizardCtrl.js',
     },
     //*** angularJS Modules
     modules: [{

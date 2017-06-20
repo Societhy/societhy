@@ -2,7 +2,7 @@ import pytest
 import time
 from os import environ, listdir, path, remove
 
-from core.blockchain_watcher import blockchain_watcher as bw
+from models.clients import blockchain_watcher as bw
 from core import keys
 
 
@@ -101,6 +101,10 @@ def miner():
 @pytest.fixture(scope='module')
 def testOrga(miner):
 	return organizations.find_one({"name" :'Societhy_ngo'})
+
+@pytest.fixture(scope='module')
+def testProject(miner):
+	return projects.find_one({"name" :'kawa_bunga_project'})
 
 def mockTx(nb=5):
 	for i in range(nb):

@@ -1,14 +1,12 @@
 import scrypt
-
-from flask import session
 from bson.objectid import ObjectId
+from core import SALT_WALLET_PASSWORD
+from core.utils import fromWei
+from flask import session
 from mongokat import Collection, Document
 from rlp.utils import encode_hex
 
 from .clients import client, eth_cli
-
-from core import SALT_WALLET_PASSWORD
-from core.utils import fromWei
 
 """
 This module implements the UserDoc class alongside with all its methods
@@ -83,11 +81,29 @@ class UserDocument(Document):
 		"""
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
-			orga = organizations.find_one({"address": address})
+			orga = models.organization.organizations.find_one({"address": address})
 			if not orga :
-				orga = organizations.find_one({"contracts.registry.address": address})
+				orga = models.organization.organizations.find_one({"contracts.registry.address": address})
 			if orga and orga.public() not in self["organizations"]:
 				self["organizations"].append(orga.public())
+				self.save_partial();
+			else:
+				return False
+		return None
+
+	def joinedProject(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
+		None is returned if everything went fine, False otherwise
+		"""
+		if len(logs) == 1 and logs[0].get('address') is not None:
+			address = logs[0].get('address')
+			proj = models.project.projects.find_one({"address": address})
+			if not proj :
+				proj = models.project.projects.find_one({"contracts.registry.address": address})
+			if proj and proj.get('address') not in self["projects"]:
+				self["projects"].append(proj.get('address'))
 				self.save_partial();
 			else:
 				return False
@@ -101,9 +117,9 @@ class UserDocument(Document):
 		"""
 		if len(logs) == 1 and logs[0].get('address') is not None:
 			address = logs[0].get('address')
-			orga = organizations.find_one({"address": address})
+			orga = models.organization.organizations.find_one({"address": address})
 			if not orga :
-				orga = organizations.find_one({"contracts.registry.address": address})
+				orga = models.organization.organizations.find_one({"contracts.registry.address": address})
 
 			for o in self.get("organizations", []):
 				if o.get('contracts').get('registry').get('address') == orga.get('contracts').get('registry').get('address'):
@@ -340,6 +356,7 @@ class UserCollection(Collection):
 		"city": str,
         "contact_list": list,
         "organizations": list,
+        "projects": list,
 		"pending_invitation": list,
 		"votes": list
 	}
@@ -359,5 +376,7 @@ class UserCollection(Collection):
 
 
 users = UserCollection(collection=client.main.users)
-from models.organization import organizations
+
+import models.organization
+import models.project
 

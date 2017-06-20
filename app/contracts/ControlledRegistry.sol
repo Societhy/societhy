@@ -12,7 +12,7 @@ contract ControlledRegistry is Registry {
 	}
 
 	function ControlledRegistry() public {
-		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now}));
+		members.push(Member({member: 0, donation: 0, tag: '', memberSince: now, project: address(this)}));
 		owner = msg.sender;
 		rights[msg.sender] = true;
 	}
@@ -22,7 +22,7 @@ contract ControlledRegistry is Registry {
 		if (memberId[_someMember] == 0) {
 			memberId[_someMember] = members.length;
 			id = members.length++;
-			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now});
+			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(this)});
 			NewMember(_someMember, _tag);
 			return true;
 		}
@@ -38,6 +38,27 @@ contract ControlledRegistry is Registry {
 		delete rights[_someMember];
 		members.length--;
 		MemberLeft(_someMember);
+	}
+
+		function createProject(address _project) public returns (bool) {
+		projects.push(_project);
+		return true;
+	}
+
+	function registerToProject(address _project, address _someMember, string _tag) public returns (bool) {
+		uint id;
+		if (projectMemberId[_project][_someMember] == 0) {
+			projectMemberId[_project][_someMember] = members.length;
+			id = members.length++;
+			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(this)});
+			NewMember(_someMember, _tag);
+			return true;
+		}
+		else throw;
+	}
+
+	function memberIdForProject(address _someProject, address _someMember) public returns (uint) {
+		return projectMemberId[_someProject][_someMember];
 	}
 
 	function getMemberList() returns (address[]) {
