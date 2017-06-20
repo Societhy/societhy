@@ -7,6 +7,9 @@ from bson.objectid import ObjectId
 from flask_mail import Message
 from mongokat import Collection, Document
 
+from models.clients import app
+from flask_socketio import SocketIO, send, emit
+
 from .clients import client, mail
 
 descriptionDict = {
@@ -101,6 +104,18 @@ class NotificationDocument(Document):
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
 		super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
 		self["seen"] = False
+		if "createdAt" not in self:
+			self["createdAt"] = datetime.now()
+
+	def save(self, force=False, uuid=False, **kwargs):
+		super().save(force=force, uuid=uuid, **kwargs)
+		imp = __import__('core.chat', globals(), locals(), ['Clients'], 0)
+		Clients = imp.Clients
+		if self["subject"]["type"] == "user":
+			if str(self["subject"]['id']) in Clients:
+				with app.app_context():
+					emit("update_notif", "",  namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+
 
 	def pushNotif(data):
 		print(data["subject"]["type"])

@@ -6,6 +6,8 @@ from sys import exit
 from eventlet.greenpool import GreenPool
 from flask import render_template, request, make_response, jsonify
 
+
+
 from api import MongoSessionInterface as MongoSessionInterface
 from api.routes.fundraise import router as fundraise_routes
 from api.routes.notifications import router as notif_routes
@@ -21,6 +23,7 @@ from models.clients import app
 
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
+app.session_interface = MongoSessionInterface()
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -29,6 +32,8 @@ app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+
+workers_pool = GreenPool(size=3)
 
 jinja_options = app.jinja_options.copy()
 
@@ -42,17 +47,12 @@ jinja_options.update(dict(
 ))
 app.jinja_options = jinja_options
 
-app.session_interface = MongoSessionInterface()
 app.register_blueprint(notif_routes)
 app.register_blueprint(user_routes)
 app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
 
-mail.init_app(app)
-socketio.init_app(app)
-
-workers_pool = GreenPool(size=3)
 
 @app.after_request
 def add_header(response):
@@ -85,6 +85,10 @@ def searchForAnything(query):
 	for results in workers_pool.imap(process_query, (organizations, users, projects)):
 		data += results
 	return make_response(jsonify(data), 200)
+
+
+mail.init_app(app)
+socketio.init_app(app)
 
 def stopServer(signal, frame):
 	if blockchain_watcher.running:

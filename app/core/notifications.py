@@ -5,6 +5,8 @@ There is 3 classes who will modelise the differents kind of notifications, and a
 from bson.json_util import dumps
 from models.notification import notifications
 
+from bson.objectid import ObjectId
+
 # Exemple for test #notifyToOne(organizations.find_one({"_id": ObjectId("58823a62fa25f07ac36d4b71")}), users.find_one({"_id" : ObjectId("5876417fcba72b00a03cf9f4")}), 'newSpending')
 
 # descriptionDict = {
@@ -102,5 +104,15 @@ def getUserUnreadNotification(user):
 		notif["description"] = descriptionDict[notif["category"]]
 	return {
 		"data" : dumps(unread_notifs),
+		"status" : 200
+	}
+
+def markNotificationsAsRead(user, notifs):
+	for item in notifs:
+		current = notifications.find_one({"_id":ObjectId(item._id)})
+		current["seen"] = True
+		current.save_partial()
+	return {
+		"data" : "OK",
 		"status" : 200
 	}
