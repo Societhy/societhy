@@ -16,10 +16,9 @@ from api.routes.project import router as project_routes
 from api.routes.user import router as user_routes
 from core import secret_key
 from core.chat import socketio
-from core.notifications import mail
 from core.utils import UserJSONEncoder
 from models import organizations, users, projects
-from models.clients import app
+from models.clients import app, mail
 
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
@@ -76,7 +75,7 @@ def helloWorld():
 
 @app.route('/searchFor/<query>', methods=['GET'])
 def searchForAnything(query):
-	
+
 	def process_query(collection):
 		regex = re.compile("^%s" % query, re.IGNORECASE)
 		return list(collection.lookup(regex))
@@ -101,7 +100,7 @@ signal(SIGINT, stopServer)
 
 if __name__ == '__main__':
 	if environ.get('MINING'):
-		from core.blockchain_watcher import blockchain_watcher
+		from models.clients import blockchain_watcher
 		blockchain_watcher.run()
 	if environ.get('IP'):
 		socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))

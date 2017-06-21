@@ -58,9 +58,9 @@ class BlockchainWatcher:
         if self.running:
             print('.', end='', flush=True)
             newBlocks = eth_cli.eth_getFilterChanges(self.newBlockFilter)
-          
+
             for blockHash in newBlocks:
-          
+
                 block = eth_cli.eth_getBlockByHash(blockHash, True)
                 self.lastTx = [tx.get('hash') for tx in block.get('transactions')]
                 if self.newBlockEvent.ready():
@@ -68,7 +68,7 @@ class BlockchainWatcher:
                 else:
                     self.newBlockEvent.send()
                 print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.lastTx)
-          
+
                 for event in self.eventQueue.yieldEvents(block.get('transactions')):
                     if isinstance(event, models.events.LogEvent):
                         self.lastEvent = event
@@ -98,7 +98,7 @@ class BlockchainWatcher:
 
     def waitBlock(self, blockNumber=1):
         """
-        blockNumber : integer / number of block that need to be mined 
+        blockNumber : integer / number of block that need to be mined
         waits for a given number of blocks before triggering a newBlockEvent
         """
         while blockNumber > 0:
