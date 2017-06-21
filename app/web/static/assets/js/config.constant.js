@@ -53,6 +53,8 @@
         'offerModalCtrl': 'static/assets/js/controllers/offerModalCtrl.js',
         'newsCtrl':'static/assets/js/controllers/newsCtrl.js',
         'projectWizardCtrl' : 'static/assets/js/controllers/projectWizardCtrl.js',
+        'projectDiscoveryCtrl' : 'static/assets/js/controllers/projectDiscoveryCtrl.js',
+        'projectMainCtrl' : 'static/assets/js/controllers/projectMainCtrl.js',
     },
     //*** angularJS Modules
     modules: [{

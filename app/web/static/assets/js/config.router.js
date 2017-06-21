@@ -86,14 +86,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Organisation'
         }
-    // }).state('app.project', {
-    //     url: '/orga/:name/:_id',
-    //     templateUrl: "static/assets/views/project_dashboard.html",
-    //     resolve: loadSequence('projectMainCtrl'),
-    //     title: 'Project dashboard',
-    //     ncyBreadcrumb: {
-    //         label: 'Project'
-    //     }
+    }).state('app.project', {
+        url: '/project/:id',
+        templateUrl: "static/assets/views/project_homepage.html",
+        resolve: loadSequence('projectMainCtrl'),
+        title: 'Project homepage',
+        ncyBreadcrumb: {
+            label: 'Project'
+        }
     }).state('app.newproject', {
         url: '/project/new',
         templateUrl: "static/assets/views/project_wizard.html",
@@ -102,6 +102,14 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Project Creation'
         }
+      }).state('app.discoverprojects', {
+          url: '/project/discover',
+          templateUrl: "static/assets/views/project_discovery.html",
+          resolve: loadSequence('projectDiscoveryCtrl'),
+          title: 'Projects list',
+          ncyBreadcrumb: {
+              label: 'Projects'
+          }
     }).state('app.registration', {
         url: '/registration',
         resolve: loadSequence('CryptoJS'),
