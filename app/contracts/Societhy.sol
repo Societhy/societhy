@@ -4,6 +4,7 @@ import {BaseProject as Project} from "BaseProject.sol";
 import {mortal} from "library.sol";
 import {BoardRoom} from "BoardRoom.sol";
 import {Offer} from "Offer.sol";
+import "Registry.sol";
 
 contract Societhy is mortal, BoardRoom {
     /* define variable greeting of the type string */
@@ -11,9 +12,6 @@ contract Societhy is mortal, BoardRoom {
 
     mapping(address => uint) offerId;
     OfferData[] public offers;
-
-    mapping (address => uint) public projectId;
-    ProjectData[] public projects;
 
     event DonationMade(address indexed member, uint indexed value, bool success);
     event ProjectCreated(address indexed newProjectAddress, string name);
@@ -24,26 +22,15 @@ contract Societhy is mortal, BoardRoom {
         address contractor;
     }
 
-    struct ProjectData {
-        Project projectAddress;
-        string  name;
-    }
-
     /* this runs when the contract is executed */
     function Societhy(string _name, address _rules, address _registry) BoardRoom(_rules, _registry) public {
         name = _name;
-        projects.push(ProjectData({projectAddress: new Project('', address(rules)), name: ''}));
     }
 
-    function createProject(string _name) {
-        Project newProjectAddress = new Project(_name, address(rules));
-        uint id;
+    function createProject(string _name) cancreateproject {
+        Project newProjectAddress = new Project(_name, address(rules), address(registry));
 
-        projectId[newProjectAddress] = projects.length;
-        id = projects.length++;
-        projects[id] = ProjectData({projectAddress: newProjectAddress, name: _name});
-        registry.createProject(newProjectAddress);
-
+        registry.createProject(address(newProjectAddress));
         ProjectCreated(newProjectAddress, _name);
     }
 

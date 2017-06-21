@@ -3,9 +3,12 @@ pragma solidity ^0.4.7;
 contract Registry {
 	mapping (address => uint) public memberId;
 	mapping (address =>	mapping(address => uint)) public projectMemberId; 
-
 	Member[] public members;
-	address[] public projects;
+
+	mapping (address => uint) public projectId;
+	ProjectData[] public projects;
+
+
 	address owner;
 
 	// mapping(address => mapping(bytes4 => bool)) rights;
@@ -23,12 +26,20 @@ contract Registry {
 		address project;
 	}
 
+	struct ProjectData {
+		address project;
+		uint numMembers;
+	}
+
 	function register(address _someMember, string _tag) public returns (bool);
 	function leave(address _someMember);
 	function getMemberList() returns (address[]);
 
 	function createProject(address _someProject) public returns (bool);
-	function registerToProject(address _project, address _someMember, string _tag) public returns (bool);
+	function joinProject(address _project, address _someMember, string _tag) public returns (bool);
+	function leaveProject(address _project, address _someMember) public returns (bool);
+	function getMemberListForProject(address _someProject) returns (address[]);
+
 
 	function memberIdForProject(address _someProject, address _someMember) public returns (uint);
 

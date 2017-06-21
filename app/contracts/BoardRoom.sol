@@ -4,24 +4,24 @@ import "OpenRegistryRules.sol";
 import "OpenRegistry.sol";
 
 contract BoardRoomInterface {
-  function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID) {}
-  function vote(uint _proposalID, uint _position) returns (uint voteWeight) {}
-  function execute(uint _proposalID, bytes _calldata) {}
-  function changeRules(address _rules) {}
+  function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) returns (uint proposalID);
+  function vote(uint _proposalID, uint _position) returns (uint voteWeight);
+  function execute(uint _proposalID, bytes _calldata);
+  function changeRules(address _rules);
 
-  function voterAddressOf(uint _proposalID, uint _voteID) constant returns (address) {}
-  function numVoters(uint _proposalID) constant returns (uint) {}
-  function isExecuted(uint _proposalID) constant returns (bool) {}
-  function positionWeightOf(uint _proposalID, uint _position) constant returns (uint) {}
-  function voteOf(uint _proposalID, address _voter) constant returns (uint, uint, uint) {}
-  function hasVoted(uint _proposalID, address _voter) constant returns (bool) {}
+  function voterAddressOf(uint _proposalID, uint _voteID) constant returns (address);
+  function numVoters(uint _proposalID) constant returns (uint);
+  function isExecuted(uint _proposalID) constant returns (bool);
+  function positionWeightOf(uint _proposalID, uint _position) constant returns (uint);
+  function voteOf(uint _proposalID, address _voter) constant returns (uint, uint, uint);
+  function hasVoted(uint _proposalID, address _voter) constant returns (bool);
 
-  function destinationOf(uint _proposalId) public constant returns (address) {}
-  function valueOf(uint _proposalId) public constant returns (uint) {}
-  function hashOf(uint _proposalId) public constant returns (bytes32) {}
-  function debatePeriodOf(uint _proposalId) public constant returns (uint) {}
-  function createdOn(uint _proposalId) public constant returns (uint) {}
-  function createdBy(uint _proposalId) public constant returns (address) {}
+  function destinationOf(uint _proposalId) public constant returns (address);
+  function valueOf(uint _proposalId) public constant returns (uint);
+  function hashOf(uint _proposalId) public constant returns (bytes32);
+  function debatePeriodOf(uint _proposalId) public constant returns (uint);
+  function createdOn(uint _proposalId) public constant returns (uint);
+  function createdBy(uint _proposalId) public constant returns (address);
 
   event ProposalCreated(uint indexed _proposalID, address indexed _destination, uint indexed _value);
   event VoteCounted(address indexed _destination, uint indexed _position, address indexed _voter);
@@ -39,6 +39,12 @@ contract BoardRoom is BoardRoomInterface {
     if(rules.canPropose(msg.sender)) {
       _;
     }
+  }
+
+  modifier cancreateproject {
+    if(rules.canCreateProject(msg.sender)) {
+      _;
+    }    
   }
 
   modifier canvote (uint _proposalID) {

@@ -35,6 +35,19 @@ contract OpenRegistryRules is Rules {
     }
   }
 
+  function canPropose(address _sender) public constant returns (bool) {
+    if (registry.memberId(_sender) > 0) {
+      return true;
+    }
+  }
+
+  function canCreateProject(address _sender) public constant returns (bool) {
+    if (registry.memberId(_sender) > 0) {
+      return true;
+    }    
+  }
+
+
   function canPoll(address _project, address _sender) public constant returns (bool) {
     if (registry.memberIdForProject(_project, _sender) > 0) {
       return true;
@@ -42,17 +55,14 @@ contract OpenRegistryRules is Rules {
   }
 
   function canVoteInPoll(address _project, address _sender) public constant returns (bool) {
-    return true;
-  }
-
-  function canPropose(address _sender) public constant returns (bool) {
-    if (registry.memberId(_sender) > 0) {
+    if (registry.memberIdForProject(_project, _sender) > 0) {
       return true;
     }
   }
 
-
   function votingWeightOf(address _sender, uint _proposalID) public constant returns (uint) {
+    address(_sender);
+    uint(_proposalID);
     return 1;
   }
 
