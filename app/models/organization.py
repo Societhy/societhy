@@ -200,7 +200,7 @@ class OrgaDocument(Document):
 		self.board["is_deployed"] = True
 
 		#SEND FUNDS TO ORGA AFTER IT IS CREATED
-		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds") > 0:
+		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds", 0) > 0:
 			from_ = callback_data.get('from')
 			amount = float(callback_data.get('initial_funds'))
 			if from_.refreshBalance() > amount:
