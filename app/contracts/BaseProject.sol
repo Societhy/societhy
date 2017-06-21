@@ -10,6 +10,7 @@ contract BaseProject is mortal {
     string name;
     Poll[] public polls;
     Rules rules;
+    Registry registry;
 
     struct Poll {
       string subject;
@@ -55,9 +56,10 @@ modifier canvotepoll (uint _pollID) {
 }
 
 /* this runs when the contract is executed */
-function BaseProject(string _name, address rules_addr) public {
+function BaseProject(string _name, address rules_addr, address registry_addr) public {
     name = _name;
     rules = Rules(rules_addr);
+    registry = Registry(registry_addr);
 }
 
 function newPoll(string _subject, address _destination, uint _value, uint _debatePeriod, bool _anonymous, bool _public) canpoll public returns (uint pollID) {
@@ -113,13 +115,9 @@ function hasVoted(uint _pollID, address _voter) constant returns (bool) {
     }
 }
 
-function join() {
-   Registry(address(rules.registry)).registerToProject(address(this), msg.sender, "member");
-}
-
 function donate() payable {
-    if (address(rules.registry) != 0 && msg.value > 0) {
-        Registry(address(rules.registry)).madeDonation(msg.sender, msg.value);
+    if (address(registry) != 0 && msg.value > 0) {
+        registry.madeDonation(msg.sender, msg.value);
     }
     DonationMade(msg.sender, msg.value, true);
 }

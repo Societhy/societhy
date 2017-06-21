@@ -15,7 +15,7 @@ class Dao(Organization):
 		"payout_freeze_period": 0,
 		"quorum": 20,
 		"majority": 50,
-		"accessibility": "open",
+		"accessibility": "public",
 		"can_be_removed": True,
 		"curators": False,
 		"public": True,

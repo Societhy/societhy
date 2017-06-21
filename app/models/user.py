@@ -129,6 +129,25 @@ class UserDocument(Document):
 			return False
 		return None
 
+	def leftProject(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the orga is in the member's orga, the orga is removed
+		None is returned if everything went fine, False otherwise
+		"""
+		if len(logs) == 1 and logs[0].get('address') is not None:
+			address = logs[0].get('address')
+			proj = models.project.projects.find_one({"address": address})
+			if not proj :
+				proj = models.project.projects.find_one({"contracts.registry.address": address})
+
+			if proj and proj.get('address') in self["projects"]:
+				self["projects"].remove(proj.get('address'))
+				self.save_partial();
+			else:
+				return False
+		return None
+
 	def madeDonation(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
