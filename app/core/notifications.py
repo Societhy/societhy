@@ -102,7 +102,7 @@ def getUserUnreadNotification(user):
 	unread_notifs = list(notifications.find({"subject.id":user.get("_id"), "seen":False }))
 	for notif in unread_notifs:
 		if ("description" not in notif):
-			notif["description"] = descriptionDict[notif["category"]]
+			notif["description"] = notifications.descriptionDict[notif["category"]]
 	return {
 		"data" : dumps(unread_notifs),
 		"status" : 200

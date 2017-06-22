@@ -29,6 +29,8 @@ class Ngo(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
+
 		},
 		"admin": {},
 		"partner": {},
@@ -44,6 +46,7 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
 		"default": {
 			"join": True,
@@ -57,6 +60,7 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": False,
 			"buy_token": False,
+			"publish_news": True
 		}
 	}
 	def launchCrowdfunding(self, params):

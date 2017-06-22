@@ -838,7 +838,8 @@ class OrgaCollection(Collection):
 		"balance": int,
 		"uploaded_documents": list,
 		"gov_model": str,
-		"invited_users": list
+		"invited_users": list,
+		"news": list
 	}
 
 	def lookup(self, query):
