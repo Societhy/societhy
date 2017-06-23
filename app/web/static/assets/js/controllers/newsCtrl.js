@@ -1,11 +1,11 @@
 app.controller('NewsController', function($scope, $rootScope, $http, $sessionStorage, FileUploader ,$state, $controller, $location, socketIO) {
     var ctrl = this;
-    console.log("loaded");
 
     $scope.news_form = {};
     $scope.news_form.text = "";
     $scope.news_form.title = "";
-
+    $scope.imagesource = {};
+    var currIndex = 0;
 
     this.clickOnSubmit = function()
     {
@@ -15,17 +15,40 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
             "orga_id": $rootScope.currentOrga._id
         }).then(function(response)
             {
-                for (var i = 0; i != uploaderImages.queue.length; i++)
+                if (uploaderImages.queue.length != 0)
                 {
-                    console.log(response["data"]["key"])
-                    uploaderImages.queue[i].formData.push({"news_key" :response["data"]["news_key"]})
-                    uploaderImages.queue[i].formData.push({"orga_id" : $rootScope.currentOrga._id})
+                    for (var i = 0; i != uploaderImages.queue.length; i++) {
+                        uploaderImages.queue[i].formData.push({"news_key": response["data"]["news_key"]})
+                        uploaderImages.queue[i].formData.push({"orga_id": $rootScope.currentOrga._id})
+                    }
+                    uploaderImages.uploadAll();
                 }
-                uploaderImages.uploadAll();
-
+                else
+                {
+                    $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+                }
             }
             , function(error) {$rootScope.toogleError(error.data);});
 
+    };
+
+    this.loadImage = function (key)
+    {
+        $http.post('/get_news_photo',
+            {
+                "orga_id": $rootScope.currentOrga._id,
+                "news_key": key
+            }
+        ).then(function (response) {
+            var respdata = response.data;
+            $scope.imagesource[key] = [];
+            currIndex = 0;
+            if (respdata.length > 0) {
+                for (var i = 0; i != respdata.length; i++) {
+                    $scope.imagesource[key].push({image: respdata[i], id: currIndex++});
+                }
+            }
+        });
     };
 
     var uploaderImages = $scope.uploaderImages = new FileUploader({
@@ -36,6 +59,11 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
         }
     });
 
+    uploaderImages.onBeforeUploadItem = function (item) {
+        item.formData.push({"name": item.file.name});
+        item.formData.push({"type": item.file.type});
+    };
+
     uploaderImages.filters.push({
         name: 'imageFilter',
         fn: function (item, options) {
@@ -45,11 +73,15 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
     });
 
     uploaderImages.onErrorItem = function (fileItem, response, status, headers) {
-        console.info('onErrorItem', fileItem, response, status, headers);
     };
 
     uploaderImages.onSuccessItem = function (fileItem, response, status, headers) {
-        console.info('SUCCESS', fileItem, response, status, headers);
-    }
+        $scope.currentOrga = $rootScope.currentOrga = response.orga;
+    };
+
+    uploaderImages.onCompleteAll = function (fileItem, response, status, headers) {
+
+    };
+
     return ctrl;
 });

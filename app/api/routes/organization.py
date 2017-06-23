@@ -210,6 +210,7 @@ def withdrawFundsFromOffer(user):
     else:
         return make_response("Wrong request format", 400)
 
+
 @router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
 @requires_auth
 def getOrgaTransaction(user, orga_id):
@@ -241,4 +242,11 @@ def publish_news_photo(user):
                                      request.files.get("pic"),
                                      request.form.get("name"),
                                      request.form.get("type"))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+
+@router.route('/get_news_photo', methods=["POST"])
+@requires_auth
+def get_news_photo(user):
+    ret = base_orga.getNewsPhoto(user, request.json.get("orga_id"), request.json.get("news_key"))
     return make_response(jsonify(ret.get('data')), ret.get('status'))

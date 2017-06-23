@@ -553,13 +553,33 @@ def publishNewsPhoto(user, orga_id, news_key, doc, name, doc_type):
     news = None
     for item in orga.get("news"):
         if str(item["createdAt"]) == news_key:
-            print("FOUND")
             news = item
     if news is None:
         return {"data": "news don't exist !", "status": 400}
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     if not news.get("img"):
         news["img"] = []
-    news["img"].append(_id)
+    news["img"].append({"_id": _id, "doc_type": doc_type})
     orga.save_partial()
-    return {"data": "OK", "status": 200}
+    return {"data": {"orga":orga}, "status": 200}
+
+
+def getNewsPhoto(user, orga_id, news_key):
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    images = []
+    if not orga:
+        return {"data": "orga does not exist", "status": 400}
+    news = None
+    for item in orga.get("news"):
+        if str(item["createdAt"]) == str(news_key):
+            news = item
+    if news is None:
+        return {"data": "news don't exist !", "status": 400}
+    if news.get('img'):
+        for img in news.get('img'):
+            payload = json.loads(json_util.dumps(db_filesystem.get(img["_id"]).read()))["$binary"]
+            images.append("data:" +
+                          img["doc_type"] +
+                          ";base64," +
+                          payload)
+    return {'data': images, 'status': 200}
