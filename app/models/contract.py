@@ -5,7 +5,7 @@ This model represent the ethereum contracts that will be deployed on the blockch
 
 from os import path
 
-from ethereum._solidity import compile_file
+from ethereum.tools._solidity import compile_file
 from ethereum.abi import encode_abi
 from mongokat import Collection, Document
 from rlp.utils import encode_hex
