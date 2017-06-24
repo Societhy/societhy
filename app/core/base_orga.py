@@ -7,7 +7,7 @@ import json
 
 from datetime import datetime
 from bson import objectid, errors, json_util
-from core.utils import toWei
+from core.utils import toWei, getYoutubeID
 from ethjsonrpc.exceptions import BadResponseError
 from flask import Response
 from models.clients import db_filesystem
@@ -531,7 +531,7 @@ def withdrawFundsFromOffer(user, password, orga_id, offer_id):
     }
 
 
-def publishNews(user, title, text, orga_id):
+def publishNews(user, title, text, orga_id, yt_url):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     if not orga:
         return {"data": "orga does not exist", "status": 400}
@@ -539,7 +539,16 @@ def publishNews(user, title, text, orga_id):
         return {"data": "you can not publish news !", "status": 400}
     date = json.dumps(datetime.now(), default=json_util.default)
     date = json.loads(date)["$date"]
-    orga.get("news").append({"title": title, "text": text, "createdAt": date})
+    payload = {
+            "title": title,
+            "text": text,
+            "createdAt": date,
+            "writer": user["name"],
+        }
+    yt_url = getYoutubeID(yt_url)
+    if yt_url != "":
+        payload["yt_url"] = yt_url
+    orga.get("news").append(payload)
     orga.save_partial()
     return {"data": {"orga": orga, "news_key": date}, "status": 200}
 
@@ -559,7 +568,12 @@ def publishNewsPhoto(user, orga_id, news_key, doc, name, doc_type):
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     if not news.get("img"):
         news["img"] = []
-    news["img"].append({"_id": _id, "doc_type": doc_type})
+    news["img"].append(
+        {
+            "_id": _id,
+            "doc_type": doc_type,
+        }
+    )
     orga.save_partial()
     return {"data": {"orga":orga}, "status": 200}
 

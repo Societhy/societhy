@@ -2,6 +2,7 @@
 This modules contains tools function that might me used by the models or the controllers.
 """
 import json
+import urllib.parse
 from copy import copy
 
 from bson.objectid import ObjectId
@@ -77,3 +78,13 @@ def to20bytes(data):
 	if len(data) > 40:
 		data = data[-40:]
 	return '0x' + data
+
+
+def getYoutubeID(url):
+	url_data = urllib.parse.urlparse(url)
+	query = urllib.parse.parse_qs(url_data.query)
+	if "v" in query:
+		video = query["v"][0]
+		if len(video) == 11:
+			return video
+	return ""

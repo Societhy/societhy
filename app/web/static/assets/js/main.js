@@ -1,4 +1,4 @@
-var app = angular.module('app', ['packet', 'xeditable', 'ui.bootstrap']);
+    var app = angular.module('app', ['packet', 'xeditable', 'ui.bootstrap']);
 app.run(['$rootScope', '$state', '$stateParams', '$sessionStorage', '$http', 'editableOptions',
   function ($rootScope, $state, $stateParams, $sessionStorage, $http, editableOptions) {
       editableOptions.theme = 'bs3';

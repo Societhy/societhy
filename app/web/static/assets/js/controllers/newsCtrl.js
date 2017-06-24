@@ -4,14 +4,29 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
     $scope.news_form = {};
     $scope.news_form.text = "";
     $scope.news_form.title = "";
+    $scope.news_form.yt = "";
     $scope.imagesource = {};
     var currIndex = 0;
+
+
+    ctrl.getIframeSrc = function (id)
+    {
+        console.log("http://www.youtube.com/embed/" + id +"?autoplay=0&origin=http://example.com");
+        return "http://www.youtube.com/embed/" + id +"?autoplay=0&origin=http://example.com"
+    };
+
+    app.filter('youtubeEmbedUrl', function ($sce) {
+        return function (videoId) {
+            return $sce.trustAsResourceUrl('http://www.youtube.com/embed/' + videoId);
+        };
+    });
 
     this.clickOnSubmit = function()
     {
         $http.post('/publish_news', {
             "title": $scope.news_form.title,
             "text": $scope.news_form.text,
+            "yt_url": $scope.news_form.yt,
             "orga_id": $rootScope.currentOrga._id
         }).then(function(response)
             {

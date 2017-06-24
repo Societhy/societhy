@@ -4,34 +4,57 @@
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h4  class="panel-title">{{item.title}}</h4>
-                <div class="panel-tools">
-                    <a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="fa fa-circle-o"></i></a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <span  class="panel-title"> <h3 class="panel-title">{{item.title}}</h3> <h5 class="panel-title" > written by {{item.writer}} </h5></span>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 style="text-align: right" class="panel-title">{{item.createdAt | date:'medium'}}</h3>
+                    </div>
                 </div>
             </div>
             <div class="panel-body no-padding partition-dark-primary">
 
-                <div ng-if="item.img !== undefined">
-                    <div class="col-md-6 partition-light-primary no-padding">
 
-                        <div class="padding-15">
+                <div ng-if="item.img !== undefined">
+                    <div class="col-md-6 ">
+
+                        <div class="padding-15 partition-light-primary no-padding" style="margin-bottom: 30px; margin-top: 30px">
                             <p>
                                 {{item.text}}
                             </p>
                         </div>
+                        <div ng-if="item.yt_url !== undefined">
+                            <div class="col-md-12" style="margin-bottom: 30px;">
+                                <iframe style="display:block;margin:auto"
+                                        type="text/html" width="640" height="360"
+                                        src="{{item.yt_url | youtubeEmbedUrl}}"
+                                        frameborder="0"></iframe>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
 
                 <div ng-if="item.img == undefined">
-                    <div class="col-md-12 partition-light-primary no-padding">
+                    <div class="col-md-12 ">
 
-                        <div class="padding-15">
+                        <div class="padding-15 partition-light-primary no-padding" style="margin-bottom: 30px; margin-top: 30px">
                             <p>
                                 {{item.text}}
                             </p>
                         </div>
+                        <div ng-if="item.yt_url !== undefined">
+                            <div class="col-md-12" style="margin-bottom: 30px;">
+                                <iframe style="display:block;margin:auto"
+                                        type="text/html" width="640" height="360"
+                                        src="{{item.yt_url | youtubeEmbedUrl}}"
+                                        frameborder="0"></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
 
                 <div ng-if="item.img !== undefined">
                     <div class="col-md-6 no-padding">
@@ -46,6 +69,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </div>
         </div>
