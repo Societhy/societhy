@@ -571,11 +571,11 @@ def publishNewsPhoto(user, orga_id, news_key, doc, name, doc_type):
     news["img"].append(
         {
             "_id": _id,
-            "doc_type": doc_type,
+            "doc_type": doc_type
         }
     )
     orga.save_partial()
-    return {"data": {"orga":orga}, "status": 200}
+    return {"data": {"orga": orga}, "status": 200}
 
 
 def getNewsPhoto(user, orga_id, news_key):

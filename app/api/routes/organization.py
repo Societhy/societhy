@@ -241,7 +241,7 @@ def publish_news_photo(user):
                                      request.form.get("news_key"),
                                      request.files.get("pic"),
                                      request.form.get("name"),
-                                     request.form.get("type")),
+                                     request.form.get("type"))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 
