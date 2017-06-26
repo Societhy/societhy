@@ -183,7 +183,7 @@ class OrgaDocument(Document):
 			"action": "donate",
 			"from": from_,
 			"password": password,
-			"initial_funds": self.get('initial_funds')
+			"initial_funds": self.get('initial_funds', 0)
 			}
 
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
@@ -317,8 +317,7 @@ class OrgaDocument(Document):
 		"""
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
-		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberList")]
-		memberList = list(users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
+		memberList = list(users.find({"account": {"$in": self.registry.call("getMemberList")}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
 		return memberList
 
 ### FEATURES : join, allow, leave, donate, createProject, createOffer, createProposal, voteForProposal, executeProposal, refreshProposals, endProposal (+all callbacks)
