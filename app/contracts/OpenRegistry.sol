@@ -25,28 +25,28 @@ contract OpenRegistry is Registry {
 		owner = msg.sender;
 	}
 
-	function register(address _someMember, string _tag) public returns (bool){
+	function register(address _member, string _tag) public returns (bool){
 		uint id;
-		if (memberId[_someMember] == 0) {
-			memberId[_someMember] = members.length;
+		if (memberId[_member] == 0) {
+			memberId[_member] = members.length;
 			id = members.length++;
-			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(this)});
+			members[id] = Member({member: _member, donation: 0, tag: _tag, memberSince: now, project: address(this)});
 			projects[0].numMembers += 1;
-			NewMember(_someMember, _tag);
+			NewMember(_member, _tag);
 			return true;
 		}
 		else throw;
 	}
 
-	function leave(address _someMember) onlyMembers /* modifier */{
-		for (uint i = memberId[_someMember]; i<members.length-1; i++){
+	function leave(address _member) onlyMembers /* modifier */{
+		for (uint i = memberId[_member]; i<members.length-1; i++){
 			members[i] = members[i+1];
 		}
 		delete members[members.length-1];
-		memberId[_someMember] = 0;
+		memberId[_member] = 0;
 		members.length--;
 		projects[0].numMembers -= 1;
-		MemberLeft(_someMember);
+		MemberLeft(_member);
 	}
 
 	function getMemberList() returns (address[]) {
@@ -73,44 +73,46 @@ contract OpenRegistry is Registry {
 	}
 
 	
-	function createProject(address _project) public returns (bool) {
+	function createProject(address _someProject) public returns (bool) {
 		uint id;
-		if (projectId[_project] == 0) {
-			projectId[_project] = projects.length;
+		if (projectId[_someProject] == 0) {
+			projectId[_someProject] = projects.length;
 			id = projects.length++;
-			projects[id] = ProjectData({project: _project, numMembers: 0});
+			projects[id] = ProjectData({project: _someProject, numMembers: 0});
 			return true;
 		}
 		else throw;
 	}
 
-	function joinProject(address _project, address _someMember, string _tag) projectExists(_project) public returns (bool) {
+	function joinProject(address _someProject, address _member, string _tag) projectExists(_someProject) public returns (bool) {
 		uint id;
-		if (projectMemberId[_project][_someMember] == 0) {
-			projectMemberId[_project][_someMember] = members.length;
+		if (projectMemberId[_someProject][_member] == 0) {
+			projectMemberId[_someProject][_member] = members.length;
 			id = members.length++;
-			members[id] = Member({member: _someMember, donation: 0, tag: _tag, memberSince: now, project: address(_project)});
-			projects[projectId[_project]].numMembers += 1;
-			NewMember(_someMember, _tag);
+			members[id] = Member({member: _member, donation: 0, tag: _tag, memberSince: now, project: address(_someProject)});
+			projects[projectId[_someProject]].numMembers += 1;
+			NewMember(_member, _tag);
 			return true;
 		}
 		else throw;
 	}
 
 
-	function leaveProject(address _project, address _someMember) onlyProjectMembers(_project) public returns (bool) {
-		for (uint i = projectMemberId[_project][_someMember]; i<members.length-1; i++){
+	function leaveProject(address _someProject, address _member) onlyProjectMembers(_someProject) public returns (bool) {
+		for (uint i = projectMemberId[_someProject][_member]; i<members.length-1; i++){
 			members[i] = members[i+1];
 		}
 		delete members[members.length-1];
-		projectMemberId[_project][_someMember] = 0;
+		projectMemberId[_someProject][_member] = 0;
 		members.length--;
-		projects[projectId[_project]].numMembers -= 1;
-		MemberLeft(_someMember);
+		projects[projectId[_someProject]].numMembers -= 1;
+		MemberLeft(_member);
+		return true;
 	}
 
-	function memberIdForProject(address _someProject, address _someMember) public returns (uint) {
-		return projectMemberId[_someProject][_someMember];
+
+	function memberIdForProject(address _someProject, address _member) public returns (uint) {
+		return projectMemberId[_someProject][_member];
 	}
 
 	function madeDonation(address _from, uint _value) {
