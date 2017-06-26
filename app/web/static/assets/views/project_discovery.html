@@ -20,7 +20,7 @@
       <hr />
     </thead>
     <tbody>
-      <tr ng-repeat="proj in projects" class="ng-scope" ui-sref="app.project({id: proj._id})" href="#">
+      <tr ng-repeat="proj in projects" class="ng-scope" ui-sref="app.project({_id: proj._id, name:proj.name})" href="#">
         <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{proj.name}} </td>
         <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{proj.address}}</td>
       </tr>
