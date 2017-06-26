@@ -2,7 +2,7 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
   var ctrl = this;
 
   onLoad = function() {
-    $http.post('/getProject', {'id': $state.params.id}).then(function(response) {
+    $http.post('/getProject', {'id': $state.params._id}).then(function(response) {
       $scope.project = response.data;
       // desc = $scope.project.description.replace(/(\r\n|\n|\r)/g,"<br />");
       // $scope.project.description = desc;

@@ -531,11 +531,12 @@ class OrgaDocument(Document):
 				"board": {"address": contract_address, "_id": new_project.board.save()},
 				"registry": self["contracts"]["registry"]
 			}
+			new_project["balance"] = new_project.getTotalFunds()
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
 				self["projects"][contract_address] = new_project
 				self.save_partial()
-				return self
+				return {"project": new_project, "orga": self}
 		return False
 
 	def killProject(self, project):

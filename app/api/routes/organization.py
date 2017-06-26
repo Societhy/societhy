@@ -86,7 +86,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -246,7 +246,6 @@ def publish_news_photo(user):
 
 
 @router.route('/get_news_photo', methods=["POST"])
-@requires_auth
-def get_news_photo(user):
-    ret = base_orga.getNewsPhoto(user, request.json.get("orga_id"), request.json.get("news_key"))
+def get_news_photo():
+    ret = base_orga.getNewsPhoto(request.json.get("orga_id"), request.json.get("news_key"))
     return make_response(jsonify(ret.get('data')), ret.get('status'))

@@ -300,6 +300,7 @@ class ProjectCollection(Collection):
 
 	structure = {
 		"name": str,
+		"amount_to_raise": int,
 		"members": dict,
 		"rights": dict,
 		"rules": dict,

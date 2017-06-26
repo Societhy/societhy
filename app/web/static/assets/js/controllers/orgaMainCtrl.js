@@ -130,6 +130,7 @@
      * @method onLoad
      */
      onLoad = function() {
+      console.log("STATE", $state);
       $http.post('/getOrganization', {
         "id": $state.params._id
       }).then(function(response) {

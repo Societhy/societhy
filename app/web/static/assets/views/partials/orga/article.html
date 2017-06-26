@@ -25,15 +25,25 @@
                             </p>
                         </div>
                         <div ng-if="item.yt_url !== undefined">
-                            <div class="col-md-12" style="margin-bottom: 30px;">
+                            <div style="margin-bottom: 30px;">
                                 <iframe style="display:block;margin:auto"
-                                        type="text/html" width="640" height="360"
-                                        src="{{item.yt_url | youtubeEmbedUrl}}"
-                                        frameborder="0"></iframe>
+                                type="text/html" width="550" height="310"
+                                src="{{item.yt_url | youtubeEmbedUrl}}"
+                                frameborder="0"></iframe>
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-md-6">
+                        <div class="padding-15">
+                            <p>
+                                <div uib-carousel active="0" interval="0" no-wrap="false">
+                                    <div uib-slide ng-repeat="itemphoto in imagesource[item.createdAt] track by itemphoto.id" index="itemphoto.id">
+                                        <img ng-src="{{itemphoto.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
+                                    </div>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div ng-if="item.img == undefined">
@@ -47,9 +57,9 @@
                         <div ng-if="item.yt_url !== undefined">
                             <div class="col-md-12" style="margin-bottom: 30px;">
                                 <iframe style="display:block;margin:auto"
-                                        type="text/html" width="640" height="360"
-                                        src="{{item.yt_url | youtubeEmbedUrl}}"
-                                        frameborder="0"></iframe>
+                                type="text/html" width="640" height="360"
+                                src="{{item.yt_url | youtubeEmbedUrl}}"
+                                frameborder="0"></iframe>
                             </div>
                         </div>
                     </div>
@@ -57,17 +67,7 @@
 
 
                 <div ng-if="item.img !== undefined">
-                    <div class="col-md-6 no-padding">
-                        <div class="padding-15">
-                            <p>
-                            <div uib-carousel active="0" interval="0" no-wrap="false">
-                                <div uib-slide ng-repeat="itemphoto in imagesource[item.createdAt] track by itemphoto.id" index="itemphoto.id">
-                                    <img ng-src="{{itemphoto.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
-                                </div>
-                            </div>
-                            </p>
-                        </div>
-                    </div>
+
                 </div>
 
 

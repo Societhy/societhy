@@ -48,6 +48,8 @@ class ContractDocument(Document):
 		Compile the contract from a .sol file to an ABI file.
 		Then put the signature.
 		"""
+		print("Compiling file", self["contract_file"], "...")
+
 		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
 		compiled = compile_file(self["contract_file"]).get(solc_key)
 		if len(compiled) == 0:
@@ -62,6 +64,7 @@ class ContractDocument(Document):
 				signature += _input.get('type')
 			signature += ')'
 			abi_item["signature"] = signature
+		print("Solidity compiler is done !")
 
 	def deploy(self, from_, args=[]):
 		"""

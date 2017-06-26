@@ -578,7 +578,7 @@ def publishNewsPhoto(user, orga_id, news_key, doc, name, doc_type):
     return {"data": {"orga": orga}, "status": 200}
 
 
-def getNewsPhoto(user, orga_id, news_key):
+def getNewsPhoto(orga_id, news_key):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     images = []
     if not orga:
