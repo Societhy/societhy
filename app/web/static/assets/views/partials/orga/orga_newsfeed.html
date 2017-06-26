@@ -10,33 +10,90 @@
 					<div class="panel panel-white">
 						<div class="panel-heading">
 							<div class="panel-title">
-								{{ currentOrga.name }}
+								Write an article for {{ currentOrga.name }}
 							</div>
 						</div>
-						<div class="panel-body">
-							<div class="form-group">
-								<div class="row">
+						<div class="row">
+							<div class="panel-body">
+								<div class="form-group">
 									<div class="col-md-6">
+										<input type="text" placeholder="Enter your title"  ng-model="news_form.title" id="news_form_title" class="form-control input-lg" >
 										<div class="note-editor">
-										<textarea class="form-control autosize" ng-model="news_form.text" style="overflow: hidden; word-wrap: break-word; resize: vertical	; height: 100px;">
+										<textarea placeholder="Enter your article" class="form-control autosize" ng-model="news_form.text" style="overflow: hidden; word-wrap: break-word; resize: vertical	; height: 100px;">
 									</textarea>
 										</div>
 									</div>
 									<div class="col-md-6">
-										<button type="button" ng-click="ctrl.clickOnSubmit()" class="btn btn-wide btn-azure">
-											Submit
-										</button>
+										<div class="row">
+											<input type="text" placeholder="Add a YouTube URL"  ng-model="news_form.yt" id="news_form_yt" class="form-control input-lg" >
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<h5>Select file</h5>
+												<div class="panel panel-white">
+													<div class="panel-body">
+														<div ng-show="uploaderImages.isHTML5">
+															<!-- 3. nv-file-over uploader="link" over-class="className" -->
+															<div class="well my-drop-zone" nv-file-over="" uploader="uploaderImages">
+																Drag you photos here
+															</div>
+														</div>
+														<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+														<span class="btn btn-primary btn-o btn-file">
+																			Or click here
+																			<input type="file" nv-file-select="" uploader="uploaderImages" multiple />
+																		</span>
+														<br />
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<h5>Photos</h5>
+												<div class="panel panel-white">
+													<div class="col-md-12">
+														<div ng-repeat="item in uploaderImages.queue">
+															<div><strong>{{ item.file.name }}</strong>
+																<div ng-show="uploaderImages.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<button type="button" ng-click="ctrl.clickOnSubmit()" class="btn btn-wide btn-azure">
+												Submit
+											</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+
+
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-white">
+						<div class="panel-heading">
+							<div class="panel-title">
+								{{ currentOrga.name }} Articles
+							</div>
+
+							<div ng-repeat=" item in currentOrga.news">
+								<div data-ng-include="'static/assets/views/partials/orga/article.html'"></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
+
+		<!--FEED-->
+
 	</div>
-
-	<!--FEED-->
-
-</div>
-<!-- END: NEWS FEED-->
+	<!-- END: NEWS FEED-->

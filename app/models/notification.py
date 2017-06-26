@@ -200,5 +200,6 @@ class NotificationDocument(Document):
 
 class NotificationCollection(Collection):
 	document_class = NotificationDocument
+	descriptions = descriptionDict
 
 notifications = NotificationCollection(collection=client.main.notifications)

@@ -87,17 +87,20 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Organisation'
         }
     }).state('app.project', {
-        url: '/project/:id',
+        url: '/project/:name/:_id',
         templateUrl: "static/assets/views/project_homepage.html",
         resolve: loadSequence('projectMainCtrl'),
         title: 'Project homepage',
+        params: {
+            data: null
+        },
         ncyBreadcrumb: {
             label: 'Project'
         }
     }).state('app.newproject', {
         url: '/project/new',
         templateUrl: "static/assets/views/project_wizard.html",
-        resolve: loadSequence('projectWizardCtrl'),
+        resolve: loadSequence('projectWizardCtrl', 'touchspin-plugin'),
         title: 'Create a new project',
         ncyBreadcrumb: {
             label: 'Project Creation'

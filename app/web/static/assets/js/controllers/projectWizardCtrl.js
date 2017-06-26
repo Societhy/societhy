@@ -60,7 +60,11 @@ app.controller('ProjectWizardCtrl',
         },
 
         submit: function (form) {
-          if ($scope.doVerifications()) {
+          if (!$rootScope.currentOrga) {
+            $rootScope.toogleError("You need to create a project from an existing organization");
+          }
+
+          else if ($scope.doVerifications()) {
            $scope.completeBlockchainAction(
             function(password) {
              $rootScope.toogleWait("Creating project")
@@ -71,9 +75,9 @@ app.controller('ProjectWizardCtrl',
               "password": password
             }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
            }, function(data) {
-             $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
-             var orga = {'_id': $rootScope.currentOrga._id, 'name': $rootScope.currentOrga.name};
-             $state.go("app.organization", orga);
+             $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.orga;
+             let proj = {name: data.data.project.name, _id: data.data.project._id}
+             $state.go("app.project", proj);
            })
          }
         },

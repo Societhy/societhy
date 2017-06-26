@@ -28,9 +28,9 @@ class Proposal(dict):
 		proposal_id = self.get('proposal_id')
 		if init_from_contract and board and proposal_id is not None:
 			self["executed"] = board.call("isExecuted", args=[proposal_id], local=True)
-			self["destination"] = '0x' + board.call("destinationOf", args=[proposal_id], local=True)
+			self["destination"] = board.call("destinationOf", args=[proposal_id], local=True)
 			self["value"] = str(board.call("valueOf", args=[proposal_id], local=True))
 			self["hashed_calldata"] = board.call("hashOf", args=[proposal_id], local=True)
 			self["debate_period"] = board.call("debatePeriodOf", args=[proposal_id], local=True)
 			self["created_on"] = board.call("createdOn", args=[proposal_id], local=True)
-			self["from"] = '0x' + board.call("createdBy", args=[proposal_id], local=True)
+			self["from"] = board.call("createdBy", args=[proposal_id], local=True)

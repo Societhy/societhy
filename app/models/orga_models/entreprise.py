@@ -29,6 +29,7 @@ class Entreprise(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
 		"admin": {},
 		"partner": {},

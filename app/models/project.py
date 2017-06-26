@@ -90,14 +90,9 @@ class ProjectDocument(Document):
 
 	def getMemberList(self):
 		"""
-		Empty
-		"""
-	def getMemberList(self):
-		"""
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
-		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberListForProject", args=[self.get('address')], local=True)]
-		memberList = list(models.user.users.find({"account": {"$in": memberAddressList}}, models.user.users.anonymous_info if self.get('rules').get("anonymous") else models.user.users.public_info))
+		memberList = list(models.user.users.find({"account": {"$in": self.registry.call("getMemberListForProject", local=True, args=[self.get('address')])}}, models.user.users.anonymous_info if self.get('rules').get("anonymous") else models.user.users.public_info))
 		return memberList
 
 	def join(self, user, tag="member", password=None, local=False):
@@ -141,7 +136,7 @@ class ProjectDocument(Document):
 				member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
 				public_member =  models.member.Member(member_data, tag=rights_tag)
 				self["members"][new_member.get('account')] = public_member
-				self.save_partial();
+				self.save_partial()
 				return { "project": self, "rights": self.get('rights').get(public_member["tag"]) }
 
 		return False
@@ -305,6 +300,7 @@ class ProjectCollection(Collection):
 
 	structure = {
 		"name": str,
+		"amount_to_raise": int,
 		"members": dict,
 		"rights": dict,
 		"rules": dict,

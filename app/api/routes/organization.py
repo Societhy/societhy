@@ -86,7 +86,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -210,6 +210,7 @@ def withdrawFundsFromOffer(user):
     else:
         return make_response("Wrong request format", 400)
 
+
 @router.route('/getOrgaTransaction/<orga_id>', methods=['GET'])
 @requires_auth
 def getOrgaTransaction(user, orga_id):
@@ -218,3 +219,33 @@ def getOrgaTransaction(user, orga_id):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+#### NEWS ###
+
+
+@router.route('/publish_news', methods=["POST"])
+@requires_auth
+def publish_news(user):
+    if ensure_fields(['title', 'text', 'orga_id'], request.json):
+        ret = base_orga.publishNews(user, request.json.get("title"), request.json.get("text"), request.json.get("orga_id"), request.json.get("yt_url"))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
+
+@router.route('/publish_news_photo', methods=["POST"])
+@requires_auth
+def publish_news_photo(user):
+    ret = base_orga.publishNewsPhoto(user,
+                                     request.form.get("orga_id"),
+                                     request.form.get("news_key"),
+                                     request.files.get("pic"),
+                                     request.form.get("name"),
+                                     request.form.get("type"))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+
+
+@router.route('/get_news_photo', methods=["POST"])
+def get_news_photo():
+    ret = base_orga.getNewsPhoto(request.json.get("orga_id"), request.json.get("news_key"))
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
