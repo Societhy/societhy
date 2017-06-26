@@ -32,14 +32,15 @@
       <div class="col-md-3">
         <h3>Objectives</h3>
         <span ng-if="project.balance < project.amount_to_raise">
-          <span class="label" class="label-warning">Crowdfunding campaign in progress</span>
-          <p>{{project.balance}} on {{project.amount_to_raise}} eth required</p>
+          <span class="label label-warning block">Crowdfunding campaign in progress</span>
+          <p class="text-center text-bold text-large">{{project.balance}} on {{project.amount_to_raise}} eth required</p>
         </span>
         <span ng-if="project.balance > project.amount_to_raise">
-          <span class="label" class="label-success">Crowdfunding campaign is complete !</span>
-          <p>{{project.balance}} ethers were raised ! ( goal was : {{project.amount_to_raise}} ethers)</p>
+          <span class="label label-success block">Crowdfunding campaign is complete !</span>
+          <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.amount_to_raise}} ethers)</p>
         </span>
         <!-- LIGNE D'AVANCEMENT DES FOND -->
+        <uib-progressbar value="project.balance * (100 / project.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
       </div>
       <div class="col-md-2 margin-top-10">
         <button type="button" class="btn btn-sm btn-success text-extra-large">Donate</button>
@@ -52,6 +53,7 @@
     <div class="row margin-10">
       <div class="col-md-5">
         <h3>Time remaining</h3>
+        <uib-progressbar value="project.time_left" class="progress no-radius background-dark no-margin" type="{{project.time_left >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
         <!-- TIMELINE ICI -->
       </div>
       <div class="col-md-7">
