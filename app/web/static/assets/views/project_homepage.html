@@ -6,8 +6,8 @@
       </div>
       <div class="col-md-2">
         <!-- Check si user dans les membres -->
-        <button type="button" class="btn btn-sm btn-success text-extra-large">Join</button>
-        <button type="button" class="btn btn-sm btn-danger text-extra-large">Leave</button>
+        <button type="button" ng-if="!isMember" class="btn btn-sm btn-success text-extra-large">Join</button>
+        <button type="button" ng-if="isMember" class="btn btn-sm btn-danger text-extra-large">Leave</button>
       </div>
       <div class="col-md-7">
         <div class="social-icons">

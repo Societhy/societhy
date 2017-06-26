@@ -4,6 +4,7 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
   onLoad = function() {
     $http.post('/getProject', {'id': $state.params.id}).then(function(response) {
       $scope.project = response.data;
+      $scope.isMember = $rootScope.user._id in response.data.member;
       // desc = $scope.project.description.replace(/(\r\n|\n|\r)/g,"<br />");
       // $scope.project.description = desc;
     }, function(error) {
