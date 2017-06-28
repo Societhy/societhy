@@ -1,6 +1,6 @@
 from api import requires_auth, ensure_fields, populate_user
 from core import base_orga, sales_platform
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, send_file
 
 router = Blueprint('orga', __name__)
 
@@ -51,10 +51,9 @@ def addOrgaDocuments(user):
     return make_response("ok", 200)
 
 @router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
-@requires_auth
-def getOrgaUploadedDocument(user, doc_id, doc_name):
-    ret = base_orga.getOrgaUploadedDocument(user, doc_id, doc_name)
-    return ret
+def getOrgaUploadedDocument(doc_id, doc_name):
+    ret = base_orga.getOrgaUploadedDocument(doc_id, doc_name)
+    return make_response(send_file(ret, attachment_filename=doc_name, as_attachment=True), 200)
 
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
