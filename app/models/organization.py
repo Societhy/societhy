@@ -42,7 +42,7 @@ class OrgaDocument(Document):
 	proposals = dict()
 	social_links = None
 	alerts = None
-	transactions = list()
+	transactions = dict()
 
 	def __init__(self,
 				doc=None,
@@ -516,10 +516,9 @@ class OrgaDocument(Document):
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				notif.save()
-			self["transactions"].append(
-                                {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
-                                 "note": "Donation of " + str(donation_amount) + "Ether as been made by " + member.get("name") + ".",
-                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": member.get("_id")})
+			self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
+                                 "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name") + ".",
+                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": member.get("_id")}
 			self.save_partial()
 			return self["balance"]
 		return False
@@ -619,6 +618,9 @@ class OrgaDocument(Document):
 			new_offer.update(callback_data)
 			new_offer["contract_id"] = new_offer.save()
 			if offer_address not in self["proposals"]:
+				self["transactions"][offer_address] =  {"type": "New Offer", "value": fromWei(float(new_offer["initialWithdrawal"])), "flux": "Out", "status": "pending",
+                                                                        "note": users.find_one({"account": new_offer["owner"]}).get("name") + " created the " +  new_offer["contract_name"] + " '" + new_offer["name"] + "' for the organization.",
+                                                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": new_offer["owner"]}
 				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
 				self.save_partial()
 				return self
@@ -688,6 +690,7 @@ class OrgaDocument(Document):
 
 				offer_contract = models.contract.contracts.find_one({"_id": self["proposals"][destination]["offer"].get('_id')})
 				self["proposals"][destination]["offer"]["votingDeadline"] = offer_contract.call('getVotingDeadline', local=True)
+				self["transactions"][destination]["status"] = "debating"
 				self.save_partial()
 				return self
 		return False
@@ -758,8 +761,11 @@ class OrgaDocument(Document):
 		   and proposal["participation"] >= self["rules"]["quorum"]\
 		   and proposal["score"] >= self["rules"]["majority"]:
 			proposal["status"] = "approved"
+			self["transactions"][proposal["offer"]["address"]]["status"] = "approved"
 		else:
+			self["transactions"][proposal["offer"]["address"]]["status"] = "denied"
 			proposal["status"] = "denied"
+		self.save_partial()
 
 	def getProposal(self, proposal_id):
 		for p in self.get('proposals', {}).values():
@@ -792,6 +798,7 @@ class OrgaDocument(Document):
 
 			if destination in self["proposals"]:
 				self["proposals"][destination]["executed"] = True
+				self["transactions"][destination]["status"] = "accepted and finish"
 				self.save_partial()
 				return self
 		return False
@@ -802,7 +809,7 @@ class OrgaDocument(Document):
 
 		tx_hash = offer.call('withdraw', local=False, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], callback_data=offer , users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -818,6 +825,11 @@ class OrgaDocument(Document):
 			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			print("balance == ", fromWei(eth_cli.eth_getBalance(destination)), " and withdrawal amount ", fromWei(withdrawal_amount))
+			self["transactions"][callback_data["address"]] =  {"type": "Offer withdrawal", "value": fromWei(withdrawal_amount), "flux": "Out", "status": "Finished",
+                                                                           "note": "The contractor " + users.find_one({"account": callback_data["contractor"]}).get("name") +
+                                                                           " has withdraw" + str(fromWei(withdrawal_amount)) + " from the contract '" + callback_data["name"] + "'.",
+                                                                           "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": callback_data["contractor"]}
+			self.save_partial()
 			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
 		return False
 
@@ -882,7 +894,7 @@ class OrgaCollection(Collection):
 		"tx_history": list,
 		"creation_date": str,
 		"mailing_lists": dict,
-		"transactions": list,
+		"transactions": dict,
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,
