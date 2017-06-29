@@ -2,7 +2,7 @@ app.controller('ProjectWizardCtrl',
   function($scope, ngNotify, $rootScope, $http, $state) {
 
     $scope.currentStep = 1;
-    $scope.proj = {invited_users: {}};
+    $scope.proj = {invited_users: {}, members: {}};
 
     $scope.addInvitedUser = function() {
       if (!$scope.proj.invited_users)

@@ -24,3 +24,30 @@ def createProject():
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+@router.route('/joinProject', methods=['POST'])
+@requires_auth
+def joinProject(user):
+    if ensure_fields(['password', 'socketid', 'proj_id', 'tag'], request.json):
+        ret = base_project.joinProject(user, request.json.get('password'), request.json.get('proj_id'), request.json.get('tag'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
+@router.route('/leaveProject', methods=['POST'])
+@requires_auth
+def leaveProject(user):
+    if ensure_fields(['password', 'socketid', 'proj_id'], request.json):
+        ret = base_project.leaveProject(user, request.json.get('password'), request.json.get('proj_id'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
+@router.route('/donateToProject', methods=['POST'])
+@requires_auth
+def donateToProject(user):
+    if ensure_fields(['password', 'socketid', 'proj_id', 'donation'], request.json):
+        ret = base_project.donateToProject(user, request.json.get('password'), request.json.get('proj_id'), request.json.get('donation'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)

@@ -6,8 +6,8 @@
       </div>
       <div class="col-md-2">
         <!-- Check si user dans les membres -->
-        <button type="button" ng-if="!isMember" class="btn btn-sm btn-success text-extra-large">Join</button>
-        <button type="button" ng-if="isMember" class="btn btn-sm btn-danger text-extra-large">Leave</button>
+        <button type="button" ng-if="!isMember" ng-click="ctrl.joinProject()" class="btn btn-sm btn-success text-extra-large">Join</button>
+        <button type="button" ng-if="isMember" ng-click="ctrl.leaveProject()" class="btn btn-sm btn-danger text-extra-large">Leave</button>
       </div>
       <div class="col-md-7">
         <div class="social-icons">
@@ -43,7 +43,7 @@
         <uib-progressbar value="project.balance * (100 / project.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
       </div>
       <div class="col-md-2 margin-top-10">
-        <button type="button" class="btn btn-sm btn-success text-extra-large">Donate</button>
+        <button type="button" ng-click="donateToProject()" class="btn btn-sm btn-success text-extra-large">Donate</button>
       </div>
       <div class="col-md-7">
         <h3>Description</h3>
