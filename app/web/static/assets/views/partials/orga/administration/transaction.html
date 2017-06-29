@@ -21,7 +21,7 @@
       <tr>
 	<td>Sale of a product</td>
 	<td>130$</td>
-	<td>In <i style="color: green;" class="fa fa-arrow-circle-up" aria-hidden="true"></td>
+	<td>In </td>
 	<td>Finished</td>
 	<td>Product 'this thing' bought by 'this guy'</td>
 	<td>2017/04/2 8:10pm</td>
@@ -37,7 +37,8 @@
       <tr ng-repeat="transaction in currentOrga.transactions">
 	<td>{{transaction.type}}</td>
 	<td>{{transaction.value}}</td>
-	<td>{{transaction.flux}}</td>
+	<td ng-if="transaction.flux == 'Out'">{{transaction.flux}}  <i style="color: red;" class="fa fa-arrow-circle-up" aria-hidden="true"/></td>
+	<td ng-if="transaction.flux == 'In'">{{transaction.flux}}  <i style="color: green;" class="fa fa-arrow-circle-up" aria-hidden="true"/></td>
 	<td>{{transaction.status}}</td>
 	<td>{{transaction.note}}</td>
     	<td>{{transaction.date}}</td>
