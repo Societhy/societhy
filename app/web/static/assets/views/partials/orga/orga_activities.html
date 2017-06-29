@@ -136,19 +136,21 @@
 			<td translate="notification.organisation.export.header.senderName"></td>
 			<td translate="notification.organisation.export.header.subjectType"></td>
 			<td translate="notification.organisation.export.header.subjectAddr"></td>
-			<td translate="notification.organisation.export.header.subjectNamer"></td>
-			<td translate="notification.organisation.export.header.category"></td>
+			<td translate="notification.organisation.export.header.subjectName"></td>
+            <td translate="notification.organisation.export.header.category"></td>
+            <td>Note</td>
 		      </tr>
 		    </thead>
 		    <tbody ng-repeat="data in histo">
 		      <tr>
 			<td>{{data.date}}</td>
-			<td>{{data.sender.type}} {{data.sender.addr}}</td>
-			<td>{{data.sender.type}} {{data.subject.name}}</td>
+			<td>{{data.sender.addr}}</td>
+			<td>{{data.sender.name}}</td>
 			<td>{{data.subject.type}}</td>
 			<td>{{data.subject.addr}}</td>
 			<td>{{data.subject.name}}</td>
 			<td>{{data.category}}</td>
+                  <td ng-if="data.category == 'newDonation'">{{data.amount}} Eth</td>
 		      </tr>
 		    </tbody>
 		  </table>

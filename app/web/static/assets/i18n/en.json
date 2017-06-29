@@ -309,10 +309,10 @@
 		"button": "Export the current selection.",
 		"header": {
 		    "date" : "Date",
-                    "senderAddr" : "Name de l'organisation",
-                    "senderName" : "organization Ethereum address",
-                    "subjectType": "Name of the subject",
-                    "subjectAddr" : "Subject address",
+                    "senderName" : "Name de l'organisation",
+                    "senderAddr" : "organization's Ethereum address",
+                    "subjectType": "Subject",
+                    "subjectAddr" : "Subject's address",
                     "subjectName" : "Name of the subject",
 		    "category": "Category"
 		}

@@ -152,7 +152,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 		
 	    });
 	}
-
+console.log($rootScope);
     $rootScope.admin.manageRights = function () {
 	$rootScope.admin.current = $rootScope.admin.menu[5]["url"];
     }

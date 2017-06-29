@@ -9,7 +9,7 @@
       <li ng-click="admin.displayProject()">Display Project</li>
       <li ng-click="admin.addTransaction()">Add a new Transaction</li>
       <li ng-click="admin.extractAdminData()">Extract Admin Data</li>
-      <li ng-click="admin.manageRights()">Manage Rights</li>
+      <li ng-if="currentRights.edit_rights" ng-click="admin.manageRights()">Manage Rights</li>
     </ul>
   </div>
   <div id="administrationContent">
