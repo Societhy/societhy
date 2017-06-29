@@ -1,0 +1,29 @@
+<div ng-controller="ProjectDiscoveryController as ctrl">
+  <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped table-hover" id="project">
+    <thead class="ng-scope">
+      <tr>
+        <td>
+          <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+          Project
+          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+        </a>
+        </td>
+        <td>
+          <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+          <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+          <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+          Address
+        </a>
+        </td>
+      </tr>
+      <hr />
+    </thead>
+    <tbody>
+      <tr ng-repeat="proj in projects" class="ng-scope" ui-sref="app.project({id: proj._id})" href="#">
+        <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{proj.name}} </td>
+        <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{proj.address}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

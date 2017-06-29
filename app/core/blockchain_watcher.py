@@ -4,14 +4,9 @@ Every second, the function watch() is ran, new events are retrieved from the blo
 Some functions allow to control the process of the transactions and wait for events.
 """
 
-from eventlet import event as g_event, greenthread, sleep as g_sleep
-
-from signal import signal, SIGINT
-from time import sleep
-from sys import exit
-
+import models.events
+from eventlet import event as g_event, greenthread
 from models.clients import eth_cli
-from models.events import Event, EventQueue, LogEvent
 
 class BlockchainWatcher:
 
@@ -43,7 +38,7 @@ class BlockchainWatcher:
         self.lastTx = None
         self.waiting = False
         self.running = False
-        self.eventQueue = EventQueue()
+        self.eventQueue = models.events.EventQueue()
 
     def run(self):
 
@@ -63,9 +58,9 @@ class BlockchainWatcher:
         if self.running:
             print('.', end='', flush=True)
             newBlocks = eth_cli.eth_getFilterChanges(self.newBlockFilter)
-          
+
             for blockHash in newBlocks:
-          
+
                 block = eth_cli.eth_getBlockByHash(blockHash, True)
                 self.lastTx = [tx.get('hash') for tx in block.get('transactions')]
                 if self.newBlockEvent.ready():
@@ -73,9 +68,9 @@ class BlockchainWatcher:
                 else:
                     self.newBlockEvent.send()
                 print("new block %s with hash =" % block.get('number'), blockHash, "and tx =", self.lastTx)
-          
+
                 for event in self.eventQueue.yieldEvents(block.get('transactions')):
-                    if isinstance(event, LogEvent):
+                    if isinstance(event, models.events.LogEvent):
                         self.lastEvent = event
                         if self.newLogEvent.ready():
                             self.newLogEvent = g_event.Event()
@@ -103,7 +98,7 @@ class BlockchainWatcher:
 
     def waitBlock(self, blockNumber=1):
         """
-        blockNumber : integer / number of block that need to be mined 
+        blockNumber : integer / number of block that need to be mined
         waits for a given number of blocks before triggering a newBlockEvent
         """
         while blockNumber > 0:
@@ -167,4 +162,4 @@ class BlockchainWatcher:
         self.running = False
 
 
-blockchain_watcher = BlockchainWatcher()
+# blockchain_watcher = BlockchainWatcher()

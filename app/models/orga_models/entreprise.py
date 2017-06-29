@@ -1,6 +1,3 @@
-from mongokat import Collection, Document
-
-from ..clients import client
 from ..organization import OrgaDocument as Organization
 
 class Entreprise(Organization):
@@ -11,7 +8,7 @@ class Entreprise(Organization):
 		"delegated_voting": False,
 		"quorum": 20,
 		"majority": 50,
-		"accessibility": "open",
+		"accessibility": "public",
 		"can_be_removed": True,
 		"curators": False,
 		"public": True,
@@ -32,9 +29,8 @@ class Entreprise(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
-		"admin": {},
-		"partner": {},
 		"member": {
 			"join": False,
 			"leave": True,

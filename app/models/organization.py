@@ -1,27 +1,20 @@
-from bson import ObjectId
 import datetime
-from mongokat import Collection, Document, find_method
-from ethjsonrpc import wei_to_ether
-from ethereum import utils, abi
-
-from bson import objectid
 from hashlib import sha3_256
-from rlp.utils import encode_hex
 
-from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
-from models.user import users, UserDocument as User
-from models.contract import contracts, ContractDocument as Contract
-from models.project import ProjectDocument, ProjectCollection
-from models.member import Member
+import models.contract
+import models.member
+import models.notification
+from bson import ObjectId
+from bson import objectid
+from core.utils import fromWei, toWei, normalizeAddress
+from models.clients import blockchain_watcher as bw
+from models.events import ContractCreationEvent, LogEvent, makeTopics
 from models.notification import notifications, NotificationDocument as Notification
-
 from models.offer import Offer
+from models.project import ProjectDocument
 from models.proposal import Proposal
-
-
-from core.notifications import notifyToOne
-from core.blockchain_watcher import blockchain_watcher as bw
-from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
+from models.user import users, UserDocument as User
+from mongokat import Collection, Document, find_method
 
 from .clients import client, eth_cli
 
@@ -49,6 +42,7 @@ class OrgaDocument(Document):
 	proposals = dict()
 	social_links = None
 	alerts = None
+	transactions = list()
 
 	def __init__(self,
 				doc=None,
@@ -77,17 +71,17 @@ class OrgaDocument(Document):
 		super().__init__(doc=doc, mongokat_collection=organizations, fetched_fields=fetched_fields, gen_skel=gen_skel)
 		if board_contract and rules_contract:
 			if token_contract:
-				self.token = Contract(token_contract, owner.get('account'))
+				self.token = models.contract.ContractDocument(token_contract, owner.get('account'))
 				self.token.compile()
 				if token_freezer_contract:
-					self.token_freezer = Contract(token_freezer_contract, owner.get('account'))
-					self.token_freezer.compile()					
+					self.token_freezer = models.contract.ContractDocument(token_freezer_contract, owner.get('account'))
+					self.token_freezer.compile()
 			if registry_contract:
-				self.registry = Contract(registry_contract, owner.get('account'))
+				self.registry = models.contract.ContractDocument(registry_contract, owner.get('account'))
 				self.registry.compile()
-			self.rules = Contract(rules_contract, owner.get('account'))
+			self.rules = models.contract.ContractDocument(rules_contract, owner.get('account'))
 			self.rules.compile()
-			self.board = Contract(board_contract, owner.get('account'))
+			self.board = models.contract.ContractDocument(board_contract, owner.get('account'))
 			self.board.compile()
 
 			self.default_rules.update(self["rules"])
@@ -101,9 +95,8 @@ class OrgaDocument(Document):
 		if owner:
 			self["owner"] = (owner.anonymous() if self.get('rules').get("anonymous") else owner.public()) if isinstance(owner, User) else owner
 
-
 	####
-	# CONTRACT SPECIFIC METHODS
+	# CONTRACT SPECIFIC METHODS: _loadContracts, deployContract, register
 	####
 
 	def _loadContracts(self):
@@ -113,28 +106,28 @@ class OrgaDocument(Document):
 		"""
 
 		try:
-			self.board = contracts.find_one({"_id": self.get('contracts').get('board').get('_id')})
+			self.board = models.contract.contracts.find_one({"_id": self.get('contracts').get('board').get('_id')})
 			balance = self.getTotalFunds()
 			if balance != self["balance"]:
 				self["balance"] = balance
 				self.save_partial()
 		except: pass
 
-		try: self.rules = contracts.find_one({"_id": self.get('contracts').get('rules').get('_id')})
+		try: self.rules = models.contract.contracts.find_one({"_id": self.get('contracts').get('rules').get('_id')})
 		except: pass
 
-		try: self.registry = contracts.find_one({"_id": self.get('contracts').get('registry').get('_id')})
+		try: self.registry = models.contract.contracts.find_one({"_id": self.get('contracts').get('registry').get('_id')})
 		except: pass
 
-		try: self.token = contracts.find_one({"_id": self.get('contracts').get('token').get('_id')})
+		try: self.token = models.contract.contracts.find_one({"_id": self.get('contracts').get('token').get('_id')})
 		except: pass
 
-		try: self.token_freezer = contracts.find_one({"_id": self.get('contracts').get('token_freezer').get('_id')})
+		try: self.token_freezer = models.contract.contracts.find_one({"_id": self.get('contracts').get('token_freezer').get('_id')})
 		except: pass
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		"""
-		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+		from_ : address of the account used to deploy the contract (self["owner"] is used by default)
 		password : password to unlock the account
 		args : list of arguments to be passed upon the contract creation
 		Deploy the contract on the blockchain
@@ -192,16 +185,11 @@ class OrgaDocument(Document):
 			"action": "donate",
 			"from": from_,
 			"password": password,
-			"initial_funds": self.get('initial_funds')
-			} if self.get('initial_funds', 0) > 0 else None
+			"initial_funds": self.get('initial_funds', 0)
+			}
 
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
 		return tx_hash
-
-
-	####
-	# CALLBACKS FOR UPDATE
-	####
 
 	def register(self, tx_receipt, callback_data=None):
 		"""
@@ -214,18 +202,18 @@ class OrgaDocument(Document):
 		self.board["is_deployed"] = True
 
 		#SEND FUNDS TO ORGA AFTER IT IS CREATED
-		if callback_data and callback_data.get('action') == "donate":
+		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds", 0) > 0:
 			from_ = callback_data.get('from')
 			amount = float(callback_data.get('initial_funds'))
 			if from_.refreshBalance() > amount:
 				from_.session_token = None
 				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
 				if not tx_hash:
-					return {"data": "User does not have permission to donate", "status": 400}	
+					return {"data": "User does not have permission to donate", "status": 400}
 			else:
 				return {"data": "Not enough funds in your wallet to process donation", "status": 400}
 
-	
+
 		self["balance"] = self.getTotalFunds()
 
 		self["contracts"] = dict()
@@ -237,7 +225,7 @@ class OrgaDocument(Document):
 		self.save()
 
 		for item in self.get('invited_users'):
-			notif = Notification({
+			notif = models.notification.NotificationDocument({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
 				"category": "newInviteJoinOrga",
@@ -247,203 +235,27 @@ class OrgaDocument(Document):
 						"_id":str(self.get("_id")),
 						"name":self.get("name")
 					}
-				}
+				},
+				"description": "You have been invited in the organisation " + self["name"] + " by " + callback_data.get('from')["name"]  + " as a " + self.get("invited_users").get(item)["tag"]
 			})
 			notif.save()
 			user = users.find_one({"_id":objectid.ObjectId(item)})
 			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
 			user.save()
 
-
-
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
-		Notification.pushNotif({"subject": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "sender": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
+		notif = models.notification.NotificationDocument({
+			"sender": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"},
+			"subject": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"},
+			"category": "orgaCreate",
+                        "createdAt": datetime.datetime.now(),
+                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+		notif.save()
 		return resp
 
-	def memberJoined(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
-		The organisation is returned alongside the rights of the new member
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
-			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_member = users.find_one({"account": address})
-			if new_member and new_member.get('account') not in self.get('members'):
-				rights_tag = logs[0]["decoded_data"][0]
-				if rights_tag in self.get('rights').keys():
-					member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
-					public_member = Member(member_data, tag=rights_tag)
-					self["members"][new_member.get('account')] = public_member
-					Notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": new_member.get("_id"), "type": "user"}, "category": "newMember"})
-					self.save_partial();
-					return { "orga": self.public(public_members=True), "rights": public_member.get('rights')}
-
-		return False
-
-	def permissionChanged(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
-		The organisation is returned alongside the rights of the new member
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
-			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_member = users.find_one({"account": address})
-
-		return False
-
-	def memberLeft(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded and that the member is part of the members, remove it
-		The organisation is returned alongside the rights of the user, which is no longer a member
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
-			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = self.getMember(address)
-			if member:
-				del self["members"][address]
-				self.save_partial();
-				Notification.pushNotif({"sender": {"id": self.get("_id"), "type": "orga"}, "subject": {"id": member.get("_id"), "type": "user"}, "category": "memberLeft"})
-				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
-		return False
-
-	def newDonation(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, add the amount of the donation to the member's data
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
-			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
-			self["balance"] = self.getTotalFunds()
-
-			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			member = self.getMember(address)
-			if member:
-				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
-				Notification.pushNotif({"subject": {"id": objectid.ObjectId(member.get("_id")), "type": "user"},
-                                                        "sender": {"id": objectid.ObjectId(self["_id"]), "type": "orga"},
-                                                        "category": "newDonation", "amount": donation_amount})
-				self.save_partial()
-			return self["balance"]
-		return False
-
-	def projectCreated(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
-			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			new_project = ProjectDocument(at=contract_address, contract='basic_project', owner=self.public())
-			if len(logs[0]["decoded_data"]) == 1:
-				new_project["name"] = logs[0]["decoded_data"][0]
-			project_id = new_project.save()
-			if contract_address not in self["projects"]:
-				self["projects"][contract_address] = new_project
-				self.save_partial()
-				return self
-		return False
-
-	def offerCreated(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
-			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor, init_from_contract=True)
-			new_offer["is_deployed"] = True
-			new_offer.update(callback_data)
-			new_offer["contract_id"] = new_offer.save()
-			if offer_address not in self["proposals"]:
-				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
-				self.save_partial()
-				return self
-		return False
-
-	def proposalCreated(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
-			proposal_id = int(logs[0].get('topics')[1], base=16)
-			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			value = int(logs[0].get('topics')[3], base=16)
-			if destination in self["proposals"]:
-				new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
-				self["proposals"][destination].update(new_proposal)
-				self["proposals"][destination].update(callback_data)
-				self["proposals"][destination]["status"] = "debating"
-				self["proposals"][destination]["votes_count"] = 0
-				self["proposals"][destination]["participation"] = 0
-				self["proposals"][destination]["time_left"] = 100
-
-				offer_contract = contracts.find_one({"_id": self["proposals"][destination]["offer"].get('_id')})
-				self["proposals"][destination]["offer"]["votingDeadline"] = offer_contract.call('getVotingDeadline', local=True)
-				self.save_partial()
-				return self
-		return False
-
-	def voteCounted(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
-			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
-			position = int(logs[0].get('topics')[2], base=16)
-			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
-			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
-
-			member = self.getMember(voter)
-			if member:
-				member.saveVotes(destination, vote)
-			if destination in self["proposals"]:
-				self["proposals"][destination]["votes_count"] += 1
-				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
-
-				time_since_creation = datetime.datetime.utcnow().timestamp() - self["proposals"][destination]["created_on"]
-				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
-
-				self.save_partial()
-				return {'orga': self, 'user': member}
-		return False
-
-	def proposalExecuted(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
-			proposal_id = int(logs[0].get('topics')[1], base=16)
-			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
-			# call_data = logs[0].get('topics')[3]
-
-			if destination in self["proposals"]:
-				self["proposals"][destination]["executed"] = True
-				self.save_partial()
-				return self
-		return False
-
-	def fundsWithdrawnFromOffer(self, logs, callback_data=None):
-		"""
-		logs : list of dict containing the event's logs
-		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
-		"""
-		print("LOGS", logs)
-		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
-			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
-			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
-		return False
-
-
 	####
-	# RIGHTS MANAGEMENT
+	# RIGHTS MANAGEMENT: setRights, can
 	####
 
 	def setRights(self, user, actions, rights):
@@ -458,12 +270,12 @@ class OrgaDocument(Document):
 		"""
 		member = self.getMember(user)
 		if member:
-			return self.get("rights").get(member.get("tag")).get(action)
+			return self.get('rights').get(member.get('tag')).get(action)
 		else:
 			return self.get('rights').get('default').get(action)
 
 	####
-	# GENERIC METHODS
+	# GENERIC METHODS : public, getMember, getTotalFunds, getMemberList
 	####
 
 	def public(self, additional_infos=None, public_members=False):
@@ -494,13 +306,13 @@ class OrgaDocument(Document):
 		if isinstance(user, User):
 			account = user.get('account')
 			if account in self["members"]:
-				return Member(self["members"][account])
+				return models.member.Member(self["members"][account])
 			else:
 				for member in self["members"].values():
 					if user.get('_id')  == member.get('_id'):
-						return Member(member)
+						return models.member.Member(member)
 		elif type(user) is str and user in self["members"]:
-				return Member(self["members"][user])
+				return models.member.Member(self["members"][user])
 		return None
 
 	def getTotalFunds(self):
@@ -513,9 +325,17 @@ class OrgaDocument(Document):
 		"""
 		Returns a list of all members. Only the anonymous data is returned in case the 'anonymous' field has been specified.
 		"""
-		memberAddressList = ["0x" + member.decode('utf-8') for member in self.registry.call("getMemberList")]
-		memberList = list(users.find({"account": {"$in": memberAddressList}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
+		memberList = list(users.find({"account": {"$in": self.registry.call("getMemberList")}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
 		return memberList
+
+### FEATURES : join, allow, leave, donate, createProject, createOffer, createProposal, voteForProposal, executeProposal, refreshProposals, endProposal (+all callbacks)
+### STRUCTURE IS : 
+### def doSomething(arg, ...):
+###		function code
+###		function code	
+
+### def somethingDone(self, logs, callback_data=None):
+###		callback_code
 
 	def join(self, user, tag="member", password=None, local=False):
 		"""
@@ -546,6 +366,33 @@ class OrgaDocument(Document):
 		else:
 			return False
 
+	def memberJoined(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
+		The organisation is returned alongside the rights of the new member
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_member = users.find_one({"account": address})
+			if new_member and new_member.get('account') not in self.get('members'):
+				rights_tag = logs[0]["decoded_data"][0]
+				if rights_tag in self.get('rights').keys():
+					member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
+					public_member =  models.member.Member(member_data, tag=rights_tag)
+					self["members"][new_member.get('account')] = public_member
+					notif = models.notification.NotificationDocument({
+			                        "sender": {"id": new_member.get("_id"), "type": "user"},
+			                        "subject": {"id": self.get("_id"), "type": "orga"},
+			                        "category": "newMember",
+                                                "createdAt": datetime.datetime.now(),
+                                                "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+					notif.save()
+					self.save_partial();
+					return { "orga": self.public(public_members=True), "rights": self.get('rights').get(public_member.get('tag'))}
+
+		return False
+
 	def allow(self, user, allowed_user, action, password=None, local=False):
 		"""
 		user : UserDoc initiating the action
@@ -565,6 +412,19 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+
+	def permissionChanged(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member isn't already part of the members, a new Member is created and stored in the orga document with its rights assigned
+		The organisation is returned alongside the rights of the new member
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_member = users.find_one({"account": address})
+
+		return False
 
 
 	def leave(self, user, password=None, local=False):
@@ -588,6 +448,28 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def memberLeft(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded and that the member is part of the members, remove it
+		The organisation is returned alongside the rights of the user, which is no longer a member
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = self.getMember(address)
+			if member:
+				del self["members"][address]
+				self.save_partial();
+				notif = models.notification.NotificationDocument({
+			                "sender": {"id": new_member.get("_id"), "type": "user"},
+			                "subject": {"id": self.get("_id"), "type": "orga"},
+			                "category": "memberLeft",
+                                        "createdAt": datetime.datetime.now(),
+                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+				notif.save()
+				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
+		return False
 
 	def donate(self, user, amount, password=None, local=False):
 		"""
@@ -613,6 +495,35 @@ class OrgaDocument(Document):
 		else:
 			return False
 
+	def newDonation(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, add the amount of the donation to the member's data
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
+			self["balance"] = self.getTotalFunds()
+
+			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			member = self.getMember(address)
+			if member:
+				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
+				notif = models.notification.NotificationDocument({
+			                "sender": {"id": member.get("_id"), "type": "user"},
+			                "subject": {"id": self.get("_id"), "type": "orga"},
+			                "category": "newDonation",
+                                        "amount": donation_amount,
+                                        "createdAt": datetime.datetime.now(),
+                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+				notif.save()
+			self["transactions"].append(
+                                {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
+                                 "note": "Donation of " + str(donation_amount) + "Ether as been made by " + member.get("name") + ".",
+                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": member.get("_id")})
+			self.save_partial()
+			return self["balance"]
+		return False
+
 	def kill(self, from_):
 		return None
 
@@ -631,11 +542,36 @@ class OrgaDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'ProjectCreated'} if user.get('notifications').get('ProjectCreated') else None
-			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"], mail=mail, callback_data=project))
 			user.needsReloading()
 			return tx_hash
 		else:
 			return False
+
+	def projectCreated(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
+			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			new_project = ProjectDocument(at=contract_address, contract='BaseProject', owner=self.public(), gen_skel=True)
+			if len(logs[0]["decoded_data"]) == 1:
+				new_project["name"] = logs[0]["decoded_data"][0]
+			if callback_data:
+				new_project.update(callback_data)
+			new_project["contracts"] = dict()
+			new_project["contracts"] = {
+				"board": {"address": contract_address, "_id": new_project.board.save()},
+				"registry": self["contracts"]["registry"]
+			}
+			new_project["balance"] = new_project.getTotalFunds()
+			project_id = new_project.save()
+			if contract_address not in self["projects"]:
+				self["projects"][contract_address] = new_project
+				self.save_partial()
+				return {"project": new_project, "orga": self}
+		return False
 
 	def killProject(self, project):
 		return None
@@ -649,7 +585,7 @@ class OrgaDocument(Document):
 		"""
 		if not self.can(user, "create_offer"):
 			return False
-	
+
 		try:
 			offer["hashOfTheProposalDocument"] = sha3_256(offer["description"].encode()).hexdigest().encode('utf-8')[:32]
 			offer["minDailyWithdrawalLimit"] = int(toWei(offer.get('recurrentWithdrawal')) / 30) if offer.get('isRecurrent') else 0
@@ -658,7 +594,7 @@ class OrgaDocument(Document):
 			args = [offer['contractor'], offer['client'], offer['hashOfTheProposalDocument'], offer['initialWithdrawal'], offer['minDailyWithdrawalLimit'], offer['payoutFreezePeriod'], offer['isRecurrent'], offer['duration'], offer['type']]
 		except KeyError as e:
 			return "missing param"
-		
+
 		tx_hash = self.board.call('createOffer', local=False, from_=user.get('account'), args=args, password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
@@ -669,6 +605,24 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def offerCreated(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			offer_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			contractor = normalizeAddress(logs[0].get('topics')[2], hexa=True)
+			new_offer = Offer(at=offer_address, contract='Offer', owner=contractor, init_from_contract=True)
+			new_offer["is_deployed"] = True
+			new_offer.update(callback_data)
+			new_offer["contract_id"] = new_offer.save()
+			if offer_address not in self["proposals"]:
+				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
+				self.save_partial()
+				return self
+		return False
 
 	def cancelOffer(self, user, offer, password=None):
 		"""
@@ -714,6 +668,31 @@ class OrgaDocument(Document):
 			return False
 
 
+	def proposalCreated(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+			proposal_id = int(logs[0].get('topics')[1], base=16)
+			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
+			value = int(logs[0].get('topics')[3], base=16)
+			if destination in self["proposals"]:
+				new_proposal = Proposal(doc={"proposal_id": proposal_id}, board=self.board, init_from_contract=True)
+				self["proposals"][destination].update(new_proposal)
+				self["proposals"][destination].update(callback_data)
+				self["proposals"][destination]["status"] = "debating"
+				self["proposals"][destination]["votes_count"] = 0
+				self["proposals"][destination]["participation"] = 0
+				self["proposals"][destination]["time_left"] = 100
+
+				offer_contract = models.contract.contracts.find_one({"_id": self["proposals"][destination]["offer"].get('_id')})
+				self["proposals"][destination]["offer"]["votingDeadline"] = offer_contract.call('getVotingDeadline', local=True)
+				self.save_partial()
+				return self
+		return False
+
+
 	def voteForProposal(self, user, proposal_id, vote, password=None):
 		"""
 		can sender vote
@@ -727,6 +706,33 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def voteCounted(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 4:
+			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			position = int(logs[0].get('topics')[2], base=16)
+			voter = normalizeAddress(logs[0].get('topics')[3], hexa=True)
+			vote = self.board.call('voteOf', local=True, args=[self["proposals"][destination]["proposal_id"], voter])
+
+			member = self.getMember(voter)
+			if member:
+				member.saveVotes(destination, vote)
+			if destination in self["proposals"]:
+				self["proposals"][destination]["votes_count"] += 1
+				self["proposals"][destination]["participation"] += (1 / len(self["members"])) * 100
+
+				time_since_creation = datetime.datetime.utcnow().timestamp() - self["proposals"][destination]["created_on"]
+				self["proposals"][destination]["time_left"] = 100 - int((time_since_creation / self["proposals"][destination]["debate_period"]) * 100)
+
+				self.save_partial()
+				return {'orga': self, 'user': member}
+		return False
+
+
 
 	def refreshProposals(self):
 		"""
@@ -747,7 +753,7 @@ class OrgaDocument(Document):
 		proposal["yea"] = self.board.call('positionWeightOf', local=True, args=[proposal["proposal_id"], 1])
 
 		proposal["score"] = (float(proposal["yea"] / (proposal["yea"] + proposal["nay"])) * 100) if proposal["participation"] > 0 else 0
-		
+
 		if proposal["yea"] > proposal["nay"]\
 		   and proposal["participation"] >= self["rules"]["quorum"]\
 		   and proposal["score"] >= self["rules"]["majority"]:
@@ -774,6 +780,22 @@ class OrgaDocument(Document):
 		else:
 			return False
 
+	def proposalExecuted(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			proposal_id = int(logs[0].get('topics')[1], base=16)
+			destination = normalizeAddress(logs[0].get('topics')[2], hexa=True)
+			# call_data = logs[0].get('topics')[3]
+
+			if destination in self["proposals"]:
+				self["proposals"][destination]["executed"] = True
+				self.save_partial()
+				return self
+		return False
+
 	def withdrawFundsFromOffer(self, user, offer, password=None):
 		"""
 		"""
@@ -785,6 +807,20 @@ class OrgaDocument(Document):
 			return tx_hash
 		else:
 			return False
+
+	def fundsWithdrawnFromOffer(self, logs, callback_data=None):
+		"""
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
+		"""
+		# print("LOGS", logs)
+		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
+			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
+			print("balance == ", fromWei(eth_cli.eth_getBalance(destination)), " and withdrawal amount ", fromWei(withdrawal_amount))
+			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
+		return False
+
 
 	def changeConstitution(self, user, constitution):
 		"""
@@ -846,13 +882,15 @@ class OrgaCollection(Collection):
 		"tx_history": list,
 		"creation_date": str,
 		"mailing_lists": dict,
+		"transactions": list,
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,
 		"balance": int,
 		"uploaded_documents": list,
 		"gov_model": str,
-		"invited_users": list
+		"invited_users": list,
+		"news": list
 	}
 
 	def lookup(self, query):
@@ -874,7 +912,7 @@ class OrgaCollection(Collection):
 		Overload the parent find_one function to initialize the Contract object which has its _id contained in the orga document
 		"""
 		from .orga_models import governances
-		
+
 		doc = super().find_one(*args, **kwargs)
 		if doc and doc.get("gov_model"):
 			doc = governances[doc["gov_model"]]["templateClass"](doc)
@@ -882,4 +920,3 @@ class OrgaCollection(Collection):
 		return doc
 
 organizations = OrgaCollection(collection=client.main.organizations)
-

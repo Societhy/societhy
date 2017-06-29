@@ -4,20 +4,18 @@ The two mains functions are login and register. They contains theirs owns userfu
 """
 
 import time
+from base64 import b64decode, b64encode
+
 import jwt
 import scrypt
-from base64 import b64decode, b64encode
-from bson.objectid import ObjectId
-
-from flask import session, request, Response
-from models import users, UserDocument
-
-from core import keys
 from core.utils import deserializeUser
+from flask import session, request
+from models import users, UserDocument
+from rlp.utils import encode_hex
 
 from . import secret_key, SALT_LOGIN_PASSWORD
 
-from rlp.utils import encode_hex
+
 # generates token for session
 
 

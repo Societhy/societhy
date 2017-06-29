@@ -2,7 +2,7 @@
  * Main controller for organizations.
  * @class OrgaMainController
  */
- app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal) {
+ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal, FileUploader) {
 
    var ctrl = this;
    $scope.isMember = false;
@@ -14,24 +14,47 @@
    var currIndex = 0;
 
    ctrl.setProduct = function(product) {
-     $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
-       images = response.data;
-       currIndex = 0;
-       slides = $scope.slides = [];
+     if (product) {
+       $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
+         images = response.data;
+         currIndex = 0;
+         slides = $scope.slides = [];
 
-       if (images.length > 0) {
-         for (var i = 0; i != images.length; i++) {
-           slides.push({image: images[i], id: currIndex++});
+         if (images.length > 0) {
+           for (var i = 0; i != images.length; i++) {
+             slides.push({image: images[i], id: currIndex++});
+           }
          }
-       }
-     })
+       })
+     }
      $scope.currentProd = product;
      if ($scope.currentProd) {
        $scope.reviewList = $scope.currentProd.reviewList;
      }
    }
 
-   ctrl.sendReview = function() {
+   var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+    url:"/addOrgaDocuments",
+    alias:"doc",
+    headers: {
+      Authentification: $sessionStorage.SociethyToken
+    },
+  });
+
+   uploaderDocs.onBeforeUploadItem = function (item) {
+    item.formData.push({"name": item.file.name});
+    item.formData.push({"type": item.file.type});
+    console.info('onBeforeUploadItem', item);
+  };
+
+  ctrl.uploadNewDocuments = function() {
+    for (var i = 0; i != uploaderDocs.queue.length; i++) {
+      uploaderDocs.queue[i].formData.push({"orga_id" : $rootScope.currentOrga._id})
+    }
+    uploaderDocs.uploadAll();
+  }
+
+  ctrl.sendReview = function() {
     productId = $scope.currentProd._id.$oid;
     console.log(this.review);
     console.log(this.rate);
@@ -46,7 +69,8 @@
     };
 
     $http.post('/addReviewToProduct/'.concat(productId), reviewPack).then(function(response) {
-      console.log(response);;
+      console.log(response);
+      $scope.reviewList.push(reviewPack);
     }, function(error) {
       console.log(error);
     });
@@ -127,11 +151,15 @@
      * @method onLoad
      */
      onLoad = function() {
+      console.log("STATE", $state);
       $http.post('/getOrganization', {
         "id": $state.params._id
       }).then(function(response) {
         if (response.data.orga) {
           $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+          ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
+          ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
+          ctrl.member_list = Object.values($rootScope.currentOrga.members);
         }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
@@ -142,6 +170,8 @@
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");
+        $rootScope.currentOrga = null;
+        $rootScope.currentRights = null;
       });
     };
 
@@ -198,6 +228,14 @@
    }
  }
 
+ ctrl.expandProject = function(proj) {
+  for (var i = 0; i != ctrl.projects_number; i++) {
+    if (proj.address == ctrl.projects_list[i].address) {
+      ctrl.projects_list[i].expand = (proj.expand == false ? true : false);
+    }
+  }
+}
+
 	/**
 	 * Create a project from the organization.
      * @method createProject
@@ -215,6 +253,9 @@
         }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
        }, function(data) {
          $scope.currentOrga.projects = $rootScope.currentOrga.projects = data.data.projects;
+         for (var i = 0; i != $scope.currentOrga.projects; i++) {
+           $scope.currentOrga.projects.expand = false;
+         }
        })
      }
 
@@ -227,6 +268,7 @@
      ctrl.downloadDoc = function (doc_id, doc_name) {
       $http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
        console.log(response);
+       window.location = '/getOrgaUploadedDocument/' + doc_id + "/" + doc_name;
      });
     }
 
@@ -267,158 +309,6 @@
    return ctrl;
  });
 
-
-// /*
-// ** Histo Handler
-// */
-// app.controller('OrgaHistoController', function($rootScope, $scope, $http, $timeout, $uibModal, $q, $rootScope, $controller, $state, SweetAlert, ladda, $sessionStorage, $document) {
-//   ctrl = this;
-
-
-//   $rootScope.filter = {categories:	[{name: 'NewMember'}, {name:'MemberLeft'}, {name: 'ProposalCreated'}, {name: 'DonationMade'}, {name: 'newSpending'}],
-//   members:	[{}],
-//   jobs:		[{name: "member"}, {name: "partener"}, {name: "admin"}],
-//   projects:	[{}],
-//   donations:	[{}]};
-
-//   $rootScope.filtered = {categories: [], members: [], jobs: [], projects: [], donations: []};
-
-//   $rootScope.getHisto = function (begin, end) {
-//     $http.post('/getOrgaHisto', {
-//       "orga_id": $state.params._id,
-//       "date": {"begin": begin, "end": end}
-//     }).then(
-//     function (data) {
-//       $(".orgaActivityLoading").addClass("displayNone");
-//       $(".timeline").removeClass("displayNone");
-//       if (data.data[0]) {
-//         $rootScope.slider.first = data.data[0]["first"];
-//         $rootScope.histoFull = $rootScope.histo = data.data;
-//         $rootScope.slider.begin = begin;
-//         $rootScope.slider.end = end;
-//         $rootScope.updateSliderFilter();
-//         $rootScope.updateFilter();
-//       }
-//       else {
-//         delete $rootScope.histoFull;
-//         delete $rootScope.histo;
-
-//       }
-//     },
-//     function (error) {
-//       console.log(error);
-//     });
-//   };
-
-//     /*
-//      ** SLIDER
-//      */
-//      $rootScope.updateSliderFilter = function () {
-//       if (!$rootScope.slider || $("#dateSliderFilter.ui-dateRangeSlider").length <= 0)
-//         return;
-//       $("#dateSliderFilter").dateRangeSlider("bounds", new Date($rootScope.slider.first), $rootScope.date);
-//       $("#dateSliderFilter").dateRangeSlider("values", new Date($rootScope.slider.begin), new Date($rootScope.slider.end));
-//     }
-
-//     $rootScope.initSlider = function () {
-//      if ($rootScope.init)
-//        return;
-//      $("#dateSliderFilter").dateRangeSlider();
-//         $("#donationSliderFilter").rangeSlider({defaultValues:{min: 0, max: 100}}); // add check donation
-//         $("#dateSliderFilter").bind("userValuesChanged", $rootScope.updateHisto)
-//         $rootScope.updateSliderFilter()
-//         $rootScope.init = true;
-//       }
-
-//     /*
-//      ** FILTERS
-//      */
-//      $rootScope.updateHisto = function (e, data) {
-//       $rootScope.slider.begin = data.values.min;
-//       $rootScope.slider.end = data.values.max
-//       locale = "en-us";
-
-//       $rootScope.getHisto(
-//         ($rootScope.slider.begin.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.begin.getDate() + ", " + $rootScope.slider.begin.getFullYear() + " 12:00 PM"),
-//         ($rootScope.slider.end.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.end.getDate() + ", " + $rootScope.slider.end.getFullYear() + " 11:59 PM"))
-//     }
-
-//     $rootScope.updateFilter = function () {
-//       delete $rootScope.histo;
-
-//       $rootScope.histo = $.extend(true, {}, $rootScope.histoFull);
-//       $.each($rootScope.histo, function (id, value) {
-//         filtered = true;
-//         if ($rootScope.filtered.categories.length !== 0) {
-//           filtered = false;
-//           $.each($rootScope.filtered.categories, function () {
-//             if (this["name"] == $rootScope.histo[id]["category"]) {
-//               filtered = true;
-//               return;
-//             }
-//           });
-//         }
-//         if ($rootScope.filtered.members.length !== 0 && filtered === true) {
-//           filtered = false;
-//           $.each($rootScope.filtered.members, function () {
-//             if ((this["name"] == $rootScope.histo[id]["subject"]["name"]) ||
-//               (this["name"] == $rootScope.histo[id]["sender"]["name"])) {
-//               filtered = true;
-//             return;
-//           }
-//         });
-//         }
-// 	    /*
-// 	    ** ADD FILTER
-// 	    */
-//       if (filtered === false)
-//         delete $rootScope.histo[id];
-//     });
-//     }
-
-//     /*
-//      ** INIT
-//      */
-//      function initHisto() {
-//       angular.forEach($rootScope.currentOrga.members, function(value, key) {
-//         $rootScope.filter.members.push(value);
-//       });
-//       angular.forEach($rootScope.currentOrga.projects, function(value, key) {
-//         $rootScope.filter.projects.push(value);
-//       });
-//       $rootScope.$watch( 'filtered' , $rootScope.updateFilter, true);
-//       locale = "en-us";
-//       $rootScope.date = new Date();
-//       $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 12:00 AM"};
-//       lastWeek = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
-//       $rootScope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 11:59 PM";
-
-//       $rootScope.getHisto(
-//         ($rootScope.slider.begin),
-//         ($rootScope.slider.end));
-//     };
-//     if ($rootScope.currentOrga)
-//       initHisto(); 
-//     return ctrl;
-
-//   });
-
-// /*
-// ** EXPORT CONTROLLER
-// */
-
-// app.controller('ExportActivityController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
-
-
-//   $rootScope.exportActivityModal = function() {
-//    $("#orgaExportData").table2excel({exclude: ".noExl",
-//      name: "Worksheet Name",
-//      filename: "SomeFile"});
-//  };
-
-//  return ctrl;
-// });
-
 app.controller('ProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal, ngNotify) {
   var ctrl = this;
 
@@ -429,6 +319,11 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
     "denied": "has been denied."
   }
 
+  $rootScope.$watch("currentOrga", function(_new, _old) {
+    if (_new != _old)
+      ctrl.reload();
+  })
+
   ctrl.reload = function() {
     if ($rootScope.currentOrga) {
       ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
@@ -438,14 +333,12 @@ app.controller('ProposalController', function($scope, $http, $timeout, $rootScop
         ctrl.proposal_list[i].expand = false;
         if ($rootScope.user != null) {
           for (let j = 0; j != $rootScope.user.votes.length; j++) {
-            console.log($rootScope.user.votes[j].offer, ctrl.proposal_list[i].destination, $rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
             if ($rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
               ctrl.proposal_list[i].voted = $rootScope.user.votes[j].vote[0];
           }
         }
       }
-    }    
-    console.log("proposals", ctrl.proposal_list)
+    }
   }
 
   ctrl.proposalLookup = function(item) {
@@ -546,7 +439,7 @@ ctrl.executeProposal = function(proposal) {
  }, function(data) {
   $rootScope.currentOrga = data.data;
   ctrl.reload();
-});  
+});
 }
 
 ctrl.withdrawFundsFromOffer = function(proposal) {
@@ -558,21 +451,13 @@ ctrl.withdrawFundsFromOffer = function(proposal) {
     "socketid": $rootScope.sessionId,
     "orga_id": $rootScope.currentOrga._id,
     "offer_id": proposal.offer.contract_id,
-  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+  }).then(function(data) {}, function(error) { $rootScope.toogleError("You cannot withdraw less than 0.0001 ether");});
  }, function(data) {
   console.log(data);
-  ctrl.reload();
-  ngNotify.set(data.withdrawal, {
-    theme: 'pure',
-    position: 'top',    
-    type: 'success',
-    button: 'true',
-    sticky: false,
-    duration: 3000
-  });
+  $rootScope.toogleInfo(data.data.withdrawal);
 });
 }
-
 ctrl.reload();
+
 return ctrl;
 });

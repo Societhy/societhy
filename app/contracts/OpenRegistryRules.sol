@@ -3,6 +3,7 @@ pragma solidity ^0.4.7;
 import "OpenRegistry.sol";
 import "Rules.sol";
 import "BoardRoom.sol";
+import "BaseProject.sol";
 
 contract OpenRegistryRules is Rules {
   function OpenRegistryRules(address _registry) public {
@@ -40,7 +41,28 @@ contract OpenRegistryRules is Rules {
     }
   }
 
+  function canCreateProject(address _sender) public constant returns (bool) {
+    if (registry.memberId(_sender) > 0) {
+      return true;
+    }    
+  }
+
+
+  function canPoll(address _project, address _sender) public constant returns (bool) {
+    if (registry.memberIdForProject(_project, _sender) > 0) {
+      return true;
+    }
+  }
+
+  function canVoteInPoll(address _project, address _sender) public constant returns (bool) {
+    if (registry.memberIdForProject(_project, _sender) > 0) {
+      return true;
+    }
+  }
+
   function votingWeightOf(address _sender, uint _proposalID) public constant returns (uint) {
+    address(_sender);
+    uint(_proposalID);
     return 1;
   }
 

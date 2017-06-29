@@ -3,16 +3,14 @@ This module implement the ContractDocument class.
 This model represent the ethereum contracts that will be deployed on the blockchain.
 """
 
-from os import path, listdir
+from os import path
 
-from mongokat import Collection, Document
-
-from models.user import UserDocument as User
-from .clients import client, eth_cli
-
-from rlp.utils import encode_hex
-from ethereum._solidity import compile_file, get_solidity
+from ethereum.tools._solidity import compile_file
 from ethereum.abi import encode_abi
+from mongokat import Collection, Document
+from rlp.utils import encode_hex
+
+from .clients import client, eth_cli
 
 class SolidityCompileError(Exception):
 	pass
@@ -43,13 +41,15 @@ class ContractDocument(Document):
 			self["name"] = contract
 			self["contract_file"] = path.join(self.contract_directory, contract + ".sol")
 			self["contract_name"] = contract
-			self["owner"] = owner.get('account') if type(owner) is User else owner
+			self["owner"] = owner.get('account') if type(owner) is models.user.UserDocument else owner
 
 	def compile(self):
 		"""
 		Compile the contract from a .sol file to an ABI file.
 		Then put the signature.
 		"""
+		print("Compiling file", self["contract_file"], "...")
+
 		solc_key = self["contract_name"] + '.sol:' + self["contract_name"]
 		compiled = compile_file(self["contract_file"]).get(solc_key)
 		if len(compiled) == 0:
@@ -64,6 +64,7 @@ class ContractDocument(Document):
 				signature += _input.get('type')
 			signature += ')'
 			abi_item["signature"] = signature
+		print("Solidity compiler is done !")
 
 	def deploy(self, from_, args=[]):
 		"""
@@ -132,3 +133,5 @@ class ContractCollection(Collection):
 	document_class = ContractDocument
 
 contracts = ContractCollection(collection=client.main.contracts)
+
+import models.user

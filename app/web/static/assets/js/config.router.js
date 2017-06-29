@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'orgaAdministrationCtrl', 'orgaActivityCtrl', 'datatable', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'), //datepicker
+        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'newsCtrl', 'orgaAdministrationCtrl', 'orgaActivityCtrl', 'datatable', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'), //datepicker
         title: 'Organisation dashboard',
         params: {
             data: null
@@ -87,13 +87,32 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Organisation'
         }
     }).state('app.project', {
-        url: '/orga/:name/:_id',
-        templateUrl: "static/assets/views/project_dashboard.html",
+        url: '/project/:name/:_id',
+        templateUrl: "static/assets/views/project_homepage.html",
         resolve: loadSequence('projectMainCtrl'),
-        title: 'Project dashboard',
+        title: 'Project homepage',
+        params: {
+            data: null
+        },
         ncyBreadcrumb: {
             label: 'Project'
         }
+    }).state('app.newproject', {
+        url: '/project/new',
+        templateUrl: "static/assets/views/project_wizard.html",
+        resolve: loadSequence('projectWizardCtrl', 'touchspin-plugin'),
+        title: 'Create a new project',
+        ncyBreadcrumb: {
+            label: 'Project Creation'
+        }
+      }).state('app.discoverprojects', {
+          url: '/project/discover',
+          templateUrl: "static/assets/views/project_discovery.html",
+          resolve: loadSequence('projectDiscoveryCtrl'),
+          title: 'Projects list',
+          ncyBreadcrumb: {
+              label: 'Projects'
+          }
     }).state('app.registration', {
         url: '/registration',
         resolve: loadSequence('CryptoJS'),

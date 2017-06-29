@@ -1,6 +1,3 @@
-from mongokat import Collection, Document
-
-from ..clients import client
 from ..organization import OrgaDocument as Organization
 
 class Ngo(Organization):
@@ -11,7 +8,7 @@ class Ngo(Organization):
 		"delegated_voting": False,
 		"quorum": 20,
 		"majority": 50,
-		"accessibility": "open",
+		"accessibility": "public",
 		"can_be_removed": True,
 		"curators": False,
 		"public": True,
@@ -32,9 +29,9 @@ class Ngo(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
+
 		},
-		"admin": {},
-		"partner": {},
 		"member": {
 			"join": False,
 			"leave": True,
@@ -47,6 +44,7 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
 		"default": {
 			"join": True,
@@ -60,6 +58,7 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": False,
 			"buy_token": False,
+			"publish_news": True
 		}
 	}
 	def launchCrowdfunding(self, params):

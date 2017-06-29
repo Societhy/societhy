@@ -14,7 +14,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 		{url: "static/assets/views/partials/orga/administration/transaction.html"},
 		{url: "static/assets/views/partials/orga/administration/manageRights.html"}],
 		current: "static/assets/views/partials/orga/administration/transaction.html",
-		rights: {current: null, "new": null, tmp: $.extend({}, $rootScope.currentOrga.rights),
+		rights: {current: null, tmp: $.extend({}, $rootScope.currentOrga.rights),
 			 availableRights: {
 			     "join": false,
 			     "leave": false,
@@ -30,22 +30,10 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 			     "sell_token": false,
 			     "buy_token": false,
 			     "access_administration": false
-			    
 			}
 		},
 		members: {tmp: {}}};
 
-
-    function init () {
-	if ($rootScope.user) {
-	    $http.get('/getOrgaDefaultRights', {
-	    }).then(function(response) {
-		$rootScope.admin.rights["new"] = response.data;
-	    },function(error) {
-		console.log(error);
-	    });
-	}
-    }
 
 
     // animate menu Icon
@@ -100,7 +88,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
     /* Add a new right to the list */
     $rootScope.admin.rights.newRight = function () {
 	if ($("#newOrgaRight").val().trim() && !$rootScope.admin.rights.tmp[$("#newOrgaRight").val()])
-	    $rootScope.admin.rights.tmp[$("#newOrgaRight").val()] = $.extend({}, $rootScope.admin.rights["new"]);
+	    $rootScope.admin.rights.tmp[$("#newOrgaRight").val()] = $.extend({}, $rootScope.admin.rights["availableRights"]);
     }
 
     /* Remove  a right from the list */
@@ -123,36 +111,30 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
     }
 
     /* Menu Handler when clicking on a element of the menu, fetch the corresponding html code and display it */
-	$rootScope.admin.displayTransactions = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[0]["url"];
-	    $http.get('/getOrgaTransaction/'.concat($rootScope.currentOrga._id)).then(function(response) {
-		$rootScope.admin.transaction = {response};
-	    });
-	}
+    $rootScope.admin.displayTransactions = function () {
+	$rootScope.admin.current = $rootScope.admin.menu[0]["url"];
+	$http.get('/getOrgaTransaction/'.concat($rootScope.currentOrga._id)).then(function(response) {
+	    $rootScope.admin.transaction = {response};
+	});
+    }
 
-	$rootScope.admin.displayMembers = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[1]["url"];
-	    $("#adminTable").DataTable({});
-	    
-	}
+    $rootScope.admin.displayMembers = function () {
+	$rootScope.admin.current = $rootScope.admin.menu[1]["url"];
+	$("#adminTable").DataTable({});
+    }
     
- 	$rootScope.admin.displayProjects = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[2]["name"];
-	    $("#tableWrapper").html('<table id="adminTable" class="adminTables table table-striped table-bordered"></table>');
-	    $("#adminTable").DataTable({"columns": $rootScope.admin.menu[2]["header"]});
-	}
-		
-	$rootScope.admin.addTransaction = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[3]["name"];
-	}
+    $rootScope.admin.displayProjects = function () {
+	$rootScope.admin.current = $rootScope.admin.menu[2]["name"];
+    }
+    
+    $rootScope.admin.addTransaction = function () {
+	$rootScope.admin.current = $rootScope.admin.menu[3]["name"];
+    }
 
-	$rootScope.admin.extractAdminData = function () {
-	    $rootScope.admin.current = $rootScope.admin.menu[4]["name"];
-	    $http.get('/getOrgaTransaction/'.concat($rootScope.currentOrga._id)).then(function(response) {
-		
-	    });
-	}
-console.log($rootScope);
+    $rootScope.admin.extractAdminData = function () {
+	$rootScope.admin.current = $rootScope.admin.menu[4]["name"];
+    }
+
     $rootScope.admin.manageRights = function () {
 	$rootScope.admin.current = $rootScope.admin.menu[5]["url"];
     }
@@ -167,6 +149,5 @@ console.log($rootScope);
       });
     */
 
-    init();
     return ctrl;
 });

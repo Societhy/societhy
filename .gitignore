@@ -6,6 +6,10 @@ tasks/
 ethjsonrpc/
 venv/
 
+
+
+
+
 .idea/
 
 # Created by https://www.gitignore.io/api/pycharm

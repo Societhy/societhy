@@ -1,0 +1,61 @@
+<div class="container-fluid container-fullw bg-white" ng-controller="ProjectMainController as ctrl">
+  <fieldset>
+    <div class="row margin-10">
+      <div class="col-md-3">
+        <h1>{{project.name}}</h1>
+      </div>
+      <div class="col-md-2">
+        <!-- Check si user dans les membres -->
+        <button type="button" class="btn btn-sm btn-success text-extra-large">Join</button>
+        <button type="button" class="btn btn-sm btn-danger text-extra-large">Leave</button>
+      </div>
+      <div class="col-md-7">
+        <div class="social-icons">
+          <ul>
+            <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+              <a href="#" ng-click="" target="_blank">
+                Twitter
+              </a>
+            </li>
+            <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+              <a href="#" ng-click="" target="_blank">
+                Facebook
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="row margin-10">
+      <div class="col-md-3">
+        <h3>Objectives</h3>
+        <span ng-if="project.balance < project.amount_to_raise">
+          <span class="label" class="label-warning">Crowdfunding campaign in progress</span>
+          <p>{{project.balance}} on {{project.amount_to_raise}} eth required</p>
+        </span>
+        <span ng-if="project.balance > project.amount_to_raise">
+          <span class="label" class="label-success">Crowdfunding campaign is complete !</span>
+          <p>{{project.balance}} ethers were raised ! ( goal was : {{project.amount_to_raise}} ethers)</p>
+        </span>
+        <!-- LIGNE D'AVANCEMENT DES FOND -->
+      </div>
+      <div class="col-md-2 margin-top-10">
+        <button type="button" class="btn btn-sm btn-success text-extra-large">Donate</button>
+      </div>
+      <div class="col-md-7">
+        <h3>Description</h3>
+        <p class="margin-top-10">{{project.description}}</p>
+      </div>
+    </div>
+    <div class="row margin-10">
+      <div class="col-md-5">
+        <h3>Time remaining</h3>
+        <!-- TIMELINE ICI -->
+      </div>
+      <div class="col-md-7">
+      </div>
+    </div>
+  </fieldset>
+</div>

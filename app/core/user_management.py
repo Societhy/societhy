@@ -2,24 +2,13 @@
 This module is used to handle request relative to the user.
 Each function correspond to a route.
 """
-import time
-import jwt
-import scrypt
 import collections
-from base64 import b64decode, b64encode
 
 from bson.objectid import ObjectId
-from rlp.utils import encode_hex
-from flask import session, request, Response, jsonify
-
-
-from models.notification import notifications
-from models import users, UserDocument, organizations
-from models.notification import notifications
+from core import base_orga
 from models import errors
-
-from core import keys, base_orga
-from . import secret_key
+from models import users, organizations
+from models.notification import notifications
 
 
 def update(user, newData):

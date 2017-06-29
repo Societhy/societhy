@@ -5,19 +5,15 @@ SocketIO enables bidirectional communication, so the server can push data to a c
 There is in this module two global arrays, one NC_clients who contains the logged user without an open SocketIO socket, the other one Clients for the connected ones.
 """
 
-
-from pymongo import ASCENDING
-from datetime import datetime
-from bson.objectid import ObjectId
 from bson.json_util import dumps
-from flask import Flask, request, json as flask_json
-from flask_socketio import SocketIO, send, emit
-
-from core.utils import UserJSONEncoder
-
+from bson.objectid import ObjectId
+from flask import request
+from flask_socketio import emit
 from models import users
 from models.clients import socketio
 from models.message import messages, MessageDocument
+from pymongo import ASCENDING
+
 from .user_management import isInContactList
 
 NC_Clients = {} #Not connected clients

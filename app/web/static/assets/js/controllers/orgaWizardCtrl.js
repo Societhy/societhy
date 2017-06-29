@@ -1,10 +1,10 @@
 'use strict';
-/** 
+/**
   * controller for Wizard Form example
   */
 
 
-  app.controller('OrgaWizardCtrl', 
+  app.controller('OrgaWizardCtrl',
     function ($scope, $http, $timeout, $uibModal, ngNotify, FileUploader, $sessionStorage, $rootScope, $state) {
 
         $scope.currentStep = 1;
@@ -226,7 +226,7 @@
     uploaderDocs.onBeforeUploadItem = function (item) {
         console.log(uploaderDocs.queue.length);
         item.formData.push({"name": item.file.name});
-        item.formData.push({"type": item.file.type});        
+        item.formData.push({"type": item.file.type});
         console.info('onBeforeUploadItem', item);
     };
 
@@ -309,7 +309,7 @@
     });
         rightsModalInstance.result.then(function() {}, function () {
         });
-    }        
+    }
 
 
 
@@ -388,7 +388,7 @@
                         for (var i = 0; i != uploaderDocs.queue.length; i++)
                         {
                             uploaderDocs.queue[i].formData.push({"orga_id" : data.data._id})
-                        } 
+                        }
                         uploaderDocs.uploadAll();
                         $state.go("app.organization", data.data);
                     })
@@ -415,7 +415,7 @@
 
         ngNotify.set(text, {
             theme: 'pure',
-            position: 'top',    
+            position: 'top',
             type: 'error',
             button: 'true',
             sticky: false,

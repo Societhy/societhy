@@ -1,27 +1,21 @@
-from .user import users, UserDocument as User
-from ethjsonrpc import wei_to_ether
-
+from models import user
 class Tag:
 	pass
 
-class Member(User):
+class Member(user.UserDocument):
 
 	organization = None
 	rights = None
 
-	def __init__(self, user, rights=None, tag=None):
-		if rights:
-			user.update({"rights": rights})
+	def __init__(self, user, tag=None):
 		if tag:
 			user["tag"] = tag
 		self["votes"] = list()
 		super().__init__(doc=user, gen_skel=False)
 
 	def saveVotes(self, destination, vote):
-		user = users.find_one({"_id": self["_id"]})
-		user["votes"].append({"offer": destination, "vote": vote})
-		user.save_partial()
 		self["votes"].append({"offer": destination, "vote": vote})
+		self.save_partial()
 
 	def canDo(self, action):
 		pass

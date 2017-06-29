@@ -7,7 +7,7 @@
       <th>Flux</th>
       <th>Status</th>
       <th>Note</th>
-      <th>Actions</th>
+      <th>Date</th>
     </tr>
     <tbody>
       <tr>
@@ -34,6 +34,13 @@
 	<td>Monthly fees expenses</td>
 	<td>2017/04/1 9:05pm"</td>
       </tr>
+      <tr ng-repeat="transaction in currentOrga.transactions">
+	<td>{{transaction.type}}</td>
+	<td>{{transaction.value}}</td>
+	<td>{{transaction.flux}}</td>
+	<td>{{transaction.status}}</td>
+	<td>{{transaction.note}}</td>
+    	<td>{{transaction.date}}</td>
     </tbody>
   </thead>
 </table>

@@ -1,19 +1,9 @@
-from mongokat import Collection, Document
-
 from ..clients import client, eth_cli
 from ..organization import OrgaDocument as Organization
 
-from models.events import Event, ContractCreationEvent, LogEvent, makeTopics
-from models.user import users, UserDocument as User
-from models.contract import contracts, ContractDocument as Contract
-from models.project import ProjectDocument, ProjectCollection
-from models.member import Member
-from models.notification import NotificationDocument as Notification, notifications as notification
-from models.offer import Offer
-from models.proposal import Proposal
+from models.events import Event, ContractCreationEvent
 
-from core.utils import fromWei, toWei, to20bytes, to32bytes, normalizeAddress
-from core.blockchain_watcher import blockchain_watcher as bw
+from models.clients import blockchain_watcher as bw
 
 class PublicCompany(Organization):
 
@@ -23,7 +13,7 @@ class PublicCompany(Organization):
 		"delegated_voting": False,
 		"quorum": 20,
 		"majority": 50,
-		"accessibility": "open",
+		"accessibility": "public",
 		"can_be_removed": True,
 		"curators": False,
 		"public": True,
@@ -44,9 +34,8 @@ class PublicCompany(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
-		"admin": {},
-		"partner": {},
 		"member": {
 			"join": False,
 			"leave": True,
@@ -59,6 +48,7 @@ class PublicCompany(Organization):
 			"remove_members": False,
 			"sell_token": True,
 			"buy_token": True,
+			"publish_news": True
 		},
 		"default": {
 			"join": True,
@@ -72,6 +62,7 @@ class PublicCompany(Organization):
 			"remove_members": False,
 			"sell_token": False,
 			"buy_token": False,
+			"publish_news": True
 		}
 	}
 

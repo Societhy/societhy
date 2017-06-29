@@ -1,9 +1,13 @@
 """
 This modules contains tools function that might me used by the models or the controllers.
 """
-from copy import copy
-from bson.objectid import ObjectId
 import json
+import urllib.parse
+from copy import copy
+from datetime import datetime
+
+from bson.objectid import ObjectId
+
 
 class UserJSONEncoder(json.JSONEncoder):
 	"""
@@ -11,7 +15,7 @@ class UserJSONEncoder(json.JSONEncoder):
 	Otherwise, ObjectId can't be transmitted.
 	"""
 	def default(self, o):
-	        if isinstance(o, ObjectId):
+	        if isinstance(o, ObjectId) or isinstance(o, datetime):
 	            return str(o)
 	        return json.JSONEncoder.default(self, o)
 
@@ -75,3 +79,13 @@ def to20bytes(data):
 	if len(data) > 40:
 		data = data[-40:]
 	return '0x' + data
+
+
+def getYoutubeID(url):
+	url_data = urllib.parse.urlparse(url)
+	query = urllib.parse.parse_qs(url_data.query)
+	if "v" in query:
+		video = query["v"][0]
+		if len(video) == 11:
+			return video
+	return ""

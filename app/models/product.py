@@ -3,8 +3,9 @@ In developpement.
 """
 
 from mongokat import Collection, Document
-from bson.objectid import ObjectId
+
 from .clients import client
+
 
 class ProductsDocument(Document):
 	def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None):

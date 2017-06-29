@@ -1,28 +1,28 @@
-from os import environ
-from sys import exit
 import re
+from os import environ
 from signal import signal, SIGINT
+from sys import exit
 
-from flask import Flask, render_template, url_for, request, make_response, jsonify
 from eventlet.greenpool import GreenPool
+from flask import render_template, request, make_response, jsonify
+
+
 
 from api import MongoSessionInterface as MongoSessionInterface
-from api.routes.user import router as user_routes
-from api.routes.organization import router as orga_routes
-from api.routes.project import router as project_routes
 from api.routes.fundraise import router as fundraise_routes
 from api.routes.notifications import router as notif_routes
-
+from api.routes.organization import router as orga_routes
+from api.routes.project import router as project_routes
+from api.routes.user import router as user_routes
 from core import secret_key
-from core.utils import UserJSONEncoder
 from core.chat import socketio
-
-from core.notifications import notifyToOne, mail
+from core.utils import UserJSONEncoder
 from models import organizations, users, projects
-from models.clients import app
+from models.clients import app, mail
 
 app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
+app.session_interface = MongoSessionInterface()
 
 app.config['MAIL_SERVER']='smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
@@ -31,6 +31,8 @@ app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
+
+workers_pool = GreenPool(size=3)
 
 jinja_options = app.jinja_options.copy()
 
@@ -44,17 +46,12 @@ jinja_options.update(dict(
 ))
 app.jinja_options = jinja_options
 
-app.session_interface = MongoSessionInterface()
 app.register_blueprint(notif_routes)
 app.register_blueprint(user_routes)
 app.register_blueprint(orga_routes)
 app.register_blueprint(project_routes)
 app.register_blueprint(fundraise_routes)
 
-mail.init_app(app)
-socketio.init_app(app)
-
-workers_pool = GreenPool(size=3)
 
 @app.after_request
 def add_header(response):
@@ -78,7 +75,7 @@ def helloWorld():
 
 @app.route('/searchFor/<query>', methods=['GET'])
 def searchForAnything(query):
-	
+
 	def process_query(collection):
 		regex = re.compile("^%s" % query, re.IGNORECASE)
 		return list(collection.lookup(regex))
@@ -87,6 +84,10 @@ def searchForAnything(query):
 	for results in workers_pool.imap(process_query, (organizations, users, projects)):
 		data += results
 	return make_response(jsonify(data), 200)
+
+
+mail.init_app(app)
+socketio.init_app(app)
 
 def stopServer(signal, frame):
 	if blockchain_watcher.running:
@@ -99,7 +100,7 @@ signal(SIGINT, stopServer)
 
 if __name__ == '__main__':
 	if environ.get('MINING'):
-		from core.blockchain_watcher import blockchain_watcher
+		from models.clients import blockchain_watcher
 		blockchain_watcher.run()
 	if environ.get('IP'):
 		socketio.run(app, host=environ.get('IP'), port=4242, debug=True, use_reloader=(environ.get('MINING') == None))

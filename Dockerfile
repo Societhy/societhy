@@ -40,7 +40,7 @@ COPY ./utils/ /societhy/utils
 
 RUN echo 'alias run="python3.6 app/app.py"' >> ~/.zshrc
 
-RUN echo 'alias console="geth attach rpc:http://localhost:8545"' >> ~/.zshrc
+RUN echo 'alias console="geth attach rpc:http://172.17.0.2:8545"' >> ~/.zshrc
 
 EXPOSE 8080
 

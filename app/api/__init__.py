@@ -1,16 +1,14 @@
-from functools import wraps
-import jwt
-from flask import session, request, Response
-from core import secret_key
-
-from models import users, UserDocument
-from models.clients import client as mongo_client
-from uuid import uuid4
 from datetime import datetime, timedelta
+from functools import wraps
+from uuid import uuid4
 
+import jwt
+from core import secret_key
+from flask import session, request, Response
 from flask.sessions import SessionInterface, SessionMixin
+from models import UserDocument
+from models.clients import client as mongo_client
 from werkzeug.datastructures import CallbackDict
-from pymongo import MongoClient
 
 
 def ensure_fields(fields, request_data):

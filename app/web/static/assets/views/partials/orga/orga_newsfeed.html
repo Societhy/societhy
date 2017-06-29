@@ -1,82 +1,99 @@
 <!-- NEWS FEED-->
-<div id="news" class="col-md-12 inline-block border-solid border-dark">
-  <div class="newsBlock">
-    <div class="permalink-header">
-      <a>
-	<img class="avatar js-action-profile-avatar" src="https://pbs.twimg.com/profile_images/725234461114269696/RQDzMg4O_bigger.jpg" alt="">
-	<span class="newsTitle">Publié par <strong class="" data-aria-label-part="">Anthox Colaboy</strong></span>
-	<span>‏</span><span class="" data-aria-label-part=""></span>
-      </a>
-    </div>
-    <div class="textContainer">
-      <p class="" lang="fr" data-aria-label-part="0">Merci bouygues telecom pour votre futur box 4G que je vais prendre direct ! ça va me sauver la vie putain !</p>
-    </div>
-    <div class="client-and-actions">
-      <span class="metadata">
-	<span>10:11 AM - 22 Jan 2017</span> |
-	<span class="keywords">BOUYGUES, YOUTUBE, INTERNET</span>
-      </span>
-    </div>
-    <div class="social-icons block">
-      <ul>
-	<li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-	  <a href="#" ng-click="ctrl.twitter_register()" target="_blank">
-	    Twitter
-	  </a>
-	</li>
-	<li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-	  <a href="#" ng-click="ctrl.fb_register()" target="_blank">
-	    Facebook
-	  </a>
-	</li>
-	<li data-placement="top" data-original-title="Google" class="social-google tooltips">
-	  <a href="#" ng-click="ctrl.google_register()" target="_blank">
-	    Google+
-	  </a>
-	</li>
-      </ul>
-    </div>
-  </div>
+<div id="news" class="col-md-12">
 
-  <div class="newsBlock">
-    <div class="permalink-header">
-      <a>
-	<img class="avatar js-action-profile-avatar" src="http://www.usinenouvelle.com/mediatheque/1/1/5/000131511_image_256x170.jpg" alt="">
-	<span class="newsTitle"><strong class="" data-aria-label-part="">Veolia construira et exploitera une unité de valorisation énergétique à La Chapelle-Saint-Luc</strong></span>
-	<span>‏</span><span class="" data-aria-label-part=""></span>
-      </a>
-    </div>
-    <div class="textContainer">
-      <p class="" lang="fr" data-aria-label-part="0">Une unité de valorisation énergétique (UVE) baptisée Valaubia sera construite et exploitée par Veolia à La Chapelle-Saint-Luc (Aube), près de Troyes. Montant du contrat sur 25 ans : 240 millions d’euros.Le Syndicat départemental d’élimination des déchets de l’Aube (Sdeda) a choisi de confier au groupe Veolia, via son activité Recyclage & Valorisation des déchets, la réalisation d’une unité de valorisation énergétique (UVE) implantée à La Chapelle-Saint-Luc (Aube), dans l'agglomération de Troyes. Tout cumulé, sur 25 ans d’exploitation, le montant du contrat remporté par Veolia se chiffre à 240 millions d’euros de chiffre d’affaires.</p>
-    </div>
-    <div class="js-tweet-details-fixer tweet-details-fixer">
-      <div class="client-and-actions">
-	<span class="metadata">
-	  <span>11h24 AM - 10 Octobre 2016</span> |
-	  <span class="keywords">VEOLIA, GRAND-EST, L'USINE DE L'ENERGIE</span>
-	</span>
-      </div>
-    </div>
-    <div class="social-icons block">
-      <ul>
-	<li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-	  <a href="#" ng-click="ctrl.twitter_register()" target="_blank">
-	    Twitter
-	  </a>
-	</li>
-	<li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-	  <a href="#" ng-click="ctrl.fb_register()" target="_blank">
-	    Facebook
-	  </a>
-	</li>
-	<li data-placement="top" data-original-title="Google" class="social-google tooltips">
-	  <a href="#" ng-click="ctrl.google_register()" target="_blank">
-	    Google+
-	  </a>
-	</li>
-      </ul>
-    </div>
-  </div>
+	<!--NEW NEW (lol, nouvelle news quoi)-->
 
-</div>
-<!-- END: NEWS FEED-->
+	<div class="container-fluid container-fullw">
+		<div ng-controller="NewsController as ctrl">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-white">
+						<div class="panel-heading">
+							<div class="panel-title">
+								Write an article for {{ currentOrga.name }}
+							</div>
+						</div>
+						<div class="row">
+							<div class="panel-body">
+								<div class="form-group">
+									<div class="col-md-6">
+										<input type="text" placeholder="Enter your title"  ng-model="news_form.title" id="news_form_title" class="form-control input-lg" >
+										<div class="note-editor">
+										<textarea placeholder="Enter your article" class="form-control autosize" ng-model="news_form.text" style="overflow: hidden; word-wrap: break-word; resize: vertical	; height: 100px;">
+									</textarea>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="row">
+											<input type="text" placeholder="Add a YouTube URL"  ng-model="news_form.yt" id="news_form_yt" class="form-control input-lg" >
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<h5>Select file</h5>
+												<div class="panel panel-white">
+													<div class="panel-body">
+														<div ng-show="uploaderImages.isHTML5">
+															<!-- 3. nv-file-over uploader="link" over-class="className" -->
+															<div class="well my-drop-zone" nv-file-over="" uploader="uploaderImages">
+																Drag you photos here
+															</div>
+														</div>
+														<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+														<span class="btn btn-primary btn-o btn-file">
+																			Or click here
+																			<input type="file" nv-file-select="" uploader="uploaderImages" multiple />
+																		</span>
+														<br />
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<h5>Photos</h5>
+												<div class="panel panel-white">
+													<div class="col-md-12">
+														<div ng-repeat="item in uploaderImages.queue">
+															<div><strong>{{ item.file.name }}</strong>
+																<div ng-show="uploaderImages.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<button type="button" ng-click="ctrl.clickOnSubmit()" class="btn btn-wide btn-azure">
+												Submit
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="panel panel-white">
+						<div class="panel-heading">
+							<div class="panel-title">
+								{{ currentOrga.name }} Articles
+							</div>
+
+							<div ng-repeat=" item in currentOrga.news">
+								<div data-ng-include="'static/assets/views/partials/orga/article.html'"></div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!--FEED-->
+
+	</div>
+	<!-- END: NEWS FEED-->
