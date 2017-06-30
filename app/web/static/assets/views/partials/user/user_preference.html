@@ -17,10 +17,18 @@
                         </div>
                         <div id="collapseOne" class="panel-collapse collapse in">
                             <div class="panel-body">
-
-                                <switch ng-model="" ng-init="filter_taxes = true" tooltip-placement="top" uib-tooltip="Apprnove" class="light"></switch>
-
-
+                                <h5>Web Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Web']" tooltip-placement="top" class="green"></switch>
+                                </div>
+                                <h5>Mobile Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Mobile']" tooltip-placement="top" class="green"></switch>
+                                </div>
+                                <h5>Mail Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Mail']" tooltip-placement="top" class="green"></switch>
+                                </div>
                             </div>
                         </div>
 
