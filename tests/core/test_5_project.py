@@ -41,11 +41,11 @@ def test_memberlist(testProject):
 
 def test_donate(miner, testProject):
 	initial_balance = testProject.getTotalFunds()
-	ret = base_project.donateToProject(miner, password, testProject.get('_id'), {"amount":1000})
+	ret = base_project.donateToProject(miner, password, testProject.get('_id'), {"amount":9})
 	assert ret.get('status') == 200
 	assert ret.get('data') is not None
 	bw.waitEvent("DonationMade")
-	assert testProject.getTotalFunds() - initial_balance == 1000
+	assert testProject.getTotalFunds() - initial_balance == 9
 
 def test_leave_project(miner, testProject):
 	ret = base_project.leaveProject(miner, password, testProject.get('_id'))

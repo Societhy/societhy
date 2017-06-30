@@ -1,6 +1,6 @@
 from api import requires_auth, ensure_fields, populate_user
 from core import base_orga, sales_platform
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify, make_response, send_file
 
 router = Blueprint('orga', __name__)
 
@@ -51,10 +51,9 @@ def addOrgaDocuments(user):
     return make_response("ok", 200)
 
 @router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
-@requires_auth
-def getOrgaUploadedDocument(user, doc_id, doc_name):
-    ret = base_orga.getOrgaUploadedDocument(user, doc_id, doc_name)
-    return ret
+def getOrgaUploadedDocument(doc_id, doc_name):
+    ret = base_orga.getOrgaUploadedDocument(doc_id, doc_name)
+    return make_response(send_file(ret, attachment_filename=doc_name, as_attachment=True), 200)
 
 @router.route('/joinOrga', methods=['POST'])
 @requires_auth
@@ -86,7 +85,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -246,7 +245,6 @@ def publish_news_photo(user):
 
 
 @router.route('/get_news_photo', methods=["POST"])
-@requires_auth
-def get_news_photo(user):
-    ret = base_orga.getNewsPhoto(user, request.json.get("orga_id"), request.json.get("news_key"))
+def get_news_photo():
+    ret = base_orga.getNewsPhoto(request.json.get("orga_id"), request.json.get("news_key"))
     return make_response(jsonify(ret.get('data')), ret.get('status'))

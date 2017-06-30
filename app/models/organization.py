@@ -351,7 +351,7 @@ class OrgaDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 			topics = makeTopics(self.registry.getAbi("NewMember").get('signature'), user.get('account'))
 
-			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'NewMember'} if user.get('notifications').get('NewMember') else None
+			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'NewMember'} #if user.get('notifications').get('NewMember') else None
 			bw.pushEvent(LogEvent("NewMember", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.registry["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
@@ -531,11 +531,12 @@ class OrgaDocument(Document):
 				"board": {"address": contract_address, "_id": new_project.board.save()},
 				"registry": self["contracts"]["registry"]
 			}
+			new_project["balance"] = new_project.getTotalFunds()
 			project_id = new_project.save()
 			if contract_address not in self["projects"]:
 				self["projects"][contract_address] = new_project
 				self.save_partial()
-				return self
+				return {"project": new_project, "orga": self}
 		return False
 
 	def killProject(self, project):

@@ -31,8 +31,6 @@ class Entreprise(Organization):
 			"buy_token": True,
 			"publish_news": True
 		},
-		"admin": {},
-		"partner": {},
 		"member": {
 			"join": False,
 			"leave": True,

@@ -4,6 +4,7 @@ This modules contains tools function that might me used by the models or the con
 import json
 import urllib.parse
 from copy import copy
+from datetime import datetime
 
 from bson.objectid import ObjectId
 
@@ -14,7 +15,7 @@ class UserJSONEncoder(json.JSONEncoder):
 	Otherwise, ObjectId can't be transmitted.
 	"""
 	def default(self, o):
-	        if isinstance(o, ObjectId):
+	        if isinstance(o, ObjectId) or isinstance(o, datetime):
 	            return str(o)
 	        return json.JSONEncoder.default(self, o)
 

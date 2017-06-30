@@ -2,7 +2,7 @@
  * Main controller for organizations.
  * @class OrgaMainController
  */
- app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal) {
+ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal, FileUploader) {
 
    var ctrl = this;
    $scope.isMember = false;
@@ -33,7 +33,28 @@
      }
    }
 
-   ctrl.sendReview = function() {
+   var uploaderDocs = $scope.uploaderDocs = new FileUploader({
+    url:"/addOrgaDocuments",
+    alias:"doc",
+    headers: {
+      Authentification: $sessionStorage.SociethyToken
+    },
+  });
+
+   uploaderDocs.onBeforeUploadItem = function (item) {
+    item.formData.push({"name": item.file.name});
+    item.formData.push({"type": item.file.type});
+    console.info('onBeforeUploadItem', item);
+  };
+
+  ctrl.uploadNewDocuments = function() {
+    for (var i = 0; i != uploaderDocs.queue.length; i++) {
+      uploaderDocs.queue[i].formData.push({"orga_id" : $rootScope.currentOrga._id})
+    }
+    uploaderDocs.uploadAll();
+  }
+
+  ctrl.sendReview = function() {
     productId = $scope.currentProd._id.$oid;
     console.log(this.review);
     console.log(this.rate);
@@ -130,6 +151,7 @@
      * @method onLoad
      */
      onLoad = function() {
+      console.log("STATE", $state);
       $http.post('/getOrganization', {
         "id": $state.params._id
       }).then(function(response) {
@@ -206,13 +228,13 @@
    }
  }
 
-  ctrl.expandProject = function(proj) {
-    for (var i = 0; i != ctrl.projects_number; i++) {
-      if (proj.address == ctrl.projects_list[i].address) {
-        ctrl.projects_list[i].expand = (proj.expand == false ? true : false);
-      }
+ ctrl.expandProject = function(proj) {
+  for (var i = 0; i != ctrl.projects_number; i++) {
+    if (proj.address == ctrl.projects_list[i].address) {
+      ctrl.projects_list[i].expand = (proj.expand == false ? true : false);
     }
   }
+}
 
 	/**
 	 * Create a project from the organization.
@@ -246,6 +268,7 @@
      ctrl.downloadDoc = function (doc_id, doc_name) {
       $http.get('/getOrgaUploadedDocument/' + doc_id + "/" + doc_name ).then(function(response) {
        console.log(response);
+       window.location = '/getOrgaUploadedDocument/' + doc_id + "/" + doc_name;
      });
     }
 

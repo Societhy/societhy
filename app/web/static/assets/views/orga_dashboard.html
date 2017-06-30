@@ -42,8 +42,7 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                       <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
-                      <li><a ng-click="ctrl.joinOrga('partner')"> partner </a></li>
-                      <li><a ng-click="ctrl.joinOrga('owner')"> admin </a></li>
+                      <li><a ng-click="ctrl.joinOrga('owner')"> owner </a></li>
                     </ul>
                   </div>
 
@@ -55,35 +54,35 @@
                 <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 <span>
                  {{ currentOrga.name }} is a {{currentOrga.gov_model}} founded by {{currentOrga.owner.name}} and administred by its {{ctrl.member_list.length}} members
-                </span>
-              </div>
+               </span>
+             </div>
 
-              <div class="col-md-6 inline-block  vertical-center">
-                <div class="float-left" style="line-height: 40px">
-                  Balance:
-                  <span ng-bind="currentOrga.balance"></span>
-                </div>
-                <div class="social-icons float-right">
-                  <ul>
-                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                      <a href="#" ng-click="" target="_blank">
-                        Twitter
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                      <a href="#" ng-click="" target="_blank">
-                        Facebook
-                      </a>
-                    </li>
-                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                      <a href="#" ng-click="" target="_blank">
-                        Google+
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+             <div class="col-md-6 inline-block  vertical-center">
+              <div class="float-left" style="line-height: 40px">
+                Balance:
+                <span ng-bind="currentOrga.balance"></span>
+              </div>
+              <div class="social-icons float-right">
+                <ul>
+                  <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                    <a href="#" ng-click="" target="_blank">
+                      Twitter
+                    </a>
+                  </li>
+                  <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                    <a href="#" ng-click="" target="_blank">
+                      Facebook
+                    </a>
+                  </li>
+                  <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                    <a href="#" ng-click="" target="_blank">
+                      Google+
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
+          </div>
           <div class="row margin-top-20" >
             <div class="col-md-6   padding-20">
               <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
@@ -235,6 +234,74 @@
           <!-- DOCUMENTS -->
           <uib-tab heading="Docs">
             <div class="container-fluid container-fullw ng-scope">
+              <div class="col-md-12">
+                <fieldset>
+                  <legend>
+                    Documents
+                  </legend>
+                  <div nv-file-drop="" uploader="uploaderDocs">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <h5>Select files</h5>
+                        <div class="panel panel-white">
+                          <div class="panel-body">
+                            <div ng-show="uploaderDocs.isHTML5">
+                              <!-- 3. nv-file-over uploader="link" over-class="className" -->
+                              <div class="well my-drop-zone" nv-file-over="" uploader="uploaderDocs">
+                                Base drop zone
+                              </div>
+                            </div>
+                            <!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+                            <span class="btn btn-primary btn-o btn-file">
+                              Select some files
+                              <input type="file" nv-file-select="" uploader="uploaderDocs" multiple />
+                            </span>
+                            <br />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-9 file-upload" style="margin-bottom: 40px">
+                        <h4>The queue</h4>
+                        <p>
+                          Queue length: {{ uploaderDocs.queue.length }}
+                        </p>
+                        <div class="table-responsive">
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th width="50%">Name</th>
+                                <th ng-show="uploaderDocs.isHTML5">Size</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr ng-repeat="item in uploaderDocs.queue">
+                                <td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
+                                <td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                                <td ng-show="uploaderDocs.isHTML5">
+
+                                </td>
+                                <td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
+                                <td nowrap>
+                                  <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div>
+                          <button type="button" class="btn btn-primary btn-o btn-s" ng-click="ctrl.uploadNewDocuments()" ng-disabled="!uploaderDocs.queue.length">
+                          <span class="glyphicon glyphicon-trash"></span> Upload
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+              </div>
               <div class="row">
                 <div class="col-md-12">
                   <div class="panel panel-white">
@@ -261,7 +328,8 @@
                             <td class="hidden-xs">{{ doc.doc_type }}</td>
                             <td class="center">
                               <div class="visible-md visible-lg hidden-sm hidden-xs">
-                                <a href="#" ng-click="ctrl.downloadDoc(doc.doc_id, doc.doc_name)" class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a>
+                                <!-- <a href="#" ng-click="ctrl.downloadDoc(doc.doc_id, doc.doc_name)" class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a> -->
+                                <a href="{{'/getOrgaUploadedDocument/' + doc.doc_id + '/' + doc.doc_name}}" download class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a>
                                 <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
                               </div>
                               <div class="visible-xs visible-sm hidden-md hidden-lg">

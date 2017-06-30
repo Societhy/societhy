@@ -17,6 +17,8 @@ from models.orga_models import *
 from models.organization import organizations
 from models.transaction import transactions
 
+from io import BytesIO
+
 
 def getOrgaDocument(user, _id=None, name=None):
     """
@@ -50,7 +52,8 @@ def getOrgaDocument(user, _id=None, name=None):
 
     if user:
         if user.get('account') in orga.get('members'):
-            rights = orga.get('members').get(user.get('account')).get('rights')
+            tag = orga["members"].get(user['account'])['tag']
+            rights = orga['rights'][tag]
         else:
             rights = orga.default_rights.get('default')
 
@@ -152,10 +155,10 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type):
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
         "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name}}})
-    return {"data": "OK", "status": 200}
+    return {"data": ret, "status": 200}
 
 
-def getOrgaUploadedDocument(user, doc_id, doc_name):
+def getOrgaUploadedDocument(doc_id, doc_name):
     """
     user : user model document that represent the user who made the request.
     doc_id : id of the document user want to retrieve.
@@ -164,11 +167,13 @@ def getOrgaUploadedDocument(user, doc_id, doc_name):
     This fuction allow user to download a document who has been previously uploaded.
     """
 
+    # TODO : check if user allowed to download doc
+
     gfile = db_filesystem.get(objectid.ObjectId(doc_id))
-    rep = Response(gfile, mimetype=gfile.doc_type, direct_passthrough=True)
-    rep.headers['Content-Disposition'] = 'attachment; filename="' + doc_name + '"'
-    rep.headers['Content-Type'] = "application/force-download"
-    return rep
+    strIO = BytesIO()
+    strIO.write(gfile.read())
+    strIO.seek(0)
+    return strIO
 
 
 def joinOrga(user, password, orga_id, tag="member"):
@@ -550,6 +555,21 @@ def publishNews(user, title, text, orga_id, yt_url):
         payload["yt_url"] = yt_url
     orga.get("news").append(payload)
     orga.save_partial()
+    for k, v in orga.get("members").items():
+        notif = notification({
+            "sender": {"id": objectid.ObjectId(orga.get("_id")), "type": "organization"},
+            "subject": {"id": v.get("_id"), "type": "user"},
+            "category": "newsPublished",
+            "angularState": {
+                "route": "app.organization",
+                "params": {
+                    "_id": str(orga.get("_id")),
+                    "name": orga.get("name")
+                }
+            },
+            "description": "Organisation " + orga.get("name") + " published \"" + title + "\""
+        })
+        notif.save()
     return {"data": {"orga": orga, "news_key": date}, "status": 200}
 
 
@@ -578,7 +598,7 @@ def publishNewsPhoto(user, orga_id, news_key, doc, name, doc_type):
     return {"data": {"orga": orga}, "status": 200}
 
 
-def getNewsPhoto(user, orga_id, news_key):
+def getNewsPhoto(orga_id, news_key):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     images = []
     if not orga:
