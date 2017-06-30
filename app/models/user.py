@@ -314,6 +314,8 @@ class UserDocument(Document):
 		"""
         return self.mongokat_collection.remove({"_id": ObjectId(self.get('_id'))})
 
+    def wantNotif(self, event, notif_type):
+        return self["notification_preference"][event][notif_type]
 
 class UserCollection(Collection):
     """
