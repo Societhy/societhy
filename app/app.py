@@ -24,12 +24,12 @@ app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
 app.session_interface = MongoSessionInterface()
 
-app.config['MAIL_SERVER']='smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'societhycompany@gmail.com'
-app.config['MAIL_PASSWORD'] = 'JDacdcacdc95'
+app.config['MAIL_SERVER']='smtp-relay.sendinblue.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USERNAME'] = 'roman.grout@hotmail.fr'
+app.config['MAIL_PASSWORD'] = '9UMq2mIjYC1GQgv8'
 app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USE_SSL'] = False
 
 
 workers_pool = GreenPool(size=3)
@@ -44,6 +44,7 @@ jinja_options.update(dict(
 	comment_start_string='<#',
 	comment_end_string='#>'
 ))
+
 app.jinja_options = jinja_options
 
 app.register_blueprint(notif_routes)

@@ -31,130 +31,140 @@
                                                          <i class="fa fa-pencil"></i>
                                                          <input type="file" flow-btn />
                                                      </span>
-                                                     <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i> </span>
-                                                 </div>
-                                                 <div class="user-image-buttons" ng-if="!obj.flow.files.length">
+                                                        <span class="btn btn-danger" ng-click="obj.flow.cancel()"> <i class="fa fa-times"></i> </span>
+                                                    </div>
+                                                    <div class="user-image-buttons" ng-if="!obj.flow.files.length">
                                                     <span class="btn btn-primary btn-file">
                                                      <i class="fa fa-pencil"></i>
                                                      <input type="file" flow-btn />
                                                  </span>
-                                                 <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i></span>
-                                             </div>
-                                         </div>
-                                     </div>
-                                     <hr>
-                                     <div id="newPhoto"></div>
-                                     <div class="social-icons block">
-                                        <ul>
-                                            <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                                                <a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
-                                                    Twitter
-                                                </a>
-                                            </li>
-                                            <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                                                <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
-                                                    Facebook
-                                                </a>
-                                            </li>
-                                            <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                                                <a href="#" ng-click="ctrl.google_connect()" target="_blank">
-                                                    Google+
-                                                </a>
-                                            </li>
-                                            <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                                                <a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
-                                                    LinkedIn
-                                                </a>
-                                            </li>
-                                            <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                                <a href="#" ng-click="ctrl.github_connect()" target="_blank">
-                                                    Github
-                                                </a>
-                                            </li>
-                                            <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
-                                                <a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
-                                                    Coinbase
-                                                </a>
-                                            </li>
+                                                        <span class="btn btn-danger" ng-if="!noImage" ng-click="removeImage()"><i class="fa fa-times"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div id="newPhoto"></div>
+                                            <div class="social-icons block">
+                                                <ul>
+                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                                        <a href="#" ng-click="ctrl.twitter_connect()" target="_blank">
+                                                            Twitter
+                                                        </a>
+                                                    </li>
+                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                                        <a href="#" ng-click="ctrl.fb_connect()" target="_blank">
+                                                            Facebook
+                                                        </a>
+                                                    </li>
+                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                                        <a href="#" ng-click="ctrl.google_connect()" target="_blank">
+                                                            Google+
+                                                        </a>
+                                                    </li>
+                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                                                        <a href="#" ng-click="ctrl.linkedin_connect()" target="_blank">
+                                                            LinkedIn
+                                                        </a>
+                                                    </li>
+                                                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                                                        <a href="#" ng-click="ctrl.github_connect()" target="_blank">
+                                                            Github
+                                                        </a>
+                                                    </li>
+                                                    <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
+                                                        <a href="#" ng-click="ctrl.coinbase_connect()" target="_blank">
+                                                            Coinbase
+                                                        </a>
+                                                    </li>
 
-                                        </ul>
+                                                </ul>
+                                            </div>
+                                            <hr>
+                                        </div>
+                                        <div class="center">
+                                            <button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.deleteAccount()"> Delete account </button>
+                                        </div>
+                                        <!--start: User Info -->
+                                        <div class="row">
+                                            <div class="col-md-12" id="userInfo">
+                                                <!--start: Input Fields-->
+                                                <div class="ng-scop">
+                                                    <label class="control-label">Firstname :</label>
+                                                    <a href="#" editable-text="user.firstname" class="userDataEditable">{{user.firstname}}</a>
+                                                </div>
+                                                <div class="ng-scop">
+                                                    <label class="control-label">Lastname :</label>
+                                                    <a href="#" editable-text="user.lastname" class="userDataEditable">{{user.lastname}}</a>
+                                                </div>
+                                                <div class="ng-scop">
+                                                    <label class="control-label">Email :</label>
+                                                    <a href="#" editable-text="user.email" class="userDataEditable" value="{{user.email}}">{{user.email}}</a>
+                                                </div>
+                                                <div class="ng-scop">
+                                                    <label class="control-label">Address :</label>
+                                                    <a href="#" editable-text="user.address" class="userDataEditable" value="{{user.address}}">{{user.address}}</a>
+                                                </div>
+                                                <div class="ng-scop">
+                                                    <label class="control-label">City :</label>
+                                                    <a href="#" editable-text="user.city" class="userDataEditable" value="{{user.city}}">{{user.city}}</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <hr>
                                 </div>
-                                <div class="center">
-                                  <button type="button" class="btn btn-danger btn-lg" ng-click="ctrl.deleteAccount()"> Delete account </button>
-                                </div>
-                                <!--start: User Info -->
-                                <div class="row">
-                                    <div class="col-md-12" id="userInfo">
-                                     <!--start: Input Fields-->
-                                     <div class="ng-scop">
-                                      <label class="control-label">Firstname :</label>
-                                      <a href="#" editable-text="user.firstname" class="userDataEditable">{{user.firstname}}</a>
-                                  </div>
-                                  <div class="ng-scop">
-                                      <label class="control-label">Lastname :</label>
-                                      <a href="#" editable-text="user.lastname" class="userDataEditable">{{user.lastname}}</a>
-                                  </div>
-                                  <div class="ng-scop">
-                                      <label class="control-label">Email :</label>
-                                      <a href="#" editable-text="user.email" class="userDataEditable" value="{{user.email}}">{{user.email}}</a>
-                                  </div>
-                                  <div class="ng-scop">
-                                      <label class="control-label">Address :</label>
-                                      <a href="#" editable-text="user.address" class="userDataEditable" value="{{user.address}}">{{user.address}}</a>
-                                  </div>
-                                  <div class="ng-scop">
-                                      <label class="control-label">City :</label>
-                                      <a href="#" editable-text="user.city" class="userDataEditable" value="{{user.city}}">{{user.city}}</a>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
 
-              </div>
-          </div>
-      </uib-tab>
-      <!-- end: TAB OVERVIEW -->
-      <!-- start: TAB EDIT ACCOUNT -->
-      <uib-tab heading="Edit Account" active="editActive">
-       <div ng-controller="KeyController as ctrl">
-           <div data-ng-include=" 'static/assets/views/partials/user/coinbase_widget.html' "></div>
-           <div data-ng-include=" 'static/assets/views/partials/user/key_management_tab.html' "></div>
-       </div>
-   </uib-tab>
-   <!-- end: TAB EDIT ACCOUNT -->
-   <!-- start: TAB PROJECTS -->
-   <uib-tab heading="Projects">
-       <div class="container-fluid container-fullw ng-scope">
-           <div class="panel panel-white">
-            <div class="panel-body">
-                <div ng-controller="userProjectTableCtrl" class="ng-scope ng-binding">
-                 <div data-ng-include=" 'static/assets/views/partials/user/user_project_tab.html' "></div>
-             </div>
-         </div>
-     </div>
- </div>
-</uib-tab>
-<!-- end: TAB PROJECTS -->
-<!-- start: TAB ORGANISATIONS -->
-<uib-tab heading="Organisations">
-   <div class="container-fluid container-fullw ng-scope">
-       <div class="panel panel-white">
-        <div class="panel-body">
-            <div ng-controller="userOrgaTableCtrl" class="ng-scope ng-binding">
-             <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
-         </div>
-     </div>
- </div>
-</div>
-</uib-tab>
-<!-- end: TAB ORGANISATIONS -->
-</uib-tabset>
-<!-- end: USER TABSET -->
-</div>
-</div>
-</div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <!-- end: TAB OVERVIEW -->
+
+                    <!-- start: TAB EDIT ACCOUNT -->
+                    <uib-tab heading="Edit Account" active="editActive">
+                        <div ng-controller="KeyController as ctrl">
+                            <div data-ng-include=" 'static/assets/views/partials/user/coinbase_widget.html' "></div>
+                            <div data-ng-include=" 'static/assets/views/partials/user/key_management_tab.html' "></div>
+                            </div>
+                        </uib-tab>
+                    <!-- end: TAB EDIT ACCOUNT -->
+
+                    <!-- start: TAB PREFERENCE -->
+                    <uib-tab heading="Preference" active="editActive">
+                        <div ng-controller="userPreferenceCtrl as ctrl">
+                            <div data-ng-include=" 'static/assets/views/partials/user/user_preference.html' "></div>
+                        </div>
+                    </uib-tab>
+                    <!-- end: TAB PREFERENCE-->
+
+                    <!-- start: TAB PROJECTS -->
+                    <uib-tab heading="Projects">
+                        <div class="container-fluid container-fullw ng-scope">
+                            <div class="panel panel-white">
+                                <div class="panel-body">
+                                    <div ng-controller="userProjectTableCtrl" class="ng-scope ng-binding">
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_project_tab.html' "></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <!-- end: TAB PROJECTS -->
+                    <!-- start: TAB ORGANISATIONS -->
+                    <uib-tab heading="Organisations">
+                        <div class="container-fluid container-fullw ng-scope">
+                            <div class="panel panel-white">
+                                <div class="panel-body">
+                                    <div ng-controller="userOrgaTableCtrl" class="ng-scope ng-binding">
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </uib-tab>
+                    <!-- end: TAB ORGANISATIONS -->
+                </uib-tabset>
+                <!-- end: USER TABSET -->
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end: USER PROFILE -->

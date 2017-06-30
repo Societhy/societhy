@@ -555,6 +555,21 @@ def publishNews(user, title, text, orga_id, yt_url):
         payload["yt_url"] = yt_url
     orga.get("news").append(payload)
     orga.save_partial()
+    for k, v in orga.get("members").items():
+        notif = notification({
+            "sender": {"id": objectid.ObjectId(orga.get("_id")), "type": "organization"},
+            "subject": {"id": v.get("_id"), "type": "user"},
+            "category": "newsPublished",
+            "angularState": {
+                "route": "app.organization",
+                "params": {
+                    "_id": str(orga.get("_id")),
+                    "name": orga.get("name")
+                }
+            },
+            "description": "Organisation " + orga.get("name") + " published \"" + title + "\""
+        })
+        notif.save()
     return {"data": {"orga": orga, "news_key": date}, "status": 200}
 
 
