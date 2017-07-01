@@ -105,7 +105,8 @@ def notifyToOne(sender, user, category, subject=None):
     # elif user.get("notification_accept") == 1 or user.get("notification_accept") == 3:
     sendNotifPush(sender, senderType, category, subject, user)
     # if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
-    sendNotifEmail(sender, senderType, category, subject, user)
+    if user.get('email') is not None:
+	    sendNotifEmail(sender, senderType, category, subject, user)
 
 
 class NotificationDocument(Document):

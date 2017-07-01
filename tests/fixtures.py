@@ -37,19 +37,6 @@ test_user = {
 	"account": None,
 	"eth": {
 		"keys": {}
-	},
-	"notifications": {
-		'NewMember': False,
-		'MemberLeft': False,
-		'ProposalCreated': False,
-		"OfferCreated": False,
-		'DonationMade': False,
-		'newSpending': False,
-		'newMessage': False,
-		'newFriendAdd': False,
-		'orgaCreated': False,
-		'ProjectCreated': False,
-		'newInviteJoinOrga': False
 	}
 }
 
@@ -59,24 +46,11 @@ test_miner = {
 	"account": None,
 	"eth": {
 		"keys": {}
-	},
-	"notifications": {
-		'NewMember': False,
-		'MemberLeft': False,
-		'ProposalCreated': False,
-		"OfferCreated": False,
-		'DonationMade': False,
-		'newSpending': False,
-		'newMessage': False,
-		'newFriendAdd': False,
-		'orgaCreated': False,
-		'ProjectCreated': False,
-		'newInviteJoinOrga': False
 	}
 }
 
-test_user_doc = UserDocument(doc=test_user, gen_skel=True)
-test_miner_doc = UserDocument(doc=test_miner, gen_skel=True)
+test_user_doc = UserDocument(doc=test_user, gen_skel=True, notifs=False)
+test_miner_doc = UserDocument(doc=test_miner, gen_skel=True, notifs=False)
 test_user_doc.save()
 test_miner_doc.save()
 

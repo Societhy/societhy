@@ -21,23 +21,24 @@ class UserDocument(Document):
 	This class is used everytime a controller needs to manipulate a user (and everytime a used sends a request with an authentification token)
 	"""
 
-    def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None):
+    def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=False, session=None, notifs=True):
         """
 		doc : dict containing the data to be initialized from
 		mongokat_collection : see mongokat.Document (mongo collection associated with the doc)
 		fetched_fileds : see mongokat.Document
 		gen_skel : boolean. If set to true, the document is initialized with the fields described in OrgaCollection.structure
 		session : token associated with the user's session
+		notifs : bool True if we want the user to receive notifs
 		"""
         super().__init__(doc, users, fetched_fields, gen_skel)
         if gen_skel:
             if not self.get('notification_preference'):
-                self.generateDefaultNotification()
+                self.generateDefaultNotification(activate=notifs)
         self.session_token = session
 
-    def generateDefaultNotification(self):
+    def generateDefaultNotification(self, activate=True):
         for k, v in models.notification.notifications.descriptions.items():
-            self.get("notification_preference")[k] = {"Web": True, "Mobile": True, "Mail": True}
+            self.get("notification_preference")[k] = {"Web": activate, "Mobile": activate, "Mail": activate}
 
     def needsReloading(self):
         """
