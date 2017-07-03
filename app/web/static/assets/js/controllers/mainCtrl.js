@@ -201,7 +201,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
             toaster.pop({type: "info", title: "Information", body: text});
         }, 0);
     };
-    
+
     $rootScope.toogleError = function(text) {
         if (waitToast) {
             $rootScope.toogleWait();
@@ -350,4 +350,27 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
             $('footer').show();
         }
     });
+
+
+    var getParameterByName =  function (name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    };
+
+    setTimeout(function(){
+        if (getParameterByName("redirect", document.URL) === "true")
+        {
+            var state = getParameterByName("angularState", document.URL);
+            console.log(state);
+            state = JSON.parse(state);
+            console.log(state);
+            $state.go(state["route"], state["params"]);
+        }
+    }, 2000);
+
 });

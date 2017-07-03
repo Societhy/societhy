@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-white">
+            <div class="panel-title">
+
+            </div>
+            <div class="panel-body">
+                <h5 class="over-title margin-bottom-15">Edit your contact preference</h5>
+
+                <div class="panel-group accordion" id="accordion">
+
+                    <div ng-repeat="(k,v) in user.notification_preference">
+                        <div class="panel panel-white">
+                            <div class="panel-heading">
+                                <h5 class="panel-title"><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> <i class="icon-arrow"></i> {{k}} </a></h5>
+                            </div>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                            <div class="panel-body">
+                                <h5>Web Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Web']" tooltip-placement="top" class="green"></switch>
+                                </div>
+                                <h5>Mobile Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Mobile']" tooltip-placement="top" class="green"></switch>
+                                </div>
+                                <h5>Mail Notification</h5>
+                                <div ng-click="ctrl.update()">
+                                    <switch ng-model="ctrl.notification_preference[k]['Mail']" tooltip-placement="top" class="green"></switch>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

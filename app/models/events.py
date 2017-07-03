@@ -143,7 +143,7 @@ class LogEvent(Event):
 			self.logs[0]["decoded_data"] = [line for line in [line.strip('\x00').strip() for line in decoded_data] if len(line) > 1]
 		if self.mail:
 			for user in self.mail['users']:
-				from models.notifications import notifyToOne
+				from models.notification import notifyToOne
 				notifyToOne(self.mail['sender'], user, 'NewMember', self.mail['subject'])
 		for cb in self.callbacks:
 			self.notifyUsers(cb(self.logs, self.callback_data))

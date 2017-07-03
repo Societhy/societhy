@@ -32,8 +32,6 @@ class Ngo(Organization):
 			"publish_news": True
 
 		},
-		"admin": {},
-		"partner": {},
 		"member": {
 			"join": False,
 			"leave": True,

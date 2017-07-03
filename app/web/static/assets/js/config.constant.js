@@ -55,6 +55,7 @@
         'projectWizardCtrl' : 'static/assets/js/controllers/projectWizardCtrl.js',
         'projectDiscoveryCtrl' : 'static/assets/js/controllers/projectDiscoveryCtrl.js',
         'projectMainCtrl' : 'static/assets/js/controllers/projectMainCtrl.js',
+        'userPreferenceCtrl' : 'static/assets/js/controllers/userPreferenceCtrl.js'
     },
     //*** angularJS Modules
     modules: [{
