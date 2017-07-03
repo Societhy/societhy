@@ -135,6 +135,7 @@
             "projects": {
                 "MAIN": "Projets",
                 "MYPROJECTS": "Mes Projets",
+                "CREATE": "Créer un projet",
                 "SAMPLE": "Aider les clodos"
             },
             "3level": {

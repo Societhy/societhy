@@ -1,13 +1,14 @@
-from api import requires_auth, ensure_fields
+from api import requires_auth, ensure_fields, populate_user
 from flask import Blueprint, request, jsonify, make_response
 from core import base_project
 
 router = Blueprint('project', __name__)
 
 @router.route('/getProject', methods=['POST'])
-def getProject():
+@populate_user
+def getProject(user):
     if ensure_fields(['id'], request.json):
-        ret = base_project.getProject(request.json.get('id'))
+        ret = base_project.getProject(user, request.json.get('id'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response('Wrong request format', 400)

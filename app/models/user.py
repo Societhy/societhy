@@ -95,6 +95,7 @@ class UserDocument(Document):
             proj = models.project.projects.find_one({"address": address})
             if not proj:
                 proj = models.project.projects.find_one({"contracts.registry.address": address})
+            print('------------------', address, proj, self)
             if proj and proj.get('address') not in self["projects"]:
                 self["projects"].append(proj.get('address'))
                 self.save_partial();

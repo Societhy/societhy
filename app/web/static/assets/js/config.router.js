@@ -89,7 +89,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.project', {
         url: '/project/:name/:_id',
         templateUrl: "static/assets/views/project_homepage.html",
-        resolve: loadSequence('projectMainCtrl'),
+        resolve: loadSequence('projectMainCtrl', 'touchspin-plugin'),
         title: 'Project homepage',
         params: {
             data: null

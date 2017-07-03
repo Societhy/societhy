@@ -1,15 +1,15 @@
 <div class="container-fluid container-fullw bg-white" ng-controller="ProjectMainController as ctrl">
   <fieldset>
     <div class="row margin-10">
-      <div class="col-md-3">
+      <div class="col-md-5">
         <h1>{{project.name}}</h1>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <!-- Check si user dans les membres -->
-        <button type="button" ng-if="!isMember" ng-click="ctrl.joinProject()" class="btn btn-sm btn-success text-extra-large">Join</button>
-        <button type="button" ng-if="isMember" ng-click="ctrl.leaveProject()" class="btn btn-sm btn-danger text-extra-large">Leave</button>
+        <button type="button" ng-if="currentRights.join" ng-click="ctrl.joinProject()" class="btn btn-sm btn-success text-extra-large">Join</button>
+        <button type="button" ng-if="!currentRights.join" ng-click="ctrl.leaveProject()" class="btn btn-sm btn-danger text-extra-large">Leave</button>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-2">
         <div class="social-icons">
           <ul>
             <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
@@ -25,25 +25,27 @@
           </ul>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
+          <input ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+        </div>
+      </div>
     </div>
   </fieldset>
   <fieldset>
     <div class="row margin-10">
-      <div class="col-md-3">
+      <div class="col-md-5">
         <h3>Objectives</h3>
         <span ng-if="project.balance < project.amount_to_raise">
           <span class="label label-warning block">Crowdfunding campaign in progress</span>
           <p class="text-center text-bold text-large">{{project.balance}} on {{project.amount_to_raise}} eth required</p>
         </span>
-        <span ng-if="project.balance > project.amount_to_raise">
+        <span ng-if="project.balance >= project.amount_to_raise">
           <span class="label label-success block">Crowdfunding campaign is complete !</span>
           <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.amount_to_raise}} ethers)</p>
         </span>
         <!-- LIGNE D'AVANCEMENT DES FOND -->
         <uib-progressbar value="project.balance * (100 / project.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
-      </div>
-      <div class="col-md-2 margin-top-10">
-        <button type="button" ng-click="donateToProject()" class="btn btn-sm btn-success text-extra-large">Donate</button>
       </div>
       <div class="col-md-7">
         <h3>Description</h3>

@@ -1,12 +1,20 @@
-app.controller('ProjectMainController', function($rootScope, $scope, $http, $sessionStorage, $state) {
+app.controller('ProjectMainController', function($rootScope, $scope, $http, $sessionStorage, $state, $timeout, $controller) {
+
   var ctrl = this;
+  ctrl.wallet = $controller("WalletController");
 
   onLoad = function() {
     $http.post('/getProject', {'id': $state.params._id}).then(function(response) {
-      $scope.project = response.data;
-      $scope.isMember = $rootScope.user._id in $scope.project.members;
+      $rootScope.currentProject = $scope.project = response.data.project;
+      $scope.currentRights = response.data.rights;
+      if ($rootScope.user) {
+        $scope.isMember = $rootScope.user._id in $scope.project.members;
+      } else {
+        $scope.isMember = false;
+      }
       // desc = $scope.project.description.replace(/(\r\n|\n|\r)/g,"<br />");
       // $scope.project.description = desc;
+      console.log(response)
     }, function(error) {
       $state.go('app.discoverprojects');
       $rootScope.toogleError("Project does not exist");
@@ -30,6 +38,9 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
         function(data) {
           $scope.project.members = data.data.project.members;
           // $rootScope.user.projects.push(data.data.project);
+          $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
+          $scope.currentRights = $rootScope.currentRights = data.data.rights;
+          $rootScope.user.projects.push($rootScope.currentProject);
           $scope.isMember = true;
         });
     }
@@ -82,6 +93,10 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
       $rootScope.toogleError("Donation amount must be more than to 0...")
     }
   }
+
+  $timeout(function() {
+    $(".donate-button").click(ctrl.donateToProject);
+  }, 500);
 
   onLoad();
   return ctrl;

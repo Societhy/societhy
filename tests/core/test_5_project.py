@@ -14,7 +14,7 @@ from ethjsonrpc import wei_to_ether
 password = "simon"
 
 def test_create_project(miner, testOrga):
-	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {"name": "kawa_bunga_project", "description": "This project aims to promote the culture of kawa bungo around the world", "invited_users": {}})
+	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {"name": "kawa_bunga_project", "description": "This project aims to promote the culture of kawa bungo around the world", "invited_users": {}, "amount_to_raise":100})
 	assert ret.get('status') == 200
 	assert ret.get('data').startswith('0x')
 	bw.waitTx(ret.get('data'))

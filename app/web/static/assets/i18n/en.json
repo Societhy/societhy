@@ -135,6 +135,7 @@
             "projects": {
                 "MAIN": "Projects",
                 "MYPROJECTS": "My Projects",
+                "CREATE": "Create a new project",
                 "SAMPLE": "Help hobos"
             },
             "utilities": {
