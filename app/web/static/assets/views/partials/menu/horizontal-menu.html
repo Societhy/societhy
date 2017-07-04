@@ -13,7 +13,7 @@
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data=" {{ 'sidebar.nav.organisations.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li ui-sref-active="active">
-						<a ui-sref="app.neworga"> <span translate="sidebar.nav.organisations.CREATE"/> </a>
+						<a ng-if="user" ui-sref="app.neworga"> <span translate="sidebar.nav.organisations.CREATE"/> </a>
 					</li>
 					<li ui-sref-active="active">
 						<a ui-sref="app.discoverorga"> <span translate="sidebar.nav.organisations.DISCOVER"/> </a>
@@ -32,7 +32,7 @@
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Projects" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.projects.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
 					<li ui-sref-active="active">
-						<a ui-sref="app.newproject({owner_id: user._id})"> <span translate="sidebar.nav.projects.CREATE"/> </a>
+						<a ng-if="user" ui-sref="app.newproject({owner_id: user._id})"> <span translate="sidebar.nav.projects.CREATE"/> </a>
 					</li>
 					<li ui-sref-active="active">
 						<a ui-sref="app.discoverprojects"> <span translate="sidebar.nav.organisations.DISCOVER"/> </a>
