@@ -98,10 +98,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Project'
         }
     }).state('app.newproject', {
-        url: '/project/new',
+        url: '/project/new/:owner_id',
         templateUrl: "static/assets/views/project_wizard.html",
         resolve: loadSequence('projectWizardCtrl', 'touchspin-plugin'),
         title: 'Create a new project',
+        params: {
+            data: null
+        },
         ncyBreadcrumb: {
             label: 'Project Creation'
         }

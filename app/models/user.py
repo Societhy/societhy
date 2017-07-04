@@ -341,6 +341,7 @@ class UserCollection(Collection):
         "votes",
         "contact_list",
         "organizations",
+        "projects",
         "notification_preference",
         "pending_invitation"
     ]

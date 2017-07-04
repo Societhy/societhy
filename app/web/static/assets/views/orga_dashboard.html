@@ -85,7 +85,7 @@
           </div>
           <div class="row margin-top-20" >
             <div class="col-md-6   padding-20">
-              <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+              <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ui-sref="app.newproject({owner_id: currentOrga._id})">+</button></h2>
 
               <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                 <!-- ngInclude: templates.header -->
@@ -324,7 +324,7 @@
                             <td class="center">1</td>
                             <td class="hidden-xs">{{ doc.doc_name }}</td>
                             <td>{{ currentOrga.name }}</td>
-                            <td>    42 octets </td>
+                            <td>    doc.doc_size </td>
                             <td class="hidden-xs">{{ doc.doc_type }}</td>
                             <td class="center">
                               <div class="visible-md visible-lg hidden-sm hidden-xs">
@@ -373,7 +373,7 @@
         </uib-tab>
 
         <uib-tab heading="Projects">
-          <button class="btn btn-green margin-15" ui-sref="app.newproject">Add a new project</button>
+          <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
           <div>
             <table class="table no-margin">
               <tr ng-repeat="project in currentOrga.projects" class="ng-scope" ng-click="ctrl.expandProject(project)">

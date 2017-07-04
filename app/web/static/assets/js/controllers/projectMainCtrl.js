@@ -38,8 +38,8 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
         function(data) {
           $scope.project.members = data.data.project.members;
           // $rootScope.user.projects.push(data.data.project);
-          $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
-          $scope.currentRights = $rootScope.currentRights = data.data.rights;
+          $rootScope.currentProject.members = $scope.project.members = data.data.project.members;
+          $rootScope.currentRights = $scope.currentRights = data.data.rights;
           $rootScope.user.projects.push($rootScope.currentProject);
           $scope.isMember = true;
         });
@@ -68,7 +68,6 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
   }
 
   ctrl.donateToProject = function() {
-    // OUVRIR UNE JOLIE SWAL POUR DEMANDER LE MONTANT!
     donationAmount = $("#donationAmount").val();
     if (donationAmount > 0 && $scope.doVerifications()) {
       $scope.completeBlockchainAction(
