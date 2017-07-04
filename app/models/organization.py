@@ -503,7 +503,7 @@ class OrgaDocument(Document):
 		"""
 		if not self.can(user, "create_project"):
 			return False
-		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject')], password=password)
+		tx_hash = self.board.call('createProject', local=False, from_=user.get('account'), args=[project.get('name', 'newProject'), int(project.get('campaign', {}).get('duration', 1))], password=password)
 
 		if tx_hash and tx_hash.startswith('0x'):
 
@@ -779,7 +779,7 @@ class OrgaDocument(Document):
 		logs : list of dict containing the event's logs
 		If the transaction has succeeded, create a new ProjectDocument and save its data into the orga document
 		"""
-		# print("LOGS", logs)
+
 		if len(logs) == 1 and len(logs[0].get('topics')) == 3:
 			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)

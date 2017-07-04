@@ -1,7 +1,7 @@
 import pytest
 from time import sleep
 from bson import objectid, errors, json_util
-
+from time import sleep
 from models.clients import blockchain_watcher as bw
 from core.utils import *
 
@@ -14,7 +14,7 @@ from ethjsonrpc import wei_to_ether
 password = "simon"
 
 def test_create_project(miner, testOrga):
-	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {"name": "kawa_bunga_project", "description": "This project aims to promote the culture of kawa bungo around the world", "invited_users": {}, "amount_to_raise":100})
+	ret = base_orga.createProjectFromOrga(miner, password, testOrga.get('_id'), {"name": "kawa_bunga_project", "description": "This project aims to promote the culture of kawa bungo around the world", "invited_users": {}, 'campaign':{"amount_to_raise":100, "duration": 1}})
 	assert ret.get('status') == 200
 	assert ret.get('data').startswith('0x')
 	bw.waitTx(ret.get('data'))
@@ -57,6 +57,16 @@ def test_leave_project(miner, testProject):
 	miner.reload()
 	assert len(testProject["members"]) == len(testProject.getMemberList())== 0
 	assert len(miner["projects"]) == 0
+
+def test_refresh_project(miner, testProject):
+	prev = 100
+	for _ in range(10):
+		sleep(1)
+		ret = base_project.refreshProject(testProject.get('_id'))
+		assert ret.get('status') == 200
+		assert ret.get('data').get('time_left') < prev
+		prev = ret.get('data').get('time_left')
+		print("time remaining for project campaign %d(%d%%)" % (prev, ret.get('data').get('time_left_percent')))
 
 def test_create_poll(miner, testOrga):
 	bw.stop()

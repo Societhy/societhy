@@ -43,7 +43,6 @@ from bson.objectid import ObjectId
 # 		description = descriptionDict[category]
 # 		if not description:
 # 			return
-# 		print("insert")
 # 		if subject:
 # 			subjectType = type(sender).__name__
 # 			if not subjectType:

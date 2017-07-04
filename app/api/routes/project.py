@@ -52,3 +52,8 @@ def donateToProject(user):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
+
+@router.route('/refreshProject/<project_id>')
+def refreshProject(project_id):
+    ret = base_project.refreshProject(project_id)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))

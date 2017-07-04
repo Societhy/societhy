@@ -27,8 +27,8 @@ contract Societhy is mortal, BoardRoom {
         name = _name;
     }
 
-    function createProject(string _name) cancreateproject {
-        Project newProjectAddress = new Project(_name, address(rules), address(registry));
+    function createProject(string _name, uint _duration) cancreateproject {
+        Project newProjectAddress = new Project(_name, address(rules), address(registry), _duration);
 
         registry.createProject(address(newProjectAddress));
         ProjectCreated(newProjectAddress, _name);

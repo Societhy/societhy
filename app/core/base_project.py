@@ -35,7 +35,9 @@ def getProject(user, _id):
     proj = projects.find_one({'_id': ObjectId(_id)})
     if proj is None:
         return {'data': 'This project does not exist', 'status': 400}
-
+    else:
+        proj.refreshProject()
+        
     if user and user.get('account') in proj.get('members'):
         tag = proj["members"].get(user['account'])['tag']
         rights = proj['rights'][tag]
@@ -162,3 +164,14 @@ def leaveProject(user, password, project_id):
         "data": tx_hash,
         "status": 200
     }
+
+def refreshProject(project_id):
+    project_instance = projects.find_one({"_id": objectid.ObjectId(project_id)})
+    if not project_instance:
+        return {"data": "Project does not exists", "status": 400}
+    ret = project_instance.refreshProject()
+    return {
+        "data": ret,
+        "status": 200
+    }
+

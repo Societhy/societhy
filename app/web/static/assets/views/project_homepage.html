@@ -25,9 +25,9 @@
           </ul>
         </div>
       </div>
-      <div class="col-md-4">
+      <div ng-if="currentRights.donate" class="col-md-4">
         <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
-          <input ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+          <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
         </div>
       </div>
     </div>
@@ -35,17 +35,25 @@
   <fieldset>
     <div class="row margin-10">
       <div class="col-md-5">
-        <h3>Objectives</h3>
-        <span ng-if="project.balance < project.amount_to_raise">
+        <div class="">
+          <h3>
+            Campaign
+            <a href="#">
+              <i class="fa fa-refresh" ng-click="ctrl.refreshProject()"></i>
+            </a>
+          </h3>
+          <!-- <span class="col-md-4 icon fa-2x"> -->
+        </div>
+        <span ng-if="project.balance < project.campaign.amount_to_raise">
           <span class="label label-warning block">Crowdfunding campaign in progress</span>
-          <p class="text-center text-bold text-large">{{project.balance}} on {{project.amount_to_raise}} eth required</p>
+          <p class="text-center text-bold text-large">{{project.balance}} on {{project.campaign.amount_to_raise}} eth required</p>
         </span>
-        <span ng-if="project.balance >= project.amount_to_raise">
+        <span ng-if="project.balance >= project.campaign.amount_to_raise">
           <span class="label label-success block">Crowdfunding campaign is complete !</span>
-          <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.amount_to_raise}} ethers)</p>
+          <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.campaign.amount_to_raise}} ethers)</p>
         </span>
         <!-- LIGNE D'AVANCEMENT DES FOND -->
-        <uib-progressbar value="project.balance * (100 / project.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
+        <uib-progressbar value="project.balance * (100 / project.campaign.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.campaign.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
       </div>
       <div class="col-md-7">
         <h3>Description</h3>
@@ -54,9 +62,14 @@
     </div>
     <div class="row margin-10">
       <div class="col-md-5">
-        <h3>Time remaining</h3>
-        <uib-progressbar value="project.time_left" class="progress no-radius background-dark no-margin" type="{{project.time_left >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
-        <!-- TIMELINE ICI -->
+        <div ng-if="project.time_left_percent > 0">
+          <h3>Time remaining</h3>
+          <uib-progressbar value="project.time_left_percent" class="progress no-radius background-dark no-margin" type="{{project.time_left_percent >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
+          <!-- TIMELINE ICI -->
+        </div>
+        <div ng-if="project.time_left_percent <= 0">
+          <h3 class="text-red">CAMPAIGN IS OVER</h3>
+        </div>
       </div>
       <div class="col-md-7">
       </div>

@@ -57,7 +57,6 @@ def connect():
     if not NC_Clients.get(request.sid) or NC_Clients.get(request.sid).sessionId != request.sid:
         NC_Clients[request.sid] = Client(request.sid)
         emit('sessionId', request.sid, namespace='/', room=request.sid)
-    print("test")
 
 @socketio.on('disconnect', namespace='/')
 def disconnect():
@@ -91,7 +90,6 @@ def handleMessage(data):
     }
     if isInContactList(data['idOther'], data['idUser']) == False:
         contact_list = addToContact(data['idOther'], data['idUser'])
-        print(dumps(contact_list))
         emit('new_contact_list', contact_list['contact_list'], namespace='/chat', room=Clients[data['idOther']].sessionId)
     if (data['idOther'] in Clients):
         emit('send_message', message, namespace='/', room=Clients[data['idOther']].sessionId)

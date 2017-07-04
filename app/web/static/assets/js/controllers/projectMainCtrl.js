@@ -14,7 +14,7 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
       }
       // desc = $scope.project.description.replace(/(\r\n|\n|\r)/g,"<br />");
       // $scope.project.description = desc;
-      console.log(response)
+      console.log("RIGHTS AND PROJECT", response.data.rights, response.data.project);
     }, function(error) {
       $state.go('app.discoverprojects');
       $rootScope.toogleError("Project does not exist");
@@ -87,11 +87,22 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
         function(data) {
           $scope.project.balance = data.data;
           ctrl.wallet.refreshAllBalances();
+          ctrl.refreshProject();
         })
     } else {
       $rootScope.toogleError("Donation amount must be more than to 0...")
     }
   }
+
+  ctrl.refreshProject = function() {
+    if ($rootScope.currentProject) {
+      $http.get('/refreshProject/'.concat($rootScope.currentProject._id))
+      .then(function(data) {
+         $rootScope.currentProject = $scope.project = data.data;
+      });
+    }
+  }
+
 
   $timeout(function() {
     $(".donate-button").click(ctrl.donateToProject);

@@ -105,7 +105,7 @@
                     <div class="form-group" ng-if="offer.isRecurrent">
                         <div ng-if="!offer.isPermanent">
                             <label for="recurrenceDuration">Contract Duration :</label>
-                            <input type="range" id="recurrenceDuration" ng-model="offer.duration" min="1" max="90" ng-init="offer.duration = 12" class="form-control" s>
+                            <input type="range" id="recurrenceDuration" ng-model="offer.duration" min="1" max="90" ng-init="offer.duration = 12" class="form-control">
                         </div>
                         <label for="isUndeterminatedDuration">This contract will be valid until one of the party ends it :</label>
                         <input type="checkbox" id="isUndeterminatedDuration" ng-model="offer.isPermanent" ng-init="offer.isPermanent = false" name="isPermanent" />

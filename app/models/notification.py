@@ -53,7 +53,6 @@ def sendNotifPush(sender, senderType, category, subject, user):
         description = descriptionDict[category]
         if not description:
             return
-        print("insert")
         if subject:
             subjectType = type(sender).__name__
             if not subjectType:
@@ -76,7 +75,6 @@ def sendNotifEmail(sender, senderType, category, subject, user):
     """
     Insert the notification in the database in order to be sent.
     """
-    print("notif email")
     description = descriptionDict[category]
     if not description:
         return None
@@ -87,7 +85,6 @@ def sendNotifEmail(sender, senderType, category, subject, user):
         msg.body = sender.get("name") + description
     with app.app_context():
         mail.send(msg)
-        print("sent")
     return msg
 
 
@@ -96,7 +93,6 @@ def notifyToOne(sender, user, category, subject=None):
     Used to send a notification depending of the type.
     """
     senderType = type(sender).__name__
-    print("OEEE")
     if not senderType:
         return
     # print(user.get("notification_accept"))
@@ -140,7 +136,6 @@ class NotificationDocument(Document):
         self.save_partial()
 
     def pushNotif(data):
-        print(data["subject"]["type"])
         notifications.insert({"subject": {"id": data["subject"]["id"], "type": data["subject"]["type"]},
                               "sender": {"id": data["sender"]["id"], "type": data["sender"]["type"]},
                               "category": data["category"],
@@ -164,7 +159,6 @@ class NotificationDocument(Document):
             self["subject"] = {"id": None, "type": None}
             self["subject"]["id"] = data["subject"]["id"]
             self["subject"]["type"] = data["subject"]["type"]
-        print(self)
         self.save()
 
     def getSender(self):

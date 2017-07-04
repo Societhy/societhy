@@ -85,7 +85,7 @@ def makeDonation(user):
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'campaign']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
