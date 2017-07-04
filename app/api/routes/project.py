@@ -20,7 +20,7 @@ def getAllProjects():
 
 @router.route('/createProject', methods=['POST'])
 def createProject():
-    if ensure_fields([{'proj': ["name", "description", "amount"]}], request.json):
+    if ensure_fields(['password', 'socketid', 'user_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
         ret = base_project.createProject(request.json.get('proj'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
