@@ -28,9 +28,9 @@ def createProject(user):
         orga_obj = organizations.find_one({"_id": objectid.ObjectId(request.json.get('owner_id'))})
         user_obj = users.find_one({"_id": objectid.ObjectId(request.json.get('owner_id'))})
         if orga_obj is not None:
-            ret = base_orga.createProjectFromOrga(user, request.json.get('password'), orga_obj, request.json.get('newProject'))
+            ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('owner_id'), request.json.get('newProject'))
         elif user_obj is not None:
-            ret = base_project.createProject(user, request.json.get('password'), user_obj, request.json.get('newProject'))
+            ret = base_project.createProject(user, request.json.get('password'), request.json.get('owner_id'), request.json.get('newProject'))
         else:
             return make_response("Must be logged in or member of an organization", 400)
         return make_response(jsonify(ret.get('data')), ret.get('status'))

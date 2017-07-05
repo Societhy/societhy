@@ -37,7 +37,7 @@ def getProject(user, _id):
         return {'data': 'This project does not exist', 'status': 400}
     else:
         proj.refreshProject()
-        
+
     if user and user.get('account') in proj.get('members'):
         tag = proj["members"].get(user['account'])['tag']
         rights = proj['rights'][tag]
@@ -175,3 +175,36 @@ def refreshProject(project_id):
         "status": 200
     }
 
+def createProject(user, password, user_id, newProject):
+    """
+    user : user who want to give funds to an organisation.
+    password : used to unlock the wallet of the user.
+    user_id : user who will receive the funds.
+    newProject : object that defines the projet user want to create.
+
+    This function is used when an user want to create a project.
+
+
+    - The wallet is unlocked.
+    - The user is retrieved in database.
+    - The project creations is commited on the blockchain.
+    - error -> 400 ; OK -> 200
+    """
+
+    if not user.unlockAccount(password=password):
+        return {"data": "Invalid password!", "status": 400}
+
+    user_obj = users.find_one({"_id": objectid.ObjectId(user_id)})
+    if not user_obj:
+        return {"data": "User does not exists", "status": 400}
+    try:
+        tx_hash = user_obj.createProject(user, newProject, password=password)
+        if tx_hash is False:
+            return {"data": "User does not have permission to create a project", "status": 400}
+
+    except BadResponseError as e:
+        return {"data": str(e), "status": 400}
+    return {
+        "data": tx_hash,
+        "status": 200
+    }

@@ -66,6 +66,9 @@ class UserDocument(Document):
 
     # CALLBACKS FOR UPDATE
 
+    def createProject(self, user, project, password=None):
+        return False
+
     def joinedOrga(self, logs, callback_data=None):
         """
 		logs : list of dict containing the event's logs

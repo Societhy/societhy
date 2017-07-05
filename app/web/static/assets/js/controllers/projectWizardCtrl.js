@@ -60,11 +60,7 @@ app.controller('ProjectWizardCtrl',
         },
 
         submit: function (form) {
-          if (!$rootScope.currentOrga) {
-            $rootScope.toogleError("You need to create a project from an existing organization");
-          }
-
-          else if ($scope.doVerifications()) {
+          if ($scope.doVerifications()) {
            $scope.completeBlockchainAction(
             function(password) {
              $rootScope.toogleWait("Creating project")

@@ -331,17 +331,18 @@ def donateToOrga(user, password, orga_id, donation):
     }
 
 
-def createProjectFromOrga(user, password, orga, newProject):
+def createProjectFromOrga(user, password, orga_id, newProject):
     """
     user : user who want to give funds to an organisation.
     password : used to unlock the wallet of the user.
-    orga : orga who will receive the funds.
+    orga_id : orga who will receive the funds.
     newProject : object that defines the projet user want to create.
 
     This function is used when an user want to create a project.
 
 
     - The wallet is unlocked.
+    - The organisation is retrieved in database.
     - The project creations is commited on the blockchain.
     - error -> 400 ; OK -> 200
     """
@@ -349,6 +350,9 @@ def createProjectFromOrga(user, password, orga, newProject):
     if not user.unlockAccount(password=password):
         return {"data": "Invalid password!", "status": 400}
 
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    if not orga:
+        return {"data": "Organization does not exists", "status": 400}
     try:
         tx_hash = orga.createProject(user, newProject, password=password)
         if tx_hash is False:
