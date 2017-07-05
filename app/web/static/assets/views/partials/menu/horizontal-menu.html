@@ -31,9 +31,9 @@
 			<li ng-class="{'active':$state.includes('app.utilities') || $state.includes('app.charts') || $state.includes('app.maps')}" uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data="Projects" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.projects.MAIN" ></span> <span class="caret"></span></a>
 				<ul uib-dropdown-menu>
-					<li ui-sref-active="active">
+					<!-- <li ui-sref-active="active">
 						<a ng-if="user" ui-sref="app.newproject({owner_id: user._id})"> <span translate="sidebar.nav.projects.CREATE"/> </a>
-					</li>
+					</li> -->
 					<li ui-sref-active="active">
 						<a ui-sref="app.discoverprojects"> <span translate="sidebar.nav.organisations.DISCOVER"/> </a>
 					</li>
