@@ -109,7 +109,7 @@
                   <hr />
                 </thead>
                 <tbody><!-- ngRepeat: user in $data -->
-                  <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
+                  <tr ng-repeat="(address, project) in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
                     <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
                     <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
                   </tr><!-- end ngRepeat: user in $data -->
@@ -376,7 +376,7 @@
           <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
           <div>
             <table class="table no-margin">
-              <tr ng-repeat="project in currentOrga.projects" class="ng-scope" ng-click="ctrl.expandProject(project)">
+              <tr ng-repeat="project in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
                 <td>
                   <div class="icons-effect col-md-3">
                     <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
@@ -389,9 +389,6 @@
                 </td>
               </tr>
             </table>
-            <pre>
-              {{currentOrga.projects | json}}
-            </pre>
           </div>
         </uib-tab>
 
