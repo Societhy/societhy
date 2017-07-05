@@ -1,6 +1,9 @@
 from api import requires_auth, ensure_fields, populate_user
 from flask import Blueprint, request, jsonify, make_response
-from core import base_project
+from bson import objectid
+from core import base_project, base_orga
+from models.organization import organizations
+from models.user import users
 
 router = Blueprint('project', __name__)
 
@@ -19,9 +22,17 @@ def getAllProjects():
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/createProject', methods=['POST'])
-def createProject():
-    if ensure_fields([{'proj': ["name", "description", "amount"]}], request.json):
-        ret = base_project.createProject(request.json.get('proj'))
+@requires_auth
+def createProject(user):
+    if ensure_fields(['password', 'socketid', 'owner_id', {'newProject': ['name', 'description', 'campaign']}], request.json):
+        orga_obj = organizations.find_one({"_id": objectid.ObjectId(request.json.get('owner_id'))})
+        user_obj = users.find_one({"_id": objectid.ObjectId(request.json.get('owner_id'))})
+        if orga_obj is not None:
+            ret = base_orga.createProjectFromOrga(user, request.json.get('password'), orga_obj, request.json.get('newProject'))
+        elif user_obj is not None:
+            ret = base_project.createProject(user, request.json.get('password'), user_obj, request.json.get('newProject'))
+        else:
+            return make_response("Must be logged in or member of an organization", 400)
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)

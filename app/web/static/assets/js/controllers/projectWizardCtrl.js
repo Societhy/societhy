@@ -68,9 +68,9 @@ app.controller('ProjectWizardCtrl',
            $scope.completeBlockchainAction(
             function(password) {
              $rootScope.toogleWait("Creating project")
-             $http.post('/createProjectFromOrga', {
+             $http.post('/createProject', {
               "socketid": $rootScope.sessionId,
-              "orga_id": $rootScope.currentOrga._id,
+              "owner_id": $state.params.owner_id,
               "newProject": $scope.proj,
               "password": password
             }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
