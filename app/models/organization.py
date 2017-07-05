@@ -848,7 +848,8 @@ class OrgaCollection(Collection):
 		Look for a name matching 'query'
 		Returns the list of the results. Each result is tagged with a flag {"category": "organization"}
 		"""
-		results = list(super().find({"name": query, "hidden": False}, ["_id", "name", "address"]))
+		print("SEARCH FOR ORGA:: ", query)
+		results = list(super().find({"name": query, "rules.hidden": False}, ["_id", "name", "address"]))
 		for doc in results:
 			doc.update({"category": "organization"})
 		return results
