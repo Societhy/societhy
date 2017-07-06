@@ -41,9 +41,15 @@
     },
   });
 
+  uploaderDocs.onAfterAddingFile = function() {
+    uploaderDocs.queue[uploaderDocs.queue.length - 1].documentPrivacy = ["default"];
+  }
+
    uploaderDocs.onBeforeUploadItem = function (item) {
     item.formData.push({"name": item.file.name});
     item.formData.push({"type": item.file.type});
+    item.formData.push({"size": item.file.size/1024/1024});
+    item.formData.push({"privacy": item.documentPrivacy});
     console.info('onBeforeUploadItem', item);
   };
 
@@ -160,6 +166,7 @@
           ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
           ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
           ctrl.member_list = Object.values($rootScope.currentOrga.members);
+          ctrl.jobs = Object.keys($scope.currentOrga.rights);
         }
         $scope.currentRights = $rootScope.currentRights = response.data.rights;
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);

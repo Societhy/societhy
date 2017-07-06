@@ -47,7 +47,10 @@ def addOrgaDocuments(user):
     doc = request.files.get("doc")
     name = request.form.get("name")
     doc_type = request.form.get("type")
-    ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
+    size = request.form.get("size")
+    privacy = request.form.get("privacy")
+    privacy = privacy.split(",")
+    ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy)
     return make_response("ok", 200)
 
 @router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])

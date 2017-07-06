@@ -206,10 +206,16 @@
         },
     });
 
+    uploaderDocs.onAfterAddingFile = function() {
+      uploaderDocs.queue[uploaderDocs.queue.length - 1].documentPrivacy = ["default"];
+    }
+
     uploaderDocs.onBeforeUploadItem = function (item) {
         console.log(uploaderDocs.queue.length);
         item.formData.push({"name": item.file.name});
         item.formData.push({"type": item.file.type});
+        item.formData.push({"size": item.file.size/1024/1024});
+        item.formData.push({"privacy": item.documentPrivacy});
         console.info('onBeforeUploadItem', item);
     };
 

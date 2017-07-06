@@ -89,7 +89,7 @@
 																<div class="clip-radio radio-primary radio-lg">
 																	<input type="radio" id="public_type" value="public" ng-model="orga_form.rules.accessibility" ng-init="orga_form.rules.accessibility = 'public'">
 																	<label for="public_type"> Public </label>
-																</div>		
+																</div>
 																<div class="clip-radio radio-primary radio-lg">
 																	<input type="radio" id="private_type" value="private" ng-model="orga_form.rules.accessibility">
 																	<label for="private_type"> Private </label>
@@ -191,7 +191,9 @@
 																	<div class="col-md-4"></div>
 																	<div class="col-md-3">
 																		<div ng-repeat="item in uploaderImages.queue">
-																			<div><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderImages.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></div>
+																			<div><strong>{{ item.file.name }}</strong>
+																				<div ng-show="uploaderImages.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+																			</div>
 																			<div ng-show="uploaderImages.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</div>
 																		</div>
 																	</div>
@@ -244,7 +246,7 @@
 																	<input type="radio" id="dao_model" value="dao" ng-model="orga_form.gov_model">
 																</div>
 															</div>
-															
+
 														</div>
 													</fieldset>
 												</div>
@@ -522,15 +524,18 @@
 																				<tr>
 																					<th width="50%">Name</th>
 																					<th ng-show="uploaderDocs.isHTML5">Size</th>
-																					<th>Actions</th>
+																					<th>Privacy</th>
 																				</tr>
 																			</thead>
 																			<tbody>
 																				<tr ng-repeat="item in uploaderDocs.queue">
-																					<td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
+																					<td><strong>{{ item.file.name }}</strong>
+																						<div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+																					</td>
 																					<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
 																					<td ng-show="uploaderDocs.isHTML5">
-
+																						<select name="docPrivacy" id="docPrivacy" multiple size="3" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="item.documentPrivacy" class="form-control">
+					                                  </select>
 																					</td>
 																					<td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
 																					<td nowrap>

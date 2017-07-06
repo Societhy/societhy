@@ -54,8 +54,10 @@ def getOrgaDocument(user, _id=None, name=None):
         if user.get('account') in orga.get('members'):
             tag = orga["members"].get(user['account'])['tag']
             rights = orga['rights'][tag]
+            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if tag in doc["privacy"] or "default" in doc["privacy"]]
         else:
             rights = orga.default_rights.get('default')
+            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
 
     if orga.get('profile_picture'):
         orga["picture"] = ("data:" + orga["profile_picture"]["profile_picture_type"] + ";base64," + json.loads(
@@ -141,20 +143,22 @@ def addOrgaProfilePicture(user, orga_id, pic, pic_type):
     return {"data": "OK", "status": 200}
 
 
-def addOrgaDocuments(user, orga_id, doc, name, doc_type):
+def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     """
     user : user model document that represent the user who made the request.
     orga_id : id of the organisation the user want to add documents.
     doc : document bytes
     name : document name
     doc_type : MIME type of the document.
+    size : size of the document.
+    privacy : privacy of the document.
 
     This function insert in the database documents related to a given organisation.
     Thanks to the GridFS sytem, documents can be inserted in a database without performance loss.
     """
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
-        "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name}}})
+        "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
     return {"data": ret, "status": 200}
 
 
@@ -162,7 +166,7 @@ def getOrgaUploadedDocument(doc_id, doc_name):
     """
     user : user model document that represent the user who made the request.
     doc_id : id of the document user want to retrieve.
-    do_name : name of the document user want to retrieve.
+    doc_name : name of the document user want to retrieve.
 
     This fuction allow user to download a document who has been previously uploaded.
     """
