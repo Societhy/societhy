@@ -296,7 +296,7 @@
                         </div>
                         <div>
                           <button type="button" class="btn btn-primary btn-o btn-s" ng-click="ctrl.uploadNewDocuments()" ng-disabled="!uploaderDocs.queue.length">
-                          <span class="glyphicon glyphicon-trash"></span> Upload
+                            <span class="glyphicon glyphicon-trash"></span> Upload
                           </button>
                         </div>
                       </div>
@@ -379,16 +379,20 @@
           <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
           <div>
             <table class="table no-margin">
-              <tr ng-repeat="project in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
+              <tr ng-repeat="project in currentOrga.projects" class="ng-scope">
                 <td>
-                  <div class="icons-effect col-md-3">
-                    <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
-                  </div>
+                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                    <div class="icons-effect col-md-3">
+                      <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+                    </div>
+                  </a>
                 </td>
                 <td class="col-md-9">
-                  <div class="padding-10">
-                    <strong>{{project.name}}</strong>
-                  </div>
+                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                    <div class="padding-10">
+                      <strong>{{project.name}}</strong>
+                    </div>
+                  </a>
                 </td>
               </tr>
             </table>
