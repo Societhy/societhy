@@ -52,7 +52,7 @@
                         <div class="row">
                           <div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
                             <label class="control-label">Project Name <span class="symbol required"></span> </label>
-                            <input type="text" placeholder="Enter your project Name" class="form-control" name="name" ng-model="proj.name" ng-required="currentStep == 1" />
+                            <input type="text" placeholder="Enter your project name" class="form-control" name="name" ng-model="proj.name" ng-required="currentStep == 1" />
                             <span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$invalid">Name is mandatory</span>
                             <span class="success text-small block" ng-if="Form.name.$valid">Cool !</span>
                           </div>
@@ -63,6 +63,24 @@
                             <textarea placeholder="Describe your project..." class="form-control autosize area-animated msd-elastic: \n;" name="description" ng-model="proj.description" ng-required="currentStep == 1"></textarea>
                             <span class="error text-small block" ng-if="Form.description.$dirty && Form.description.$invalid">Description is mandatory</span>
                             <span class="success text-small" ng-if="Form.description.$valid">Wonderful!</span>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-facebook"/></span>
+                              <input type="text" placeholder="Enter your project facebook link" class="form-control" name="facebook_link" ng-model="proj.facebook_link"/>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon"><i class="fa fa-twitter"/></span>
+                              <input type="text" placeholder="Enter your project twitter link" class="form-control" name="twitter_link" ng-model="proj.twitter_link"/>
+                            </div>
                           </div>
                         </div>
 

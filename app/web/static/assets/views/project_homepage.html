@@ -12,13 +12,13 @@
       <div class="col-md-2">
         <div class="social-icons">
           <ul>
-            <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-              <a href="#" ng-click="" target="_blank">
+            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+              <a ng-href="{{project.twitter_link}}" target="_blank">
                 Twitter
               </a>
             </li>
-            <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-              <a href="#" ng-click="" target="_blank">
+            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+              <a ng-href="{{project.facebook_link}}" target="_blank">
                 Facebook
               </a>
             </li>
