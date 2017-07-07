@@ -28,12 +28,10 @@
                 <div class="chat-content ">
                     <a class="sidebar-back pull-left" href="#" ct-toggle="off" target="users"><i class="ti-angle-left"></i> <span translate="offsidebar.chat.BACK">Back</span></a>
                     <div class="sidebar-content" id="off-chat" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-
                         <clip-chat messages="chat" id-self="selfIdUser" id-other="otherIdUser"></clip-chat>
                     </div>
+                    <chat-submit submit-function="sendMessage" ng-model="chatMessage" scroll-element="#off-chat"></chat-submit>
                 </div>
-                <chat-submit submit-function="sendMessage" ng-model="chatMessage" scroll-element="#off-chat"></chat-submit>
-
             </div>
         </div>
     </uib-tab>
