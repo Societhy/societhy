@@ -229,7 +229,7 @@ class UserDocument(Document):
         if 'social' in self:
             for socialProvider, socialData in self['social'].items():
                 for key, value in socialData.items():
-                    if key in fields and key not in self:
+                    if key in fields:
                         self[key] = value
         self.save_partial()
 
