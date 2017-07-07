@@ -295,11 +295,25 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    $scope.searchForAnything = function(query) {
-      console.log(query.title);
-        $rootScope.query = query.title;
-        $http.get('/searchFor/'.concat(query.title)).then(function(response) {
+    $scope.changeQueryCallback = function ($item) {
+      $rootScope.query = $item;
+    }
+
+    $scope.queryCallback = function ($item) {
+      $rootScope.query = $item.title;
+      $http.get('/searchFor/'.concat($rootScope.query)).then(function(response) {
+          console.log(response.data);
+          if (response.data.length == 1) {
+              $state.go("app.".concat(response.data[0].category), response.data[0]);
+          }
+      });
+
+    }
+
+    $scope.searchForAnything = function() {
+        $http.get('/searchFor/'.concat($rootScope.query)).then(function(response) {
             console.log(response.data);
+            // $scope.$broadcast('angucomplete-alt:clearInput', 'searchBar');
             if (response.data.length == 1) {
                 $state.go("app.".concat(response.data[0].category), response.data[0]);
             }
