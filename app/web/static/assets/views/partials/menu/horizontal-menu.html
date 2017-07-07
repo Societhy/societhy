@@ -160,7 +160,7 @@
 			<li class="dropdown" uib-dropdown ng-show="user">
 				<a href="#" class="dropdown-toggle nav-user-wrapper" data-toggle="dropdown" uib-dropdown-toggle>
 					<img alt="" src="static/assets/images/default-user.png">
-					<span id="username" > {{ ctrl.user.name || ctrl.user.firstname.concat(" ").concat(ctrl.user.lastname)}}</span>
+					<span id="username" > {{ ctrl.user.name || ctrl.user.firstname.concat(" ").concat(ctrl.user.lastname || "")}}</span>
 					<span> {{ctrl.user.totalBalance.toFixed(1)}} ETH</span>
 					<span class="caret"></span>
 				</a>
