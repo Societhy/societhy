@@ -206,7 +206,9 @@ class OrgaDocument(Document):
 		tx_hash = self.join(from_, tag="owner", password=callback_data.get('password'), local=False)
 		if not tx_hash:
 			return {"data": "User does not have permission to join", "status": 400}
-
+		else:
+			print("waiting for join...")
+			bw.waitTx(tx_hash)
 
 		#SEND FUNDS TO ORGA AFTER IT IS CREATED
 		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds", 0) > 0:
