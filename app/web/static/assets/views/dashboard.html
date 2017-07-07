@@ -8,7 +8,7 @@
 <!-- start: FIRST SECTION -->
 <div class="container-fluid container-fullw padding-bottom-10">
 	<div ng-controller="DashboardCtrl">	
-		<div class="panel panel-red">
+		<div class="panel panel-red" ng-if="user && !user.account">
 			<div class="panel-heading">
 			<h4 class="panel-title text-center text-extra-large text-bold">Limited account</h4>
 				<ct-paneltool class="panel-tools" tool-refresh="load1"><a href="#" class="btn btn-transparent btn-sm" panel-refresh="" tooltip-placement="top" uib-tooltip="Refresh" data-spinner="load1"><i class="fa fa-circle-o"></i></a></ct-paneltool>
