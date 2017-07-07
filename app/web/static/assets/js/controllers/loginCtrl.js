@@ -599,7 +599,7 @@ ctrl.google_connect = function ()
 	** Check if passwords match
 	*/
 	$("form input[name='password'], form input[name='password_again']").on("change", function() {
-	    if (($("form input[name='password']").length == 0 || $("form input[name='password_again']").length == 0 ) || $("form input[name='password']").val().length != "" && $("form input[name='password_again']").val() != "" &&
+	    if ($("form input[name='password']").val().length != 0 && $("form input[name='password_again']").length != 0 &&
 		$("form input[name='password_again']").val() !== $("form input[name='password']").val()) {
 		$("#passwordConfirmationCheck").addClass("enabled");
 		$("#passwordConfirmationCheck").removeClass("disabled");
