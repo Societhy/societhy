@@ -108,16 +108,11 @@ def test_anonymous_orga(miner):
 	assert ret.get('status') == 200
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
-	sleep(0.5)
+	sleep(1)
 	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 	assert inserted != None
 	assert inserted.get('name') ==  "Societhy_anonymous_orga"
 
-	# ret = base_orga.joinOrga(miner, password, inserted.get('_id'), tag='member')
-	# assert ret.get('status') == 200
-	# assert ret.get('data') != None
-
-	# bw.waitEvent('NewMember')
 	miner.reload()
 	inserted.reload()
 
@@ -146,7 +141,7 @@ def test_private_orga(miner, user):
 	assert ret.get('status') == 200
 	assert tx_hash != None
 	bw.waitTx(tx_hash)
-	sleep(0.5)
+	sleep(1)
 	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 	assert inserted != None
 	
@@ -154,7 +149,6 @@ def test_private_orga(miner, user):
 	miner.reload()
 	assert len(miner.get('organizations')) == 3
 	assert len(inserted.getMemberList()) == 1
-
 
 	#USER CANNOT JOIN
 	ret = base_orga.joinOrga(user, password, inserted.get('_id'), tag='member')
