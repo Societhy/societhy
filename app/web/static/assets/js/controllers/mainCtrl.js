@@ -226,7 +226,7 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
         var args = arguments;
         SweetAlert.swal({
 	    title: "MembershipFee",
-	    text: "To enter this organization, you'll need to pay a unique fee of " + $rootScope.currentOrga.funding.membershipFeeAmount + " eth.",
+	    text: "To enter this organization, you'll need to pay a unique fee of " + $rootScope.currentOrga.funding.membershipAmount + " eth.",
 	    type: "input",
             inputType: "password",
 	    showCancelButton: true,
