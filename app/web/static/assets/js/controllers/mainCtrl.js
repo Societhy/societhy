@@ -222,6 +222,30 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
 
     var tmpCallback = null;
 
+    $scope.checkMembershipFee = function(requestCallback, updateCallback) {
+        var args = arguments;
+        SweetAlert.swal({
+	    title: "MembershipFee",
+	    text: "To enter this organization, you'll need to pay a unique fee of " + $rootScope.currentOrga.funding.membershipFeeAmount + " eth.",
+	    type: "input",
+            inputType: "password",
+	    showCancelButton: true,
+	    closeOnConfirm: true,
+	    animation: "slide-from-top",
+	    inputPlaceholder: "Password"
+        }, function(inputValue) {
+	    if (inputValue === false) return false;
+            else if (inputValue === "") {
+                SweetAlert.swal.showInputError("You need to write something!");
+                return false
+            }
+            var password = inputValue;
+            args[0] = password;
+            requestCallback.apply(null, args);
+            tmpCallback = updateCallback;
+        });
+    };
+
     $scope.completeBlockchainAction = function(requestCallback, updateCallback) {
         var args = arguments;
         SweetAlert.swal({

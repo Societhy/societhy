@@ -1,31 +1,48 @@
-<div class="modal-header ng-scope">
-  <h3 class="modal-title">Manages Rights</h3>
-</div>
-<div class="form-group">
-  <div id="orgaRightsMenu">
-    <div ng-repeat="(id, data) in currentOrga.rights" ng-init="outerIndex = $index" ng-click="admin.rights.updateSelected(id, $index)"
-	 class="orgaRightsMenuField" val="{{$index}}">
-      <span>{{id}}<span>
-      <button class="btn-xs btn-danger" ng-click="admin.rights.removeRight(id)">X</button>
-    </div>
-    <div>
-      <input type="text" id="newOrgaRight">
-      <button class="btn-sm btn-primary" ng-click="admin.rights.newRight()">+</button>
-    </div>
+<div id="orgaRightsManagment">
+  <div class="modal-header ng-scope ">
+    <h3 class="modal-title">Manages Rights</h3>
   </div>
-  <div id="orgaRightsSelector">
-    <div ng-repeat="(id, data) in currentOrga.rights[admin.rights.current]" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
-      <input type="checkbox" name="{{id}}" value="{{data}}" id="checkbox{{$index}}"
-	     ng-model="currentOrga.rights[admin.rights.current][id]"
-	     ng-checked="data" ng-true-value="true" ng-false-value="false">
-      <label for="checkbox{{$index}}">{{id}}</label>
-    </div>
-    <input type="submit" value="Save Changes" class="btn btn-green" ng-click="admin.updateRights()">
+  <div class="form-group">
+    <table style="width: 100%;">
+      <thead>
+	<tr>
+	  <th style="width: 15%;">Categories</th>
+	  <th style="width: 75%;">Rights</th>
+	</tr>
+      </thead>
+      <tfoot>
+	<tr>
+	  <td>
+	    <input type="text" id="newOrgaRight">
+	    <button class="btn-sm btn-primary" ng-click="admin.rights.newRight()">+</button>
+	    <span class="d-block">Add a new category</span>
+	  </td>
+	  <td id="updateRight"><input type="submit" value="Save Changes" class="btn btn-green" ng-click="admin.updateRights()"></td>
+	</tr>
+      </tfoot>
+      <tbody>
+	<tr>
+	  <td>
+	    <div id="orgaRightsMenu">
+	      <div ng-repeat="(id, data) in admin.rights.tmp" ng-init="outerIndex = $index" ng-click="admin.rights.updateSelected(id, $index)"
+		   class="orgaRightsMenuField" val="{{$index}}">
+		<span>{{id}}</span>
+		<button class="btn-xs btn-danger" ng-click="admin.rights.removeRight(id)">X</button>
+	      </div>
+	    </div>
+	  </td>
+	  <td>
+	    <div id="orgaRightsSelector">
+	      <div ng-if="admin.rights.current" ng-repeat="(id, data) in admin.rights.availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+		<input type="checkbox" name="{{id}}" value="{{data}}" id="checkboxManageRights{{$index}}"
+		       ng-model="admin.rights.tmp[admin.rights.current][id]"
+		       ng-checked="admin.rights.tmp[admin.rights.current][id]" ng-true-value="true" ng-false-value="false">
+		<label for="checkboxManageRights{{$index}}">{{id}}</label>
+	      </div>
+	    </div>
+	  </td>
+	</tr>
+      </tbody>
+    </table>
   </div>
-  <!--
-    <div ng-repeat="(right, bool) in rights[selected_tag]" class="checkbox vertical-center clip-check check-primary check-lg">
-      <input type="checkbox" id="{{right}}" ng-model="orga_form.invited_users[user_id]['rights'][right]">
-      <label for="{{right}}">{{right}}</label>
-    </div>
-    -->
 </div>

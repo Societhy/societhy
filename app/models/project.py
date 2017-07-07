@@ -200,7 +200,7 @@ class ProjectDocument(Document):
 
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'DonationMade'} if user.get('notification_preference').get('DonationMade').get('Mail') else None
-			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], callbacks=[user.madeDonation, self.newDonation], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], callbacks=[user.madeDonation, self.newDonation], callback_data={"name": self["name"]}, users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:

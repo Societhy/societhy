@@ -273,31 +273,32 @@ def getOrgaTransaction(user):
     }
 
 
-def updateOrgaRights(orga_id, rights):
+def updateOrgaRights(user, orga_id, rights):
     """
-    user : UserDoc
     orga_id : string for the mongo id
+    rights : data to be push in the database
     """
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     orga["rights"] = rights;
     orga.save_partial()
+    user.needsReloading()
     return {
-        "data": "allgood",
-        "status": 200
+	"data": orga["rights"],
+	"status": 200
     }
 
 
-def updateMemberTag(orga_id, addr, tag):
+def updateMemberTag(user, orga_id, addr, tag):
     """
-    user : UserDoc
     orga_id : string for the mongo id
+    rights : data to be push in the database
     """
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     orga["members"][addr]["tag"] = tag;
     orga.save_partial()
     return {
-        "data": "allgood",
-        "status": 200
+	"data": tag,
+	"status": 200
     }
 
 
@@ -393,13 +394,41 @@ def leaveOrga(user, password, orga_id):
             return {"data": "User does not have permission to leave", "status": 400}
     except BadResponseError as e:
         return {"data": str(e), "status": 400}
-    notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"},
-                            "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"},
-                            "category": "MemberLeft"})
 
     return {
         "data": tx_hash,
         "status": 200
+    }
+
+
+def removeMember(user, member_account, password, orga_id):
+    """
+    user : user who want to remove a member from the organisation.
+    member_addr: member to be removed from the organisation.	
+    password : used to unlock the wallet of the user.
+    orga_id : id of the orga the user want to leave.
+    
+    This function is called when an user wants to remove a member from the organisation.
+    
+    - The wallet is unlocked.
+    - The leave order is commited on the blockchain.
+    - error -> 400 ; OK -> 200
+    """
+    
+    if not user.unlockAccount(password=password):
+        return {"data": "Invalid password!", "status": 400}
+    
+    orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    try:
+        tx_hash = orga_instance.removeMember(user, member_account, password=password)
+        if tx_hash is False:
+            return {"data": "User does not have permission to leave", "status": 400}	
+    except BadResponseError as e:
+        return {"data": str(e), "status": 400}
+    
+    return {
+	"data": tx_hash,
+	"status": 200
     }
 
 

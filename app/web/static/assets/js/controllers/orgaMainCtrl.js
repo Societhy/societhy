@@ -597,6 +597,7 @@ ctrl.executeProposal = function(proposal) {
   }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
  }, function(data) {
   $rootScope.currentOrga = data.data;
+  delete $rootScope.user.transactions["0x076841d6d0569f6cc2a5e4b69827804d0a599121887de44abea4eaf4bb1b395c"];
   ctrl.reload();
 });
 }

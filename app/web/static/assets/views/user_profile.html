@@ -127,6 +127,14 @@
                         </uib-tab>
                     <!-- end: TAB EDIT ACCOUNT -->
 
+                    <!-- start: TAB TRANSACTION-->
+                    <uib-tab heading="Transactions" active="editActive">
+                        <div >
+                            <div data-ng-include=" 'static/assets/views/partials/user/transaction.html' "></div>
+                        </div>
+                    </uib-tab>
+                    <!-- end: TAB TRANSACTION -->
+
                     <!-- start: TAB PREFERENCE -->
                     <uib-tab heading="Preference" active="editActive">
                         <div ng-controller="userPreferenceCtrl as ctrl">

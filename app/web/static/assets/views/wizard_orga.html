@@ -38,34 +38,41 @@
 										<a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
 											<div class="stepNumber">
 												3
-											</div> <span class="stepDesc text-small">Members</span>
+											</div> <span class="stepDesc text-small">Rights</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 4)">
 										<a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}">
 											<div class="stepNumber">
 												4
-											</div> <span class="stepDesc text-small">Tokens</span>
+											</div> <span class="stepDesc text-small">Members</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 5)">
 										<a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}">
 											<div class="stepNumber">
 												5
-											</div> <span class="stepDesc text-small">Funding</span>
+											</div> <span class="stepDesc text-small">Tokens</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 6)">
 										<a href ng-class="{'selected' : currentStep >= 6, 'done' : currentStep > 6}">
 											<div class="stepNumber">
 												6
-											</div> <span class="stepDesc text-small"> Document Upload </span>
+											</div> <span class="stepDesc text-small">Funding</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 7)">
 										<a href ng-class="{'selected' : currentStep >= 7, 'done' : currentStep > 7}">
 											<div class="stepNumber">
 												7
+											</div> <span class="stepDesc text-small"> Document Upload </span>
+										</a>
+									</li>
+									<li ng-click="form.goTo(Form, 8)">
+										<a href ng-class="{'selected' : currentStep >= 8, 'done' : currentStep > 8}">
+											<div class="stepNumber">
+												8
 											</div> <span class="stepDesc text-small"> Complete </span>
 										</a>
 									</li>
@@ -304,8 +311,82 @@
 										</div>
 										<!-- end: WIZARD STEP 2 -->
 
-										<!-- start: WIZARD STEP 3 -->
-										<div id="step-3" ng-show="currentStep == 3">
+								<!-- start: WIZARD STEP 3 -->
+								<div id="step-3" ng-show="currentStep == 3">
+									<div class="row">
+										<div class="col-md-2">
+											<div class="padding-30">
+												<h2 class="StepTitle">Rights<span class="text-large block">Set up jobs according to what you wish</span></h2>
+											</div>
+										</div>
+										<div class="col-md-9">
+											<fieldset>
+												<legend>
+													Current Rights
+												</legend>
+												<div id="orgaRightsManagment">
+													<div class="modal-header ng-scope ">
+														<h3 class="modal-title">Manages Rights</h3>
+													</div>
+													<div class="form-group">
+														<table style="width: 100%;">
+															<thead>
+															<tr>
+																<th style="width: 15%;">Categories</th>
+																<th style="width: 75%;">Rights</th>
+															</tr>
+															</thead>
+															<tfoot>
+															<tr>
+																<td>
+																	<input type="text" id="newOrgaRight">
+																	<button class="btn-sm btn-primary" ng-click="addRight()">+</button>
+																	<span class="d-block">Add a new category</span>
+																</td>
+															</tr>
+															</tfoot>
+															<tbody>
+															<tr>
+																<td>
+																	<div id="orgaRightsMenu">
+																		<div ng-repeat="(id, data) in orga_form.rights" ng-init="outerIndex = $index" ng-click="displaySelectedRight(id, $index)"
+																			 class="orgaRightsMenuField" val="{{$index}}">
+																			<span>{{id}}</span>
+																			<button class="btn-xs btn-danger" ng-click="removeRight(id, $index)">X</button>
+																		</div>
+																	</div>
+																</td>
+																<td>
+																	<div id="orgaRightsSelector">
+																		<div ng-if="currentRight" ng-repeat="(name, value) in availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+																			<input type="checkbox" name="{{name}}" value="{{name}}" id="checkboxManageRights{{$index}}"
+																				   ng-model="orga_form.rights[currentRight][name]"
+																				   ng-checked="orga_form.rights[currentRight][name]" ng-true-value="true" ng-false-value="false">
+																			<label for="checkboxManageRights{{$index}}">{{name}}</label>
+																		</div>
+																	</div>
+																</td>
+															</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</fieldset>
+											<div class="form-group">
+												<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+													<i class="fa fa-circle-arrow-left"></i> Back
+												</button>
+												<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+													Next <i class="fa fa-arrow-circle-right"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end: WIZARD STEP 3 -->
+
+								<!-- start: WIZARD STEP 4 -->
+										<div id="step-4" ng-show="currentStep == 4">
 											<div class="row">
 												<div class="col-md-2">
 													<div class="padding-30">
@@ -385,10 +466,10 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 3 -->
+										<!-- end: WIZARD STEP 4 -->
 
-										<!-- start: WIZARD STEP 4 -->
-										<div id="step-4" ng-show="currentStep == 4">
+										<!-- start: WIZARD STEP 5 -->
+										<div id="step-5" ng-show="currentStep == 5">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
@@ -399,10 +480,10 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 4 -->
+										<!-- end: WIZARD STEP 5 -->
 
-										<!-- start: WIZARD STEP 5 -->
-										<div id="step-5" ng-show="currentStep == 5">
+										<!-- start: WIZARD STEP 6 -->
+										<div id="step-6" ng-show="currentStep == 6">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
@@ -440,10 +521,11 @@
 															</label>
 														</div>
 														<div class="checkbox clip-check check-primary checkbox-inline">
-															<input type="checkbox" id="membershipFees" value="0" checked="">
-															<label for="membershipFees">
-																Membership fees
-															</label>
+														  <input type="checkbox" ng-model="orga_form.funding.membershipFee" id="membershipFees" value="0" checked="">
+
+														  <label for="membershipFees">
+														    Membership fees
+														  </label>
 														</div>
 														<div class="checkbox clip-check check-primary checkbox-inline">
 															<input type="checkbox" id="donations" value="0" checked="">
@@ -460,7 +542,13 @@
 
 
 													</fieldset>
-
+													<fieldset ng-if="orga_form.funding.membershipFee">
+													  <legend>Additional informations</legend>
+													  <div ng-if="orga_form.funding.membershipFee">
+													    <input type="number" ng-model="orga_form.funding.membershipAmount" id="feeAmount"/>
+													    <label for="feeAmount">Enter the price (in eth) to join to organization</label>
+													  </div>
+													</fieldset>
 													<div class="form-group">
 														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
 															<i class="fa fa-circle-arrow-left"></i> Back
@@ -472,9 +560,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 5 -->
-										<!-- start: WIZARD STEP 6 -->
-										<div id="step-6" ng-show="currentStep == 6">
+										<!-- end: WIZARD STEP 6 -->
+										<!-- start: WIZARD STEP 7 -->
+										<div id="step-7" ng-show="currentStep == 7">
 											<div class="row">
 												<div class="col-md-5">
 													<div class="padding-30">
@@ -567,9 +655,9 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 6 -->
-										<!-- start: WIZARD STEP 7 -->
-										<div id="step-7" ng-show="currentStep == 7">
+										<!-- end: WIZARD STEP 7 -->
+										<!-- start: WIZARD STEP 8 -->
+										<div id="step-8" ng-show="currentStep == 8">
 											<div class="row">
 												<div class="col-md-12">
 													<div class="text-center">
@@ -586,7 +674,7 @@
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 7 -->
+										<!-- end: WIZARD STEP 8 -->
 									</div>
 									<pre class="code margin-top-20">{{ orga_form | json }}</pre>
 								</form>

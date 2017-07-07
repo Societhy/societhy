@@ -9,6 +9,7 @@ from bson import objectid
 from core.utils import fromWei, toWei, normalizeAddress
 from models.clients import blockchain_watcher as bw
 from models.events import ContractCreationEvent, LogEvent, makeTopics
+from models.notification import notifications, NotificationDocument as Notification
 from models.offer import Offer
 from models.project import ProjectDocument
 from models.proposal import Proposal
@@ -41,6 +42,7 @@ class OrgaDocument(Document):
 	proposals = dict()
 	social_links = None
 	alerts = None
+	transactions = dict()
 
 	def __init__(self,
 				doc=None,
@@ -243,7 +245,21 @@ class OrgaDocument(Document):
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
 		resp.update({"data" :{k: str(v) if type(v) == ObjectId else v for (k, v) in self.items()}})
-		models.notification.NotificationDocument.pushNotif({"sender": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"}, "subject": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"}, "category": "orgaCreate"})
+		notif = models.notification.NotificationDocument({
+			"sender": {"id": objectid.ObjectId(resp.get("data").get("_id")), "type": "orga"},
+			"subject": {"id": objectid.ObjectId(resp.get("data").get("owner").get("_id")), "type": "user"},
+			"category": "orgaCreated",
+			"angularState": {
+				"route":"app.organization",
+				"params":{
+					"_id":str(self.get("_id")),
+						"name":self.get("name")
+				}
+                        },
+                        "description": "The organization " + self["name"] + "was created by " +  callback_data.get('from')["name"] + ".", 
+                        "createdAt": datetime.datetime.now(),
+                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+		notif.save()
 		return resp
 
 	####
@@ -373,6 +389,21 @@ class OrgaDocument(Document):
 					member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
 					public_member =  models.member.Member(member_data, tag=rights_tag)
 					self["members"][new_member.get('account')] = public_member
+					notif = models.notification.NotificationDocument({
+			                        "sender": {"id": new_member.get("_id"), "type": "user"},
+			                        "subject": {"id": self.get("_id"), "type": "orga"},
+			                        "category": "newMember",
+                                                "angularState": {
+				                        "route":"app.organization",
+				                        "params":{
+					                        "_id":str(self.get("_id")),
+						                "name":self.get("name")
+				                        }
+                                                },
+                                                "description": new_member.get("name") + " has join the organization " + self["name"] + ".", 
+                                                "createdAt": datetime.datetime.now(),
+                                                "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+					notif.save()
 					self.save_partial();
 					return { "orga": self.public(public_members=True), "rights": self.get('rights').get(public_member.get('tag'))}
 
@@ -434,6 +465,30 @@ class OrgaDocument(Document):
 		else:
 			return False
 
+	def removeMember(self, user, member_account, password=None, local=False):
+		"""
+		user : UserDoc initiating the action
+		password : password unlocking the account at the origin of the action
+		local : boolen set to True if the transaction is of type "call" (execution on local eth node), False if it is truly a transaction to be broadcasted on the network
+		Sends the transaction to the smart contract, pushes new event to wait for the result of the tx.
+		Returns the transaction hash if the tx is successfully sent to the node, False otherwise (eg: not enough funds in account)
+		"""
+		if not self.can(user, "remove_members"):
+			return False
+                
+		member = users.find_one({"account": member_account})
+		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), args=[member.get('account')], password=password)
+		if tx_hash and tx_hash.startswith('0x'):
+			topics = makeTopics(self.registry.getAbi("MemberLeft").get('signature'), member.get('account'))
+
+			mail = {'sender':self, 'subject':member, 'users':[member], 'category':'MemberLeft'} if member.get('notification_preference').get('MemberLeft').get('Mail') else None
+			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberLeft, member.leftOrga], users=member, event_abi=self.registry["abi"], mail=mail))
+			user.needsReloading()
+			return tx_hash
+		else:
+			return False
+
+                
 	def memberLeft(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
@@ -446,6 +501,21 @@ class OrgaDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
+				notif = models.notification.NotificationDocument({
+			                "sender": {"id": member.get("_id"), "type": "user"},
+			                "subject": {"id": self.get("_id"), "type": "orga"},
+			                "category": "memberLeft",
+                                        "angularState": {
+				                "route":"app.organization",
+				                "params":{
+					                "_id":str(self.get("_id")),
+						        "name":self.get("name")
+				                }
+                                        },
+                                        "description": member.get("name") + " has left the organization " + self["name"] + ".", 
+                                        "createdAt": datetime.datetime.now(),
+                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+				notif.save()
 				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
 		return False
 
@@ -467,7 +537,7 @@ class OrgaDocument(Document):
 			topics = makeTopics(self.board.getAbi("DonationMade").get('signature'), user.get('account'))
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'DonationMade'} if user.get('notification_preference').get('DonationMade').get('Mail') else None
-			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user, callback_data={"name": self["name"]}, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -486,6 +556,44 @@ class OrgaDocument(Document):
 			member = self.getMember(address)
 			if member:
 				self["members"][address]["donation"] = member.get('donation', 0) + donation_amount
+				notif = models.notification.NotificationDocument({
+			                "sender": {"id": member.get("_id"), "type": "user"},
+			                "subject": {"id": self.get("_id"), "type": "orga"},
+			                "category": "newDonation",
+                                        "angularState": {
+				                "route":"app.organization",
+				                "params":{
+					                "_id":str(self.get("_id")),
+						        "name":self.get("name")
+				                }
+                                        },
+                                        "description": member.get("name") + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
+                                        "amount": donation_amount,
+                                        "createdAt": datetime.datetime.now(),
+                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
+                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name") + ".",
+                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
+			else:
+				notif = models.notification.NotificationDocument({
+			                "sender": {"id": address, "type": "user"},
+			                "subject": {"id": self.get("_id"), "type": "orga"},
+			                "category": "newDonation",
+                                        "angularState": {
+				                "route":"app.organization",
+				                "params":{
+					                "_id":str(self.get("_id")),
+						        "name":self.get("name")
+				                }
+                                        },
+                                        "description": address + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".",                                         
+                                        "amount": donation_amount,
+                                        "createdAt": datetime.datetime.now(),
+                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
+				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
+                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + address + ".",
+                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
+			notif.save()
 			self.save_partial()
 			return self["balance"]
 		return False
@@ -585,6 +693,10 @@ class OrgaDocument(Document):
 			new_offer.update(callback_data)
 			new_offer["contract_id"] = new_offer.save()
 			if offer_address not in self["proposals"]:
+				self["transactions"][offer_address] =  {"type": "New Offer", "value": fromWei(float(new_offer["initialWithdrawal"])), "flux": "Out", "status": "pending",
+                                                                        "note": users.find_one({"account": new_offer["owner"]}).get("name") + " created the " +  new_offer["contract_name"] + " '" + new_offer["name"] +
+                                                                        "' for the organization.",
+                                                                        "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": new_offer["owner"]}
 				self["proposals"][offer_address] = Proposal(doc={"offer": new_offer, "status": "pending"})
 				self.save_partial()
 				return self
@@ -724,7 +836,9 @@ class OrgaDocument(Document):
 		   and proposal["participation"] >= self["rules"]["quorum"]\
 		   and proposal["score"] >= self["rules"]["majority"]:
 			proposal["status"] = "approved"
+			self["transactions"][proposal["offer"]["address"]]["status"] = "approved"
 		else:
+			self["transactions"][proposal["offer"]["address"]]["status"] = "denied"
 			proposal["status"] = "denied"
 
 	def getProposal(self, proposal_id):
@@ -740,7 +854,7 @@ class OrgaDocument(Document):
 		p = self.getProposal(proposal_id)
 		tx_hash = self.board.call('execute', local=False, from_=user.get('account'), args=[proposal_id, p.get('calldata').encode()], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("ProposalExecuted", tx_hash, self.board["address"], callbacks=[self.proposalExecuted], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("ProposalExecuted", tx_hash, self.board["address"], callbacks=[self.proposalExecuted, user.proposalExecuted], callback_data=p, users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -758,6 +872,7 @@ class OrgaDocument(Document):
 
 			if destination in self["proposals"]:
 				self["proposals"][destination]["executed"] = True
+				self["transactions"][destination]["status"] = "accepted and finished"
 				self.save_partial()
 				return self
 		return False
@@ -768,7 +883,7 @@ class OrgaDocument(Document):
 
 		tx_hash = offer.call('withdraw', local=False, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
-			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], users=user, event_abi=self.board["abi"]))
+			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], callback_data=offer, users=user, event_abi=self.board["abi"]))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -784,6 +899,11 @@ class OrgaDocument(Document):
 			withdrawal_amount = int(logs[0].get('topics')[2], base=16)
 			destination = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			print("balance == ", fromWei(eth_cli.eth_getBalance(destination)), " and withdrawal amount ", fromWei(withdrawal_amount))
+			self["transactions"][callback_data["address"]] =  {"type": "Offer withdrawal", "value": fromWei(withdrawal_amount), "flux": "Out", "status": "Finished",
+                                                                           "note": "The contractor " + users.find_one({"account": callback_data["contractor"]}).get("name") +
+                                                                           " has withdraw" + str(fromWei(withdrawal_amount)) + " from the contract '" + callback_data["name"] + "'.",
+                                                                           "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": callback_data["contractor"]}
+			self.save_partial()
 			return {'orga': self, 'withdrawal': "You received %d ether (%d wei) in your wallet" % (fromWei(withdrawal_amount), withdrawal_amount)}
 		return False
 
@@ -832,6 +952,7 @@ class OrgaCollection(Collection):
 		"tx_history": list,
 		"creation_date": str,
 		"mailing_lists": dict,
+		"transactions": dict,
 		"accounting_data": str,
 		"alerts": list,
 		"social_accounts": dict,

@@ -10,7 +10,7 @@
       <th>Date</th>
     </tr>
     <tbody>
-      <tr ng-repeat="transaction in currentOrga.transactions">
+      <tr ng-repeat="transaction in user.transactions">
 	<td>{{transaction.type}}</td>
 	<td>{{transaction.value}}</td>
 	<td ng-if="transaction.flux == 'Out'">{{transaction.flux}}  <i style="color: red;" class="fa fa-arrow-circle-up" aria-hidden="true"/></td>

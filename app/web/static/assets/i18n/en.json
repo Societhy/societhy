@@ -267,11 +267,11 @@
      "organisation": {
          "title": "Historic",
          "messages": {
-          "orgaCreate": "Creation of the organisation.",
-          "MemberLeft": "A member <u>has left</u> the organisation.",
-          "NewMember": "A member <u>has join</u> the organisation.",
-          "ProposalCreated": "A member has submit a new proposition",
-          "DonationMade": "A member has made a new donation."
+          "orgaCreated": "Creation of the organisation.",
+          "memberLeft": "A member <u>has left</u> the organisation.",
+          "newMember": "A member <u>has join</u> the organisation.",
+          "proposalCreated": "A member has submit a new proposition",
+          "newDonation": "A member has made a new donation."
       },
       "filter": {
           "title": "Filter",

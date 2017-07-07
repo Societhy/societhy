@@ -44,7 +44,7 @@
         'userOtherOverviewCtrl' : 'static/assets/js/controllers/userOtherOverviewCtrl.js',
         'walletCtrl' : 'static/assets/js/controllers/walletCtrl.js',
         'orgaMainCtrl' : ['static/assets/js/controllers/orgaMainCtrl.js','static/assets/css/orga.css'],
-        'orgaWizardCtrl' : 'static/assets/js/controllers/orgaWizardCtrl.js',
+        'orgaWizardCtrl' : ['static/assets/js/controllers/orgaWizardCtrl.js','static/assets/css/orga.css'],
         'orgaDiscoveryCtrl': 'static/assets/js/controllers/orgaDiscoveryCtrl.js',
         'productModalCtrl': 'static/assets/js/controllers/productModalCtrl.js',
         'orgaActivityCtrl': 'static/assets/js/controllers/orgaActivityCtrl.js',

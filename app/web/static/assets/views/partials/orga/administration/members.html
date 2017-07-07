@@ -4,7 +4,8 @@
     <thead>
       <tr>
 	<th>Name</th>
-	<th>Job</th>
+	<th>Current Job</th>
+	<th ng-if="currentRights.edit_jobs" ><i class="fa fa-arrow-right" aria-hidden="true"></i> New Job</th>
 	<th>Status</th>
 	<th>View Hitoric</th>
 	<th>Actions</th>
@@ -13,23 +14,23 @@
     <tbody>
       <tr ng-repeat="(addr, data) in currentOrga.members">
 	<td>{{data.name}}</td>
-	<td>
-	  <select class="cs-select cs-skin-elastic" ng-model="currentOrga.members[addr].tag" ng-change="admin.members.tagChanged(addr)">
-	    <option ng-repeat="(name, job) in currentOrga.rights" ng-if="currentOrga.members[addr].tag == name" value="{{name}}" selected >{{name}}</option>
-	    <option ng-repeat="(name, job) in currentOrga.rights" ng-if="currentOrga.members[addr].tag != name" value="{{name}}">{{name}}</option>
+	<td>{{data.tag}}</td>
+	<td ng-if="currentRights.edit_jobs">
+	  <select class="cs-select cs-skin-elastic" id="memberTag_{{addr}}" ng-model="members.tmp[addr]" ng-change="admin.members.tagChanged(addr)">
+	    <option ng-repeat="(name, job) in currentOrga.rights" ng-if="name.toLowerCase() != data.tag.toLowerCase()" value="{{name}}" {{(currentOrga.members[addr].tag != name) ? '': 'selected'}} >{{name}}</option>
 	  </select>
 	</td>
 	<td>active</td>
 	<td>
 	  <button type="button" class="btn-xs btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="">
-            <span>View Historic</span>
+            <span>View History</span>
           </button>
 	</td>
 	<td>
-	  <button type="button" class="btn-xs btn-danger btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="removeMember(user.name, user._id)">
+	  <button ng-if="currentRights.remove_members && addr != user.account" type="button" class="btn-xs btn-danger btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="admin.members.removeMember(addr)">
             <span>Delete</span>
           </button>
-	  <button type="button" class="btn-xs btn-info btn-wide btn-scroll btn-scroll-top ti-pen" val="{{addr}}" disabled ng-click="admin.members.saveChangedTag(addr)">
+	  <button  ng-if="currentRights.edit_jobs" type="button" class="btn-xs btn-info btn-wide btn-scroll btn-scroll-top ti-pen" val="{{addr}}" disabled ng-click="admin.members.saveChangedTag(addr)">
             <span>Edit Job</span>
           </button>
 	</td>      

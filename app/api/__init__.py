@@ -36,9 +36,9 @@ def requires_auth(f):
 				return Response({"error": "Login required"}, 401)
 			token = token.replace('.', '|')
 			user = UserDocument(session.get(token), session=token)
-			if session.get(token).get('needs_reloading') is True:
-				user.reload()
-				session[token]["needs_reloading"] = False
+			#if session.get(token).get('needs_reloading') is True:
+			user.reload()
+		    #session[token]["needs_reloading"] = False
 		else:
 			return Response({"error": "unauthorized"}, 401)
 
