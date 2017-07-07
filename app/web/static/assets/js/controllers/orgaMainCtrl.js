@@ -18,7 +18,6 @@
      * @method onLoad
      */
      onLoad = function() {
-      console.log("STATE", $state);
       $http.post('/getOrganization', {
         "id": $state.params._id
       }).then(function(response) {
@@ -338,12 +337,15 @@
    }
 
    $rootScope.$on("loggedIn", function(event, data) {
+    console.log("onload loggedin")
     onLoad();
   });
 
    $timeout(function() {
     $(".donate-button").click(ctrl.makeDonation);
   }, 500);
+
+   console.log("onload mainorga")
    onLoad();
 
    return ctrl;
