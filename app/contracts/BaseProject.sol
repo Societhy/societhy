@@ -11,6 +11,8 @@ contract BaseProject is mortal {
     Poll[] public polls;
     Rules rules;
     Registry registry;
+    uint created;
+    uint duration;
 
     struct Poll {
       string subject;
@@ -56,10 +58,12 @@ modifier canvotepoll (uint _pollID) {
 }
 
 /* this runs when the contract is executed */
-function BaseProject(string _name, address rules_addr, address registry_addr) public {
+function BaseProject(string _name, address rules_addr, address registry_addr, uint _duration) public {
     name = _name;
     rules = Rules(rules_addr);
     registry = Registry(registry_addr);
+    duration = _duration * 1 minutes;
+    created = now;
 }
 
 function newPoll(string _subject, address _destination, uint _value, uint _debatePeriod, bool _anonymous, bool _public) canpoll public returns (uint pollID) {
@@ -103,6 +107,14 @@ function getPoll(uint _pollID) public returns (uint yea, uint nay) {
 
 function debatePeriodOf(uint _pollID) public constant returns (uint) {
   return polls[_pollID].debatePeriod;
+}
+
+function getCreationDate() public constant returns (uint) {
+  return created;
+}
+
+function getDuration() public constant returns (uint) {
+  return duration;
 }
 
 function createdOn(uint _pollID) public constant returns (uint) {

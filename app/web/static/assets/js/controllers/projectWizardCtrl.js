@@ -2,7 +2,7 @@ app.controller('ProjectWizardCtrl',
   function($scope, ngNotify, $rootScope, $http, $state) {
 
     $scope.currentStep = 1;
-    $scope.proj = {invited_users: {}};
+    $scope.proj = {invited_users: {}, members: {}, facebook_link:null, twitter_link:null};
 
     $scope.addInvitedUser = function() {
       if (!$scope.proj.invited_users)
@@ -60,17 +60,13 @@ app.controller('ProjectWizardCtrl',
         },
 
         submit: function (form) {
-          if (!$rootScope.currentOrga) {
-            $rootScope.toogleError("You need to create a project from an existing organization");
-          }
-
-          else if ($scope.doVerifications()) {
+          if ($scope.doVerifications()) {
            $scope.completeBlockchainAction(
             function(password) {
              $rootScope.toogleWait("Creating project")
-             $http.post('/createProjectFromOrga', {
+             $http.post('/createProject', {
               "socketid": $rootScope.sessionId,
-              "orga_id": $rootScope.currentOrga._id,
+              "owner_id": $state.params.owner_id,
               "newProject": $scope.proj,
               "password": password
             }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});

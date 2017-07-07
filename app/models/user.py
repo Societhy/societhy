@@ -1,4 +1,5 @@
 import scrypt
+import datetime
 from bson.objectid import ObjectId
 from core import SALT_WALLET_PASSWORD
 from core.utils import fromWei
@@ -65,6 +66,9 @@ class UserDocument(Document):
         super().save_partial(data, allow_protected_fields, **kwargs)
 
     # CALLBACKS FOR UPDATE
+
+    def createProject(self, user, project, password=None):
+        return False
 
     def joinedOrga(self, logs, callback_data=None):
         """
@@ -150,9 +154,26 @@ class UserDocument(Document):
 		"""
         if len(logs) == 1 and len(logs[0].get('topics')) == 3:
             donation_amount = fromWei(int(logs[0].get('topics')[2], 16))
-            self["donations"] = self.get('donations', 0) + donation_amount
+            self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "Out", "status": "Finished",
+                                                                     "note": "Donation of " + str(donation_amount) + " Ether as been made to " + callback_data["name"] + ".",
+                                                                     "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")}
             self.save_partial()
         return None
+
+    def proposalExecuted(self, logs, callback_data=None):
+        """
+		logs : list of dict containing the event's logs
+		If the transaction has succeeded, the total amount of donation is incremented by the value of the new one
+		None is returned
+		"""
+        if len(logs) == 1 and len(logs[0].get('topics')) == 3:
+            offer_amount = fromWei(int(callback_data["value"]))
+            self["transactions"][logs[0].get("transactionHash")] =  {"type": "Offer", "value": offer_amount, "flux": "In", "status": "Finished",
+                                                                     "note": self["name"] + " Received " + str(offer_amount) + " Ether from the offer " + callback_data["offer"]["name"] + ".",
+                                                                     "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")}
+            self.save_partial()
+        return None
+
 
     # KEY MANAGEMENT
 
@@ -336,10 +357,12 @@ class UserCollection(Collection):
         "gender",
         "firstname",
         "lastname",
+        "transactions",
         "city",
         "votes",
         "contact_list",
         "organizations",
+        "projects",
         "notification_preference",
         "pending_invitation"
     ]
@@ -372,6 +395,7 @@ class UserCollection(Collection):
         "city": str,
         "contact_list": list,
         "organizations": list,
+        "transactions": dict,
         "projects": list,
         "pending_invitation": list,
         "notification_preference": dict,

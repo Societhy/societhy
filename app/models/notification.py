@@ -53,7 +53,6 @@ def sendNotifPush(sender, senderType, category, subject, user):
         description = descriptionDict[category]
         if not description:
             return
-        print("insert")
         if subject:
             subjectType = type(sender).__name__
             if not subjectType:
@@ -76,7 +75,6 @@ def sendNotifEmail(sender, senderType, category, subject, user):
     """
     Insert the notification in the database in order to be sent.
     """
-    print("notif email")
     description = descriptionDict[category]
     if not description:
         return None
@@ -87,7 +85,6 @@ def sendNotifEmail(sender, senderType, category, subject, user):
         msg.body = sender.get("name") + description
     with app.app_context():
         mail.send(msg)
-        print("sent")
     return msg
 
 
@@ -96,7 +93,6 @@ def notifyToOne(sender, user, category, subject=None):
     Used to send a notification depending of the type.
     """
     senderType = type(sender).__name__
-    print("OEEE")
     if not senderType:
         return
     # print(user.get("notification_accept"))
@@ -140,7 +136,6 @@ class NotificationDocument(Document):
         self.save_partial()
 
     def pushNotif(data):
-        print(data["subject"]["type"])
         notifications.insert({"subject": {"id": data["subject"]["id"], "type": data["subject"]["type"]},
                               "sender": {"id": data["sender"]["id"], "type": data["sender"]["type"]},
                               "category": data["category"],
@@ -164,7 +159,6 @@ class NotificationDocument(Document):
             self["subject"] = {"id": None, "type": None}
             self["subject"]["id"] = data["subject"]["id"]
             self["subject"]["type"] = data["subject"]["type"]
-        print(self)
         self.save()
 
     def getSender(self):
@@ -175,39 +169,41 @@ class NotificationDocument(Document):
         elif self['sender']['senderType'] == 'user':
             return models.user.users.find_one({"_id": self['sender']['senderId']})
         return None
-
+    
     def getName(data):
-        name = None
+        data["name"] = "Unknown"
+        data["addr"] = "Unknown"
         if data['type'] == 'orga':
-            name = models.organization.organizations.find_one({"_id": data['id']}, {"name": 1})
+            res = models.organization.organizations.find_one({"_id" : data['id']}, {"name": 1, "address": 1})
+            data["name"] = res["name"]
+            data["addr"] = res["address"]
         elif data['type'] == 'user':
-            name = users.find_one({"_id": data['id']}, {"name": 1})
-        if name == None:
-            return "Unknown"
-        return name['name']
-
+            res = models.user.users.find_one({"_id" : data['id']}, {"name": 1, "account": 1 })
+            if res != None:
+                data["name"] = res["name"]
+                data["addr"] = res["account"]
+        else:
+            data["name"] = "Unknown"
+            data["addr"] = "Unknown"
+        return data
+                
     def getHisto(_id, date):
         data = notifications.find({
-            "$and": [
-                {"$or": [
-                    {"sender.type": "orga", "sender.id": ObjectId(_id)},
-                    {"subject.type": "orga", "subject.id": ObjectId(_id)}
-                ]},
-                {"createdAt": {
-                    "$gte": datetime.strptime(date['begin'], "%b %d, %Y %I:%M %p"),
-                    "$lt": datetime.strptime(date['end'], "%b %d, %Y %I:%M %p")
-                }}
-            ]},
-            {"_id": 0, "createdAt": 0})
+            "$and" : [
+                {"$or" : [
+                    {"sender.type": "orga", "sender.id" : ObjectId(_id)},
+                    {"subject.type": "orga", "subject.id" : ObjectId(_id)}
+                ]}
+            ]}, {"_id": 0, "createdAt": 0})
         res = {}
         i = 0
         if data.count() != 0:
             for record in data:
                 name = ""
                 res[i] = record
-                # res[i]['sender']['name'] = NotificationDocument.getName(record['sender'])
-                # res[i]['subject']['name'] = NotificationDocument.getName(record['subject'])
-                if record["category"] == "orgaCreate":
+                res[i]['sender'] = NotificationDocument.getName(record['sender'])
+                res[i]['subject'] = NotificationDocument.getName(record['subject'])
+                if record["category"] == "orgaCreated":
                     res[0]["first"] = record["date"]
                 i = i + 1
             return res

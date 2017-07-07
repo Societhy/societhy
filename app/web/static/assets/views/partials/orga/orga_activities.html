@@ -1,4 +1,4 @@
-<div class="orgaActivityContainer" ng-controller="OrgaHistoController">
+<div class="orgaActivityContainer" ng-controller="OrgaActivityController">
     <div class="page-header">
         <h1>
             <span translate="notification.organisation.title"></span>
@@ -33,7 +33,7 @@
         </div>
         <!-- END: TIMELINE-->
         <!-- BEGIN: OPTION-->
-        <div id="cmdContainer" class="col-md-6">
+        <div id="filterContainer" class="col-md-6">
             <!-- BEGIN: FILTER-->
             <div id="filterContainer" class="col-md-12">
                 <div>
@@ -52,8 +52,12 @@
                 <!-- END: DATESLIDER -->
 		<!-- BEGIN: DONATIONSLIDER -->
                 <div class="filter">
-                    <label><span translate="notification.organisation.filter.donation.title"></span> :</label>
-                    <div id="donationSliderFilter"></div>
+		  <!--                  
+                  <label><span translate="notification.organisation.filter.donation.title"></span> :</label>
+		      <div id="donationSlider">
+			<input type="text">
+		      </div>
+		      -->
                 </div>
 		<!-- END: DONATIONSLIDER -->
 		<span class="select">
@@ -128,17 +132,25 @@
 		    <thead>
 		      <tr>
 			<td translate="notification.organisation.export.header.date"></td>
-			<td translate="notification.organisation.export.header.organization"></td>
-			<td translate="notification.organisation.export.header.subject"></td>
-			<td translate="notification.organisation.export.header.category"></td>
+			<td translate="notification.organisation.export.header.senderAddr"></td>
+			<td translate="notification.organisation.export.header.senderName"></td>
+			<td translate="notification.organisation.export.header.subjectType"></td>
+			<td translate="notification.organisation.export.header.subjectAddr"></td>
+			<td translate="notification.organisation.export.header.subjectName"></td>
+            <td translate="notification.organisation.export.header.category"></td>
+            <td>Note</td>
 		      </tr>
 		    </thead>
 		    <tbody ng-repeat="data in histo">
 		      <tr>
 			<td>{{data.date}}</td>
+			<td>{{data.sender.addr}}</td>
 			<td>{{data.sender.name}}</td>
+			<td>{{data.subject.type}}</td>
+			<td>{{data.subject.addr}}</td>
 			<td>{{data.subject.name}}</td>
 			<td>{{data.category}}</td>
+                  <td ng-if="data.category == 'newDonation'">{{data.amount}} Eth</td>
 		      </tr>
 		    </tbody>
 		  </table>

@@ -54,8 +54,11 @@ def getOrgaDocument(user, _id=None, name=None):
         if user.get('account') in orga.get('members'):
             tag = orga["members"].get(user['account'])['tag']
             rights = orga['rights'][tag]
-        else:
-            rights = orga.default_rights.get('default')
+            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if tag in doc["privacy"] or "default" in doc["privacy"]]
+
+    if not rights:
+        rights = orga.default_rights.get('default')
+        orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
 
     if orga.get('profile_picture'):
         orga["picture"] = ("data:" + orga["profile_picture"]["profile_picture_type"] + ";base64," + json.loads(
@@ -141,20 +144,22 @@ def addOrgaProfilePicture(user, orga_id, pic, pic_type):
     return {"data": "OK", "status": 200}
 
 
-def addOrgaDocuments(user, orga_id, doc, name, doc_type):
+def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     """
     user : user model document that represent the user who made the request.
     orga_id : id of the organisation the user want to add documents.
     doc : document bytes
     name : document name
     doc_type : MIME type of the document.
+    size : size of the document.
+    privacy : privacy of the document.
 
     This function insert in the database documents related to a given organisation.
     Thanks to the GridFS sytem, documents can be inserted in a database without performance loss.
     """
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
-        "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name}}})
+        "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
     return {"data": ret, "status": 200}
 
 
@@ -162,7 +167,7 @@ def getOrgaUploadedDocument(doc_id, doc_name):
     """
     user : user model document that represent the user who made the request.
     doc_id : id of the document user want to retrieve.
-    do_name : name of the document user want to retrieve.
+    doc_name : name of the document user want to retrieve.
 
     This fuction allow user to download a document who has been previously uploaded.
     """
@@ -269,31 +274,32 @@ def getOrgaTransaction(user):
     }
 
 
-def updateOrgaRights(orga_id, rights):
+def updateOrgaRights(user, orga_id, rights):
     """
-    user : UserDoc
     orga_id : string for the mongo id
+    rights : data to be push in the database
     """
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     orga["rights"] = rights;
     orga.save_partial()
+    user.needsReloading()
     return {
-        "data": "allgood",
-        "status": 200
+	"data": orga["rights"],
+	"status": 200
     }
 
 
-def updateMemberTag(orga_id, addr, tag):
+def updateMemberTag(user, orga_id, addr, tag):
     """
-    user : UserDoc
     orga_id : string for the mongo id
+    rights : data to be push in the database
     """
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     orga["members"][addr]["tag"] = tag;
     orga.save_partial()
     return {
-        "data": "allgood",
-        "status": 200
+	"data": tag,
+	"status": 200
     }
 
 
@@ -389,13 +395,41 @@ def leaveOrga(user, password, orga_id):
             return {"data": "User does not have permission to leave", "status": 400}
     except BadResponseError as e:
         return {"data": str(e), "status": 400}
-    notification.pushNotif({"sender": {"id": objectid.ObjectId(orga_id), "type": "orga"},
-                            "subject": {"id": objectid.ObjectId(user.get("_id")), "type": "user"},
-                            "category": "MemberLeft"})
 
     return {
         "data": tx_hash,
         "status": 200
+    }
+
+
+def removeMember(user, member_account, password, orga_id):
+    """
+    user : user who want to remove a member from the organisation.
+    member_addr: member to be removed from the organisation.	
+    password : used to unlock the wallet of the user.
+    orga_id : id of the orga the user want to leave.
+    
+    This function is called when an user wants to remove a member from the organisation.
+    
+    - The wallet is unlocked.
+    - The leave order is commited on the blockchain.
+    - error -> 400 ; OK -> 200
+    """
+    
+    if not user.unlockAccount(password=password):
+        return {"data": "Invalid password!", "status": 400}
+    
+    orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    try:
+        tx_hash = orga_instance.removeMember(user, member_account, password=password)
+        if tx_hash is False:
+            return {"data": "User does not have permission to leave", "status": 400}	
+    except BadResponseError as e:
+        return {"data": str(e), "status": 400}
+    
+    return {
+	"data": tx_hash,
+	"status": 200
     }
 
 

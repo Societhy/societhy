@@ -47,7 +47,10 @@ def addOrgaDocuments(user):
     doc = request.files.get("doc")
     name = request.form.get("name")
     doc_type = request.form.get("type")
-    ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type)
+    size = request.form.get("size")
+    privacy = request.form.get("privacy")
+    privacy = privacy.split(",")
+    ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy)
     return make_response("ok", 200)
 
 @router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
@@ -82,10 +85,20 @@ def makeDonation(user):
     else:
         return make_response("Wrong request format", 400)
 
+@router.route('/payMembership', methods=['POST'])
+@requires_auth
+def payMembership(user):
+    if ensure_fields(['password', 'socketid', 'orga_id', 'donation'], request.json):
+        ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('tag'))
+        ret = base_orga.donateToOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('donation'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
 @router.route('/createProjectFromOrga', methods=['POST'])
 @requires_auth
 def createProjectFromOrga(user):
-    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'amount_to_raise']}], request.json):
+    if ensure_fields(['password', 'socketid', 'orga_id', {'newProject': ['name', 'description', 'campaign']}], request.json):
         ret = base_orga.createProjectFromOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('newProject'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
@@ -100,6 +113,15 @@ def leaveOrga(user):
     else:
         return make_response("Wrong request format", 400)
 
+@router.route('/removeMember', methods=['POST'])
+@requires_auth
+def removeMember(user):
+    if ensure_fields(['password', 'socketid', 'orga_id'], request.json):
+        ret = base_orga.removeMember(user, request.json.get('account'), request.json.get('password'), request.json.get('orga_id'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+    
 @router.route('/addNewProduct', methods=['POST'])
 @requires_auth
 def addProductOrga(user):
@@ -140,15 +162,16 @@ def getOrgaHisto():
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/updateOrgaRights', methods=['POST'])
-def updateOrgaRights():
-    ret = base_orga.updateOrgaRights(request.json.get('orga_id'), request.json.get('rights'))
+@requires_auth
+def updateOrgaRights(user):
+    ret = base_orga.updateOrgaRights(user, request.json.get('orga_id'), request.json.get('rights'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/updateMemberTag', methods=['POST'])
-def updateMembertag():
-    ret = base_orga.updateMemberTag(request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
+@requires_auth
+def updateMembertag(user):
+    ret = base_orga.updateMemberTag(user, request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
-
 
 @router.route('/createOffer', methods=["POST"])
 @requires_auth

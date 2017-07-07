@@ -139,7 +139,6 @@ def acceptInvitation(user, data):
 	orga = organizations.find_one({"_id":ObjectId(data["orga_id"])})
 	if str(user["_id"]) in orga["invited_users"]:
 		item = orga["invited_users"][str(user["_id"])]
-		print(user)
 		ret = base_orga.joinOrga(user, data["password"], str(orga["_id"]), item["tag"])
 		if (ret["status"] == 200):
 			del orga["invited_users"][str(user["_id"])]

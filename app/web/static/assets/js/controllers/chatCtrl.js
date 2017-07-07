@@ -24,7 +24,6 @@
             $scope.usersList = $scope.user.contact_list;
             $scope.selfIdUser = $scope.user._id;
             socketIO.emit('init', {"id": $scope.selfIdUser});
-            console.log('chat ctrl loaded')
         }
     }
 
@@ -104,7 +103,7 @@
         if ($rootScope.user && data != $rootScope.user.socketid ) {
             $http.get('/socketid/'.concat($rootScope.sessionId)).then(function(resp) {
                 $rootScope.user = resp.data
-                console.log($rootScope.user)
+                console.log("USER IS SET :", $rootScope.user);
             });
         }
     });

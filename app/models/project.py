@@ -1,6 +1,8 @@
 """
 Model that represent an organization's project.
 """
+import datetime
+
 import models.contract
 import models.user
 import models.events
@@ -69,6 +71,8 @@ class ProjectDocument(Document):
 			self["rules"] = self.default_rules
 			self.default_rights.update(self["rights"])
 			self["rights"] = self.default_rights
+			self["created_on"] = self.board.call("getCreationDate", local=True)
+			self["duration"] = self.board.call("getDuration", local=True)
 
 		elif len(self.get("contracts", {})) > 0:
 			self._loadContracts()
@@ -196,7 +200,7 @@ class ProjectDocument(Document):
 
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'DonationMade'} if user.get('notification_preference').get('DonationMade').get('Mail') else None
-			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], callbacks=[user.madeDonation, self.newDonation], users=user, event_abi=self.board["abi"], mail=mail))
+			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], callbacks=[user.madeDonation, self.newDonation], callback_data={"name": self["name"]}, users=user, event_abi=self.board["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -219,6 +223,12 @@ class ProjectDocument(Document):
 			return self["balance"]
 		return False
 
+	def refreshProject(self):
+		time_since_creation = datetime.datetime.utcnow().timestamp() - self["created_on"]
+		self["time_left_percent"] = 100 - int((time_since_creation / self["duration"]) * 100)
+		self["time_left"] = self["duration"] - time_since_creation
+		self.save_partial()
+		return self
 
 	def createPoll(self, from_, poll):
 		pass
@@ -300,7 +310,7 @@ class ProjectCollection(Collection):
 
 	structure = {
 		"name": str,
-		"amount_to_raise": int,
+		"campaign": dict,
 		"members": dict,
 		"rights": dict,
 		"rules": dict,

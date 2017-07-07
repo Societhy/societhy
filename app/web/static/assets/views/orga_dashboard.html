@@ -2,7 +2,7 @@
 <div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
   <div class="row">
     <div class="col-md-12">
-      <div ng-controller="OrgaMainController as ctrl" class="ng-scope ng-binding">
+      <div class="ng-scope ng-binding">
         <!-- start: USER TABSET -->
         <uib-tabset class="tabbable">
           <!-- start: TAB OVERVIEW -->
@@ -85,7 +85,7 @@
           </div>
           <div class="row margin-top-20" >
             <div class="col-md-6   padding-20">
-              <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProject()">+</button></h2>
+              <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ui-sref="app.newproject({owner_id: currentOrga._id})">+</button></h2>
 
               <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
                 <!-- ngInclude: templates.header -->
@@ -109,7 +109,7 @@
                   <hr />
                 </thead>
                 <tbody><!-- ngRepeat: user in $data -->
-                  <tr ng-repeat="(address, project) in currentOrga.projects" class="ng-scope">
+                  <tr ng-repeat="(address, project) in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
                     <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
                     <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
                   </tr><!-- end ngRepeat: user in $data -->
@@ -271,15 +271,18 @@
                               <tr>
                                 <th width="50%">Name</th>
                                 <th ng-show="uploaderDocs.isHTML5">Size</th>
-                                <th>Actions</th>
+                                <th>Privacy</th>
                               </tr>
                             </thead>
                             <tbody>
                               <tr ng-repeat="item in uploaderDocs.queue">
-                                <td><strong>{{ item.file.name }}</strong><!-- Image preview --><!--auto height--><!--<div ng-thumb="{ file: item.file, width: 100 }"></div>--><!--auto width--><div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div><!--fixed width and height --><!--<div ng-thumb="{ file: item.file, width: 100, height: 100 }"></div>--></td>
+                                <td><strong>{{ item.file.name }}</strong>
+                                  <div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+                                </td>
                                 <td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
                                 <td ng-show="uploaderDocs.isHTML5">
-
+                                  <select name="docPrivacy" id="docPrivacy" multiple ng-options="option for option in ctrl.jobs" size="3" ng-model="item.documentPrivacy" class="form-control">
+                                  </select>
                                 </td>
                                 <td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
                                 <td nowrap>
@@ -293,7 +296,7 @@
                         </div>
                         <div>
                           <button type="button" class="btn btn-primary btn-o btn-s" ng-click="ctrl.uploadNewDocuments()" ng-disabled="!uploaderDocs.queue.length">
-                          <span class="glyphicon glyphicon-trash"></span> Upload
+                            <span class="glyphicon glyphicon-trash"></span> Upload
                           </button>
                         </div>
                       </div>
@@ -315,7 +318,7 @@
                             <th class="hidden-xs no-border">Creator</th>
                             <th class="no-border">Size</th>
                             <th class="hidden-xs no-border">Type</th>
-                            <th class="no-border">Actions</th>
+                            <th class="no-border">Privacy</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -324,7 +327,7 @@
                             <td class="center">1</td>
                             <td class="hidden-xs">{{ doc.doc_name }}</td>
                             <td>{{ currentOrga.name }}</td>
-                            <td>    42 octets </td>
+                            <td>{{doc.size|number:2}}MB</td>
                             <td class="hidden-xs">{{ doc.doc_type }}</td>
                             <td class="center">
                               <div class="visible-md visible-lg hidden-sm hidden-xs">
@@ -373,25 +376,26 @@
         </uib-tab>
 
         <uib-tab heading="Projects">
-          <button class="btn btn-green margin-15" ui-sref="app.newproject">Add a new project</button>
+          <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
           <div>
             <table class="table no-margin">
-              <tr ng-repeat="project in currentOrga.projects" class="ng-scope" ng-click="ctrl.expandProject(project)">
+              <tr ng-repeat="project in currentOrga.projects" class="ng-scope">
                 <td>
-                  <div class="icons-effect col-md-3">
-                    <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
-                  </div>
+                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                    <div class="icons-effect col-md-3">
+                      <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+                    </div>
+                  </a>
                 </td>
                 <td class="col-md-9">
-                  <div class="padding-10">
-                    <strong>{{project.name}}</strong>
-                  </div>
+                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                    <div class="padding-10">
+                      <strong>{{project.name}}</strong>
+                    </div>
+                  </a>
                 </td>
               </tr>
             </table>
-            <pre>
-              {{currentOrga.projects | json}}
-            </pre>
           </div>
         </uib-tab>
 

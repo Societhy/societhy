@@ -29,6 +29,12 @@
                         "recruit": true,
                         "remove_members": true,
                         "buy_token": true,
+                        "sell_token": true,
+                        "access_administration": true,
+                        "edit_rights": true,
+                        "edit_jobs": true,
+                        "create_project": true,
+                        "create_offer": true
                     },
                     "admin": {},
                     "guest": {},
@@ -64,11 +70,17 @@
                         "join": false,
                         "leave": true,
                         "donate": true,
+                        "edit_rights": true,
+                        "edit_jobs": true,
+                        "create_project": true,
+                        "create_offer": true,
                         "create_proposal": true,
                         "vote_proposal": true,
                         "recruit": true,
                         "remove_members": true,
+                        "sell_token": true,
                         "buy_token": true,
+                        "access_administration": true
                     },
                     "admin": {},
                     "partner": {},
@@ -76,11 +88,17 @@
                         "join": false,
                         "leave": true,
                         "donate": true,
-                        "create_proposal": false,
+                        "edit_rights": true,
+                        "edit_jobs": true,
+                        "create_project": true,
+                        "create_offer": true,
+                        "create_proposal": true,
                         "vote_proposal": true,
-                        "recruit": false,
-                        "remove_members": false,
+                        "recruit": true,
+                        "remove_members": true,
+                        "sell_token": true,
                         "buy_token": true,
+                        "access_administration": true
                     },
                     "default": {
                         "join": true,
@@ -104,11 +122,17 @@
                         "join": false,
                         "leave": true,
                         "donate": true,
+                        "edit_rights": true,
+                        "edit_jobs": true,
+                        "create_project": true,
+                        "create_offer": true,
                         "create_proposal": true,
                         "vote_proposal": true,
                         "recruit": true,
                         "remove_members": true,
+                        "sell_token": true,
                         "buy_token": true,
+                        "access_administration": true
                     },
                     "admin": {},
                     "partner": {},
@@ -144,11 +168,17 @@
                         "join": false,
                         "leave": true,
                         "donate": true,
+                        "edit_rights": true,
+                        "edit_jobs": true,
+                        "create_project": true,
+                        "create_offer": true,
                         "create_proposal": true,
                         "vote_proposal": true,
                         "recruit": true,
                         "remove_members": true,
+                        "sell_token": true,
                         "buy_token": true,
+                        "access_administration": true
                     },
                     "admin": {},
                     "partner": {},
@@ -174,6 +204,23 @@
                     }
                 }
             }
+        };
+
+        $scope.availableRights = {
+            "join": false,
+            "leave": false,
+            "donate": false,
+            "edit_rights": false,
+            "edit_jobs": false,
+            "create_project": false,
+            "create_offer": false,
+            "create_proposal": false,
+            "vote_proposal": false,
+            "recruit": false,
+            "remove_members": false,
+            "sell_token": false,
+            "buy_token": false,
+	    "access_administration": false
         }
 
     // IMAGE UPLOAD
@@ -206,12 +253,44 @@
         },
     });
 
+    uploaderDocs.onAfterAddingFile = function() {
+      uploaderDocs.queue[uploaderDocs.queue.length - 1].documentPrivacy = ["default"];
+    }
+
     uploaderDocs.onBeforeUploadItem = function (item) {
         console.log(uploaderDocs.queue.length);
         item.formData.push({"name": item.file.name});
         item.formData.push({"type": item.file.type});
+        item.formData.push({"size": item.file.size/1024/1024});
+        item.formData.push({"privacy": item.documentPrivacy});
         console.info('onBeforeUploadItem', item);
     };
+
+    // RIGHTS MANAGEMENT
+        $scope.$watch('orga_form.gov_model', function() {
+            delete $scope.orga_form.rights;
+            $scope.orga_form.rights = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model]["rights"]);
+        });
+
+        /* Select a right and display is allowed actions among the list */
+        $scope.displaySelectedRight = function (id, index) {
+            $scope.currentRight = id;
+            $(".currentRight").removeClass("currentRight");
+            $(".orgaRightsMenuField[val='"+index+"'").addClass("currentRight");
+        }
+
+        /* Remove  a right from the list */
+        $scope.removeRight = function (id, index) {
+            $scope.currentRights.push($("#newOrgaRight").val());
+            delete $scope.orga_form.rights[id];
+        }
+
+        /* Add a newright to the list */
+        $rootScope.addRight = function () {
+            if ($("#newOrgaRight").val().trim() && !$scope.orga_form.rights[$("#newOrgaRight").val()]) {
+                $scope.orga_form.rights[$("#newOrgaRight").val()] = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model].rights["default"]);
+            }
+        }
 
 
     // MEMBER MANAGEMENT
