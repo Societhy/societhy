@@ -201,9 +201,15 @@ class OrgaDocument(Document):
 		self["address"] = tx_receipt.get('contractAddress')
 		self.board["is_deployed"] = True
 
+		#ADD OWNER
+		from_ = callback_data.get('from')
+		tx_hash = self.join(from_, tag="owner", password=callback_data.get('password'), local=False)
+		if not tx_hash:
+			return {"data": "User does not have permission to join", "status": 400}
+
+
 		#SEND FUNDS TO ORGA AFTER IT IS CREATED
 		if callback_data and callback_data.get('action') == "donate" and callback_data.get("initial_funds", 0) > 0:
-			from_ = callback_data.get('from')
 			amount = float(callback_data.get('initial_funds'))
 			if from_.refreshBalance() > amount:
 				from_.session_token = None
@@ -369,7 +375,7 @@ class OrgaDocument(Document):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'NewMember'} if user.get('notification_preference').get('NewMember').get('Mail') else None
 			bw.pushEvent(LogEvent("NewMember", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberJoined, user.joinedOrga], users=user, event_abi=self.registry["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -424,7 +430,7 @@ class OrgaDocument(Document):
 		tx_hash = self.registry.call('allow', local=local, from_=user.get('account'), args=[allowed_user], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("PermissionChanged", tx_hash, self.registry["address"], callbacks=[self.permissionChanged], users=user, event_abi=self.registry["abi"]))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -460,7 +466,7 @@ class OrgaDocument(Document):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'MemberLeft'} if user.get('notification_preference').get('MemberLeft').get('Mail') else None
 			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberLeft, user.leftOrga], users=user, event_abi=self.registry["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -483,7 +489,7 @@ class OrgaDocument(Document):
 
 			mail = {'sender':self, 'subject':member, 'users':[member], 'category':'MemberLeft'} if member.get('notification_preference').get('MemberLeft').get('Mail') else None
 			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], topics=topics, callbacks=[self.memberLeft, member.leftOrga], users=member, event_abi=self.registry["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -538,7 +544,7 @@ class OrgaDocument(Document):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'DonationMade'} if user.get('notification_preference').get('DonationMade').get('Mail') else None
 			bw.pushEvent(LogEvent("DonationMade", tx_hash, self.board["address"], topics=topics, callbacks=[user.madeDonation, self.newDonation], users=user, callback_data={"name": self["name"]}, event_abi=self.board["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -617,7 +623,7 @@ class OrgaDocument(Document):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'ProjectCreated'} if user.get('notification_preference').get('ProjectCreated').get('Mail') else None
 			bw.pushEvent(LogEvent("ProjectCreated", tx_hash, self.board["address"], callbacks=[self.projectCreated], users=user, event_abi=self.board["abi"], mail=mail, callback_data=project))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -675,7 +681,7 @@ class OrgaDocument(Document):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'OfferCreated'} if user.get('notification_preference').get('OfferCreated').get('Mail') else None
 			callback_data = {"description": offer.get('description'), "actors": offer.get('actors'), "name": offer.get('name')}
 			bw.pushEvent(LogEvent("OfferCreated", tx_hash, self.board["address"], callbacks=[self.offerCreated], callback_data=callback_data, users=user, event_abi=self.board["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -711,7 +717,7 @@ class OrgaDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'OfferCanceled'} if user.get('notification_preference').get('OfferCanceled').get('Mail') else None
 			bw.pushEvent(LogEvent("OfferCanceled", tx_hash, self.board["address"], callbacks=[], users=user, event_abi=self.board["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -740,7 +746,7 @@ class OrgaDocument(Document):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'ProposalCreated'} if user.get('notification_preference').get('ProposalCreated').get('Mail') else None
 			callback_data = {'calldata': calldata.decode('utf-8')}
 			bw.pushEvent(LogEvent("ProposalCreated", tx_hash, self.board["address"], callbacks=[self.proposalCreated], callback_data=callback_data, users=user, event_abi=self.board["abi"], mail=mail))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -780,7 +786,7 @@ class OrgaDocument(Document):
 
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("VoteCounted", tx_hash, self.board["address"], callbacks=[self.voteCounted], users=user, event_abi=self.board["abi"]))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -855,7 +861,7 @@ class OrgaDocument(Document):
 		tx_hash = self.board.call('execute', local=False, from_=user.get('account'), args=[proposal_id, p.get('calldata').encode()], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("ProposalExecuted", tx_hash, self.board["address"], callbacks=[self.proposalExecuted, user.proposalExecuted], callback_data=p, users=user, event_abi=self.board["abi"]))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False
@@ -884,7 +890,7 @@ class OrgaDocument(Document):
 		tx_hash = offer.call('withdraw', local=False, from_=user.get('account'), password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			bw.pushEvent(LogEvent("FundsWithdrawn", tx_hash, offer["address"], callbacks=[self.fundsWithdrawnFromOffer], callback_data=offer, users=user, event_abi=self.board["abi"]))
-			user.needsReloading()
+			#user.needsReloading()
 			return tx_hash
 		else:
 			return False

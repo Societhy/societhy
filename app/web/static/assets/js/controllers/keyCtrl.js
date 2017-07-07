@@ -247,7 +247,7 @@ app.controller('KeyController', function($scope, $http, $timeout, $uibModal, $q,
 				function(response) {
 					$rootScope.user.eth.keys[response.data] = {"address": response.data, "local": false, "balance": 0};
 					if (!$rootScope.user.account) {
-						$rootScope.user.account = data.address;
+						$rootScope.user.account = response.data.address;
 						$rootScope.user.password_type = "local";
 						$rootScope.user.local_account = false;
 					}

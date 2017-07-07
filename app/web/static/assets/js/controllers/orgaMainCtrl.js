@@ -53,6 +53,12 @@
     console.info('onBeforeUploadItem', item);
   };
 
+   uploaderDocs.onAfterUploadItem = function (item) {
+    
+  };
+
+
+
   ctrl.uploadNewDocuments = function() {
     for (var i = 0; i != uploaderDocs.queue.length; i++) {
       uploaderDocs.queue[i].formData.push({"orga_id" : $rootScope.currentOrga._id})

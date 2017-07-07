@@ -112,17 +112,17 @@ def test_anonymous_orga(miner):
 	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 	assert inserted != None
 	assert inserted.get('name') ==  "Societhy_anonymous_orga"
-	
-	ret = base_orga.joinOrga(miner, password, inserted.get('_id'), tag='member')
-	assert ret.get('status') == 200
-	assert ret.get('data') != None
 
-	bw.waitEvent('NewMember')
+	# ret = base_orga.joinOrga(miner, password, inserted.get('_id'), tag='member')
+	# assert ret.get('status') == 200
+	# assert ret.get('data') != None
+
+	# bw.waitEvent('NewMember')
 	miner.reload()
 	inserted.reload()
 
 	member_list = inserted.getMemberList()
-	assert len(miner.get('organizations')) == 1
+	assert len(miner.get('organizations')) == 2
 	assert len([x.get('name') for x in member_list if x.get('name') is not None]) == 0
 	assert len([x.get('account') for x in member_list]) == 1
 
@@ -150,14 +150,10 @@ def test_private_orga(miner, user):
 	inserted = organizations.find_one({"_id": objectid.ObjectId(new_orga["_id"])})
 	assert inserted != None
 	
-	#MINER CAN JOIN
-	ret = base_orga.joinOrga(miner, password, inserted.get('_id'), tag='owner')
-	assert ret.get('status') == 200	
-	assert ret.get('data') != None
-	bw.waitEvent('NewMember')
+	#MINER HAS JOINED
 	miner.reload()
-	assert len(miner.get('organizations')) == 2
-	assert len([x.get('account') for x in inserted.getMemberList()]) == 1
+	assert len(miner.get('organizations')) == 3
+	assert len(inserted.getMemberList()) == 1
 
 
 	#USER CANNOT JOIN
@@ -178,9 +174,15 @@ def test_private_orga(miner, user):
 	bw.waitEvent('NewMember')
 	user.reload()
 	assert len(user.get('organizations')) == 1
-	assert len([x.get('account') for x in inserted.getMemberList()]) == 2
+	assert len(inserted.getMemberList()) == 2
 
 def test_join(miner, testOrga):
+
+	#ALREADY IN ORGA (from creation, so leave first)
+	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))
+	bw.waitEvent("MemberLeft")
+	miner.reload()
+
 	before = len(miner.get('organizations'))
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
@@ -209,13 +211,14 @@ def test_donate(miner, testOrga):
 	assert testOrga.getTotalFunds() - initial_balance == 1000
 
 def test_leave(miner, testOrga):
+	before = len(miner.get('organizations'))
 	ret = base_orga.leaveOrga(miner, password, testOrga.get('_id'))
 	assert ret.get('status') == 200
 	assert ret.get('data').startswith('0x')
 	bw.waitEvent("MemberLeft")
 	miner.reload()
 
-	assert len(miner.get('organizations')) == 2
+	assert len(miner.get('organizations')) == before - 1
 	assert miner.get('name') not in [member.get('name') for member in testOrga.getMemberList()]
 	ret = base_orga.joinOrga(miner, password, testOrga.get('_id'), tag='owner')
 	assert ret.get('status') == 200	
