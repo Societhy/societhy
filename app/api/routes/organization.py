@@ -1,6 +1,7 @@
 from api import requires_auth, ensure_fields, populate_user
 from core import base_orga, sales_platform
 from flask import Blueprint, request, jsonify, make_response, send_file
+from models.clients import blockchain_watcher as bw
 
 router = Blueprint('orga', __name__)
 
@@ -89,9 +90,11 @@ def makeDonation(user):
 @requires_auth
 def payMembership(user):
     if ensure_fields(['password', 'socketid', 'orga_id', 'donation'], request.json):
-        ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('tag'))
         ret = base_orga.donateToOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('donation'))
-        return make_response(jsonify(ret.get('data')), ret.get('status'))
+        if ret.get('status') == 200:
+            bw.waitTx(ret.get("data"))
+            ret = base_orga.joinOrga(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('tag'))
+        return make_response("dsadsa", ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
 

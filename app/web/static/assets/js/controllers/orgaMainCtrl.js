@@ -206,10 +206,12 @@
 			 "tag": tag
 		     }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
 		 },  function(data) {
-		     $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
-		     $scope.currentRights = $rootScope.currentRights = data.data.rights;
-		     $rootScope.user.organizations.push($rootScope.currentOrga);
-		     $scope.isMember = true;
+		     if (data.data.orga.members) {
+                 $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
+                 $scope.currentRights = $rootScope.currentRights = data.data.rights;
+                 $rootScope.user.organizations.push($rootScope.currentOrga);
+                 $scope.isMember = true;
+             }
 		 })
 	 )};
 

@@ -63,8 +63,9 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    "orga_id": $rootScope.currentOrga._id,
 	    "addr": addr,
 	    "tag": $rootScope.admin.members.tmp[addr]
-	}).then(function(response) {	
-	    $("button[val='"+addr+"']").prop("disabled", true);
+	}).then(function(response) {
+        $rootScope.toogleSuccess("Job updated!");
+        $("button[val='"+addr+"']").prop("disabled", true);
 	    $rootScope.currentOrga.members[addr].tag = $rootScope.admin.members.tmp[addr];
 	    //$(("#memberTag_").concat(addr, " option:selected")).text(""); reset le select
 	    delete $rootScope.admin.members.tmp[addr]
@@ -84,7 +85,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 		    "orga_id": $rootScope.currentOrga._id
 		}).then(function(response) {	
 		    $rootScope.currentOrga.members[addr].tag = $rootScope.admin.members.tmp[addr];
-		    $rootScope.toogleSuccess("Member...")
+		    $rootScope.toogleSuccess("Member removed...")
 		    delete $rootScope.admin.members.tmp[addr]
 		    delete $rootScope.currentOrga.members[addr]
 		},function(error) {
@@ -124,7 +125,8 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    "orga_id": $rootScope.currentOrga._id,
 	    "rights": $rootScope.admin.rights.tmp
 	}).then(function(response) {
-	    $rootScope.currentOrga.rights = response.data;
+        $rootScope.toogleSuccess("Rights updated!");
+        $rootScope.currentOrga.rights = response.data;
 	},function(error) {
 	    $rootScope.admin.rights.tmp = $rootScope.currentOrga.rights;
 	    $rootScope.toogleError(error.data);
