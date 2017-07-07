@@ -55,9 +55,10 @@ def getOrgaDocument(user, _id=None, name=None):
             tag = orga["members"].get(user['account'])['tag']
             rights = orga['rights'][tag]
             orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if tag in doc["privacy"] or "default" in doc["privacy"]]
-        else:
-            rights = orga.default_rights.get('default')
-            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
+
+    if not rights:
+        rights = orga.default_rights.get('default')
+        orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
 
     if orga.get('profile_picture'):
         orga["picture"] = ("data:" + orga["profile_picture"]["profile_picture_type"] + ";base64," + json.loads(

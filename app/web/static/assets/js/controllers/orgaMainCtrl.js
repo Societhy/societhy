@@ -13,7 +13,37 @@
    var slides = $scope.slides = [];
    var currIndex = 0;
 
-   ctrl.setProduct = function(product) {
+ /**
+     * Get the organizations list.
+     * @method onLoad
+     */
+     onLoad = function() {
+      console.log("STATE", $state);
+      $http.post('/getOrganization', {
+        "id": $state.params._id
+      }).then(function(response) {
+        if (response.data.orga) {
+          $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
+          ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
+          ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
+          ctrl.member_list = Object.values($rootScope.currentOrga.members);
+          ctrl.jobs = Object.keys($scope.currentOrga.rights);
+        }
+        $scope.currentRights = $rootScope.currentRights = response.data.rights;
+        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
+        if ($rootScope.user) {
+          $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
+          ctrl.isCurrentUserInvitedToOrga();
+        }
+      }, function(error) {
+        $state.go('app.dashboard');
+        $rootScope.toogleError("Organization does not exist");
+        $rootScope.currentOrga = null;
+        $rootScope.currentRights = null;
+      });
+    };
+
+    ctrl.setProduct = function(product) {
      if (product) {
        $http.get('/getProductImages/'.concat(product._id.$oid)).then(function(response) {
          images = response.data;
@@ -41,11 +71,11 @@
     },
   });
 
-  uploaderDocs.onAfterAddingFile = function() {
+   uploaderDocs.onAfterAddingFile = function() {
     uploaderDocs.queue[uploaderDocs.queue.length - 1].documentPrivacy = ["default"];
   }
 
-   uploaderDocs.onBeforeUploadItem = function (item) {
+  uploaderDocs.onBeforeUploadItem = function (item) {
     item.formData.push({"name": item.file.name});
     item.formData.push({"type": item.file.type});
     item.formData.push({"size": item.file.size/1024/1024});
@@ -53,8 +83,8 @@
     console.info('onBeforeUploadItem', item);
   };
 
-   uploaderDocs.onAfterUploadItem = function (item) {
-    
+  uploaderDocs.onAfterUploadItem = function (item) {
+
   };
 
 
@@ -157,37 +187,7 @@
         }
       });
     }
-
-    /**
-     * Get the organizations list.
-     * @method onLoad
-     */
-     onLoad = function() {
-      console.log("STATE", $state);
-      $http.post('/getOrganization', {
-        "id": $state.params._id
-      }).then(function(response) {
-        if (response.data.orga) {
-          $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
-          ctrl.projects_number = Object.keys($rootScope.currentOrga.projects).length;
-          ctrl.projects_list = Object.values($rootScope.currentOrga.projects);
-          ctrl.member_list = Object.values($rootScope.currentOrga.members);
-          ctrl.jobs = Object.keys($scope.currentOrga.rights);
-        }
-        $scope.currentRights = $rootScope.currentRights = response.data.rights;
-        console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
-        if ($rootScope.user) {
-          $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
-          ctrl.isCurrentUserInvitedToOrga();
-        }
-      }, function(error) {
-        $state.go('app.dashboard');
-        $rootScope.toogleError("Organization does not exist");
-        $rootScope.currentOrga = null;
-        $rootScope.currentRights = null;
-      });
-    };
-
+     
      /**
      * Join a new organization by it's tag and paying the entrance fee.
      * @param {string} tag - Tag of the organization.
@@ -215,7 +215,7 @@
 		 })
 	 )};
 
-    /**
+    /**6
      * Join a new organization by it's tag.
      * @param {string} tag - Tag of the organization.
      * @method joinOrga
