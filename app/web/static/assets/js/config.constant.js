@@ -37,6 +37,7 @@
 
         //*** Custom Controllers
         'dashboardCtrl': 'static/assets/js/controllers/dashboardCtrl.js',
+        'registration': ['static/assets/css/registration.css'],
         'loginCtrl': 'static/assets/js/controllers/loginCtrl.js',
         'chatCtrl': 'static/assets/js/controllers/chatCtrl.js',
         'keyCtrl': 'static/assets/js/controllers/keyCtrl.js',

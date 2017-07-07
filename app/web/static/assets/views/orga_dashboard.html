@@ -25,7 +25,7 @@
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
 
-                <div ng-if="isInvitedToOrga == true">
+                <div ng-if="isInvitedToOrga == true && !currentOrga.funding.membershipFee">
 
                   <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
                     Accept Invitation
@@ -33,7 +33,7 @@
 
                 </div>
                 <div ng-if="isInvitedToOrga == false">
-                  <div class="btn-group" ng-if="currentRights.join" uib-dropdown>
+                  <div class="btn-group" ng-if="currentRights.join && !currentOrga.funding.membershipFee" uib-dropdown>
                     <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
                       Join
                     </button>
@@ -44,6 +44,11 @@
                       <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
                       <li><a ng-click="ctrl.joinOrga('owner')"> owner </a></li>
                     </ul>
+                  </div>
+                  <div class="btn-group" ng-if="currentRights.join && currentOrga.funding.membershipFee" uib-dropdown>
+                    <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.payMembershipFee('member')">
+                      Join $
+                    </button>
                   </div>
 
                 </div>

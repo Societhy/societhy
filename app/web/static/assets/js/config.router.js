@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "/app",
         templateUrl: "static/assets/views/app.html",
-        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify', 'notificationCtrl'),
+        resolve: loadSequence('OAuth', 'btford.socket-io', 'chatCtrl', 'loginCtrl', 'walletCtrl', 'ngNotify', 'notificationCtrl', 'angucomplete-alt'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -61,7 +61,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     }).state('app.organization', {
         url: '/orga/:name/:_id',
         templateUrl: "static/assets/views/orga_dashboard.html",
-        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'newsCtrl', 'orgaAdministrationCtrl', 'orgaActivityCtrl', 'datatable', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload', 'angucomplete-alt'), //datepicker
+        resolve: loadSequence('orgaMainCtrl', 'productModalCtrl', 'newsCtrl', 'orgaAdministrationCtrl', 'orgaActivityCtrl', 'datatable', 'offerModalCtrl', 'touchspin-plugin', 'angularFileUpload'), //datepicker
         title: 'Organisation dashboard',
         params: {
             data: null
@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/orga/new',
         needs_auth: true,
         templateUrl :"static/assets/views/wizard_orga.html",
-        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload', 'touchspin-plugin', 'angucomplete-alt'),
+        resolve: loadSequence('orgaWizardCtrl', 'FileSaver', 'angularFileUpload', 'touchspin-plugin'),
         title: "Create a new organisation",
         ncyBreadcrumb: {
             label: 'Organisation Creation'
@@ -118,7 +118,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
           }
     }).state('app.registration', {
         url: '/registration',
-        resolve: loadSequence('CryptoJS'),
+        resolve: loadSequence('CryptoJS', 'registration'),
         templateUrl: "static/assets/views/login_registration.html"
     })
 

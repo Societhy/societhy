@@ -203,6 +203,7 @@ class OrgaDocument(Document):
 
 		#ADD OWNER
 		from_ = callback_data.get('from')
+		from_.unlockAccount(password=callback_data.get('password'))
 		tx_hash = self.join(from_, tag="owner", password=callback_data.get('password'), local=False)
 		if not tx_hash:
 			return {"data": "User does not have permission to join", "status": 400}
@@ -212,6 +213,7 @@ class OrgaDocument(Document):
 			amount = float(callback_data.get('initial_funds'))
 			if from_.refreshBalance() > amount:
 				from_.session_token = None
+				from_.unlockAccount(password=callback_data.get('password'))
 				tx_hash = self.donate(from_, toWei(amount), password=callback_data.get('password'), local=False)
 				if not tx_hash:
 					return {"data": "User does not have permission to donate", "status": 400}
