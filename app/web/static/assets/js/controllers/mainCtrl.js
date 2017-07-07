@@ -296,8 +296,9 @@ app.controller('AppCtrl', function($rootScope, $scope, $state, $swipe, $translat
     }
 
     $scope.searchForAnything = function(query) {
-        $rootScope.query = query;
-        $http.get('/searchFor/'.concat(query)).then(function(response) {
+      console.log(query.title);
+        $rootScope.query = query.title;
+        $http.get('/searchFor/'.concat(query.title)).then(function(response) {
             console.log(response.data);
             if (response.data.length == 1) {
                 $state.go("app.".concat(response.data[0].category), response.data[0]);
