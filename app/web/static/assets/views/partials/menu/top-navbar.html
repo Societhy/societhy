@@ -29,19 +29,20 @@
                 <a ng-click="goFullscreen()"> <i class="fa fa-expand inline-block" ng-show="!isFullscreen"></i> <i class="fa fa-compress" ng-show="isFullscreen"></i></a>
             </li>
             <li>
-              <form class="form-inline" ng-submit="searchForAnything(query)">
+              <form class="form-inline" ng-submit="searchForAnything()">
                 <div class="form-group">
-                  <angucomplete-alt id="ex2"
+                  <angucomplete-alt id="searchBar"
                   placeholder="Search an user, orga or project..."
                   pause="300"
-                  selected-object="query"
                   title-field="name"
                   remote-url='/searchFor/'
                   description-field="_id"
                   minlength="1"
                   input-class="form-control"
                   match-class="highlight"
-                  input-changed=""/>
+                  input-changed="changeQueryCallback"
+                  selected-object="queryCallback"
+                  clear-selected="true"/>
                 </div>
                 <button class="btn"><i class="fa fa-search"/></button>
               </form>
