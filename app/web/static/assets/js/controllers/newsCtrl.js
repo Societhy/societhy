@@ -12,7 +12,7 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
     ctrl.getIframeSrc = function (id)
     {
         console.log("http://www.youtube.com/embed/" + id +"?autoplay=0&origin=http://example.com");
-        return "http://www.youtube.com/embed/" + id +"?autoplay=0&origin=http://example.com"
+        return "http://www.youtube.com/embed/" + id +"?autoplay=0&origin=http://example.com";
     };
 
     app.filter('youtubeEmbedUrl', function ($sce) {
@@ -42,8 +42,8 @@ app.controller('NewsController', function($scope, $rootScope, $http, $sessionSto
                 {
                     $scope.currentOrga = $rootScope.currentOrga = response.data.orga;
                 }
-            }
-            , function(error) {$rootScope.toogleError(error.data);});
+                $rootScope.toogleSuccess("News published !");
+            } , function(error) {$rootScope.toogleError(error.data);});
 
     };
 

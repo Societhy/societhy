@@ -76,10 +76,10 @@ def addToContact(user, data):
 	if users.find_one({'_id': ObjectId(data['contact']['id'])}) is None:
 		return {'data': 'User doesn\' exists.',
                         'status': 401}
-		users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
-		user = users.find_one({"_id": ObjectId(data["_id"])})
-		return {"data": user,
-        		"status": 200}
+	users.update({"_id": ObjectId(data["_id"])}, {"$addToSet": {"contact_list": data["contact"]}})
+	user = users.find_one({"_id": ObjectId(data["_id"])})
+	return {"data": user,
+    		"status": 200}
 
 def delFromContact(user, data):
 	"""
@@ -87,8 +87,8 @@ def delFromContact(user, data):
 	data : data provided by the request.
 
 	This function is used to delete a contact from a user's contact list.
-	
-	- An update is perform in the database.	
+
+	- An update is perform in the database.
 	- OK-> 200, error->400
 	"""
 	users.update({"_id": ObjectId(data["_id"])}, {"$pull": {"contact_list": {"id": data["contact"]["id"]}}})
@@ -102,7 +102,7 @@ def isInContactList(userId, contactId):
 	contactId : the ID the user is looking to
 
 	This function is used to check if a user is in an other user's contact list.
-	- An search is perform in the database.	
+	- An search is perform in the database.
 	- OK-> 200, error->400
 	"""
 	if users.find_one({'_id': ObjectId(userId), 'contact_list.id': contactId}) != None:
