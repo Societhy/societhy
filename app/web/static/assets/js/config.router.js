@@ -118,7 +118,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
           }
     }).state('app.registration', {
         url: '/registration',
-        resolve: loadSequence('CryptoJS'),
+        resolve: loadSequence('CryptoJS', 'registration'),
         templateUrl: "static/assets/views/login_registration.html"
     })
 
