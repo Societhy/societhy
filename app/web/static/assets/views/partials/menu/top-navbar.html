@@ -29,14 +29,31 @@
                 <a ng-click="goFullscreen()"> <i class="fa fa-expand inline-block" ng-show="!isFullscreen"></i> <i class="fa fa-compress" ng-show="isFullscreen"></i></a>
             </li>
             <li>
-                <form role="search" class="navbar-form main-search">
+              <form class="form-inline" ng-submit="searchForAnything(query)">
+                <div class="form-group">
+                  <angucomplete-alt id="ex2"
+                  placeholder="Search an user, orga or project..."
+                  pause="300"
+                  selected-object="query"
+                  title-field="name"
+                  remote-url='/searchFor/'
+                  description-field="_id"
+                  minlength="1"
+                  input-class="form-control"
+                  match-class="highlight"
+                  input-changed=""/>
+                </div>
+                <button class="btn"><i class="fa fa-search"/></button>
+              </form>
+
+                <!-- <form role="search" class="navbar-form main-search">
                     <div class="form-group">
                         <input type="text" name="username" ng-model="query" placeholder="{{ 'search.PLACEHOLDER' | translate }}" class="form-control">
                         <button class="btn search-button block" type="submit" style="margin-left: 50px; padding-top:20px">
                             <i class="fa fa-search" ng-click="searchForAnything(query)"></i>
                         </button>
                     </div>
-                </form>
+                </form> -->
             </li>
         </ul>
         <ul class="nav navbar-right" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
