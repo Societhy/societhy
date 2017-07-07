@@ -279,14 +279,15 @@ def updateOrgaRights(user, orga_id, rights):
     orga_id : string for the mongo id
     rights : data to be push in the database
     """
-    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
-    orga["rights"] = rights;
-    orga.save_partial()
-    user.needsReloading()
-    return {
-	"data": orga["rights"],
-	"status": 200
-    }
+    if not self.can(user, "edit_rights"):
+        orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+        orga["rights"] = rights;
+        orga.save_partial()
+        user.needsReloading()
+        return {
+	        "data": orga["rights"],
+	        "status": 200
+        }
 
 
 def updateMemberTag(user, orga_id, addr, tag):
@@ -294,13 +295,14 @@ def updateMemberTag(user, orga_id, addr, tag):
     orga_id : string for the mongo id
     rights : data to be push in the database
     """
-    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
-    orga["members"][addr]["tag"] = tag;
-    orga.save_partial()
-    return {
-	"data": tag,
-	"status": 200
-    }
+    if not self.can(user, "edit_jobs"):
+        orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+        orga["members"][addr]["tag"] = tag;
+        orga.save_partial()
+        return {
+	        "data": tag,
+	        "status": 200
+        }
 
 
 def donateToOrga(user, password, orga_id, donation):
