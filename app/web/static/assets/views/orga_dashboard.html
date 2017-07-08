@@ -158,7 +158,7 @@
                     <hr />
                   </thead>
                   <tbody><!-- ngRepeat: user in $data -->
-                    <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user" class="ng-scope">
+                    <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user({name:member.name, _id:member._id})" class="ng-scope">
                       <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
                       <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
                     </tr><!-- end ngRepeat: user in $data -->

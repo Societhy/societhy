@@ -338,7 +338,7 @@ class ProjectCollection(Collection):
 	def lookup(self, query):
 		results = list(super().find({"name": query}, ["_id", "name", "address"]))
 		for doc in results:
-			doc.update({"category": "organization"})
+			doc.update({"category": "project"})
 		return results
 
 projects = ProjectCollection(collection=client.main.projects)
