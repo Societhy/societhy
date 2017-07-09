@@ -125,10 +125,11 @@ class NotificationDocument(Document):
             else:
                 self["seen"] = True
             if user.wantNotif(self["category"], "Mail"):
-                msg = Message("You have a new notification on Societhy !", sender='contact@societhy.com',
+                msg = Message("Notif", sender='roman.grout@hotmail.fr',
                               recipients=[user.get("email")])
                 url = "http://www.localhost:4242?redirect=true&angularState=" + urllib.parse.quote(json.dumps(self["angularState"]))
                 with app.app_context():
+                    print(user.get("email"))
                     msg.html = render_template('/assets/views/emailing/notification.html', name=user.get("name"),
                                                description=self["description"], url=url)
                     mail.send(msg)
