@@ -29,8 +29,10 @@ class Ngo(Organization):
 			"remove_members": True,
 			"sell_token": True,
 			"buy_token": True,
-			"publish_news": True
-
+			"publish_news": True,
+            "edit_rights": True,
+            "edit_jobs": True,
+            "access_administration": True
 		},
 		"member": {
 			"join": False,
@@ -44,7 +46,10 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": True,
 			"buy_token": True,
-			"publish_news": True
+			"publish_news": True,
+            "edit_rights": True,
+            "edit_jobs": True,
+            "access_administration": True
 		},
 		"default": {
 			"join": True,
@@ -58,7 +63,10 @@ class Ngo(Organization):
 			"remove_members": False,
 			"sell_token": False,
 			"buy_token": False,
-			"publish_news": True
+			"publish_news": True,
+            "edit_rights": False,
+            "edit_jobs": False,
+            "access_administration": False
 		}
 	}
 	def launchCrowdfunding(self, params):
