@@ -33,9 +33,9 @@ if "noUser" not in sys.argv:
 	users.delete_many({})
 if "noOrga" not in sys.argv:
 	organizations.delete_many({})
+	contracts.delete_many({})
+	projects.delete_many({})
 notifications.delete_many({})
-projects.delete_many({})
-contracts.delete_many({})
 session = Collection(collection=client.main.sessions)
 
 session.delete_many({})
@@ -150,6 +150,9 @@ def create_orga(orga, miner, password):
 	return ret
 	
 
+
+
+        
 # CREATE ANONYMOUS USERS
 if "noUser" not in sys.argv:
 	user_docs = create_user(40, anonym_template)
@@ -159,7 +162,7 @@ else:
 #   UNICEF
 def create_unicef(miner):
 	orga_unicef = {
-	        "name": "UNICEF2", 
+	        "name": "UNICEF", 
 	        "description" : "Présent dans 190 pays et territoires, l’UNICEF se bat depuis soixante-dix ans pour les droits de chaque enfant. Découvrez notre action par l’intermédiaire des programmes que nous créons au nom des enfants.", 
 	        "gov_model" : "ngo",
 	        "initial_funds": 2570,
@@ -175,7 +178,7 @@ def create_unicef(miner):
 		create_orga(orga_unicef, miner, "simon")
 
                 
-	unicef_doc = organizations.find_one({"name": "UNICEF2"})
+	unicef_doc = organizations.find_one({"name": "UNICEF"})
 	print(unicef_doc["_id"])	
 	#Join and donate and leave
 	x  = 0
