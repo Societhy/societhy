@@ -367,6 +367,7 @@ class OrgaDocument(Document):
 		## WE SHOULD CHECK RIGHT BEFORE BUT ITS NOT WORKING
 		if self.get('rules').get('accessibility') == 'private':
 			isAllowed = self.registry.call('isAllowed', local=True, args=[user.get('account')])
+			print("ALLOWED", isAllowed)
 			if not isAllowed:
 				return False
 
@@ -446,6 +447,7 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
+			member = self.getMember(address)
 
 		return False
 
@@ -519,7 +521,7 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name") + " has left the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has left the organization " + self["name"] + ".", 
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				notif.save()

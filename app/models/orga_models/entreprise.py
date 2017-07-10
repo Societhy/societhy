@@ -8,7 +8,7 @@ class Entreprise(Organization):
 		"delegated_voting": False,
 		"quorum": 20,
 		"majority": 50,
-		"accessibility": "public",
+		"accessibility": "private",
 		"can_be_removed": True,
 		"curators": False,
 		"public": True,
