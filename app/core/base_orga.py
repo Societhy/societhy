@@ -158,9 +158,15 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     Thanks to the GridFS sytem, documents can be inserted in a database without performance loss.
     """
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
-    ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
-        "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
-    return {"data": ret, "status": 200}
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    orga['uploaded_documents'].append({"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy})
+    orga.save_partial()
+    print(orga['uploaded_documents'])
+    # ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
+    #     "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
+    # if ret.modified_count < 1:
+    #     return {"data": 'Cannot insert document', "status": 400}
+    return {"data": 'Document uploaded', "status": 200}
 
 
 def getOrgaUploadedDocument(doc_id, doc_name):
@@ -407,28 +413,28 @@ def leaveOrga(user, password, orga_id):
 def removeMember(user, member_account, password, orga_id):
     """
     user : user who want to remove a member from the organisation.
-    member_addr: member to be removed from the organisation.	
+    member_addr: member to be removed from the organisation.
     password : used to unlock the wallet of the user.
     orga_id : id of the orga the user want to leave.
-    
+
     This function is called when an user wants to remove a member from the organisation.
-    
+
     - The wallet is unlocked.
     - The leave order is commited on the blockchain.
     - error -> 400 ; OK -> 200
     """
-    
+
     if not user.unlockAccount(password=password):
         return {"data": "Invalid password!", "status": 400}
-    
+
     orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     try:
         tx_hash = orga_instance.removeMember(user, member_account, password=password)
         if tx_hash is False:
-            return {"data": "User does not have permission to leave", "status": 400}	
+            return {"data": "User does not have permission to leave", "status": 400}
     except BadResponseError as e:
         return {"data": str(e), "status": 400}
-    
+
     return {
 	"data": tx_hash,
 	"status": 200

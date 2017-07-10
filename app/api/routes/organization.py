@@ -51,8 +51,9 @@ def addOrgaDocuments(user):
     size = request.form.get("size")
     privacy = request.form.get("privacy")
     privacy = privacy.split(",")
+    print(privacy)
     ret = base_orga.addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy)
-    return make_response("ok", 200)
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
 
 @router.route('/getOrgaUploadedDocument/<doc_id>/<doc_name>', methods=['GET'])
 def getOrgaUploadedDocument(doc_id, doc_name):
@@ -124,7 +125,7 @@ def removeMember(user):
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
-    
+
 @router.route('/addNewProduct', methods=['POST'])
 @requires_auth
 def addProductOrga(user):
