@@ -367,7 +367,6 @@ class OrgaDocument(Document):
 		## WE SHOULD CHECK RIGHT BEFORE BUT ITS NOT WORKING
 		if self.get('rules').get('accessibility') == 'private':
 			isAllowed = self.registry.call('isAllowed', local=True, args=[user.get('account')])
-			print("ALLOWED", isAllowed)
 			if not isAllowed:
 				return False
 
@@ -408,7 +407,7 @@ class OrgaDocument(Document):
 						                "name":self.get("name")
 				                        }
                                                 },
-                                                "description": new_member.get("name") + " has join the organization " + self["name"] + ".", 
+                                                "description": new_member.get("name", address) + " has join the organization " + self["name"] + ".", 
                                                 "createdAt": datetime.datetime.now(),
                                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 					notif.save()
@@ -576,12 +575,12 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name") + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
                                         "amount": donation_amount,
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
-                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name") + ".",
+                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name", address) + ".",
                                                                                          "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
 			else:
 				notif = models.notification.NotificationDocument({
