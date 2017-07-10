@@ -32,7 +32,7 @@
                   </button>
 
                 </div>
-                <div ng-if="isInvitedToOrga == false">
+                <div ng-if="isInvitedToOrga == false && currentOrga.rules.acessibility == 'public'">
                   <div class="btn-group" ng-if="currentRights.join && !currentOrga.funding.membershipFee" uib-dropdown>
                     <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
                       Join
@@ -51,6 +51,11 @@
                     </button>
                   </div>
 
+                </div>
+                <div ng-if="isInvitedToOrga == false && currentOrga.rules.accessibility == 'private' && currentRights.join">
+                      <span class="text-red text-large">
+                        This organization is private, you need to be invited to be a member.
+                      </span>
                 </div>
 
 
