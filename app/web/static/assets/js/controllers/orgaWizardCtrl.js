@@ -34,7 +34,8 @@
                         "edit_rights": true,
                         "edit_jobs": true,
                         "create_project": true,
-                        "create_offer": true
+                        "create_offer": true,
+                        "publish_news":true
                     },
                     "admin": {},
                     "guest": {},
@@ -47,6 +48,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": true,
+                        "publish_news":true
                     },
                     "default": {
                         "join": true,
@@ -57,6 +59,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": false,
+                        "publish_news":false
                     }
                 }
             },
@@ -80,7 +83,9 @@
                         "remove_members": true,
                         "sell_token": true,
                         "buy_token": true,
-                        "access_administration": true
+                        "access_administration": true,
+                        "publish_news":true
+
                     },
                     "admin": {},
                     "partner": {},
@@ -98,7 +103,8 @@
                         "remove_members": true,
                         "sell_token": true,
                         "buy_token": true,
-                        "access_administration": true
+                        "access_administration": true,
+                        "publish_news":true
                     },
                     "default": {
                         "join": true,
@@ -109,6 +115,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": false,
+                        "publish_news":false
                     }
                 }
             },
@@ -132,7 +139,8 @@
                         "remove_members": true,
                         "sell_token": true,
                         "buy_token": true,
-                        "access_administration": true
+                        "access_administration": true,
+                        "publish_news":true
                     },
                     "admin": {},
                     "partner": {},
@@ -145,6 +153,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": true,
+                        "publish_news":true
                     },
                     "default": {
                         "join": true,
@@ -155,6 +164,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": false,
+                        "publish_news":false
                     }
                 }
             },
@@ -178,7 +188,9 @@
                         "remove_members": true,
                         "sell_token": true,
                         "buy_token": true,
-                        "access_administration": true
+                        "access_administration": true,
+                        "publish_news":true
+
                     },
                     "admin": {},
                     "partner": {},
@@ -191,6 +203,8 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": true,
+                        "publish_news":false
+
                     },
                     "default": {
                         "join": true,
@@ -201,6 +215,7 @@
                         "recruit": false,
                         "remove_members": false,
                         "buy_token": false,
+                        "publish_news":false
                     }
                 }
             }
@@ -220,8 +235,9 @@
             "remove_members": false,
             "sell_token": false,
             "buy_token": false,
-	    "access_administration": false
-        }
+	        "access_administration": false,
+            "publish_news":false
+        };
 
     // IMAGE UPLOAD
     var uploaderImages = $scope.uploaderImages = new FileUploader({
@@ -291,22 +307,6 @@
                 $scope.orga_form.rights[$("#newOrgaRight").val()] = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model].rights["default"]);
             }
         }
-
-
-    // MEMBER MANAGEMENT
-        $scope.addCurrentUserToInvited = function () {
-            if (!$scope.orga_form.invited_users)
-                $scope.orga_form.invited_users = {};
-            $scope.orga_form.invited_users[$rootScope.user._id] =
-                {
-                    "_id" : $rootScope.user._id,
-                    "account": $rootScope.user.account,
-                    "category": "owner",
-                    "name": $rootScope.user.name,
-                    "tag" : "owner"
-                };
-            $scope.tagChangedForUser($rootScope.user._id);
-        };
 
     $scope.addInvitedUser = function () {
         if (!$scope.orga_form.invited_users)
@@ -409,7 +409,6 @@
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
-                        $scope.addCurrentUserToInvited();
                         $http.post('/createOrga', {
                             "socketid": $rootScope.sessionId,
                             "password": password,

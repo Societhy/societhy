@@ -24,10 +24,10 @@ app.secret_key = secret_key
 app.json_encoder = UserJSONEncoder
 app.session_interface = MongoSessionInterface()
 
-app.config['MAIL_SERVER']='smtp-relay.sendinblue.com'
+app.config['MAIL_SERVER'] = 'in-v3.mailjet.com'
 app.config['MAIL_PORT'] = 587
-app.config['MAIL_USERNAME'] = 'roman.grout@hotmail.fr'
-app.config['MAIL_PASSWORD'] = '9UMq2mIjYC1GQgv8'
+app.config['MAIL_USERNAME'] = 'a8320af9de7db2a8ea61106b9b473df8'
+app.config['MAIL_PASSWORD'] = 'ffb1038ea704a2b533bc88da01a780a9'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 
