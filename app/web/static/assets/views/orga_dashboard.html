@@ -61,7 +61,6 @@
                  {{ currentOrga.name }} is a {{currentOrga.gov_model}} founded by {{currentOrga.owner.name}} and administred by its {{ctrl.member_list.length}} members
                </span>
              </div>
-
              <div class="col-md-6 inline-block  vertical-center">
               <div class="float-left" style="line-height: 40px">
                 Balance:
@@ -88,6 +87,10 @@
               </div>
             </div>
           </div>
+            <div style="width: 75%" class="center-block text-center clearfix">
+              <h2>Description</h2>
+              <span>{{currentOrga.description}}</span>
+            </div>
           <div class="row margin-top-20" >
             <div class="col-md-6   padding-20">
               <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ui-sref="app.newproject({owner_id: currentOrga._id})">+</button></h2>
