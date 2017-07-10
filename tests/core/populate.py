@@ -29,12 +29,10 @@ for keyFile in listdir(keyDirectory):
 		remove(path.join(keyDirectory, keyFile))
 		print("removed", keyFile)
 
-if "noUser" not in sys.argv:
-	users.delete_many({})
-if "noOrga" not in sys.argv:
-	organizations.delete_many({})
-	contracts.delete_many({})
-	projects.delete_many({})
+users.delete_many({})
+organizations.delete_many({})
+contracts.delete_many({})
+projects.delete_many({})
 notifications.delete_many({})
 session = Collection(collection=client.main.sessions)
 
@@ -79,61 +77,36 @@ user_martin = {
 	}
 }
 
-anonym_template = {
-	"name": "anonym",
-        "firstname": "Anonym",
-        "lastname": "Anonym",
-        "city": "Unknown",
-        "email": "anonym@societhy.fr",
-	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
-	"account": None,
-	"eth": {
-		"keys": {}
-	}
-}
-
-test_orga = {
-	"name": "Societhy_anonymous_orga",
-	"description" : "test_description", 
-	"gov_model" : "ngo",
-	"rules": {
-		"hidden": False,
-		"delegated_voting": True,
-		"curators": True,
-		"quorum" : 50,
-		"majority": 50,
-		"anonymous": True
-	}
-}
-
 # InitAll
-if "noUser" not in sys.argv:
-	test_user_doc = UserDocument(doc=test_user, gen_skel=True, notifs=False)
-	miner = UserDocument(doc=test_miner, gen_skel=True, notifs=False)
-	user_martin_doc = UserDocument(doc=user_martin, gen_skel=True, notifs=False)
-	test_user_doc.save()
-	miner.save()
-	user_martin_doc.save()
-       
-	with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
-		keys.importNewKey(miner, f)
+test_user_doc = UserDocument(doc=test_user, gen_skel=True, notifs=False)
+miner = UserDocument(doc=test_miner, gen_skel=True, notifs=False)
+user_martin_doc = UserDocument(doc=user_martin, gen_skel=True, notifs=False)
+test_user_doc.save()
+miner.save()
+user_martin_doc.save()
+      
+with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
+	keys.importNewKey(miner, f)
 miner = users.find_one({"name": "simon"})
 bw.run()
 
 
 
 # CREATE USERS
-def create_user(number, user):
+def create_user(user, user_names, user_villes, user_addrs):
 	i = 0
 	user_docs = {}
-	while number >= i:
-		user["name"] = "anonyme_" + str(i)
-		user["firstname"] = "anonyme_" + str(i)
-		user["lastname"] = "anonyme_" + str(i)
-		user["email"] = "anonyme_" + str(i) + "@societhy.fr"
+	while 49 >= i:
+		user["eth"]["keys"] = {}
+		user["name"] = user_names[i]["firstname"]
+		user["firstname"] = user_names[i]["firstname"]
+		user["lastname"] = user_names[i]["lastname"]
+		user["city"] = user_villes[randint(0, (len(user_villes) - 1))]
+		user["address"] = user_addrs[i]
+		user["email"] = user_names[i]["firstname"] + "." + user_names[i]["lastname"] + "@societhy.fr"
 		print("creating user " + str(i))
 		user_docs[i] = UserDocument(doc=user, gen_skel=True, notifs=False)
-		user_docs[i].save()                
+		user_docs[i].save()
 		addr = keys.genLinkedKey(user_docs[i], "test")
 		user.update()              
 		miner.unlockAccount(password='simon')
@@ -147,18 +120,9 @@ def create_orga(orga, miner, password):
 	tx_hash = ret.get('data').get('tx_hash')
 	bw.waitTx(tx_hash)
 	bw.waitBlock()
+	ret = organizations.find_one({"name": orga["name"]})
 	return ret
 	
-
-
-
-        
-# CREATE ANONYMOUS USERS
-if "noUser" not in sys.argv:
-	user_docs = create_user(40, anonym_template)
-else:
-	user_docs = users.find({"city": "Unknown"})
-
 #   UNICEF
 def create_unicef(miner):
 	orga_unicef = {
@@ -174,40 +138,261 @@ def create_unicef(miner):
 	        }
         
         }
-	if "noOrga" not in sys.argv:
-		create_orga(orga_unicef, miner, "simon")
+	create_orga(orga_unicef, miner, "simon")
 
                 
 	unicef_doc = organizations.find_one({"name": "UNICEF"})
-	print(unicef_doc["_id"])	
-	#Join and donate and leave
+	miner.reload()
+        #Join and donate and leave
 	x  = 0
-	if "noJoin" not in sys.argv:
-		for x in range(0, 27):
-			print("user " + str(x) + " join unicef orga")
-			base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
-			bw.waitEvent('NewMember')
-			user_docs[x].reload()
-			if (randint(0, 100) in range(0, 80)):
-				ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
-				bw.waitEvent("DonationMade")
+	for x in range(0, 10):
+		base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
+		bw.waitEvent('NewMember')
+		user_docs[x].reload()
+		if (randint(0, 100) in range(0, 80)):
+			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
+			bw.waitEvent("DonationMade")
+		sleep(1)
+		user_docs[x].reload()
+		unicef_doc.reload()
+		if (randint(0, 100) in range(0, 30)):
+			base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
+			bw.waitEvent("MemberLeft")
 			sleep(1)
 			user_docs[x].reload()
-			if (randint(0, 100) in range(0, 30)):
-				base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
-				bw.waitEvent("MemberLeft")
-				sleep(1)
-		
-		# Donate
-		x = 28
-		for x in range(28, 39):
-			print("user " + str(x) + " donate to unicef")
-			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
+			unicef_doc.reload()		
+	# Donate
+	x = 11
+	for x in range(11, 18):
+		print("user " + str(x) + " donate to unicef")
+		ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
+		bw.waitEvent("DonationMade")
+		sleep(1)
+		user_docs[x].reload()
+		unicef_doc.reload()		
+
+	test_offer_1 = {
+	        'name': '',
+	        'client': unicef_doc.get('address'),
+	        'contractor': miner.get('account'),
+	        "description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
+	        'initialWithdrawal': 100,
+	        'recurrentWithdrawal': 300,
+	        'isRecurrent': True,
+	        'duration': 10,
+	        "type": "investment",
+	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
+        }
+
+	create_offer(miner, "simon", unicef_doc, test_offer_1, True, True, True)
+
+def create_msf(miner):
+	orga_msf = {
+	        "name": "Medecin Sans Frontier", 
+	        "description" : "Médecins Sans Frontières est une association médicale humanitaire internationale, créée en 1971 à Paris par des médecins et des journalistes. MSF intervient dans des situations d’exception (conflits, épidémies, catastrophes naturelles) et de grande précarité, afin de porter assistance à ceux dont la vie ou la santé est menacée. L’association délivre ses secours en toute indépendance et impartialité et se réserve le droit de s’exprimer publiquement sur les situations dont ses équipes peuvent être témoin.",
+	        "gov_model" : "ngo",
+	        "initial_funds": 2570,
+	        "rules": {
+		        "delegated_voting": True,
+		        "curators": True,
+		"quorum" : 50,
+		"majority": 50
+	        }
+        
+        }
+	create_orga(orga_msf, miner, "simon")
+	miner.reload()
+                
+	msf_doc = organizations.find_one({"name": "Medecin Sans Frontier"})
+	#Join and donate and leave
+	x  = 0
+	for x in range(0, 10):
+		base_orga.joinOrga(user_docs[x], "test", msf_doc["_id"])
+		bw.waitEvent('NewMember')
+		user_docs[x].reload()
+		if (randint(0, 100) in range(0, 80)):
+			ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(500, 1200)})
 			bw.waitEvent("DonationMade")
 			sleep(1)
 			user_docs[x].reload()
-        # Project
-	ret = base_orga.createProjectFromOrga(miner, "simon", unicef_doc.get('_id'), {"name": "Support School in  Kurdistan", "description": "This project aims to help a 1st grade classroom at the school in Baharka IDP Camp on the outskirts of Erbil, Kurdistan, Iraq. ", "invited_users": {}, 'campaign':{"amount_to_raise":7800, "duration": 100}})
-	bw.waitTx(ret.get('data'))
+			msf_doc.reload()		
+		if (randint(0, 100) in range(0, 30)):
+			base_orga.leaveOrga(user_docs[x], "test", msf_doc["_id"])
+			bw.waitEvent("MemberLeft")
+			sleep(1)
+			user_docs[x].reload()
+			msf_doc.reload()		
+		
+	# Donate
+	x = 11
+	for x in range(18, 25):
+		ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(100, 800)})
+		bw.waitEvent("DonationMade")
+		sleep(1)
+		user_docs[x].reload()
+		msf_doc.reload()		
 
+                        
+        # Project
+	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"name": "Collecte de don de Juin", "description": "Ceci represente la collecte de don mensuel de juin.\n Merci à tous pour votre participation.","invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	bw.waitTx(ret.get('data'))
+	sleep(1)
+	msf_doc.reload()
+	miner.reload()
+	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"descrition": "Le projet de MSF de lutte contre le VIH et la tuberculose dans le district d’uThungulu, qui couvre une population de 114 000 personnes, a toujours pour ambition de devenir le premier site sud-africain à atteindre l’objectif ambitieux des 90-90-90 d’ONUSIDA .\n                Le rapport « Inverser la tendance de l’épidémie de VIH et de tuberculose dans la province de KwaZulu-Natal » a présenté l’approche communautaire du projet, qui a permis d’augmenter le nombre de dépistages intégrés du VIH et de la tuberculose, ainsi que l’accès et l’adhérence au traitement du VIH, avec pour objectif d’influencer la future stratégie du gouvernement sud-africain pour atteindre les objectifs de traitement « 90-90-90 » à l’échelon national. En 2016, 56 029 personnes ont été dépistées, 2370 hommes circoncis et 1 573 756 préservatifs ont été distribués.", "name": "Collecte de don pour la lute contre le VIH et la tuberculose dans la province de Kwazulu-Natal en sud-Afrique", "invited_users": {}, 'campaign':{"amount_to_raise": 10000, "duration": 30}})
+	bw.waitTx(ret.get('data'))
+	sleep(1)
+	msf_doc.reload()
+	miner.reload()                
+	return msf_doc
+
+
+def create_youtube(miner):
+	orga_youtube = {
+	        "name": "VoxMaker", 
+	        "description" : "Il y en a pour tous les goûts sur VoxMakers !\nNous sommes un collectif de créateurs vidéo divers; nos émissions couvrent de nombreux sujets de la culture populaire :\nJeux vidéo, films, technologie, culture geek, musique, etc...",
+	        "gov_model" : "ngo",
+	        "initial_funds": 2570,
+	        "rules": {
+		        "delegated_voting": True,
+		        "curators": True,
+		"quorum" : 50,
+		"majority": 50
+	        }
+        
+        }
+	create_orga(orga_youtube, miner, "simon")                
+	youtube_doc = organizations.find_one({"name": "VoxMaker"})
+	#Join and donate and leave
+	x  = 22
+	for x in range(22, 30):
+		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"])
+		bw.waitEvent('NewMember')
+		user_docs[x].reload()
+		sleep(1)
+		user_docs[x].reload()
+		youtube_doc.reload()		
+		if (randint(0, 100) in range(0, 30)):
+			base_orga.leaveOrga(user_docs[x], "test", youtube_doc["_id"])
+			bw.waitEvent("MemberLeft")
+			sleep(1)
+			user_docs[x].reload()
+			youtube_doc.reload()		
+		
+        # Project
+	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "JAPAN EXPO JUILLET 2017", "description": "Comme tout les ans, le collectif vous attend à la japan expo!!\nMalheuresement très peu de membre habite près de celle-ci, et la Japan refuse de nous aidé financièrement.\nNous nous en remettons donc à vous, nos cher auditeurs, si vous le souhaitez et si sourtout vous le pouvez, vous pouvez nous soutenir financièrement ici même!\nVoici la liste non exhaustive de toutes nos activités:\n	        Samedi:		Rencontre abonnés, Dédicaces, Ventes de goodies et dvd collector\n		Dimanche:	Sketch et annonces inédits + concert live\n À bientôt ~ ",  "invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	bw.waitTx(ret.get('data'))
+	sleep(1)        
+	youtube_doc.reload()
+	miner.reload()        
+	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "Foundraise: Projet Film", "description": "Bonjour à tous, comme annoncé dernièrement, le collectif se lance dans la réalisation d'un court métrage.\n Nous allons pour cela avoir encore besoin de votre aide. Cette aide peut se faire de plusieurs façons: En partageant ou en nous soutenant financièrement.\nSi vous le pouvez et si surtout vous le voulez, vous pouvez par cette page nous setenir fiancièrement pour la réalisation de ce projet. Tout l'argent sera directement mis uniquement à disposition du projet (Payement des acteurs, des lieux, des props)\n Merci à tous pour votre soutien et à bientôt!!!", "invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	bw.waitTx(ret.get('data'))
+	sleep(1)        
+	youtube_doc.reload()
+	miner.reload()        
+	return youtube_doc
+
+# CREATE OFFER
+def create_offer(miner, password, orga, offer, createPro=False, votePro=False, execPro=False):
+	ret = base_orga.createOffer(miner, password, orga.get('_id'), offer)
+	bw.waitTx(ret.get('data'))
+	orga.reload()
+	if createPro:
+		for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'pending']):
+			ret =  base_orga.createProposal(miner, password, orga.get('_id'), proposal.get('offer').get('address'))
+			bw.waitTx(ret.get('data'))
+			orga.reload()
+			new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
+	if votePro:
+		NAY = 0
+		YEA = 1
+		for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'debating']):
+			ret = base_orga.voteForProposal(miner, password, orga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
+			bw.waitEvent('VoteCounted')
+			orga.reload()
+			new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
+	
+		last_timeleft = 100
+		while len([x for x in orga.get('proposals').values() if x.get('status') == 'debating']) > 0:
+			orga.refreshProposals()
+			orga.reload()
+	
+			for index, proposal in enumerate(orga.get('proposals').values()):
+				if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
+					print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
+					last_timeleft = proposal.get('time_left')
+	
+	for p in orga.get('proposals').values():
+		initial_balance = eth_cli.eth_getBalance(p.get('offer').get('contractor'))
+		if p.get('status') == 'approved':
+			ret = base_orga.executeProposal(miner, password, orga.get('_id'), p.get('proposal_id'))
+			bw.waitTx(ret.get('data'))
+			sleep(1)
+			orga.reload()
+
+
+def create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types):
+	for x in range(0, 50):
+		orga_template["name"] = orga_names[x]
+		orga_template["type"] = orga_types[randint(0,3)]
+		size = randint(0, 6200)
+		orga_template["description"] = orga_descs[size: (size + randint(0, 300))]
+		orga_doc = create_orga(orga_template, miner, "simon")
+                        
+anonym_template = {
+	"name": "anonym",
+        "firstname": "Anonym",
+        "lastname": "Anonym",
+        "city": "Unknown",
+        "email": "anonym@societhy.fr",
+	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
+	"account": None,
+	"eth": {
+		"keys": {}
+	}
+}
+orga_types = ["ngo", "entreprise", "dao", "public_company"]
+
+user_names = [
+{"firstname": "Tina", "lastname": "Johnson"}, {"firstname": "Lillie", "lastname": "Newman"}, {"firstname": "Albert", "lastname": "Gardner"}, {"firstname": "Nancy", "lastname": "Armstrong"}, {"firstname": "Eleanor", "lastname": "Reeves"}, {"firstname": "Marcos", "lastname": "Wolfe"}, {"firstname": "Daryl", "lastname": "Adams"}, {"firstname": "Alicia", "lastname": "Rivera"}, {"firstname": "Hugo", "lastname": "Mckenzie"}, {"firstname": "Ella", "lastname": "Park"}, {"firstname": "Jeremy", "lastname": "Floyd"}, {"firstname": "Jaime", "lastname": "Alvarez"}, {"firstname": "Dewey", "lastname": "Norris"}, {"firstname": "Arnold", "lastname": "Herrera"}, {"firstname": "Mildred", "lastname": "Gross"}, {"firstname": "Verna", "lastname": "Wilkins"}, {"firstname": "Debra", "lastname": "Pearson"}, {"firstname": "Jesus", "lastname": "Perez"}, {"firstname": "Shawna", "lastname": "Powell"}, {"firstname": "Misty", "lastname": "Cannon"}, {"firstname": "Leona", "lastname": "Bryant"}, {"firstname": "Johnnie", "lastname": "Poole"}, {"firstname": "Jackie", "lastname": "Washington"}, {"firstname": "Victor", "lastname": "Bowers"}, {"firstname": "Elmer", "lastname": "Ramirez"}, {"firstname": "Nora", "lastname": "Robbins"}, {"firstname": "Floyd", "lastname": "Simon"}, {"firstname": "Neal", "lastname": "Long"}, {"firstname": "Kerry", "lastname": "Joseph"}, {"firstname": "Cora", "lastname": "Evans"}, {"firstname": "Wilbur", "lastname": "Harris"}, {"firstname": "Camille", "lastname": "Rios"}, {"firstname": "Jodi", "lastname": "Moreno"}, {"firstname": "Lora", "lastname": "Terry"}, {"firstname": "Phil", "lastname": "Delgado"}, {"firstname": "Boyd", "lastname": "Duncan"}, {"firstname": "Steven", "lastname": "Brewer"}, {"firstname": "Janie", "lastname": "Jordan"}, {"firstname": "Oscar", "lastname": "Arnold"}, {"firstname": "Erica", "lastname": "Myers"}, {"firstname": "Anita", "lastname": "Mcdaniel"}, {"firstname": "Richard", "lastname": "Chapman"}, {"firstname": "Everett", "lastname": "Santos"}, {"firstname": "Irving", "lastname": "Hawkins"}, {"firstname": "Courtney", "lastname": "Tran"}, {"firstname": "Ignacio", "lastname": "Hammond"}, {"firstname": "Angelina", "lastname": "Bates"}, {"firstname": "Joann", "lastname": "Mccormick"}, {"firstname": "April", "lastname": "Hardy"}, {"firstname": "Ross", "lastname": "", "lastname": "Schneider"}]
+
+user_villes = ["Paris", "Strasbourg", "LongChamp", "Lyon", "Grenoble", "Marseille", "Rouen", "Avignon", "Poitier", "Angers", "Versailles", "Créteil", "Cannes"]
+
+user_addrs = [
+"8026 Rosewood St.","Madison Heights, MI 48071","372 Coffee St.","Elyria, OH 44035","816 Depot St.","Sewell, NJ 08080","766 High Noon Ave.","Muskegon, MI 49441","463 Alton Ave.","Greenville, NC 27834","9630 Lancaster Drive","Long Branch, NJ 07740","9427 Van Dyke Ave.","Naples, FL 34116","9911 E. Woodside Lane","Fresno, CA 93706","4 Laurel Drive","Duluth, GA 30096","75 SE. Rockaway Dr.","Sun City, AZ 85351","117 Railroad Dr.","Amsterdam, NY 12010","7171 Riverview Drive","Flowery Branch, GA 30542","849 Whitemarsh Rd.","Greensburg, PA 15601","8005 Goldfield St.","Loveland, OH 45140","8322 Stillwater Drive","Egg Harbor Township, NJ 08234","333 Trout Ave.","Palm Coast, FL 32137","45 Highland Ave.","Findlay, OH 45840","527 Beach Dr.","Dickson, TN 37055","901 Summerhouse Dr.","South Plainfield, NJ 07080","55 NW. Vernon Drive","Nashville, TN 37205","9759 Morris St.","Cordova, TN 38016","8327 Buckingham Rd.","Camas, WA 98607","504 Schoolhouse Dr.","Anchorage, AK 99504","8185 Acacia Street","Waynesboro, PA 17268","9112 Princess Dr.","North Attleboro, MA 02760","721 Marsh Court","Toms River, NJ 08753","489 River Street","King Of Prussia, PA 19406","340 Mulberry Rd.","Fayetteville, NC 28303","558 Victoria St.","Hartford, CT 06106","8215 South Victoria Drive","Chattanooga, TN 37421","98 Howard Road","Mc Lean, VA 22101","9176 Riverside Dr.","Woodbridge, VA 22191","723 Edgewood St.","Saratoga Springs, NY 12866","556 Thompson St.","Davison, MI 48423","97 S. Sierra Road","Oakland Gardens, NY 11364","946 Bradford Ave.","West Orange, NJ 07052","639 Livingston Dr.","Fort Worth, TX 76110","7874 Foxrun St.","Apt E","Pittsford, NY 14534","8973 North Brewery Drive","Homestead, FL 33030","8821 East Main Drive","Owatonna, MN 55060","65 Golf Drive","Ottawa, IL 61350","961 Cedar Swamp Court","Boston, MA 02127","8399 Princess Drive","Willingboro, NJ 08046","8313 Carson Ave.","Taunton, MA 02780","290 Cambridge St.","Arvada, CO 80003","37 South Sierra St.","Port Washington, NY 11050","50 Jefferson Court","Ottumwa, IA 52501","912 Trout St.","Clarkston, MI 48348","834 W. Union St.","East Lansing, MI 48823","893 South Washington Avenue","Ontario, CA 91762"]
+
+orga_names = ["MonOrga", "La grandeOrga","Paxton","Braxton","Veolia", "Canal +", "EFD", "RATP", "Virgin", "SOCIETHY", "alliance", "alliancego", "goservices", "servicespro", "proeco", "ecotop", "topmy", "mybio", "biomultiservice", "multiserviceservice", "serviceaxe", "axeideal", "idealexpert", "expertconcept", "conceptadvisor", "advisorconsulting", "consultingconsultant", "consultantconsult", "consultconseil", "conseilsolution", "solution team", "teamplus", "pluschrono", "chronoexpress", "expressfrance", "francefocus", "focuscentre", "centrefirst", "first technologie", "technologiecommerce", "commerceassu", "assudeco", "deco transport", "transportexport", "exportbusiness", "business immobilier", "immobilier","great", "plusgreat", "chronogreat", "expressgreat", "francegreat", "focusgreat", "centregreat", "first", "great", "technologiegreat", "commercegreat", "assugreat", "deco", "great", "transportgreat", "exportgreat", "business", "great", "immobiliergreat", "elitegreatabgreatad"]
+
+
+orga_descs = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam blandit elit mauris, id luctus diam pretium a. Ut mauris velit, elementum et diam id, egestas finibus enim. Suspendisse tincidunt leo quis euismod ornare. Etiam dignissim placerat dictum. Sed rhoncus hendrerit nunc sit amet faucibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed varius arcu ut nulla cursus auctor. Donec posuere dignissim sapien sit amet consequat.\n\nEtiam ultrices neque elit, in feugiat augue posuere vel. Ut in tortor ac mauris ullamcorper feugiat. Vivamus dignissim eros vitae ante ornare, nec fermentum nulla lacinia. Fusce ut leo libero. In interdum consequat justo, quis sodales erat. Nunc purus orci, finibus eget volutpat a, ornare a ipsum. Curabitur sit amet risus a tortor fermentum euismod in a augue. Phasellus est libero, bibendum sit amet eros sed, scelerisque euismod nibh. Integer et efficitur ante. Proin congue pulvinar bibendum. Suspendisse et sollicitudin tortor, id blandit velit. Phasellus eu ante sed massa pulvinar mattis. Nullam mattis diam sit amet nisl posuere rutrum. Nulla ornare ultrices tellus sit amet volutpat.\n\nDonec mattis tincidunt sollicitudin. Sed nec pulvinar dolor. Nam pretium hendrerit augue, ac interdum purus convallis eu. Integer a nibh non libero volutpat luctus ac vel augue. Proin quis volutpat mauris. Sed vel dui viverra, consectetur orci id, congue dui. Pellentesque eu lectus elementum, mattis massa ut, dictum massa. Pellentesque id lorem eu libero finibus vehicula.\n\nVestibulum sodales ullamcorper massa in auctor. Etiam iaculis eleifend lacinia. Fusce aliquam urna eget elit condimentum, tempor tempor ex gravida. Vestibulum quis felis tempor, suscipit lectus non, lobortis justo. Sed at semper mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nunc congue placerat metus eu consectetur. Vivamus molestie arcu pharetra dui lobortis porta. Phasellus sed posuere nisl, vel molestie elit. Phasellus sagittis odio sapien, quis blandit elit interdum vel. Mauris pellentesque eu risus vel rutrum. Nam posuere libero elit, vel suscipit massa varius id. Phasellus in placerat ligula. Aliquam et finibus dolor. Mauris at libero dui.\n\nUt vitae lorem leo. Morbi porta sed justo vel sollicitudin. Pellentesque quis cursus ante. Etiam non libero posuere, dapibus quam sed, suscipit purus. Sed sit amet nulla at lectus vehicula feugiat. Maecenas tempor tortor nec sapien commodo auctor. Vestibulum posuere quam eu libero vehicula lobortis. In non finibus risus. Aenean vehicula nibh vitae ultricies pharetra. Mauris nec felis ligula. Nam condimentum auctor augue a pharetra. Aliquam non tellus a justo dignissim euismod quis a lectus. Nunc vulputate urna ut lorem luctus, quis auctor massa molestie.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. In faucibus non risus et euismod. Proin ut tempor tortor. Aliquam placerat nunc nulla, quis sollicitudin tortor bibendum at. Cras laoreet vel lacus vitae volutpat. Quisque sit amet libero sollicitudin, posuere dolor efficitur, pharetra nisi. Suspendisse sit amet porttitor diam. Pellentesque imperdiet, erat eu ultrices vehicula, massa magna maximus elit, nec vehicula turpis justo quis massa. Suspendisse ornare non risus id vulputate. Morbi lobortis odio enim, sed vehicula metus pulvinar sit amet. Etiam mattis, massa ut elementum pretium, quam sapien dapibus lorem, quis hendrerit neque mi eu ligula. Nam id suscipit orci. Vivamus congue pellentesque est in condimentum. Suspendisse sollicitudin condimentum ligula vitae mattis. Proin cursus velit vitae nibh malesuada iaculis.\n\nAliquam iaculis tincidunt ultrices. Ut maximus ultricies posuere. Aenean auctor eget libero et varius. Integer semper odio tempus diam malesuada, at finibus felis fermentum. Vestibulum volutpat velit mauris, eu imperdiet turpis rutrum a. Nam tincidunt ac sem non commodo. Ut sed cursus mauris.\n\nUt imperdiet turpis quis sollicitudin dignissim. Pellentesque eget aliquet libero. Curabitur consequat mauris quis felis elementum, at egestas purus accumsan. Aliquam fringilla tortor ut lectus maximus, eu tincidunt libero consequat. Etiam laoreet at dolor eget porta. Vestibulum vel ipsum consectetur, consequat tellus nec, ultrices augue. Mauris bibendum tristique odio sit amet laoreet. Vestibulum vulputate auctor sapien. Praesent bibendum accumsan ipsum, in posuere lorem mollis vitae. Fusce in eleifend justo, eget molestie felis. Suspendisse potenti. Donec eu tempus justo. Ut aliquam risus posuere urna eleifend aliquet. Donec interdum urna et fringilla rutrum. Morbi sagittis ac eros id maximus. Pellentesque et mi in mauris lacinia fringilla.\n\nUt a semper velit. Nunc eget erat pulvinar urna rhoncus lobortis. Vestibulum molestie egestas diam vitae pulvinar. Vestibulum et elit tincidunt, volutpat lorem vitae, porta ex. Mauris ornare leo viverra massa commodo porta. Morbi sollicitudin hendrerit porta. Aenean varius elit non orci hendrerit, quis consectetur erat cursus. Sed placerat dictum odio, eget interdum ipsum aliquam et. Vivamus venenatis vulputate ipsum, sed vestibulum eros sollicitudin nec. Donec sed ornare sapien. Nulla eget tincidunt dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer pretium ultricies mauris, vel eleifend massa pharetra nec. Curabitur semper sem nunc, a feugiat nisi luctus vitae. Mauris porta lorem id ullamcorper ullamcorper. Vestibulum at sagittis libero, vel laoreet urna.\n\nAliquam tortor turpis, placerat nec ultrices at, feugiat vitae erat. Aenean sed gravida lacus. Curabitur vel auctor libero. Curabitur quis urna sit amet orci finibus ornare nec ac lacus. Sed iaculis sit amet risus ac mollis. Donec accumsan eros sed lacus efficitur, placerat finibus enim tristique. Phasellus non maximus augue. Sed vitae nisl sed risus ultricies tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas ornare tortor vehicula eros accumsan eleifend. Curabitur sed turpis bibendum, semper eros non, vulputate diam. Sed ullamcorper purus urna, vel aliquam elit feugiat sit amet. Curabitur nec elit tempor, mattis justo vitae, pulvinar felis."
+
+orga_template = {
+	"description" : "test_description", 
+	"gov_model" : "entreprise",
+	"rules": {
+		"hidden": False,
+		"delegated_voting": True,
+		"curators": True,
+		"quorum" : 50,
+		"majority": 50,
+		"anonymous": True
+	}
+}
+
+# CREATE ANONYMOUS USERS
+if "noUser" not in sys.argv:
+	user_docs = create_user(anonym_template, user_names, user_villes, user_addrs)
+else:
+	user_docs = users.find({"city": "Unknown"})
+
+
+create_youtube(miner)
 create_unicef(miner)
+create_msf(miner)
+
+unicef_doc = organizations.find_one({"name": "UNICEF"})
+msf_doc = organizations.find_one({"name": "MSF"})
+youtube_doc = organizations.find_one({"name": "YOUTUBE"})
+
+create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
+
