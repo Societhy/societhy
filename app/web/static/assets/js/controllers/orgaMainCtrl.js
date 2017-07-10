@@ -120,15 +120,19 @@
   ctrl.acceptInvit = function () {
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(function(password) {
+       $rootScope.toogleWait("Sending membership")
        $http.post('/acceptInvitation',
        {
          "orga_id": $rootScope.currentOrga._id,
          "password": password,
          "socketid": $rootScope.sessionId
-       }).then(function (response) {
-        console.log(response);
-      });
-     });
+       }).then(function (data) {}, function(error) { $rootScope.toogleError(error);});
+     },  function(data) {
+         $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
+         $scope.currentRights = $rootScope.currentRights = data.data.rights;
+         $rootScope.user.organizations.push($rootScope.currentOrga);
+         $scope.isMember = true;
+       });
    }
  };
 
@@ -186,33 +190,33 @@
         }
       });
     }
-     
+
      /**
      * Join a new organization by it's tag and paying the entrance fee.
      * @param {string} tag - Tag of the organization.
      * @method joinOrga
      */
      ctrl.payMembershipFee = function(tag) {
-	 $scope.doVerifications(
-	     $scope.checkMembershipFee(
-		 function(password) {
-		     $rootScope.toogleWait("Sending membership")
-		     $http.post('/payMembership', {
-			 "socketid": $rootScope.sessionId,
-			 "orga_id": $rootScope.currentOrga._id,
-			 "donation": {"amount": $rootScope.currentOrga.funding.membershipAmount},
-			 "password": password,
-			 "tag": tag
-		     }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
-		 },  function(data) {
-		     if (data.data.orga.members) {
-                 $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
-                 $scope.currentRights = $rootScope.currentRights = data.data.rights;
-                 $rootScope.user.organizations.push($rootScope.currentOrga);
-                 $scope.isMember = true;
-             }
-		 })
-	 )};
+      $scope.doVerifications(
+        $scope.checkMembershipFee(
+         function(password) {
+           $rootScope.toogleWait("Sending membership")
+           $http.post('/payMembership', {
+            "socketid": $rootScope.sessionId,
+            "orga_id": $rootScope.currentOrga._id,
+            "donation": {"amount": $rootScope.currentOrga.funding.membershipAmount},
+            "password": password,
+            "tag": tag
+          }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+         },  function(data) {
+           if (data.data.orga.members) {
+             $scope.currentOrga.members = $rootScope.currentOrga.members = data.data.orga.members;
+             $scope.currentRights = $rootScope.currentRights = data.data.rights;
+             $rootScope.user.organizations.push($rootScope.currentOrga);
+             $scope.isMember = true;
+           }
+         })
+        )};
 
     /**6
      * Join a new organization by it's tag.
@@ -245,7 +249,7 @@
 	 * Leave the current organization.
 	 * @method leaveOrga
 	 */
-   ctrl.leaveOrga = function() {
+  ctrl.leaveOrga = function() {
 
     if ($scope.doVerifications()) {
      $scope.completeBlockchainAction(

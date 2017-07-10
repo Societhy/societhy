@@ -248,8 +248,6 @@ class OrgaDocument(Document):
 			notif.save()
 			user = users.find_one({"_id":objectid.ObjectId(item)})
 			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
-			from_.unlockAccount(password=callback_data.get('password'))
-			self.allow(from_, user.get('account'), None, password=callback_data.get('password'), local=False)
 			user.save()
 
 		resp = {"name": self["name"], "_id": str(self["_id"])}
