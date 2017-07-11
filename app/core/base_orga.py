@@ -517,14 +517,14 @@ def cancelOffer(user, password, orga_id, offer_id):
     }
 
 
-def createProposal(user, password, orga_id, proposal):
+def createProposal(user, password, orga_id, offer_id, duration=None):
     if not user.unlockAccount(password=password):
         return {"data": "Invalid password!", "status": 400}
     orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     if not orga_instance:
         return {"data": "Organization does not exists", "status": 400}
     try:
-        tx_hash = orga_instance.createProposal(user, proposal, password=password)
+        tx_hash = orga_instance.createProposal(user, offer_id, duration, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to create an offer", "status": 400}
 

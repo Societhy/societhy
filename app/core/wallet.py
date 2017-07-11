@@ -69,7 +69,7 @@ def getTxHistory(user, account):
 	# r = requests.get('https://etherchain.org/api/account/%s/tx/0' % account)
 	print("REQUESTING : ", "https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0")
 	r = requests.get('https://etherchain.org/api/account/0xEA674fdDe714fd979de3EdF0F56AA9716B898ec8/tx/0')
-	data = r.json().get('data')
+	data = r.json().get('data') if r else None
 	return {
 			"data": data,
 			"status": 200

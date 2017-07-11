@@ -52,7 +52,7 @@ def test_create_offer(miner, user, testOrga):
 def test_create_proposal(miner, testOrga):
 	for index, proposal in enumerate([x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']):
 		assert proposal.get('status') == "pending"
-		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'), 15)
 		assert ret.get('status') == 200	
 		assert ret.get('data') != None
 		bw.waitTx(ret.get('data'))
@@ -112,7 +112,7 @@ def test_vote_proposal_no_quorum(miner, user, testOrga):
 	assert len(testOrga.get('proposals')) == 3
 
 	for proposal in [x for x in testOrga.get('proposals').values() if x.get('status') == 'pending']:
-		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'))
+		ret = base_orga.createProposal(miner, password, testOrga.get('_id'), proposal.get('offer').get('address'), 15)
 		assert ret.get('status') == 200	
 		assert ret.get('data') != None
 		bw.waitTx(ret.get('data'))

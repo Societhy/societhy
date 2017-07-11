@@ -747,7 +747,7 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-	def createProposal(self, user, offer_addr, password=None):
+	def createProposal(self, user, offer_addr, duration, password=None):
 		"""
 		canSenderPropose
 		check proposal (_name, _type, , _description, _debatePeriod, _destination, _value, _calldata)
@@ -763,7 +763,7 @@ class OrgaDocument(Document):
 			# calldata = (encode_hex(eth_cli._encode_function('sign()', []))).encode('utf-8')
 			callvalue = (offer_addr + str(value) + calldata.decode()).encode()
 			hashed_callvalue = sha3_256(callvalue).hexdigest().encode('utf-8')[:32]
-			args = [offer['name'], self["rules"]["default_proposal_duration"], offer_addr, value, calldata]
+			args = [offer['name'], duration or self["rules"]["default_proposal_duration"], offer_addr, value, calldata]
 		except KeyError:
 			return False
 		tx_hash = self.board.call('newProposal', local=False, from_=user.get('account'), args=args, password=password)

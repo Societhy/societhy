@@ -208,7 +208,7 @@ def cancelOffer(user, orga_id, offer_id):
 @requires_auth
 def createProposal(user):
     if ensure_fields(['password', 'socketid', 'orga_id', 'offer'], request.json):
-        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'))
+        ret = base_orga.createProposal(user, request.json.get('password'), request.json.get('orga_id'), request.json.get('offer'), request.json.get('duration'))
         return make_response(jsonify(ret.get('data')), ret.get('status'))
     else:
         return make_response("Wrong request format", 400)
