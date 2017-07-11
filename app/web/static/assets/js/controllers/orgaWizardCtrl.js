@@ -311,7 +311,10 @@
     $scope.addInvitedUser = function () {
         if (!$scope.orga_form.invited_users)
             $scope.orga_form.invited_users = {};
-
+        if ($scope.selected_user.originalObject.category != "user") {
+            $rootScope.toogleInfo("You can only invite user!");
+            return false;
+        }
         $scope.orga_form.invited_users[$scope.selected_user.originalObject._id] = $scope.selected_user.originalObject;
         $scope.orga_form.invited_users[$scope.selected_user.originalObject._id]["tag"] = "member";
         $scope.tagChangedForUser($scope.selected_user.originalObject._id);

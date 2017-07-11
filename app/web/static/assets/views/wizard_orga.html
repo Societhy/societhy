@@ -424,7 +424,6 @@
 																		<tr>
 																			<th>Name</th>
 																			<th>Tag</th>
-																			<th>Rights</th>
 																			<th></th>
 																		</tr>
 																	</thead>
@@ -436,11 +435,6 @@
 																					<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
 																					</select>
 																				</div>
-																			</td>
-																			<td>
-																				<button type="button" class="btn btn-blue btn-wide btn-scroll btn-scroll-top ti-pen" ng-click="editRights(user.name, user._id)">
-																					<span>Edit Rights</span>
-																				</button>
 																			</td>
 																			<td>
 																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">

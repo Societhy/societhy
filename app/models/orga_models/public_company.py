@@ -8,7 +8,7 @@ from models.clients import blockchain_watcher as bw
 class PublicCompany(Organization):
 
 	default_rules = {
-		"default_proposal_duration": 1,
+		"default_proposal_duration": 120,
 		"payout_freeze_period": 0,
 		"delegated_voting": False,
 		"quorum": 20,
