@@ -3,7 +3,7 @@ import models.notification
 from bson import objectid
 import datetime
 from models.user import users, UserDocument as User
-from core.utils import toWei
+from core.utils import fromWei, toWei, normalizeAddress
 
 class Entreprise(Organization):
 

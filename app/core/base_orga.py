@@ -285,8 +285,9 @@ def updateOrgaRights(user, orga_id, rights):
     orga_id : string for the mongo id
     rights : data to be push in the database
     """
-    if not self.can(user, "edit_rights"):
-        orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+
+    if orga.can(user, "edit_rights"):
         orga["rights"] = rights;
         orga.save_partial()
         user.needsReloading()
@@ -294,20 +295,48 @@ def updateOrgaRights(user, orga_id, rights):
 	        "data": orga["rights"],
 	        "status": 200
         }
+    else:
+        return {
+	        "data": "You don't have the right to change the rights",
+	        "status": 403
+        }
 
+def inviteUsers(user, orga_id, invited_users):
+    """
+    orga_id : string for the mongo id
+    rights : data to be push in the database
+    """
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    if orga.can(user, "recruit"):
+        orga.inviteUsers(user, invited_users)
+        return {
+            "data": orga,
+            "status": 200
+        }
+    else:
+        return {
+	        "data": "You don't have the right to invite",
+	        "status": 403
+        }
 
 def updateMemberTag(user, orga_id, addr, tag):
     """
     orga_id : string for the mongo id
     rights : data to be push in the database
     """
-    if not self.can(user, "edit_jobs"):
-        orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+    orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
+
+    if orga.can(user, "edit_jobs"):
         orga["members"][addr]["tag"] = tag;
         orga.save_partial()
         return {
 	        "data": tag,
 	        "status": 200
+        }
+    else:
+        return {
+	        "data": "You don't have the right to change tag",
+	        "status": 403
         }
 
 

@@ -232,6 +232,7 @@ class OrgaDocument(Document):
 		self.save()
 
 		for item in self.get('invited_users'):
+			print(item)
 			notif = models.notification.NotificationDocument({
 				"sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
 				"subject": {"id": objectid.ObjectId(item), "type":"user"},
@@ -342,6 +343,29 @@ class OrgaDocument(Document):
 		"""
 		memberList = list(users.find({"account": {"$in": self.registry.call("getMemberList")}}, users.anonymous_info if self.get('rules').get("anonymous") else users.public_info))
 		return memberList
+
+	def inviteUsers(self, user, invited_users):
+		for key, item in invited_users.items():
+			self['invited_users'][key] = item
+			self.save_partial()
+			notif = models.notification.NotificationDocument({
+				"sender": {"id": objectid.ObjectId(self.get("_id")), "type": "organization"},
+				"subject": {"id": objectid.ObjectId(key), "type": "user"},
+				"category": "newInviteJoinOrga",
+				"angularState": {
+					"route":"app.organization",
+					"params":{
+						"_id":str(self.get("_id")),
+						"name":self.get("name")
+					}
+				},
+				"description": "You have been invited in the organisation " + self["name"] + " by " + user.get('name')  + " as a " + item["tag"]
+			})
+			notif.save()
+			user = users.find_one({"_id":objectid.ObjectId(item.get("_id"))})
+			user.get("pending_invitation").append({"type":"organisation", "id":str(self.get("_id"))})
+			user.save()
+
 
 ### FEATURES : join, allow, leave, donate, createProject, createOffer, createProposal, voteForProposal, executeProposal, refreshProposals, endProposal (+all callbacks)
 ### STRUCTURE IS : 
@@ -968,7 +992,7 @@ class OrgaCollection(Collection):
 		"balance": int,
 		"uploaded_documents": list,
 		"gov_model": str,
-		"invited_users": list,
+		"invited_users": dict,
 		"news": list
 	}
 
