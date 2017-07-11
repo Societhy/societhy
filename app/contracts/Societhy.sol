@@ -14,7 +14,7 @@ contract Societhy is mortal, BoardRoom {
     OfferData[] public offers;
 
     event DonationMade(address indexed member, uint indexed value, bool success);
-    event ProjectCreated(address indexed newProjectAddress, string name);
+    event ProjectCreated(address indexed newProjectAddress);
     event OfferCreated(address indexed newProjectAddress, address indexed contractor);
 
     struct OfferData {
@@ -31,7 +31,7 @@ contract Societhy is mortal, BoardRoom {
         Project newProjectAddress = new Project(_name, address(rules), address(registry), _duration);
 
         registry.createProject(address(newProjectAddress));
-        ProjectCreated(newProjectAddress, _name);
+        ProjectCreated(newProjectAddress);
     }
 
     function newProposal(string _name, uint _debatePeriod, address _destination, uint _value, bytes _calldata) canpropose returns (uint proposalID) {

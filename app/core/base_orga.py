@@ -161,7 +161,7 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     orga['uploaded_documents'].append({"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy})
     orga.save_partial()
-    print(orga['uploaded_documents'])
+    print(len(orga['uploaded_documents']))
     # ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
     #     "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
     # if ret.modified_count < 1:
