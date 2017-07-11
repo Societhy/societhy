@@ -391,6 +391,7 @@ class OrgaDocument(Document):
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
 			if new_member and new_member.get('account') not in self.get('members'):
+				self.reload()
 				rights_tag = logs[0]["decoded_data"][0]
 				if rights_tag in self.get('rights').keys():
 					member_data = new_member.anonymous() if self.get('rules').get("anonymous") else new_member.public()
