@@ -165,7 +165,8 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
         $rootScope.getHisto(($rootScope.slider.begin),($rootScope.slider.end))
     };
 
-    $rootScope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)
+    // $rootScope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)
+    setTimeout(initHisto, 1000)
     return ctrl;
 
 });
