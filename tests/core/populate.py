@@ -192,17 +192,15 @@ def create_unicef(miner, martin_doc):
 	for x in range(0, 10):
 		base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
 		bw.waitEvent('NewMember')
-		user_docs[x].reload()
+		# user_docs[x].reload()
 		if (randint(0, 100) in range(0, 80)):
 			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
 			bw.waitEvent("DonationMade")
-			sleep(1)
 			user_docs[x].reload()
 			unicef_doc.reload()
 		if (randint(0, 100) in range(0, 30)):
 			base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
 			bw.waitEvent("MemberLeft")
-			sleep(1)
 			user_docs[x].reload()
 			unicef_doc.reload()
 	# Donate
@@ -211,7 +209,6 @@ def create_unicef(miner, martin_doc):
 		print("user " + str(x) + " donate to unicef")
 		ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
 		bw.waitEvent("DonationMade")
-		sleep(1)
 		user_docs[x].reload()
 		unicef_doc.reload()
 		
@@ -243,13 +240,11 @@ def create_msf(miner):
 		if (randint(0, 100) in range(0, 80)):
 			ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(500, 1200)})
 			bw.waitEvent("DonationMade")
-			sleep(1)
 			user_docs[x].reload()
 			msf_doc.reload()		
 		if (randint(0, 100) in range(0, 30)):
 			base_orga.leaveOrga(user_docs[x], "test", msf_doc["_id"])
 			bw.waitEvent("MemberLeft")
-			sleep(1)
 			user_docs[x].reload()
 			msf_doc.reload()		
 		
@@ -258,7 +253,6 @@ def create_msf(miner):
 	for x in range(18, 25):
 		ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(100, 800)})
 		bw.waitEvent("DonationMade")
-		sleep(1)
 		user_docs[x].reload()
 		msf_doc.reload()		
 
@@ -266,12 +260,10 @@ def create_msf(miner):
         # Project
 	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"name": "Collecte de don de Juin", "description": "Ceci represente la collecte de don mensuel de juin.\n Merci à tous pour votre participation.","invited_users": {}, 'campaign':{"amount_to_raise": 7000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
-	sleep(1)
 	msf_doc.reload()
 	miner.reload()
 	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"descrition": "Le projet de MSF de lutte contre le VIH et la tuberculose dans le district d’uThungulu, qui couvre une population de 114 000 personnes, a toujours pour ambition de devenir le premier site sud-africain à atteindre l’objectif ambitieux des 90-90-90 d’ONUSIDA .\n                Le rapport « Inverser la tendance de l’épidémie de VIH et de tuberculose dans la province de KwaZulu-Natal » a présenté l’approche communautaire du projet, qui a permis d’augmenter le nombre de dépistages intégrés du VIH et de la tuberculose, ainsi que l’accès et l’adhérence au traitement du VIH, avec pour objectif d’influencer la future stratégie du gouvernement sud-africain pour atteindre les objectifs de traitement « 90-90-90 » à l’échelon national. En 2016, 56 029 personnes ont été dépistées, 2370 hommes circoncis et 1 573 756 préservatifs ont été distribués.", "name": "Collecte de don pour la lute contre le VIH et la tuberculose dans la province de Kwazulu-Natal en sud-Afrique", "invited_users": {}, 'campaign':{"amount_to_raise": 10000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
-	sleep(1)
 	msf_doc.reload()
 	miner.reload()                
 	return msf_doc
@@ -283,40 +275,36 @@ def create_youtube(miner):
 	        "description" : "Il y en a pour tous les goûts sur VoxMakers !\nNous sommes un collectif de créateurs vidéo divers; nos émissions couvrent de nombreux sujets de la culture populaire :\nJeux vidéo, films, technologie, culture geek, musique, etc...",
 	        "gov_model" : "entreprise",
 	        "initial_funds": 2570,
-	        "rules": {
-		        "delegated_voting": True,
-		        "curators": True,
-		"quorum" : 50,
-		"majority": 50
-	        }
-        
+                "rules": {
+	                "accessibility": "public",
+                        "quorum": 50,
+                        "majority": 50
+                }
         }
 	create_orga(orga_youtube, miner, "simon")                
+	bw.waitEvent('CreateOrga')
 	youtube_doc = organizations.find_one({"name": "VoxMaker"})
-	#Join and donate and leave
-	x  = 22
-	for x in range(22, 30):
-		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"], "member")
-		bw.waitEvent('NewMember')
-		sleep(1)
-		user_docs[x].reload()
-		youtube_doc.reload()		
-		if (randint(0, 100) in range(0, 30)):
-			base_orga.leaveOrga(user_docs[x], "test", youtube_doc["_id"])
-			bw.waitEvent("MemberLeft")
-			sleep(1)
-			user_docs[x].reload()
-			youtube_doc.reload()		
-		
+	#Join and donate and leave NOT TO DO IF ENTREPRISE
+#	x  = 22
+#	for x in range(22, 30):
+#		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"], "member")
+#		bw.waitEvent('NewMember')
+#		sleep(1)
+#		user_docs[x].reload()
+#		youtube_doc.reload()		
+#		if (randint(0, 100) in range(0, 30)):
+#			base_orga.leaveOrga(user_docs[x], "test", youtube_doc["_id"])
+#			bw.waitEvent("MemberLeft")
+#			user_docs[x].reload()
+#			youtube_doc.reload()		
+#		
         # Project
 	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "JAPAN EXPO JUILLET 2017", "description": "Comme tout les ans, le collectif vous attend à la japan expo!!\nMalheuresement très peu de membre habite près de celle-ci, et la Japan refuse de nous aidé financièrement.\nNous nous en remettons donc à vous, nos cher auditeurs, si vous le souhaitez et si sourtout vous le pouvez, vous pouvez nous soutenir financièrement ici même!\nVoici la liste non exhaustive de toutes nos activités:\n	        Samedi:		Rencontre abonnés, Dédicaces, Ventes de goodies et dvd collector\n		Dimanche:	Sketch et annonces inédits + concert live\n À bientôt ~ ",  "invited_users": {}, 'campaign':{"amount_to_raise": 7000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
-	sleep(1)        
 	youtube_doc.reload()
 	miner.reload()        
 	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "Foundraise: Projet Film", "description": "Bonjour à tous, comme annoncé dernièrement, le collectif se lance dans la réalisation d'un court métrage.\n Nous allons pour cela avoir encore besoin de votre aide. Cette aide peut se faire de plusieurs façons: En partageant ou en nous soutenant financièrement.\nSi vous le pouvez et si surtout vous le voulez, vous pouvez par cette page nous setenir fiancièrement pour la réalisation de ce projet. Tout l'argent sera directement mis uniquement à disposition du projet (Payement des acteurs, des lieux, des props)\n Merci à tous pour votre soutien et à bientôt!!!", "invited_users": {}, 'campaign':{"amount_to_raise": 10000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
-	sleep(1)        
 	youtube_doc.reload()
 	miner.reload()        
 	return youtube_doc
@@ -353,13 +341,12 @@ def create_offer(admin, miner, password, orga, offer, createPro=False, votePro=F
 		if p.get('status') == 'approved':
 			ret = base_orga.executeProposal(miner, password, orga.get('_id'), p.get('proposal_id'))
 			bw.waitTx(ret.get('data'))
-			sleep(1)
 			orga.reload()
 			admin.reload()
 
 
 def create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types):
-	for x in range(0, 50):
+	for x in range(0, 30):
 		orga_template["name"] = orga_names[x]
 		orga_template["type"] = orga_types[randint(0,3)]
 		size = randint(0, 6200)

@@ -431,7 +431,7 @@ class OrgaDocument(Document):
 						                "name":self.get("name")
 				                        }
                                                 },
-                                                "description": new_member.get("name") + " has join the organization " + self["name"] + ".", 
+                                                "description": new_member.get("name", address) + " has join the organization " + self["name"] + ".", 
                                                 "createdAt": datetime.datetime.now(),
                                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 					notif.save()
@@ -470,7 +470,8 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2 and len(logs[0]["decoded_data"]) == 1:
 			address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_member = users.find_one({"account": address})
-
+			member = self.getMember(address)
+			return self
 		return False
 
 
@@ -543,7 +544,7 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name") + " has left the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has left the organization " + self["name"] + ".", 
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				notif.save()
@@ -598,12 +599,12 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name") + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
                                         "amount": donation_amount,
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
-                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name") + ".",
+                                                                                         "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name", address) + ".",
                                                                                          "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
 			else:
 				notif = models.notification.NotificationDocument({

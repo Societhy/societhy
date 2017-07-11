@@ -30,7 +30,7 @@ contract ControlledRegistry is Registry {
 		rights[this] = true;
 	}
 
-	function register(address _someMember, string _tag) public returns (bool) {
+	function register(address _someMember, string _tag) public onlyAllowed returns (bool) {
 		uint id;
 		if (memberId[_someMember] == 0) {
 			memberId[_someMember] = members.length;
@@ -56,7 +56,7 @@ contract ControlledRegistry is Registry {
 		MemberLeft(_someMember);
 	}
 
-	function createProject(address _project) onlyAllowed public returns (bool) {
+	function createProject(address _project) public returns (bool) {
 		uint id;
 		if (projectId[_project] == 0) {
 			projectId[_project] = projects.length;
