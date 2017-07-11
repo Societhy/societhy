@@ -291,8 +291,11 @@ def updateOrgaRights(user, orga_id, rights):
         orga["rights"] = rights;
         orga.save_partial()
         user.needsReloading()
+        tag = orga["members"].get(user['account'])['tag']
+        print(tag)
+        rights = orga['rights'][tag]
         return {
-	        "data": orga["rights"],
+	        "data": {"rights": orga["rights"], "userRights": rights},
 	        "status": 200
         }
     else:
@@ -329,8 +332,10 @@ def updateMemberTag(user, orga_id, addr, tag):
     if orga.can(user, "edit_jobs"):
         orga["members"][addr]["tag"] = tag;
         orga.save_partial()
+        tag = orga["members"].get(user['account'])['tag']
+        rights = orga['rights'][tag]
         return {
-	        "data": tag,
+	        "data": {"rights": orga["rights"], "userRights": rights},
 	        "status": 200
         }
     else:

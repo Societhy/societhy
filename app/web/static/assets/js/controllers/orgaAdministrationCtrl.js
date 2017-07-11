@@ -63,8 +63,8 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	}).then(function(response) {
         $rootScope.toogleSuccess("Job updated!");
         $("button[val='"+addr+"']").prop("disabled", true);
-	    $rootScope.currentOrga.members[addr].tag = $rootScope.admin.members.tmp[addr];
-	    //$(("#memberTag_").concat(addr, " option:selected")).text(""); reset le select
+        $rootScope.currentOrga.rights = response.data.rights;
+        $scope.currentRights = $rootScope.currentRights = response.data.userRights;
 	    delete $rootScope.admin.members.tmp[addr]
 	},function(error) {
 	    $rootScope.toogleError(error.data);
@@ -171,9 +171,11 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    "orga_id": $rootScope.currentOrga._id,
 	    "rights": $rootScope.admin.rights.tmp
 	}).then(function(response) {
+		console.log(response)
         $rootScope.toogleSuccess("Rights updated!");
-        $rootScope.currentOrga.rights = response.data;
-	},function(error) {
+        $rootScope.currentOrga.rights = response.data.rights;
+        $scope.currentRights = $rootScope.currentRights = response.data.userRights;
+    },function(error) {
 	    $rootScope.admin.rights.tmp = $rootScope.currentOrga.rights;
 	    $rootScope.toogleError(error.data);
 	});
