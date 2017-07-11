@@ -282,7 +282,6 @@ def create_youtube(miner):
                 }
         }
 	create_orga(orga_youtube, miner, "simon")                
-	bw.waitEvent('CreateOrga')
 	youtube_doc = organizations.find_one({"name": "VoxMaker"})
 	#Join and donate and leave NOT TO DO IF ENTREPRISE
 #	x  = 22
@@ -400,8 +399,8 @@ else:
 	user_docs = users.find({"city": "Unknown"})
 
 
-#create_unicef(miner, martin_doc)
+create_unicef(miner, martin_doc)
 create_youtube(miner)
-#create_msf(miner)
-#create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
+create_msf(miner)
+create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
 
