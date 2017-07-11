@@ -45,7 +45,7 @@ test_user = {
         "firstname": "Thomas",
         "lastname": "Duvent",
         "email": "basic@societhy.fr",
-	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
+	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
@@ -57,7 +57,7 @@ test_miner = {
         "firstname": "Simon",
         "lastname": "Legrand",
         "email": "miner@societhy.fr",
-	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
+	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
@@ -70,7 +70,7 @@ user_martin = {
         "lastname": "Martin",
         "city": "Amien",
         "email": "jeremy.martin@societhy.com",
-	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
+	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
@@ -111,7 +111,7 @@ def create_user(user, user_names, user_villes, user_addrs):
 		print("creating user " + str(i))
 		user_docs[i] = UserDocument(doc=user, gen_skel=True, notifs=False)
 		user_docs[i].save()
-		addr = keys.genLinkedKey(user_docs[i], "test")
+		addr = keys.genLinkedKey(user_docs[i], "simon")
 		user.update()              
 		miner.unlockAccount(password='simon')
 		ret = eth_cli.transfer(miner.get('account'), user_docs[i]["account"], 50000000000000000000000000)
@@ -184,33 +184,35 @@ def create_unicef(miner, martin_doc):
 	        "type": "employment",
 	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
         }
-
-	create_offer(miner, martin_doc, "simon", unicef_doc, offre_1, True, True, True)
-	create_offer(miner, martin_doc, "simon", unicef_doc, offre_2, True, True, True)
-	create_offer(miner, martin_doc, "simon", unicef_doc, offre_3, True, True, True)
+	members = []
         #Join and donate and leave
 	for x in range(0, 10):
-		base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
+		base_orga.joinOrga(user_docs[x], "simon", unicef_doc["_id"])
 		bw.waitEvent('NewMember')
-		# user_docs[x].reload()
+		user_docs[x].reload()
+		members.append(user_docs[x])
 		if (randint(0, 100) in range(0, 80)):
-			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
+			ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(500, 1200)})
 			bw.waitEvent("DonationMade")
 			user_docs[x].reload()
 			unicef_doc.reload()
 		if (randint(0, 100) in range(0, 30)):
-			base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
+			base_orga.leaveOrga(user_docs[x], "simon", unicef_doc["_id"])
 			bw.waitEvent("MemberLeft")
 			user_docs[x].reload()
 			unicef_doc.reload()
+			members.remove(user_docs[x])
 	# Donate
-	x = 11
-	for x in range(11, 18):
-		print("user " + str(x) + " donate to unicef")
-		ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
-		bw.waitEvent("DonationMade")
-		user_docs[x].reload()
-		unicef_doc.reload()
+#	x = 11
+#	for x in range(11, 18):
+#		print("user " + str(x) + " donate to unicef")
+#		ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(100, 800)})
+#		bw.waitEvent("DonationMade")
+#		user_docs[x].reload()
+#		unicef_doc.reload()
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_1, members)
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_2, members)
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_3, members)
 		
                
 def create_msf(miner):
@@ -234,16 +236,16 @@ def create_msf(miner):
 	#Join and donate and leave
 	x  = 0
 	for x in range(0, 10):
-		base_orga.joinOrga(user_docs[x], "test", msf_doc["_id"])
+		base_orga.joinOrga(user_docs[x], "simon", msf_doc["_id"])
 		bw.waitEvent('NewMember')
 		user_docs[x].reload()
 		if (randint(0, 100) in range(0, 80)):
-			ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(500, 1200)})
+			ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(500, 1200)})
 			bw.waitEvent("DonationMade")
 			user_docs[x].reload()
 			msf_doc.reload()		
 		if (randint(0, 100) in range(0, 30)):
-			base_orga.leaveOrga(user_docs[x], "test", msf_doc["_id"])
+			base_orga.leaveOrga(user_docs[x], "simon", msf_doc["_id"])
 			bw.waitEvent("MemberLeft")
 			user_docs[x].reload()
 			msf_doc.reload()		
@@ -251,7 +253,7 @@ def create_msf(miner):
 	# Donate
 	x = 11
 	for x in range(18, 25):
-		ret = base_orga.donateToOrga(user_docs[x], "test", msf_doc['_id'], {"amount": randint(100, 800)})
+		ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(100, 800)})
 		bw.waitEvent("DonationMade")
 		user_docs[x].reload()
 		msf_doc.reload()		
@@ -286,13 +288,13 @@ def create_youtube(miner):
 	#Join and donate and leave NOT TO DO IF ENTREPRISE
 #	x  = 22
 #	for x in range(22, 30):
-#		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"], "member")
+#		base_orga.joinOrga(user_docs[x], "simon", youtube_doc["_id"], "member")
 #		bw.waitEvent('NewMember')
 #		sleep(1)
 #		user_docs[x].reload()
 #		youtube_doc.reload()		
 #		if (randint(0, 100) in range(0, 30)):
-#			base_orga.leaveOrga(user_docs[x], "test", youtube_doc["_id"])
+#			base_orga.leaveOrga(user_docs[x], "simon", youtube_doc["_id"])
 #			bw.waitEvent("MemberLeft")
 #			user_docs[x].reload()
 #			youtube_doc.reload()		
@@ -309,7 +311,7 @@ def create_youtube(miner):
 	return youtube_doc
 
 # CREATE OFFER
-def create_offer(admin, miner, password, orga, offer, createPro=False, votePro=False, execPro=False):
+def create_offer(admin, miner, password, orga, offer, members):
 	ret = base_orga.createOffer(miner, password, orga.get('_id'), offer)
 	bw.waitTx(ret.get('data'))
 	orga.reload()
@@ -320,28 +322,11 @@ def create_offer(admin, miner, password, orga, offer, createPro=False, votePro=F
 		new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
 	NAY = 0
 	YEA = 1
-	for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'debating']): 
-		ret = base_orga.voteForProposal(admin, password, orga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
-		bw.waitEvent('VoteCounted')
-		orga.reload()
-		new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
-	last_timeleft = 100
-	while len([x for x in orga.get('proposals').values() if x.get('status') == 'debating']) > 0:
-		orga.refreshProposals()
-		orga.reload()
-	
-		for index, proposal in enumerate(orga.get('proposals').values()):
-			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
-				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
-				last_timeleft = proposal.get('time_left')
-	
-	for p in orga.get('proposals').values():
-		initial_balance = eth_cli.eth_getBalance(p.get('offer').get('contractor'))
-		if p.get('status') == 'approved':
-			ret = base_orga.executeProposal(miner, password, orga.get('_id'), p.get('proposal_id'))
-			bw.waitTx(ret.get('data'))
+	for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'debating']):
+		for member in members:                
+			ret = base_orga.voteForProposal(member, password, orga.get('_id'), proposal.get('proposal_id'), randint(0,1))
+			bw.waitEvent('VoteCounted')
 			orga.reload()
-			admin.reload()
 
 
 def create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types):
@@ -358,7 +343,7 @@ anonym_template = {
         "lastname": "Anonym",
         "city": "Unknown",
         "email": "anonym@societhy.fr",
-	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
+	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
