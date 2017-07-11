@@ -334,8 +334,9 @@ def updateMemberTag(user, orga_id, addr, tag):
         orga.save_partial()
         tag = orga["members"].get(user['account'])['tag']
         rights = orga['rights'][tag]
+        user.needsReloading()
         return {
-	        "data": {"rights": orga["rights"], "userRights": rights},
+	        "data": {"members": orga["members"], "userRights": rights},
 	        "status": 200
         }
     else:

@@ -63,7 +63,8 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	}).then(function(response) {
         $rootScope.toogleSuccess("Job updated!");
         $("button[val='"+addr+"']").prop("disabled", true);
-        $rootScope.currentOrga.rights = response.data.rights;
+        console.log(response)
+        $rootScope.currentOrga.members = response.data.members;
         $scope.currentRights = $rootScope.currentRights = response.data.userRights;
 	    delete $rootScope.admin.members.tmp[addr]
 	},function(error) {
@@ -74,7 +75,6 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	// USER INVIT MANAGEMENT
 
     $scope.addInvitedUser = function () {
-    	console.log($rootScope.admin.members.selected)
     	if ($rootScope.admin.members.selected.originalObject.category != "user") {
             $rootScope.toogleInfo("You can only invite users");
             return false;
@@ -171,7 +171,6 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    "orga_id": $rootScope.currentOrga._id,
 	    "rights": $rootScope.admin.rights.tmp
 	}).then(function(response) {
-		console.log(response)
         $rootScope.toogleSuccess("Rights updated!");
         $rootScope.currentOrga.rights = response.data.rights;
         $scope.currentRights = $rootScope.currentRights = response.data.userRights;
