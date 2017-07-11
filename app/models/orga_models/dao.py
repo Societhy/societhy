@@ -10,7 +10,7 @@ from models.clients import blockchain_watcher as bw
 class Dao(Organization):	
 	
 	default_rules = {
-		"default_proposal_duration": 2,
+		"default_proposal_duration": 120,
 		"delegated_voting": False,
 		"payout_freeze_period": 0,
 		"quorum": 20,
