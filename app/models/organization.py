@@ -663,8 +663,6 @@ class OrgaDocument(Document):
 		if len(logs) == 1 and len(logs[0].get('topics')) == 2:
 			contract_address = normalizeAddress(logs[0].get('topics')[1], hexa=True)
 			new_project = ProjectDocument(at=contract_address, contract='BaseProject', owner=self.public(), gen_skel=True)
-			if len(logs[0]["decoded_data"]) == 1:
-				new_project["name"] = logs[0]["decoded_data"][0]
 			if callback_data:
 				new_project.update(callback_data)
 			new_project["contracts"] = dict()
