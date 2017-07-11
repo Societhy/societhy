@@ -176,6 +176,15 @@ def updateMembertag(user):
     ret = base_orga.updateMemberTag(user, request.json.get('orga_id'), request.json.get('addr'), request.json.get('tag'))
     return make_response(jsonify(ret.get('data')), ret.get('status'))
 
+@router.route('/inviteUsersToOrga', methods=["POST"])
+@requires_auth
+def inviteUsersToOrga(user):
+    if ensure_fields(['orga_id', 'invited_users', 'socketid'], request.json):
+        ret = base_orga.inviteUsers(user, request.json.get('orga_id'), request.json.get('invited_users'))
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
 @router.route('/createOffer', methods=["POST"])
 @requires_auth
 def createOffer(user):

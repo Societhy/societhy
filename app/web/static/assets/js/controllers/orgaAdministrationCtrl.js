@@ -1,7 +1,6 @@
 app.controller('orgaAdministrationController', function($rootScope, $scope, $http, $sessionStorage, $state, $controller) {
 
     var ctrl = this;
-
     // ADD DEFAULT RIGHT
     // Deplacer les user d'un job à un autre
     // LA SECU !!!!
@@ -32,7 +31,7 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 			     "access_administration": false
 			}
 		},
-		members: {tmp: {}}};
+		members: {tmp: {}, invited_users: {}}};
 
 
 
@@ -73,6 +72,55 @@ app.controller('orgaAdministrationController', function($rootScope, $scope, $htt
 	    $rootScope.toogleError(error.data);
 	});
     }
+
+	// USER INVIT MANAGEMENT
+
+    $scope.addInvitedUser = function () {
+    	console.log($rootScope.admin.members.selected)
+    	if ($rootScope.admin.members.selected.originalObject.category != "user") {
+            $rootScope.toogleInfo("You can only invite users");
+            return false;
+		}
+
+    	if (!$rootScope.admin.members.invited_users[$rootScope.admin.members.selected.originalObject._id])
+        	$rootScope.admin.members.invited_users[$rootScope.admin.members.selected.originalObject._id] = $rootScope.admin.members.selected.originalObject
+
+    };
+
+    $scope.updateInvitedUserRights = function (id) {
+        $rootScope.admin.members.invited_users[id]["rights"] = $rootScope.currentOrga.rights[$rootScope.admin.members.invited_users[id]["tag"]]
+    };
+
+    $scope.removeInvitedUser = function (id) {
+        delete $rootScope.admin.members.invited_users[id];
+    };
+
+    $scope.sendInvitations = function () {
+        if (Object.keys($rootScope.admin.members.invited_users).length) {
+            var ret = true;
+            $.each($rootScope.admin.members.invited_users, function (key, val) {
+				 if (!val["rights"]) {
+				 	ret = false;
+				 	return;
+				 }
+            })
+			if (ret == false) {
+                $rootScope.toogleInfo("Please fill all tag(s)");
+                return
+            }
+            $http.post('/inviteUsersToOrga', {
+                "socketid": $rootScope.sessionId,
+                "orga_id": $rootScope.currentOrga._id,
+                "invited_users": $rootScope.admin.members.invited_users
+            }).then(function (response) {
+                $rootScope.toogleSuccess("Member(s) invited");
+                delete $rootScope.admin.members.invited_users;
+                $rootScope.admin.members.invited_users = {};
+            }, function (error) {
+                $rootScope.toogleError(error.data);
+            });
+        }
+    };
 
     $rootScope.admin.members.removeMember = function(addr) {
 	if ($scope.doVerifications()) {
