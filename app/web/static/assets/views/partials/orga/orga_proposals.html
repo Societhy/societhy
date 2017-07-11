@@ -139,12 +139,13 @@
 								<div class="text-center block">
 									<div class="border-left border-right border-dark padding-5">
 										<small class="text-muted">Votes
-											<br>
+											<br/>
 											<strong> {{ proposal.votes_count || 0 }}</strong>
 										</small>
+										<br/>
+										<small><span class="text-success">{{proposal.yea}} for</span> / <span class="text-danger">{{proposal.nay}} against</span></small>
 									</div>
 									<span ng-if="proposal.voted == 0 || proposal.voted == 1" class="label text-large" ng-class="{0: 'label-danger', 1: 'label-success'}[proposal.voted]">{{ "You voted ".concat({0: "nay", 1:"yea"}[proposal.voted]) }}</span>
-
 								</div>
 								<div class="block" ng-if="proposal.status == 'debating'">
 									<div class="min-height-80 padding-10 text-center">
