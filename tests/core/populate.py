@@ -69,7 +69,7 @@ user_martin = {
         "firstname": "Jeremy",
         "lastname": "Martin",
         "city": "Amien",
-        "email": "jeremy.martin@societhy.fr",
+        "email": "jeremy.martin@societhy.com",
 	"password": encode_hex(scrypt.hash("test", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
@@ -80,14 +80,18 @@ user_martin = {
 # InitAll
 test_user_doc = UserDocument(doc=test_user, gen_skel=True, notifs=False)
 miner = UserDocument(doc=test_miner, gen_skel=True, notifs=False)
-user_martin_doc = UserDocument(doc=user_martin, gen_skel=True, notifs=False)
+martin_doc = UserDocument(doc=user_martin, gen_skel=True, notifs=False)
 test_user_doc.save()
 miner.save()
-user_martin_doc.save()
+martin_doc.save()
       
 with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 	keys.importNewKey(miner, f)
 miner = users.find_one({"name": "simon"})
+
+with open(path.join(keyDirectory, 'test_key2.key'), 'rb') as f:
+	keys.importNewKey(martin_doc, f)
+martin_doc = users.find_one({"email": "jeremy.martin@societhy.com"})
 bw.run()
 
 
@@ -124,12 +128,12 @@ def create_orga(orga, miner, password):
 	return ret
 	
 #   UNICEF
-def create_unicef(miner):
+def create_unicef(miner, martin_doc):
 	orga_unicef = {
 	        "name": "UNICEF", 
 	        "description" : "Présent dans 190 pays et territoires, l’UNICEF se bat depuis soixante-dix ans pour les droits de chaque enfant. Découvrez notre action par l’intermédiaire des programmes que nous créons au nom des enfants.", 
 	        "gov_model" : "ngo",
-	        "initial_funds": 2570,
+	        "initial_funds": 25700,
 	        "rules": {
 		        "delegated_voting": True,
 		        "curators": True,
@@ -143,38 +147,10 @@ def create_unicef(miner):
                 
 	unicef_doc = organizations.find_one({"name": "UNICEF"})
 	miner.reload()
-        #Join and donate and leave
-	x  = 0
-	for x in range(0, 10):
-		base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
-		bw.waitEvent('NewMember')
-		user_docs[x].reload()
-		if (randint(0, 100) in range(0, 80)):
-			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
-			bw.waitEvent("DonationMade")
-		sleep(1)
-		user_docs[x].reload()
-		unicef_doc.reload()
-		if (randint(0, 100) in range(0, 30)):
-			base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
-			bw.waitEvent("MemberLeft")
-			sleep(1)
-			user_docs[x].reload()
-			unicef_doc.reload()		
-	# Donate
-	x = 11
-	for x in range(11, 18):
-		print("user " + str(x) + " donate to unicef")
-		ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
-		bw.waitEvent("DonationMade")
-		sleep(1)
-		user_docs[x].reload()
-		unicef_doc.reload()		
-
-	test_offer_1 = {
-	        'name': '',
+	offre_1 = {
+	        'name': 'Offre 1',
 	        'client': unicef_doc.get('address'),
-	        'contractor': miner.get('account'),
+	        'contractor': martin_doc.get('account'),
 	        "description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
 	        'initialWithdrawal': 100,
 	        'recurrentWithdrawal': 300,
@@ -184,8 +160,62 @@ def create_unicef(miner):
 	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
         }
 
-	create_offer(miner, "simon", unicef_doc, test_offer_1, True, True, True)
+	offre_2 = {
+	        'name': 'Offre 2',
+	        'client': unicef_doc.get('address'),
+	        'contractor': martin_doc.get('account'),
+	        "description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
+	        'initialWithdrawal': 8000,
+	        'recurrentWithdrawal': 100,
+	        'isRecurrent': True,
+	        'duration': 10,
+	        "type": "investment",
+	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
+        }
+	offre_3 = {
+	        'name': 'Offre 2',
+	        'client': unicef_doc.get('address'),
+	        'contractor': martin_doc.get('account'),
+	        "description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
+	        'initialWithdrawal': 10,
+	        'recurrentWithdrawal': 200,
+	        'isRecurrent': True,
+	        'duration': 12,
+	        "type": "employment",
+	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
+        }
 
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_1, True, True, True)
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_2, True, True, True)
+	create_offer(miner, martin_doc, "simon", unicef_doc, offre_3, True, True, True)
+        #Join and donate and leave
+	for x in range(0, 10):
+		base_orga.joinOrga(user_docs[x], "test", unicef_doc["_id"])
+		bw.waitEvent('NewMember')
+		user_docs[x].reload()
+		if (randint(0, 100) in range(0, 80)):
+			ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(500, 1200)})
+			bw.waitEvent("DonationMade")
+			sleep(1)
+			user_docs[x].reload()
+			unicef_doc.reload()
+		if (randint(0, 100) in range(0, 30)):
+			base_orga.leaveOrga(user_docs[x], "test", unicef_doc["_id"])
+			bw.waitEvent("MemberLeft")
+			sleep(1)
+			user_docs[x].reload()
+			unicef_doc.reload()
+	# Donate
+	x = 11
+	for x in range(11, 18):
+		print("user " + str(x) + " donate to unicef")
+		ret = base_orga.donateToOrga(user_docs[x], "test", unicef_doc['_id'], {"amount": randint(100, 800)})
+		bw.waitEvent("DonationMade")
+		sleep(1)
+		user_docs[x].reload()
+		unicef_doc.reload()
+		
+               
 def create_msf(miner):
 	orga_msf = {
 	        "name": "Medecin Sans Frontier", 
@@ -234,7 +264,7 @@ def create_msf(miner):
 
                         
         # Project
-	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"name": "Collecte de don de Juin", "description": "Ceci represente la collecte de don mensuel de juin.\n Merci à tous pour votre participation.","invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	ret = base_orga.createProjectFromOrga(miner, "simon", msf_doc.get('_id'), {"name": "Collecte de don de Juin", "description": "Ceci represente la collecte de don mensuel de juin.\n Merci à tous pour votre participation.","invited_users": {}, 'campaign':{"amount_to_raise": 7000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
 	sleep(1)
 	msf_doc.reload()
@@ -251,7 +281,7 @@ def create_youtube(miner):
 	orga_youtube = {
 	        "name": "VoxMaker", 
 	        "description" : "Il y en a pour tous les goûts sur VoxMakers !\nNous sommes un collectif de créateurs vidéo divers; nos émissions couvrent de nombreux sujets de la culture populaire :\nJeux vidéo, films, technologie, culture geek, musique, etc...",
-	        "gov_model" : "ngo",
+	        "gov_model" : "entreprise",
 	        "initial_funds": 2570,
 	        "rules": {
 		        "delegated_voting": True,
@@ -266,9 +296,8 @@ def create_youtube(miner):
 	#Join and donate and leave
 	x  = 22
 	for x in range(22, 30):
-		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"])
+		base_orga.joinOrga(user_docs[x], "test", youtube_doc["_id"], "member")
 		bw.waitEvent('NewMember')
-		user_docs[x].reload()
 		sleep(1)
 		user_docs[x].reload()
 		youtube_doc.reload()		
@@ -280,12 +309,12 @@ def create_youtube(miner):
 			youtube_doc.reload()		
 		
         # Project
-	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "JAPAN EXPO JUILLET 2017", "description": "Comme tout les ans, le collectif vous attend à la japan expo!!\nMalheuresement très peu de membre habite près de celle-ci, et la Japan refuse de nous aidé financièrement.\nNous nous en remettons donc à vous, nos cher auditeurs, si vous le souhaitez et si sourtout vous le pouvez, vous pouvez nous soutenir financièrement ici même!\nVoici la liste non exhaustive de toutes nos activités:\n	        Samedi:		Rencontre abonnés, Dédicaces, Ventes de goodies et dvd collector\n		Dimanche:	Sketch et annonces inédits + concert live\n À bientôt ~ ",  "invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "JAPAN EXPO JUILLET 2017", "description": "Comme tout les ans, le collectif vous attend à la japan expo!!\nMalheuresement très peu de membre habite près de celle-ci, et la Japan refuse de nous aidé financièrement.\nNous nous en remettons donc à vous, nos cher auditeurs, si vous le souhaitez et si sourtout vous le pouvez, vous pouvez nous soutenir financièrement ici même!\nVoici la liste non exhaustive de toutes nos activités:\n	        Samedi:		Rencontre abonnés, Dédicaces, Ventes de goodies et dvd collector\n		Dimanche:	Sketch et annonces inédits + concert live\n À bientôt ~ ",  "invited_users": {}, 'campaign':{"amount_to_raise": 7000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
 	sleep(1)        
 	youtube_doc.reload()
 	miner.reload()        
-	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "Foundraise: Projet Film", "description": "Bonjour à tous, comme annoncé dernièrement, le collectif se lance dans la réalisation d'un court métrage.\n Nous allons pour cela avoir encore besoin de votre aide. Cette aide peut se faire de plusieurs façons: En partageant ou en nous soutenant financièrement.\nSi vous le pouvez et si surtout vous le voulez, vous pouvez par cette page nous setenir fiancièrement pour la réalisation de ce projet. Tout l'argent sera directement mis uniquement à disposition du projet (Payement des acteurs, des lieux, des props)\n Merci à tous pour votre soutien et à bientôt!!!", "invited_users": {}, 'campaign':{"amount_to_raise": 0, "duration": 30}})
+	ret = base_orga.createProjectFromOrga(miner, "simon", youtube_doc.get('_id'), {"name": "Foundraise: Projet Film", "description": "Bonjour à tous, comme annoncé dernièrement, le collectif se lance dans la réalisation d'un court métrage.\n Nous allons pour cela avoir encore besoin de votre aide. Cette aide peut se faire de plusieurs façons: En partageant ou en nous soutenant financièrement.\nSi vous le pouvez et si surtout vous le voulez, vous pouvez par cette page nous setenir fiancièrement pour la réalisation de ce projet. Tout l'argent sera directement mis uniquement à disposition du projet (Payement des acteurs, des lieux, des props)\n Merci à tous pour votre soutien et à bientôt!!!", "invited_users": {}, 'campaign':{"amount_to_raise": 10000, "duration": 30}})
 	bw.waitTx(ret.get('data'))
 	sleep(1)        
 	youtube_doc.reload()
@@ -293,34 +322,31 @@ def create_youtube(miner):
 	return youtube_doc
 
 # CREATE OFFER
-def create_offer(miner, password, orga, offer, createPro=False, votePro=False, execPro=False):
+def create_offer(admin, miner, password, orga, offer, createPro=False, votePro=False, execPro=False):
 	ret = base_orga.createOffer(miner, password, orga.get('_id'), offer)
 	bw.waitTx(ret.get('data'))
 	orga.reload()
-	if createPro:
-		for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'pending']):
-			ret =  base_orga.createProposal(miner, password, orga.get('_id'), proposal.get('offer').get('address'))
-			bw.waitTx(ret.get('data'))
-			orga.reload()
-			new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
-	if votePro:
-		NAY = 0
-		YEA = 1
-		for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'debating']):
-			ret = base_orga.voteForProposal(miner, password, orga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
-			bw.waitEvent('VoteCounted')
-			orga.reload()
-			new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
+	for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'pending']):
+		ret =  base_orga.createProposal(admin, password, orga.get('_id'), proposal.get('offer').get('address'))
+		bw.waitTx(ret.get('data'))
+		orga.reload()
+		new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
+	NAY = 0
+	YEA = 1
+	for index, proposal in enumerate([x for x in orga.get('proposals').values() if x.get('status') == 'debating']): 
+		ret = base_orga.voteForProposal(admin, password, orga.get('_id'), proposal.get('proposal_id'), YEA if index % 2 == 0 else NAY)
+		bw.waitEvent('VoteCounted')
+		orga.reload()
+		new_proposal = orga.get('proposals').get(proposal.get('offer').get('address'))
+	last_timeleft = 100
+	while len([x for x in orga.get('proposals').values() if x.get('status') == 'debating']) > 0:
+		orga.refreshProposals()
+		orga.reload()
 	
-		last_timeleft = 100
-		while len([x for x in orga.get('proposals').values() if x.get('status') == 'debating']) > 0:
-			orga.refreshProposals()
-			orga.reload()
-	
-			for index, proposal in enumerate(orga.get('proposals').values()):
-				if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
-					print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
-					last_timeleft = proposal.get('time_left')
+		for index, proposal in enumerate(orga.get('proposals').values()):
+			if proposal.get('time_left') % 10 == 0 and proposal.get('time_left') < last_timeleft:
+				print("Waiting for proposal debating time to end : ", proposal.get('time_left'), "% of time left")
+				last_timeleft = proposal.get('time_left')
 	
 	for p in orga.get('proposals').values():
 		initial_balance = eth_cli.eth_getBalance(p.get('offer').get('contractor'))
@@ -329,6 +355,7 @@ def create_offer(miner, password, orga, offer, createPro=False, votePro=False, e
 			bw.waitTx(ret.get('data'))
 			sleep(1)
 			orga.reload()
+			admin.reload()
 
 
 def create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types):
@@ -386,13 +413,8 @@ else:
 	user_docs = users.find({"city": "Unknown"})
 
 
+#create_unicef(miner, martin_doc)
 create_youtube(miner)
-create_unicef(miner)
-create_msf(miner)
-
-unicef_doc = organizations.find_one({"name": "UNICEF"})
-msf_doc = organizations.find_one({"name": "MSF"})
-youtube_doc = organizations.find_one({"name": "YOUTUBE"})
-
-create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
+#create_msf(miner)
+#create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
 
