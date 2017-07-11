@@ -6,7 +6,7 @@
 app.controller('OrgaActivityController', function($rootScope, $scope, $http, $timeout, $uibModal, $q, $rootScope, $controller, $state, SweetAlert, ladda, $sessionStorage, $document) {
     ctrl = this;
 
-    $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeave'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
+    $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeft'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
 			 members:	[],
 			 jobs:		[],
 			 projects:	[],
@@ -128,7 +128,6 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 		    }
 		});
 	    }
-	    console.log(3);
 /*            // Donation
 	    if (data.category == "newDonation" && filtered === true) {
                 filtered = false;
@@ -163,9 +162,10 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
         $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 23:59"};
         lastWeek = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
         $rootScope.slider.first = $rootScope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 00:00";
-	$scope.$watch('currentOrga', $rootScope.getHisto(($rootScope.slider.begin),($rootScope.slider.end)), true);
+        $rootScope.getHisto(($rootScope.slider.begin),($rootScope.slider.end))
     };
-    initHisto();
+
+    $rootScope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)
     return ctrl;
 
 });

@@ -1,0 +1,24 @@
+<h2>Project</h2>
+<table id="myTable1" class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Amount To Raise</th>
+      <th>Duration</th>
+      <th>Desc</th>
+      <th>Actual Balance</th>
+    </tr>
+    <tbody>
+      <tr ng-repeat="project in currentOrga.projects">
+          <td>{{project.name}}</td>
+          <td>{{project.campaign.amount_to_raise}}</td>
+          <td>{{project.campaign.duration}} Hour(s)</td>
+          <td style="white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 200px;">
+          {{project.description}}</td>
+          <td>{{project.balance}}</td>
+    </tbody>
+  </thead>
+</table>
