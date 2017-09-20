@@ -259,6 +259,14 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
     return ctrl;
 });
 
+app.controller('userTransactionTableCtrl', function($scope, $rootScope) {
+    $scope.sortType = 'name'; // set the default sort type
+    $scope.sortReverse = false;  // set the default sort order
+    $scope.searchType = '';     // set the default search/filter term
+
+    $scope.transactions = Object.values($rootScope.user.transactions)
+});
+
 app.controller('userProjectTableCtrl', function($scope) {
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = false;  // set the default sort order
@@ -270,7 +278,7 @@ app.controller('userProjectTableCtrl', function($scope) {
     { name: 'ONG: Tous Ensemble', type: 'Action caritative, Levée de fonds'},
     { name: 'Mon groupe de musique', type: 'Personel, musique'},
     ];
-})
+});
 
 app.controller('userOrgaTableCtrl', function($scope) {
     $scope.sortType     = 'name'; // set the default sort type
@@ -279,6 +287,8 @@ app.controller('userOrgaTableCtrl', function($scope) {
 
     $scope.orgas = [
     { name: 'Entreprise familiale', projects: "Mon groupe de musique"},
-    ];
+        { name: 'Entreprise familiale', projects: "Mon groupe de musiqu2e"},
 
+    ];
+    console.log($scope.orgas)
 });

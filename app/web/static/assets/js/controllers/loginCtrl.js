@@ -4,7 +4,7 @@
  * @class LoginCtrl
  */
 
- app.controller('LoginController', function($scope, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
+ app.controller('LoginController', function($scope, ngNotify, $rootScope, $http, $sessionStorage, $state, $controller, $location) {
 
  	OAuth.initialize('xitTtb8VF8kr2NKmBhhKV_yKi4U');
 
@@ -472,156 +472,139 @@
  	});
  }
 
-    /**
-     * REGISTRATION
-     * @method register
-     */
-     ctrl.register = function() {
 
-     	if (ctrl.username && ctrl.password) {
-     		$http.post('/newUser', {
-     			name: ctrl.username,
-     			email: ctrl.email,
-     			password: ctrl.password,
-     			eth: ctrl.wantsKey || false,
-     			firstname: ctrl.firstname || "",
-     			lastname: ctrl.lastname || "",
-     			birthday: ctrl.birthday || "",
-     			gender: ctrl.gender || "",
-     			address: ctrl.address || "",
-     			city: ctrl.city || "",
-     			contact_list: [],
-     			socketid: $rootScope.sessionId
-     		}).then(function(response) {
-     			console.log("RECEIVED = ", response);
-     			$sessionStorage.SociethyToken = response.data.token;
-     			$rootScope.user = ctrl.user = response.data.user;
-				console.log("USER IS SET in register : ", $rootScope.user);
-     			$rootScope.$emit("loggedIn", '');
-     			$state.go("app.me", ctrl, {reload: true})
-     		},
-     		function(error) {
-     			$rootScope.toogleError(error.data);
-     			console.log(error);
-     		});
-     	}
-     };
+ 	 $scope.checkPassword = function () {
+             if ($scope.form.password.length < 4 || $$scope.form.password.length > 20 ||
+                 $$scope.form.password.indexOf(" ") != -1) {
+                 $("#passwordCheck").addClass("enabled");
+                 $("#passwordCheck").removeClass("disabled");
+		 }
 
-     function registration_checker() {
-     	/* Enable datepicker*/
-     	$( function() {
-     		$( "#datepicker" ).datepicker();
-     	} );
-
-     	step = 1;
-
-     	$("div#stepAdvancement button#btn-prev").on("click", function() {
-     		step--;
-     		updateDisplay();
-     	});
-
-     	$("div#stepAdvancement button#btn-next").on("click", function() {
-     		step++;
-     		updateDisplay()
-     	});
-
-	/**
-	 * Enable submit button when all mandatory field are filled.
-     * @method updateSubmitButtonState
-     */
-     function updateSubmitButtonState () {
-     	if ($(".formChecker.disabled").length != 4) {
-     		$("button#submit").prop("disabled", true);
-     		$("#beforeSubmit").show();
-     	}
-     	else {
-     		$("button#submit").prop("disabled", false);
-     		$("#beforeSubmit").hide();
-     	}
-     };
-
-	/**
-	 * Enable/Disable previous and next button.
-     * @method updateDisplay
-     */
-     function updateDisplay() {
-     	if (step == 1)
-     		$("div#stepAdvancement button#btn-prev").prop("disabled", true);
-     	else
-     		$("div#stepAdvancement button#btn-prev").prop("disabled", false);
-     	if (step == $(".registrationDatas").length)
-     		$("div#stepAdvancement button#btn-next").prop("disabled", true);
-     	else
-     		$("div#stepAdvancement button#btn-next").prop("disabled", false);
-     	$(".registrationDatas").hide();
-     	$(".data" + step).show();
-     }
-
-	/*
-	** Regex for email check
-	*/
-	$("form input[type='email']").on("change", function() {
-		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-		if (!re.test($(this).val())) {
-			$("#emailCheck").removeClass("disabled");
-			$("#emailCheck").addClass("enabled");
-		}
-		else {
-			$("#emailCheck").addClass("disabled");
-			$("#emailCheck").removeClass("enabled");
-		}
-		updateSubmitButtonState();
-	});
-
-	/*
-	** Check Username format
-	*/
-	$("form input[name='username']").on("change", function() {
-		var re = /^[a-zA-Z0-9_-]{3,20}$/;
-		if (!re.test($(this).val())) {
-			$("#usernameCheck").addClass("enabled");
-			$("#usernameCheck").removeClass("disabled");
-		}
-		else {
-			$("#usernameCheck").addClass("disabled");
-			$("#usernameCheck").removeClass("enabled");
-		}
-		updateSubmitButtonState();
-	});
-
-	/*
-	** Check the requierment for password
-	*/
-	$("form input[name='password']").on("change", function() {
-		if ($(this).val().length < 4 || $(this).val().length > 20 ||
-			$(this).val().indexOf(" ") != -1) {
-			$("#passwordCheck").addClass("enabled");
-		$("#passwordCheck").removeClass("disabled");
-	}
-	else {
-		$("#passwordCheck").removeClass("enabled");
-		$("#passwordCheck").addClass("disabled");
-	}
-	updateSubmitButtonState();
-});
-
-	/*
-	** Check if passwords match
-	*/
-	$("form input[name='password'], form input[name='password_again']").on("change", function() {
-	    if ($("form input[name='password']").val().length != 0 && $("form input[name='password_again']").length != 0 &&
-		$("form input[name='password_again']").val() !== $("form input[name='password']").val()) {
-		$("#passwordConfirmationCheck").addClass("enabled");
-
-		$("#passwordConfirmationCheck").removeClass("disabled");
-	}
-	else {
-		$("#passwordConfirmationCheck").addClass("disabled");
-		$("#passwordConfirmationCheck").removeClass("enabled");
-	}
-	updateSubmitButtonState();
-});
 }
+     $scope.currentStep = 1;
+
+     $scope.form = {
+         next: function (form) {
+             $scope.toTheTop();
+
+             if (form.$valid) {
+                 form.$setPristine();
+                 nextStep();
+             } else {
+                 console.log(form);
+                 var field = null, firstError = null;
+                 for (field in form) {
+                     if (field[0] != '$') {
+                         if (firstError === null && !form[field].$valid) {
+                             firstError = form[field].$name;
+                         }
+
+                         if (form[field].$pristine) {
+                             form[field].$dirty = true;
+                         }
+                     }
+                 }
+                 console.log(firstError)
+                 angular.element('.ng-invalid[name=' + firstError + ']').focus();
+                 errorMessage('please complete the form in this step before proceeding');
+             }
+         },
+
+         prev: function (form) {
+             $scope.toTheTop();
+             prevStep();
+         },
+
+         goTo: function (form, i) {
+             if (parseInt($scope.currentStep) > parseInt(i)) {
+                 $scope.toTheTop();
+                 goToStep(i);
+
+             } else {
+                 if (form.$valid) {
+                     $scope.toTheTop();
+                     goToStep(i);
+
+                 } else
+                     errorMessage('Please complete the form in this step before proceeding');
+             }
+         },
+
+         submit: function (form) {
+                 $http.post('/newUser', {
+                     name: $scope.form.username,
+                     email: $scope.form.email,
+                     password: $scope.form.password,
+                     eth: $scope.form.wantsKey || false,
+                     firstname: $scope.form.firstname || "",
+                     lastname: $scope.form.lastname || "",
+                     birthday: $scope.form.birthday || "",
+                     gender: $scope.form.gender || "",
+                     address: $scope.form.address || "",
+                     city: $scope.form.city || "",
+                     contact_list: [],
+                     socketid: $rootScope.sessionId
+                 }).then(function(response) {
+                         console.log("RECEIVED = ", response);
+                         $sessionStorage.SociethyToken = response.data.token;
+                         $rootScope.user = $scope.user = response.data.user;
+                         console.log("USER IS SET in register : ", $rootScope.user);
+                         $rootScope.$emit("loggedIn", '');
+                         $state.go("app.me", ctrl, {reload: true})
+                     },
+                     function(error) {
+                         $rootScope.toogleError(error.data);
+                         console.log(error);
+                 })
+         },
+
+         reset: function () {
+         }
+     };
+     var nextStep = function () {
+         $scope.currentStep++;
+     };
+     var prevStep = function () {
+         $scope.currentStep--;
+     };
+     var goToStep = function (i) {
+         $scope.currentStep = i;
+     };
+
+     var errorMessage = function (text) {
+
+         ngNotify.set(text, {
+             theme: 'pure',
+             position: 'top',
+             type: 'error',
+             button: 'true',
+             sticky: false,
+             duration: 3000
+         });
+     };
+
+
+     var compareTo = function() {
+         return {
+             require: "ngModel",
+             scope: {
+                 otherModelValue: "=compareTo"
+             },
+             link: function(scope, element, attributes, ngModel) {
+
+                 ngModel.$validators.compareTo = function(modelValue) {
+                     return modelValue == scope.otherModelValue;
+                 };
+
+                 scope.$watch("otherModelValue", function() {
+                     ngModel.$validate();
+                 });
+             }
+         };
+     };
+
+
+     app.directive("compareTo", compareTo);
 
 registration_checker();
 

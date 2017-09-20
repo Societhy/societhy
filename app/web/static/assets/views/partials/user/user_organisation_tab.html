@@ -31,7 +31,7 @@
     </thead>
     <tbody><!-- ngRepeat: user in $data -->
 	<tr ng-repeat="orga in orgas  | orderBy:sortType:sortReverse | filter:searchType" class="ng-scope">
-	    <td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding"> {{orga.name}} </td>
+	    <td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding"> {{orga.name}}</td>
 	    <td data-title="'Alias'" data-title-text="Alias" class="ng-binding">{{orga.projects}}</td>
 	    <td data-title="'Gender'" data-title-text="Gender" class="ng-binding">
 		<button width="50%" type="button" class="btn btn-primary btn-sm ladda-button">
