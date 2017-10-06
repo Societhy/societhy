@@ -4,6 +4,7 @@ Each function correspond to a route.
 """
 import collections
 
+from flask import jsonify
 from bson.objectid import ObjectId
 from core import base_orga
 from models import errors
@@ -134,6 +135,14 @@ def findUser(data):
 def getUserNotif(data):
 	ret = list(notifications.find({"userId" : ObjectId(data.get("_id"))}, {"date" : 0, "_id" : 0}))
 	return {"data": {"notifications": ret}, "status": 200}
+
+def getUserHomePage(user):
+	ret = list()
+	ret = ret + ( list(notifications.find({"subject.id":user.get("_id")})) )
+	for item in user["organizations"]:
+		orga = organizations.find_one({"_id": ObjectId(item["_id"])})
+		ret = ret + orga.get("news")
+	return {"data": jsonify(ret), "status": 200}
 
 def acceptInvitation(user, data):
 	orga = organizations.find_one({"_id":ObjectId(data["orga_id"])})

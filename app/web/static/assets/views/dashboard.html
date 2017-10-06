@@ -1,16 +1,47 @@
 <!-- start: BREADCRUMB -->
-<div class="breadcrumb-wrapper">
-	<h4 class="mainTitle no-margin" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">WELCOME TO SOCIETHY</h4>
-	<span class="mainDescription">Page d'accueil</span>
-	<div ncy-breadcrumb class="pull-right"></div>
-</div>
-<!-- end: BREADCRUMB -->
-<!-- start: FIRST SECTION -->
-<div class="container-fluid container-fullw padding-bottom-10">
-	<div ng-controller="DashboardCtrl">	
+<div ng-controller="DashboardCtrl as ctrl" >
+
+	<div class="breadcrumb-wrapper">
+		<h4 class="mainTitle no-margin" translate="dashboard.WELCOME" translate-values="{ appName: app.name }">WELCOME TO SOCIETHY</h4>
+		<span class="mainDescription">Page d'accueil</span>
+		<div ncy-breadcrumb class="pull-right"></div>
+	</div>
+	<!-- end: BREADCRUMB -->
+	<!-- start: FIRST SECTION -->
+	<div class="container-fluid container-fullw padding-bottom-10">
+		<div ng-repeat=" item in values">
+
+			<div class="col-md-9 offset-md-6 ">
+				<div ng-if="item['writer']">
+					<div data-ng-include="'static/assets/views/partials/orga/article.html'"></div>
+				</div>
+
+				<div ng-if="item['sender']">
+					<div class="panel panel-blue">
+						<div class="panel-heading">
+							<h4 class="panel-title">Notification</h4>
+							<div class="panel-tools">
+								<a data-original-title="Refresh" data-toggle="tooltip" data-placement="top" class="btn btn-transparent btn-sm panel-refresh" href="#"><i class="fa fa-circle-o"></i></a>
+							</div>
+						</div>
+						<div class="panel-body">
+								<p ng-click="ctrl.click_notif(item)">
+									{{item.description}}
+								</p>
+								<p>
+									{{item.createdAt["$date"] | date:'medium'}}
+								</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<!--account warning-->
 		<div class="panel panel-red" ng-if="user && !user.account">
 			<div class="panel-heading">
-			<h4 class="panel-title text-center text-extra-large text-bold">Limited account</h4>
+				<h4 class="panel-title text-center text-extra-large text-bold">Limited account</h4>
 				<ct-paneltool class="panel-tools" tool-refresh="load1"><a href="#" class="btn btn-transparent btn-sm" panel-refresh="" tooltip-placement="top" uib-tooltip="Refresh" data-spinner="load1"><i class="fa fa-circle-o"></i></a></ct-paneltool>
 			</div>
 			<div class="panel-body">
@@ -18,8 +49,11 @@
 					Your account is limited : you need to set up an ethereum account first ! To do that, please go to My Profile --> Edit Settings --> Add key, anc chose the option 'Generate key on server'.
 				</p>
 			</div>
-		</div>	</div>
+		</div>
 	</div>
+
+
+
 	<!-- end: FIRST SECTION -->
 	<!-- start: SECOND SECTION -->
 	<div class="container-fluid container-fullw">
@@ -31,3 +65,4 @@
 
 	</div>
 	<!-- end: THIRD SECTION -->
+</div>

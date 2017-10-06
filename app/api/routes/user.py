@@ -84,6 +84,11 @@ def getUserNotif(user):
 	ret = user_management.getUserNotif(user)
 	return make_response(ret.get('data'), ret.get('status'))
 
+@router.route('/getUserHomePage', methods=['GET'])
+@requires_auth
+def getUserHomePage(user):
+	ret = user_management.getUserHomePage(user)
+	return make_response(ret.get('data'), ret.get('status'))
 
 ####################
 ## KEY MANAGEMENT ##

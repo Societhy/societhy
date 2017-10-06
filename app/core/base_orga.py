@@ -620,7 +620,7 @@ def publishNews(user, title, text, orga_id, yt_url):
     if not orga.can(user, "publish_news"):
         return {"data": "you can not publish news !", "status": 400}
     date = json.dumps(datetime.now(), default=json_util.default)
-    date = json.loads(date)["$date"]
+    date = int(datetime.now().timestamp())
     payload = {
             "title": title,
             "text": text,
