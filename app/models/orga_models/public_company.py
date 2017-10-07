@@ -23,6 +23,7 @@ class PublicCompany(Organization):
 
 	default_rights = {
 		"owner": {
+			"weight": 3,
 			"join": False,
 			"leave": True,
 			"donate": True,
@@ -40,6 +41,7 @@ class PublicCompany(Organization):
             "access_administration": True
 		},
 		"member": {
+			"weight": 1,
 			"join": False,
 			"leave": True,
 			"donate": True,
@@ -57,6 +59,7 @@ class PublicCompany(Organization):
             "access_administration": True
 		},
 		"default": {
+			"weight": 0,
 			"join": True,
 			"leave": False,
 			"donate": True,
