@@ -229,6 +229,7 @@ class OrgaDocument(Document):
 					"address": contract_instance["address"],
 					"_id": contract_instance.save()
 				}
+		self["creation_date"] = datetime.datetime.now().strftime("%b %d, %Y %H:%M")
 		self.save()
 
 		for item in self.get('invited_users'):
@@ -264,7 +265,7 @@ class OrgaDocument(Document):
 						"name":self.get("name")
 				}
                         },
-                        "description": "The organization " + self["name"] + "was created by " +  callback_data.get('from')["name"] + ".", 
+                        "description": "The organization " + self["name"] + " was created by " +  callback_data.get('from')["name"] + ".",
                         "createdAt": datetime.datetime.now(),
                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 		notif.save()
@@ -368,10 +369,10 @@ class OrgaDocument(Document):
 
 
 ### FEATURES : join, allow, leave, donate, createProject, createOffer, createProposal, voteForProposal, executeProposal, refreshProposals, endProposal (+all callbacks)
-### STRUCTURE IS : 
+### STRUCTURE IS :
 ### def doSomething(arg, ...):
 ###		function code
-###		function code	
+###		function code
 
 ### def somethingDone(self, logs, callback_data=None):
 ###		callback_code
@@ -432,7 +433,7 @@ class OrgaDocument(Document):
 						                "name":self.get("name")
 				                        }
                                                 },
-                                                "description": new_member.get("name", address) + " has join the organization " + self["name"] + ".", 
+                                                "description": new_member.get("name", address) + " has join the organization " + self["name"] + ".",
                                                 "createdAt": datetime.datetime.now(),
                                                 "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 					notif.save()
@@ -508,7 +509,7 @@ class OrgaDocument(Document):
 		"""
 		if not self.can(user, "remove_members"):
 			return False
-                
+
 		member = users.find_one({"account": member_account})
 		tx_hash = self.registry.call('leave', local=local, from_=user.get('account'), args=[member.get('account')], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
@@ -521,7 +522,7 @@ class OrgaDocument(Document):
 		else:
 			return False
 
-                
+
 	def memberLeft(self, logs, callback_data=None):
 		"""
 		logs : list of dict containing the event's logs
@@ -545,7 +546,7 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name", address) + " has left the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has left the organization " + self["name"] + ".",
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				notif.save()
@@ -600,13 +601,13 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": member.get("name", address) + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".", 
+                                        "description": member.get("name", address) + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".",
                                         "amount": donation_amount,
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
                                                                                          "note": "Donation of " + str(donation_amount) + " Ether as been made by " + member.get("name", address) + ".",
-                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
+                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}
 			else:
 				notif = models.notification.NotificationDocument({
 			                "sender": {"id": address, "type": "user"},
@@ -619,13 +620,13 @@ class OrgaDocument(Document):
 						        "name":self.get("name")
 				                }
                                         },
-                                        "description": address + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".",                                         
+                                        "description": address + " has made a donation of " + str(donation_amount) + " to the organization " + self["name"] + ".",
                                         "amount": donation_amount,
                                         "createdAt": datetime.datetime.now(),
                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 				self["transactions"][logs[0].get("transactionHash")] =  {"type": "Donation", "value": donation_amount, "flux": "In", "status": "Finished",
                                                                                          "note": "Donation of " + str(donation_amount) + " Ether as been made by " + address + ".",
-                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}                                
+                                                                                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p"), "actor": address}
 			notif.save()
 			self.save_partial()
 			return self["balance"]

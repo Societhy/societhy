@@ -12,12 +12,12 @@
       <div class="col-md-2">
         <div class="social-icons">
           <ul>
-            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+            <li ng-if="project.twitter_link" project-placement="top" project-original-title="Twitter" class="social-twitter tooltips">
               <a ng-href="{{project.twitter_link}}" target="_blank">
                 Twitter
               </a>
             </li>
-            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+            <li ng-if="project.twitter_link" project-placement="top" project-original-title="Facebook" class="social-facebook tooltips">
               <a ng-href="{{project.facebook_link}}" target="_blank">
                 Facebook
               </a>
@@ -27,7 +27,7 @@
       </div>
       <div ng-if="currentRights.donate" class="col-md-4">
         <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
-          <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+          <input id="donationAmount" type="number" value="0" touchspin project-forcestepdivisibility="none" project-decimals="2" project-min="0" project-max="1000" project-stepinterval="50" step="0.1" project-postfix="send!" project-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
         </div>
       </div>
     </div>
@@ -74,5 +74,36 @@
       <div class="col-md-7">
       </div>
     </div>
+    <button width="50%" type="button" class="btn btn-success btn-xl" ng-click="ctrl.exportActivityModal()">
+      <span translate="project.export.BUTTON"></span>
+    </button>
   </fieldset>
+  <div style="display: none;">
+    <table id="projectExportData">
+      <thead>
+        <tr>
+    <td translate="project.export.header.DATE"></td>
+    <td translate="project.export.header.ADDR"></td>
+    <td translate="project.export.header.BALANCE"></td>
+    <td translate="project.export.header.GOAL"></td>
+    <td translate="project.export.header.DESCRIPTION"></td>
+    <td translate="project.export.header.OWNERNAME"></td>
+    <td translate="project.export.header.OWNERADDR"></td>
+    <td translate="project.export.header.MEMBERS"></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+    <td>{{project.creation_date}}</td>
+    <td>{{project.address}}</td>
+    <td>{{project.balance}} Eth</td>
+    <td>{{project.campaign.amount_to_raise}} Eth</td>
+    <td>{{project.description}}</td>
+    <td>{{project.owner.name}}</td>
+    <td>{{project.owner.address}}</td>
+    <td ng-repeat="member in project.members"><span>{{member.name}}, </span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -3,19 +3,19 @@
 ** Histo Handler TOUT REFAIRE AU PROPRE C"EST MOCHE
 */
 
-app.controller('OrgaActivityController', function($rootScope, $scope, $http, $timeout, $uibModal, $q, $rootScope, $controller, $state, SweetAlert, ladda, $sessionStorage, $document) {
+app.controller('OrgaActivityController', function($rootScope, $scope, $http, $timeout, $uibModal, $q,  $controller, $state, SweetAlert, ladda, $sessionStorage, $document) {
     ctrl = this;
 
-    $rootScope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeft'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
+    $scope.filter = {categories:	[{name: 'newMember'}, {name:'memberLeft'}, {name: 'newProposition'}, {name: 'newDonation'}, {name: 'newSpending'}],
 			 members:	[],
 			 jobs:		[],
 			 projects:	[],
 			 init:		false}
-			 
-    $rootScope.filtered = {categories: [], members: [], jobs: [], projects: [], donations: [0, 1000]};
+
+    $scope.filtered = {categories: [], members: [], jobs: [], projects: [], donations: [0, 1000]};
 
 
-    $rootScope.getHisto = function (begin, end) {
+    $scope.getHisto = function (begin, end) {
         $http.post('/getOrgaHisto', {
             "orga_id": $state.params._id,
             "date": {"begin": begin, "end": end}
@@ -24,17 +24,17 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 		$(".orgaActivityLoading").addClass("displayNone");
                 $(".timeline").removeClass("displayNone");
                 if (data.data[0]) {
-                    $rootScope.slider.first = data.data[0]["first"];
-		    $rootScope.currentOrga.histo = data.data;
-		    $rootScope.histo = $.extend({}, $rootScope.currentOrga.histo);
-		    $rootScope.slider.begin = begin;
-		    $rootScope.slider.end = end;
-                    $rootScope.updateSliderFilter();
-                    $rootScope.updateFilter();
+                    $scope.slider.first = data.data[0]["first"];
+		    $scope.currentOrga.histo = data.data;
+		    $scope.histo = $.extend({}, $scope.currentOrga.histo);
+		    $scope.slider.begin = begin;
+		    $scope.slider.end = end;
+                    $scope.updateSliderFilter();
+                    $scope.updateFilter();
                 }
                 else {
-                    delete $rootScope.currentOrga.histo;
-                    delete $rootScope.histo;
+                    delete $scope.currentOrga.histo;
+                    delete $scope.histo;
 
                 }
             },
@@ -46,68 +46,55 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
     /*
      ** SLIDER
      */
-    $rootScope.updateSliderFilter = function () {
-        if (!$rootScope.slider || $("#dateSliderFilter.ui-dateRangeSlider").length <= 0)
+    $scope.updateSliderFilter = function () {
+        if (!$scope.slider || $("#dateSliderFilter.ui-dateRangeSlider").length <= 0)
             return;
-        $("#dateSliderFilter").dateRangeSlider("bounds", new Date($rootScope.slider.first), $rootScope.date);
-        $("#dateSliderFilter").dateRangeSlider("values", new Date($rootScope.slider.begin), new Date($rootScope.slider.end));
+        $("#dateSliderFilter").dateRangeSlider("bounds", new Date($scope.slider.first), $scope.date);
+        $("#dateSliderFilter").dateRangeSlider("values", new Date($scope.slider.begin), new Date($scope.slider.end));
     }
 
     $rootScope.initSlider = function () {
-	if ($rootScope.filter.init)
+	if ($scope.filter.init)
 	    return;
-	$("#dateSliderFilter").dateRangeSlider({defaultValues: {min: $rootScope.slider.begin, max: $rootScope.slider.end}, bounds:{min: $rootScope.slider.fist, max: $rootScope.slider.end} });
-        $("#dateSliderFilter").on("userValuesChanged", $rootScope.updateHisto)
-	$rootScope.updateSliderFilter()
-	$rootScope.filter.init = true;
-/*	$("#donationSlider input").ionRangeSlider({
-	    type: "double",
-	    grid: true,
-	    min: 0,
-	    max: 1000,
-	    from: 200,
-	    to: 800,
-	    prefix: "Eth ",
-	    onFinish: function (data) {
-		$rootScope.filtered.donations = {min: data.from, max: data.to}
-		$rootScope.updateFilter();
-	    },
-	});*/
+	$("#dateSliderFilter").dateRangeSlider({defaultValues: {min: $scope.slider.begin, max: $scope.slider.end}, bounds:{min: $scope.slider.fist, max: $scope.slider.end} });
+        $("#dateSliderFilter").on("userValuesChanged", $scope.updateHisto)
+	$scope.updateSliderFilter()
+	$scope.filter.init = true;
     }
 
-    
+
     /*
      ** FILTERS
      */
-    $rootScope.updateHisto = function (e, data) {
-        $rootScope.slider.begin = data.values.min;
-        $rootScope.slider.end = data.values.max
+    $scope.updateHisto = function (e, data) {
+        $scope.slider.begin = data.values.min;
+        $scope.slider.end = data.values.max
         locale = "en-us";
 
-	$rootScope.getHisto(
-            ($rootScope.slider.begin.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.begin.getDate() + ", " + $rootScope.slider.begin.getFullYear() + " 00:00"),
-            ($rootScope.slider.end.toLocaleString(locale, {month: "short"}) + " " + $rootScope.slider.end.getDate() + ", " + $rootScope.slider.end.getFullYear() + " 23:59"))
+	$scope.getHisto(
+            ($scope.slider.begin.toLocaleString(locale, {month: "short"}) + " " + $scope.slider.begin.getDate() + ", " + $scope.slider.begin.getFullYear() + " 00:00"),
+            ($scope.slider.end.toLocaleString(locale, {month: "short"}) + " " + $scope.slider.end.getDate() + ", " + $scope.slider.end.getFullYear() + " 23:59"))
     }
 
-    $rootScope.updateFilter = function () {
-        delete $rootScope.histo;
-        $rootScope.histo = $.extend({}, $rootScope.currentOrga.histo);
-        $.each($rootScope.histo, function (id, data) {
+    $scope.updateFilter = function () {
+        delete $scope.histo;
+        $scope.histo = $.extend({}, $scope.currentOrga.histo);
+        $.each($scope.histo, function (id, data) {
             filtered = true;
 	    // categories
-            if ($rootScope.filtered.categories.length !== 0) {
+            if ($scope.filtered.categories.length !== 0) {
                 filtered = false;
-                $.each($rootScope.filtered.categories, function () {
-                    if (this["name"] == $rootScope.histo[id]["category"]) {
+                $.each($scope.filtered.categories, function () {
+                    if (this["name"] == $scope.histo[id]["category"]) {
                         filtered = true;
                         return;
                     }
                 });
             }
 	    // members
-            if ($rootScope.filtered.members.length !== 0 && filtered === true) {
+            if ($scope.filtered.members.length !== 0 && filtered === true) {
                 filtered = false;
-                $.each($rootScope.filtered.members, function (memberID, member) {
+                $.each($scope.filtered.members, function (memberID, member) {
 		    if ((this["id"] == data["subject"]["id"]) ||
                         (this["id"] == data["sender"]["id"])) {
                         filtered = true;
@@ -116,13 +103,13 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
                 });
             }
 	    // Jobs
-            if ($rootScope.filtered.jobs.length !== 0 && filtered === true) {
+            if ($scope.filtered.jobs.length !== 0 && filtered === true) {
                 filtered = false;
-                $.each($rootScope.filtered.jobs, function (idJob, job) {
-		    if ((data["sender"]["type"] == "user" && $rootScope.currentOrga.members[data["sender"]['addr']] &&
-			 $rootScope.currentOrga.members[data["sender"]['addr']]['tag'] == job['name']) ||
-			(data["subject"]["type"] == "user" && $rootScope.currentOrga.members[data["subject"]['addr']] &&
-			 $rootScope.currentOrga.members[data["subject"]['addr']]['tag'] == job['name'])) {
+                $.each($scope.filtered.jobs, function (idJob, job) {
+		    if ((data["sender"]["type"] == "user" && $scope.currentOrga.members[data["sender"]['addr']] &&
+			 $scope.currentOrga.members[data["sender"]['addr']]['tag'] == job['name']) ||
+			(data["subject"]["type"] == "user" && $scope.currentOrga.members[data["subject"]['addr']] &&
+			 $scope.currentOrga.members[data["subject"]['addr']]['tag'] == job['name'])) {
 			filtered = true;
 			return;
 		    }
@@ -131,14 +118,14 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 /*            // Donation
 	    if (data.category == "newDonation" && filtered === true) {
                 filtered = false;
-		if ((data.amount <= $rootScope.filtered.donations[1]) &&
-		    (data.amount >= $rootScope.filtered.donations[0]))
+		if ((data.amount <= $scope.filtered.donations[1]) &&
+		    (data.amount >= $scope.filtered.donations[0]))
 		{		    filtered = true;console.log("good");}
 		else
 		    console.log("not good");
 	    }*/
 	    if (filtered === false) {
-                delete $rootScope.histo[id];
+                delete $scope.histo[id];
 	    }
         });
     }
@@ -147,25 +134,29 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
      ** INIT
      */
     function initHisto() {
-        angular.forEach($rootScope.currentOrga.members, function(value, key) {
-            $rootScope.filter.members.push({name: value.name, id: value._id });
+        angular.forEach($scope.currentOrga.members, function(value, key) {
+            $scope.filter.members.push({name: value.name, id: value._id });
         });
-        angular.forEach($rootScope.currentOrga.projects, function(value, key) {
-            $rootScope.filter.projects.push(value);
+        angular.forEach($scope.currentOrga.projects, function(value, key) {
+            $scope.filter.projects.push(value);
         });
-        angular.forEach($rootScope.currentOrga.rights, function(value, key) {
-            $rootScope.filter.jobs.push({name: key});
+        angular.forEach($scope.currentOrga.rights, function(value, key) {
+            $scope.filter.jobs.push({name: key});
         });
-        $rootScope.$watch( 'filtered', $rootScope.updateFilter, true);
+        $scope.$watch( 'filtered', $scope.updateFilter, true);
         locale = "en-us";
-        $rootScope.date = new Date();
-        $rootScope.slider = {"end" : $rootScope.date.toLocaleString(locale, {month: "short"}) + " " + $rootScope.date.getDate() + ", " + $rootScope.date.getFullYear() + " 23:59"};
-        lastWeek = new Date($rootScope.date.getFullYear(), $rootScope.date.getMonth(), $rootScope.date.getDate() - 7);
-        $rootScope.slider.first = $rootScope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 00:00";
-        $rootScope.getHisto(($rootScope.slider.begin),($rootScope.slider.end))
+        $scope.date = new Date();
+        $scope.slider = {
+          "end" : $scope.date.toLocaleString(locale, {month: "short"}) + " " + $scope.date.getDate() + ", " + $scope.date.getFullYear() + " 23:59",
+          "begin": $scope.currentOrga.creation_date
+        };
+        // lastWeek = new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate() - 7);
+        // $scope.slider.first = $scope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 00:00";
+        // console.log($scope.slider);
+      console.log($scope.slider);  $scope.getHisto(($scope.slider.begin),($scope.slider.end))
     };
 
-    // $rootScope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)
+    // $scope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)
     setTimeout(initHisto, 1000)
     return ctrl;
 
@@ -176,11 +167,11 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
 */
 
 app.controller('ExportActivityController', function($scope, $http, $timeout, $rootScope, $controller, $state) {
-    
-    $rootScope.exportActivityModal = function() {
+
+    $scope.exportActivityModal = function() {
 	$("#orgaExportData").table2excel({exclude: ".noExl",
 					  name: "Worksheet Name",
-					  filename: "ExportHisto_" + $rootScope.currentOrga.name });	
+					  filename: "ExportHisto_" + $scope.currentOrga.name });
     };
 
     return ctrl;

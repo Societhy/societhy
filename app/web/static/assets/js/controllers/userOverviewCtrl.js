@@ -259,6 +259,16 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
     return ctrl;
 });
 
+
+app.controller('exportUserTransactionCtrl', function ($scope) {
+
+  $scope.exportActivityModal = function() {
+    $("#userTransactionTable").table2excel({exclude: ".noExl",
+  					  name: "Worksheet Name",
+  					  filename: "ExportTransaction_" + $scope.user.name });
+      };
+});
+
 app.controller('userProjectTableCtrl', function($scope) {
     $scope.sortType     = 'name'; // set the default sort type
     $scope.sortReverse  = false;  // set the default sort order
