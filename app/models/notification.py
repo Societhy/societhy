@@ -124,7 +124,7 @@ class NotificationDocument(Document):
                         emit("update_notif", "", namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
             else:
                 self["seen"] = True
-            if user.wantNotif(self["category"], "Mail"):
+            if user.wantNotif(self["category"], "Mail") and "angularState" in self :
                 msg = Message("Notif", sender='roman.grout@hotmail.fr',
                               recipients=[user.get("email")])
                 url = "http://www.localhost:4242?redirect=true&angularState=" + urllib.parse.quote(json.dumps(self["angularState"]))
