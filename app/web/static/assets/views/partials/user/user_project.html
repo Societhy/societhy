@@ -31,7 +31,7 @@
 				<span ng-show="sortType == 'Goal' && sortReverse" class="fa fa-caret-up"></span>
 				</a>
 			</td>
-			<td class="col-md-6">
+			<td class="col-md-4">
 				<a href="#" ng-click="sortType = 'Desc'; sortReverse = !sortReverse">
 						Description
 					<span ng-show="sortType == 'Desc' && !sortReverse" class="fa fa-caret-down"></span>
@@ -56,8 +56,8 @@
 			<td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding">{{project.name}}</td>
 			<td data-title="'Amount'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{project.balance}}</td>
 			<td data-title="'Goal'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{project.campaign.amount_to_raise}}</td>
-			<td data-title="'Duration'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{project.campaign.duration}} Hour(s)</td>
 			<td data-title="'Desc'" data-title-text="Alias" class="ng-binding">{{project.description}}</td>
+			<td data-title="'Duration'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{project.campaign.duration}} Hour(s)</td>
 			<td data-title="'Gender'" data-title-text="Gender" class="ng-binding">
 				<button width="50%" type="button" class="btn btn-primary btn-sm ladda-button">
 		        <span class="glyphicon glyphicon-arrow-right ladda-label" ui-sref="app.project({name: project.name, _id: project._id})"> Access </span>

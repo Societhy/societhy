@@ -129,8 +129,14 @@
 
                     <!-- start: TAB TRANSACTION-->
                     <uib-tab heading="Transactions" active="editActive">
-                        <div >
-                            <div data-ng-include=" 'static/assets/views/partials/user/transaction.html' "></div>
+                        <div class="container-fluid container-fullw ng-scope">
+                            <div class="panel panel-white">
+                                <div class="panel-body">
+                                    <div ng-controller="userTransactionTableCtrl" class="ng-scope ng-binding">
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_transaction.html' "></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </uib-tab>
                     <!-- end: TAB TRANSACTION -->

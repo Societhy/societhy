@@ -69,7 +69,7 @@ user_martin = {
         "firstname": "Jeremy",
         "lastname": "Martin",
         "city": "Amien",
-        "email": "jeremy.martin@societhy.com",
+        "email": "sillverr@hotmail.fr",
 	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
@@ -91,7 +91,7 @@ miner = users.find_one({"name": "simon"})
 
 with open(path.join(keyDirectory, 'test_key2.key'), 'rb') as f:
 	keys.importNewKey(martin_doc, f)
-martin_doc = users.find_one({"email": "jeremy.martin@societhy.com"})
+martin_doc = users.find_one({"email": "sillverr@hotmail.fr"})
 bw.run()
 
 
@@ -142,6 +142,7 @@ def create_unicef(miner, martin_doc):
 	        }
         
         }
+
 	create_orga(orga_unicef, miner, "simon")
 
                 
@@ -161,16 +162,17 @@ def create_unicef(miner, martin_doc):
         }
 
 	offre_2 = {
-	        'name': 'Offre 2',
+	        'name': 'Creation de maison au sud du Sudan',
 	        'client': unicef_doc.get('address'),
 	        'contractor': martin_doc.get('account'),
-	        "description": "Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui",
+	        "description": "Collect de Don pour le Sudan du Sud", "description": "Les combats au Sud-Soudan ont déplacé plus de quatre millions de personnes et infligé des difficultés et des souffrances impensables. Lorsque les affrontements ont éclaté à Wau en juin 2016, des milliers de personnes se sont réfugiées à la base des Nations Unies en bordure de la ville et à la cathédrale Saint-Mary. En juin 2017, 48 000 personnes vivaient entre les deux sites, incapables de rentrer chez eux, en s'appuyant sur leurs besoins fondamentaux.",
 	        'initialWithdrawal': 8000,
 	        'recurrentWithdrawal': 100,
 	        'isRecurrent': True,
 	        'duration': 10,
 	        "type": "investment",
-	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"]
+	        'actors': ["Ox87dhdhdhdhd", "0xcou!s796kld00lkdnld", "0xsalutcava98078"],
+                "time_left": 8000
         }
 	offre_3 = {
 	        'name': 'Offre 2',
@@ -203,17 +205,21 @@ def create_unicef(miner, martin_doc):
 			unicef_doc.reload()
 			members.remove(user_docs[x])
 	# Donate
-#	x = 11
-#	for x in range(11, 18):
-#		print("user " + str(x) + " donate to unicef")
-#		ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(100, 800)})
-#		bw.waitEvent("DonationMade")
-#		user_docs[x].reload()
-#		unicef_doc.reload()
+	x = 11
+	for x in range(11, 18):
+		print("user " + str(x) + " donate to unicef")
+		ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(100, 800)})
+		bw.waitEvent("DonationMade")
+		user_docs[x].reload()
+		unicef_doc.reload()
 	create_offer(miner, martin_doc, "simon", unicef_doc, offre_1, members)
 	create_offer(miner, martin_doc, "simon", unicef_doc, offre_2, members)
 	create_offer(miner, martin_doc, "simon", unicef_doc, offre_3, members)
 		
+	ret = base_orga.createProjectFromOrga(miner, "simon", unicef_doc.get('_id'), {"name": "Collect de Don pour le Sudan du Sud", "description": "Les combats au Sud-Soudan ont déplacé plus de quatre millions de personnes et infligé des difficultés et des souffrances impensables. Lorsque les affrontements ont éclaté à Wau en juin 2016, des milliers de personnes se sont réfugiées à la base des Nations Unies en bordure de la ville et à la cathédrale Saint-Mary. En juin 2017, 48 000 personnes vivaient entre les deux sites, incapables de rentrer chez eux, en s'appuyant sur leurs besoins fondamentaux.","invited_ users": {}, 'campaign':{"amount_to_raise": 7000, "duration": 30}})
+	bw.waitTx(ret.get('data'))
+	unicef_doc.reload()
+	miner.reload()        
                
 def create_msf(miner):
 	orga_msf = {
@@ -333,6 +339,7 @@ def create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types):
 	for x in range(0, 30):
 		orga_template["name"] = orga_names[x]
 		orga_template["type"] = orga_types[randint(0,3)]
+		print(orga_template["type"])
 		size = randint(0, 6200)
 		orga_template["description"] = orga_descs[size: (size + randint(0, 300))]
 		orga_doc = create_orga(orga_template, miner, "simon")
@@ -388,4 +395,3 @@ create_unicef(miner, martin_doc)
 create_youtube(miner)
 create_msf(miner)
 create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
-
