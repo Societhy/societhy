@@ -1,7 +1,7 @@
 <form>
   <div class="form-group">
     <div class="input-group">
-      <input type="text" class="tableFilter" placeholder="Filter: Type1, Type2.." ng-model="searchType">
+      <input type="text" class="tableFilter" placeholder="Search..." ng-model="searchType">
     </div>
   </div>
 </form>
@@ -11,20 +11,20 @@
     <tr>
       <td>
         <a href="#" ng-click="sortType = 'name'; sortReverse = !sortReverse">
-		    Nom de l'organisation
+            Name of the organisation
 		    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
 		    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-		</a>
+		    </a>
       </td>
       <td>
         <a href="#" ng-click="sortType = 'type'; sortReverse = !sortReverse">
-		    <span ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
-		    <span ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
-		    Description
-		</a>
+		    <span ng-show="sortType == 'desc' && !sortReverse" class="fa fa-caret-down"></span>
+		    <span ng-show="sortType == 'desc' && sortReverse" class="fa fa-caret-up"></span>
+		        Description
+		     </a>
       </td>
       <td>
-        <a href="#">Action</a>
+        <a href="#">Actions</a>
       </td>
     </tr>
     <hr />
@@ -32,9 +32,9 @@
   <tbody>
     <!-- ngRepeat: user in $data -->
     <tr ng-repeat="orga in user.organizations  | orderBy:sortType:sortReverse | filter:searchType" class="ng-scope">
-      <td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding"> {{orga.name}} </td>
-      <td data-title="'Alias'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{orga.description}}</td>
-      <td data-title="'Gender'" data-title-text="Gender" class="ng-binding">
+      <td data-title="'Name'" filter="{ 'name': 'text' }" data-title-text="Name" class="ng-binding">{{orga.name}}</td>
+      <td data-title="'Desc'" style="overflow: hidden" data-title-text="Alias" class="ng-binding">{{orga.description}}</td>
+      <td data-title="'Action'" data-title-text="Gender" class="ng-binding">
         <button width="50%" type="button" class="btn btn-primary btn-sm ladda-button">
 		        <span class="glyphicon glyphicon-arrow-right ladda-label" ui-sref="app.organization({name: orga.name, _id: orga._id})"> Access </span>
 		    </button>

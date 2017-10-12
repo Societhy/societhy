@@ -61,8 +61,11 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
           });
         },
         function(data) {
+          console.log(data.data)
           $scope.project.members = data.data.project.members;
+          $rootScope.currentRights = $scope.currentRights = data.data.rights;
           $scope.isMember = false;
+          ctrl.reload();
         });
     }
   }
