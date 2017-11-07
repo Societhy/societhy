@@ -1,78 +1,88 @@
 <div class="container-fluid container-fullw bg-white" ng-controller="ProjectMainController as ctrl">
-  <fieldset>
-    <div class="row margin-10">
-      <div class="col-md-5">
-        <h1>{{project.name}}</h1>
-      </div>
-      <div class="col-md-1">
-        <!-- Check si user dans les membres -->
-        <button type="button" ng-if="currentRights.join" ng-click="ctrl.joinProject()" class="btn btn-sm btn-success text-extra-large">Join</button>
-        <button type="button" ng-if="!currentRights.join" ng-click="ctrl.leaveProject()" class="btn btn-sm btn-danger text-extra-large">Leave</button>
-      </div>
-      <div class="col-md-2">
-        <div class="social-icons">
-          <ul>
-            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-              <a ng-href="{{project.twitter_link}}" target="_blank">
+  <uib-tabset class="tabbable">
+    <uib-tab heading="Overview" href="#">
+      <fieldset>
+        <div class="row margin-10">
+          <div class="col-md-5">
+            <h1>{{project.name}}</h1>
+          </div>
+          <div class="col-md-1">
+            <!-- Check si user dans les membres -->
+            <button type="button" ng-if="currentRights.join" ng-click="ctrl.joinProject()" class="btn btn-sm btn-success text-extra-large">Join</button>
+            <button type="button" ng-if="!currentRights.join" ng-click="ctrl.leaveProject()" class="btn btn-sm btn-danger text-extra-large">Leave</button>
+          </div>
+          <div class="col-md-2">
+            <div class="social-icons">
+              <ul>
+                <li ng-if="project.twitter_link" data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                  <a ng-href="{{project.twitter_link}}" target="_blank">
                 Twitter
               </a>
-            </li>
-            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-              <a ng-href="{{project.facebook_link}}" target="_blank">
+                </li>
+                <li ng-if="project.twitter_link" data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                  <a ng-href="{{project.facebook_link}}" target="_blank">
                 Facebook
               </a>
-            </li>
-          </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div ng-if="currentRights.donate" class="col-md-4">
+            <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
+              <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0"
+                data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button"
+                class="form-control input-sm">
+            </div>
+          </div>
         </div>
-      </div>
-      <div ng-if="currentRights.donate" class="col-md-4">
-        <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
-          <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
-        </div>
-      </div>
-    </div>
-  </fieldset>
-  <fieldset>
-    <div class="row margin-10">
-      <div class="col-md-5">
-        <div class="">
-          <h3>
-            Campaign
-            <a href="#">
+      </fieldset>
+      <fieldset>
+        <div class="row margin-10">
+          <div class="col-md-5">
+            <div class="">
+              <h3>
+                Campaign
+                <a href="#">
               <i class="fa fa-refresh" ng-click="ctrl.refreshProject()"></i>
             </a>
-          </h3>
-          <!-- <span class="col-md-4 icon fa-2x"> -->
-        </div>
-        <span ng-if="project.balance < project.campaign.amount_to_raise">
+              </h3>
+              <!-- <span class="col-md-4 icon fa-2x"> -->
+            </div>
+            <span ng-if="project.balance < project.campaign.amount_to_raise">
           <span class="label label-warning block">Crowdfunding campaign in progress</span>
-          <p class="text-center text-bold text-large">{{project.balance}} on {{project.campaign.amount_to_raise}} eth required</p>
-        </span>
-        <span ng-if="project.balance >= project.campaign.amount_to_raise">
+            <p class="text-center text-bold text-large">{{project.balance}} on {{project.campaign.amount_to_raise}} eth required</p>
+            </span>
+            <span ng-if="project.balance >= project.campaign.amount_to_raise">
           <span class="label label-success block">Crowdfunding campaign is complete !</span>
-          <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.campaign.amount_to_raise}} ethers)</p>
-        </span>
-        <!-- LIGNE D'AVANCEMENT DES FOND -->
-        <uib-progressbar value="project.balance * (100 / project.campaign.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.campaign.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
-      </div>
-      <div class="col-md-7">
-        <h3>Description</h3>
-        <p class="margin-top-10">{{project.description}}</p>
-      </div>
-    </div>
-    <div class="row margin-10">
-      <div class="col-md-5">
-        <div ng-if="project.time_left_percent > 0">
-          <h3>Time remaining</h3>
-          <uib-progressbar value="project.time_left_percent" class="progress no-radius background-dark no-margin" type="{{project.time_left_percent >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
-          <!-- TIMELINE ICI -->
+            <p class="text-bold text-center text-large">{{project.balance}} ethers were raised ! ( goal was : {{project.campaign.amount_to_raise}} ethers)</p>
+            </span>
+            <!-- LIGNE D'AVANCEMENT DES FOND -->
+            <uib-progressbar value="project.balance * (100 / project.campaign.amount_to_raise)" class="progress no-radius background-dark no-margin"
+              type="{{project.balance * (100 / project.campaign.amount_to_raise) >= 50 ? 'success' : 'warning'}}"></uib-progressbar>
+          </div>
+          <div class="col-md-7">
+            <h3>Description</h3>
+            <p class="margin-top-10">{{project.description}}</p>
+          </div>
         </div>
-        <div ng-if="project.time_left_percent <= 0">
-          <h3 class="text-red">CAMPAIGN IS OVER</h3>
+        <div class="row margin-10">
+          <div class="col-md-5">
+            <div ng-if="project.time_left_percent > 0">
+              <h3>Time remaining</h3>
+              <uib-progressbar value="project.time_left_percent" class="progress no-radius background-dark no-margin" type="{{project.time_left_percent >= 50 ? 'success' : 'warning'}}"></uib-progressbar>
+              <!-- TIMELINE ICI -->
+            </div>
+            <div ng-if="project.time_left_percent <= 0">
+              <h3 class="text-red">CAMPAIGN IS OVER</h3>
+            </div>
+          </div>
+          <div class="col-md-7">
+          </div>
         </div>
-      </div>
-      <div class="col-md-7">
-      </div>
-    </div>
-  </fieldset>
+      </fieldset>
+    </uib-tab>
+     <uib-tab heading="Proposals">
+      <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/project/project_proposals.html' "></div>
+    </uib-tab> 
+  </uib-tabset>
 </div>

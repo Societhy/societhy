@@ -111,3 +111,157 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
   onLoad();
   return ctrl;
 });
+
+app.controller('ProjectProposalController', function($scope, $http, $timeout, $rootScope, $controller, $state, $uibModal, ngNotify) {
+  var ctrl = this;
+
+  $scope.proposal_status = {
+    "pending": "is waiting for approval.",
+    "debating": "is currently submitted to the votes.",
+    "approved": "has been approved.",
+    "denied": "has been denied."
+  }
+
+  $rootScope.$watch("currentOrga", function(_new, _old) {
+    if (_new != _old)
+      ctrl.reload();
+  })
+
+  ctrl.reload = function() {
+    if ($rootScope.currentOrga) {
+      ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+      ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+
+      for (let i = 0; i != ctrl.proposal_list.length; i++) {
+        ctrl.proposal_list[i].expand = false;
+        if ($rootScope.user != null) {
+          for (let j = 0; j != $rootScope.user.votes.length; j++) {
+            if ($rootScope.user.votes[j].offer == ctrl.proposal_list[i].destination)
+              ctrl.proposal_list[i].voted = $rootScope.user.votes[j].vote[0];
+          }
+        }
+      }
+    }
+  }
+
+  ctrl.proposalLookup = function(item) {
+    console.log(item);
+    if (item) {
+      $scope.proposalLookupName = item.title;
+    }
+    else {
+     $scope.proposalLookupName = "";
+   }
+ }
+
+ ctrl.expandProposal = function(proposal) {
+  for (let i = 0; i != ctrl.proposal_number; i++) {
+    if (proposal.destination == ctrl.proposal_list[i].destination)
+      ctrl.proposal_list[i].expand = (proposal.expand == false ? true : false);
+  }
+}
+
+ctrl.submitProposal = function(proposal) {
+  console.log(proposal);
+  if ($rootScope.currentRights.create_proposal == true) {
+   $scope.completeBlockchainAction(
+    function(password) {
+     $rootScope.toogleWait("Creating proposal...")
+     $http.post('/createProposal', {
+      "password": password,
+      "socketid": $rootScope.sessionId,
+      "orga_id": $rootScope.currentOrga._id,
+      "offer": proposal.offer.address
+    }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+   }, function(data) {
+    $rootScope.currentOrga = data.data;
+    ctrl.proposal_number = Object.keys($rootScope.currentOrga.proposals).length;
+    ctrl.proposal_list = Object.values($rootScope.currentOrga.proposals);
+  })
+ } else {
+   $rootScope.toogleError("You don't have the right to turn this offer into a proposal")
+ }
+}
+
+ctrl.submitOffer = function() {
+  var modalInstance = $uibModal.open({
+   templateUrl: "static/assets/views/modals/newOfferModal.html",
+   controller: 'OfferModalController',
+   size: 'lg',
+   scope: $scope,
+   resolve: {
+    ctrl : function() {
+     return ctrl;
+   }
+ }
+});
+}
+
+ctrl.voteForProposal = function(proposal, vote) {
+  if ($rootScope.currentRights.vote_proposal == true) {
+   $scope.completeBlockchainAction(
+    function(password) {
+     $rootScope.toogleWait("Voting...")
+     $http.post('/voteForProposal', {
+      "password": password,
+      "socketid": $rootScope.sessionId,
+      "orga_id": $rootScope.currentOrga._id,
+      "proposal_id": proposal.proposal_id,
+      "vote": vote
+    }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+   }, function(data) {
+    $rootScope.currentOrga = data.data.orga;
+    $rootScope.user = data.data.user;
+    ctrl.reload();
+  })
+ } else {
+   $rootScope.toogleError("You don't have the right to vote for this proposal...")
+ }
+}
+
+ctrl.refreshProposals = function() {
+  if ($rootScope.currentOrga) {
+    $http.get('/refreshProposals/'.concat($rootScope.currentOrga._id))
+    .then(function(data) {
+     $rootScope.currentOrga = data.data;
+     ctrl.reload();
+   });
+  }
+}
+
+ctrl.executeProposal = function(proposal) {
+ $scope.completeBlockchainAction(
+  function(password) {
+   $rootScope.toogleWait("Proposal is being executed...")
+   $http.post('/executeProposal', {
+    "password": password,
+    "socketid": $rootScope.sessionId,
+    "orga_id": $rootScope.currentOrga._id,
+    "proposal_id": proposal.proposal_id,
+  }).then(function(data) {}, function(error) { $rootScope.toogleError(error);});
+ }, function(data) {
+  $rootScope.currentOrga = data.data;
+  delete $rootScope.user.transactions["0x076841d6d0569f6cc2a5e4b69827804d0a599121887de44abea4eaf4bb1b395c"];
+  ctrl.reload();
+});
+}
+
+ctrl.withdrawFundsFromOffer = function(proposal) {
+ $scope.completeBlockchainAction(
+  function(password) {
+   $rootScope.toogleWait("Proposal is being executed...")
+   $http.post('/withdrawFundsFromOffer', {
+    "password": password,
+    "socketid": $rootScope.sessionId,
+    "orga_id": $rootScope.currentOrga._id,
+    "offer_id": proposal.offer.contract_id,
+  }).then(function(data) {}, function(error) { $rootScope.toogleError("You cannot withdraw less than 0.0001 ether");});
+ }, function(data) {
+  console.log(data);
+  $rootScope.toogleInfo(data.data.withdrawal);
+});
+}
+ctrl.reload();
+
+return ctrl;
+});

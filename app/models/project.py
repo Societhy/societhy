@@ -31,6 +31,10 @@ class ProjectDocument(Document):
 			"donate": True,
 			"recruit": True,
 			"remove_members": True,
+			"create_offer": True,
+			"create_proposal": True,
+			"vote_proposal": True,
+			"publish_news": True,
 		},
 		"member": {
 			"join": False,
@@ -38,6 +42,10 @@ class ProjectDocument(Document):
 			"donate": True,
 			"recruit": False,
 			"remove_members": False,
+			"create_offer": True,
+			"create_proposal": False,
+			"vote_proposal": True,
+			"publish_news": True,
 		},
 		"default": {
 			"join": True,
@@ -45,7 +53,18 @@ class ProjectDocument(Document):
 			"donate": False,
 			"recruit": False,
 			"remove_members": False,
+			"create_offer": True,
+			"create_proposal": False,
+			"vote_proposal": False,
+			"publish_news": False,
 		}
+	}
+	default_weight = {
+		"owner": 3,
+		"partner": 2,
+		"admin": 2,
+		"member": 1,
+		"default": 0
 	}
 
 	contract = None
@@ -69,8 +88,12 @@ class ProjectDocument(Document):
 
 			self.default_rules.update(self["rules"])
 			self["rules"] = self.default_rules
+
+			for role, rights in self["rights"].items():
+				rights['weight'] = self.default_weight.get(role, 1)
 			self.default_rights.update(self["rights"])
 			self["rights"] = self.default_rights
+
 			self["created_on"] = self.board.call("getCreationDate", local=True)
 			self["duration"] = self.board.call("getDuration", local=True)
 
