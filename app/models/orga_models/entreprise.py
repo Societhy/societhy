@@ -39,12 +39,14 @@ class Entreprise(Organization):
             "edit_jobs": True,
             "access_administration": True
 		},
+        "admin": {},
+        "guest": {},
 		"member": {
 			"join": False,
 			"leave": True,
 			"donate": True,
 			"create_project": False,
-			"create_offer": True,			
+			"create_offer": True,
 			"create_proposal": False,
 			"vote_proposal": True,
 			"recruit": False,
@@ -147,7 +149,7 @@ class Entreprise(Organization):
 						"name":self.get("name")
 				}
                         },
-                        "description": "The organization " + self["name"] + "was created by " +  callback_data.get('from')["name"] + ".", 
+                        "description": "The organization " + self["name"] + "was created by " +  callback_data.get('from')["name"] + ".",
                         "createdAt": datetime.datetime.now(),
                         "date": datetime.datetime.now().strftime("%b %d, %Y %I:%M %p")})
 		notif.save()

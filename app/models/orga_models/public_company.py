@@ -39,6 +39,8 @@ class PublicCompany(Organization):
             "edit_jobs": True,
             "access_administration": True
 		},
+        "admin": {},
+        "guest": {},
 		"member": {
 			"join": False,
 			"leave": True,
@@ -77,7 +79,7 @@ class PublicCompany(Organization):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		"""
-		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+		from_ : address of the account used to deploy the contract (self["owner"] is used by default)
 		password : password to unlock the account
 		args : list of arguments to be passed upon the contract creation
 		Deploy the contract on the blockchain
@@ -125,7 +127,7 @@ class PublicCompany(Organization):
 			} if self.get('initial_funds', 0) > 0 else None
 
 		bw.pushEvent(ContractCreationEvent(tx_hash=tx_hash, callbacks=self.register, callback_data=action, users=from_))
-		return tx_hash	
+		return tx_hash
 
 
 	def launchCrowdfunding(self, params):

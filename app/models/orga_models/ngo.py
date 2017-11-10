@@ -38,8 +38,8 @@ class Ngo(Organization):
 			"join": False,
 			"leave": True,
 			"donate": True,
-			"create_project": False,
-			"create_proposal": False,
+			"create_project": True,
+			"create_proposal": True,
 			"create_offer": True,
 			"vote_proposal": True,
 			"recruit": False,
@@ -51,6 +51,8 @@ class Ngo(Organization):
             "edit_jobs": True,
             "access_administration": True
 		},
+        "admin": {},
+        "partner": {},
 		"default": {
 			"join": True,
 			"leave": False,

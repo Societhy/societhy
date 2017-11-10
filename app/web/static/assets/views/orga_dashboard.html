@@ -32,7 +32,7 @@
                   </button>
 
                 </div>
-                <div ng-if=" currentRights.join == true && isInvitedToOrga == false && currentOrga.rules.accessibility == 'public'">
+                <div ng-if="currentRights.join == true && isInvitedToOrga == false && currentOrga.rules.accessibility == 'public'">
                   <div class="btn-group" ng-if="currentRights.join && !currentOrga.funding.membershipFee" uib-dropdown>
                     <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
                       Join

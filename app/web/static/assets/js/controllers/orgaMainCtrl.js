@@ -2,7 +2,7 @@
  * Main controller for organizations.
  * @class OrgaMainController
  */
- app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $controller, $uibModal, FileUploader) {
+ app.controller('OrgaMainController', function($rootScope, $scope, $http, $sessionStorage, $timeout, $state, $stateParams, $controller, $uibModal, FileUploader) {
 
    var ctrl = this;
    $scope.isMember = false;
@@ -28,12 +28,19 @@
           ctrl.member_list = Object.values($rootScope.currentOrga.members);
           ctrl.jobs = Object.keys($scope.currentOrga.rights);
         }
-        $scope.currentRights = $rootScope.currentRights = response.data.rights;
+
+
         console.log("current orga & rights", $scope.currentOrga, $scope.currentRights);
         if ($rootScope.user) {
           $scope.isMember = $rootScope.user.account in $scope.currentOrga.members;
           ctrl.isCurrentUserInvitedToOrga();
         }
+        if ($stateParams.data){
+         $scope.currentRights = $rootScope.currentRights = $stateParams.data.rights.owner;
+         $scope.isMember = true;
+       }
+       else
+         $scope.currentRights = $rootScope.currentRights = response.data.rights;
       }, function(error) {
         $state.go('app.dashboard');
         $rootScope.toogleError("Organization does not exist");

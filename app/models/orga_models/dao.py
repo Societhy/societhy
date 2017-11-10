@@ -7,8 +7,11 @@ from models.offer import Offer
 
 from models.clients import blockchain_watcher as bw
 
-class Dao(Organization):	
-	
+
+default_rights = 5
+
+class Dao(Organization):
+
 	default_rules = {
 		"default_proposal_duration": 120,
 		"delegated_voting": False,
@@ -41,6 +44,8 @@ class Dao(Organization):
             "edit_jobs": True,
             "access_administration": True
 		},
+    	"admin": {},
+        "guest": {},
 		"member": {
 			"join": False,
 			"leave": True,
@@ -79,7 +84,7 @@ class Dao(Organization):
 
 	def deployContract(self, from_=None, password=None, args=[]):
 		"""
-		from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+		from_ : address of the account used to deploy the contract (self["owner"] is used by default)
 		password : password to unlock the account
 		args : list of arguments to be passed upon the contract creation
 		Deploy the contract on the blockchain

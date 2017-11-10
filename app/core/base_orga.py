@@ -279,6 +279,15 @@ def getOrgaTransaction(user):
         "status": 200
     }
 
+def getGovernanceRights():
+    """
+    """
+
+    data = {"dao": dao.Dao.default_rights, "ngo": ngo.Ngo.default_rights, "entreprise": entreprise.Entreprise.default_rights, "public_company": public_company.PublicCompany.default_rights}
+    return {
+        "data": {"data": data},
+        "status": 200
+    }
 
 def updateOrgaRights(user, orga_id, rights):
     """
