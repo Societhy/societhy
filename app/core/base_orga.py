@@ -54,7 +54,7 @@ def getOrgaDocument(user, _id=None, name=None):
         if user.get('account') in orga.get('members'):
             tag = orga["members"].get(user['account'])['tag']
             rights = orga['rights'][tag]
-            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if tag in doc["privacy"] or "default" in doc["privacy"]]
+            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if rights.get('weight') >= orga['rights'][doc["privacy"]]["weight"]]
 
     if not rights:
         rights = orga.default_rights.get('default')
@@ -159,9 +159,8 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     """
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
-    orga['uploaded_documents'].append({"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy})
+    orga['uploaded_documents'].append({"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy[0]})
     orga.save_partial()
-    print(len(orga['uploaded_documents']))
     # ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
     #     "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
     # if ret.modified_count < 1:
@@ -301,7 +300,6 @@ def updateOrgaRights(user, orga_id, rights):
         orga.save_partial()
         user.needsReloading()
         tag = orga["members"].get(user['account'])['tag']
-        print(tag)
         rights = orga['rights'][tag]
         return {
 	        "data": {"rights": orga["rights"], "userRights": rights},

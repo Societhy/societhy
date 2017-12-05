@@ -18,6 +18,7 @@ class Ngo(Organization):
 
 	default_rights = {
 		"owner": {
+			"weight": 3,
 			"join": False,
 			"leave": True,
 			"donate": True,
@@ -35,6 +36,7 @@ class Ngo(Organization):
             "access_administration": True
 		},
 		"member": {
+			"weight": 1,
 			"join": False,
 			"leave": True,
 			"donate": True,
@@ -47,13 +49,14 @@ class Ngo(Organization):
 			"sell_token": True,
 			"buy_token": True,
 			"publish_news": True,
-            "edit_rights": True,
-            "edit_jobs": True,
+            "edit_rights": False,
+            "edit_jobs": False,
             "access_administration": True
 		},
         "admin": {},
         "partner": {},
 		"default": {
+			"weight": 0,
 			"join": True,
 			"leave": False,
 			"donate": True,

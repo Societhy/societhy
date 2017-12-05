@@ -72,11 +72,14 @@
     <link rel="stylesheet" type="text/css" href="bower_components/angularjs-slider/dist/rzslider.css"/>
     <!-- MultiSelect -->
     <link rel="stylesheet" href="static/assets/css/isteven-multi-select.css">
+    <link rel="stylesheet" href="static/assets/css/main.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
 
 </head>
 <body ng-controller="AppCtrl">
-    <div ui-view id="app" class="lyt-4" ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}"></div>
+    <div ui-view id="app" class="lyt-4" ng-class="{'app-mobile' : app.isMobile,
+    'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed,
+    'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}"></div>
 
     <!-- jQuery -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
