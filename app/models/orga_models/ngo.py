@@ -53,8 +53,6 @@ class Ngo(Organization):
             "edit_jobs": False,
             "access_administration": True
 		},
-        "admin": {},
-        "partner": {},
 		"default": {
 			"weight": 0,
 			"join": True,

@@ -45,8 +45,6 @@ class Dao(Organization):
             "edit_jobs": True,
             "access_administration": True
 		},
-    	"admin": {},
-        "guest": {},
 		"member": {
 			"weight": 1,
 			"join": False,
