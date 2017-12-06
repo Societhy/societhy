@@ -517,12 +517,10 @@
 
          goTo: function (form, i) {
              if (parseInt($scope.currentStep) > parseInt(i)) {
-                 $scope.toTheTop();
                  goToStep(i);
 
              } else {
                  if (form.$valid) {
-                     $scope.toTheTop();
                      goToStep(i);
 
                  } else

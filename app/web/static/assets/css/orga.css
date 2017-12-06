@@ -754,7 +754,7 @@ table.dataTable thead th {
 }
 
 /*
-** Manage Rights 
+** Manage Rights
 */
 
 #orgaRightsMenu {
@@ -815,7 +815,7 @@ table.dataTable thead th {
 
 #orgaRightsSelector {
     display : inline-block;
-    width: 75%;
+    width: 100%;
     margin: 20px
 }
 
@@ -837,7 +837,7 @@ table.dataTable thead th {
 #orgaRightsSelector div {
     display: inline-block;
     margin: 0 40px 20px 0;
-    width: 15%;
+    width: 25%;
 }
 /**
  * Rating stars
