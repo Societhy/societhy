@@ -137,20 +137,23 @@
       }).then(
         function(response) {
           jQuery.each(response.data.data, function(index, val) {
-            $scope.governance_types["ngo"]["rights"] = val;
+            $scope.governance_types[index]["rights"] = val;
           })
-          $scope.orga_form.gov_model = ["ngo"];
+          $scope.orga_form.gov_model = "ngo";
+          $scope.$watch('orga_form.gov_model', function() {
+              delete $scope.orga_form.rights;
+              $scope.orga_form.rights = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model]["rights"]);
+
+          });
         },
         function(error) {
           $rootScope.toogleError(error.data);
         }
       );
+
     }
     getGovernanceRights();
-      $scope.$watch('orga_form.gov_model', function() {
-          delete $scope.orga_form.rights;
-          $scope.orga_form.rights = $.extend({}, $scope.governance_types[$scope.orga_form.gov_model]["rights"]);
-      });
+
 
         /* Select a right and display is allowed actions among the list */
         $scope.displaySelectedRight = function (id, index) {
@@ -276,6 +279,8 @@
                 $scope.completeBlockchainAction(
                     function(password) {
                         $rootScope.toogleWait("Processing organization creation...");
+                        var date = new Date();
+                        $scope.orga_form.creation_date = date.toLocaleString("en-us", {month: "short"}) + " " + date.getDate() + ", " + date.getFullYear() + " 00:00"
                         $http.post('/createOrga', {
                             "socketid": $rootScope.sessionId,
                             "password": password,
