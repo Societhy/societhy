@@ -48,7 +48,7 @@ contract StandardTokenFreezer is StandardTokenFreezerInterface {
   }
 
   function balanceOf (address _from) public constant returns (uint balance) {
-    return balances[_from];
+    return token.balanceOf(_from);
   }
 
   function frozenUntil (address _from) public constant returns (uint thawDate) {
