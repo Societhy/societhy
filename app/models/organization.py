@@ -240,7 +240,6 @@ class OrgaDocument(Document):
         self.save()
 
         for item in self.get('invited_users'):
-            print(item)
             notif = models.notification.NotificationDocument({
                 "sender": {"id": objectid.ObjectId(self.get("_id")), "type":"organization"},
                 "subject": {"id": objectid.ObjectId(item), "type":"user"},

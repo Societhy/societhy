@@ -74,7 +74,6 @@ contract Societhy is mortal, BoardRoom {
           p.executed = true;
 
           if(!p.destination.call.value(p.value)(bytes4(keccak256(_calldata)))){
-           // if(!p.destination.call.value(p.value)(_calldata)){
               throw;
           }
           ProposalExecuted(_proposalID, p.destination, _calldata);

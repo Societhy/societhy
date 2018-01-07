@@ -92,6 +92,7 @@ miner = users.find_one({"name": "simon"})
 with open(path.join(keyDirectory, 'test_key2.key'), 'rb') as f:
 	keys.importNewKey(martin_doc, f)
 martin_doc = users.find_one({"email": "jeremy.martin@societhy.com"})
+print("Miner has", miner.refreshBalance(), "ethers")
 bw.run()
 
 
@@ -100,7 +101,7 @@ bw.run()
 def create_user(user, user_names, user_villes, user_addrs):
 	i = 0
 	user_docs = {}
-	while 49 >= i:
+	while 10 >= i:
 		user["eth"]["keys"] = {}
 		user["name"] = user_names[i]["firstname"]
 		user["firstname"] = user_names[i]["firstname"]
@@ -114,7 +115,7 @@ def create_user(user, user_names, user_villes, user_addrs):
 		addr = keys.genLinkedKey(user_docs[i], "simon")
 		user.update()              
 		miner.unlockAccount(password='simon')
-		ret = eth_cli.transfer(miner.get('account'), user_docs[i]["account"], 50000000000000000000000000)
+		ret = eth_cli.transfer(miner.get('account'), user_docs[i]["account"], 50000000000000000000)
 		i = i + 1		 
 	return user_docs
 
@@ -193,6 +194,7 @@ def create_unicef(miner, martin_doc):
 		members.append(user_docs[x])
 		if (randint(0, 100) in range(0, 80)):
 			ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(500, 1200)})
+			print("ret is", ret, user_docs[x].refreshBalance())
 			bw.waitEvent("DonationMade")
 			user_docs[x].reload()
 			unicef_doc.reload()

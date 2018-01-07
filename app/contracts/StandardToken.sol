@@ -23,7 +23,9 @@ contract StandardToken is Token {
             balances[_to] += _value;
             Transfer(msg.sender, _to, _value);
             return true;
-        } else { return false; }
+        } else {
+            return false;
+            }
     }
 
     function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
@@ -35,7 +37,9 @@ contract StandardToken is Token {
             allowed[_from][msg.sender] -= _value;
             Transfer(_from, _to, _value);
             return true;
-        } else { return false; }
+        } else {
+            return false;
+            }
     }
 
     function balanceOf(address _owner) constant returns (uint256 balance) {
