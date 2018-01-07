@@ -1,5 +1,5 @@
 <!-- start: ORGA DASHBOARD PROFILE -->
-<div class="container-fluid container-fullw bg-white"  ng-controller="OrgaMainController as ctrl">
+<div class="container-fluid container-fullw bg-white" ng-controller="OrgaMainController as ctrl">
   <div class="row">
     <div class="col-md-12">
       <div class="ng-scope ng-binding">
@@ -13,7 +13,9 @@
               </div>
               <div class="col-md-6">
                 <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
-                  <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+                  <input ng-init="ctrl.plop()" ng-if="currentRights.donate" id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none"
+                    data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button"
+                    class="form-control input-sm">
                 </div>
               </div>
             </div>
@@ -25,14 +27,19 @@
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
 
-                <div ng-if="isInvitedToOrga == true && !currentOrga.funding.membershipFee">
+                <div ng-if="isInvitedToOrga == true && !isMember">
 
-                  <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
+                  <button ng-if="!currentOrga.funding.membershipFee" type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
                     Accept Invitation
                   </button>
 
+                  <button ng-if="currentOrga.funding.membershipFee" type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.payMembershipFee('member')">
+                    Pay membership and join
+                  </button>
+
+
                 </div>
-                <div ng-if="isInvitedToOrga == false && currentOrga.rules.accessibility == 'public'">
+                <div ng-if="isInvitedToOrga == false && currentOrga.rules.accessibility == 'public'" && "!isMember">
                   <div class="btn-group" ng-if="currentRights.join && !currentOrga.funding.membershipFee" uib-dropdown>
                     <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.joinOrga('member')">
                       Join
@@ -41,21 +48,25 @@
                       <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu">
-                      <li><a ng-click="ctrl.joinOrga('member')"> member </a></li>
-                      <li><a ng-click="ctrl.joinOrga('owner')"> owner </a></li>
+                      <li>
+                        <a ng-click="ctrl.joinOrga('member')"> member </a>
+                      </li>
+                      <li>
+                        <a ng-click="ctrl.joinOrga('owner')"> owner </a>
+                      </li>
                     </ul>
                   </div>
                   <div class="btn-group" ng-if="currentRights.join && currentOrga.funding.membershipFee" uib-dropdown>
                     <button type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.payMembershipFee('member')">
-                      Join $
+                      Pay membership and join
                     </button>
                   </div>
 
                 </div>
                 <div ng-if="isInvitedToOrga == false && currentOrga.rules.accessibility == 'private' && currentRights.join">
-                      <span class="text-red text-large">
-                        This organization is private, you need to be invited to be a member.
-                      </span>
+                  <span class="text-red text-large">
+                    This organization is private, you need to be invited to be a member.
+                  </span>
                 </div>
 
 
@@ -63,113 +74,124 @@
                 <button ng-if="isMember" ng-disable="true" class="btn btn-wide btn-info active">Member</button>
                 <button ng-if="isMember" type="button" class="btn btn-wide btn-danger" ng-click="ctrl.leaveOrga()()">Leave</button>
                 <span>
-                 {{ currentOrga.name }} is a {{currentOrga.gov_model}} founded by {{currentOrga.owner.name}} and administred by its {{ctrl.member_list.length}} members
-               </span>
-             </div>
-             <div class="col-md-6 inline-block  vertical-center">
-              <div class="float-left" style="line-height: 40px">
-                Balance:
-                <span ng-bind="currentOrga.balance"></span>
+                  {{ currentOrga.name }} is a {{currentOrga.gov_model}} founded by {{currentOrga.owner.name}} and administred by its {{ctrl.member_list.length}}
+                  members
+                </span>
               </div>
-              <div class="social-icons float-right">
-                <ul>
-                  <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                    <a ng-href="{{currentOrga.twitterUrl}}">
-                      Twitter
-                    </a>
-                  </li>
-                  <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                    <a ng-href="{{currentOrga.fbUrl}}">
-                      Facebook
-                    </a>
-                  </li>
-                  <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                    <a href="#" ng-click="" target="_blank">
-                      Google+
-                    </a>
-                  </li>
-                </ul>
+              <div class="col-md-6 inline-block  vertical-center">
+                <div class="float-left" style="line-height: 40px">
+                  Balance:
+                  <span ng-bind="currentOrga.balance"></span>
+                </div>
+                <div class="social-icons float-right">
+                  <ul>
+                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                      <a ng-href="{{currentOrga.twitterUrl}}">
+                        Twitter
+                      </a>
+                    </li>
+                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                      <a ng-href="{{currentOrga.fbUrl}}">
+                        Facebook
+                      </a>
+                    </li>
+                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                      <a href="#" ng-click="" target="_blank">
+                        Google+
+                      </a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
             <div style="width: 75%" class="center-block text-center clearfix">
               <h2>Description</h2>
               <span>{{currentOrga.description}}</span>
             </div>
-          <div class="row margin-top-20" >
-            <div class="col-md-6   padding-20">
-              <h2>Projects<button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ui-sref="app.newproject({owner_id: currentOrga._id})">+</button></h2>
+            <div class="row margin-top-20">
+              <div class="col-md-6   padding-20">
+                <h2>Projects
+                  <button ng-if="currentRights.create_project" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large"
+                    ui-sref="app.newproject({owner_id: currentOrga._id})">+</button>
+                </h2>
 
-              <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
-                <!-- ngInclude: templates.header -->
-                <thead  class="ng-scope">
-                  <tr>
-                    <td>
-                      <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
-                        Project address
-                        <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
-                      </a>
-                    </td>
-                    <td>
-                      <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
-                        <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
-                        Name
-                      </a>
-                    </td>
-                  </tr>
-                  <hr />
-                </thead>
-                <tbody><!-- ngRepeat: user in $data -->
-                  <tr ng-repeat="(address, project) in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
-                    <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
-                    <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
-                  </tr><!-- end ngRepeat: user in $data -->
-                </tbody>
-              </table>
-
-            </div>
-            <div class="col-md-6 inline-block   padding-20">
-              <h2>News</h2>
-
-            </div>
-          </div>
-
-          <div class="row margin-top-20" >
-            <div class="col-md-6   padding-20">
-              <h2>Proposals<button ng-if="currentRights.create_proposal" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large" ng-click="ctrl.createProposal()">+</button></h2>
-            </div>
-            <div class="col-md-6 inline-block" style="padding: 20px">
-              <h2>Members</h2>
-              <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
-
-                <!-- ngInclude: templates.header -->
-                <thead  class="ng-scope">
-                  <tr>
-                    <td>
-                      <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
-                        Member
-                        <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
-                      </a>
-                    </td>
-
-                    <td>
-                      <a href="#" ng-click="sortType = 'tag'; sortReverse = !sortReverse">
-                        <span ng-show="sortType == 'tag' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'tag' && sortReverse" class="fa fa-caret-up"></span>
-                        Tag
-                      </a>
-                    </td>
-
+                <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+                  <!-- ngInclude: templates.header -->
+                  <thead class="ng-scope">
+                    <tr>
+                      <td>
+                        <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                          Project address
+                          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                      </td>
+                      <td>
+                        <a href="#" ng-click="sortType = 'rank'; sortReverse = !sortReverse">
+                          <span ng-show="sortType == 'rank' && !sortReverse" class="fa fa-caret-down"></span>
+                          <span ng-show="sortType == 'rank' && sortReverse" class="fa fa-caret-up"></span>
+                          Name
+                        </a>
+                      </td>
+                    </tr>
                     <hr />
                   </thead>
-                  <tbody><!-- ngRepeat: user in $data -->
+                  <tbody>
+                    <!-- ngRepeat: user in $data -->
+                    <tr ng-repeat="(address, project) in currentOrga.projects" ui-sref="app.project({_id: project._id, name:project.name})" class="ng-scope">
+                      <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{address}} </td>
+                      <td data-title="'Project'" data-title-text="Project" class="ng-binding" filter="{ 'Project': 'text' }">{{project.name}}</td>
+                    </tr>
+                    <!-- end ngRepeat: user in $data -->
+                  </tbody>
+                </table>
+
+              </div>
+              <div class="col-md-6 inline-block   padding-20">
+                <h2>News</h2>
+
+              </div>
+            </div>
+
+            <div class="row margin-top-20">
+              <div class="col-md-6   padding-20">
+                <h2>Proposals
+                  <button ng-if="currentRights.create_proposal" type="button" class="btn btn-sm btn-success padding-10 margin-left-20 text-extra-large"
+                    ng-click="ctrl.createProposal()">+</button>
+                </h2>
+              </div>
+              <div class="col-md-6 inline-block" style="padding: 20px">
+                <h2>Members</h2>
+                <table ng-table="tableParams" show-filter="true" class="table table-bordered table-striped" id="project">
+
+                  <!-- ngInclude: templates.header -->
+                  <thead class="ng-scope">
+                    <tr>
+                      <td>
+                        <a href="#" ng-click="sortType = 'address'; sortReverse = !sortReverse">
+                          Member
+                          <span ng-show="sortType == 'address' && !sortReverse" class="fa fa-caret-down"></span>
+                          <span ng-show="sortType == 'address' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                      </td>
+
+                      <td>
+                        <a href="#" ng-click="sortType = 'tag'; sortReverse = !sortReverse">
+                          <span ng-show="sortType == 'tag' && !sortReverse" class="fa fa-caret-down"></span>
+                          <span ng-show="sortType == 'tag' && sortReverse" class="fa fa-caret-up"></span>
+                          Tag
+                        </a>
+                      </td>
+
+                      <hr />
+                  </thead>
+                  <tbody>
+                    <!-- ngRepeat: user in $data -->
                     <tr ng-repeat="(address, member) in currentOrga.members" ui-sref="app.user({name:member.name, _id:member._id})" class="ng-scope">
                       <td data-title="'address'" filter="{ 'address': 'text' }" data-title-text="address" class="ng-binding"> {{member.name || address}} </td>
                       <td data-title="'rank'" data-title-text="rank" class="ng-binding" filter="{ 'rank': 'text' }">{{member.tag}}</td>
-                    </tr><!-- end ngRepeat: user in $data -->
+                    </tr>
+                    <!-- end ngRepeat: user in $data -->
                   </tbody>
                 </table>
 
@@ -178,7 +200,7 @@
             </div>
           </uib-tab>
 
-          <uib-tab heading="Newsfeed" >
+          <uib-tab heading="Newsfeed">
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_newsfeed.html' "></div>
           </uib-tab>
 
@@ -187,7 +209,7 @@
             <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_activities.html' "></div>
           </uib-tab>
 
-<!--          <uib-tab heading="Members">
+          <!--          <uib-tab heading="Members">
             <div class="row">
               <div class="col-md-12 inline-block">
 
@@ -289,15 +311,27 @@
                             </thead>
                             <tbody>
                               <tr ng-repeat="item in uploaderDocs.queue">
-                                <td><strong>{{ item.file.name }}</strong>
+                                <td>
+                                  <strong>{{ item.file.name }}</strong>
                                   <div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
                                 </td>
                                 <td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
                                 <td ng-show="uploaderDocs.isHTML5">
-                                  <select name="docPrivacy" id="docPrivacy" multiple ng-options="option for option in ctrl.jobs" size="3" ng-model="item.documentPrivacy" class="form-control">
+                                  <select name="docPrivacy" id="docPrivacy" multiple ng-options="option for option in ctrl.jobs" size="3" ng-model="item.documentPrivacy"
+                                    class="form-control">
                                   </select>
                                 </td>
-                                <td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
+                                <td class="text-center">
+                                  <span ng-show="item.isSuccess">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                  </span>
+                                  <span ng-show="item.isCancel">
+                                    <i class="glyphicon glyphicon-ban-circle"></i>
+                                  </span>
+                                  <span ng-show="item.isError">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                  </span>
+                                </td>
                                 <td nowrap>
                                   <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
                                     <span class="glyphicon glyphicon-trash"></span> Remove
@@ -322,7 +356,9 @@
                 <div class="col-md-12">
                   <div class="panel panel-white">
                     <div class="panel-body">
-                      <h5 class="over-title margin-bottom-15">Your uploaded <span class="text-bold">Documents</span></h5>
+                      <h5 class="over-title margin-bottom-15">Your uploaded
+                        <span class="text-bold">Documents</span>
+                      </h5>
                       <table class="table table-stylish" id="sample-table-2">
                         <thead>
                           <tr>
@@ -345,19 +381,26 @@
                             <td class="center">
                               <div class="visible-md visible-lg hidden-sm hidden-xs">
                                 <!-- <a href="#" ng-click="ctrl.downloadDoc(doc.doc_id, doc.doc_name)" class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a> -->
-                                <a href="{{'/getOrgaUploadedDocument/' + doc.doc_id + '/' + doc.doc_name}}" download class="btn btn-transparent btn-xs" tooltip-placement="top" uib-tooltip="Download"><i class="fa fa-download"></i></a>
-                                <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" uib-tooltip="Remove"><i class="fa fa-times fa fa-white"></i></a>
+                                <a href="{{'/getOrgaUploadedDocument/' + doc.doc_id + '/' + doc.doc_name}}" download class="btn btn-transparent btn-xs" tooltip-placement="top"
+                                  uib-tooltip="Download">
+                                  <i class="fa fa-download"></i>
+                                </a>
+                                <a href="#" class="btn btn-transparent btn-xs tooltips" tooltip-placement="top" uib-tooltip="Remove">
+                                  <i class="fa fa-times fa fa-white"></i>
+                                </a>
                               </div>
                               <div class="visible-xs visible-sm hidden-md hidden-lg">
                                 <div class="btn-group" uib-dropdown>
                                   <button type="button" class="btn btn-primary btn-o btn-sm dropdown-toggle" uib-dropdown-toggle>
-                                    <i class="fa fa-cog"></i>&nbsp;<span class="caret"></span>
+                                    <i class="fa fa-cog"></i>&nbsp;
+                                    <span class="caret"></span>
                                   </button>
                                   <ul class="dropdown-menu pull-right dropdown-light" role="menu">
                                     <li>
                                       <a href="#"> Download </a>
                                     </li>
-                                    <li><a href="#"> Remove </a>
+                                    <li>
+                                      <a href="#"> Remove </a>
                                     </li>
                                   </ul>
                                 </div>
@@ -376,127 +419,128 @@
             </div>
           </uib-tab>
           <uib-tab ng-if="currentRights.access_administration" heading="Administration">
-           <div class="panel panel-white">
-             <div class="panel-body">
-              <div data-ng-include="'static/assets/views/partials/orga/administration.html'">
-              </div>
-            </div>
-          </div>
-        </uib-tab>
-
-        <uib-tab heading="Proposals" active="editActive">
-          <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
-        </uib-tab>
-
-        <uib-tab heading="Projects">
-          <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
-          <div>
-            <table class="table no-margin">
-              <tr ng-repeat="project in currentOrga.projects" class="ng-scope">
-                <td>
-                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
-                    <div class="icons-effect col-md-3">
-                      <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
-                    </div>
-                  </a>
-                </td>
-                <td class="col-md-9">
-                  <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
-                    <div class="padding-10">
-                      <strong>{{project.name}}</strong>
-                    </div>
-                  </a>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </uib-tab>
-
-        <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
-          <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
-          <div ng-show="listProducts.length" class="row" style="margin-right: 10">
-            <div class="col-md-3">
-
-              <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
-                <thead></thead>
-                <tbody>
-                  <tr ng-repeat="product in listProducts" class="ng-scope">
-                    <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <fieldset class="margin-15">
-              <legend class="text-large">{{currentProd.name}}</legend>
-
-              <div class="row">
-                <div class="col-md-4">
-                  <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
-                    <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
-                      <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
-                    </div>
-                  </div>
-
-                  <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." style="margin: auto; height: 300px; width: auto;"/>
-                </div>
-
-                <div class="col-md-8">
-                  <fieldset>
-                    <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
-                  </fieldset>
-                  <div class="row">
-                    <div class="col-md-2">
-                      <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
-                    </div>
-                    <div class="col-md-2">
-                      <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
-                       <span>Buy</span>
-                     </button>
-                   </div>
-                 </div>
-               </div>
-             </div>
-
-             <div class="row">
-              <h3>Review this product</h3>
-              <div class="col-md-6">
-                <textarea placeholder="Enter your review..." ng-model="ctrl.review" ng-init='ctrl.review = ""' rows="7" cols="73" wrap="hard"></textarea>
-              </div>
-
-              <div class="col-md-6">
-                <div class="row">
-                  <span uib-rating ng-model="ctrl.rate" ng-init='ctrl.rate = 3' read-only="false"></span>
-                </div>
-
-                <div class="row">
-                  <button class="btn btn-success" ng-click="ctrl.sendReview()">Send</button>
+            <div class="panel panel-white">
+              <div class="panel-body">
+                <div data-ng-include="'static/assets/views/partials/orga/administration.html'">
                 </div>
               </div>
             </div>
+          </uib-tab>
 
-            <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
-              <thead></thead>
-              <tbody>
-                <tr ng-repeat="review in reviewList" class="ng-scope">
+          <uib-tab heading="Proposals" active="editActive">
+            <div class="col-md-12" data-ng-include=" 'static/assets/views/partials/orga/orga_proposals.html' "></div>
+          </uib-tab>
+
+          <uib-tab heading="Projects">
+            <button class="btn btn-green margin-15" ng-if="currentRights.create_project" ui-sref="app.newproject({owner_id: currentOrga._id})">Add a new project</button>
+            <div>
+              <table class="table no-margin">
+                <tr ng-repeat="project in currentOrga.projects" class="ng-scope">
                   <td>
-                    <h4 class="text-capitalize">{{review.user.name}}</h4>
-                    <span uib-rating ng-model="review.rate" read-only="true"></span>
-                    <p style="width: 100%; height: 100%">{{review.review}}</p>
+                    <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                      <div class="icons-effect col-md-3">
+                        <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default_sm.jpg'}}" class="img-responsive img-circle" alt="">
+                      </div>
+                    </a>
+                  </td>
+                  <td class="col-md-9">
+                    <a href="#" ui-sref="app.project({_id: project._id, name:project.name})">
+                      <div class="padding-10">
+                        <strong>{{project.name}}</strong>
+                      </div>
+                    </a>
                   </td>
                 </tr>
-              </tbody>
-            </table>
+              </table>
+            </div>
+          </uib-tab>
 
-          </fieldset>
-        </div>
+          <uib-tab heading="Sales" active="editActive" ng-click="ctrl.loadProducts()">
+            <button class="btn btn-green margin-15" ng-click="ctrl.addNewProduct()">Add a new product</button>
+            <div ng-show="listProducts.length" class="row" style="margin-right: 10">
+              <div class="col-md-3">
 
-        <div ng-show="!listProducts.length">
-          <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
-        </div>
-      </uib-tab>
+                <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                  <thead></thead>
+                  <tbody>
+                    <tr ng-repeat="product in listProducts" class="ng-scope">
+                      <td ng-click="ctrl.setProduct(product)">{{product.name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
 
-    <!--
+              <fieldset class="margin-15">
+                <legend class="text-large">{{currentProd.name}}</legend>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div ng-show="slides.length" uib-carousel active="0" interval="0" no-wrap="false">
+                      <div uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
+                        <img ng-src="{{slide.image || 'static/assets/images/product_default.png'}}" style="margin: auto; height: 300px; width: auto;">
+                      </div>
+                    </div>
+
+                    <img ng-show="!slides.length" ng-src="{{'static/assets/images/product_default.png'}}" alt="..." style="margin: auto; height: 300px; width: auto;"
+                    />
+                  </div>
+
+                  <div class="col-md-8">
+                    <fieldset>
+                      <p style="width: 100%; height: 100%">{{currentProd.description}}</p>
+                    </fieldset>
+                    <div class="row">
+                      <div class="col-md-2">
+                        <p class="text-blue text-large text-uppercase margin-10">{{currentProd.price}} eth</p>
+                      </div>
+                      <div class="col-md-2">
+                        <button type="button" class="btn btn-info btn-wide btn-scroll btn-scroll-top ti-shopping-cart">
+                          <span>Buy</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <h3>Review this product</h3>
+                  <div class="col-md-6">
+                    <textarea placeholder="Enter your review..." ng-model="ctrl.review" ng-init='ctrl.review = ""' rows="7" cols="73" wrap="hard"></textarea>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="row">
+                      <span uib-rating ng-model="ctrl.rate" ng-init='ctrl.rate = 3' read-only="false"></span>
+                    </div>
+
+                    <div class="row">
+                      <button class="btn btn-success" ng-click="ctrl.sendReview()">Send</button>
+                    </div>
+                  </div>
+                </div>
+
+                <table ng-table="tableParams" class="table margin-top-15 table-condensed table-bordered table-hover">
+                  <thead></thead>
+                  <tbody>
+                    <tr ng-repeat="review in reviewList" class="ng-scope">
+                      <td>
+                        <h4 class="text-capitalize">{{review.user.name}}</h4>
+                        <span uib-rating ng-model="review.rate" read-only="true"></span>
+                        <p style="width: 100%; height: 100%">{{review.review}}</p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </fieldset>
+            </div>
+
+            <div ng-show="!listProducts.length">
+              <h1 class="text-center text-uppercase text-azure">{{currentOrga.name}} has no product added yet.</h1>
+            </div>
+          </uib-tab>
+
+          <!--
          <uib-tab heading="Settings">
            <div class="container-fluid container-fullw ng-scope">
              <div class="panel panel-white">
@@ -509,11 +553,11 @@
          </div>
        </uib-tab>
      -->
-     <!-- end: TAB ORGANISATIONS -->
-   </uib-tabset>
-   <!-- end: USER TABSET -->
- </div>
-</div>
-</div>
+          <!-- end: TAB ORGANISATIONS -->
+        </uib-tabset>
+        <!-- end: USER TABSET -->
+      </div>
+    </div>
+  </div>
 </div>
 <!-- end: USER PROFILE -->

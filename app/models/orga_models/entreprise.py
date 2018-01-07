@@ -9,11 +9,11 @@ from core.utils import fromWei, toWei, normalizeAddress
 class Entreprise(Organization):
 
     default_rules = {
-        "default_proposal_duration": 120,
+        "default_proposal_duration": 15,
         "payout_freeze_period": 0,
         "delegated_voting": False,
         "quorum": 20,
-        "majority": 50,
+        "majority": 1,
         "accessibility": "private",
         "can_be_removed": True,
         "curators": False,
@@ -49,7 +49,7 @@ class Entreprise(Organization):
             "create_project": False,
             "create_offer": True,
             "create_proposal": False,
-            "vote_proposal": True,
+            "vote_proposal": False,
             "recruit": False,
             "remove_members": False,
             "sell_token": True,

@@ -34,7 +34,7 @@ app.controller("OrgaWizardCtrl", function(
       ],
       desc:
         "DAO stands for 'decentralized autonomous organisation'. It is a kind of organisation that is controlled entirely by all of its members, and in which every member has the same rights. One does not need to become a member of the organisation to participate in its operations, and the weight of one's vote depends on the amount he invested in the structure",
-      tags: ["owner", "admin", "member", "guest"],
+      tags: ["owner", "admin", "member", "default"],
       rights: {
         owner: {
           join: false,
@@ -54,7 +54,7 @@ app.controller("OrgaWizardCtrl", function(
           publish_news: true
         },
         admin: {},
-        guest: {},
+        default: {},
         member: {
           join: false,
           leave: true,
@@ -92,7 +92,7 @@ app.controller("OrgaWizardCtrl", function(
       ],
       desc:
         "This type of organisation is the right choice for public structures and those who want complete transparency over their processes, hence preventing fraud.",
-      tags: ["owner", "admin", "member", "guest"],
+      tags: ["owner", "admin", "member", "default"],
       rights: {
         owner: {
           join: false,
@@ -157,7 +157,7 @@ app.controller("OrgaWizardCtrl", function(
       ],
       desc:
         "This type of structure is the right fit for organisations wanting to involve external investors and/or their customers in their funding and decision making.",
-      tags: ["owner", "admin", "member", "guest"],
+      tags: ["owner", "admin", "member", "default"],
       rights: {
         owner: {
           join: false,
@@ -219,7 +219,7 @@ app.controller("OrgaWizardCtrl", function(
       ],
       desc:
         "This type of structure is made for people that want a strong leadership in their organization, allowing quick and efficient decision making, it is the right structure for a regular business needing privacy over its accounts.",
-      tags: ["owner", "admin", "member", "guest"],
+      tags: ["owner", "admin", "member", "default"],
       rights: {
         owner: {
           join: false,
@@ -245,7 +245,7 @@ app.controller("OrgaWizardCtrl", function(
           leave: true,
           donate: true,
           create_proposal: false,
-          vote_proposal: true,
+          vote_proposal: false,
           recruit: false,
           remove_members: false,
           buy_token: true,
