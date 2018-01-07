@@ -28,7 +28,7 @@ app.controller('ProjectWizardCtrl',
         var newItemNo = $scope.proj.levels.length + 1;
         $scope.proj.levels.push({
           'name': 'Default name' + newItemNo,
-          value: 0,
+          value: 10,
           prevTot: 0,
           'desc': ''
         });

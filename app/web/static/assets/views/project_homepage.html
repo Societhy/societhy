@@ -35,6 +35,11 @@
   <fieldset>
     <div class="row margin-10">
       <div class="col-md-5">
+        <div>
+          <h3>Description</h3>
+          <p class="margin-top-10">{{project.description}}</p>
+        </div>
+
         <div class="">
           <h3>
             Campaign
@@ -55,38 +60,38 @@
         <!-- LIGNE D'AVANCEMENT DES FOND -->
          <!-- <uib-progress max="project.balance"><uib-bar ng-repeat="bar in project.levels track by $index" value="project.balance - bar.value" max="bar.value" type="warning"><span ng-hide="bar.value < 5">{{bar.value}}%</span></uib-bar></uib-progress> -->
         <uib-progressbar value="project.balance * (100 / project.campaign.amount_to_raise)" class="progress no-radius background-dark no-margin" type="{{project.balance * (100 / project.campaign.amount_to_raise) >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
+        <div class="panel panel-white" ng-if="project.time_left_percent > 0">
+          <div class="panel-body">
+          <h3>Time remaining</h3>
+          <uib-progressbar value="project.time_left_percent" class="progress no-radius background-dark no-margin" type="{{project.time_left_percent >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
+          <!-- TIMELINE ICI -->
+          </div>
+        </div>
+        <div class="panel panel-white" ng-if="project.time_left_percent <= 0">
+          <div class="panel-body">
+
+          <h3 class="text-red">CAMPAIGN IS OVER</h3>
+        </div>
+        </div>
       </div>
       <div class="col-md-7">
-        <h3>Description</h3>
-        <p class="margin-top-10">{{project.description}}</p>
-
+        <h3>Steps</h3>
         <div ng-repeat="level in project.levels">
-          <div class="panel">
+          <div class="panel panel-white">
             <div class="panel-heading">
               {{level.name}}
             </div>
             <div class="panel-body">
               <uib-progressbar value="((project.balance - level.prevTot < 0) ? 0 : project.balance - level.prevTot) * (100 / (level.value - level.prevTot))" class="progress no-radius background-dark no-margin" type="{{((project.balance - level.prevTot < 0) ? 0 : project.balance - level.prevTot) * (100 / (level.value - level.prevTot)) >= 100 ? 'success' : 'warning'}}" >
               </uib-progressbar>
-              {{level.desc}}
+              <p class="margin-10">{{level.desc}}</p>
             </div>
           </div>
         </div>
-        <pre>
-          {{project.levels}}
-        </pre>
       </div>
     </div>
     <div class="row margin-10">
       <div class="col-md-5">
-        <div ng-if="project.time_left_percent > 0">
-          <h3>Time remaining</h3>
-          <uib-progressbar value="project.time_left_percent" class="progress no-radius background-dark no-margin" type="{{project.time_left_percent >= 50 ? 'success' : 'warning'}}" ></uib-progressbar>
-          <!-- TIMELINE ICI -->
-        </div>
-        <div ng-if="project.time_left_percent <= 0">
-          <h3 class="text-red">CAMPAIGN IS OVER</h3>
-        </div>
       </div>
       <div class="col-md-7">
       </div>
