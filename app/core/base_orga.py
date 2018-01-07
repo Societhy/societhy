@@ -54,11 +54,13 @@ def getOrgaDocument(user, _id=None, name=None):
         if user.get('account') in orga.get('members'):
             tag = orga["members"].get(user['account'])['tag']
             rights = orga['rights'][tag]
-            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if tag in doc["privacy"] or "default" in doc["privacy"]]
+            orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"]
+                                             if rights.get('weight') >= orga['rights'][doc["privacy"]]["weight"]]
 
     if not rights:
         rights = orga.default_rights.get('default')
-        orga["uploaded_documents"][:] = [doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
+        orga["uploaded_documents"][:] = [
+            doc for doc in orga["uploaded_documents"] if "default" in doc["privacy"]]
 
     if orga.get('profile_picture'):
         orga["picture"] = ("data:" + orga["profile_picture"]["profile_picture_type"] + ";base64," + json.loads(
@@ -73,7 +75,8 @@ def getAllOrganizations():
     """
     Return all the registered organisations.
     """
-    orgas = list(organizations.find({"rules.hidden": False}, organizations.public_info))
+    orgas = list(organizations.find(
+        {"rules.hidden": False}, organizations.public_info))
     return {
         "data": orgas,
         "status": 200
@@ -101,7 +104,8 @@ def createOrga(user, password, newOrga):
 
     rules_contract = governances.get(newOrga["gov_model"]).get('rulesContract')
     token_contract = governances.get(newOrga["gov_model"]).get('tokenContract')
-    token_freezer_contract = governances.get(newOrga["gov_model"]).get('tokenFreezerContract')
+    token_freezer_contract = governances.get(
+        newOrga["gov_model"]).get('tokenFreezerContract')
     registry_contract = 'ControlledRegistry' if newOrga.get('rules').get(
         'accessibility') == "private" else governances.get(newOrga["gov_model"]).get('registryContract')
 
@@ -115,7 +119,8 @@ def createOrga(user, password, newOrga):
         registry_contract=registry_contract,
         gen_skel=True)
     try:
-        tx_hash = instance.deployContract(from_=user, password=password, args=[newOrga.get('name')])
+        tx_hash = instance.deployContract(
+            from_=user, password=password, args=[newOrga.get('name')])
     except BadResponseError as e:
         return {"data": str(e), "status": 400}
 
@@ -159,9 +164,9 @@ def addOrgaDocuments(user, orga_id, doc, name, doc_type, size, privacy):
     """
     _id = db_filesystem.put(doc, doc_type=doc_type, name=name)
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
-    orga['uploaded_documents'].append({"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy})
+    orga['uploaded_documents'].append(
+        {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy[0]})
     orga.save_partial()
-    print(len(orga['uploaded_documents']))
     # ret = organizations.update_one({"_id": objectid.ObjectId(orga_id)}, {
     #     "$addToSet": {"uploaded_documents": {"doc_id": _id, "doc_type": doc_type, "doc_name": name, "size": size, "privacy": privacy}}})
     # if ret.modified_count < 1:
@@ -288,21 +293,21 @@ def updateOrgaRights(user, orga_id, rights):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 
     if orga.can(user, "edit_rights"):
-        orga["rights"] = rights;
+        orga["rights"] = rights
         orga.save_partial()
         user.needsReloading()
         tag = orga["members"].get(user['account'])['tag']
-        print(tag)
         rights = orga['rights'][tag]
         return {
-	        "data": {"rights": orga["rights"], "userRights": rights},
-	        "status": 200
+            "data": {"rights": orga["rights"], "userRights": rights},
+            "status": 200
         }
     else:
         return {
-	        "data": "You don't have the right to change the rights",
-	        "status": 403
+            "data": "You don't have the right to change the rights",
+            "status": 403
         }
+
 
 def inviteUsers(user, orga_id, invited_users):
     """
@@ -318,9 +323,10 @@ def inviteUsers(user, orga_id, invited_users):
         }
     else:
         return {
-	        "data": "You don't have the right to invite",
-	        "status": 403
+            "data": "You don't have the right to invite",
+            "status": 403
         }
+
 
 def updateMemberTag(user, orga_id, addr, tag):
     """
@@ -330,19 +336,19 @@ def updateMemberTag(user, orga_id, addr, tag):
     orga = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
 
     if orga.can(user, "edit_jobs"):
-        orga["members"][addr]["tag"] = tag;
+        orga["members"][addr]["tag"] = tag
         orga.save_partial()
         tag = orga["members"].get(user['account'])['tag']
         rights = orga['rights'][tag]
         user.needsReloading()
         return {
-	        "data": {"members": orga["members"], "userRights": rights},
-	        "status": 200
+            "data": {"members": orga["members"], "userRights": rights},
+            "status": 200
         }
     else:
         return {
-	        "data": "You don't have the right to change tag",
-	        "status": 403
+            "data": "You don't have the right to change tag",
+            "status": 403
         }
 
 
@@ -464,15 +470,16 @@ def removeMember(user, member_account, password, orga_id):
 
     orga_instance = organizations.find_one({"_id": objectid.ObjectId(orga_id)})
     try:
-        tx_hash = orga_instance.removeMember(user, member_account, password=password)
+        tx_hash = orga_instance.removeMember(
+            user, member_account, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to leave", "status": 400}
     except BadResponseError as e:
         return {"data": str(e), "status": 400}
 
     return {
-	"data": tx_hash,
-	"status": 200
+        "data": tx_hash,
+        "status": 200
     }
 
 
@@ -530,7 +537,8 @@ def createProposal(user, password, orga_id, offer_id, duration=None):
     if not orga_instance:
         return {"data": "Organization does not exists", "status": 400}
     try:
-        tx_hash = orga_instance.createProposal(user, offer_id, duration, password=password)
+        tx_hash = orga_instance.createProposal(
+            user, offer_id, duration, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to create an offer", "status": 400}
 
@@ -549,7 +557,8 @@ def voteForProposal(user, password, orga_id, proposal_id, vote):
     if not orga_instance:
         return {"data": "Organization does not exists", "status": 400}
     try:
-        tx_hash = orga_instance.voteForProposal(user, proposal_id, vote, password=password)
+        tx_hash = orga_instance.voteForProposal(
+            user, proposal_id, vote, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to create an offer", "status": 400}
 
@@ -579,7 +588,8 @@ def executeProposal(user, password, orga_id, proposal_id):
     if not orga_instance:
         return {"data": "Organization does not exists", "status": 400}
     try:
-        tx_hash = orga_instance.executeProposal(user, proposal_id, password=password)
+        tx_hash = orga_instance.executeProposal(
+            user, proposal_id, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to create an offer", "status": 400}
 
@@ -601,7 +611,8 @@ def withdrawFundsFromOffer(user, password, orga_id, offer_id):
     if not offer_instance:
         return {"data": "Offer does not exists", "status": 400}
     try:
-        tx_hash = orga_instance.withdrawFundsFromOffer(user, offer_instance, password=password)
+        tx_hash = orga_instance.withdrawFundsFromOffer(
+            user, offer_instance, password=password)
         if tx_hash is False:
             return {"data": "User does not have permission to create an offer", "status": 400}
 
@@ -622,11 +633,11 @@ def publishNews(user, title, text, orga_id, yt_url):
     date = json.dumps(datetime.now(), default=json_util.default)
     date = json.loads(date)["$date"]
     payload = {
-            "title": title,
-            "text": text,
-            "createdAt": date,
-            "writer": user["name"],
-        }
+        "title": title,
+        "text": text,
+        "createdAt": date,
+        "writer": user["name"],
+    }
     yt_url = getYoutubeID(yt_url)
     if yt_url != "":
         payload["yt_url"] = yt_url
@@ -688,7 +699,8 @@ def getNewsPhoto(orga_id, news_key):
         return {"data": "news don't exist !", "status": 400}
     if news.get('img'):
         for img in news.get('img'):
-            payload = json.loads(json_util.dumps(db_filesystem.get(img["_id"]).read()))["$binary"]
+            payload = json.loads(json_util.dumps(
+                db_filesystem.get(img["_id"]).read()))["$binary"]
             images.append("data:" +
                           img["doc_type"] +
                           ";base64," +

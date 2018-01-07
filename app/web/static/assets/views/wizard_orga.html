@@ -12,7 +12,9 @@
 		<div class="col-md-12">
 			<div class="panel panel-white">
 				<div class="panel-body">
-					<h5 class="over-title margin-bottom-15">Create an <span class="text-bold">organisation</span></h5>
+					<h5 class="over-title margin-bottom-15">Create an
+						<span class="text-bold">organisation</span>
+					</h5>
 					<div ng-controller="OrgaWizardCtrl as ctrl">
 						<!-- start: WIZARD FORM -->
 						<form name="Form" id="form" novalidate>
@@ -23,14 +25,16 @@
 										<a href ng-class="{'selected' : currentStep >= 1, 'done' : currentStep > 1}">
 											<div class="stepNumber">
 												1
-											</div> <span class="stepDesc text-small"> Basic information </span>
+											</div>
+											<span class="stepDesc text-small"> Basic information </span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 2)">
 										<a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}">
 											<div class="stepNumber">
 												2
-											</div> <span class="stepDesc text-small">Governance</span>
+											</div>
+											<span class="stepDesc text-small">Governance</span>
 										</a>
 									</li>
 
@@ -38,42 +42,48 @@
 										<a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
 											<div class="stepNumber">
 												3
-											</div> <span class="stepDesc text-small">Rights</span>
+											</div>
+											<span class="stepDesc text-small">Rights</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 4)">
 										<a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}">
 											<div class="stepNumber">
 												4
-											</div> <span class="stepDesc text-small">Members</span>
+											</div>
+											<span class="stepDesc text-small">Members</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 5)">
 										<a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}">
 											<div class="stepNumber">
 												5
-											</div> <span class="stepDesc text-small">Tokens</span>
+											</div>
+											<span class="stepDesc text-small">Tokens</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 6)">
 										<a href ng-class="{'selected' : currentStep >= 6, 'done' : currentStep > 6}">
 											<div class="stepNumber">
 												6
-											</div> <span class="stepDesc text-small">Funding</span>
+											</div>
+											<span class="stepDesc text-small">Funding</span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 7)">
 										<a href ng-class="{'selected' : currentStep >= 7, 'done' : currentStep > 7}">
 											<div class="stepNumber">
 												7
-											</div> <span class="stepDesc text-small"> Document Upload </span>
+											</div>
+											<span class="stepDesc text-small"> Document Upload </span>
 										</a>
 									</li>
 									<li ng-click="form.goTo(Form, 8)">
 										<a href ng-class="{'selected' : currentStep >= 8, 'done' : currentStep > 8}">
 											<div class="stepNumber">
 												8
-											</div> <span class="stepDesc text-small"> Complete </span>
+											</div>
+											<span class="stepDesc text-small"> Complete </span>
 										</a>
 									</li>
 								</ul>
@@ -83,600 +93,697 @@
 									<div class="row">
 										<div class="col-md-5">
 											<div class="padding-30">
-												<h2 class="StepTitle"><i class="ti-face-smile fa-2x text-primary block margin-bottom-10"></i> Enter your basic information</h2 >
+												<h2 class="StepTitle">
+													<i class="ti-face-smile fa-2x text-primary block margin-bottom-10"></i> Enter your basic information
+												</h2>
+											</div>
+											<fieldset>
+												<legend>
+													Openness & Privacy
+												</legend>
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="block"> Do you want your organization to be :</label>
+															<div class="clip-radio radio-primary radio-lg">
+																<input type="radio" id="public_type" value="public" ng-model="orga_form.rules.accessibility" ng-init="orga_form.rules.accessibility = 'public'">
+																<label for="public_type"> Public </label>
+															</div>
+															<div class="clip-radio radio-primary radio-lg">
+																<input type="radio" id="private_type" value="private" ng-model="orga_form.rules.accessibility">
+																<label for="private_type"> Private </label>
+															</div>
+														</div>
+													</div>
 												</div>
-												<fieldset>
-													<legend>
-														Openness & Privacy
-													</legend>
-													<div class="row">
-														<div class="col-md-6">
-															<div class="form-group">
-																<label class="block"> Do you want your organization to be :</label>
-																<div class="clip-radio radio-primary radio-lg">
-																	<input type="radio" id="public_type" value="public" ng-model="orga_form.rules.accessibility" ng-init="orga_form.rules.accessibility = 'public'">
-																	<label for="public_type"> Public </label>
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label class="block"> You can also chose to make it :</label>
+															<div class="checkbox vertical-center clip-check check-primary check-lg">
+																<input type="checkbox" id="anonymous_type" ng-model="orga_form.rules.anonymous">
+																<label for="anonymous_type"> Anonymous </label>
+															</div>
+															<div class="checkbox vertical-center clip-check check-primary check-lg">
+																<input type="checkbox" id="hidden_type" ng-model="orga_form.rules.hidden">
+																<label for="hidden_type"> Hidden </label>
+															</div>
+														</div>
+													</div>
+												</div>
+											</fieldset>
+										</div>
+										<div class="col-md-7">
+											<fieldset>
+												<legend>
+													Basics
+												</legend>
+												<div class="row">
+													<div class="col-md-6">
+														<div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
+															<label class="control-label">Organisation Name
+																<span class="symbol required"></span>
+															</label>
+															<input type="text" placeholder="Enter your organisation Name" class="form-control" name="name" ng-model="orga_form.name"
+															 ng-required="currentStep == 1" />
+															<span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$invalid">Name is mandatory</span>
+															<span class="success text-small block" ng-if="Form.name.$valid">Cool !</span>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group" ng-class="{'has-error':Form.description.$dirty && Form.description.$invalid, 'has-success':Form.description.$valid}">
+															<label class="control-label"> Description
+																<span class="symbol required"></span>
+															</label>
+															<textarea placeholder="Enter the description" class="form-control autosize area-animated msd-elastic: \n;" name="description"
+															 ng-model="orga_form.description" ng-required="currentStep == 1"></textarea>
+															<span class="error text-small block" ng-if="Form.description.$dirty && Form.description.$invalid">Description is mandatory</span>
+															<span class="success text-small" ng-if="Form.description.$valid">Wonderful!</span>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-6">
+														<h5>Your Networks (optional)</h5>
+														<div class="row">
+															<div class="col-md-1">
+																<span class="fa fa-facebook"></span>
+															</div>
+															<div class="col-md-11">
+																<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="orga_form.fbUrl" />
+															</div>
+														</div>
+
+														<div class="row">
+															<div class="col-md-1">
+																<span class="fa fa-twitter"></span>
+															</div>
+															<div class="col-md-11">
+																<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="orga_form.twitterUrl" />
+															</div>
+														</div>
+
+													</div>
+											</fieldset>
+
+											<fieldset>
+												<legend>
+													Your logo
+												</legend>
+												<div class="row">
+													<div class="col-md-6">
+														<h5>Select file</h5>
+														<div class="panel panel-white">
+															<div class="panel-body">
+																<div ng-show="uploaderImages.isHTML5">
+																	<!-- 3. nv-file-over uploader="link" over-class="className" -->
+																	<div class="well my-drop-zone" nv-file-over="" uploader="uploaderImages">
+																		Drag you logo here
+																	</div>
 																</div>
-																<div class="clip-radio radio-primary radio-lg">
-																	<input type="radio" id="private_type" value="private" ng-model="orga_form.rules.accessibility">
-																	<label for="private_type"> Private </label>
+																<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
+																<span class="btn btn-primary btn-o btn-file">
+																	Or click here
+																	<input type="file" nv-file-select="" uploader="uploaderImages" multiple />
+																</span>
+																<br />
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6">
+														<h5>Your logo</h5>
+														<div class="panel panel-white">
+															<div class="col-md-4"></div>
+															<div class="col-md-3">
+																<div ng-repeat="item in uploaderImages.queue">
+																	<div>
+																		<strong>{{ item.file.name }}</strong>
+																		<div ng-show="uploaderImages.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+																	</div>
+																	<div ng-show="uploaderImages.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</div>
 																</div>
 															</div>
 														</div>
 													</div>
-													<div class="row">
-														<div class="col-md-6">
-															<div class="form-group">
-																<label class="block"> You can also chose to make it :</label>
-																<div class="checkbox vertical-center clip-check check-primary check-lg">
-																	<input type="checkbox" id="anonymous_type" ng-model="orga_form.rules.anonymous">
-																	<label for="anonymous_type"> Anonymous </label>
-																</div>
-																<div class="checkbox vertical-center clip-check check-primary check-lg">
-																	<input type="checkbox" id="hidden_type" ng-model="orga_form.rules.hidden">
-																	<label for="hidden_type"> Hidden </label>
-																</div>
+
+												</div>
+
+											</fieldset>
+
+											<div class="form-group">
+												<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+													Next
+													<i class="fa fa-arrow-circle-right"></i>
+												</button>
+											</div>
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 1 -->
+
+									<!-- start: WIZARD STEP 2 -->
+									<div id="step-2" ng-show="currentStep == 2">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="padding-30">
+													<h2 class="StepTitle">Governance models
+														<span class="text-large block">How will you manage to take decisions ?</span>
+													</h2>
+												</div>
+												<fieldset>
+													<legend>
+														Choose a governance model
+													</legend>
+													<div cass="clip-radio radio-primary radio-lg">
+														<div class="row text-extra-large inline">
+															<div class="col-md-6 ">
+																<span>
+																	<i class="fa fa-industry text-xxl padding-10"></i>Entreprise</span>
+																<input type="radio" id="entreprise_model" value="entreprise" ng-model="orga_form.gov_model">
 															</div>
+															<div class="col-md-6">
+																<span>
+																	<i class="fa fa-bank text-xxl padding-10"></i>Public company</span>
+																<input type="radio" id="public_company_model" value="public_company" ng-model="orga_form.gov_model">
+															</div>
+														</div>
+														<div class="row text-extra-large">
+															<div class="col-md-12 text-center">
+																<span>
+																	<i class="fa fa-users text-xxl padding-10"></i>Nonprofit organization</span>
+																<input type="radio" id="ngo_model" value="ngo" ng-model="orga_form.gov_model" ng-init="orga_form.gov_model = 'ngo'">
+															</div>
+															<!-- <div class="col-md-6">
+																<span>
+																	<i class="fa fa-cubes text-xxl padding-10"></i>DAO</span>
+																<input type="radio" id="dao_model" value="dao" ng-model="orga_form.gov_model">
+															</div> -->
+														</div>
+
+													</div>
+												</fieldset>
+											</div>
+											<div class="col-md-6">
+												<fieldset class="text-extra-large">
+													<legend>Model description</legend>
+													<div class="col-md-6">
+														<span ng-repeat="model in governance_types[orga_form.gov_model]['pros']" class="block">
+															<i class="fa fa-check-circle padding-10"></i>{{model}}</span>
+													</div>
+													<div class="col-md-6">
+														<span ng-repeat="model in governance_types[orga_form.gov_model]['cons']" class="block">
+															<i class="fa fa-check-circle padding-10"></i>{{model}}</span>
+													</div>
+													<div class="col-md-12">
+														<br>
+														<br>
+														<p>{{governance_types[orga_form.gov_model]["desc"] || "Please chose a governance model to see its characteristics"}}</p>
+													</div>
+												</fieldset>
+											</div>
+											<div class="col-md-6">
+												<fieldset class="text-extra-large">
+													<legend>
+														Advanced Settings
+													</legend>
+													<div class="form-group">
+														<label class="block"> You may add the following features to your structure:</label>
+														<div class="checkbox vertical-center clip-check check-primary">
+															<input type="checkbox" id="delegated_voting" ng-model="orga_form.rules.delegated_voting">
+															<label for="delegated_voting"> Delegated voting </label>
+
+															<input type="checkbox" id="add_curators" ng-model="orga_form.rules.curators">
+															<label for="add_curators"> Add curators </label>
+														</div>
+													</div>
+													<div class="col-md-4 input-group-sm bootstrap-touchspin">
+														<label for="quorum_value"> Quorum : </label>
+														<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0" data-postfix="%"
+														 ng-model="orga_form.rules.quorum" ng-init="orga_form.rules.quorum = 50">
+													</div>
+													<div class="col-md-4 input-group-sm bootstrap-touchspin">
+														<label for="majority_value"> Majority : </label>
+														<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"
+														 data-postfix="%" ng-model="orga_form.rules.majority" ng-init="orga_form.rules.majority = 50">
+													</div>
+												</fieldset>
+
+												<div class="form-group">
+													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+														<i class="fa fa-circle-arrow-left"></i> Back
+													</button>
+													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+														Next
+														<i class="fa fa-arrow-circle-right"></i>
+													</button>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 2 -->
+
+									<!-- start: WIZARD STEP 3 -->
+									<div id="step-3" ng-show="currentStep == 3">
+										<div class="row">
+											<div class="col-md-2">
+												<div class="padding-30">
+													<h2 class="StepTitle">Rights
+														<span class="text-large block">Set up jobs according to what you wish</span>
+													</h2>
+												</div>
+											</div>
+											<div class="col-md-9">
+												<fieldset>
+													<legend>
+														Current Rights
+													</legend>
+													<div id="orgaRightsManagment">
+														<div class="modal-header ng-scope ">
+															<h3 class="modal-title">Manages Rights</h3>
+														</div>
+														<div class="form-group">
+															<table style="width: 100%;">
+																<thead>
+																	<tr>
+																		<th style="width: 15%;">Categories</th>
+																		<th style="width: 75%;">Rights</th>
+																	</tr>
+																</thead>
+																<tfoot>
+																	<tr>
+																		<td>
+																			<input type="text" id="newOrgaRight">
+																			<button class="btn-sm btn-primary" ng-click="addRight()">+</button>
+																			<span class="d-block">Add a new category</span>
+																		</td>
+																	</tr>
+																</tfoot>
+																<tbody>
+																	<tr>
+																		<td>
+																			<div id="orgaRightsMenu">
+																				<div ng-repeat="(id, data) in orga_form.rights" ng-init="outerIndex = $index" ng-click="displaySelectedRight(id, $index)"
+																				 class="orgaRightsMenuField" val="{{$index}}">
+																					<span>{{id}}</span>
+																					<button class="btn-xs btn-danger" ng-click="removeRight(id, $index)">X</button>
+																				</div>
+																			</div>
+																		</td>
+																		<td>
+																			<div id="orgaRightsSelector">
+																				<div ng-if="currentRight" ng-repeat="(name, value) in availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
+																					<input type="checkbox" name="{{name}}" value="{{name}}" id="checkboxManageRights{{$index}}" ng-model="orga_form.rights[currentRight][name]"
+																					 ng-checked="orga_form.rights[currentRight][name]" ng-true-value="true" ng-false-value="false">
+																					<label for="checkboxManageRights{{$index}}">{{name}}</label>
+																				</div>
+																			</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</fieldset>
+												<div class="form-group">
+													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+														<i class="fa fa-circle-arrow-left"></i> Back
+													</button>
+													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+														Next
+														<i class="fa fa-arrow-circle-right"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 3 -->
+
+									<!-- start: WIZARD STEP 4 -->
+									<div id="step-4" ng-show="currentStep == 4">
+										<div class="row">
+											<div class="col-md-2">
+												<div class="padding-30">
+													<h2 class="StepTitle">Members
+														<span class="text-large block">Who's joining the ship ?</span>
+													</h2>
+												</div>
+											</div>
+											<div class="col-md-9">
+												<fieldset>
+													<legend>
+														Invite members
+													</legend>
+
+													<div class="col-md-12 inline-block">
+														<form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
+															<div class="form-group col-md-8">
+																<angucomplete-alt id="ex2" placeholder="Search for existing users or invite new ones" pause="300" selected-object="selected_user"
+																 title-field="name" remote-url='/searchFor/' description-field="_id" minlength="1" input-class="form-control form-control-small"
+																 match-class="highlight" input-changed="" />
+															</div>
+															<button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
+														</form>
+													</div>
+													<div class="col-md-12">
+														<div class="table min-height-300">
+															<table class="table">
+																<thead>
+																	<tr>
+																		<th>Name</th>
+																		<th>Tag</th>
+																		<th></th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr ng-repeat="(user_id, user) in orga_form.invited_users">
+																		<td>{{user.name}} </td>
+																		<td>
+																			<div class="form-group">
+																				<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']"
+																				 ng-change="tagChangedForUser(user._id)">
+																				</select>
+																			</div>
+																		</td>
+																		<td>
+																			<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
+																				<span>Remove</span>
+																			</button>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													</div>
+
+
+												</fieldset>
+												<div class="form-group">
+													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+														<i class="fa fa-circle-arrow-left"></i> Back
+													</button>
+													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+														Next
+														<i class="fa fa-arrow-circle-right"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 4 -->
+
+									<!-- start: WIZARD STEP 5 -->
+									<div id="step-5" ng-show="currentStep == 5" ng-if="orga_form.gov_model != 'public_company'">
+										<div class="col-md-12 panel-blue panel">
+											<div class="panel-heading">Not available</div>
+											<div class="panel-body">You have the possibility to set up your own token if your organisation is a public company</div>
+										</div>
+									</div>
+									<div id="step-5" ng-show="currentStep == 5" ng-if="orga_form.gov_model == 'public_company'">
+										<div class="row">
+											<div class="col-md-3">
+												<div class="padding-30">
+													<h2 class="StepTitle">
+														<i class="fa fa-btc fa-2x text-primary block margin-bottom-10"></i> Tokens
+													</h2>
+
+													<span class="text-large block">How about creating your own coin ?</span>
+												</div>
+											</div>
+											<div class="col-md-9">
+												<fieldset>
+													<legend>
+														Choose your token's properties
+													</legend>
+													<div class="form-group col-md-6">
+														<label for="token_name" class="control-label">Token name
+															<span class="symbol required"></span>
+														</label>
+														<input type="text" placeholder="Enter your token name" class="form-control" name="token_name" ng-model="orga_form.token.name"
+														/>
+													</div>
+													<div ng-if="orga_form.token.name">
+														<div class="form-group col-md-6">
+															<label for="token_short" class="control-label">Token abbreviation
+																<span class="symbol required"></span>
+															</label>
+															<input type="text" placeholder="Enter your token abbreviation" class="form-control" name="token_short" ng-model="orga_form.token.short"
+															/>
+														</div>
+														<div class="form-group col-md-3">
+															<label for="token_amount" class="control-label">How many tokens do you want to create ?</label>
+															<input id="token_amount" type="number" value="100" touchspin data-min="0" data-max="100000" data-step="1" data-decimals="0"
+															 ng-model="orga_form.token.amount" ng-init="orga_form.token.amount = 100">
+														</div>
+														<div class="form-group col-md-3">
+															<label for="token_price" class="control-label">What should it be worth (in ether) ?</label>
+															<input id="token_price" type="number" value="0.01" touchspin data-min="0" data-max="100" data-step="0.01" data-decimals="3"
+															 data-postfix="E" ng-model="orga_form.token.price" ng-init="orga_form.token.price = 0.01">
+														</div>
+														<div class="col-md-6" ng-if="orga_form.token.short">
+															<label for="owned_tokens" class="control-label">What will be the amount of these tokens owned by your organization ?</label>
+															<input type="range" id="owned_tokens" ng-model="orga_form.token.owned" min="1" max="100" ng-init="orga_form.token.owned = 50"
+															 class="form-control">
+															<span>All your {{orga_form.token.short}} tokens will be worth {{orga_form.token.price * 300 * orga_form.token.amount}}$
+																. Your organization will own {{orga_form.token.owned}}% of the total supply ({{orga_form.token.price * 300 * orga_form.token.amount * (orga_form.token.owned / 100)}}$)</label>
+														</div>
+														<div class="form-group col-md-12">
+															<label for="ico_duration" class="control-label">What long will your token sale last for?</label>
+															<input type="range" id="ico_duration" ng-model="orga_form.token.ico_duration" min="1" max="90" ng-init="orga_form.token.ico_duration = 30"
+															 class="form-control">
+															<span>Your token sale will last for {{orga_form.token.ico_duration}} days</label>
+														</div>
+														<div class="col-md-12 panel-red panel">
+															<div class="panel-heading text-bold">Be careful !</div>
+															<div class="panel-body">Voting power inside your organisation is determined by the amount of owned tokens. If some user owns more
+																than half of all tokens, he will be able to make all the decisions inside of this organisation by himself.
+																Tokens are tradable, hence you will be able to sell and/or buy ones in the future</div>
 														</div>
 													</div>
 												</fieldset>
 											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 5 -->
+
+									<!-- start: WIZARD STEP 6 -->
+									<div id="step-6" ng-show="currentStep == 6">
+										<div class="row">
+											<div class="col-md-5">
+												<div class="padding-30">
+													<h2 class="StepTitle">Let's talk about money
+														<span class="text-large block">Do you want to send funds to this new organization ?</span>
+													</h2>
+												</div>
+											</div>
 											<div class="col-md-7">
 												<fieldset>
 													<legend>
-														Basics
+														Adding funds yo your organisation
 													</legend>
-													<div class="row">
-														<div class="col-md-6">
-															<div class="form-group" ng-class="{'has-error':Form.name.$dirty && Form.name.$invalid, 'has-success':Form.name.$valid}">
-																<label class="control-label">Organisation Name <span class="symbol required"></span> </label>
-																<input type="text" placeholder="Enter your organisation Name" class="form-control" name="name" ng-model="orga_form.name" ng-required="currentStep == 1" />
-																<span class="error text-small block" ng-if="Form.name.$dirty && Form.name.$invalid">Name is mandatory</span>
-																<span class="success text-small block" ng-if="Form.name.$valid">Cool !</span>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="form-group" ng-class="{'has-error':Form.description.$dirty && Form.description.$invalid, 'has-success':Form.description.$valid}">
-																<label class="control-label"> Description <span class="symbol required"></span> </label>
-																<textarea  placeholder="Enter the description" class="form-control autosize area-animated msd-elastic: \n;" name="description" ng-model="orga_form.description" ng-required="currentStep == 1"></textarea>
-																<span class="error text-small block" ng-if="Form.description.$dirty && Form.description.$invalid">Description is mandatory</span>
-																<span class="success text-small" ng-if="Form.description.$valid">Wonderful!</span>
-															</div>
-														</div>
+													<div class="input-group-sm bootstrap-touchspin">
+														<label for="initial_funds"> Amount to be sent as initial funds (will use your own funds) : </label>
+														<input id="initial_funds" type="number" value="0" touchspin data-min="0" data-max="999999999" data-step="1" data-decimals="0"
+														 data-postfix="eth" ng-model="orga_form.initial_funds" ng-init="orga_form.initial_funds = 0">
 													</div>
-													<div class="row">
-														<div class="col-md-6">
-															<h5>Your Networks (optional)</h5>
-															<div class="row">
-																<div class="col-md-1">
-																	<span class="fa fa-facebook"></span>
-																</div>
-																<div class="col-md-11">
-																	<input type="text" placeholder="Facebook URL" class="form-control" name="fbUrl" ng-model="orga_form.fbUrl" />
-																</div>
-															</div>
 
-															<div class="row">
-																<div class="col-md-1">
-																	<span class="fa fa-twitter"></span>
-																</div>
-																<div class="col-md-11">
-																	<input type="text" placeholder="Twitter URL" class="form-control" name="twitterUrl" ng-model="orga_form.twitterUrl"/>
-																</div>
-															</div>
 
-														</div>
-													</fieldset>
+												</fieldset>
 
-													<fieldset>
-														<legend>
-															Your logo
-														</legend>
+												<fieldset>
+													<legend>
+														Sources of money you want to switch on
+													</legend>
+
+													<div class="checkbox clip-check check-primary checkbox-inline">
+														<input type="checkbox" id="sellingGoods" value="0" checked="">
+														<label for="sellingGoods">
+															Sellings goods
+														</label>
+													</div>
+													<div class="checkbox clip-check check-primary checkbox-inline">
+														<input type="checkbox" id="privateFinancing" value="0" checked="">
+														<label for="privateFinancing">
+															Private financing
+														</label>
+													</div>
+													<div class="checkbox clip-check check-primary checkbox-inline">
+														<input type="checkbox" ng-model="orga_form.funding.membershipFee" id="membershipFees" value="0" checked="">
+
+														<label for="membershipFees">
+															Membership fees
+														</label>
+													</div>
+													<div class="checkbox clip-check check-primary checkbox-inline">
+														<input type="checkbox" id="donations" value="0" checked="">
+														<label for="donations">
+															Donations
+														</label>
+													</div>
+													<div class="checkbox clip-check check-primary checkbox-inline">
+														<input type="checkbox" id="crowdfunding" value="0" checked="">
+														<label for="crowdfunding">
+															Crowdfunding
+														</label>
+													</div>
+
+
+												</fieldset>
+												<fieldset ng-if="orga_form.funding.membershipFee">
+													<legend>Additional informations</legend>
+													<div ng-if="orga_form.funding.membershipFee">
+														<input type="number" ng-model="orga_form.funding.membershipAmount" id="feeAmount" />
+														<label for="feeAmount">Enter the price (in eth) to join to organization</label>
+													</div>
+												</fieldset>
+												<div class="form-group">
+													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+														<i class="fa fa-circle-arrow-left"></i> Back
+													</button>
+													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+														Next
+														<i class="fa fa-arrow-circle-right"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 6 -->
+									<!-- start: WIZARD STEP 7 -->
+									<div id="step-7" ng-show="currentStep == 7">
+										<div class="row">
+											<div class="col-md-5">
+												<div class="padding-30">
+													<h2 class="StepTitle">Do you wish to upload documents ?</h2>
+													<p class="text-large">
+														You can upload all kind of documents you would like to have on Societhy
+													</p>
+													<p class="text-small">
+														.
+													</p>
+												</div>
+											</div>
+											<div class="col-md-7">
+												<fieldset>
+													<legend>
+														Documents
+													</legend>
+													<div nv-file-drop="" uploader="uploaderDocs">
 														<div class="row">
-															<div class="col-md-6">
-																<h5>Select file</h5>
+															<div class="col-md-3">
+																<h5>Select files</h5>
 																<div class="panel panel-white">
 																	<div class="panel-body">
-																		<div ng-show="uploaderImages.isHTML5">
+																		<div ng-show="uploaderDocs.isHTML5">
 																			<!-- 3. nv-file-over uploader="link" over-class="className" -->
-																			<div class="well my-drop-zone" nv-file-over="" uploader="uploaderImages">
-																				Drag you logo here
+																			<div class="well my-drop-zone" nv-file-over="" uploader="uploaderDocs">
+																				Base drop zone
 																			</div>
 																		</div>
 																		<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
 																		<span class="btn btn-primary btn-o btn-file">
-																			Or click here
-																			<input type="file" nv-file-select="" uploader="uploaderImages" multiple />
+																			Select some files
+																			<input type="file" nv-file-select="" uploader="uploaderDocs" multiple />
 																		</span>
 																		<br />
 																	</div>
 																</div>
 															</div>
-															<div class="col-md-6">
-																<h5>Your logo</h5>
-																<div class="panel panel-white">
-																	<div class="col-md-4"></div>
-																	<div class="col-md-3">
-																		<div ng-repeat="item in uploaderImages.queue">
-																			<div><strong>{{ item.file.name }}</strong>
-																				<div ng-show="uploaderImages.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
-																			</div>
-																			<div ng-show="uploaderImages.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-
-														</div>
-
-													</fieldset>
-
-													<div class="form-group">
-														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-															Next <i class="fa fa-arrow-circle-right"></i>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 1 -->
-
-										<!-- start: WIZARD STEP 2 -->
-										<div id="step-2" ng-show="currentStep == 2">
-											<div class="row">
-												<div class="col-md-6">
-													<div class="padding-30">
-														<h2 class="StepTitle">Governance models<span class="text-large block">How will you manage to take decisions ?</span></h2>
-													</div>
-													<fieldset>
-														<legend>
-															Choose a governance model
-														</legend>
-														<div cass="clip-radio radio-primary radio-lg">
-															<div class="row text-extra-large inline">
-																<div class="col-md-6 ">
-																	<span><i class="fa fa-industry text-xxl padding-10"></i>Entreprise</span>
-																	<input type="radio" id="entreprise_model" value="entreprise" ng-model="orga_form.gov_model">
-																</div>
-																<div class="col-md-6">
-																	<span><i class="fa fa-bank text-xxl padding-10"></i>Public company</span>
-																	<input type="radio" id="public_company_model" value="public_company" ng-model="orga_form.gov_model">
-																</div>
-															</div>
-															<div class="row text-extra-large">
-																<div class="col-md-6">
-																	<span><i class="fa fa-users text-xxl padding-10"></i>Nonprofit organization</span>
-																	<input type="radio" id="ngo_model" value="ngo" ng-model="orga_form.gov_model" ng-init="orga_form.gov_model = 'ngo'">
-																</div>
-																<div class="col-md-6">
-																	<span><i class="fa fa-cubes text-xxl padding-10"></i>DAO</span>
-																	<input type="radio" id="dao_model" value="dao" ng-model="orga_form.gov_model">
-																</div>
-															</div>
-
-														</div>
-													</fieldset>
-												</div>
-												<div class="col-md-6">
-													<fieldset class="text-extra-large">
-														<legend>Model description</legend>
-														<div class="col-md-6">
-															<span ng-repeat="model in governance_types[orga_form.gov_model]['pros']" class="block"><i class="fa fa-check-circle padding-10"></i>{{model}}</span>
-														</div>
-														<div class="col-md-6">
-															<span ng-repeat="model in governance_types[orga_form.gov_model]['cons']" class="block"><i class="fa fa-check-circle padding-10"></i>{{model}}</span>
-														</div>
-														<div class="col-md-12">
-															<br><br>
-															<p>{{governance_types[orga_form.gov_model]["desc"] || "Please chose a governance model to see its characteristics"}}</p>
-														</div>
-													</fieldset>
-												</div>
-												<div class="col-md-6">
-													<fieldset class="text-extra-large">
-														<legend>
-															Advanced Settings
-														</legend>
-														<div class="form-group">
-															<label class="block"> You may add the following features to your structure:</label>
-															<div class="checkbox vertical-center clip-check check-primary">
-																<input type="checkbox" id="delegated_voting" ng-model="orga_form.rules.delegated_voting">
-																<label for="delegated_voting"> Delegated voting </label>
-
-																<input type="checkbox" id="add_curators" ng-model="orga_form.rules.curators">
-																<label for="add_curators"> Add curators </label>
-															</div>
-														</div>
-														<div class="col-md-4 input-group-sm bootstrap-touchspin">
-															<label for="quorum_value"> Quorum : </label>
-															<input id="quorum_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.rules.quorum" ng-init="orga_form.rules.quorum = 50">
-														</div>
-														<div class="col-md-4 input-group-sm bootstrap-touchspin">
-															<label for="majority_value"> Majority : </label>
-															<input id="majority_value" type="number" value="50" touchspin data-min="0" data-max="100" data-step="1" data-decimals="0"  data-postfix="%" ng-model="orga_form.rules.majority" ng-init="orga_form.rules.majority = 50">
-														</div>
-													</fieldset>
-
-													<div class="form-group">
-														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-															<i class="fa fa-circle-arrow-left"></i> Back
-														</button>
-														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-															Next <i class="fa fa-arrow-circle-right"></i>
-														</button>
-													</div>
-
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 2 -->
-
-								<!-- start: WIZARD STEP 3 -->
-								<div id="step-3" ng-show="currentStep == 3">
-									<div class="row">
-										<div class="col-md-2">
-											<div class="padding-30">
-												<h2 class="StepTitle">Rights<span class="text-large block">Set up jobs according to what you wish</span></h2>
-											</div>
-										</div>
-										<div class="col-md-9">
-											<fieldset>
-												<legend>
-													Current Rights
-												</legend>
-												<div id="orgaRightsManagment">
-													<div class="modal-header ng-scope ">
-														<h3 class="modal-title">Manages Rights</h3>
-													</div>
-													<div class="form-group">
-														<table style="width: 100%;">
-															<thead>
-															<tr>
-																<th style="width: 15%;">Categories</th>
-																<th style="width: 75%;">Rights</th>
-															</tr>
-															</thead>
-															<tfoot>
-															<tr>
-																<td>
-																	<input type="text" id="newOrgaRight">
-																	<button class="btn-sm btn-primary" ng-click="addRight()">+</button>
-																	<span class="d-block">Add a new category</span>
-																</td>
-															</tr>
-															</tfoot>
-															<tbody>
-															<tr>
-																<td>
-																	<div id="orgaRightsMenu">
-																		<div ng-repeat="(id, data) in orga_form.rights" ng-init="outerIndex = $index" ng-click="displaySelectedRight(id, $index)"
-																			 class="orgaRightsMenuField" val="{{$index}}">
-																			<span>{{id}}</span>
-																			<button class="btn-xs btn-danger" ng-click="removeRight(id, $index)">X</button>
-																		</div>
-																	</div>
-																</td>
-																<td>
-																	<div id="orgaRightsSelector">
-																		<div ng-if="currentRight" ng-repeat="(name, value) in availableRights" ng-init="outerIndex = $index" class="checkbox clip-check check-primary">
-																			<input type="checkbox" name="{{name}}" value="{{name}}" id="checkboxManageRights{{$index}}"
-																				   ng-model="orga_form.rights[currentRight][name]"
-																				   ng-checked="orga_form.rights[currentRight][name]" ng-true-value="true" ng-false-value="false">
-																			<label for="checkboxManageRights{{$index}}">{{name}}</label>
-																		</div>
-																	</div>
-																</td>
-															</tr>
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</fieldset>
-											<div class="form-group">
-												<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-													<i class="fa fa-circle-arrow-left"></i> Back
-												</button>
-												<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-													Next <i class="fa fa-arrow-circle-right"></i>
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- end: WIZARD STEP 3 -->
-
-								<!-- start: WIZARD STEP 4 -->
-										<div id="step-4" ng-show="currentStep == 4">
-											<div class="row">
-												<div class="col-md-2">
-													<div class="padding-30">
-														<h2 class="StepTitle">Members<span class="text-large block">Who's joining the ship ?</span></h2>
-													</div>
-												</div>
-												<div class="col-md-9">
-													<fieldset>
-														<legend>
-															Invite members
-														</legend>
-
-														<div class="col-md-12 inline-block">
-															<form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
-																<div class="form-group col-md-8">
-																	<angucomplete-alt id="ex2"
-																	placeholder="Search for existing users or invite new ones"
-																	pause="300"
-																	selected-object="selected_user"
-																	title-field="name"
-																	remote-url='/searchFor/'
-																	description-field="_id"
-																	minlength="1"
-																	input-class="form-control form-control-small"
-																	match-class="highlight"
-																	input-changed=""/>
-																</div>
-																<button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
-															</form>
-														</div>
-														<div class="col-md-12">
-															<div class="table min-height-300">
-																<table class="table">
-																	<thead>
-																		<tr>
-																			<th>Name</th>
-																			<th>Tag</th>
-																			<th></th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr ng-repeat="(user_id, user) in orga_form.invited_users">
-																			<td>{{user.name}} </td>
-																			<td>
-																				<div class="form-group">
-																					<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']" ng-change="tagChangedForUser(user._id)">
+															<div class="col-md-9 file-upload" style="margin-bottom: 40px">
+																<h4>The queue</h4>
+																<p>
+																	Queue length: {{ uploaderDocs.queue.length }}
+																</p>
+																<div class="table-responsive">
+																	<table class="table">
+																		<thead>
+																			<tr>
+																				<th width="50%">Name</th>
+																				<th ng-show="uploaderDocs.isHTML5">Size</th>
+																				<th>Privacy</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr ng-repeat="item in uploaderDocs.queue">
+																				<td>
+																					<strong>{{ item.file.name }}</strong>
+																					<div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
+																				</td>
+																				<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+																				<td ng-show="uploaderDocs.isHTML5">
+																					<select name="docPrivacy" id="docPrivacy" multiple size="3" ng-options="label for label in governance_types[orga_form.gov_model]['tags']"
+																					 ng-model="item.documentPrivacy" class="form-control">
 																					</select>
-																				</div>
-																			</td>
-																			<td>
-																				<button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
-																					<span>Remove</span>
-																				</button>
-																			</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-
-
-													</fieldset>
-													<div class="form-group">
-														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-															<i class="fa fa-circle-arrow-left"></i> Back
-														</button>
-														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-															Next <i class="fa fa-arrow-circle-right"></i>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 4 -->
-
-										<!-- start: WIZARD STEP 5 -->
-										<div id="step-5" ng-show="currentStep == 5">
-											<div class="row">
-												<div class="col-md-5">
-													<div class="padding-30">
-														<h2 class="StepTitle">Tokens<span class="text-large block">How about creating your own asset ?</span></h2>
-													</div>
-												</div>
-												<div class="col-md-7">
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 5 -->
-
-										<!-- start: WIZARD STEP 6 -->
-										<div id="step-6" ng-show="currentStep == 6">
-											<div class="row">
-												<div class="col-md-5">
-													<div class="padding-30">
-														<h2 class="StepTitle">Let's talk about money<span class="text-large block">Do you want to send funds to this new organization ?</span></h2>
-													</div>
-												</div>
-												<div class="col-md-7">
-													<fieldset>
-														<legend>
-															Adding funds yo your organisation
-														</legend>
-														<div class="input-group-sm bootstrap-touchspin">
-															<label for="initial_funds"> Amount to be sent as initial funds (will use your own funds) : </label>
-															<input id="initial_funds" type="number" value="0" touchspin data-min="0" data-max="999999999" data-step="1" data-decimals="0"  data-postfix="eth" ng-model="orga_form.initial_funds" ng-init="orga_form.initial_funds = 0">
-														</div>
-
-
-													</fieldset>
-
-													<fieldset>
-														<legend>
-															Sources of money you want to switch on
-														</legend>
-
-														<div class="checkbox clip-check check-primary checkbox-inline">
-															<input type="checkbox" id="sellingGoods" value="0" checked="">
-															<label for="sellingGoods">
-																Sellings goods
-															</label>
-														</div>
-														<div class="checkbox clip-check check-primary checkbox-inline">
-															<input type="checkbox" id="privateFinancing" value="0" checked="">
-															<label for="privateFinancing">
-																Private financing
-															</label>
-														</div>
-														<div class="checkbox clip-check check-primary checkbox-inline">
-														  <input type="checkbox" ng-model="orga_form.funding.membershipFee" id="membershipFees" value="0" checked="">
-
-														  <label for="membershipFees">
-														    Membership fees
-														  </label>
-														</div>
-														<div class="checkbox clip-check check-primary checkbox-inline">
-															<input type="checkbox" id="donations" value="0" checked="">
-															<label for="donations">
-																Donations
-															</label>
-														</div>
-														<div class="checkbox clip-check check-primary checkbox-inline">
-															<input type="checkbox" id="crowdfunding" value="0" checked="">
-															<label for="crowdfunding">
-																Crowdfunding
-															</label>
-														</div>
-
-
-													</fieldset>
-													<fieldset ng-if="orga_form.funding.membershipFee">
-													  <legend>Additional informations</legend>
-													  <div ng-if="orga_form.funding.membershipFee">
-													    <input type="number" ng-model="orga_form.funding.membershipAmount" id="feeAmount"/>
-													    <label for="feeAmount">Enter the price (in eth) to join to organization</label>
-													  </div>
-													</fieldset>
-													<div class="form-group">
-														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-															<i class="fa fa-circle-arrow-left"></i> Back
-														</button>
-														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-															Next <i class="fa fa-arrow-circle-right"></i>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 6 -->
-										<!-- start: WIZARD STEP 7 -->
-										<div id="step-7" ng-show="currentStep == 7">
-											<div class="row">
-												<div class="col-md-5">
-													<div class="padding-30">
-														<h2 class="StepTitle">Do you wish to upload documents ?</h2>
-														<p class="text-large">
-															You can upload all kind of documents you would like to have on Societhy
-														</p>
-														<p class="text-small">
-															.
-														</p>
-													</div>
-												</div>
-												<div class="col-md-7">
-													<fieldset>
-														<legend>
-															Documents
-														</legend>
-														<div nv-file-drop="" uploader="uploaderDocs">
-															<div class="row">
-																<div class="col-md-3">
-																	<h5>Select files</h5>
-																	<div class="panel panel-white">
-																		<div class="panel-body">
-																			<div ng-show="uploaderDocs.isHTML5">
-																				<!-- 3. nv-file-over uploader="link" over-class="className" -->
-																				<div class="well my-drop-zone" nv-file-over="" uploader="uploaderDocs">
-																					Base drop zone
-																				</div>
-																			</div>
-																			<!-- Example: nv-file-select="" uploader="{Object}" options="{Object}" filters="{String}" -->
-																			<span class="btn btn-primary btn-o btn-file">
-																				Select some files
-																				<input type="file" nv-file-select="" uploader="uploaderDocs" multiple />
-																			</span>
-																			<br />
-																		</div>
-																	</div>
+																				</td>
+																				<td class="text-center">
+																					<span ng-show="item.isSuccess">
+																						<i class="glyphicon glyphicon-ok"></i>
+																					</span>
+																					<span ng-show="item.isCancel">
+																						<i class="glyphicon glyphicon-ban-circle"></i>
+																					</span>
+																					<span ng-show="item.isError">
+																						<i class="glyphicon glyphicon-remove"></i>
+																					</span>
+																				</td>
+																				<td nowrap>
+																					<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+																						<span class="glyphicon glyphicon-trash"></span> Remove
+																					</button>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
 																</div>
-																<div class="col-md-9 file-upload" style="margin-bottom: 40px">
-																	<h4>The queue</h4>
-																	<p>
-																		Queue length: {{ uploaderDocs.queue.length }}
-																	</p>
-																	<div class="table-responsive">
-																		<table class="table">
-																			<thead>
-																				<tr>
-																					<th width="50%">Name</th>
-																					<th ng-show="uploaderDocs.isHTML5">Size</th>
-																					<th>Privacy</th>
-																				</tr>
-																			</thead>
-																			<tbody>
-																				<tr ng-repeat="item in uploaderDocs.queue">
-																					<td><strong>{{ item.file.name }}</strong>
-																						<div ng-show="uploaderDocs.isHTML5" ng-thumb="{ file: item._file, height: 100 }"></div>
-																					</td>
-																					<td ng-show="uploaderDocs.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
-																					<td ng-show="uploaderDocs.isHTML5">
-																						<select name="docPrivacy" id="docPrivacy" multiple size="3" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="item.documentPrivacy" class="form-control">
-					                                  </select>
-																					</td>
-																					<td class="text-center"><span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span><span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span><span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span></td>
-																					<td nowrap>
-																						<button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
-																							<span class="glyphicon glyphicon-trash"></span> Remove
-																						</button>
-																					</td>
-																				</tr>
-																			</tbody>
-																		</table>
-																	</div>
-																	<div>
-																		<button type="button" class="btn btn-primary btn-o btn-s" ng-click="uploaderDocs.clearQueue()" ng-disabled="!uploaderDocs.queue.length">
-																			<span class="glyphicon glyphicon-trash"></span> Remove all
-																		</button>
-																	</div>
+																<div>
+																	<button type="button" class="btn btn-primary btn-o btn-s" ng-click="uploaderDocs.clearQueue()" ng-disabled="!uploaderDocs.queue.length">
+																		<span class="glyphicon glyphicon-trash"></span> Remove all
+																	</button>
 																</div>
 															</div>
 														</div>
-													</fieldset>
-													<div class="form-group">
-														<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-															<i class="fa fa-circle-arrow-left"></i> Back
-														</button>
-														<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-															Next <i class="fa fa-arrow-circle-right"></i>
-														</button>
 													</div>
+												</fieldset>
+												<div class="form-group">
+													<button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+														<i class="fa fa-circle-arrow-left"></i> Back
+													</button>
+													<button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+														Next
+														<i class="fa fa-arrow-circle-right"></i>
+													</button>
 												</div>
 											</div>
 										</div>
-										<!-- end: WIZARD STEP 7 -->
-										<!-- start: WIZARD STEP 8 -->
-										<div id="step-8" ng-show="currentStep == 8">
-											<div class="row">
-												<div class="col-md-12">
-													<div class="text-center">
-														<h1 class=" ti-check block text-primary"></h1>
-														<h2 class="StepTitle">Congratulations!</h2>
-														<p class="text-large">
-															You've finish the organization creation wizard
-														</p>
-														<p class="text-small">
-															Thank you for your your time. You can now submit your application.
-														</p>
-														<a class="btn btn-primary btn-o"  ng-click="form.submit(Form)"> Submit </a>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- end: WIZARD STEP 8 -->
 									</div>
-									<pre class="code margin-top-20">{{ orga_form | json }}</pre>
-								</form>
-								<!-- end: WIZARD FORM -->
-							</div>
+									<!-- end: WIZARD STEP 7 -->
+									<!-- start: WIZARD STEP 8 -->
+									<div id="step-8" ng-show="currentStep == 8">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="text-center">
+													<h1 class=" ti-check block text-primary"></h1>
+													<h2 class="StepTitle">Congratulations!</h2>
+													<p class="text-large">
+														You've finish the organization creation wizard
+													</p>
+													<p class="text-small">
+														Thank you for your your time. You can now submit your application.
+													</p>
+													<a class="btn btn-primary btn-o" ng-click="form.submit(Form)"> Submit </a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- end: WIZARD STEP 8 -->
+								</div>
+								<pre class="code margin-top-20">{{ orga_form | json }}</pre>
+						</form>
+						<!-- end: WIZARD FORM -->
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- start: WIZARD DEMO -->
+	</div>
+	<!-- start: WIZARD DEMO -->

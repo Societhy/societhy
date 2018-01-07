@@ -29,13 +29,13 @@ contract LiquidDemocracyRules is Rules {
   }
 
   function configureBoard(address _board) public {
-    if(!isConfigured[_board]){
-      curators[_board] = curators[address(this)];
-      for(uint i = 0 ; i < curators[_board].length ; i++){
-        isCurator[_board][curators[_board][i]] = true;
-      }
+    // if(!isConfigured[_board]){
+    //   curators[_board] = curators[address(this)];
+    //   for(uint i = 0 ; i < curators[_board].length ; i++){
+    //     isCurator[_board][curators[_board][i]] = true;
+    //   }
       isConfigured[_board] = true;
-    }
+    // }
   }
 
   function addCurator (address _curator) boardConfigured(msg.sender) public {
@@ -84,14 +84,14 @@ contract LiquidDemocracyRules is Rules {
     return  false;
   }
 
-  function hasWon (uint _proposalID) boardConfigured(msg.sender) bondPosted(msg.sender, _proposalID) public constant returns (bool) {
+  function hasWon (uint _proposalID) bondPosted(msg.sender, _proposalID) public constant returns (bool) {
     BoardRoom board = BoardRoom(msg.sender);
 
     uint nay = board.positionWeightOf(_proposalID, 0);
     uint yea = board.positionWeightOf(_proposalID, 1);
 
     for(uint i = 0; i < curators[msg.sender].length; i++){
-      var (position, weight, created) = board.voteOf(_proposalID, curators[msg.sender][i]);
+      var (position, _, created) = board.voteOf(_proposalID, curators[msg.sender][i]);
       if (position == 0 && curators[msg.sender][i] != address(0x0)){
         return false;
       }
@@ -113,7 +113,7 @@ contract LiquidDemocracyRules is Rules {
     }
   }
 
-  function canVote (address _sender, uint _proposalID) boardConfigured(msg.sender) bondPosted(msg.sender, _proposalID) public constant returns (bool) {
+  function canVote (address _sender, uint _proposalID)  public constant returns (bool) {
     BoardRoom board = BoardRoom(msg.sender);
 
     uint created = board.createdOn(_proposalID);
@@ -121,15 +121,14 @@ contract LiquidDemocracyRules is Rules {
     return true;
     if(votingWeightOf(_sender, _proposalID) > 0
       && now < (created + debatePeriod)
-      && token.frozenUntil(_sender) > (created + debatePeriod)
       && delegated[msg.sender][_proposalID][_sender] == false
       && board.hasVoted(_proposalID, _sender) == false) {
       return true;
     }
   }
 
-  function canPropose (address _sender) boardConfigured(msg.sender) public constant returns (bool) {
-    if(token.balanceOf(_sender) > 0) {
+  function canPropose (address _sender) public constant returns (bool) {
+    if (token.balanceOf(_sender) > 0) {
       return true;
     }
   }
@@ -147,7 +146,7 @@ contract LiquidDemocracyRules is Rules {
 
   function votingWeightOf (address _sender, uint _proposalID) public constant returns (uint) {
     if (delegated[msg.sender][_proposalID][_sender] == false) {
-      return token.balanceOf(_sender) + delegatedWeight[msg.sender][_proposalID][_sender] ;
+      return StandardToken(token.token()).balanceOf(_sender) + delegatedWeight[msg.sender][_proposalID][_sender] ;
     }
   }
 
