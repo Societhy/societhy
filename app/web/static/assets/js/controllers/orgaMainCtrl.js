@@ -17,6 +17,7 @@ app.controller("OrgaMainController", function(
   $scope.isMember = false;
   ctrl.wallet = $controller("WalletController");
 
+
   $scope.listProducts = [];
   $scope.reviewList = [];
   var slides = ($scope.slides = []);

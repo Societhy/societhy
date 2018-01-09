@@ -26,6 +26,28 @@
             "LOGOUT": "Se déconnecter"
         }
     },
+    "user": {
+      "transaction": {
+        "export": {
+          "BUTTON": "Exporter les transaction de l'utilisateur"
+        }
+      }
+    },
+    "project": {
+      "export": {
+        "BUTTON": "Exporter les données du projet",
+        "header": {
+            "DATE" : "Date",
+            "ADDR": "Adresse du projet",
+            "BALANCE" : "balance actuelle",
+            "GOAL": "Objectif",
+            "DESCRIPTION": "description",
+            "MEMBERS": "Membres",
+            "OWNERNAME": "Propriétaire",
+            "OWNERADDR": "Adresse du propriétaire"
+        }
+      }
+    },
     "offsidebar": {
         "chat": {
             "ONLINE": "En ligne",

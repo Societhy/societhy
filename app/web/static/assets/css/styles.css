@@ -11570,6 +11570,7 @@ Dropdown checkboxes
 /***
 Social Icons
 ***/
+
 .social-icons ul {
   list-style: none;
   margin: 0 0 -1px 0;
@@ -11763,6 +11764,10 @@ Social Icons
 }
 .social-icons ul li.social-foursquare a:after {
   background: #6FCCF4;
+}
+
+.social-icons.register {
+    font-size: 24px;
 }
 
 .btn-scroll {

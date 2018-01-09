@@ -255,6 +255,16 @@ def getOrgaTransaction(user, orga_id):
     else:
         return make_response("Wrong request format", 400)
 
+@router.route('/getGovernanceRights', methods=["GET"])
+def getRights():
+    ret = base_orga.getGovernanceRights()
+    return make_response(jsonify(ret.get('data')), ret.get('status'))
+    if ensure_fields('socketid', request.json):
+        ret = base_orga.getGovernanceRights()
+        return make_response(jsonify(ret.get('data')), ret.get('status'))
+    else:
+        return make_response("Wrong request format", 400)
+
 #### NEWS ###
 
 

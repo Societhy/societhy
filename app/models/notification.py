@@ -124,7 +124,7 @@ class NotificationDocument(Document):
                         emit("update_notif", "", namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
             else:
                 self["seen"] = True
-            if user.wantNotif(self["category"], "Mail"):
+            if user.wantNotif(self["category"], "Mail") and "angularState" in self :
                 msg = Message("Notif", sender='roman.grout@hotmail.fr',
                               recipients=[user.get("email")])
                 url = "http://www.localhost:4242?redirect=true&angularState=" + urllib.parse.quote(json.dumps(self["angularState"]))
@@ -141,7 +141,7 @@ class NotificationDocument(Document):
                               "sender": {"id": data["sender"]["id"], "type": data["sender"]["type"]},
                               "category": data["category"],
                               "createdAt": datetime.now(),
-                              "date": datetime.now().strftime("%b %d, %Y %I:%M %p"),
+                              "date": datetime.now().strftime("%b %d, %Y %I:%M"),
                               "seen": False
                               })
 
@@ -170,7 +170,7 @@ class NotificationDocument(Document):
         elif self['sender']['senderType'] == 'user':
             return models.user.users.find_one({"_id": self['sender']['senderId']})
         return None
-    
+
     def getName(data):
         data["name"] = "Unknown"
         data["addr"] = "Unknown"
@@ -187,14 +187,18 @@ class NotificationDocument(Document):
             data["name"] = "Unknown"
             data["addr"] = "Unknown"
         return data
-                
+
     def getHisto(_id, date):
         data = notifications.find({
             "$and" : [
                 {"$or" : [
                     {"sender.type": "orga", "sender.id" : ObjectId(_id)},
                     {"subject.type": "orga", "subject.id" : ObjectId(_id)}
-                ]}
+                ]},
+                { "createdAt" : {
+                     "$gte" : datetime.strptime(date['begin'], "%b %d, %Y %H:%M"),
+                     "$lt": datetime.strptime(date['end'], "%b %d, %Y %H:%M")
+                }}
             ]}, {"_id": 0, "createdAt": 0})
         res = {}
         i = 0

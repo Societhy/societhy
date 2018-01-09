@@ -42,48 +42,48 @@ class Dao(Organization):
             "edit_rights": True,
             "edit_jobs": True,
             "access_administration": True
-        },
-        "member": {
-            "weight": 1,
-            "join": False,
-            "leave": True,
-            "donate": True,
-            "create_project": False,
-            "create_offer": True,
-            "create_proposal": False,
-            "vote_proposal": True,
-            "recruit": False,
-            "remove_members": False,
-            "sell_token": True,
-            "buy_token": True,
-            "publish_news": True,
+		},
+		"member": {
+			"weight": 1,
+			"join": False,
+			"leave": True,
+			"donate": True,
+			"create_project": False,
+			"create_offer": True,
+			"create_proposal": False,
+			"vote_proposal": True,
+			"recruit": False,
+			"remove_members": False,
+			"sell_token": True,
+			"buy_token": True,
+			"publish_news": True,
             "edit_rights": True,
             "edit_jobs": True,
             "access_administration": True
-        },
-        "default": {
-            "weight": 0,
-            "join": True,
-            "leave": False,
-            "donate": True,
-            "create_project": False,
-            "create_offer": True,
-            "create_proposal": False,
-            "vote_proposal": False,
-            "recruit": False,
-            "remove_members": False,
-            "sell_token": False,
-            "buy_token": False,
-            "publish_news": True,
+		},
+		"default": {
+			"weight": 0,
+			"join": True,
+			"leave": False,
+			"donate": True,
+			"create_project": False,
+			"create_offer": True,
+			"create_proposal": False,
+			"vote_proposal": False,
+			"recruit": False,
+			"remove_members": False,
+			"sell_token": False,
+			"buy_token": False,
+			"publish_news": True,
             "edit_rights": False,
             "edit_jobs": False,
             "access_administration": False
-        }
-    }
+		}
+	}
 
     def deployContract(self, from_=None, password=None, args=[]):
         """
-        from_ : address of the account used to deploy the contract (self["owner"] is used by default) 
+        from_ : address of the account used to deploy the contract (self["owner"] is used by default)
         password : password to unlock the account
         args : list of arguments to be passed upon the contract creation
         Deploy the contract on the blockchain
