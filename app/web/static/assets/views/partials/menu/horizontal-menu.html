@@ -11,7 +11,7 @@
 			<!-- 			MY ORGANISATIONS -->
 			<li uib-dropdown uib-dropdown auto-close="outsideClick">
 				<a href="javascript:void(0)" uib-dropdown-toggle> <letter-icon data=" {{ 'sidebar.nav.organisations.MAIN' | translate }}" color="auto" char-count="2" size="sm"></letter-icon> <span translate="sidebar.nav.organisations.MAIN" ></span> <span class="caret"></span></a>
-				<ul uib-dropdown-menu>
+				<ul uib-dropdown-menu class="dropdownHandler">
 					<li ui-sref-active="active">
 						<a ng-if="user" ui-sref="app.neworga"> <span translate="sidebar.nav.organisations.CREATE"/> </a>
 					</li>

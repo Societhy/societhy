@@ -27,7 +27,8 @@
 24 - Invoice
 25 - Timeline
 26 - Tables
-27 - User Profile
+27 - User<div data-ng-include=" 'static/assets/views/partials/menu/horizontal-menu.html' " class="navbar navbar-default horizontal-menu collapse" uib-collapse="horizontalNavbarCollapsed" off-click="menuInit(true)" off-click-if='!horizontalNavbarCollapsed' off-click-filter="'#horizontal-menu-toggler'">
+ Profile
 28 - Calendar
 29 - Todo
 30 - Chat
@@ -126,6 +127,11 @@ h1, h2, h3, h4, h5 {
 h5.over-title {
   font-family: "Lato", sans-serif;
   font-size: 16px;
+}
+
+.dropdownhandler {
+  max-height:  450px;
+  overflow-y: auto;
 }
 
 .mainTitle {

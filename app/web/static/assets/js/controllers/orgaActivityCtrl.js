@@ -153,7 +153,7 @@ app.controller('OrgaActivityController', function($rootScope, $scope, $http, $ti
         // lastWeek = new Date($scope.date.getFullYear(), $scope.date.getMonth(), $scope.date.getDate() - 7);
         // $scope.slider.first = $scope.slider.begin = lastWeek.toLocaleString(locale, {month: "short"}) + " " + lastWeek.getDate() + ", " + lastWeek.getFullYear() + " 00:00";
         // console.log($scope.slider);
-      console.log($scope.slider);  $scope.getHisto(($scope.slider.begin),($scope.slider.end))
+       $scope.getHisto(($scope.slider.begin),($scope.slider.end))
     };
 
     // $scope.$watch(['currentOrga.members', 'currentOrga.rights', 'currentOrga.projects'], initHisto, true)

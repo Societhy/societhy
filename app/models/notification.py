@@ -193,11 +193,7 @@ class NotificationDocument(Document):
                 {"$or" : [
                     {"sender.type": "orga", "sender.id" : ObjectId(_id)},
                     {"subject.type": "orga", "subject.id" : ObjectId(_id)}
-                ]},
-                { "createdAt" : {
-                     "$gte" : datetime.strptime(date['begin'], "%b %d, %Y %H:%M"),
-                     "$lt": datetime.strptime(date['end'], "%b %d, %Y %H:%M")
-                }}
+                ]}
             ]}, {"_id": 0, "createdAt": 0})
         res = {}
         i = 0
