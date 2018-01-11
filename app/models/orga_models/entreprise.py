@@ -43,7 +43,7 @@ class Entreprise(Organization):
         },
         "member": {
             "weight": 1,
-            "join": False,
+            "join": True,
             "leave": True,
             "donate": True,
             "create_project": False,
@@ -56,7 +56,7 @@ class Entreprise(Organization):
             "buy_token": True,
             "edit_rights": True,
             "edit_jobs": True,
-            "access_administration": True
+            "access_administration": False
         },
         "default": {
             "weight": 0,
