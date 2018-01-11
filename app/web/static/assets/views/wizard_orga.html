@@ -461,7 +461,7 @@
 																		<td>{{user.name}} </td>
 																		<td>
 																			<div class="form-group">
-																				<select class="cs-select cs-skin-elastic" ng-options="label for label in governance_types[orga_form.gov_model]['tags']" ng-model="orga_form.invited_users[user._id]['tag']"
+																				<select class="cs-select cs-skin-elastic" ng-options="key as key for (key, value) in orga_form.rights" ng-model="orga_form.invited_users[user._id]['tag']"
 																				 ng-change="tagChangedForUser(user._id)">
 																				</select>
 																			</div>

@@ -89,9 +89,7 @@ with open(path.join(keyDirectory, 'test_key.key'), 'rb') as f:
 	keys.importNewKey(miner, f)
 miner = users.find_one({"name": "simon"})
 
-with open(path.join(keyDirectory, 'test_key2.key'), 'rb') as f:
-	keys.importNewKey(martin_doc, f)
-martin_doc = users.find_one({"email": "jeremy.martin@societhy.com"})
+
 print("Miner has", miner.refreshBalance(), "ethers")
 bw.run()
 
