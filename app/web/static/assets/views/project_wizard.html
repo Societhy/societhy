@@ -24,12 +24,6 @@
                       <span class="stepDesc text-small">Campaign</span>
                     </a>
                   </li>
-                  <li ng-click="form.goTo(Form, 3)">
-                    <a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
-                      <div class="stepNumber">3</div>
-                      <span class="stepDesc text-small">Members</span>
-                    </a>
-                  </li>
                   <li ng-click="form.goTo(Form, 4)">
                     <a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}">
                       <div class="stepNumber">4</div>
@@ -152,63 +146,6 @@
                 <!-- start: WIZARD STEP 3 -->
                 <div id="step-3" ng-show="currentStep == 3">
                   <div class="row">
-                    <div class="col-md-5">
-                      <div class="padding-30">
-                        <h2 class="StepTitle">Members<span class="text-large block">Invite people to join the project.</span></h2>
-                      </div>
-                    </div>
-                    <div class="col-md-7">
-                      <fieldset>
-                        <legend>
-                          Invite members
-                        </legend>
-
-                        <div class="col-md-12 inline-block">
-                          <form class="form-inline padding-bottom-20" role="form" ng-submit="addInvitedUser()">
-                            <div class="form-group col-md-8">
-                              <angucomplete-alt id="ex2" placeholder="Search for existing users or invite new ones" pause="300" selected-object="selected_user" title-field="name" remote-url='/searchFor/' description-field="_id" minlength="1" input-class="form-control form-control-small"
-                                match-class="highlight" input-changed="" />
-                            </div>
-                            <button class="btn btn-primary" ng-click="addInvitedUser()">+</button>
-                          </form>
-                        </div>
-                        <div class="col-md-12">
-                          <div class="table min-height-300">
-                            <table class="table">
-                              <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr ng-repeat="(user_id, user) in proj.invited_users">
-                                  <td>{{user.name}} </td>
-                                  <td>
-                                    <button type="button" class="btn btn-red btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="removeRow(user._id)">
-                                    <span>Remove</span>
-                                  </button>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                        <div class="row margin-top-20">
-                          <div class="form-group">
-                            <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-                            Next <i class="fa fa-arrow-circle-right"></i>
-                          </button>
-                          </div>
-                        </div>
-                      </fieldset>
-                    </div>
-                  </div>
-                </div>
-                <!-- end: WIZARD STEP 3 -->
-                <!-- start: WIZARD STEP 4 -->
-                <div id="step-4" ng-show="currentStep == 4">
-                  <div class="row">
                     <div class="col-md-12">
                       <div class="text-center">
                         <h1 class=" ti-check block text-primary"></h1>
@@ -224,7 +161,7 @@
                     </div>
                   </div>
                 </div>
-                <!-- end: WIZARD STEP 7 -->
+                <!-- end: WIZARD STEP 3 -->
 
               </div>
             </form>
