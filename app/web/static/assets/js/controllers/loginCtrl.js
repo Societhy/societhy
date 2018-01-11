@@ -73,6 +73,7 @@
  				{ "coinbase" :
  				{
  					"firstname" : data.firstname,
+          "username" : data.firstname,
  					"lastname" : data.lastname,
  					"email" : data.email,
  					"id" : data.id,
@@ -106,7 +107,8 @@
  				{"facebook" :
  				{
  					"firstname" : userData.first_name,
- 					"lastname" : userData.last_name,
+          "username" : userData.first_name,
+					"lastname" : userData.last_name,
  					"id" : userData.id,
  					"email" : userData.email,
  					"pictureURL" : userData.picture.data.url
@@ -142,7 +144,8 @@
  				{"twitter" :
  				{
  					"firstname" : userData.name,
- 					"id" : userData.id,
+          "username" : userData.name,
+					"id" : userData.id,
  					"email" : userData.email,
  					"pictureURL" : userData.avatar,
  					"url" : userData.url,
@@ -178,6 +181,7 @@
  				{"linkedin" :
  				{
  					"firstname" : userData.firstname,
+          "username" : userData.firstname,
  					"lastname" : userData.lastname,
  					"id" : userData.id,
  					"pictureURL" : userData.avatar,
@@ -213,6 +217,7 @@
  				{"github" :
  				{
  					"firstname" : userData.name,
+          "username" : userData.name,
  					"id" : userData.id,
  					"email" : userData.email,
  					"pictureURL" : userData.avatar,
@@ -252,6 +257,7 @@
  				{"google" :
  				{
  					"firstname" : userData.firstname,
+          "username" : userData.firstname,
  					"lastname" : userData.lastname,
  					"id" : userData.id,
  					"email" : userData.email,
@@ -582,27 +588,7 @@
      };
 
 
-     var compareTo = function() {
-         return {
-             require: "ngModel",
-             scope: {
-                 otherModelValue: "=compareTo"
-             },
-             link: function(scope, element, attributes, ngModel) {
 
-                 ngModel.$validators.compareTo = function(modelValue) {
-                     return modelValue == scope.otherModelValue;
-                 };
-
-                 scope.$watch("otherModelValue", function() {
-                     ngModel.$validate();
-                 });
-             }
-         };
-     };
-
-
-     app.directive("compareTo", compareTo);
 
 
 

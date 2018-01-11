@@ -1,6 +1,5 @@
 "use strict";
 /**
-<<<<<<< HEAD
  * controller for Wizard Form example
  */
 
@@ -175,7 +174,7 @@ app.controller("OrgaWizardCtrl", function(
         $scope.removeRight = function (id, index) {
             $scope.currentRights.push($("#newOrgaRight").val());
             delete $scope.orga_form.rights[id];
-
+          }
 
   // IMAGE UPLOAD
   var uploaderImages = ($scope.uploaderImages = new FileUploader({

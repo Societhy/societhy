@@ -105,22 +105,22 @@
                                                 </div>
                                             </div>
                                                 <div class="row">
-                                                    <div class="form-group" ng-class="{'has-error':!Form.password.$pristine && Form.password.$invalid, 'has-success':Form.password.$valid}">
-                                                        <label class="control-label">Password<span class="symbol required"></span> </label>
-                                                        <input type="password" placeholder="Password" ng-minlength="3" ng-maxlength="20" class="form-control" name="password" ng-model="form.password" ng-required="currentStep == 1"/>
-                                                        <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$invalid">Password is invalid</span>
-                                                        <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.minlength">Password is Short</span>
-                                                        <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.maxlength">Password is too long</span>
-                                                        <span class="success text-small" ng-if="Form.password.$valid">Valid!</span>
-                                                    </div>
+                                                  <div class="form-group" ng-class="{'has-error':!Form.password.$pristine && Form.password.$invalid, 'has-success':Form.password.$valid}">
+                                                      <label class="control-label">Password<span class="symbol required"></span> </label>
+                                                      <input type="password" placeholder="Password" ng-minlength="3" ng-maxlength="20" class="form-control" name="password" ng-model="form.password" ng-required="currentStep == 1"/>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$invalid">Password is invalid</span>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.minlength">Password is Short</span>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.maxlength">Password is too long</span>
+                                                      <span class="success text-small" ng-if="Form.password.$valid">Valid!</span>
+                                                  </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="form-group" ng-class="{'has-error':!Form.passwordConfirm.$pristine && Form.passwordConfirm.$invalid, 'has-success':Form.passwordConfirm.$valid}">
                                                         <label class="control-label">Password Confirmation<span class="symbol required"></span> </label>
-                                                        <input type="password" class="form-control " placeholder="Password Confirmation" ng-minlength="3" ng-maxlength="20" name="passwordConfirm" ng-model="form.passwordConfirm" compare-to="form.password" ng-required="currentStep == 1"/>
+                                                        <input type="password" class="form-control" placeholder="Password Confirmation" ng-minlength="3" ng-maxlength="20" name="passwordConfirm" ng-model="form.passwordConfirm" compare-to="form.password" ng-required="currentStep == 1"/>
                                                         <span class="error text-small block" ng-if="!Form.passwordConfirm.$pristine && Form.passwordConfirm.$invalid">The passwords doesn't match!</span>
                                                         <span class="success text-small" ng-if="Form.passwordConfirm.$valid">Valid!</span>
-                                                        <div ng-messages="registrationForm.confirmPassword.$error" ng-messages-include="messages.html"></div>
+                                                        <div ng-messages="registrationForm.passwordConfirm.$error" ng-messages-include="messages.html"></div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">

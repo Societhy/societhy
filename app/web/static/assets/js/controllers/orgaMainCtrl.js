@@ -7,6 +7,7 @@ app.controller("OrgaMainController", function(
   $scope,
   $http,
   $sessionStorage,
+  $stateParams,
   $timeout,
   $state,
   $controller,
@@ -55,6 +56,11 @@ app.controller("OrgaMainController", function(
               $rootScope.user.account in $scope.currentOrga.members;
             ctrl.isCurrentUserInvitedToOrga();
           }
+          if ($stateParams.data) {
+            $scope.currentRights = $rootScope.currentRights = $stateParams.data.rights.owner;
+            $scope.isMember = true;
+          } else
+            $scope.currentRights = $rootScope.currentRights = response.data.rights;
         },
         function(error) {
           $state.go("app.dashboard");
