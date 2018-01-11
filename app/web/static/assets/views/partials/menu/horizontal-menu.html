@@ -68,7 +68,7 @@
 					<span class="badge"> {{unread_notification.length || 0}} </span>
 					<i class="fa fa-bell"></i>
 				</a>
-				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort">
+				<ul class="dropdown-menu dropdown-light dropdown-messages dropdown-large animated fadeInUpShort" style="overflow-y: auto; max-height: 1000px;">
 					<li>
 						<div ng-if="unread_notification.length">
 							<span class="dropdown-header text-large" style="text-align: center"> You have new notifications </span>
