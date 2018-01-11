@@ -23,7 +23,7 @@
                                             <div flow-init="{singleFile:true}" flow-name="obj.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
                                                 <div class="user-image">
                                                     <div class="thumbnail">
-                                                        <img ng-src="{{userInfo.avatar}}" alt="" ng-if="!obj.flow.files.length && !noImage">
+                                                        <img ng-src="static/assets/images/default-user.png" alt="" ng-if="!obj.flow.files.length && !noImage">
                                                         <img flow-img="obj.flow.files[0]" ng-if="obj.flow.files.length">
                                                     </div>
                                                     <div class="user-image-buttons" ng-if="obj.flow.files.length">
@@ -129,8 +129,14 @@
 
                     <!-- start: TAB TRANSACTION-->
                     <uib-tab heading="Transactions" active="editActive">
-                        <div >
-                            <div data-ng-include=" 'static/assets/views/partials/user/transaction.html' "></div>
+                        <div class="container-fluid container-fullw ng-scope">
+                            <div class="panel panel-white">
+                                <div class="panel-body">
+                                    <div ng-controller="userTransactionTableCtrl" class="ng-scope ng-binding">
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_transaction.html' "></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </uib-tab>
                     <!-- end: TAB TRANSACTION -->
@@ -148,7 +154,7 @@
                         <div class="container-fluid container-fullw ng-scope">
                             <div class="panel panel-white">
                                 <div class="panel-body">
-                                        <div data-ng-include=" 'static/assets/views/partials/user/user_project_tab.html' "></div>
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_project.html' "></div>
                                 </div>
                             </div>
                         </div>
@@ -159,8 +165,8 @@
                         <div class="container-fluid container-fullw ng-scope">
                             <div class="panel panel-white">
                                 <div class="panel-body">
-                                    <div ng-controller="userOrgaTableCtrl" class="ng-scope ng-binding">
-                                        <div data-ng-include=" 'static/assets/views/partials/user/user_organisation_tab.html' "></div>
+                                    <div class="ng-scope ng-binding">
+                                        <div data-ng-include=" 'static/assets/views/partials/user/user_organisation.html' "></div>
                                     </div>
                                 </div>
                             </div>

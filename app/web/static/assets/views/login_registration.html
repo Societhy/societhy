@@ -1,177 +1,339 @@
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-<!-- start: REGISTRATION -->
-<div id="registrationContainer" class="row" ng-controller="LoginController as ctrl">
-	<div id="registrationContent" class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4 col-lg-2 col-lg-offset-5">
-		<div class="logo text-center">
-			<a ui-sref="app.dashboard">
-				<img src="static/assets/images/logo.png" alt="{{app.name}}" class="img-responsive" />
-			</a>
-		</div>
-		<p class="text-center text-dark text-bold text-extra-large margin-top-15">
-			Sign Up
-		</p>
-        <!-- SOCIAL LOGIN-->
-        <div class="social-icons block">
-            <ul>
-                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                <a href="#" ng-click="ctrl.twitter_register()" target="_blank">
-                        Twitter
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                    <a href="#" ng-click="ctrl.fb_register()" target="_blank">
-                        Facebook
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                    <a href="#" ng-click="ctrl.google_register()" target="_blank">
-                        Google+
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                    <a href="#" ng-click="ctrl.linkedin_register()" target="_blank">
-                        LinkedIn
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                    <a href="#" ng-click="ctrl.github_register()" target="_blank">
-                        Github
-                    </a>
-                </li>
-                <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
-                    <a href="#" ng-click="ctrl.coinbase_register()" target="_blank">
-                        Coinbase
-                    </a>
-                </li>
+<div class="container-fluid container-fullw">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-white">
+                <div class="panel-body">
+                    <h5 class="over-title margin-bottom-15">Create a <span class="text-bold">Account</span></h5>
+                    <div ng-controller="LoginController as ctrl">
+                        <div class="col-md-12 margin-30">
+                            <div class="padding-30">
+                                <h2 class="StepTitle">How do you want to register?</h2>
+                            </div>
+                        </div>
+                        <div class="social-icons register center col-md-12">
+                            <div class="padding-30">
+                                <h2 class="StepTitle">Choose from your favorite social network</h2>
+                            </div>
+                            <ul>
+                                <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                    <a href="#" ng-click="ctrl.twitter_register()" target="_blank">
+                                        Twitter
+                                    </a>
+                                </li>
+                                <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                    <a href="#" ng-click="ctrl.fb_register()" target="_blank">
+                                        Facebook
+                                    </a>
+                                </li>
+                                <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                    <a href="#" ng-click="ctrl.google_register()" target="_blank">
+                                        Google+
+                                    </a>
+                                </li>
+                                <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                                    <a href="#" ng-click="ctrl.linkedin_register()" target="_blank">
+                                        LinkedIn
+                                    </a>
+                                </li>
+                                <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                                    <a href="#" ng-click="ctrl.github_register()" target="_blank">
+                                        Github
+                                    </a>
+                                </li>
+                                <li data-placement="top" data-original-title="Coinbase" class="ti-wallet tooltips">
+                                    <a href="#" ng-click="ctrl.coinbase_register()" target="_blank">
+                                        Coinbase
+                                    </a>
+                                </li>
 
-            </ul>
+                            </ul>
+                        </div>
+                        <div class="center">
+                            <h2 class="StepTitle">Or</h2>
+                        </div>
+                        <!-- start: WIZARD FORM -->
+                        <div class="center">
+                            <h2 class="StepTitle">Enter your information</h2>
+                        </div>
+                        <form name="Form" id="form" novalidate class="col-md-6 col-md-offset-3 ">
+                            <div id="wizard" class="swMain">
+                                <!-- start: WIZARD STEPS -->
+                                <ul>
+                                    <li ng-click="form.goTo(Form, 1)">
+                                        <a href ng-class="{'selected' : currentStep >= 1, 'done' : currentStep > 1}">
+                                            <div class="stepNumber">1</div>
+                                            <span class="stepDesc text-small">Mandatory fields</span>
+                                        </a>
+                                    </li>
+                                    <li ng-click="form.goTo(Form, 2)">
+                                        <a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}">
+                                            <div class="stepNumber">2</div>
+                                            <span class="stepDesc text-small">Additional fields</span>
+                                        </a>
+                                    </li>
+                                    <li ng-click="form.goTo(Form, 3)">
+                                        <a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}">
+                                            <div class="stepNumber">3</div>
+                                            <span class="stepDesc text-small">Complete</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- end: WIZARD STEPS -->
+
+                                <!-- start: WIZARD STEP 1 -->
+                                <div id="step-1" ng-show="currentStep == 1">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="form-group" ng-class="{'has-error':!Form.email.$pristine && Form.email.$invalid, 'has-success':Form.email.$valid}">
+                                                        <label class="control-label">Email<span class="symbol required"></span> </label>
+                                                        <input type="email" placeholder="Email" class="form-control" name="email" ng-model="form.email" ng-required="currentStep == 1"/>
+                                                        <span class="error text-small block" ng-if="!Form.email.$pristine && Form.email.$invalid">Email is invalid</span>
+
+                                                        <span class="success text-small" ng-if="Form.email.$valid">Valid!</span>
+                                                    </div>
+                                                </div>
+                                              <div class="row">
+                                                <div class="form-group" ng-class="{'has-error':!Form.username.$pristine && Form.username.$invalid, 'has-success':Form.username.$valid}">
+                                                    <label class="control-label">Username<span class="symbol required"></span> </label>
+                                                    <input type="username" placeholder="Username" ng-minlength="3" ng-maxlength="20" class="form-control" name="username" ng-model="form.username" ng-required="currentStep == 1"/>
+                                                    <span class="error text-small block" ng-if="!Form.username.$pristine && Form.username.$invalid">Username is invalid</span>
+                                                    <span class="error text-small block" ng-if="!Form.username.$pristine && Form.username.$error.minlength">Username is Short</span>
+                                                    <span class="error text-small block" ng-if="!Form.username.$pristine && Form.username.$error.maxlength">Username is too long</span>
+                                                    <span class="success text-small" ng-if="Form.username.$valid">Valid!</span>
+                                                </div>
+                                            </div>
+                                                <div class="row">
+                                                  <div class="form-group" ng-class="{'has-error':!Form.password.$pristine && Form.password.$invalid, 'has-success':Form.password.$valid}">
+                                                      <label class="control-label">Password<span class="symbol required"></span> </label>
+                                                      <input type="password" placeholder="Password" ng-minlength="3" ng-maxlength="20" class="form-control" name="password" ng-model="form.password" ng-required="currentStep == 1"/>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$invalid">Password is invalid</span>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.minlength">Password is Short</span>
+                                                      <span class="error text-small block" ng-if="!Form.password.$pristine && Form.password.$error.maxlength">Password is too long</span>
+                                                      <span class="success text-small" ng-if="Form.password.$valid">Valid!</span>
+                                                  </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group" ng-class="{'has-error':!Form.passwordConfirm.$pristine && Form.passwordConfirm.$invalid, 'has-success':Form.passwordConfirm.$valid}">
+                                                        <label class="control-label">Password Confirmation<span class="symbol required"></span> </label>
+                                                        <input type="password" class="form-control" placeholder="Password Confirmation" ng-minlength="3" ng-maxlength="20" name="passwordConfirm" ng-model="form.passwordConfirm" compare-to="form.password" ng-required="currentStep == 1"/>
+                                                        <span class="error text-small block" ng-if="!Form.passwordConfirm.$pristine && Form.passwordConfirm.$invalid">The passwords doesn't match!</span>
+                                                        <span class="success text-small" ng-if="Form.passwordConfirm.$valid">Valid!</span>
+                                                        <div ng-messages="registrationForm.passwordConfirm.$error" ng-messages-include="messages.html"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="checkbox clip-check check-primary">
+                                                        <input type="checkbox" id="wantsKey" value="wantsKey" ng-model="form.wantsKey">
+                                                        <label for="wantsKey">
+                                                            I want to create an ethereum key
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+                                                            Next <i class="fa fa-arrow-circle-right"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- start: WIZARD STEP 2 -->
+                                <div id="step-2" ng-show="currentStep == 2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model="form.firstname" name="firstname" placeholder="Firstname">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model="form.lastname" name="lastname" placeholder="Lastname">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model="form.birthday" name="birthday" id="datepicker" placeholder="Birthday">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model="form.address" name="address" placeholder="Address">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model="form.city" name="city" placeholder="City">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="inline-block text-center text-small">
+                                                        Gender:
+                                                    </label>
+                                                    <select id="gender" ng-model="form.gender" name="gender" class="text-center">
+                                                        <option value="0" disabled selected>-- Select --</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Male">Male</option>
+                                                    </select>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <button class="btn btn-primary btn-o next-step btn-wide pull-left" ng-click="form.prev(Form)">
+                                                            Prev <i class="fa fa-arrow-circle-left"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+                                                            Next <i class="fa fa-arrow-circle-right"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- start: WIZARD STEP 3 -->
+                                <div id="step-3" ng-show="currentStep == 3">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="text-center">
+                                                <h1 class=" ti-check block text-primary"></h1>
+                                                <h2 class="StepTitle">Congratulations!</h2>
+                                                <p class="text-large">
+                                                    You've complete your registration.
+                                                </p>
+                                                <p class="text-small">
+                                                    You can now submit your application.
+                                                </p>
+                                                <a class="btn btn-primary btn-o" ng-disabled="userForm.$invalid" ng-click="form.submit(Form)"> Submit </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </form>
+                        <!--<pre class="code col-md-12 margin-top-20">{{form | json}}</pre>-->
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- start: REGISTER BOX -->
-        <div id="regitrationContainer" class="box-register">
-         <form class="form-register">
-            <div id="mandatoryInfo" class="registrationDatas data1">
-               <h5 class="text-center">
-                  Enter your account details below:
-              </h5>
-              <div class="form-group">
-               <div class="reminder">*</div>
-               <input type="email" class="form-control" ng-model="ctrl.email" name="email" placeholder="Email">
-               <div id="emailCheck" style="display: none;" class="formChecker text-center">
-                  Please enter a valid address email.
-              </div>
-          </div>
-          <div class="form-group">
-           <div class="reminder">*</div>
-           <input type="text" class="form-control" ng-model="ctrl.username" name="username" placeholder="Username">
-           <div id="usernameCheck" style="display: none;" class="formChecker text-center">
-              Your username has to contain between 4 and 20 alphanumeric characters, underscore and dash.
-          </div>
-      </div>
-      <div class="form-group">
-          <div class="reminder">*</div>
-          <input type="password" class="form-control" ng-model="ctrl.password" id="password" name="password" placeholder="Password">
-          <div id="passwordCheck" style="display: none;" class="formChecker text-center">
-              Your password has to contain between 4 and 20 characters, spaces are not allowed.
-          </div>
-
-      </div>
-      <div class="form-group">
-          <div class="reminder">*</div>
-          <input type="password" class="form-control" name="password_again" placeholder="Password Confirmation">
-          <div id="passwordConfirmationCheck" style="display: none;" class="formChecker text-center">
-              The passwords do not match.
-          </div>
-      </div>
-    
-    <div class="form-group">
-      <div class="checkbox clip-check check-primary">
-         <input type="checkbox" id="wantsKey" value="wantsKey" ng-model="ctrl.wantsKey">
-         <label for="wantsKey">
-            I want to create an ethereum key
-        </label>
     </div>
 </div>
-</div>
-<div id="personalInfo" class="registrationDatas data2">
-   <h5 class="text-center">
-      Enter your personal details below:
-  </h5>
-  <div class="form-group">
-      <input type="text" class="form-control" ng-model="ctrl.firstname" name="firstname" placeholder="Firstname">
-  </div>
-  <div class="form-group">
-      <input type="text" class="form-control" ng-model="ctrl.lastname" name="lastname" placeholder="Lastname">
-  </div>
-  <div class="form-group">
-      <input type="text" class="form-control" ng-model="ctrl.birthday" name="birthday" id="datepicker" placeholder="Birthday">
-  </div>
-  <div class="form-group">
-      <input type="text" class="form-control" ng-model="ctrl.address" name="address" placeholder="Address">
-  </div>
-  <div class="form-group">
-      <input type="text" class="form-control" ng-model="ctrl.city" name="city" placeholder="City">
-  </div>
-  <div class="form-group">
-      <label class="inline-block text-center text-small">
-         Gender:
-     </label>
-     <select id="gender" ng-model="ctrl.gender" name="gender" class="center-block text-center">
-         <option value="0" disabled selected>-- Select --</option>
-         <option value="Female">Female</option>
-         <option value="Male">Male</option>
-     </select>
- </div>
-</div>
-<div id="stepAdvancement" class="form-actions text-center">
-   <button id="btn-prev" type="button" disabled="disabled" class="btn btn-green">
-      <- previous
-  </button>
-  <button id="btn-next" type="button" class="btn btn-green ">
-      Next ->
-  </button>
-</div>
-<div id="beforeSubmit" class="text-center">
-   Please fill out all the mandatory fields preceded by an '*'.
-</div>
-<button type="submit" id="submit" disabled="disabled" class="btn btn-red btn-block" ng-click="ctrl.register()" disabled>
-   Submit
-</button>
-<hr />
-<p class="text-center">
-   Already have an account?
-   <a ui-sref="login.signin">
-      Log-in
-  </a>
-</p>
+<script>$("#datepicker").datepicker();</script>
+<style>
+.ui-datepicker {
+    width: 300px;
+    height: 300px;
+    margin: 5px auto 0;
+    font: 12pt Arial, sans-serif;
+    /*-webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, .5);*/
+}
 
-<p class="text-center">
-   Or
-</p>
-<p class="text-center">
-   sign up with a social network
-</p>
-<div class="social-icons text-center">
-   <ul>
-      <li class="social-twitter" uib-tooltip="Twitter" tooltip-placement="top">
-         <a target="_blank" href="#"> Twitter </a>
-     </li>
-     <li class="social-google" uib-tooltip="Google" tooltip-placement="top">
-         <a target="_blank" href="#"> Google </a>
-     </li>
-     <li class="social-facebook" uib-tooltip="Facebook" tooltip-placement="top">
-         <a target="_blank" href="#"> Facebook </a>
-     </li>
- </ul>
-</div>
-</form>
-<!-- start: COPYRIGHT -->
-<div class="copyright">
-    {{app.year}} &copy; {{ app.name }} by {{ app.author }}.
-</div>
-<!-- end: COPYRIGHT -->
-</div>
-<!-- end: REGISTER BOX -->
-</div>
-</div>
-<!-- end: REGISTRATION -->
+    .ui-datepicker table {
+        width: 100%;
+    }
+
+.ui-datepicker-header {
+    background: #30404d;
+    color: #ffffff;
+    font-family:'Times New Roman';
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: #111;
+}
+
+.ui-datepicker-title {
+    text-align: center;
+    font-size: 15px;
+
+}
+
+.ui-datepicker-prev {
+    color: white;
+    float: left;
+    cursor: pointer;
+    background-position: center -30px;
+}
+
+.ui-datepicker-next {
+    color: white;
+    float: right;
+    cursor: pointer;
+    background-position: center 0px;
+}
+
+.ui-datepicker thead {
+    background-color: #f7f7f7;
+
+    /*border-bottom: 1px solid #bbb;*/
+}
+
+.ui-datepicker th {
+    background-color:#808080;
+    text-transform: uppercase;
+    font-size: 8pt;
+    color: white;
+    /*text-shadow: 1px 0px 0px #fff;*/
+    /*filter: dropshadow(color=#fff, offx=1, offy=0);*/
+}
+
+.ui-datepicker tbody td {
+    padding: 0;
+    /*border-right: 1px solid #808080;*/
+}
+
+    .ui-datepicker tbody td:last-child {
+        border-right: 0px;
+    }
+
+.ui-datepicker tbody tr {
+    border-bottom: 1px solid #bbb;
+}
+
+    .ui-datepicker tbody tr:last-child {
+        border-bottom: 0px;
+    }
+
+.ui-datepicker a {
+    text-decoration: none;
+}
+
+.ui-datepicker td span, .ui-datepicker td a {
+    display: inline-block;
+    /*font-weight: bold;*/
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffffff;
+    /*text-shadow: 1px 1px 0px #fff;*/
+    /*filter: dropshadow(color=#fff, offx=1, offy=1);*/
+}
+
+.ui-datepicker-calendar .ui-state-default {
+      background: linear-gradient(#999999, #737373);
+      color:#ffffff;
+      height:40px;
+      width:40px;
+
+}
+
+.ui-datepicker-calendar .ui-state-hover {
+    background: #33adff;
+    color: #FFFFFF;
+}
+
+.ui-datepicker-calendar .ui-state-active {
+    background: #33adff;
+    -webkit-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    -moz-box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    box-shadow: inset 0px 0px 10px 0px rgba(0, 0, 0, .1);
+    color: #e0e0e0;
+    text-shadow: 0px 1px 0px #4d7a85;
+    border: 1px solid #55838f;
+    position: relative;
+    margin: -1px;
+}
+
+.ui-datepicker-unselectable .ui-state-default {
+    background: #D6E4BE;
+    color: #000;
+}
+</style>

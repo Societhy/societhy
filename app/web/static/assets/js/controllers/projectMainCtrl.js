@@ -61,8 +61,11 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
           });
         },
         function(data) {
+          console.log(data.data)
           $scope.project.members = data.data.project.members;
+          $rootScope.currentRights = $scope.currentRights = data.data.rights;
           $scope.isMember = false;
+          ctrl.reload();
         });
     }
   }
@@ -102,7 +105,11 @@ app.controller('ProjectMainController', function($rootScope, $scope, $http, $ses
       });
     }
   }
-
+  ctrl.exportActivityModal = function() {
+  $("#projectExportData").table2excel({exclude: ".noExl",
+          name: "Worksheet Name",
+          filename: "ExportProject_" + $scope.currentProject.name });
+  };
 
   $timeout(function() {
     $(".donate-button").click(ctrl.donateToProject);

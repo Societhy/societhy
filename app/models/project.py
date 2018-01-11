@@ -120,7 +120,7 @@ class ProjectDocument(Document):
 		tx_hash = self.registry.call('joinProject', local=local, from_=user.get('account'), args=[self.get('address'), user.get('account'), tag], password=password)
 		if tx_hash and tx_hash.startswith('0x'):
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'NewMember'} if user.get('notification_preference').get('NewMember').get('Mail') else None
-			bw.pushEvent(models.events.LogEvent("NewMember", tx_hash, self.registry["address"], callbacks=[self.memberJoined, user.joinedProject], users=user, event_abi=self.registry["abi"], mail=mail))
+			bw.pushEvent(models.events.LogEvent("NewMember", tx_hash, self.registry["address"], callback_data=self.get("_id"), callbacks=[self.memberJoined, user.joinedProject], users=user, event_abi=self.registry["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -156,7 +156,7 @@ class ProjectDocument(Document):
 		if tx_hash and tx_hash.startswith('0x'):
 
 			mail = {'sender':self, 'subject':user, 'users':[user], 'category':'MemberLeft'} if user.get('notification_preference').get('MemberLeft').get('Mail') else None
-			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], callbacks=[self.memberLeft, user.leftProject], users=user, event_abi=self.registry["abi"], mail=mail))
+			bw.pushEvent(LogEvent("MemberLeft", tx_hash, self.registry["address"], callback_data=self.get("_id"), callbacks=[self.memberLeft, user.leftProject], users=user, event_abi=self.registry["abi"], mail=mail))
 			user.needsReloading()
 			return tx_hash
 		else:
@@ -174,7 +174,7 @@ class ProjectDocument(Document):
 			if member:
 				del self["members"][address]
 				self.save_partial();
-				return { "orga": self.public(public_members=True), "rights": self.get('rights').get('default')}
+				return { "project": self.public(public_members=True), "rights": self.get('rights').get('default')}
 		return False
 
 	def kill(self, from_):

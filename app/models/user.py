@@ -94,13 +94,12 @@ class UserDocument(Document):
 		If the transaction has succeeded and that the orga isn't already in the member's orga, the public orga data is stored in the user document
 		None is returned if everything went fine, False otherwise
 		"""
-        if len(logs) == 1 and logs[0].get('address') is not None:
-            address = logs[0].get('address')
-            proj = models.project.projects.find_one({"address": address})
-            if not proj:
-                proj = models.project.projects.find_one({"contracts.registry.address": address})
+
+        if callback_data is not None:
+            proj = models.project.projects.find_one({"_id": callback_data})
+
             if proj and proj.get('address') not in self["projects"]:
-                self["projects"].append(proj.get('address'))
+                self["projects"].append(proj)
                 self.save_partial();
             else:
                 return False
@@ -133,15 +132,15 @@ class UserDocument(Document):
 		If the transaction has succeeded and that the orga is in the member's orga, the orga is removed
 		None is returned if everything went fine, False otherwise
 		"""
-        if len(logs) == 1 and logs[0].get('address') is not None:
-            address = logs[0].get('address')
-            proj = models.project.projects.find_one({"address": address})
-            if not proj:
-                proj = models.project.projects.find_one({"contracts.registry.address": address})
+        if callback_data is not None:
+            proj = models.project.projects.find_one({"_id": callback_data})
 
-            if proj and proj.get('address') in self["projects"]:
-                self["projects"].remove(proj.get('address'))
-                self.save_partial();
+            for o in self.get("projects", []):
+                if o.get('contracts').get('registry').get('address') == proj.get('contracts').get('registry').get(
+                        'address'):
+                    self["projects"].remove(o)
+                    self.save_partial();
+                    return None
             else:
                 return False
         return None
