@@ -193,7 +193,7 @@ def create_unicef(miner, martin_doc):
 		user_docs[x].reload()
 		members.append(user_docs[x])
 		if (randint(0, 100) in range(0, 80)):
-			ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(500, 1200)})
+			ret = base_orga.donateToOrga(user_docs[x], "simon", unicef_doc['_id'], {"amount": randint(20, 30)})
 			print("ret is", ret, user_docs[x].refreshBalance())
 			bw.waitEvent("DonationMade")
 			user_docs[x].reload()
@@ -242,7 +242,7 @@ def create_msf(miner):
 		bw.waitEvent('NewMember')
 		user_docs[x].reload()
 		if (randint(0, 100) in range(0, 80)):
-			ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(500, 1200)})
+			ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(30, 40)})
 			bw.waitEvent("DonationMade")
 			user_docs[x].reload()
 			msf_doc.reload()		
@@ -255,7 +255,7 @@ def create_msf(miner):
 	# Donate
 	x = 11
 	for x in range(18, 25):
-		ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(100, 800)})
+		ret = base_orga.donateToOrga(user_docs[x], "simon", msf_doc['_id'], {"amount": randint(50, 60)})
 		bw.waitEvent("DonationMade")
 		user_docs[x].reload()
 		msf_doc.reload()		
