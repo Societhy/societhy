@@ -211,6 +211,7 @@ app.controller('userOverviewCtrl', function($scope, $http, $timeout, $rootScope,
         "old": oldVal,
         "name": name
       }).then(function(response) {
+        $rootScope.toogleInfo("Modification saved!");
           $rootScope.user = ctrl.user = response.data;
         },
         function(error) {
