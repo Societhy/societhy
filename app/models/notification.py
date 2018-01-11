@@ -47,7 +47,8 @@ def sendNotifPush(sender, senderType, category, subject, user):
             'subject_name': subject['name'],
             'sender_name': sender['name']
         }
-        emit('send_message', notif, namespace='/', room=Clients[user['_id']].sessionId)
+        emit('send_message', notif, namespace='/',
+             room=Clients[user['_id']].sessionId)
     else:
         notification = NotificationDocument()
         description = descriptionDict[category]
@@ -78,7 +79,8 @@ def sendNotifEmail(sender, senderType, category, subject, user):
     description = descriptionDict[category]
     if not description:
         return None
-    msg = Message(category, sender='societhycompany@gmail.com', recipients=[user.get("email")])
+    msg = Message(category, sender='societhycompany@gmail.com',
+                  recipients=[user.get("email")])
     if subject:
         msg.body = subject.get("name") + description + sender.get("name")
     else:
@@ -102,12 +104,13 @@ def notifyToOne(sender, user, category, subject=None):
     sendNotifPush(sender, senderType, category, subject, user)
     # if user.get("notification_accept") == 2 or user.get("notification_accept") == 3:
     if user.get('email') is not None:
-	    sendNotifEmail(sender, senderType, category, subject, user)
+        sendNotifEmail(sender, senderType, category, subject, user)
 
 
 class NotificationDocument(Document):
     def __init__(self, doc=None, mongokat_collection=None, fetched_fields=None, gen_skel=None, session=None):
-        super().__init__(doc=doc, mongokat_collection=notifications, fetched_fields=fetched_fields, gen_skel=gen_skel)
+        super().__init__(doc=doc, mongokat_collection=notifications,
+                         fetched_fields=fetched_fields, gen_skel=gen_skel)
         self["seen"] = False
         self["createdAt"] = int(datetime.now().timestamp())
 
@@ -120,19 +123,21 @@ class NotificationDocument(Document):
             if user.wantNotif(self["category"], "Web"):
                 if str(self["subject"]['id']) in Clients:
                     with app.app_context():
-                        emit("update_notif", "", namespace='/', room=Clients[str(self["subject"]['id'])].sessionId)
+                        emit("update_notif", "", namespace='/',
+                             room=Clients[str(self["subject"]['id'])].sessionId)
             else:
                 self["seen"] = True
-            if user.wantNotif(self["category"], "Mail") and "angularState" in self :
+            if user.wantNotif(self["category"], "Mail") and "angularState" in self:
                 msg = Message("Notif", sender='roman.grout@hotmail.fr',
                               recipients=[user.get("email")])
-                url = "http://www.localhost:4242?redirect=true&angularState=" + urllib.parse.quote(json.dumps(self["angularState"]))
+                url = "http://www.localhost:4242?redirect=true&angularState=" + \
+                    urllib.parse.quote(json.dumps(self["angularState"]))
                 with app.app_context():
                     print(user.get("email"))
                     msg.html = render_template('/assets/views/emailing/notification.html', name=user.get("name"),
                                                description=self["description"], url=url)
                     mail.send(msg)
-        #pas touche a ce save
+        # pas touche a ce save
         self.save_partial()
 
     def pushNotif(data):
@@ -174,11 +179,13 @@ class NotificationDocument(Document):
         data["name"] = "Unknown"
         data["addr"] = "Unknown"
         if data['type'] == 'orga':
-            res = models.organization.organizations.find_one({"_id" : data['id']}, {"name": 1, "address": 1})
+            res = models.organization.organizations.find_one(
+                {"_id": data['id']}, {"name": 1, "address": 1})
             data["name"] = res["name"]
             data["addr"] = res["address"]
         elif data['type'] == 'user':
-            res = models.user.users.find_one({"_id" : data['id']}, {"name": 1, "account": 1 })
+            res = models.user.users.find_one(
+                {"_id": data['id']}, {"name": 1, "account": 1})
             if res != None:
                 data["name"] = res["name"]
                 data["addr"] = res["account"]
@@ -188,6 +195,7 @@ class NotificationDocument(Document):
         return data
 
     def getHisto(_id, date):
+        print('----------', date)
         data = notifications.find({
             "$and" : [
                 {"$or" : [
@@ -201,8 +209,10 @@ class NotificationDocument(Document):
             for record in data:
                 name = ""
                 res[i] = record
-                res[i]['sender'] = NotificationDocument.getName(record['sender'])
-                res[i]['subject'] = NotificationDocument.getName(record['subject'])
+                res[i]['sender'] = NotificationDocument.getName(
+                    record['sender'])
+                res[i]['subject'] = NotificationDocument.getName(
+                    record['subject'])
                 if record["category"] == "orgaCreated":
                     res[0]["first"] = record["date"]
                 i = i + 1
