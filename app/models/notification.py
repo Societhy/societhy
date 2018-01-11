@@ -197,15 +197,11 @@ class NotificationDocument(Document):
     def getHisto(_id, date):
         print('----------', date)
         data = notifications.find({
-            "$and": [
-                {"$or": [
-                    {"sender.type": "orga", "sender.id": ObjectId(_id)},
-                    {"subject.type": "orga", "subject.id": ObjectId(_id)}
-                ]},
-                {"createdAt": {
-                    "$gte": datetime.strptime(date['begin'], "%b %d, %Y %H:%M"),
-                    "$lt": datetime.strptime(date['end'], "%b %d, %Y %H:%M")
-                }}
+            "$and" : [
+                {"$or" : [
+                    {"sender.type": "orga", "sender.id" : ObjectId(_id)},
+                    {"subject.type": "orga", "subject.id" : ObjectId(_id)}
+                ]}
             ]}, {"_id": 0, "createdAt": 0})
         res = {}
         i = 0

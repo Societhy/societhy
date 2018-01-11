@@ -26,7 +26,6 @@
                 <div class="user-left user-image">
                   <img ng-src="{{currentOrga.picture || 'static/assets/images/orga_default.jpg'}}" alt="..." class="img-rounded">
                 </div>
-{{currentOrga.picture}}
                 <div ng-if="isInvitedToOrga == true && !isMember">
 
                   <button ng-if="!currentOrga.funding.membershipFee" type="button" class="btn btn-success btn-primary btn-wide" ng-click="ctrl.acceptInvit()">
