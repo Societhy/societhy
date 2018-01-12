@@ -56,12 +56,12 @@ test_miner = {
 	"name": "simon",
         "firstname": "Simon",
         "lastname": "Legrand",
-        "email": "miner@societhy.fr",
+        "email": "titouan.theophile@gmail.com",
 	"password": encode_hex(scrypt.hash("simon", SALT_LOGIN_PASSWORD)),
 	"account": None,
 	"eth": {
 		"keys": {}
-	}
+	},
 }
 
 user_martin = {
@@ -565,3 +565,66 @@ create_unicef(miner, martin_doc)
 create_youtube(miner)
 create_msf(miner)
 create_allOrgas(miner, orga_template, orga_names, orga_descs, orga_types)
+miner["notification_preference"] = 	{
+	 "NewMember" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "MemberLeft" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "ProposalCreated" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "DonationMade" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "newSpending" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "newMessage" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "newFriendAdd" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "orgaCreated" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "ProjectCreated" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "newInviteJoinOrga" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "OfferCreated" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        },
+        "newsPublished" : {
+            "Web" : True,
+            "Mobile" : True,
+            "Mail" : True
+        }
+		}
+miner.save_partial()
