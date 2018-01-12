@@ -12,12 +12,12 @@
       <div class="col-md-2">
         <div class="social-icons">
           <ul>
-            <li ng-if="project.twitter_link" project-placement="top" project-original-title="Twitter" class="social-twitter tooltips">
+            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
               <a ng-href="{{project.twitter_link}}" target="_blank">
                 Twitter
               </a>
             </li>
-            <li ng-if="project.twitter_link" project-placement="top" project-original-title="Facebook" class="social-facebook tooltips">
+            <li ng-if="project.twitter_link" data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
               <a ng-href="{{project.facebook_link}}" target="_blank">
                 Facebook
               </a>
@@ -27,7 +27,7 @@
       </div>
       <div ng-if="currentRights.donate" class="col-md-4">
         <div class="input-group-sm bootstrap-touchspin align-left col-md-offset-6">
-          <input id="donationAmount" type="number" value="0" touchspin project-forcestepdivisibility="none" project-decimals="2" project-min="0" project-max="1000" project-stepinterval="50" step="0.1" project-postfix="send!" project-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
+          <input id="donationAmount" type="number" value="0" touchspin data-forcestepdivisibility="none" data-decimals="2" data-min="0" data-max="1000" data-stepinterval="50" step="0.1" data-postfix="send!" data-postfix_extraclass="btn btn-default donate-button" class="form-control input-sm">
         </div>
       </div>
     </div>
